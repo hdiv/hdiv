@@ -134,7 +134,7 @@
 				</xsd:annotation>
 			</xsd:attribute>
 			<xsd:attribute name="avoidCookiesIntegrity" type="xsd:boolean"
-				default="true">
+				default="false">
 				<xsd:annotation>
 					<xsd:documentation><![CDATA[
 	Boolean defining if cookies integrity is activated. 
@@ -142,7 +142,7 @@
 				</xsd:annotation>
 			</xsd:attribute>
 			<xsd:attribute name="avoidCookiesConfidentiality" type="xsd:boolean"
-				default="true">
+				default="false">
 				<xsd:annotation>
 					<xsd:documentation><![CDATA[
 	Boolean defining if cookies confidentiality is activated. 
@@ -150,7 +150,7 @@
 				</xsd:annotation>
 			</xsd:attribute>
 			<xsd:attribute name="avoidValidationInUrlsWithoutParams"
-				type="xsd:boolean" default="true">
+				type="xsd:boolean" default="false">
 				<xsd:annotation>
 					<xsd:documentation><![CDATA[
 	Boolean defining if parameterless urls are securized.
