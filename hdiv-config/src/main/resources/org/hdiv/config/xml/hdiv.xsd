@@ -80,7 +80,8 @@
 						]]></xsd:documentation>
 					</xsd:annotation>
 				</xsd:element>
-				<xsd:element name="startParameters" type="xsd:string" minOccurs="0">
+				<xsd:element name="startParameters" type="xsd:string"
+					minOccurs="0">
 					<xsd:annotation>
 						<xsd:documentation><![CDATA[
 	List of parameters separated by commas. These parameters are permitted in all application. 
@@ -174,14 +175,16 @@
 					]]></xsd:documentation>
 				</xsd:annotation>
 			</xsd:attribute>
-			<xsd:attribute name="protectedExtensions" type="xsd:string">
+			<xsd:attribute name="protectedExtensions" type="xsd:string"
+				default=".*">
 				<xsd:annotation>
 					<xsd:documentation><![CDATA[
 	List of url extensions that Hdiv protects. 
 					]]></xsd:documentation>
 				</xsd:annotation>
 			</xsd:attribute>
-			<xsd:attribute name="excludedExtensions" type="xsd:string">
+			<xsd:attribute name="excludedExtensions" type="xsd:string"
+				default="">
 				<xsd:annotation>
 					<xsd:documentation><![CDATA[
 	List of url extensions that Hdiv don't protects. 

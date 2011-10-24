@@ -45,7 +45,7 @@ public class HDIVConfig {
 	 * Map with the parameters that will not be validated by the HDIV filter. The
 	 * init parameters are initialized by the Spring factory.
 	 */
-	private Hashtable startParameters;
+	private Hashtable startParameters = new Hashtable();
 
 	/**
 	 * Map of the validated actions that are init pages. It is necessary to create
@@ -61,7 +61,7 @@ public class HDIVConfig {
 	 * 
 	 * @since HDIV 1.1.1
 	 */
-	private Hashtable matchedParameters;
+	private Hashtable matchedParameters = new Hashtable();
 
 	/**
 	 * Error page to which HDIV will redirect the request if it doesn't pass the HDIV
@@ -356,9 +356,6 @@ public class HDIVConfig {
 	 * @param userStartPages list of init parameters defined by the user
 	 */
 	public void setUserStartParameters(List userStartParameters) {
-
-		this.matchedParameters = new Hashtable();
-		this.startParameters = new Hashtable();
 
 		String currentPattern;
 		for (int i = 0; i < userStartParameters.size(); i++) {
