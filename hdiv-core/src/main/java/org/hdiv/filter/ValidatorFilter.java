@@ -30,7 +30,6 @@ import org.hdiv.config.HDIVConfig;
 import org.hdiv.config.multipart.IMultipartConfig;
 import org.hdiv.config.multipart.exception.HdivMultipartException;
 import org.hdiv.session.ISession;
-import org.hdiv.util.Constants;
 import org.hdiv.util.HDIVUtil;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.web.context.WebApplicationContext;
@@ -120,10 +119,6 @@ public class ValidatorFilter extends OncePerRequestFilter {
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
 				
-		this.initHDIV(request);
-		
-		request.setAttribute(Constants.REQUEST_URI_KEY, request.getRequestURI());
-		
 		ResponseWrapper responseWrapper = new ResponseWrapper(response);
 		RequestWrapper requestWrapper = getRequestWrapper(request);
 		
@@ -184,20 +179,9 @@ public class ValidatorFilter extends OncePerRequestFilter {
 				log.error("Exception: "+e.toString());
 			}
 			response.sendRedirect(response.encodeRedirectURL(request.getContextPath() + hdivConfig.getErrorPage()));
-		} finally {
-			HDIVUtil.resetLocalData();
 		}
 	}
 	
-	/**
-	 * Initialize HDIV HTTP session
-	 * 
-	 * @param request HTTP request
-	 */
-	public void initHDIV(HttpServletRequest request) {		
-		HDIVUtil.setHttpServletRequest(request);
-	}
-
 	/**
 	 * Utility method that determines whether the request contains multipart
 	 * content.

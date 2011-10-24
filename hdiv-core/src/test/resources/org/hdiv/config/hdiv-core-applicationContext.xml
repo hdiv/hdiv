@@ -74,14 +74,6 @@
 		<property name="config"><ref bean="config" /></property>
 	</bean>
 
-	<bean id="abstractValidatorHelper" class="org.hdiv.filter.AbstractValidatorHelper" init-method="init" abstract="true">
-		<property name="logger"><ref bean="logger" /></property>
-		<property name="stateUtil"><ref bean="stateUtil" /></property>
-		<property name="hdivConfig" ref="config"/>
-		<property name="session" ref="sessionHDIV"/>
-		<property name="dataValidatorFactory" ref="dataValidatorFactory"/>
-	</bean>
-	
 	<bean id="dataValidatorFactory" class="org.hdiv.dataValidator.DataValidatorFactory">
 		<property name="hdivConfig" ref="config"/>
 	</bean>
@@ -96,8 +88,12 @@
 		<property name="allowedLength"><value>4000</value></property>
 	</bean>
 
-	<bean id="validatorHelper" class="org.hdiv.filter.ValidatorHelperRequest" parent="abstractValidatorHelper">
-		<property name="dataComposerFactory" ref="dataComposerFactory"/>
+	<bean id="validatorHelper" class="org.hdiv.filter.ValidatorHelperRequest" init-method="init">
+		<property name="logger"><ref bean="logger" /></property>
+		<property name="stateUtil"><ref bean="stateUtil" /></property>
+		<property name="hdivConfig" ref="config"/>
+		<property name="session" ref="sessionHDIV"/>
+		<property name="dataValidatorFactory" ref="dataValidatorFactory"/>
 	</bean>
 	
 	<bean id="hdivParameter" class="java.lang.String">

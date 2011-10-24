@@ -28,7 +28,6 @@ import org.hdiv.config.multipart.SpringMVCMultipartConfig;
 import org.hdiv.dataComposer.DataComposerFactory;
 import org.hdiv.dataValidator.DataValidatorFactory;
 import org.hdiv.dataValidator.ValidationResult;
-import org.hdiv.filter.AbstractValidatorHelper;
 import org.hdiv.filter.ValidatorHelperRequest;
 import org.hdiv.idGenerator.RandomGuidUidGenerator;
 import org.hdiv.idGenerator.SequentialPageIdGenerator;
@@ -41,7 +40,6 @@ import org.hdiv.util.EncodingUtil;
 import org.hdiv.web.servlet.support.HdivRequestDataValueProcessor;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.RuntimeBeanReference;
-import org.springframework.beans.factory.support.ChildBeanDefinition;
 import org.springframework.beans.factory.support.RootBeanDefinition;
 import org.springframework.beans.factory.xml.BeanDefinitionParser;
 import org.springframework.beans.factory.xml.ParserContext;
@@ -81,8 +79,6 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		parserContext.getRegistry().registerBeanDefinition("cipher", this.createCipher(element, source));
 		parserContext.getRegistry().registerBeanDefinition("results", this.createValidationResult(element, source));
 		parserContext.getRegistry().registerBeanDefinition("stateUtil", this.createStateUtil(element, source));
-		parserContext.getRegistry().registerBeanDefinition("abstractValidatorHelper",
-				this.createAbstractValidatorHelper(element, source));
 		parserContext.getRegistry().registerBeanDefinition("dataValidatorFactory",
 				this.createDataValidatorFactory(element, source));
 		parserContext.getRegistry().registerBeanDefinition("dataComposerFactory",
@@ -216,20 +212,6 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		return bean;
 	}
 
-	private RootBeanDefinition createAbstractValidatorHelper(Element element, Object source) {
-		RootBeanDefinition bean = new RootBeanDefinition(AbstractValidatorHelper.class);
-		bean.setSource(source);
-		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
-		bean.setInitMethodName("init");
-		bean.setAbstract(true);
-		bean.getPropertyValues().add("logger", new RuntimeBeanReference("logger"));
-		bean.getPropertyValues().add("stateUtil", new RuntimeBeanReference("stateUtil"));
-		bean.getPropertyValues().add("hdivConfig", new RuntimeBeanReference("config"));
-		bean.getPropertyValues().add("session", new RuntimeBeanReference("sessionHDIV"));
-		bean.getPropertyValues().add("dataValidatorFactory", new RuntimeBeanReference("dataValidatorFactory"));
-		return bean;
-	}
-
 	private RootBeanDefinition createDataValidatorFactory(Element element, Object source) {
 		RootBeanDefinition bean = new RootBeanDefinition(DataValidatorFactory.class);
 		bean.setSource(source);
@@ -251,12 +233,17 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		return bean;
 	}
 
-	private ChildBeanDefinition createValidatorHelper(Element element, Object source) {
-		ChildBeanDefinition bean = new ChildBeanDefinition("abstractValidatorHelper");
-		bean.setBeanClass(ValidatorHelperRequest.class);
+	private RootBeanDefinition createValidatorHelper(Element element, Object source) {
+
+		RootBeanDefinition bean = new RootBeanDefinition(ValidatorHelperRequest.class);
 		bean.setSource(source);
 		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
-		bean.getPropertyValues().add("dataComposerFactory", new RuntimeBeanReference("dataComposerFactory"));
+		bean.setInitMethodName("init");
+		bean.getPropertyValues().add("logger", new RuntimeBeanReference("logger"));
+		bean.getPropertyValues().add("stateUtil", new RuntimeBeanReference("stateUtil"));
+		bean.getPropertyValues().add("hdivConfig", new RuntimeBeanReference("config"));
+		bean.getPropertyValues().add("session", new RuntimeBeanReference("sessionHDIV"));
+		bean.getPropertyValues().add("dataValidatorFactory", new RuntimeBeanReference("dataValidatorFactory"));
 		return bean;
 	}
 
