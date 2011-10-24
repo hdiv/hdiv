@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+
+	<!-- State token id generator -->
+	<bean id="uidGenerator" class="org.hdiv.idGenerator.RandomGuidUidGenerator"/>
+	
+	<!-- Page id generator -->
+	<bean id="pageIdGenerator" class="org.hdiv.idGenerator.SequentialPageIdGenerator" singleton="false"/>
+
+	<bean id="keyFactory" class="org.hdiv.cipher.KeyFactory">
+		<property name="algorithm">
+			<value>AES</value>
+		</property>
+		<property name="keySize">
+			<value>128</value>
+		</property>		
+		<property name="prngAlgorithm">
+			<value>IBMSecureRandom</value>
+		</property>
+		<property name="provider">
+			<value>IBMJCE</value>
+		</property>
+	</bean>
+	
+	<!--LOGGER -->
+	<bean id="userData" class="org.hdiv.logs.UserData"/>
+	<bean id="logger" class="org.hdiv.logs.Logger">
+		<property name="userData">
+			<ref bean="userData" />
+		</property>
+	</bean>
+
+	<bean id="cache" class="org.hdiv.session.StateCache" singleton="false" init-method="init">
+		<property name="maxSize">
+			<value>5</value>
+		</property>
+	</bean>
+	
+	<bean id="encoding" class="org.hdiv.util.EncodingUtil" init-method="init">
+		<property name="session" ref="sessionHDIV"/>
+	</bean>
+	
+	<!--CONTEXT BEANS -->
+	<bean id="sessionHDIV" class="org.hdiv.session.SessionHDIV" init-method="init">
+		<property name="cipherName">
+			<value>cipher</value>
+		</property>
+		<property name="pageIdGeneratorName">
+			<ref bean="pageIdGeneratorName" />
+		</property>
+		<property name="cacheName">
+			<ref bean="cacheName" />
+		</property>
+		<property name="keyName">
+			<ref bean="keyName" />
+		</property>
+	</bean>
+
+	<bean id="application" class="org.hdiv.application.ApplicationHDIV" />
+    
+	<!-- CIPHER BEANS -->
+	<bean id="cipher" class="org.hdiv.cipher.CipherHTTP" init-method="init">
+		<property name="transformation">
+			<value>AES/CBC/PKCS5Padding</value>
+		</property>
+	</bean>
+
+	<bean id="results" class="org.hdiv.dataValidator.ValidationResult"/>
+
+	<bean id="stateUtil" class="org.hdiv.state.StateUtil" init-method="init">
+		<property name="encodingUtil"><ref bean="encoding" /></property>
+		<property name="config"><ref bean="config" /></property>
+	</bean>
+
+	<bean id="abstractValidatorHelper" class="org.hdiv.filter.AbstractValidatorHelper" init-method="init" abstract="true">
+		<property name="logger"><ref bean="logger" /></property>
+		<property name="stateUtil"><ref bean="stateUtil" /></property>
+		<property name="hdivConfig" ref="config"/>
+		<property name="session" ref="sessionHDIV"/>
+		<property name="dataValidatorFactory" ref="dataValidatorFactory"/>
+	</bean>
+	
+	<bean id="dataValidatorFactory" class="org.hdiv.dataValidator.DataValidatorFactory">
+		<property name="hdivConfig" ref="config"/>
+	</bean>
+
+	<!-- DATACOMPOSERS, DATAVALIDATOR -->
+
+	<bean id="dataComposerFactory" class="org.hdiv.dataComposer.DataComposerFactory">
+		<property name="hdivConfig"><ref bean="config" /></property>
+		<property name="session"><ref bean="sessionHDIV" /></property>
+		<property name="uidGenerator"><ref bean="uidGenerator" /></property>
+		<property name="encodingUtil"><ref bean="encoding" /></property>
+		<property name="allowedLength"><value>4000</value></property>
+	</bean>
+
+	<bean id="validatorHelper" class="org.hdiv.filter.ValidatorHelperRequest" parent="abstractValidatorHelper">
+		<property name="dataComposerFactory" ref="dataComposerFactory"/>
+	</bean>
+	
+	<bean id="hdivParameter" class="java.lang.String">
+         <constructor-arg>
+               <value>_HDIV_STATE_</value>
+          </constructor-arg>  
+    </bean>
+
+	<bean id="cacheName" class="java.lang.String">
+         <constructor-arg>
+               <value>cache</value>
+          </constructor-arg>  
+    </bean>
+    
+    <bean id="pageIdGeneratorName" class="java.lang.String">
+         <constructor-arg>
+               <value>pageIdGenerator</value>
+          </constructor-arg>  
+    </bean>
+
+	<bean id="keyName" class="java.lang.String">
+         <constructor-arg>
+               <value>key</value>
+          </constructor-arg>
+    </bean>
+    
+    <bean id="messageSourcePath" class="java.lang.String">
+		<constructor-arg>
+			<value>org.hdiv.msg.MessageResources</value>
+		</constructor-arg>
+    </bean>
+
+</beans>

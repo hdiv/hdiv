@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.hdiv</groupId>
+	<artifactId>hdiv</artifactId>
+	<packaging>pom</packaging>
+	<name>HDIV</name>
+	<version>2.1.0.RC2</version>
+	<url>http://www.hdiv.org</url>
+	<description>Java Web Application Security Framework</description>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
+	<issueManagement>
+		<system>GitHub</system>
+		<url>https://github.com/hdiv/hdiv/issues</url>
+	</issueManagement>
+
+	<!-- who the developers are for the project -->
+	<developers>
+		<developer>
+			<name>Roberto Velasco</name>
+			<id>robertovelasco</id>
+			<email>roberto at hdiv.org</email>
+			<roles>
+				<role>Project Admin</role>
+				<role>Developer</role>
+			</roles>
+		</developer>
+		<developer>
+			<name>Gorka Vicente</name>
+			<id>gorkavicente</id>
+			<email>gorka at hdiv.org</email>
+			<roles>
+				<role>Project Admin</role>
+				<role>Developer</role>
+			</roles>
+		</developer>
+		<developer>
+			<name>Gotzon Illarramendi</name>
+			<id>gillarramendi</id>
+			<email>gotzon at hdiv.org</email>
+			<roles>
+				<role>Developer</role>
+			</roles>
+		</developer>
+		<developer>
+			<name>Aritz Rabadan</name>
+			<id>arabadan</id>
+			<email>arabadan at users.sourceforge.net</email>
+			<roles>
+				<role>Developer</role>
+			</roles>
+		</developer>
+	</developers>
+
+	<build>
+		<extensions>
+			<extension>
+				<groupId>org.apache.maven.wagon</groupId>
+				<artifactId>wagon-ssh-external</artifactId>
+				<version>1.0-beta-5</version>
+			</extension>
+		</extensions>
+		<plugins>
+			<plugin>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>2.1</version>
+				<configuration>
+					<archive>
+						<manifest>
+							<addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+							<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+						</manifest>
+					</archive>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>com.mycila.maven-license-plugin</groupId>
+				<artifactId>maven-license-plugin</artifactId>
+				<configuration>
+					<header>${basedir}/../LICENSE_HEADER</header>
+					<encoding>UTF-8</encoding>
+					<strictCheck>true</strictCheck>
+					<includes>
+						<include>src/main/java/**</include>
+					</includes>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+	<distributionManagement>
+		<repository>
+			<uniqueVersion>false</uniqueVersion>
+			<id>oss-staging</id>
+			<name>OSS Staging repository</name>
+			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+		</repository>
+		<snapshotRepository>
+			<uniqueVersion>true</uniqueVersion>
+			<id>oss-snapshot</id>
+			<name>OSS Snapshot repository</name>
+			<url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+		</snapshotRepository>
+	</distributionManagement>
+
+	<!-- Modules -->
+	<modules>
+		<module>hdiv-core</module>
+		<module>hdiv-config</module>
+		<module>hdiv-jstl-taglibs-1.2</module>
+		<module>hdiv-spring-mvc</module>
+	</modules>
+
+	<licenses>
+		<license>
+			<name>The Apache Software License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<distribution>repo</distribution>
+			<comments />
+		</license>
+	</licenses>
+
+	<scm>
+		<connection>scm:git:git://github.com/hdiv/hdiv.git</connection>
+		<developerConnection>scm:git:git://github.com/hdiv/hdiv.git</developerConnection>
+		<url>git@github.com:hdiv/hdiv.git</url>
+	</scm>
+
+	<organization>
+		<name>hdiv.org</name>
+		<url>http://www.hdiv.org/</url>
+	</organization>
+
+	<!-- Project Dependencies -->
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.8.1</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-logging</groupId>
+			<artifactId>commons-logging</artifactId>
+			<version>1.0.4</version>
+		</dependency>
+	</dependencies>
+
+	<repositories>
+		<repository>
+			<id>spring-milestone</id>
+			<name>Spring Maven MILESTONE Repository</name>
+			<url>http://maven.springframework.org/milestone</url>
+		</repository>
+		<repository>
+			<id>spring-maven-snapshot</id>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+			<name>Springframework Maven SNAPSHOT Repository</name>
+			<url>http://maven.springframework.org/snapshot</url>
+		</repository>
+	</repositories>
+</project>

@@ -1,0 +1,7 @@
+HDIV Spring MVC
+Copyright 2005-2010 hdiv.org
+
+This product includes software developed by
+HDIV (http://www.hdiv.org/).
+
+

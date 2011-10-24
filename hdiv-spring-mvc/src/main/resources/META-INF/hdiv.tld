@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<taglib version="2.0" xmlns="http://java.sun.com/xml/ns/j2ee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_0.xsd">
+	<description>HDIV Tag Library</description>
+	<tlib-version>3.0</tlib-version>
+	<short-name>hdiv</short-name>
+	<uri>http://www.hdiv.org/tags</uri>
+	<tag>
+		<description>
+			Tag to cipher data without using Spring MVC.
+			Prints the encoded value of the 'value' attribute.
+		</description>
+		<name>cipher</name>
+		<tag-class>org.hdiv.web.servlet.tags.form.CipherTag</tag-class>
+		<body-content>JSP</body-content>
+		<attribute>
+			<description>In case of a link or a form, this is the url.</description>
+			<name>action</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>Name of the parameter to encode.</description>
+			<name>parameter</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>Value of the parameter to encode.</description>
+			<name>value</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>Name of the variable to assign encoded value.</description>
+			<name>var</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+</taglib>

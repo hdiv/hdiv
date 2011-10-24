@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+
+	<!-- Servlet API mock 
+	<bean id="mockServletContext" class="org.springframework.mock.web.MockServletContext"/>
+	
+	<bean id="mockHttpSession" class="org.springframework.mock.web.MockHttpSession"/>
+	-->
+	<bean id="mockRequest" class="org.springframework.mock.web.MockHttpServletRequest"/>
+
+	<!--HDIV API mock -->
+	
+	<!-- CIPHER BEANS -->
+	<bean id="cipher" class="org.hdiv.cipher.MockCipherHTTP">
+		<property name="algorithm"><value>AES</value></property>
+    </bean>
+    
+    <bean id="targetName" class="java.lang.String">
+         <constructor-arg>
+               <value>/testAction.do</value>
+          </constructor-arg>  
+    </bean>	
+	
+	<bean id="keyFactory" class="org.hdiv.cipher.KeyFactory">
+		<property name="algorithm">
+			<value>AES</value>
+		</property>
+		<property name="keySize">
+			<value>128</value>
+		</property>		
+		<property name="prngAlgorithm">
+			<value>SHA1PRNG</value>
+		</property>
+		<property name="provider">
+			<value>SUN</value>
+		</property>
+	</bean>
+	
+</beans>

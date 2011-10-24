@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns="http://www.hdiv.org/schema/hdiv"
+	targetNamespace="http://www.hdiv.org/schema/hdiv" elementFormDefault="qualified"
+	attributeFormDefault="unqualified" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+	<xsd:element name="validation">
+		<xsd:annotation>
+			<xsd:documentation><![CDATA[
+	Validation rule for a editable value.
+			]]></xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="acceptedPattern" type="xsd:string"
+					minOccurs="0" maxOccurs="1">
+					<xsd:annotation>
+						<xsd:documentation><![CDATA[
+	Regular expression that defines the values ​​allowed by a value.
+						]]></xsd:documentation>
+					</xsd:annotation>
+				</xsd:element>
+				<xsd:element name="rejectedPattern" type="xsd:string"
+					minOccurs="0" maxOccurs="1">
+					<xsd:annotation>
+						<xsd:documentation><![CDATA[
+	Regular expression defining the values ​​are not allowed by a value.
+						]]></xsd:documentation>
+					</xsd:annotation>
+				</xsd:element>
+			</xsd:sequence>
+			<xsd:attribute name="id" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation><![CDATA[
+	Id of the validation rule.
+					]]></xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+			<xsd:attribute name="componentType" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation><![CDATA[
+	Type of field you are going to apply the validation.
+					]]></xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:element name="editableValidations">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="validationRule" maxOccurs="unbounded">
+					<xsd:complexType mixed="true">
+						<xsd:attribute name="url" type="xsd:string">
+							<xsd:annotation>
+								<xsd:documentation><![CDATA[
+	Regular expression that defines the url for which validation is applied.
+								]]></xsd:documentation>
+							</xsd:annotation>
+						</xsd:attribute>
+					</xsd:complexType>
+				</xsd:element>
+			</xsd:sequence>
+			<xsd:attribute name="id" type="xsd:string"
+				default="editableParametersValidations" />
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:element name="config">
+		<xsd:annotation>
+			<xsd:documentation><![CDATA[
+	Hdiv general configuration.
+			]]></xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="startPages" type="xsd:string">
+					<xsd:annotation>
+						<xsd:documentation><![CDATA[
+	List of urls separated by commas. These URLs are not validated. 
+						]]></xsd:documentation>
+					</xsd:annotation>
+				</xsd:element>
+				<xsd:element name="startParameters" type="xsd:string" minOccurs="0">
+					<xsd:annotation>
+						<xsd:documentation><![CDATA[
+	List of parameters separated by commas. These parameters are permitted in all application. 
+						]]></xsd:documentation>
+					</xsd:annotation>
+				</xsd:element>
+				<xsd:element name="paramsWithoutValidation" minOccurs="0">
+					<xsd:annotation>
+						<xsd:documentation><![CDATA[
+	These parameters are permitted without validation. 
+						]]></xsd:documentation>
+					</xsd:annotation>
+					<xsd:complexType>
+						<xsd:sequence>
+							<xsd:element name="mapping" maxOccurs="unbounded"
+								minOccurs="0">
+								<xsd:complexType>
+									<xsd:attribute name="url" type="xsd:string">
+										<xsd:annotation>
+											<xsd:documentation><![CDATA[
+	Url regular expression. 
+											]]></xsd:documentation>
+										</xsd:annotation>
+									</xsd:attribute>
+									<xsd:attribute name="parameters" type="xsd:string">
+										<xsd:annotation>
+											<xsd:documentation><![CDATA[
+	List of parameters separated by commas.
+											]]></xsd:documentation>
+										</xsd:annotation>
+									</xsd:attribute>
+								</xsd:complexType>
+							</xsd:element>
+						</xsd:sequence>
+					</xsd:complexType>
+				</xsd:element>
+			</xsd:sequence>
+			<xsd:attribute name="confidentiality" type="xsd:boolean"
+				default="true">
+				<xsd:annotation>
+					<xsd:documentation><![CDATA[
+	Boolean defining if confidentiality is activated. 
+					]]></xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+			<xsd:attribute name="id" type="xsd:string" default="config">
+				<xsd:annotation>
+					<xsd:documentation><![CDATA[
+	Id of the config bean. 
+					]]></xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+			<xsd:attribute name="avoidCookiesIntegrity" type="xsd:boolean"
+				default="true">
+				<xsd:annotation>
+					<xsd:documentation><![CDATA[
+	Boolean defining if cookies integrity is activated. 
+					]]></xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+			<xsd:attribute name="avoidCookiesConfidentiality" type="xsd:boolean"
+				default="true">
+				<xsd:annotation>
+					<xsd:documentation><![CDATA[
+	Boolean defining if cookies confidentiality is activated. 
+					]]></xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+			<xsd:attribute name="avoidValidationInUrlsWithoutParams"
+				type="xsd:boolean" default="true">
+				<xsd:annotation>
+					<xsd:documentation><![CDATA[
+	Boolean defining if parameterless urls are securized.
+					]]></xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+			<xsd:attribute name="strategy" type="strategy" default="memory">
+				<xsd:annotation>
+					<xsd:documentation><![CDATA[
+	Hdiv strategy. 
+					]]></xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+			<xsd:attribute name="randomName" type="xsd:boolean"
+				default="false" />
+			<xsd:attribute name="errorPage" type="xsd:string"
+				default="error.jsp">
+				<xsd:annotation>
+					<xsd:documentation><![CDATA[
+	Url of the error page. 
+					]]></xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+			<xsd:attribute name="protectedExtensions" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation><![CDATA[
+	List of url extensions that Hdiv protects. 
+					]]></xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+			<xsd:attribute name="excludedExtensions" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation><![CDATA[
+	List of url extensions that Hdiv don't protects. 
+					]]></xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:simpleType name="strategy">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="memory" />
+			<xsd:enumeration value="cipher" />
+			<xsd:enumeration value="hash" />
+		</xsd:restriction>
+	</xsd:simpleType>
+
+</xsd:schema>

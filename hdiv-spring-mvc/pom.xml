@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<artifactId>hdiv</artifactId>
+		<groupId>org.hdiv</groupId>
+		<version>2.1.0.RC2</version>
+	</parent>
+	<artifactId>hdiv-spring-mvc</artifactId>
+	<name>HDIV Spring Mvc</name>
+	<description>Java Web Application Security Framework</description>
+	<url>http://www.hdiv.org</url>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.5</source>
+					<target>1.5</target>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+	<properties>
+		<org.springframework.version>3.1.0.BUILD-SNAPSHOT</org.springframework.version>
+	</properties>
+	<dependencies>
+		<dependency>
+			<groupId>org.hdiv</groupId>
+			<artifactId>hdiv-core</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>servlet-api</artifactId>
+			<version>2.5</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet.jsp</groupId>
+			<artifactId>jsp-api</artifactId>
+			<version>2.1</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webmvc</artifactId>
+			<version>${org.springframework.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<version>${org.springframework.version}</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+	<reporting>
+		<plugins>
+			<plugin>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<configuration>
+					<doctitle>HDIV Spring MVC API</doctitle>
+					<header>HDIV API ${project.version}</header>
+					<footer>HDIV ${project.version}</footer>
+					<destDir>../docs/api/hdiv-spring-mvc</destDir>
+				</configuration>
+			</plugin>
+		</plugins>
+	</reporting>
+</project>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<!-- HDIV Configuration Bean -->
+	<bean id="config" class="org.hdiv.config.HDIVConfig">
+
+		<property name="userStartParameters">
+			<list>
+				<value>clientGeneratedParam</value>
+			</list>
+		</property>
+
+		<property name="userStartPages">
+			<list>
+				<value>/</value>
+				<value>/index.jsp</value>
+				<value>/testing.do</value>
+			</list>
+		</property>
+
+		<property name="errorPage">
+			<value>/error.jsp</value>
+		</property>
+
+		<property name="paramsWithoutValidation">
+			<map>								
+				<entry key="/testAction.do">
+					<list>
+						<value>testingInitParameter</value>
+					</list>   
+				</entry>
+			</map>
+		</property>
+
+		<property name="protectedExtensions">
+			<list>
+ 				<value>.*.do</value>
+				<value>.*.jsp</value>
+			</list>
+		</property>
+
+		<property name="validations">
+			<ref bean="editableParemetersValidations" />
+		</property>
+
+		<property name="confidentiality" value="true"/>
+
+		<property name="cookiesIntegrity" value="true"/>
+
+		<property name="cookiesConfidentiality" value="true"/>
+
+		<property name="strategy" value="memory"/>
+
+		<property name="randomName" value="false"/>
+	</bean>
+
+</beans>

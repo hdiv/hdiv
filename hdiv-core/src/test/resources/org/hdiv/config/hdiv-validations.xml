@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean id="editableParemetersValidations" class="org.hdiv.config.HDIVValidations">
+		<property name="urls">
+			<map>
+				<entry key=".*">
+			  	   <list>
+					<ref bean="safeText" />
+					<!--  Typical SQL Injection attack -->
+					<ref bean="SQLInjection" />
+					<!-- avoid stored or extended procedures execution -->
+					<ref bean="execCommand" />
+					<ref bean="unauthorizedChars" />
+					<!--  Simple XSS attack -->
+					<ref bean="simpleXSS" />
+					<!--  image XSS attack -->
+					<ref bean="imageXSS" />						
+					<!--  script XSS attack -->
+					<ref bean="scriptXSS" />
+					<!--  avoid eval instruction -->
+					<ref bean="evalXSS" />
+				   </list>
+				</entry>
+			</map>
+		</property>
+   </bean>
+
+   <bean id="safeText" class="org.hdiv.validator.Validation">
+	<property name="componentType">
+ 	   <value>text</value>
+	</property>
+	<property name="acceptedPattern">
+	   <value><![CDATA[^[a-zA-Z0-9@.\-_]*$]]></value>
+	</property>
+	<property name="rejectedPattern">
+	   <value><![CDATA[(\s|\S)*(--)(\s|\S)*]]></value>
+	</property>
+   </bean>
+
+ 
+	<bean id="SQLInjection" class="org.hdiv.validator.Validation">
+		<property name="componentType">
+			<value>textarea</value>
+		</property>
+		<property name="rejectedPattern">
+			<value><![CDATA[(\s|\S)*((%27)|(')|(%3D)|(=)|(/)|(%2F)|(")|((%22)|(-|%2D){2})|(%23)|(%3B)|(;))+(\s|\S)*]]></value>
+		</property>
+   </bean>
+
+	<bean id="execCommand" class="org.hdiv.validator.Validation">
+		<property name="componentType">
+			<value>textarea</value>
+		</property>
+		<property name="rejectedPattern">
+			<value><![CDATA[(\s|\S)*(exec(\s|\+)+(s|x)p\w+)(\s|\S)*]]></value>
+		</property>
+	</bean>
+
+	<bean id="unauthorizedChars" class="org.hdiv.validator.Validation">
+		<property name="componentType">
+			<value>textarea</value>
+		</property>
+		<property name="rejectedPattern">
+			<value><![CDATA[(\s|\S)*((%23)|#|&|(%26))(\s|\S)*]]></value>
+		</property>
+	</bean>
+
+	<bean id="simpleXSS" class="org.hdiv.validator.Validation">
+		<property name="componentType">
+			<value>textarea</value>
+		</property>
+		<property name="rejectedPattern">
+			<value><![CDATA[(\s|\S)*((%3C)|<)((%2F)|/)*[a-z0-9%]+((%3E)|>)(\s|\S)*]]></value>
+		</property>
+   </bean>
+
+	<bean id="imageXSS" class="org.hdiv.validator.Validation">
+		<property name="componentType">
+			<value>textarea</value>
+		</property>
+		<property name="rejectedPattern">		   
+			<value><![CDATA[(\s|\S)*((%3C)|<)((%69)|i|I|(%49))((%6D)|m|M|(%4D))((%67)|g|G|(%47))[^\n]+((%3E)|>)(\s|\S)*]]></value>
+		</property>
+   </bean>
+
+	<bean id="scriptXSS" class="org.hdiv.validator.Validation">
+		<property name="componentType">
+			<value>textarea</value>
+		</property>
+		<property name="rejectedPattern">		   
+			<value><![CDATA[(\s|\S)*((%73)|s)(\s)*((%63)|c)(\s)*((%72)|r)(\s)*((%69)|i)(\s)*((%70)|p)(\s)*((%74)|t)(\s|\S)*]]></value>
+		</property>
+   </bean>
+
+ 
+	<bean id="evalXSS" class="org.hdiv.validator.Validation">
+		<property name="componentType">
+			<value>textarea</value>
+		</property>
+		<property name="rejectedPattern">			   
+			<value><![CDATA[(\s|\S)*((%65)|e)(\s)*((%76)|v)(\s)*((%61)|a)(\s)*((%6C)|l)(\s|\S)*]]></value>
+		</property>
+	</bean>
+
+	<bean id="safeText8" class="org.hdiv.validator.Validation">
+		<property name="componentType">
+			<value>text</value>
+		</property>
+		<property name="acceptedPattern">
+			<value><![CDATA[^[a-zA-Z0-9]{1,8}$]]></value>
+		</property>
+	</bean>
+ 
+</beans>

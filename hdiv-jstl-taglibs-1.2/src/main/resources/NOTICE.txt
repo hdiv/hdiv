@@ -1,0 +1,7 @@
+HDIV JSTL 1.1
+Copyright 2005-2007 hdiv.org
+
+This product includes software developed by
+HDIV (http://www.hdiv.org/).
+
+
