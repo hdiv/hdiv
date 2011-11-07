@@ -54,17 +54,36 @@ public class HdivRequestDataValueProcessor implements RequestDataValueProcessor 
 
 	public HdivRequestDataValueProcessor() {
 
-		// Non Editable:
-		// checkbox
-		// hidden
-		// option
-		// radio
-		// select
-		// Editable:
-		// text
-		// textarea
-		// password
-		// XXX Find a better way for this
+		// Initialize no editable types list
+		initNoEditableTypes();
+	}
+
+	/**
+	 * <p>
+	 * Initialize no editable input types.
+	 * </p>
+	 * <p>
+	 * Non editable input types:
+	 * <ul>
+	 * <li>checkbox</li>
+	 * <li>hidden</li>
+	 * <li>option</li>
+	 * <li>radio</li>
+	 * <li>select</li>
+	 * </ul>
+	 * </p>
+	 * <p>
+	 * Editable input types:
+	 * <ul>
+	 * <li>text</li>
+	 * <li>textarea</li>
+	 * <li>password</li>
+	 * <li>other input types: (number, tel, email...)</li>
+	 * </ul>
+	 * </p>
+	 */
+	protected void initNoEditableTypes() {
+
 		this.noEditableTypes.add("checkbox");
 		this.noEditableTypes.add("hidden");
 		this.noEditableTypes.add("option");
