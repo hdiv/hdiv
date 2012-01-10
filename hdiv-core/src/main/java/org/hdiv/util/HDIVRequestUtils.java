@@ -158,23 +158,24 @@ public class HDIVRequestUtils {
 	public static String addExtraParameters(HttpServletRequest request, IDataComposer dataComposer, String encodedURL) {
 
 		String hdivParameter = (String) request.getSession().getAttribute("HDIVParameter");
-		return addHDIVState(dataComposer, hdivParameter, encodedURL);
+		String requestId = dataComposer.endRequest();
+		
+		return addHDIVState(hdivParameter, requestId, encodedURL);
 	}
 
 	/**
 	 * Adds the HDIV parameter, depending on the strategy defined by the user,
 	 * to validate the request <code>encodedURL</code>.
 	 * 
-	 * @param dataComposer HDIV's data composer
 	 * @param hdivParameter HDIV's parameter name
+	 * @param requestId HDIV's parameter value
 	 * @param encodedURL URL encoded
 	 * @return <code>url</code> with the HDIV state added as a new parameter
 	 * @see org.hdiv.composer.IDataComposer
 	 */
-	public static String addHDIVState(IDataComposer dataComposer, String hdivParameter, String encodedURL) {
+	public static String addHDIVState(String hdivParameter, String requestId, String encodedURL) {
 
 		String separator = "";
-		String requestId = dataComposer.endRequest();
 
 		if ((requestId.length() <= 0) || (encodedURL.startsWith("javascript:"))) {
 			return encodedURL;
@@ -434,12 +435,12 @@ public class HDIVRequestUtils {
 		//Obtain complete url (relative urls are completed)
 		String contextPathUrl = HDIVRequestUtils.getContextRelativePath(request, url);
 		
-		//If this is a start page, don�t compose
+		//If this is a start page, don't compose
 		if(hdivConfig.isStartPage(contextPathUrl)){
 			return true;
 		}
 		
-		//If the url contains the context path and is a start page, don�t compose
+		//If the url contains the context path and is a start page, don't compose
 		if(contextPathUrl.startsWith(request.getContextPath())){
 			String urlWithoutContextPath = contextPathUrl.substring(request.getContextPath().length());
 			if(hdivConfig.isStartPage(urlWithoutContextPath)){
@@ -460,7 +461,7 @@ public class HDIVRequestUtils {
 	
 	public static String getAnchorFromUrl(String url){
 		String anchor = null;
-		if(url.indexOf('#')>0){
+		if(url.indexOf('#') >= 0){
 			anchor = url.substring(url.indexOf('#')+1);
 		}
 		return anchor;
@@ -468,7 +469,7 @@ public class HDIVRequestUtils {
 	
 	public static String removeAnchorFromUrl(String url){
 
-		if(url.indexOf('#')>0){
+		if(url.indexOf('#') >= 0){
 			return url.substring(0, url.indexOf('#'));
 		}else{
 			return url;
