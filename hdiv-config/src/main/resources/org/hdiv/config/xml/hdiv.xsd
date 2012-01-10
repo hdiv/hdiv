@@ -191,6 +191,13 @@
 					]]></xsd:documentation>
 				</xsd:annotation>
 			</xsd:attribute>
+			<xsd:attribute name="userData" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation><![CDATA[
+	Id of the UserData bean. 
+					]]></xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
 		</xsd:complexType>
 	</xsd:element>
 

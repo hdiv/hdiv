@@ -70,7 +70,11 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		parserContext.getRegistry().registerBeanDefinition("pageIdGenerator",
 				this.createPageIdGenerator(element, source));
 		parserContext.getRegistry().registerBeanDefinition("keyFactory", this.createKeyFactory(element, source));
-		parserContext.getRegistry().registerBeanDefinition("userData", this.createUserData(element, source));
+		String userData = element.getAttribute("userData");
+		if (userData == null || userData.length() < 1) {
+			// If user dont define userData bean, create default
+			parserContext.getRegistry().registerBeanDefinition("userData", this.createUserData(element, source));
+		}
 		parserContext.getRegistry().registerBeanDefinition("logger", this.createLogger(element, source));
 		parserContext.getRegistry().registerBeanDefinition("cache", this.createStateCache(element, source));
 		parserContext.getRegistry().registerBeanDefinition("encoding", this.createEncodingUtil(element, source));
@@ -141,10 +145,14 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 	}
 
 	private RootBeanDefinition createLogger(Element element, Object source) {
+		String userData = element.getAttribute("userData");
+		if (userData == null || userData.length() < 1) {
+			userData = "userData";// default userData bean id
+		}
 		RootBeanDefinition bean = new RootBeanDefinition(Logger.class);
 		bean.setSource(source);
 		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
-		bean.getPropertyValues().add("userData", new RuntimeBeanReference("userData"));
+		bean.getPropertyValues().add("userData", new RuntimeBeanReference(userData));
 		return bean;
 	}
 
