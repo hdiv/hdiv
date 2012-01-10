@@ -75,33 +75,34 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	private StateUtil stateUtil;
 
 	/**
-	 * State that represents all the data of a request or a form existing in a page
-	 * <code>page</code>
+	 * State that represents all the data of a request or a form existing in a
+	 * page <code>page</code>
 	 */
 	private ISession session;
-	
+
 	/**
-	 * IDataValidator factory 
+	 * IDataValidator factory
 	 */
 	private DataValidatorFactory dataValidatorFactory;
-	
+
 	/**
 	 * Compiled numeric <code>Pattern</code>
 	 */
-	private Pattern numberPattern =  Pattern.compile("[0-9]+");
+	private Pattern numberPattern = Pattern.compile("[0-9]+");
 
 	/**
 	 * Initialization of the objects needed for the validation process.
 	 * 
-	 * @throws HDIVException if there is an initialization error.
+	 * @throws HDIVException
+	 *             if there is an initialization error.
 	 */
 	public void init() {
 	}
-	
+
 	/**
 	 * Checks if the values of the parameters received in the request
-	 * <code>request</code> are valid. These values are valid if and only if
-	 * the noneditable parameters haven�t been modified.<br>
+	 * <code>request</code> are valid. These values are valid if and only if the
+	 * noneditable parameters haven�t been modified.<br>
 	 * Validation process is as follows.<br>
 	 * 1. If the action to which the request is directed is an init page, then
 	 * it is a valid request.<br>
@@ -124,39 +125,42 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	 * 5.4. If it is a noneditable parameter, all the received values are
 	 * checked.
 	 * 
-	 * @param request HttpServletRequest to validate
+	 * @param request
+	 *            HttpServletRequest to validate
 	 * @return True If all the parameter values of the request
 	 *         <code>request</code> pass the the HDIV validation. False,
 	 *         otherwise.
-	 * @throws HDIVException If the request doesn't pass the HDIV validation an
-	 *             exception is thrown explaining the cause of the error.
+	 * @throws HDIVException
+	 *             If the request doesn't pass the HDIV validation an exception
+	 *             is thrown explaining the cause of the error.
 	 */
 	public boolean validate(HttpServletRequest request) {
 
 		String target = this.getTarget(request);
 		String targetWithoutContextPath = this.getTargetWithoutContextPath(request, target);
-		
+
 		// Hook before the validation
 		Boolean pre = this.preValidate(request, target);
 		if (pre != null) {
 			return pre.booleanValue();
 		}
-		
-		if (this.hdivConfig.hasExtensionToExclude(target))
-		{
+
+		if (this.hdivConfig.hasExtensionToExclude(target)) {
 			log.debug("The target " + target + " has an extension to exclude from validation");
 			return true;
 		}
-		
+
 		if (!this.hdivConfig.isValidationInUrlsWithoutParamsActivated()) {
-			
-			boolean requestHasParameters = (request.getParameterNames() != null) && (request.getParameterNames().hasMoreElements());
+
+			boolean requestHasParameters = (request.getParameterNames() != null)
+					&& (request.getParameterNames().hasMoreElements());
 			if (!requestHasParameters) {
-				log.debug("The url " + request.getRequestURI() + " is not be validated because it has not got parameters");
+				log.debug("The url " + request.getRequestURI()
+						+ " is not be validated because it has not got parameters");
 				return true;
 			}
 		}
-		
+
 		if (this.hdivConfig.isStartPage(targetWithoutContextPath)) {
 			return (this.validateStartPageParameters(request, target));
 		}
@@ -181,9 +185,9 @@ public class ValidatorHelperRequest implements IValidationHelper {
 			return false;
 		}
 
-		//Hdiv parameter name
+		// Hdiv parameter name
 		String hdivParameter = getHdivParameter(request);
-		
+
 		Hashtable unauthorizedEditableParameters = new Hashtable();
 		Enumeration parameters = request.getParameterNames();
 		while (parameters.hasMoreElements()) {
@@ -192,7 +196,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 
 			// check if the HDIV validation must be applied to the parameter
 			if (!this.hdivConfig.needValidation(parameter, hdivParameter)) {
-				
+
 				if (log.isDebugEnabled() && !parameter.equals(hdivParameter)) {
 					log.debug("parameter " + parameter + " doesn't need validation");
 				}
@@ -203,20 +207,22 @@ public class ValidatorHelperRequest implements IValidationHelper {
 			// valid parameter
 			if (this.isUserDefinedNonValidationParameter(targetWithoutContextPath, parameter)) {
 				continue;
-			}			
-			
+			}
+
 			IParameter stateParameter = state.getParameter(parameter);
 			if (stateParameter == null) {
 
 				// If the parameter is not defined in the state, it is an error.
-				// With this verification we guarantee that no extra parameters are
+				// With this verification we guarantee that no extra parameters
+				// are
 				// added.
 				this.logger.log(HDIVErrorCodes.PARAMETER_NOT_EXISTS, target, parameter, null);
-				
-				if(log.isDebugEnabled()){
-					log.debug("Validation Error Detected: Parameter ["+parameter+"] does not exist in the state for action ["+target+"]");
+
+				if (log.isDebugEnabled()) {
+					log.debug("Validation Error Detected: Parameter [" + parameter
+							+ "] does not exist in the state for action [" + target + "]");
 				}
-				
+
 				return false;
 			}
 
@@ -227,8 +233,8 @@ public class ValidatorHelperRequest implements IValidationHelper {
 			if (stateParameter.isEditable()) {
 
 				if (hdivConfig.existValidations() && (stateParameter.getEditableDataType() != null)) {
-					this.validateEditableParameter(request, target, parameter, values, stateParameter.getEditableDataType(),
-							unauthorizedEditableParameters);
+					this.validateEditableParameter(request, target, parameter, values,
+							stateParameter.getEditableDataType(), unauthorizedEditableParameters);
 				}
 				continue;
 			}
@@ -244,8 +250,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 		}
 
 		if (unauthorizedEditableParameters.size() > 0) {
-			request.setAttribute(HDIVErrorCodes.EDITABLE_PARAMETER_ERROR,
-					unauthorizedEditableParameters);
+			request.setAttribute(HDIVErrorCodes.EDITABLE_PARAMETER_ERROR, unauthorizedEditableParameters);
 		}
 
 		return true;
@@ -255,9 +260,12 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	 * Checks if the action received in the request is the same as the one
 	 * stored in the HDIV state.
 	 * 
-	 * @param request HttpServletRequest to validate
-	 * @param target Part of the url that represents the target action
-	 * @param IState The restored state for this url
+	 * @param request
+	 *            HttpServletRequest to validate
+	 * @param target
+	 *            Part of the url that represents the target action
+	 * @param IState
+	 *            The restored state for this url
 	 * @return True if the actions are the same. False otherwise.
 	 */
 	public boolean isTheSameAction(HttpServletRequest request, String target, IState state) {
@@ -279,11 +287,12 @@ public class ValidatorHelperRequest implements IValidationHelper {
 		}
 
 		this.logger.log(HDIVErrorCodes.ACTION_ERROR, target, null, null);
-		
-		if(log.isDebugEnabled()){
-			log.debug("Detected validation error in the action: action in state:"+state.getAction()+", action in the request:"+target);
+
+		if (log.isDebugEnabled()) {
+			log.debug("Detected validation error in the action: action in state:" + state.getAction()
+					+ ", action in the request:" + target);
 		}
-		
+
 		return false;
 	}
 
@@ -292,8 +301,10 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	 * receive requests that require validation but don't have any HDIV state.
 	 * So, despite being init pages, editable data validation must be done.
 	 * 
-	 * @param request HttpServletRequest to validate
-	 * @param target Part of the url that represents the target action
+	 * @param request
+	 *            HttpServletRequest to validate
+	 * @param target
+	 *            Part of the url that represents the target action
 	 * @return True if the values of the editable parameters pass the
 	 *         validations defined in hdiv-config.xml. False otherwise.
 	 * @since HDIV 1.1.2
@@ -302,23 +313,21 @@ public class ValidatorHelperRequest implements IValidationHelper {
 
 		if (hdivConfig.existValidations()) {
 
-			String targetWithoutContextPath = this.getTargetWithoutContextPath(request, target);
-			
+			Hashtable unauthorizedEditableParameters = new Hashtable();
+
 			Enumeration parameters = request.getParameterNames();
 			while (parameters.hasMoreElements()) {
 
 				String parameter = (String) parameters.nextElement();
 				String[] values = request.getParameterValues(parameter);
 
-				if (!hdivConfig.areEditableParameterValuesValid(targetWithoutContextPath, parameter, values, "")) {
-					this.logger.log(HDIVErrorCodes.EDITABLE_PARAMETER_ERROR, target, parameter, values.toString());
-					
-					if(log.isDebugEnabled()){
-						log.debug("Validation error detected: Editable parameter ["+parameter+"] not valid for the action ["+target+"], value = "+values.toString());
-					}
-					
-					return false;
-				}
+				this.validateEditableParameter(request, target, parameter, values, "text",
+						unauthorizedEditableParameters);
+
+			}
+
+			if (unauthorizedEditableParameters.size() > 0) {
+				request.setAttribute(HDIVErrorCodes.EDITABLE_PARAMETER_ERROR, unauthorizedEditableParameters);
 			}
 		}
 		return true;
@@ -328,8 +337,10 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	 * Checks if the cookies received in the request are correct. For that, it
 	 * checks if they are in the user session.
 	 * 
-	 * @param request HttpServletRequest to validate
-	 * @param target Part of the url that represents the target action
+	 * @param request
+	 *            HttpServletRequest to validate
+	 * @param target
+	 *            Part of the url that represents the target action
 	 * @return True if all the cookies received in the request are correct. They
 	 *         must have been previously stored in the user session by HDIV to
 	 *         be correct. False otherwise.
@@ -338,7 +349,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	public boolean validateRequestCookies(HttpServletRequest request, String target) {
 
 		Cookie[] requestCookies = request.getCookies();
-		
+
 		if ((requestCookies == null) || (requestCookies.length == 0)) {
 			return true;
 		}
@@ -384,25 +395,31 @@ public class ValidatorHelperRequest implements IValidationHelper {
 
 	/**
 	 * Checks if the values <code>values</code> are valid for the editable
-	 * parameter <code>parameter</code>. This validation is defined by the
-	 * user in the hdiv-validations.xml file of Spring. If the values are not
-	 * valid, an error message with the parameter and the received values will
-	 * be log.
+	 * parameter <code>parameter</code>. This validation is defined by the user
+	 * in the hdiv-validations.xml file of Spring. If the values are not valid,
+	 * an error message with the parameter and the received values will be log.
 	 * 
-	 * @param request HttpServletRequest to validate
-	 * @param target Part of the url that represents the target action
-	 * @param parameter parameter name
-	 * @param values parameter's values
-	 * @param dataType editable data type
-	 * @param unauthorizedParameters Unauthorized editable parameters
+	 * @param request
+	 *            HttpServletRequest to validate
+	 * @param target
+	 *            Part of the url that represents the target action
+	 * @param parameter
+	 *            parameter name
+	 * @param values
+	 *            parameter's values
+	 * @param dataType
+	 *            editable data type
+	 * @param unauthorizedParameters
+	 *            Unauthorized editable parameters
 	 * @since HDIV 1.1
 	 */
-	public void validateEditableParameter(HttpServletRequest request, String target, String parameter, String[] values, String dataType,
-			Hashtable unauthorizedParameters) {
+	public void validateEditableParameter(HttpServletRequest request, String target, String parameter, String[] values,
+			String dataType, Hashtable unauthorizedParameters) {
 
 		String targetWithoutContextPath = this.getTargetWithoutContextPath(request, target);
-		
-		boolean isValid = hdivConfig.areEditableParameterValuesValid(targetWithoutContextPath, parameter, values, dataType);
+
+		boolean isValid = hdivConfig.areEditableParameterValuesValid(targetWithoutContextPath, parameter, values,
+				dataType);
 		if (!isValid) {
 
 			StringBuffer unauthorizedValues = new StringBuffer(values[0]);
@@ -418,17 +435,19 @@ public class ValidatorHelperRequest implements IValidationHelper {
 				unauthorizedParameters.put(parameter, values);
 			}
 
-			this.logger.log(HDIVErrorCodes.EDITABLE_VALIDATION_ERROR, target, parameter, unauthorizedValues
-					.toString());
+			this.logger.log(HDIVErrorCodes.EDITABLE_VALIDATION_ERROR, target, parameter, unauthorizedValues.toString());
 		}
 	}
 
 	/**
 	 * Check if all required parameters are received in <code>request</code>.
 	 * 
-	 * @param request HttpServletRequest to validate
-	 * @param state IState The restored state for this url
-	 * @param target Part of the url that represents the target action
+	 * @param request
+	 *            HttpServletRequest to validate
+	 * @param state
+	 *            IState The restored state for this url
+	 * @param target
+	 *            Part of the url that represents the target action
 	 * @return True if all required parameters are received. False in otherwise.
 	 */
 	private boolean allRequiredParametersReceived(HttpServletRequest request, IState state, String target) {
@@ -452,8 +471,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 		}
 
 		if (receivedParameters.size() > 0) {
-			this.logger.log(HDIVErrorCodes.REQUIRED_PARAMETERS, target, receivedParameters.keySet().toString(),
-					null);
+			this.logger.log(HDIVErrorCodes.REQUIRED_PARAMETERS, target, receivedParameters.keySet().toString(), null);
 			return false;
 		}
 
@@ -461,12 +479,14 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	}
 
 	/**
-	 * Checks if the parameter <code>parameter</code> is defined by the user
-	 * as a no required validation parameter for the action
+	 * Checks if the parameter <code>parameter</code> is defined by the user as
+	 * a no required validation parameter for the action
 	 * <code>this.target</code>.
 	 * 
-	 * @param targetWithoutContextPath target with the ContextPath stripped
-	 * @param parameter parameter name
+	 * @param targetWithoutContextPath
+	 *            target with the ContextPath stripped
+	 * @param parameter
+	 *            parameter name
 	 * @return True If it is parameter that needs no validation. False
 	 *         otherwise.
 	 */
@@ -484,20 +504,22 @@ public class ValidatorHelperRequest implements IValidationHelper {
 
 	/**
 	 * Restore state from session or <code>request</code> with
-	 * <code>request</code> identifier. Strategy defined by the user
-	 * determines the way the state is restored.
+	 * <code>request</code> identifier. Strategy defined by the user determines
+	 * the way the state is restored.
 	 * 
-	 * @param request HTTP request
-	 * @param target Part of the url that represents the target action
+	 * @param request
+	 *            HTTP request
+	 * @param target
+	 *            Part of the url that represents the target action
 	 * @return True if restored state is valid. False in otherwise.
-	 * @throws HDIVException if there is an error restoring state from request
-	 *             or session.
+	 * @throws HDIVException
+	 *             if there is an error restoring state from request or session.
 	 */
 	private IState restoreState(HttpServletRequest request, String target) {
 
-		//Hdiv parameter name
+		// Hdiv parameter name
 		String hdivParameter = getHdivParameter(request);
-		
+
 		// checks if the parameter HDIV parameter exists in the parameters of
 		// the request
 		String requestState = request.getParameter(hdivParameter);
@@ -511,14 +533,13 @@ public class ValidatorHelperRequest implements IValidationHelper {
 			if (stateUtil.isMemoryStrategy(requestState)) {
 
 				if (!this.validateHDIVSuffix(requestState)) {
-					this.logger.log(HDIVErrorCodes.HDIV_PARAMETER_INCORRECT_VALUE, target, hdivParameter,
-							requestState);
+					this.logger.log(HDIVErrorCodes.HDIV_PARAMETER_INCORRECT_VALUE, target, hdivParameter, requestState);
 					return null;
 				}
 			}
 
 			IState state = stateUtil.restoreState(requestState);
-			
+
 			return state;
 
 		} catch (HDIVException e) {
@@ -538,7 +559,8 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	 * original suffix. So any request using the memory version should keep the
 	 * suffix unchanged.
 	 * 
-	 * @param value value received in the HDIV parameter
+	 * @param value
+	 *            value received in the HDIV parameter
 	 * @return True if the received value of the suffix is valid. False
 	 *         otherwise.
 	 */
@@ -547,32 +569,32 @@ public class ValidatorHelperRequest implements IValidationHelper {
 		int firstSeparator = value.indexOf("-");
 		int lastSeparator = value.lastIndexOf("-");
 
-		if(firstSeparator == -1){
-			
+		if (firstSeparator == -1) {
+
 			return false;
 		}
-		
+
 		if (firstSeparator >= lastSeparator) {
-			
+
 			return false;
 		}
 
 		try {
 			// read hdiv's suffix from request
 			String requestSuffix = value.substring(lastSeparator + 1);
-			
-			// read suffix from page stored in session			
-			String pageId = value.substring(0, firstSeparator);			
+
+			// read suffix from page stored in session
+			String pageId = value.substring(0, firstSeparator);
 			IPage currentPage = this.session.getPage(pageId);
 
-			if(currentPage==null){
-				if(log.isErrorEnabled()){
-					log.error("Page with id ["+pageId+"] not found in session.");
+			if (currentPage == null) {
+				if (log.isErrorEnabled()) {
+					log.error("Page with id [" + pageId + "] not found in session.");
 				}
 				String errorMessage = HDIVUtil.getMessage("helper.nopageinsession", pageId);
 				throw new HDIVException(errorMessage);
 			}
-			
+
 			return currentPage.getRandomToken().equals(requestSuffix);
 
 		} catch (Exception e) {
@@ -586,30 +608,41 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	 * valid, that is, are expected values. Received value number is checked and
 	 * then these values are validated.
 	 * 
-	 * @param request HttpServletRequest to validate
-	 * @param target Part of the url that represents the target action
-	 * @param state IState The restored state for this url
-	 * @param stateParameter parameter stored in state
-	 * @param parameter Parameter to validate
-	 * @param values parameter <code>parameter</code> values
+	 * @param request
+	 *            HttpServletRequest to validate
+	 * @param target
+	 *            Part of the url that represents the target action
+	 * @param state
+	 *            IState The restored state for this url
+	 * @param stateParameter
+	 *            parameter stored in state
+	 * @param parameter
+	 *            Parameter to validate
+	 * @param values
+	 *            parameter <code>parameter</code> values
 	 * @return True if the validation is correct. False otherwise.
-	 * @throws HDIVException if there is an error in parameter validation
-	 *             process.
+	 * @throws HDIVException
+	 *             if there is an error in parameter validation process.
 	 */
-	private boolean validateParameterValues(HttpServletRequest request, String target, IState state, IParameter stateParameter, String parameter, String[] values) {
+	private boolean validateParameterValues(HttpServletRequest request, String target, IState state,
+			IParameter stateParameter, String parameter, String[] values) {
 
 		try {
-			// Only for required parameters must be checked if the number of received
-			// values is the same as number of values in the state. If this wasn't
-			// taken into account, this verification will be done for every parameter, 
-			// including for example, a multiple combo where hardly ever are all its 
+			// Only for required parameters must be checked if the number of
+			// received
+			// values is the same as number of values in the state. If this
+			// wasn't
+			// taken into account, this verification will be done for every
+			// parameter,
+			// including for example, a multiple combo where hardly ever are all
+			// its
 			// values received.
 			if (stateParameter.isActionParam()) {
 
 				if (values.length != stateParameter.getValues().size()) {
-					
-					String valueMessage = (values.length > stateParameter.getValues().size()) ? 
-										  "extra value" : "more values expected";
+
+					String valueMessage = (values.length > stateParameter.getValues().size()) ? "extra value"
+							: "more values expected";
 					this.logger.log(HDIVErrorCodes.VALUE_LENGTH_INCORRECT, target, parameter, valueMessage);
 					return false;
 				}
@@ -619,8 +652,10 @@ public class ValidatorHelperRequest implements IValidationHelper {
 				return false;
 			}
 
-			// At this point, we know that the number of received values is the same
-			// as the number of values sent to the client. Now we have to check if
+			// At this point, we know that the number of received values is the
+			// same
+			// as the number of values sent to the client. Now we have to check
+			// if
 			// the received values are all tha ones stored in the state.
 			return this.validateReceivedValuesInState(request, target, state, parameter, values);
 
@@ -634,10 +669,14 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	 * Checks if repeated or no valid values have been received for the
 	 * parameter <code>parameter</code>.
 	 * 
-	 * @param target Part of the url that represents the target action
-	 * @param parameter parameter name
-	 * @param values Parameter <code>parameter</code> values
-	 * @param stateValues values stored in state for <code>parameter</code>
+	 * @param target
+	 *            Part of the url that represents the target action
+	 * @param parameter
+	 *            parameter name
+	 * @param values
+	 *            Parameter <code>parameter</code> values
+	 * @param stateValues
+	 *            values stored in state for <code>parameter</code>
 	 * @return True If repeated or no valid values have been received for the
 	 *         parameter <code>parameter</code>.
 	 */
@@ -657,10 +696,14 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	 * Checks if repeated values have been received for the parameter
 	 * <code>parameter</code>.
 	 * 
-	 * @param target Part of the url that represents the target action
-	 * @param parameter parameter name
-	 * @param values Parameter <code>parameter</code> values
-	 * @param size number of values received for <code>parameter</code>
+	 * @param target
+	 *            Part of the url that represents the target action
+	 * @param parameter
+	 *            parameter name
+	 * @param values
+	 *            Parameter <code>parameter</code> values
+	 * @param size
+	 *            number of values received for <code>parameter</code>
 	 * @return True If repeated values have been received for the parameter
 	 *         <code>parameter</code>.
 	 */
@@ -688,14 +731,19 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	 * Checks if repeated or no valid values have been received for the
 	 * parameter <code>parameter</code>.
 	 * 
-	 * @param target Part of the url that represents the target action
-	 * @param parameter parameter name
-	 * @param values Parameter <code>parameter</code> values
-	 * @param tempStateValues values stored in state for <code>parameter</code>
+	 * @param target
+	 *            Part of the url that represents the target action
+	 * @param parameter
+	 *            parameter name
+	 * @param values
+	 *            Parameter <code>parameter</code> values
+	 * @param tempStateValues
+	 *            values stored in state for <code>parameter</code>
 	 * @return True If repeated or no valid values have been received for the
 	 *         parameter <code>parameter</code>.
 	 */
-	private boolean hasNonConfidentialIncorrectValues(String target, String parameter, String[] values, List tempStateValues) {
+	private boolean hasNonConfidentialIncorrectValues(String target, String parameter, String[] values,
+			List tempStateValues) {
 
 		Hashtable receivedValues = new Hashtable();
 
@@ -727,21 +775,25 @@ public class ValidatorHelperRequest implements IValidationHelper {
 		return false;
 	}
 
-    /**
-     * Checks if the confidential value received in <code>value</code> is a
-     * value lower than the number or values received for the parameter
-     * <code>parameter</code>. 
-     * 
-	 * @param target Part of the url that represents the target action
-     * @param parameter parameter
-     * @param value value
-     * @param valuesNumber number of values received for <code>parameter</code>
-     * @return True if <code>value</code> is correct. False otherwise. 
-     * @since HDIV 2.0
-     */
+	/**
+	 * Checks if the confidential value received in <code>value</code> is a
+	 * value lower than the number or values received for the parameter
+	 * <code>parameter</code>.
+	 * 
+	 * @param target
+	 *            Part of the url that represents the target action
+	 * @param parameter
+	 *            parameter
+	 * @param value
+	 *            value
+	 * @param valuesNumber
+	 *            number of values received for <code>parameter</code>
+	 * @return True if <code>value</code> is correct. False otherwise.
+	 * @since HDIV 2.0
+	 */
 	private boolean isInRange(String target, String parameter, String value, int valuesNumber) {
 
-//		Pattern p = Pattern.compile("[0-9]+");
+		// Pattern p = Pattern.compile("[0-9]+");
 		Matcher m = this.numberPattern.matcher(value);
 
 		if (!m.matches() || (Integer.valueOf(value).intValue() >= valuesNumber)) {
@@ -752,27 +804,34 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	}
 
 	/**
-	 * Checks that values <code>values</code> for the <code>parameter</code>
-	 * are valid.
+	 * Checks that values <code>values</code> for the <code>parameter</code> are
+	 * valid.
 	 * 
-	 * @param request HttpServletRequest to validate
-	 * @param target Part of the url that represents the target action
-	 * @param state IState The restored state for this url
-	 * @param parameter Parameter to validate
-	 * @param values Parameter <code>parameter</code> values.
+	 * @param request
+	 *            HttpServletRequest to validate
+	 * @param target
+	 *            Part of the url that represents the target action
+	 * @param state
+	 *            IState The restored state for this url
+	 * @param parameter
+	 *            Parameter to validate
+	 * @param values
+	 *            Parameter <code>parameter</code> values.
 	 * @return True If the <code>values</code> validation is correct. False
 	 *         otherwise.
-	 * @throws Exception if there is an internal error.
+	 * @throws Exception
+	 *             if there is an internal error.
 	 */
-	private boolean validateReceivedValuesInState(HttpServletRequest request, String target, IState state, String parameter, String[] values) throws Exception {
+	private boolean validateReceivedValuesInState(HttpServletRequest request, String target, IState state,
+			String parameter, String[] values) throws Exception {
 
 		int size = values.length;
 		String[] originalValues = new String[size];
 
 		IDataValidator dataValidator = this.dataValidatorFactory.newInstance(state);
-		
+
 		String targetWithoutContextPath = this.getTargetWithoutContextPath(request, target);
-		
+
 		IValidationResult result = null;
 		for (int i = 0; i < size; i++) {
 
@@ -785,45 +844,52 @@ public class ValidatorHelperRequest implements IValidationHelper {
 				originalValues[i] = (String) result.getResult();
 			}
 		}
-		
-		if(this.hdivConfig.getConfidentiality().equals(Boolean.TRUE)){
+
+		if (this.hdivConfig.getConfidentiality().equals(Boolean.TRUE)) {
 			this.addParameterToRequest(request, parameter, originalValues);
 		}
-		
+
 		return true;
-	}
-	
-	/**
-	 * Adds one parameter to the request.
-	 * Since the HttpServletRequest object's parameters are unchanged according to the Servlet specification, 
-	 * the instance of request should be passed as a parameter of type RequestWrapper.
-	 * 
-	 * @param request HttpServletRequest to validate
-	 * @param name new parameter name
-	 * @param value new parameter value
-	 * @throws HDIVException si el objeto request no es de tipo RequestWrapper
-	 */
-	protected void addParameterToRequest(HttpServletRequest request, String name, Object value){
-		
-		if(request instanceof RequestWrapper){
-			
-			RequestWrapper wrapper = (RequestWrapper)request;
-			wrapper.addParameter(name, value);
-			
-		}else{
-			throw new HDIVException("El objeto request no es de tipo RequestWrapper.");
-		}
-		
 	}
 
 	/**
-	 * Gets the part of the url that represents the action to be executed in this request.
+	 * Adds one parameter to the request. Since the HttpServletRequest object's
+	 * parameters are unchanged according to the Servlet specification, the
+	 * instance of request should be passed as a parameter of type
+	 * RequestWrapper.
 	 * 
-	 * @param request HttpServletRequest to validate
-	 * @return target Part of the url that represents the target action
-	 * @throws HDIVException 
+	 * @param request
+	 *            HttpServletRequest to validate
+	 * @param name
+	 *            new parameter name
+	 * @param value
+	 *            new parameter value
+	 * @throws HDIVException
+	 *             si el objeto request no es de tipo RequestWrapper
 	 */
-	protected String getTarget(HttpServletRequest request){
+	protected void addParameterToRequest(HttpServletRequest request, String name, Object value) {
+
+		if (request instanceof RequestWrapper) {
+
+			RequestWrapper wrapper = (RequestWrapper) request;
+			wrapper.addParameter(name, value);
+
+		} else {
+			throw new HDIVException("El objeto request no es de tipo RequestWrapper.");
+		}
+
+	}
+
+	/**
+	 * Gets the part of the url that represents the action to be executed in
+	 * this request.
+	 * 
+	 * @param request
+	 *            HttpServletRequest to validate
+	 * @return target Part of the url that represents the target action
+	 * @throws HDIVException
+	 */
+	protected String getTarget(HttpServletRequest request) {
 		try {
 			return HDIVUtil.actionName(request);
 		} catch (Exception e) {
@@ -831,15 +897,17 @@ public class ValidatorHelperRequest implements IValidationHelper {
 			throw new HDIVException(errorMessage, e);
 		}
 	}
-	
+
 	/**
 	 * Removes the target's ContextPath part
 	 * 
-	 * @param request HttpServletRequest to validate
-	 * @param target target to stripp the ContextPath
+	 * @param request
+	 *            HttpServletRequest to validate
+	 * @param target
+	 *            target to stripp the ContextPath
 	 * @return target without the ContextPath
 	 */
-	protected String getTargetWithoutContextPath(HttpServletRequest request, String target){
+	protected String getTargetWithoutContextPath(HttpServletRequest request, String target) {
 		String targetWithoutContextPath = target.substring(request.getContextPath().length());
 		return targetWithoutContextPath;
 	}
@@ -848,48 +916,59 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	 * Name of the parameter that HDIV will include in the requests or/and forms
 	 * which contains the state identifier in the memory strategy or the state
 	 * itself in the Encoded or Hash strategies.
-	 * @param request request
+	 * 
+	 * @param request
+	 *            request
 	 * @return
 	 */
-	protected String getHdivParameter(HttpServletRequest request){
-		
-		return (String)request.getSession().getAttribute(Constants.HDIV_PARAMETER);
+	protected String getHdivParameter(HttpServletRequest request) {
+
+		return (String) request.getSession().getAttribute(Constants.HDIV_PARAMETER);
 	}
-	
+
 	/**
 	 * <p>
-	 * Method invoked before validation. 
-	 * Designed to change the validation logic beyond the base implementation.
+	 * Method invoked before validation. Designed to change the validation logic
+	 * beyond the base implementation.
 	 * </p>
 	 * <p>
 	 * The response of the method can have three meanings:<br/>
-	 * -Boolean = true: The validation has been completed correctly and is not necessary to run the entire validation process.<br/>
-	 * -Boolean = false: The validation has encountered an error and terminates the validation process. <br/>
-	 * -Boolean = null: It should continue with the validation process (default answer).<br/>
+	 * -Boolean = true: The validation has been completed correctly and is not
+	 * necessary to run the entire validation process.<br/>
+	 * -Boolean = false: The validation has encountered an error and terminates
+	 * the validation process. <br/>
+	 * -Boolean = null: It should continue with the validation process (default
+	 * answer).<br/>
 	 * </p>
-	 * @param request HttpServletRequest to validate
+	 * 
+	 * @param request
+	 *            HttpServletRequest to validate
 	 * @return Boolean result
 	 */
-	protected Boolean preValidate(HttpServletRequest request, String target) {	
+	protected Boolean preValidate(HttpServletRequest request, String target) {
 		return null;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
-	 * @see org.hdiv.filter.IValidationHelper#startPage(javax.servlet.http.HttpServletRequest)
+	 * 
+	 * @see org.hdiv.filter.IValidationHelper#startPage(javax.servlet.http.
+	 * HttpServletRequest)
 	 */
 	public void startPage(HttpServletRequest request) {
 		// DataComposer startPage moved to InitListener
 	}
-	
+
 	/*
 	 * (non-Javadoc)
-	 * @see org.hdiv.filter.IValidationHelper#endPage(javax.servlet.http.HttpServletRequest)
+	 * 
+	 * @see org.hdiv.filter.IValidationHelper#endPage(javax.servlet.http.
+	 * HttpServletRequest)
 	 */
 	public void endPage(HttpServletRequest request) {
 		// DataComposer endPage moved to InitListener
 	}
-	
+
 	/**
 	 * @return Returns the user logger.
 	 */
@@ -898,7 +977,8 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	}
 
 	/**
-	 * @param logger The user logger to set.
+	 * @param logger
+	 *            The user logger to set.
 	 */
 	public void setLogger(Logger logger) {
 		this.logger = logger;
@@ -912,7 +992,8 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	}
 
 	/**
-	 * @param stateUtil The state utility to set.
+	 * @param stateUtil
+	 *            The state utility to set.
 	 */
 	public void setStateUtil(StateUtil stateUtil) {
 		this.stateUtil = stateUtil;
@@ -926,7 +1007,8 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	}
 
 	/**
-	 * @param hdivConfig The HDIV configuration object to set.
+	 * @param hdivConfig
+	 *            The HDIV configuration object to set.
 	 */
 	public void setHdivConfig(HDIVConfig hdivConfig) {
 		this.hdivConfig = hdivConfig;
@@ -940,7 +1022,8 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	}
 
 	/**
-	 * @param session the session to set
+	 * @param session
+	 *            the session to set
 	 */
 	public void setSession(ISession session) {
 		this.session = session;
@@ -954,7 +1037,8 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	}
 
 	/**
-	 * @param dataValidatorFactory the dataValidatorFactory to set
+	 * @param dataValidatorFactory
+	 *            the dataValidatorFactory to set
 	 */
 	public void setDataValidatorFactory(DataValidatorFactory dataValidatorFactory) {
 		this.dataValidatorFactory = dataValidatorFactory;
@@ -968,7 +1052,8 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	}
 
 	/**
-	 * @param numberPattern the numberPattern to set
+	 * @param numberPattern
+	 *            the numberPattern to set
 	 */
 	public void setNumberPattern(Pattern numberPattern) {
 		this.numberPattern = numberPattern;
