@@ -73,6 +73,9 @@ public class InitListener implements HttpSessionListener, ServletRequestListener
 			WebApplicationContext wac = WebApplicationContextUtils.getRequiredWebApplicationContext(servletContext);
 			this.config = (HDIVConfig) wac.getBean("config");
 			this.dataComposerFactory = (DataComposerFactory) wac.getBean("dataComposerFactory");
+
+			// Init servlet context scoped objects
+			HDIVUtil.setHDIVConfig(this.config, servletContext);
 		}
 
 	}

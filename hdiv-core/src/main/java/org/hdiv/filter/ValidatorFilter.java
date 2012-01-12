@@ -101,7 +101,6 @@ public class ValidatorFilter extends OncePerRequestFilter {
 		HDIVUtil.setApplication(application, servletContext);
 		HDIVUtil.setMessageSource(messageSource, servletContext);
 		HDIVUtil.setISession(session, servletContext);
-		HDIVUtil.setHDIVConfig(this.hdivConfig, servletContext);
 		
 	}
 
