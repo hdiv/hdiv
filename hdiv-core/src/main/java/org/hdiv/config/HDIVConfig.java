@@ -554,17 +554,12 @@ public class HDIVConfig {
 		result.append(" strategy=").append(this.getStrategy());
 		result.append(" randomName=").append(this.isRandomName());
 		result.append(" errorPage=").append(this.getErrorPage());
-		result.append(" excludedExtensions=").append(this.excludedURLExtensions.toString());
+		result.append(" excludedExtensions=").append(this.excludedURLExtensions);
 		result.append(" protectedExtensions=").append(this.getProtectedURLPatterns());
-		result.append(" startPages=").append(this.startPages.toString());
-		result.append(" startParameters=").append(this.startParameters.toString());
-		result.append(" paramsWithoutValidation=").append(this.paramsWithoutValidation.toString());
+		result.append(" startPages=").append(this.startPages);
+		result.append(" startParameters=").append(this.startParameters);
+		result.append(" paramsWithoutValidation=").append(this.paramsWithoutValidation);
 	
-		
-		
 		return result.toString();
-		
-		
-		
 	}
 }
