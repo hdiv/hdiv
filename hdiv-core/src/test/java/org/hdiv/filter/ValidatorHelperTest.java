@@ -45,7 +45,6 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 		this.targetName = (String) this.getApplicationContext().getBean("targetName");
 		
 		this.request = (MockHttpServletRequest)HDIVUtil.getHttpServletRequest();
-		this.request.setRequestURI(this.targetName);
 		
 		this.hdivParameter = (String) this.getApplicationContext().getBean("hdivParameter");
 		this.helper = (IValidationHelper) this.getApplicationContext().getBean("validatorHelper");
