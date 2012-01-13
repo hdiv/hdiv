@@ -16,6 +16,8 @@
 package org.hdiv.listener;
 
 import javax.servlet.ServletContext;
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
 import javax.servlet.ServletRequestEvent;
 import javax.servlet.ServletRequestListener;
 import javax.servlet.http.HttpServletRequest;
@@ -25,16 +27,19 @@ import javax.servlet.http.HttpSessionListener;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.hdiv.application.IApplication;
 import org.hdiv.cipher.IKeyFactory;
 import org.hdiv.cipher.Key;
 import org.hdiv.config.HDIVConfig;
 import org.hdiv.dataComposer.DataComposerFactory;
 import org.hdiv.dataComposer.IDataComposer;
 import org.hdiv.idGenerator.PageIdGenerator;
+import org.hdiv.session.ISession;
 import org.hdiv.session.IStateCache;
 import org.hdiv.util.Constants;
 import org.hdiv.util.HDIVUtil;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
@@ -46,7 +51,7 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
  * @author Gorka Vicente
  * @author Gotzon Illarramendi
  */
-public class InitListener implements HttpSessionListener, ServletRequestListener {
+public class InitListener implements ServletContextListener, HttpSessionListener, ServletRequestListener {
 
 	/**
 	 * Commons Logging instance.
@@ -64,32 +69,55 @@ public class InitListener implements HttpSessionListener, ServletRequestListener
 	private DataComposerFactory dataComposerFactory;
 
 	/**
-	 * Init dependencies.
-	 * 
-	 * @param servletContext
+	 * Is servlet context Hdiv objects initialized?
 	 */
-	private void init(ServletContext servletContext) {
-		if (this.config == null) {
-			WebApplicationContext wac = WebApplicationContextUtils.getRequiredWebApplicationContext(servletContext);
-			this.config = (HDIVConfig) wac.getBean("config");
-			this.dataComposerFactory = (DataComposerFactory) wac.getBean("dataComposerFactory");
+	private boolean servletContextInitialized = false;
 
-			// Init servlet context scoped objects
-			HDIVUtil.setHDIVConfig(this.config, servletContext);
+	/**
+	 * Initialize servlet context objects.
+	 * 
+	 * @param servletContextEvent
+	 *            servlet context created event
+	 * @since HDIV 2.1.0
+	 */
+	public void contextInitialized(ServletContextEvent servletContextEvent) {
+
+		ServletContext servletContext = servletContextEvent.getServletContext();
+		WebApplicationContext wac = WebApplicationContextUtils.getWebApplicationContext(servletContext);
+
+		if (wac != null) {
+			this.initServletContext(servletContext);
+		} else {
+			if (log.isWarnEnabled()) {
+				log.warn("Hdiv's InitListener is registered before Spring's ContextLoaderListener.");
+			}
 		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see javax.servlet.ServletContextListener#contextDestroyed(javax.servlet.
+	 * ServletContextEvent)
+	 */
+	public void contextDestroyed(ServletContextEvent servletContextEvent) {
 
 	}
 
 	/**
-	 * Initialize request asosiated process.
+	 * Initialize request associated objects.
 	 * 
 	 * @param sre
-	 *            event
+	 *            request created event
 	 */
 	public void requestInitialized(ServletRequestEvent sre) {
 
 		HttpServletRequest request = (HttpServletRequest) sre.getServletRequest();
-		init(request.getSession().getServletContext());
+
+		if (!this.servletContextInitialized) {
+			ServletContext servletContext = request.getSession().getServletContext();
+			this.initServletContext(servletContext);
+		}
 
 		// Put the request in threadlocal
 		HDIVUtil.setHttpServletRequest(request);
@@ -105,10 +133,10 @@ public class InitListener implements HttpSessionListener, ServletRequestListener
 	}
 
 	/**
-	 * End request asosiated process.
+	 * End request associated objects.
 	 * 
 	 * @param sre
-	 *            event
+	 *            request destroyed event
 	 */
 	public void requestDestroyed(ServletRequestEvent sre) {
 
@@ -145,7 +173,9 @@ public class InitListener implements HttpSessionListener, ServletRequestListener
 
 		ServletContext servletContext = httpSessionEvent.getSession().getServletContext();
 
-		init(servletContext);
+		if (!this.servletContextInitialized) {
+			this.initServletContext(servletContext);
+		}
 
 		WebApplicationContext wac = WebApplicationContextUtils.getRequiredWebApplicationContext(servletContext);
 
@@ -161,6 +191,36 @@ public class InitListener implements HttpSessionListener, ServletRequestListener
 	}
 
 	/**
+	 * Initialize ServletContext scoped objects.
+	 * 
+	 * @param servletContext
+	 *            ServletContext instance
+	 */
+	protected void initServletContext(ServletContext servletContext) {
+
+		WebApplicationContext wac = WebApplicationContextUtils.getRequiredWebApplicationContext(servletContext);
+
+		this.config = (HDIVConfig) wac.getBean("config");
+		this.dataComposerFactory = (DataComposerFactory) wac.getBean("dataComposerFactory");
+
+		// Init servlet context scoped objects
+		HDIVUtil.setHDIVConfig(this.config, servletContext);
+
+		IApplication application = (IApplication) wac.getBean("application");
+		ISession session = (ISession) wac.getBean("sessionHDIV");
+		ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
+		messageSource.setBeanClassLoader(wac.getClassLoader());
+		String messageSourcePath = (String) wac.getBean("messageSourcePath");
+		messageSource.setBasename(messageSourcePath);
+
+		HDIVUtil.setApplication(application, servletContext);
+		HDIVUtil.setMessageSource(messageSource, servletContext);
+		HDIVUtil.setISession(session, servletContext);
+
+		this.servletContextInitialized = true;
+	}
+
+	/**
 	 * Strategies initialization.
 	 * 
 	 * @param context
@@ -168,7 +228,7 @@ public class InitListener implements HttpSessionListener, ServletRequestListener
 	 * @param httpSessionEvent
 	 *            http session event
 	 */
-	public void initStrategies(ApplicationContext context, HttpSession httpSession) {
+	protected void initStrategies(ApplicationContext context, HttpSession httpSession) {
 
 		if (this.config.getStrategy().equalsIgnoreCase("cipher")) {
 			IKeyFactory keyFactory = (IKeyFactory) context.getBean("keyFactory");
@@ -192,7 +252,7 @@ public class InitListener implements HttpSessionListener, ServletRequestListener
 	 * @param httpSessionEvent
 	 *            http session event
 	 */
-	public void initCache(ApplicationContext context, HttpSession httpSession) {
+	protected void initCache(ApplicationContext context, HttpSession httpSession) {
 
 		IStateCache cache = (IStateCache) context.getBean("cache");
 		String cacheName = (String) context.getBean("cacheName");
@@ -207,15 +267,11 @@ public class InitListener implements HttpSessionListener, ServletRequestListener
 	 * @param httpSessionEvent
 	 *            http session event
 	 */
-	public void initPageIdGenerator(ApplicationContext context, HttpSession httpSession) {
+	protected void initPageIdGenerator(ApplicationContext context, HttpSession httpSession) {
 
 		String pageIdGeneratorName = (String) context.getBean("pageIdGeneratorName");
-		PageIdGenerator pageIdGenerator = (PageIdGenerator) context.getBean("pageIdGenerator");// Conseguir
-																								// una
-																								// nueva
-																								// instancia
-																								// de
-																								// PageIdGenerator
+		// Obtain new instance of PageIdGenerator
+		PageIdGenerator pageIdGenerator = (PageIdGenerator) context.getBean("pageIdGenerator");
 		httpSession
 				.setAttribute((pageIdGeneratorName == null) ? Constants.PAGE_ID_GENERATOR_NAME : pageIdGeneratorName,
 						pageIdGenerator);
@@ -230,7 +286,7 @@ public class InitListener implements HttpSessionListener, ServletRequestListener
 	 *            http session event
 	 * @since HDIV 1.1
 	 */
-	public void initHDIVState(ApplicationContext context, HttpSession httpSession) {
+	protected void initHDIVState(ApplicationContext context, HttpSession httpSession) {
 
 		String hdivParameterName = null;
 

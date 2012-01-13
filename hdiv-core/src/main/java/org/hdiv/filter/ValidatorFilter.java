@@ -25,13 +25,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.hdiv.application.IApplication;
 import org.hdiv.config.HDIVConfig;
 import org.hdiv.config.multipart.IMultipartConfig;
 import org.hdiv.config.multipart.exception.HdivMultipartException;
-import org.hdiv.session.ISession;
-import org.hdiv.util.HDIVUtil;
-import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -91,16 +87,6 @@ public class ValidatorFilter extends OncePerRequestFilter {
 			//For applications without Multipart requests
 			this.multipartConfig = (IMultipartConfig) context.getBean("multipartConfig");
 		}
-		IApplication application = (IApplication) context.getBean("application");
-		ISession session = (ISession) context.getBean("sessionHDIV");
-		ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
-		messageSource.setBeanClassLoader(context.getClassLoader());
-		String messageSourcePath = (String)context.getBean("messageSourcePath");
-		messageSource.setBasename(messageSourcePath);
-		
-		HDIVUtil.setApplication(application, servletContext);
-		HDIVUtil.setMessageSource(messageSource, servletContext);
-		HDIVUtil.setISession(session, servletContext);
 		
 	}
 
