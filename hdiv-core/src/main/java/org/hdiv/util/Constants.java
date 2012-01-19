@@ -16,39 +16,39 @@
 package org.hdiv.util;
 
 /**
- * <p>Global constants.</p>
- *  
+ * <p>
+ * Global constants.
+ * </p>
+ * 
  * @author Gorka Vicente
  * @since HDIV 1.1.1
  */
 public class Constants {
-	 
+
 	/**
 	 * Name of the attribute which is used for storing cookies in session.
 	 */
 	public static final String HDIV_COOKIES_KEY = "hdivCookies";
-	
+
 	/**
-	 * Name of the attribute which is used for storing the suffix added to the HDIV
-	 * state.
+	 * Name of the attribute which is used for storing the suffix added to the
+	 * HDIV state.
 	 */
 	public static final String STATE_SUFFIX = "hdivStateSuffix";
-	
+
 	/**
 	 * Session's cookie identifier
 	 */
 	public static final String JSESSIONID = "JSESSIONID";
-	
+
 	public static final String KEY_NAME = "key";
 
 	public static final String CACHE_NAME = "cache";
-	
+
 	public static final String PAGE_ID_GENERATOR_NAME = "pageIdGenerator";
-	
+
 	public static final String HDIV_PARAMETER = "HDIVParameter";
-	
+
 	public static final String ENCODING_UTF_8 = "UTF-8";
-	
-	public static final String REQUEST_URI_KEY = "hdivRequestUriKey";
-	
+
 }

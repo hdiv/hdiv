@@ -19,33 +19,26 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.StringTokenizer;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.hdiv.config.HDIVConfig;
 import org.hdiv.dataComposer.IDataComposer;
+import org.hdiv.urlProcessor.FormUrlProcessor;
+import org.hdiv.urlProcessor.LinkUrlProcessor;
 import org.hdiv.util.Constants;
-import org.hdiv.util.HDIVRequestUtils;
 import org.hdiv.util.HDIVUtil;
 import org.springframework.web.servlet.support.RequestDataValueProcessor;
 
 /**
- * RequestDataValueProcessor implementation for HDIV.
+ * {@link RequestDataValueProcessor} implementation for HDIV.
  * 
  * @author Gotzon Illarramendi
  */
 public class HdivRequestDataValueProcessor implements RequestDataValueProcessor {
 
-	/**
-	 * HDIV configuration for this app.
-	 */
-	private HDIVConfig hdivConfig;
+	private LinkUrlProcessor linkUrlProcessor;
 
-	/**
-	 * HDIV state param name.
-	 */
-	private String hdivStateParamName;
+	private FormUrlProcessor formUrlProcessor;
 
 	/**
 	 * No editable field types.
@@ -102,32 +95,9 @@ public class HdivRequestDataValueProcessor implements RequestDataValueProcessor 
 	 */
 	public String processAction(HttpServletRequest request, String action) {
 
-		IDataComposer dataComposer = (IDataComposer) request.getAttribute(HDIVUtil.DATACOMPOSER_REQUEST_KEY);
+		String result = this.formUrlProcessor.processUrl(request, action);
+		return result;
 
-		String beginAction = action;
-		String queryString = null;
-		if (action.contains("?")) {
-			beginAction = action.substring(0, action.indexOf("?"));
-			queryString = action.substring(action.indexOf("?") + 1);
-		}
-
-		// If action is a start page, do nothig
-		boolean startPage = HDIVRequestUtils.isUrlStartPage(beginAction, request, hdivConfig);
-		if (startPage) {
-			return action;
-		}
-
-		// Obtain a context path relative url, completing relative urls
-		beginAction = HDIVRequestUtils.getContextRelativePath(request, beginAction);
-
-		dataComposer.beginRequest(HDIVUtil.getActionMappingName(beginAction));
-
-		if (queryString != null) {
-			String encodedParams = this.composeQueryString(request, dataComposer, queryString);
-			action = beginAction + "?" + encodedParams;
-		}
-
-		return action;
 	}
 
 	/**
@@ -201,8 +171,8 @@ public class HdivRequestDataValueProcessor implements RequestDataValueProcessor 
 	 */
 	public String processUrl(HttpServletRequest request, String url) {
 
-		String urlStr = HDIVRequestUtils.composeLinkUrl(url, request);
-		return urlStr;
+		String result = this.linkUrlProcessor.processUrl(request, url);
+		return result;
 	}
 
 	/**
@@ -221,67 +191,19 @@ public class HdivRequestDataValueProcessor implements RequestDataValueProcessor 
 	}
 
 	/**
-	 * Removes HDIV parameter from <code>queryString</code> and it composes
-	 * other parameters.
-	 * 
-	 * @param request
-	 *            request object
-	 * @param dataComposer
-	 *            request DataComposer
-	 * @param queryString
-	 *            query string
-	 * @return queryString without HDIV's parameter
+	 * @param linkUrlProcessor
+	 *            the linkUrlProcessor to set
 	 */
-	protected String composeQueryString(HttpServletRequest request, IDataComposer dataComposer, String queryString) {
-
-		String token = null;
-		StringBuffer result = new StringBuffer();
-
-		StringTokenizer st = new StringTokenizer(queryString, "&");
-		while (st.hasMoreTokens()) {
-
-			token = st.nextToken();
-			String param = token.substring(0, token.indexOf("="));
-
-			if (!ignoreParameter(request, param)) {
-
-				String originalValue = request.getParameter(param);
-				String val = dataComposer.compose(param, originalValue, false);
-
-				if (result.length() > 0) {
-					result.append("&");
-				}
-				result.append(param + "=" + val);
-			}
-		}
-		return result.toString();
+	public void setLinkUrlProcessor(LinkUrlProcessor linkUrlProcessor) {
+		this.linkUrlProcessor = linkUrlProcessor;
 	}
 
 	/**
-	 * @returns Returns true if parameter <code>param</code> must be ignored.
-	 *          False otherwise.
+	 * @param formUrlProcessor
+	 *            the formUrlProcessor to set
 	 */
-	protected boolean ignoreParameter(HttpServletRequest request, String param) {
-
-		if (this.hdivStateParamName == null) {
-			this.hdivStateParamName = (String) request.getSession().getAttribute(Constants.HDIV_PARAMETER);
-		}
-		return param.equalsIgnoreCase(this.hdivStateParamName);
-	}
-
-	/**
-	 * @return the hdivConfig
-	 */
-	public HDIVConfig getHdivConfig() {
-		return hdivConfig;
-	}
-
-	/**
-	 * @param hdivConfig
-	 *            the hdivConfig to set
-	 */
-	public void setHdivConfig(HDIVConfig hdivConfig) {
-		this.hdivConfig = hdivConfig;
+	public void setFormUrlProcessor(FormUrlProcessor formUrlProcessor) {
+		this.formUrlProcessor = formUrlProcessor;
 	}
 
 }

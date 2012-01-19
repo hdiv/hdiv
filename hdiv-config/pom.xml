@@ -26,6 +26,7 @@
 			<artifactId>hdiv-spring-mvc</artifactId>
 			<version>${project.version}</version>
 			<scope>compile</scope>
+			<optional>true</optional>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>

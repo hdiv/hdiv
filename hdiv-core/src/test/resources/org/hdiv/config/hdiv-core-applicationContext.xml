@@ -126,4 +126,13 @@
 		</constructor-arg>
     </bean>
 
+	<!-- URL PROCESSOR -->
+	<bean id="linkUrlProcessor" class="org.hdiv.urlProcessor.LinkUrlProcessor">
+		<property name="config" ref="config"/>
+	</bean>
+	
+	<bean id="formUrlProcessor" class="org.hdiv.urlProcessor.FormUrlProcessor">
+		<property name="config" ref="config"/>
+	</bean>
+
 </beans>

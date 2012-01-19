@@ -27,7 +27,8 @@ import org.apache.taglibs.standard.tag.common.core.ImportSupport;
 import org.apache.taglibs.standard.tag.common.core.ParamParent;
 import org.apache.taglibs.standard.tag.common.core.ParamSupport;
 import org.apache.taglibs.standard.tag.common.core.Util;
-import org.hdiv.util.HDIVRequestUtils;
+import org.hdiv.urlProcessor.LinkUrlProcessor;
+import org.hdiv.util.HDIVUtil;
 
 /**
  * <p>
@@ -100,7 +101,8 @@ public abstract class UrlSupportHDIV extends BodyTagSupport implements ParamPare
 		}
 
 		// Call to HDIV
-		result = HDIVRequestUtils.composeLinkUrl(result, (HttpServletRequest) pageContext.getRequest());
+		LinkUrlProcessor linkUrlProcessor = HDIVUtil.getLinkUrlProcessor(pageContext.getServletContext());
+		result = linkUrlProcessor.processUrl((HttpServletRequest) pageContext.getRequest(), result);
 
 		// store or print the output
 		if (var != null)

@@ -36,6 +36,8 @@ import org.hdiv.logs.UserData;
 import org.hdiv.session.SessionHDIV;
 import org.hdiv.session.StateCache;
 import org.hdiv.state.StateUtil;
+import org.hdiv.urlProcessor.FormUrlProcessor;
+import org.hdiv.urlProcessor.LinkUrlProcessor;
 import org.hdiv.util.EncodingUtil;
 import org.hdiv.web.servlet.support.HdivRequestDataValueProcessor;
 import org.springframework.beans.factory.config.BeanDefinition;
@@ -89,6 +91,10 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 				this.createDataComposerFactory(element, source));
 		parserContext.getRegistry().registerBeanDefinition("validatorHelper",
 				this.createValidatorHelper(element, source));
+		parserContext.getRegistry().registerBeanDefinition("linkUrlProcessor",
+				this.createLinkUrlProcessor(element, source));
+		parserContext.getRegistry().registerBeanDefinition("formUrlProcessor",
+				this.createFormUrlProcessor(element, source));
 		parserContext.getRegistry().registerBeanDefinition("hdivParameter",
 				this.createStringBean("_HDIV_STATE_", source));
 		parserContext.getRegistry().registerBeanDefinition("cacheName", this.createStringBean("cache", source));
@@ -255,6 +261,24 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		return bean;
 	}
 
+	private RootBeanDefinition createLinkUrlProcessor(Element element, Object source) {
+		RootBeanDefinition bean = new RootBeanDefinition(LinkUrlProcessor.class);
+		bean.setSource(source);
+		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
+		bean.getPropertyValues().add("config", new RuntimeBeanReference("config"));
+
+		return bean;
+	}
+
+	private RootBeanDefinition createFormUrlProcessor(Element element, Object source) {
+		RootBeanDefinition bean = new RootBeanDefinition(FormUrlProcessor.class);
+		bean.setSource(source);
+		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
+		bean.getPropertyValues().add("config", new RuntimeBeanReference("config"));
+
+		return bean;
+	}
+
 	private RootBeanDefinition createStringBean(String value, Object source) {
 		RootBeanDefinition bean = new RootBeanDefinition(java.lang.String.class);
 		bean.setSource(source);
@@ -274,7 +298,8 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		RootBeanDefinition bean = new RootBeanDefinition(HdivRequestDataValueProcessor.class);
 		bean.setSource(source);
 		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
-		bean.getPropertyValues().add("hdivConfig", new RuntimeBeanReference("config"));
+		bean.getPropertyValues().add("linkUrlProcessor", new RuntimeBeanReference("linkUrlProcessor"));
+		bean.getPropertyValues().add("formUrlProcessor", new RuntimeBeanReference("formUrlProcessor"));
 		return bean;
 	}
 
@@ -296,7 +321,6 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 
 		if (StringUtils.hasText(confidentiality)) {
 			bean.getPropertyValues().add("confidentiality", confidentiality);
-
 		}
 
 		if (StringUtils.hasText(avoidCookiesIntegrity)) {
@@ -304,7 +328,6 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		}
 
 		if (StringUtils.hasText(avoidCookiesIntegrity)) {
-
 			bean.getPropertyValues().add("cookiesConfidentiality", cookiesConfidentiality);
 		}
 

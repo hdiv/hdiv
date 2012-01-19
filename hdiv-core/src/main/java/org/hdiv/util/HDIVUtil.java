@@ -15,8 +15,6 @@
  */
 package org.hdiv.util;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.Locale;
 import java.util.Random;
 import java.util.regex.Pattern;
@@ -32,11 +30,12 @@ import org.hdiv.config.HDIVConfig;
 import org.hdiv.dataComposer.IDataComposer;
 import org.hdiv.exception.HDIVException;
 import org.hdiv.session.ISession;
+import org.hdiv.urlProcessor.FormUrlProcessor;
+import org.hdiv.urlProcessor.LinkUrlProcessor;
 import org.springframework.context.MessageSource;
 
 /**
- * Class containing utility methods for access HDIV components: IDataComposer,
- * IDataValidator, IApplication, ISession.
+ * Class containing utility methods for access HDIV components: IDataComposer, IDataValidator, IApplication, ISession.
  * <p>
  * This class is initialized from a Listener and a Filter.
  * </p>
@@ -55,38 +54,41 @@ public class HDIVUtil {
 	public static final String APPLICATION_SERVLETCONTEXT_KEY = "APPLICATION_SERVLETCONTEXT_KEY";
 	public static final String MESSAGESOURCE_SERVLETCONTEXT_KEY = "MESSAGESOURCE_SERVLETCONTEXT_KEY";
 	public static final String HDIVCONFIG_SERVLETCONTEXT_KEY = "HDIVCONFIG_SERVLETCONTEXT_KEY";
-	public static final String DATACOMPOSER_REQUEST_KEY = "dataComposer";
+	public static final String DATACOMPOSER_REQUEST_KEY = "DATACOMPOSER_REQUEST_KEY";
+	public static final String REQUESTURI_REQUEST_KEY = "REQUESTURI_REQUEST_KEY";
 	public static final String ISESSION_SERVLETCONTEXT_KEY = "ISESSION_SERVLETCONTEXT_KEY";
-	
+	public static final String LINKURLPROCESSOR_SERVLETCONTEXT_KEY = "LINKURLPROCESSOR_SERVLETCONTEXT_KEY";
+	public static final String FORMURLPROCESSOR_SERVLETCONTEXT_KEY = "FORMURLPROCESSOR_SERVLETCONTEXT_KEY";
+
 	public static Pattern intPattern = Pattern.compile("[0-9]+");
-	
+
 	/**
 	 * HttpServletRequest thread local
 	 */
 	private static ThreadLocal httpRequest = new ThreadLocal();
-	
+
 	/**
-	 * ThreadLocales is always guaranteed to be cleaned up when returning the
-	 * thread to the server's pool.
+	 * ThreadLocales is always guaranteed to be cleaned up when returning the thread to the server's pool.
 	 */
 	public static void resetLocalData() {
 
 		httpRequest.set(null);
 	}
 
-	/* DataComposer*/
-	
+	/* DataComposer */
+
 	/**
 	 * Returns data composer object from <code>HttpServletRequest</code>
 	 * 
-	 * @param request HttpServletRequest
+	 * @param request
+	 *            HttpServletRequest
 	 * @return IDataComposer
 	 */
 	public static IDataComposer getDataComposer(HttpServletRequest request) {
 
 		IDataComposer requestDataComposer = (IDataComposer) request.getAttribute(DATACOMPOSER_REQUEST_KEY);
-		if(requestDataComposer==null){
-			throw new HDIVException("No se ha inicializado el objeto IDataComposer en request");
+		if (requestDataComposer == null) {
+			throw new HDIVException("IDataComposer has not been initialized in request");
 		}
 		return requestDataComposer;
 	}
@@ -97,11 +99,11 @@ public class HDIVUtil {
 	public static IDataComposer getDataComposer() {
 
 		HttpServletRequest request = getHttpServletRequest();
-		IDataComposer newDataComposer= getDataComposer(request);
+		IDataComposer newDataComposer = getDataComposer(request);
 		return newDataComposer;
-		
+
 	}
-	
+
 	/**
 	 * Set the <code>IDataComposer</code>
 	 * 
@@ -111,11 +113,43 @@ public class HDIVUtil {
 	public static void setDataComposer(IDataComposer newDataComposer, HttpServletRequest request) {
 
 		request.setAttribute(DATACOMPOSER_REQUEST_KEY, newDataComposer);
-		
+
 	}
-	
-	/* IApplication*/
-	
+
+	/* RequestURI */
+
+	/**
+	 * Returns RequestURI value from <code>HttpServletRequest</code>
+	 * 
+	 * @param request
+	 *            HttpServletRequest
+	 * @return String
+	 */
+	public static String getRequestURI(HttpServletRequest request) {
+
+		String requestURI = (String) request.getAttribute(REQUESTURI_REQUEST_KEY);
+		if (requestURI == null) {
+			throw new HDIVException("RequestURI has not been initialized in request.");
+		}
+		return requestURI;
+	}
+
+	/**
+	 * Set the RequestURI
+	 * 
+	 * @param requestURI
+	 *            RequestURI to set
+	 * @param request
+	 *            {@link HttpServletRequest} object
+	 */
+	public static void setRequestURI(String requestURI, HttpServletRequest request) {
+
+		request.setAttribute(REQUESTURI_REQUEST_KEY, requestURI);
+
+	}
+
+	/* IApplication */
+
 	/**
 	 * @return Returns the servlet context wrapper object.
 	 */
@@ -123,9 +157,9 @@ public class HDIVUtil {
 
 		ServletContext servletContext = getHttpServletRequest().getSession().getServletContext();
 		return getApplication(servletContext);
-		
+
 	}
-	
+
 	/**
 	 * Returns the servlet context wrapper object.
 	 * 
@@ -133,9 +167,9 @@ public class HDIVUtil {
 	 * @return IApplication object
 	 */
 	public static IApplication getApplication(ServletContext servletContext) {
-		IApplication app= (IApplication) servletContext.getAttribute(APPLICATION_SERVLETCONTEXT_KEY);
-		if(app==null){
-			throw new HDIVException("No se ha inicializado el objeto IApplication en servletContext");
+		IApplication app = (IApplication) servletContext.getAttribute(APPLICATION_SERVLETCONTEXT_KEY);
+		if (app == null) {
+			throw new HDIVException("IApplication has not been initialized in servlet context");
 		}
 		return app;
 	}
@@ -149,9 +183,9 @@ public class HDIVUtil {
 	public static void setApplication(IApplication newApplication, ServletContext servletContext) {
 		servletContext.setAttribute(APPLICATION_SERVLETCONTEXT_KEY, newApplication);
 	}
-	
-	/* HDIVConfig*/
-	
+
+	/* HDIVConfig */
+
 	/**
 	 * Return the <code>HDIVConfig</code> object
 	 * 
@@ -161,9 +195,9 @@ public class HDIVUtil {
 
 		ServletContext servletContext = getHttpServletRequest().getSession().getServletContext();
 		return getHDIVConfig(servletContext);
-		
+
 	}
-	
+
 	/**
 	 * Return the <code>HDIVConfig</code> object
 	 * 
@@ -171,15 +205,15 @@ public class HDIVUtil {
 	 * @return HDIVConfig
 	 */
 	public static HDIVConfig getHDIVConfig(ServletContext servletContext) {
-		
+
 		HDIVConfig hdivConfig = (HDIVConfig) servletContext.getAttribute(HDIVCONFIG_SERVLETCONTEXT_KEY);
-		if (hdivConfig == null){
-			throw new HDIVException("HDIVConfig has not been initialized in in servlet context");
+		if (hdivConfig == null) {
+			throw new HDIVException("HDIVConfig has not been initialized in servlet context");
 		}
-		
+
 		return hdivConfig;
 	}
-	
+
 	/**
 	 * Set the <code>HDIVConfig</code> object
 	 * 
@@ -190,8 +224,8 @@ public class HDIVUtil {
 		servletContext.setAttribute(HDIVCONFIG_SERVLETCONTEXT_KEY, hdivConfig);
 	}
 
-	/* ISession*/
-	
+	/* ISession */
+
 	/**
 	 * Return the <code>ISession</code> instance.
 	 * 
@@ -201,9 +235,9 @@ public class HDIVUtil {
 
 		ServletContext servletContext = getHttpServletRequest().getSession().getServletContext();
 		return getISession(servletContext);
-		
+
 	}
-	
+
 	/**
 	 * Return the <code>ISession</code> instance.
 	 * 
@@ -211,13 +245,13 @@ public class HDIVUtil {
 	 * @return
 	 */
 	public static ISession getISession(ServletContext servletContext) {
-		ISession session= (ISession) servletContext.getAttribute(ISESSION_SERVLETCONTEXT_KEY);
-		if(session==null){
-			throw new HDIVException("No se ha inicializado el objeto ISession en servletContext");
+		ISession session = (ISession) servletContext.getAttribute(ISESSION_SERVLETCONTEXT_KEY);
+		if (session == null) {
+			throw new HDIVException("ISession has not been initialized in servlet context");
 		}
 		return session;
 	}
-	
+
 	/**
 	 * Set the <code>ISession</code> instance.
 	 * 
@@ -226,12 +260,71 @@ public class HDIVUtil {
 	 */
 	public static void setISession(ISession session, ServletContext servletContext) {
 		servletContext.setAttribute(ISESSION_SERVLETCONTEXT_KEY, session);
-	}	
+	}
 
-	/* HttpSession*/
-	
+	/* UrlProcessor */
+
+	/**
+	 * Return the <code>LinkUrlProcessor</code> instance.
+	 * 
+	 * @param servletContext
+	 *            {@link ServletContext} instance
+	 * @return {@link LinkUrlProcessor} instance
+	 */
+	public static LinkUrlProcessor getLinkUrlProcessor(ServletContext servletContext) {
+		LinkUrlProcessor urlProcessor = (LinkUrlProcessor) servletContext
+				.getAttribute(LINKURLPROCESSOR_SERVLETCONTEXT_KEY);
+		if (urlProcessor == null) {
+			throw new HDIVException("LinkUrlProcessor has not been initialized in servlet context");
+		}
+		return urlProcessor;
+	}
+
+	/**
+	 * Set the <code>LinkUrlProcessor</code> instance.
+	 * 
+	 * @param urlProcessor
+	 *            {@link LinkUrlProcessor} instance
+	 * @param servletContext
+	 *            {@link ServletContext} instance
+	 */
+	public static void setLinkUrlProcessor(LinkUrlProcessor urlProcessor, ServletContext servletContext) {
+		servletContext.setAttribute(LINKURLPROCESSOR_SERVLETCONTEXT_KEY, urlProcessor);
+	}
+
+	/**
+	 * Return the <code>FormUrlProcessor</code> instance.
+	 * 
+	 * @param servletContext
+	 *            {@link ServletContext} instance
+	 * @return {@link FormUrlProcessor} instance
+	 */
+	public static FormUrlProcessor getFormUrlProcessor(ServletContext servletContext) {
+		FormUrlProcessor urlProcessor = (FormUrlProcessor) servletContext
+				.getAttribute(FORMURLPROCESSOR_SERVLETCONTEXT_KEY);
+		if (urlProcessor == null) {
+			throw new HDIVException("FormUrlProcessor has not been initialized in servlet context");
+		}
+		return urlProcessor;
+	}
+
+	/**
+	 * Set the <code>FormUrlProcessor</code> instance.
+	 * 
+	 * @param urlProcessor
+	 *            {@link FormUrlProcessor} instance
+	 * @param servletContext
+	 *            {@link ServletContext} instance
+	 */
+	public static void setFormUrlProcessor(FormUrlProcessor urlProcessor, ServletContext servletContext) {
+		servletContext.setAttribute(FORMURLPROCESSOR_SERVLETCONTEXT_KEY, urlProcessor);
+	}
+
+	/* HttpSession */
+
 	/**
 	 * Return the <code>HttpSession</code> object.
+	 * 
 	 * @return
 	 */
 	public static HttpSession getHttpSession() {
@@ -239,68 +332,72 @@ public class HDIVUtil {
 		return request.getSession();
 	}
 
-	/* HttpServletRequest*/
-	
+	/* HttpServletRequest */
+
 	/**
 	 * Return the <code>HttpServletRequest</code> object.
+	 * 
 	 * @return
 	 */
 	public static HttpServletRequest getHttpServletRequest() {
 		HttpServletRequest request = (HttpServletRequest) httpRequest.get();
-		if(request == null){
-			throw new HDIVException("No se ha inicializado el request en threadlocal");
+		if (request == null) {
+			throw new HDIVException("Request has not been initialized in threadlocal");
 		}
 		return request;
 	}
 
 	/**
 	 * Set the <code>HttpServletRequest</code> instance in {@link ThreadLocal}
+	 * 
 	 * @param httpServletRequest
 	 */
 	public static void setHttpServletRequest(HttpServletRequest httpServletRequest) {
 		httpRequest.set(httpServletRequest);
 	}
 
-	/* MessageSource*/
-	
+	/* MessageSource */
+
 	/**
 	 * Return the {@link MessageSource} instance.
+	 * 
 	 * @return
 	 */
 	public static MessageSource getMessageSource() {
-		
+
 		ServletContext servletContext = getHttpServletRequest().getSession().getServletContext();
 		return getMessageSource(servletContext);
 	}
-	
+
 	/**
 	 * Return the {@link MessageSource} instance.
+	 * 
 	 * @param servletContext
 	 * @return
 	 */
 	public static MessageSource getMessageSource(ServletContext servletContext) {
 		MessageSource msgSource = (MessageSource) servletContext.getAttribute(MESSAGESOURCE_SERVLETCONTEXT_KEY);
-		if(msgSource==null){
-			throw new HDIVException("No se ha inicializado el MessageSource en servletContext");
+		if (msgSource == null) {
+			throw new HDIVException("MessageSource has not been initialized in servlet context");
 		}
 		return msgSource;
 	}
 
 	/**
 	 * Set the {@link MessageSource} instance.
+	 * 
 	 * @param msgSource
 	 * @param servletContext
 	 */
 	public static void setMessageSource(MessageSource msgSource, ServletContext servletContext) {
 		servletContext.setAttribute(MESSAGESOURCE_SERVLETCONTEXT_KEY, msgSource);
 	}
-	
-	
+
 	/**
-	 * Try to resolve the message. Treat as an error if the message can't be
-	 * found.
+	 * Try to resolve the message. Treat as an error if the message can't be found.
 	 * 
-	 * @param key the code to lookup up, such as 'calculator.noRateSet'
+	 * @param key
+	 *            the code to lookup up, such as 'calculator.noRateSet'
 	 * @return The resolved message
 	 */
 	public static String getMessage(String key) {
@@ -308,13 +405,13 @@ public class HDIVUtil {
 	}
 
 	/**
-	 * Try to resolve the message. Treat as an error if the message can't be
-	 * found.
+	 * Try to resolve the message. Treat as an error if the message can't be found.
 	 * 
-	 * @param key the code to lookup up, such as 'calculator.noRateSet'
-	 * @param o Array of arguments that will be filled in for params within the
-	 *            message (params look like "{0}", "{1,date}", "{2,time}" within
-	 *            a message), or null if none.
+	 * @param key
+	 *            the code to lookup up, such as 'calculator.noRateSet'
+	 * @param o
+	 *            Array of arguments that will be filled in for params within the message (params look like "{0}",
+	 *            "{1,date}", "{2,time}" within a message), or null if none.
 	 * @return The resolved message
 	 */
 	public static String getMessage(String key, String o) {
@@ -322,14 +419,15 @@ public class HDIVUtil {
 	}
 
 	/**
-	 * Try to resolve the message. Treat as an error if the message can't be
-	 * found.
+	 * Try to resolve the message. Treat as an error if the message can't be found.
 	 * 
-	 * @param key the code to lookup up, such as 'calculator.noRateSet'
-	 * @param o Array of arguments that will be filled in for params within the
-	 *            message (params look like "{0}", "{1,date}", "{2,time}" within
-	 *            a message), or null if none.
-	 * @param userLocale locale
+	 * @param key
+	 *            the code to lookup up, such as 'calculator.noRateSet'
+	 * @param o
+	 *            Array of arguments that will be filled in for params within the message (params look like "{0}",
+	 *            "{1,date}", "{2,time}" within a message), or null if none.
+	 * @param userLocale
+	 *            locale
 	 * @return The resolved message
 	 */
 	public static String getMessage(String key, String o, Locale userLocale) {
@@ -342,143 +440,12 @@ public class HDIVUtil {
 	}
 
 	/**
-	 * Return the form action converted into an action mapping path. The value
-	 * of the <code>action</code> property is manipulated as follows in
-	 * computing the name of the requested mapping:
-	 * <ul>
-	 * <li>Any filename extension is removed (on the theory that extension
-	 * mapping is being used to select the controller servlet).</li>
-	 * <li>If the resulting value does not start with a slash, then a slash is
-	 * prepended.</li>
-	 * </ul>
-	 * 
-	 * @param url URL representing the current request
-	 * @return the form action converted into an action mapping path.
-	 */
-	public static String getActionMappingName(String url) {
-
-		String value = url;
-		int question = url.indexOf("?");
-		if (question >= 0) {
-			value = value.substring(0, question);
-		}
-
-		int pound = value.indexOf("#");
-		if (pound >= 0) {
-			value = value.substring(0, pound);
-		}
-
-		// strip a servlet session ID from
-		value = stripSession(value);
-
-		int slash = value.lastIndexOf("/");
-		int period = value.lastIndexOf(".");
-
-		// struts-examples/dir/action.do
-		if ((period >= 0) && (period > slash)) {
-			value = value.substring(0, value.length());
-		}
-
-		return value.startsWith("/") ? value : ("/" + value);
-	}
-
-	/**
-	 * Strips a servlet session ID from <tt>url</tt>. The session ID is
-	 * encoded as a URL "path parameter" beginning with "jsessionid=". We thus
-	 * remove anything we find between ";jsessionid=" (inclusive) and either EOS
-	 * or a subsequent ';' (exclusive).
-	 */
-	public static String stripSession(String url) {
- 
-		if (log.isDebugEnabled()) {
-			log.debug("Stripping jsessionid from url " + url);
-		}
-		StringBuffer u = new StringBuffer(url);
-		int sessionStart;
-
-		while ( ((sessionStart = u.toString().indexOf(";jsessionid=")) != -1) 
-				|| ((sessionStart = u.toString().indexOf(";JSESSIONID=")) != -1) ) {
- 
-			int sessionEnd = u.toString().indexOf(";", sessionStart + 1);
-			if (sessionEnd == -1) {
-				sessionEnd = u.toString().indexOf("?", sessionStart + 1);
-			}
-			if (sessionEnd == -1) { // still
-				sessionEnd = u.length();
-			}
-			u.delete(sessionStart, sessionEnd);
-		}
-		return u.toString();
-	}
-
-	/**
-	 * Return the URL representing the current request.
-	 * 
-	 * @param request The servlet request we are processing
-	 * @return URL representing the current request
-	 * @exception Exception if a URL cannot be created
-	 */
-	public static String actionName(HttpServletRequest request) throws Exception {
-
-		return requestURL(request).getFile();
-	}
-
-	/**
-	 * Return the URL representing the current request. This is equivalent to
-	 * <code>HttpServletRequest.getRequestURL()</code> in Servlet 2.3.
-	 * 
-	 * @param request The servlet request we are processing
-	 * @return URL representing the current request
-	 * @exception MalformedURLException if a URL cannot be created
-	 */
-	public static URL requestURL(HttpServletRequest request) throws MalformedURLException {
-		//TODO Is it necessary to do this to create a URL if then only used in actionName?
-
-		StringBuffer url = new StringBuffer();
-		String scheme = request.getScheme();
-		int port = request.getServerPort();
-		if (port < 0) {
-			port = 80; // Work around java.net.URL bug
-		}
-		url.append(scheme);
-		url.append("://");
-		url.append(request.getServerName());
-		if ((scheme.equals("http") && (port != 80)) || (scheme.equals("https") && (port != 443))) {
-			url.append(':');
-			url.append(port);
-		}
-		url.append(request.getRequestURI());
-		return (new URL(HDIVUtil.stripSession(url.toString())));
-	}
-
-	/**
-	 * Function to protect meaningful characters of regular expressions
-	 * (+,*,...)
-	 * 
-	 * @param par Parameter to encode
-	 * 
-	 * @return Returns par with protected characters
-	 */
-	public static String protectCharacters(String par) {
-
-		par = par.replaceAll("\\+", "\\\\+");
-		par = par.replaceAll("\\*", "\\\\*");
-		par = par.replaceAll("\\?", "\\\\?");
-		par = par.replaceAll("\\$", "\\\\\\$");
-		par = par.replaceAll("\\^", "\\\\^");
-		par = par.replaceAll("\\[", "\\\\[");
-		par = par.replaceAll("\\(", "\\\\(");
-		par = par.replaceAll("\\)", "\\\\)");
-		par = par.replaceAll("\\|", "\\\\|");
-		return par;
-	}
-	
-	/**
 	 * Generates a random number between 0 (inclusive) and n (exclusive).
 	 * 
-	 * @param n the bound on the random number to be returned. Must be positive.
-	 * @return Returns a pseudorandom, uniformly distributed int value between 0
-	 *         (inclusive) and <code>n</code> (exclusive).
+	 * @param n
+	 *            the bound on the random number to be returned. Must be positive.
+	 * @return Returns a pseudorandom, uniformly distributed int value between 0 (inclusive) and <code>n</code>
+	 *         (exclusive).
 	 * @since HDIV 1.1
 	 */
 	public static String createRandomToken(int n) {

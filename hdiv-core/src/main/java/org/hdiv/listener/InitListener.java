@@ -36,6 +36,8 @@ import org.hdiv.dataComposer.IDataComposer;
 import org.hdiv.idGenerator.PageIdGenerator;
 import org.hdiv.session.ISession;
 import org.hdiv.session.IStateCache;
+import org.hdiv.urlProcessor.FormUrlProcessor;
+import org.hdiv.urlProcessor.LinkUrlProcessor;
 import org.hdiv.util.Constants;
 import org.hdiv.util.HDIVUtil;
 import org.springframework.context.ApplicationContext;
@@ -97,8 +99,7 @@ public class InitListener implements ServletContextListener, HttpSessionListener
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see javax.servlet.ServletContextListener#contextDestroyed(javax.servlet.
-	 * ServletContextEvent)
+	 * @see javax.servlet.ServletContextListener#contextDestroyed(javax.servlet. ServletContextEvent)
 	 */
 	public void contextDestroyed(ServletContextEvent servletContextEvent) {
 
@@ -123,7 +124,7 @@ public class InitListener implements ServletContextListener, HttpSessionListener
 		HDIVUtil.setHttpServletRequest(request);
 
 		// Store request original request uri
-		request.setAttribute(Constants.REQUEST_URI_KEY, request.getRequestURI());
+		HDIVUtil.setRequestURI(request.getRequestURI(), request);
 
 		// Init page in datacomposer
 		IDataComposer dataComposer = this.dataComposerFactory.newInstance();
@@ -151,8 +152,7 @@ public class InitListener implements ServletContextListener, HttpSessionListener
 	}
 
 	/**
-	 * @see javax.servlet.http.HttpSessionListener#void
-	 *      (javax.servlet.http.HttpSessionEvent)
+	 * @see javax.servlet.http.HttpSessionListener#void (javax.servlet.http.HttpSessionEvent)
 	 */
 	public void sessionDestroyed(HttpSessionEvent event) {
 
@@ -162,12 +162,10 @@ public class InitListener implements ServletContextListener, HttpSessionListener
 	}
 
 	/**
-	 * For each user session, a new cipher key is created if the cipher strategy
-	 * has been chosen, and a new cache is created to store the data to be
-	 * validated.
+	 * For each user session, a new cipher key is created if the cipher strategy has been chosen, and a new cache is
+	 * created to store the data to be validated.
 	 * 
-	 * @see javax.servlet.http.HttpSessionListener#void
-	 *      (javax.servlet.http.HttpSessionEvent)
+	 * @see javax.servlet.http.HttpSessionListener#void (javax.servlet.http.HttpSessionEvent)
 	 */
 	public void sessionCreated(HttpSessionEvent httpSessionEvent) {
 
@@ -207,15 +205,22 @@ public class InitListener implements ServletContextListener, HttpSessionListener
 		HDIVUtil.setHDIVConfig(this.config, servletContext);
 
 		IApplication application = (IApplication) wac.getBean("application");
+		HDIVUtil.setApplication(application, servletContext);
+
 		ISession session = (ISession) wac.getBean("sessionHDIV");
+		HDIVUtil.setISession(session, servletContext);
+
 		ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
 		messageSource.setBeanClassLoader(wac.getClassLoader());
 		String messageSourcePath = (String) wac.getBean("messageSourcePath");
 		messageSource.setBasename(messageSourcePath);
-
-		HDIVUtil.setApplication(application, servletContext);
 		HDIVUtil.setMessageSource(messageSource, servletContext);
-		HDIVUtil.setISession(session, servletContext);
+
+		LinkUrlProcessor linkUrlProcessor = (LinkUrlProcessor) wac.getBean("linkUrlProcessor");
+		HDIVUtil.setLinkUrlProcessor(linkUrlProcessor, servletContext);
+
+		FormUrlProcessor formUrlProcessor = (FormUrlProcessor) wac.getBean("formUrlProcessor");
+		HDIVUtil.setFormUrlProcessor(formUrlProcessor, servletContext);
 
 		this.servletContextInitialized = true;
 	}

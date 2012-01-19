@@ -24,8 +24,9 @@ import org.hdiv.dataValidator.DataValidatorTest;
 import org.hdiv.filter.ValidatorHelperTest;
 import org.hdiv.session.StateCacheTest;
 import org.hdiv.state.StateUtilTest;
+import org.hdiv.urlProcessor.FormUrlProcessorTest;
+import org.hdiv.urlProcessor.LinkUrlProcessorTest;
 import org.hdiv.util.EncodingUtilTest;
-import org.hdiv.util.HDIVUtilTest;
 
 public class AllCoreTests {
 
@@ -41,7 +42,8 @@ public class AllCoreTests {
 		suite.addTestSuite(StateCacheTest.class);
 		suite.addTestSuite(StateUtilTest.class);
 		suite.addTestSuite(EncodingUtilTest.class);
-		suite.addTestSuite(HDIVUtilTest.class);
+		suite.addTestSuite(FormUrlProcessorTest.class);
+		suite.addTestSuite(LinkUrlProcessorTest.class);
 		
 		return suite;
 	}

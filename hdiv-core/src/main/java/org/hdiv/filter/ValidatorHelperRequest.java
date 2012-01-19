@@ -891,7 +891,8 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	 */
 	protected String getTarget(HttpServletRequest request) {
 		try {
-			return HDIVUtil.actionName(request);
+			String requestUri = request.getRequestURI();
+			return requestUri;
 		} catch (Exception e) {
 			String errorMessage = HDIVUtil.getMessage("helper.actionName");
 			throw new HDIVException(errorMessage, e);
