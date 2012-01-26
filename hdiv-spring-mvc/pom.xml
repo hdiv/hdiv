@@ -5,7 +5,7 @@
 	<parent>
 		<artifactId>hdiv</artifactId>
 		<groupId>org.hdiv</groupId>
-		<version>2.1.0.RC3</version>
+		<version>2.1.0</version>
 	</parent>
 	<artifactId>hdiv-spring-mvc</artifactId>
 	<name>HDIV Spring Mvc</name>

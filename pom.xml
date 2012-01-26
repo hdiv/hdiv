@@ -6,8 +6,8 @@
 	<groupId>org.hdiv</groupId>
 	<artifactId>hdiv</artifactId>
 	<packaging>pom</packaging>
-	<name>HDIV</name>
-	<version>2.1.0.RC3</version>
+	<name>HDIV Parent</name>
+	<version>2.1.0</version>
 	<url>http://www.hdiv.org</url>
 	<description>Java Web Application Security Framework</description>
 
@@ -152,19 +152,4 @@
 		</dependency>
 	</dependencies>
 
-	<repositories>
-		<repository>
-			<id>spring-milestone</id>
-			<name>Spring Maven MILESTONE Repository</name>
-			<url>http://maven.springframework.org/milestone</url>
-		</repository>
-		<repository>
-			<id>spring-maven-snapshot</id>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-			<name>Springframework Maven SNAPSHOT Repository</name>
-			<url>http://maven.springframework.org/snapshot</url>
-		</repository>
-	</repositories>
 </project>
