@@ -27,13 +27,13 @@ import javax.servlet.http.HttpServletResponse;
  */
 public interface IResponseWrapper extends HttpServletResponse {
 
-	 /**
-     * Adds the specified cookie to the response. It can be called multiple
-     * times to set more than one cookie.
-     *
-     * @param The <CODE>Cookie</CODE> to return to the client
-     * @see javax.servlet.http.HttpServletResponse#addCookie
-     */
+	/**
+	* Adds the specified cookie to the response. It can be called multiple
+	* times to set more than one cookie.
+	*
+	* @param cookie The <CODE>Cookie</CODE> to return to the client
+	* @see javax.servlet.http.HttpServletResponse#addCookie
+	*/
 	public void addCookie(Cookie cookie);
 
 }

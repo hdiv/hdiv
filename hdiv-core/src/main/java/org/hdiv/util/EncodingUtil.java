@@ -275,7 +275,7 @@ public class EncodingUtil {
 	}
 
 	/**
-	 * @param algorithm The algorithm to set for the message digest.
+	 * @param algorithmName The algorithm to set for the message digest.
 	 */
 	public void setAlgorithmName(String algorithmName) {
 		this.algorithmName = algorithmName;

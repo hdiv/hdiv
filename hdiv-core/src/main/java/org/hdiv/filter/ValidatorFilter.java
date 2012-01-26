@@ -39,7 +39,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
  * 
  * @author Roberto Velasco
  * @author Gorka Vicente
- * @see org.hdiv.filter.ValidatorHelperThreadLocal
+ * @see org.hdiv.filter.ValidatorHelperRequest
  */
 public class ValidatorFilter extends OncePerRequestFilter {
 
@@ -95,8 +95,8 @@ public class ValidatorFilter extends OncePerRequestFilter {
 	 * through the chain due to a client request for a resource at the end of
 	 * the chain.
 	 * 
-	 * @param servletRequest request
-	 * @param servletResponse response
+	 * @param request request object
+	 * @param response response object
 	 * @param filterChain filter chain
 	 * @see javax.servlet.Filter#doFilter(javax.servlet.ServletRequest,
 	 *      javax.servlet.ServletResponse, javax.servlet.FilterChain)

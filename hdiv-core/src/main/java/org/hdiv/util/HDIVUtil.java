@@ -82,7 +82,7 @@ public class HDIVUtil {
 	 * 
 	 * @param request
 	 *            HttpServletRequest
-	 * @return IDataComposer
+	 * @return {@link IDataComposer} instance
 	 */
 	public static IDataComposer getDataComposer(HttpServletRequest request) {
 
@@ -94,7 +94,9 @@ public class HDIVUtil {
 	}
 
 	/**
-	 * @return Returns data composer object
+	 * Returns {@link IDataComposer} instance for this request.
+	 * 
+	 * @return {@link IDataComposer} instance
 	 */
 	public static IDataComposer getDataComposer() {
 
@@ -107,8 +109,8 @@ public class HDIVUtil {
 	/**
 	 * Set the <code>IDataComposer</code>
 	 * 
-	 * @param newDataComposer
-	 * @param request
+	 * @param newDataComposer new {@link IDataComposer}
+	 * @param request {@link HttpServletRequest} instance
 	 */
 	public static void setDataComposer(IDataComposer newDataComposer, HttpServletRequest request) {
 
@@ -189,7 +191,7 @@ public class HDIVUtil {
 	/**
 	 * Return the <code>HDIVConfig</code> object
 	 * 
-	 * @return HDIVConfig
+	 * @return {@link HDIVConfig} instance
 	 */
 	public static HDIVConfig getHDIVConfig() {
 
@@ -202,7 +204,7 @@ public class HDIVUtil {
 	 * Return the <code>HDIVConfig</code> object
 	 * 
 	 * @param servletContext
-	 * @return HDIVConfig
+	 * @return {@link HDIVConfig} instance
 	 */
 	public static HDIVConfig getHDIVConfig(ServletContext servletContext) {
 
@@ -229,7 +231,7 @@ public class HDIVUtil {
 	/**
 	 * Return the <code>ISession</code> instance.
 	 * 
-	 * @return
+	 * @return {@link ISession} instance
 	 */
 	public static ISession getISession() {
 
@@ -242,7 +244,7 @@ public class HDIVUtil {
 	 * Return the <code>ISession</code> instance.
 	 * 
 	 * @param servletContext
-	 * @return
+	 * @return {@link ISession} instance
 	 */
 	public static ISession getISession(ServletContext servletContext) {
 		ISession session = (ISession) servletContext.getAttribute(ISESSION_SERVLETCONTEXT_KEY);
@@ -325,7 +327,7 @@ public class HDIVUtil {
 	/**
 	 * Return the <code>HttpSession</code> object.
 	 * 
-	 * @return
+	 * @return {@link HttpSession} instance
 	 */
 	public static HttpSession getHttpSession() {
 		HttpServletRequest request = getHttpServletRequest();
@@ -337,7 +339,7 @@ public class HDIVUtil {
 	/**
 	 * Return the <code>HttpServletRequest</code> object.
 	 * 
-	 * @return
+	 * @return {@link HttpServletRequest} instance
 	 */
 	public static HttpServletRequest getHttpServletRequest() {
 		HttpServletRequest request = (HttpServletRequest) httpRequest.get();
@@ -361,7 +363,7 @@ public class HDIVUtil {
 	/**
 	 * Return the {@link MessageSource} instance.
 	 * 
-	 * @return
+	 * @return {@link MessageSource} instance
 	 */
 	public static MessageSource getMessageSource() {
 
@@ -373,7 +375,7 @@ public class HDIVUtil {
 	 * Return the {@link MessageSource} instance.
 	 * 
 	 * @param servletContext
-	 * @return
+	 * @return {@link MessageSource} instance
 	 */
 	public static MessageSource getMessageSource(ServletContext servletContext) {
 		MessageSource msgSource = (MessageSource) servletContext.getAttribute(MESSAGESOURCE_SERVLETCONTEXT_KEY);

@@ -75,7 +75,7 @@ public class Page implements IPage, Serializable {
 	 * Adds a new state hash to the page <code>this</code>.
 	 * 
 	 * @param id state identifier
-	 * @param state Hash of a state that represents all the data that composes a
+	 * @param stateHash Hash of a state that represents all the data that composes a
 	 *            possible request.
 	 */
 	public void addState(String id, String stateHash) {

@@ -264,7 +264,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	 *            HttpServletRequest to validate
 	 * @param target
 	 *            Part of the url that represents the target action
-	 * @param IState
+	 * @param state
 	 *            The restored state for this url
 	 * @return True if the actions are the same. False otherwise.
 	 */
@@ -920,7 +920,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	 * 
 	 * @param request
 	 *            request
-	 * @return
+	 * @return hdiv parameter value
 	 */
 	protected String getHdivParameter(HttpServletRequest request) {
 

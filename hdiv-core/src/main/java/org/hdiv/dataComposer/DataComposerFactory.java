@@ -34,22 +34,22 @@ public class DataComposerFactory {
 	 * HDIV configuration object.
 	 */
 	private HDIVConfig hdivConfig;
-	
+
 	/**
 	 * Http session wrapper
 	 */
 	private ISession session;
-	
+
 	/**
 	 * Unique Id generator
 	 */
 	private UidGenerator uidGenerator;
-	
+
 	/**
 	 * Maximum size allowed to represent page state
 	 */
 	private int allowedLength;
-	
+
 	/**
 	 * Utility methods for encoding
 	 */
@@ -60,8 +60,8 @@ public class DataComposerFactory {
 	 * 
 	 * @return IDataComposer instance
 	 */
-	public IDataComposer newInstance(){
-		
+	public IDataComposer newInstance() {
+
 		if (this.hdivConfig.getStrategy().equalsIgnoreCase("memory")) {
 			DataComposerMemory composer = new DataComposerMemory();
 			composer.setHdivConfig(this.hdivConfig);
@@ -69,7 +69,7 @@ public class DataComposerFactory {
 			composer.setUidGenerator(this.uidGenerator);
 			composer.init();
 			return composer;
-			
+
 		} else if (this.hdivConfig.getStrategy().equalsIgnoreCase("cipher")) {
 			DataComposerCipher composer = new DataComposerCipher();
 			composer.setHdivConfig(this.hdivConfig);
@@ -79,7 +79,7 @@ public class DataComposerFactory {
 			composer.setEncodingUtil(this.encodingUtil);
 			composer.init();
 			return composer;
-			
+
 		} else if (this.hdivConfig.getStrategy().equalsIgnoreCase("hash")) {
 			DataComposerHash composer = new DataComposerHash();
 			composer.setHdivConfig(this.hdivConfig);
@@ -89,32 +89,47 @@ public class DataComposerFactory {
 			composer.setEncodingUtil(this.encodingUtil);
 			composer.init();
 			return composer;
-			
+
 		} else {
 			String errorMessage = HDIVUtil.getMessage("strategy.error", this.hdivConfig.getStrategy());
 			throw new HDIVException(errorMessage);
 		}
-		
+
 	}
-	
+
+	/**
+	 * @param hdivConfig the hdivConfig to set
+	 */
 	public void setHdivConfig(HDIVConfig hdivConfig) {
 		this.hdivConfig = hdivConfig;
 	}
 
+	/**
+	 * @param session the session to set
+	 */
 	public void setSession(ISession session) {
 		this.session = session;
 	}
-	
+
+	/**
+	 * @param uidGenerator the uidGenerator to set
+	 */
 	public void setUidGenerator(UidGenerator uidGenerator) {
 		this.uidGenerator = uidGenerator;
 	}
 
+	/**
+	 * @param allowedLength the allowedLength to set
+	 */
 	public void setAllowedLength(int allowedLength) {
 		this.allowedLength = allowedLength;
 	}
 
+	/**
+	 * @param encodingUtil the encodingUtil to set
+	 */
 	public void setEncodingUtil(EncodingUtil encodingUtil) {
 		this.encodingUtil = encodingUtil;
 	}
-	
+
 }

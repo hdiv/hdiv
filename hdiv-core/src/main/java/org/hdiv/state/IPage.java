@@ -34,7 +34,7 @@ public interface IPage {
 	 * @param state Hash of a state that represents all the data that composes a
 	 *            possible request.
 	 */
-	public void addState(String id, String request);
+	public void addState(String id, String state);
 
 	/**
 	 * Checks if exists a state with the given identifier <code>key</code>.

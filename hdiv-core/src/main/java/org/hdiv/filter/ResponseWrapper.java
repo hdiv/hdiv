@@ -194,7 +194,7 @@ public class ResponseWrapper extends HttpServletResponseWrapper {
 	 * Adds the specified cookie to the response. It can be called multiple times to
 	 * set more than one cookie.
 	 * 
-	 * @param The <code>Cookie</code> to return to the client
+	 * @param cookie The <code>Cookie</code> to return to the client
 	 * @see javax.servlet.http.HttpServletResponse#addCookie
 	 */
 	public void addCookie(Cookie cookie) {

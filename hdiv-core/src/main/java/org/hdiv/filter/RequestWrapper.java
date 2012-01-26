@@ -340,8 +340,8 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 	/**
 	 * Adds a file parameter to the set of file parameters for this request.
 	 * 
-	 * @param name
-	 * @param values 
+	 * @param name file name
+	 * @param value file value
 	 */
 	public void addFileItem(String name, MultipartFile value) {
 		this.elementsFile.put(name, value);
@@ -350,8 +350,8 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 	/**
 	 * Adds a file parameter to the set of file parameters for this request.
 	 * 
-	 * @param name
-	 * @param values 
+	 * @param name file name
+	 * @param values file values
 	 */
 	public void addFileItem(String name, List values) {
 		this.elementsFile.put(name, values);

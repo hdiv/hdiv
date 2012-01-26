@@ -353,7 +353,7 @@ public class HDIVConfig {
 	/**
 	 * It creates a map from the list of init parameters defined by the user.
 	 * 
-	 * @param userStartPages list of init parameters defined by the user
+	 * @param userStartParameters list of init parameters defined by the user
 	 */
 	public void setUserStartParameters(List userStartParameters) {
 
@@ -398,7 +398,7 @@ public class HDIVConfig {
 	 * <li>rejected: the value is rejected if doesn't pass the validation</li>
 	 * </p>
 	 * 
-	 * @param target target name
+	 * @param url target url
 	 * @param parameter parameter name
 	 * @param values parameter's values
 	 * @param dataType editable data type

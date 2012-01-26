@@ -39,9 +39,9 @@ public interface IValidationResult {
 	public Object getResult();
 
 	/**
-	 * @param legal The result to set.
+	 * @param result The result to set.
 	 */
-	public void setResult(Object object);
+	public void setResult(Object result);
 
 	/**
 	 * @return Returns the expectedValue.
@@ -51,5 +51,5 @@ public interface IValidationResult {
 	/**
 	 * @param expectedValue The expectedValue to set.
 	 */
-	public void setExpectedValue(String value);
+	public void setExpectedValue(String expectedValue);
 }
