@@ -152,4 +152,33 @@
 		</dependency>
 	</dependencies>
 
+	<profiles>
+		<!-- Profile to activate artifact signing in release -->
+		<profile>
+			<id>performRelease</id>
+			<activation>
+				<property>
+					<name>performRelease</name>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-gpg-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>sign-artifacts</id>
+								<phase>package</phase>
+								<goals>
+									<goal>sign</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+
 </project>
