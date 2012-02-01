@@ -41,7 +41,7 @@ import org.hdiv.state.State;
  * </p>
  * 
  * @see org.hdiv.dataComposer.AbstractDataComposer
- * @see org.hdiv.composer.IDataComposer
+ * @see org.hdiv.dataComposer.IDataComposer
  * @author Roberto Velasco
  */
 public class DataComposerMemory extends AbstractDataComposer implements IDataComposer {
@@ -87,7 +87,7 @@ public class DataComposerMemory extends AbstractDataComposer implements IDataCom
 	 * HDIV configuration object.
 	 */
 	protected HDIVConfig hdivConfig;
-	
+
 	/**
 	 * Unique id generator
 	 */
@@ -97,7 +97,7 @@ public class DataComposerMemory extends AbstractDataComposer implements IDataCom
 	 * True if beginRequest has been executed and endRequest not
 	 */
 	protected boolean isRequestStarted = false;
-	
+
 	/**
 	 * DataComposerMemory initialization with HTTP session wrapper and new stack to
 	 * store all states of the page <code>page</code>.
@@ -105,6 +105,16 @@ public class DataComposerMemory extends AbstractDataComposer implements IDataCom
 	public void init() {
 		this.page = new Page();
 		this.statesStack = new Stack();
+	}
+
+	/**
+	 * DataComposerMemory initialization based on the state of another <code>page</code>.
+	 * @param page
+	 *            IPage with the state of another request
+	 */
+	public void init(IPage page) {
+		this.init();
+		this.page = page;
 	}
 
 	/**
@@ -193,8 +203,8 @@ public class DataComposerMemory extends AbstractDataComposer implements IDataCom
 	 * @param charEncoding character encoding
 	 * @return Codified value to send to the client
 	 */
-	public String compose(String action, String parameter, String value, boolean editable,
-			boolean isActionParam, String charEncoding) {
+	public String compose(String action, String parameter, String value, boolean editable, boolean isActionParam,
+			String charEncoding) {
 
 		this.setAction(action);
 		return this.compose(parameter, value, editable, isActionParam, charEncoding);
@@ -214,8 +224,7 @@ public class DataComposerMemory extends AbstractDataComposer implements IDataCom
 	 * @param charEncoding character encoding
 	 * @return Codified value to send to the client
 	 */
-	public String compose(String parameter, String value, boolean editable, boolean isActionParam,
-			String charEncoding) {
+	public String compose(String parameter, String value, boolean editable, boolean isActionParam, String charEncoding) {
 
 		return this.compose(parameter, value, editable, null, isActionParam, charEncoding);
 	}
@@ -236,19 +245,19 @@ public class DataComposerMemory extends AbstractDataComposer implements IDataCom
 	 * @return Codified value to send to the client
 	 * @since HDIV 1.1
 	 */
-	public String compose(String parameter, String value, boolean editable, String editableName,
-			boolean isActionParam, String charEncoding) {
+	public String compose(String parameter, String value, boolean editable, String editableName, boolean isActionParam,
+			String charEncoding) {
 
 		this.composeParameter(parameter, value, editable, editableName, isActionParam, charEncoding);
-		
+
 		if (this.hdivConfig.isStartParameter(parameter)) {
 			return value;
 		}
-		
+
 		if (this.isUserDefinedNonValidationParameter(parameter)) {
 			return value;
 		}
-		
+
 		if (Boolean.FALSE.equals(this.hdivConfig.getConfidentiality())) {
 			return value;
 		}
@@ -261,7 +270,7 @@ public class DataComposerMemory extends AbstractDataComposer implements IDataCom
 
 		return (this.lastParameter.getCount() - 1) + "";
 	}
-	
+
 	/**
 	 * Checks if the parameter <code>parameter</code> is defined by the user
 	 * as a no required validation parameter for the action
@@ -273,13 +282,13 @@ public class DataComposerMemory extends AbstractDataComposer implements IDataCom
 	 * @since HDIV 2.0.6
 	 */
 	private boolean isUserDefinedNonValidationParameter(String parameter) {
-		
+
 		String actionWithoutContextPath = this.getAction();
 		if (actionWithoutContextPath.startsWith("/")) {
 			int secondSlash = actionWithoutContextPath.indexOf("/", 1);
 			if (secondSlash > 0) {
-				actionWithoutContextPath = actionWithoutContextPath.substring(secondSlash);	
-			}			
+				actionWithoutContextPath = actionWithoutContextPath.substring(secondSlash);
+			}
 		}
 
 		if (this.hdivConfig.isParameterWithoutValidation(actionWithoutContextPath, parameter)) {
@@ -288,9 +297,9 @@ public class DataComposerMemory extends AbstractDataComposer implements IDataCom
 				log.debug("parameter " + parameter + " doesn't need validation. It is user defined parameter.");
 			}
 			return true;
-		}		
+		}
 		return false;
-	}	
+	}
 
 	/**
 	 * Adds a new IParameter object, generated from the values passed as parameters,
@@ -306,12 +315,12 @@ public class DataComposerMemory extends AbstractDataComposer implements IDataCom
 	 * @return Codified value to send to the client
 	 * @since HDIV 1.1
 	 */
-	private void composeParameter(String parameter, String value, boolean editable,
-			String editableName, boolean isActionParam, String charEncoding) {
+	private void composeParameter(String parameter, String value, boolean editable, String editableName,
+			boolean isActionParam, String charEncoding) {
 
 		// we decoded value before store it in state.
 		String decodedValue = this.getDecodedValue(value, charEncoding);
-		
+
 		if (this.state.existParameter(parameter)) {
 
 			if ((this.lastParameter == null) || (!this.lastParameter.getName().equals(parameter))) {
@@ -349,7 +358,7 @@ public class DataComposerMemory extends AbstractDataComposer implements IDataCom
 
 		if (storedParameter.getValues().size() > 0) {
 
-			this.composeParameter(newParameter, storedParameter.getValuePosition(0), false, "",	false, "UTF-8");
+			this.composeParameter(newParameter, storedParameter.getValuePosition(0), false, "", false, "UTF-8");
 
 			String currentValue = null;
 			// We check the parameters since the second position because the first 
@@ -397,7 +406,7 @@ public class DataComposerMemory extends AbstractDataComposer implements IDataCom
 
 		requestCounter++;
 		this.lastParameter = null;
-		
+
 		this.isRequestStarted = true;
 	}
 
@@ -431,13 +440,12 @@ public class DataComposerMemory extends AbstractDataComposer implements IDataCom
 		this.state.setPageId(this.getPage().getName());
 		this.page.addState(this.state);
 
-		String id = this.getPage().getName() + DASH + this.state.getId() + DASH
-				+ this.getHdivStateSuffix();
+		String id = this.getPage().getName() + DASH + this.state.getId() + DASH + this.getHdivStateSuffix();
 
 		this.updateComposerState();
 
 		this.isRequestStarted = false;
-		
+
 		return id;
 	}
 
@@ -475,7 +483,7 @@ public class DataComposerMemory extends AbstractDataComposer implements IDataCom
 			this.page.setName(this.getPageId());
 			this.page.setRandomToken(this.uidGenerator.generateUid().toString());
 		}
-	}	
+	}
 
 	/**
 	 * This method is called in the pre-processing stage of each user request to add
@@ -483,18 +491,18 @@ public class DataComposerMemory extends AbstractDataComposer implements IDataCom
 	 * states to the user session.
 	 */
 	public void endPage() {
-		
-		if(this.page.getStates().size() > 0){
+
+		if (this.page.getStates().size() > 0) {
 			this.getSession().addPage(this.getPageId(), this.page);
-		}else{
-			log.debug("The page ["+this.page.getName()+"] has no states, is not stored in session");
+		} else {
+			log.debug("The page [" + this.page.getName() + "] has no states, is not stored in session");
 		}
-		
+
 	}
-	
+
 	public boolean isRequestStarted() {
 		return this.isRequestStarted;
-	}	
+	}
 
 	/**
 	 * @return IPage which represents the page in memory.
@@ -529,6 +537,4 @@ public class DataComposerMemory extends AbstractDataComposer implements IDataCom
 		this.uidGenerator = uidGenerator;
 	}
 
-	
-	
 }
