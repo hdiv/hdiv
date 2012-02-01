@@ -1,0 +1,21 @@
+   ======================================================================
+   == NOTICE file corresponding to section 4 d of the Apache License,  ==
+   == Version 2.0, in this case for the HDIV distribution. ==
+   ======================================================================
+
+   This product includes software developed by
+   the Apache Software Foundation (http://www.apache.org).
+
+   The end-user documentation included with a redistribution, if any,
+   must include the following acknowledgement:
+
+     "This product includes software developed by the HDIV Project 
+	 (http://www.hdiv.org)."
+
+   Alternately, this acknowledgement may appear in the software itself,
+   if and wherever such third-party acknowledgements normally appear.
+
+   The names "HDIV" and "HTTP Data Integrity Validator" must not be 
+   used to endorse or promote products derived from this software 
+   without prior written permission. For written permission, please 
+   contact support@hdiv.org or roberto@hdiv.org.
