@@ -2,6 +2,11 @@ HDIV CHANGELOG
 ==============
 http://www.hdiv.org
 
+Release 2.1.1
+==================================
+
+ * New 'debugMode' configuration mode to log the attacks but don`t stop it.
+ 
 Release 2.1.0
 ==================================
 

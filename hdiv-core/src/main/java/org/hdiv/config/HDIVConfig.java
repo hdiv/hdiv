@@ -132,6 +132,12 @@ public class HDIVConfig {
 	private String strategy;
 	
 	/**
+	 * If debug mode is enabled, the attacks are logged but the requests are not stopped.
+	 * @since HDIV 2.1.1
+	 */
+	private boolean debugMode = false;
+	
+	/**
 	 * @param strategy the strategy to set
 	 */
 	public void setStrategy(String strategy) {
@@ -545,6 +551,20 @@ public class HDIVConfig {
 		return strategy;
 	}
 	
+	/**
+	 * @return the debugMode
+	 */
+	public boolean isDebugMode() {
+		return debugMode;
+	}
+
+	/**
+	 * @param debugMode the debugMode to set
+	 */
+	public void setDebugMode(boolean debugMode) {
+		this.debugMode = debugMode;
+	}
+
 	public String toString(){
 		StringBuffer result = new StringBuffer().append("");
 		result = result.append(" Confidentiality=").append(this.getConfidentiality().toString());
@@ -559,6 +579,7 @@ public class HDIVConfig {
 		result.append(" startPages=").append(this.startPages);
 		result.append(" startParameters=").append(this.startParameters);
 		result.append(" paramsWithoutValidation=").append(this.paramsWithoutValidation);
+		result.append(" debugMode=").append(this.debugMode);
 	
 		return result.toString();
 	}

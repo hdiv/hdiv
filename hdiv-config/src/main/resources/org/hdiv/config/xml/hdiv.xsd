@@ -198,6 +198,14 @@
 					]]></xsd:documentation>
 				</xsd:annotation>
 			</xsd:attribute>
+			<xsd:attribute name="debugMode" type="xsd:boolean"
+				default="false">
+				<xsd:annotation>
+					<xsd:documentation><![CDATA[
+	If debug mode is enabled, the attacks are logged but the requests are not stopped.
+					]]></xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
 		</xsd:complexType>
 	</xsd:element>
 

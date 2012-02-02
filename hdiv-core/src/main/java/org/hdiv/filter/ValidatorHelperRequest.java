@@ -102,7 +102,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	/**
 	 * Checks if the values of the parameters received in the request
 	 * <code>request</code> are valid. These values are valid if and only if the
-	 * noneditable parameters haven�t been modified.<br>
+	 * noneditable parameters haven't been modified.<br>
 	 * Validation process is as follows.<br>
 	 * 1. If the action to which the request is directed is an init page, then
 	 * it is a valid request.<br>
@@ -250,7 +250,9 @@ public class ValidatorHelperRequest implements IValidationHelper {
 		}
 
 		if (unauthorizedEditableParameters.size() > 0) {
-			request.setAttribute(HDIVErrorCodes.EDITABLE_PARAMETER_ERROR, unauthorizedEditableParameters);
+			if (!this.hdivConfig.isDebugMode()) {
+				request.setAttribute(HDIVErrorCodes.EDITABLE_PARAMETER_ERROR, unauthorizedEditableParameters);
+			}
 		}
 
 		return true;
@@ -327,7 +329,9 @@ public class ValidatorHelperRequest implements IValidationHelper {
 			}
 
 			if (unauthorizedEditableParameters.size() > 0) {
-				request.setAttribute(HDIVErrorCodes.EDITABLE_PARAMETER_ERROR, unauthorizedEditableParameters);
+				if (!this.hdivConfig.isDebugMode()) {
+					request.setAttribute(HDIVErrorCodes.EDITABLE_PARAMETER_ERROR, unauthorizedEditableParameters);
+				}
 			}
 		}
 		return true;

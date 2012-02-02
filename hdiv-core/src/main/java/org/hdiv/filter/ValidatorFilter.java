@@ -52,17 +52,17 @@ public class ValidatorFilter extends OncePerRequestFilter {
 	 * HDIV configuration object
 	 */
 	private HDIVConfig hdivConfig;
-	
+
 	/**
 	 * IValidationHelper object
 	 */
 	private IValidationHelper validationHelper;
-	
+
 	/**
 	 * The multipart config
 	 */
 	private IMultipartConfig multipartConfig;
-	
+
 	/**
 	 * Creates a new ValidatorFilter object.
 	 */
@@ -77,17 +77,17 @@ public class ValidatorFilter extends OncePerRequestFilter {
 	 * @see javax.servlet.Filter#init(javax.servlet.FilterConfig)
 	 */
 	protected void initFilterBean() throws ServletException {
-		
+
 		ServletContext servletContext = getServletContext();
 		WebApplicationContext context = WebApplicationContextUtils.getRequiredWebApplicationContext(servletContext);
-		
+
 		this.hdivConfig = (HDIVConfig) context.getBean("config");
 		this.validationHelper = (IValidationHelper) context.getBean("validatorHelper");
-		if(context.containsBean("multipartConfig")){
+		if (context.containsBean("multipartConfig")) {
 			//For applications without Multipart requests
 			this.multipartConfig = (IMultipartConfig) context.getBean("multipartConfig");
 		}
-		
+
 	}
 
 	/**
@@ -103,13 +103,13 @@ public class ValidatorFilter extends OncePerRequestFilter {
 	 */
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
-				
+
 		ResponseWrapper responseWrapper = new ResponseWrapper(response);
 		RequestWrapper requestWrapper = getRequestWrapper(request);
-		
+
 		HttpServletRequest multipartProcessedRequest = requestWrapper;
-		
-		try {			
+
+		try {
 
 			boolean legal = false;
 			boolean isMultipartException = false;
@@ -117,14 +117,16 @@ public class ValidatorFilter extends OncePerRequestFilter {
 			if (this.isMultipartContent(request.getContentType())) {
 
 				requestWrapper.setMultipart(true);
-				
+
 				try {
-					
-					if(this.multipartConfig == null){
-						throw new RuntimeException("No 'multipartConfig' configured. It is required to multipart requests.");
+
+					if (this.multipartConfig == null) {
+						throw new RuntimeException(
+								"No 'multipartConfig' configured. It is required to multipart requests.");
 					}
-					
-					multipartProcessedRequest = this.multipartConfig.handleMultipartRequest(requestWrapper, super.getServletContext());
+
+					multipartProcessedRequest = this.multipartConfig.handleMultipartRequest(requestWrapper,
+							super.getServletContext());
 
 				} catch (HdivMultipartException e) {
 					request.setAttribute(IMultipartConfig.FILEUPLOAD_EXCEPTION, e);
@@ -137,36 +139,42 @@ public class ValidatorFilter extends OncePerRequestFilter {
 				legal = this.validationHelper.validate(multipartProcessedRequest);
 			}
 
-			if (legal) {
+			if (legal || this.hdivConfig.isDebugMode()) {
 				processRequest(multipartProcessedRequest, responseWrapper, filterChain);
 			} else {
-				response.sendRedirect(response.encodeRedirectURL(request.getContextPath() + hdivConfig.getErrorPage()));
+				// Redirect to error page
+				response.sendRedirect(response.encodeRedirectURL(request.getContextPath()
+						+ this.hdivConfig.getErrorPage()));
 			}
 
-		} catch (IOException e){
+		} catch (IOException e) {
 			//Internal framework exception, rethrow exception
 			throw e;
-		} catch (ServletException e){
+		} catch (ServletException e) {
 			//Internal framework exception, rethrow exception
 			throw e;
 		} catch (Exception e) {
-			if(log.isErrorEnabled()){
+			if (log.isErrorEnabled()) {
 				log.error("Exception in request validation:");
-				log.error("Message: "+e.getMessage());
-				
+				log.error("Message: " + e.getMessage());
+
 				StringBuffer buffer = new StringBuffer();
-	            StackTraceElement[] trace = e.getStackTrace();
-	            for (int i=0; i < trace.length; i++){
-	            	buffer.append("\tat " + trace[i] + System.getProperty("line.separator"));
-	            }
-				log.error("StackTrace: "+buffer.toString());
-				log.error("Cause: "+e.getCause());
-				log.error("Exception: "+e.toString());
+				StackTraceElement[] trace = e.getStackTrace();
+				for (int i = 0; i < trace.length; i++) {
+					buffer.append("\tat " + trace[i] + System.getProperty("line.separator"));
+				}
+				log.error("StackTrace: " + buffer.toString());
+				log.error("Cause: " + e.getCause());
+				log.error("Exception: " + e.toString());
 			}
-			response.sendRedirect(response.encodeRedirectURL(request.getContextPath() + hdivConfig.getErrorPage()));
+			// Redirect to error page
+			if (!this.hdivConfig.isDebugMode()) {
+				response.sendRedirect(response.encodeRedirectURL(request.getContextPath()
+						+ this.hdivConfig.getErrorPage()));
+			}
 		}
 	}
-	
+
 	/**
 	 * Utility method that determines whether the request contains multipart
 	 * content.
@@ -192,7 +200,7 @@ public class ValidatorFilter extends OncePerRequestFilter {
 			FilterChain filterChain) throws IOException, ServletException {
 
 		this.validationHelper.startPage(requestWrapper);
-		filterChain.doFilter(requestWrapper, responseWrapper);		
+		filterChain.doFilter(requestWrapper, responseWrapper);
 		this.validationHelper.endPage(requestWrapper);
 	}
 
@@ -202,13 +210,13 @@ public class ValidatorFilter extends OncePerRequestFilter {
 	 * @param request HTTP request
 	 * @return the request wrapper
 	 */
-	protected RequestWrapper getRequestWrapper(HttpServletRequest request){
+	protected RequestWrapper getRequestWrapper(HttpServletRequest request) {
 
 		RequestWrapper requestWrapper = new RequestWrapper(request);
 		requestWrapper.setConfidentiality(this.hdivConfig.getConfidentiality());
 		requestWrapper.setCookiesConfidentiality(this.hdivConfig.isCookiesConfidentialityActivated());
-	
+
 		return requestWrapper;
 	}
-	
+
 }
