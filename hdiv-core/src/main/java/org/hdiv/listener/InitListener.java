@@ -230,8 +230,8 @@ public class InitListener implements ServletContextListener, HttpSessionListener
 	 * 
 	 * @param context
 	 *            application context
-	 * @param httpSessionEvent
-	 *            http session event
+	 * @param httpSession
+	 *            http session
 	 */
 	protected void initStrategies(ApplicationContext context, HttpSession httpSession) {
 
@@ -254,8 +254,8 @@ public class InitListener implements ServletContextListener, HttpSessionListener
 	 * 
 	 * @param context
 	 *            application context
-	 * @param httpSessionEvent
-	 *            http session event
+	 * @param httpSession
+	 *            http session
 	 */
 	protected void initCache(ApplicationContext context, HttpSession httpSession) {
 
@@ -269,8 +269,8 @@ public class InitListener implements ServletContextListener, HttpSessionListener
 	 * 
 	 * @param context
 	 *            application context
-	 * @param httpSessionEvent
-	 *            http session event
+	 * @param httpSession
+	 *            http session
 	 */
 	protected void initPageIdGenerator(ApplicationContext context, HttpSession httpSession) {
 
@@ -287,8 +287,8 @@ public class InitListener implements ServletContextListener, HttpSessionListener
 	 * 
 	 * @param context
 	 *            application context
-	 * @param httpSessionEvent
-	 *            http session event
+	 * @param httpSession
+	 *            http session
 	 * @since HDIV 1.1
 	 */
 	protected void initHDIVState(ApplicationContext context, HttpSession httpSession) {
