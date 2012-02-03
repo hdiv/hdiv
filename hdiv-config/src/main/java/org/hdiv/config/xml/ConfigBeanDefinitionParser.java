@@ -375,13 +375,15 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		for (int i = 0; i < nodeList.getLength(); i++) {
 			Node node = nodeList.item(i);
 
-			if (node.getNodeName().equalsIgnoreCase("hdiv:startPages")) {
-				this.processStartPages(node, bean);
-			} else if (node.getNodeName().equalsIgnoreCase("hdiv:startParameters")) {
-				this.processStartParameters(node, bean);
-
-			} else if (node.getNodeName().equalsIgnoreCase("hdiv:paramsWithoutValidation")) {
-				this.processParamsWithoutValidation(node, bean);
+			if (node.getNodeType() == Node.ELEMENT_NODE) {
+				if (node.getLocalName().equalsIgnoreCase("startPages")) {
+					this.processStartPages(node, bean);
+				} else if (node.getLocalName().equalsIgnoreCase("startParameters")) {
+					this.processStartParameters(node, bean);
+	
+				} else if (node.getLocalName().equalsIgnoreCase("paramsWithoutValidation")) {
+					this.processParamsWithoutValidation(node, bean);
+				}
 			}
 		}
 	}
@@ -403,8 +405,10 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		bean.getPropertyValues().add("ParamsWithoutValidation", map);
 		for (int i = 0; i < nodeList.getLength(); i++) {
 			Node mappingNode = nodeList.item(i);
-			if (mappingNode.getNodeName().equalsIgnoreCase("hdiv:mapping")) {
-				this.processMapping(mappingNode, map);
+			if (mappingNode.getNodeType() == Node.ELEMENT_NODE) {
+				if (mappingNode.getLocalName().equalsIgnoreCase("mapping")) {
+					this.processMapping(mappingNode, map);
+				}
 			}
 		}
 	}

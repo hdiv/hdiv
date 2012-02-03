@@ -15,7 +15,9 @@
  */
 package org.hdiv.config.xml;
 
+import java.util.Arrays;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Map;
 
 import org.hdiv.config.HDIVValidations;
@@ -31,33 +33,63 @@ import org.w3c.dom.NodeList;
  */
 public class EditableValidationsBeanDefinitionParser extends AbstractSingleBeanDefinitionParser {
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.springframework.beans.factory.xml.AbstractSingleBeanDefinitionParser#getBeanClass(org.w3c.dom.Element)
+	 */
 	protected Class getBeanClass(Element element) {
 		return HDIVValidations.class;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.springframework.beans.factory.xml.AbstractSingleBeanDefinitionParser#doParse(org.w3c.dom.Element, 
+	 * org.springframework.beans.factory.support.BeanDefinitionBuilder)
+	 */
 	protected void doParse(Element element, BeanDefinitionBuilder bean) {
 
 		Map map = new Hashtable();
-		bean.addPropertyValue("xmlData", map);
+		bean.addPropertyValue("rawUrls", map);
 		bean.setInitMethodName("init");
 
 		NodeList list = element.getChildNodes();
 
 		for (int i = 0; i < list.getLength(); i++) {
 			Node node = list.item(i);
-			if (node.getNodeName().equalsIgnoreCase("hdiv:validationRule")) {
-
-				this.processValidationRule(node, bean, map);
+			if (node.getNodeType() == Node.ELEMENT_NODE) {
+				if (node.getLocalName().equalsIgnoreCase("validationRule")) {
+	
+					this.processValidationRule(node, bean, map);
+				}
 			}
 		}
 	}
 
+	/**
+	 * Initialize Map with url and ValidationRule data.
+	 * @param node processing xml node
+	 * @param bean bean configuration
+	 * @param map Map with url and ValidationRule data
+	 */
 	private void processValidationRule(Node node, BeanDefinitionBuilder bean, Map map) {
 
 		String value = node.getTextContent();
 		NamedNodeMap attributes = node.getAttributes();
 		String url = attributes.getNamedItem("url").getTextContent();
-		map.put(url, value);
+		List ids = this.convertToList(value);
+		map.put(url, ids);
+
+	}
+
+	/**
+	 * Convert String with bean id's in List
+	 * @param data String data
+	 * @return List with bean id's
+	 */
+	private List convertToList(String data) {
+		String[] result = data.split(",");
+		List list = Arrays.asList(result);
+		return list;
 
 	}
 

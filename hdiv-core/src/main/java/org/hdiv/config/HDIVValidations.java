@@ -16,8 +16,7 @@
 package org.hdiv.config;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -41,17 +40,66 @@ public class HDIVValidations implements BeanFactoryAware {
 	 * the editable parameters.
 	 */
 	protected Map urls;
-	
-	protected Map xmlData;
-	
+
+	/**
+	 * Map for configuration purpose.
+	 */
+	protected Map rawUrls;
+
+	/**
+	 * Spring bean container factory.
+	 */
 	private BeanFactory beanFactory;
 
-	public Map getXmlData() {
-		return xmlData;
+	/**
+	 * Using data read from HDIV custom schema and stored within 'rawUrls'
+	 * attribute, initiliaze 'urls' attribute.
+	 * 
+	 */
+	public void init() {
+
+		this.urls = new HashMap();
+
+		Iterator iterator = this.rawUrls.keySet().iterator();
+		while (iterator.hasNext()) {
+			String key = (String) iterator.next();
+			List ids = (List) rawUrls.get(key);
+			this.urls.put(key, this.createValidationList(ids));
+		}
+
 	}
 
-	public void setXmlData(Map xmlData) {
-		this.xmlData = xmlData;
+	/**
+	 * Convert List with bean ids in another List with the bean instances.
+	 * @param ids List with bean ids.
+	 * @return List with bean instances.
+	 */
+	private List createValidationList(List ids) {
+		List newList = new ArrayList();
+
+		Iterator iterator = ids.iterator();
+		while (iterator.hasNext()) {
+			String id = (String) iterator.next();
+			Validation validation = (Validation) this.beanFactory.getBean(id);
+			newList.add(validation);
+		}
+		return newList;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	public String toString() {
+		return urls.toString();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.springframework.beans.factory.BeanFactoryAware#setBeanFactory(org.springframework.beans.factory.BeanFactory)
+	 */
+	public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
+		this.beanFactory = beanFactory;
 	}
 
 	/**
@@ -70,47 +118,17 @@ public class HDIVValidations implements BeanFactoryAware {
 	}
 
 	/**
-	 * Using data read from HDIV custom schema and stored within xmlData
-	 * attribute, initiliaze urls attribute.
-	 * 
+	 * @return the rawUrls
 	 */
-	public void init() {
-
-		this.urls = new Hashtable();
-
-		Iterator iterator = this.xmlData.keySet().iterator();
-
-		while (iterator.hasNext()) {
-			String key = (String) iterator.next();
-			List ids = this.convertToList((String) xmlData.get(key));
-			this.urls.put(key, this.createValidationList(ids));
-		}
-
+	public Map getRawUrls() {
+		return rawUrls;
 	}
 
-	private List createValidationList(List ids) {
-		List newList = new ArrayList();
-
-		for (int i = 0; i < ids.size(); i++) {
-			String key = (String) ids.get(i);
-			newList.add((Validation) this.beanFactory.getBean(key));
-		}
-		return newList;
-	}
-
-	public String toString() {
-		return urls.toString();
-	}
-
-	private List convertToList(String data) {
-		String[] result = data.split(",");
-		List list = Arrays.asList(result);
-		return list;
-
-	}
-
-	public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
-		this.beanFactory = beanFactory;
+	/**
+	 * @param rawUrls the rawUrls to set
+	 */
+	public void setRawUrls(Map rawUrls) {
+		this.rawUrls = rawUrls;
 	}
 
 }

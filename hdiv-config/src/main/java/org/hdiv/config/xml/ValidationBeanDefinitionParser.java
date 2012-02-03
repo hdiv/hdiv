@@ -45,19 +45,21 @@ public class ValidationBeanDefinitionParser extends AbstractSingleBeanDefinition
 
 		for (int i = 0; i < list.getLength(); i++) {
 			Node node = list.item(i);
-			if (node.getNodeName().equalsIgnoreCase("hdiv:acceptedPattern")) {
-
-				String value = node.getTextContent();
-				if (StringUtils.hasText(value)) {
-					bean.addPropertyValue("acceptedPattern", value);
+			if (node.getNodeType() == Node.ELEMENT_NODE) {
+				if (node.getLocalName().equalsIgnoreCase("acceptedPattern")) {
+	
+					String value = node.getTextContent();
+					if (StringUtils.hasText(value)) {
+						bean.addPropertyValue("acceptedPattern", value);
+					}
 				}
-			}
-
-			if (node.getNodeName().equalsIgnoreCase("hdiv:rejectedPattern")) {
-
-				String value = node.getTextContent();
-				if (StringUtils.hasText(value)) {
-					bean.addPropertyValue("rejectedPattern", value);
+	
+				if (node.getLocalName().equalsIgnoreCase("rejectedPattern")) {
+	
+					String value = node.getTextContent();
+					if (StringUtils.hasText(value)) {
+						bean.addPropertyValue("rejectedPattern", value);
+					}
 				}
 			}
 		}
