@@ -6,6 +6,9 @@ Release 2.1.1
 ==================================
 
  * New 'debugMode' configuration mode to log the attacks but don`t stop it.
+ * Register and use a group of editable validations by default (Sql injection, exec command and XSS attacks).
+ * Add "registerDefaults" attribute to <hdiv:editableValidations> element to enable/disable default editable validations.
+ * Add "enableDefaults" attribute to <hdiv:validationRule> element to enable/disable default editable validations per rule. 
  
 Release 2.1.0
 ==================================

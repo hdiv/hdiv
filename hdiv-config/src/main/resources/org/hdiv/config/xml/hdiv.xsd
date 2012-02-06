@@ -57,11 +57,28 @@
 								]]></xsd:documentation>
 							</xsd:annotation>
 						</xsd:attribute>
+						<xsd:attribute name="enableDefaults" type="xsd:boolean"
+							default="true">
+							<xsd:annotation>
+								<xsd:documentation><![CDATA[
+	Enable default editable validations for this validation rule. True by default.
+								]]></xsd:documentation>
+							</xsd:annotation>
+						</xsd:attribute>
 					</xsd:complexType>
 				</xsd:element>
 			</xsd:sequence>
 			<xsd:attribute name="id" type="xsd:string"
 				default="editableParametersValidations" />
+			<xsd:attribute name="registerDefaults" type="xsd:boolean"
+				default="true">
+				<xsd:annotation>
+					<xsd:documentation><![CDATA[
+	Register default editable validations and use in all validation rules. True by default.
+	Default editable validations detects Sql injection, exec command and XSS attacks.
+					]]></xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
 		</xsd:complexType>
 	</xsd:element>
 
