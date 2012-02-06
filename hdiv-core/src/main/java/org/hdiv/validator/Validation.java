@@ -217,8 +217,10 @@ public class Validation implements IValidation {
 	public String toString() {
 		StringBuffer result = new StringBuffer().append("");
 		result = result.append(" componentType=").append(this.getComponentType());
-		result = result.append(" acceptedPattern=").append(this.acceptedPattern.toString());
-		result = result.append(" rejectedPattern=").append(this.rejectedPattern.toString());
+		result = result.append(" acceptedPattern=").append(
+				this.acceptedPattern == null ? "" : this.acceptedPattern.toString());
+		result = result.append(" rejectedPattern=").append(
+				this.rejectedPattern == null ? "" : this.rejectedPattern.toString());
 		return result.toString();
 
 	}
