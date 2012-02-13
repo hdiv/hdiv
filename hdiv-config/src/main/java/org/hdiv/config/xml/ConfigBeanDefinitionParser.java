@@ -97,6 +97,8 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 				this.createFormUrlProcessor(element, source));
 		parserContext.getRegistry().registerBeanDefinition("hdivParameter",
 				this.createStringBean("_HDIV_STATE_", source));
+		parserContext.getRegistry().registerBeanDefinition("modifyHdivStateParameter",
+				this.createStringBean("_MODIFY_HDIV_STATE_", source));
 		parserContext.getRegistry().registerBeanDefinition("cacheName", this.createStringBean("cache", source));
 		parserContext.getRegistry().registerBeanDefinition("pageIdGeneratorName",
 				this.createStringBean("pageIdGenerator", source));

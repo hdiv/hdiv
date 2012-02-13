@@ -97,7 +97,7 @@ public class HDIVConfig {
 	 * not be applied.
 	 */
 	private boolean cookiesConfidentiality;
-	
+
 	/**
 	 * if <code>avoidValidationInUrlsWithoutParams</code> is true, HDIV validation will 
 	 * not be applied in urls without parameters.
@@ -105,38 +105,38 @@ public class HDIVConfig {
 	 * @since HDIV 2.1.0
 	 */
 	private boolean avoidValidationInUrlsWithoutParams;
-	
+
 	/**
 	 * Extensions that we have to protect with HDIV's state.
 	 * @since HDIV 2.0
 	 */
 	private Hashtable protectedURLPatterns;
-	
+
 	/**
 	 * Extensions that we have not to protect with HDIV's state.
 	 * @since HDIV 2.1.0
 	 */
 	private List excludedURLExtensions;
-	
+
 	/**
 	 * HDIV adds an extra parameter to all links and forms. By default this parameter is _HDIV_STATE.
 	 * If <code>randomName</code> is true a random name is generated instead of default name (_HDIV_STATE_) 
 	 * @since HDIV 2.1.0
 	 */
 	private boolean randomName;
-	
+
 	/**
 	 * HDIV behaviour strategy. There are 3 possible options: memory, cipher, hash
 	 * @since HDIV 2.1.0
 	 */
 	private String strategy;
-	
+
 	/**
 	 * If debug mode is enabled, the attacks are logged but the requests are not stopped.
 	 * @since HDIV 2.1.1
 	 */
 	private boolean debugMode = false;
-	
+
 	/**
 	 * @param strategy the strategy to set
 	 */
@@ -189,12 +189,12 @@ public class HDIVConfig {
 		return true;
 	}
 
-	public boolean hasExtensionToExclude(String path){
-		
-		if(this.excludedURLExtensions == null){
+	public boolean hasExtensionToExclude(String path) {
+
+		if (this.excludedURLExtensions == null) {
 			return false;
 		}
-		
+
 		if (path.indexOf("?") > 0) {
 			path = path.substring(0, path.indexOf("?"));
 		}
@@ -202,23 +202,23 @@ public class HDIVConfig {
 		if (path.charAt(path.length() - 1) == '/') {
 			return false;
 		}
-		
+
 		int pound = path.indexOf("#");
 		if (pound >= 0) {
 			path = path.substring(0, pound);
 		}
 
 		for (Iterator iter = this.excludedURLExtensions.iterator(); iter.hasNext();) {
-			
+
 			String extension = (String) iter.next();
 			if (path.endsWith(extension)) {
 				return true;
 			}
 		}
-				
+
 		return false;
 	}
-	
+
 	/**
 	 * Checks if the parameter <code>parameter</code> is defined by the user as a
 	 * no required validation parameter for the action <code>action</code>.
@@ -229,10 +229,14 @@ public class HDIVConfig {
 	 */
 	public boolean isParameterWithoutValidation(String action, String parameter) {
 
-		if(this.paramsWithoutValidation == null){
+		if (action == null) {
 			return false;
 		}
-		
+
+		if (this.paramsWithoutValidation == null) {
+			return false;
+		}
+
 		Pattern p = null;
 		Matcher m = null;
 
@@ -243,7 +247,7 @@ public class HDIVConfig {
 
 			p = Pattern.compile(key);
 			m = p.matcher(action);
-			
+
 			if (m.matches()) {
 
 				List parametersWithoutValidation = (List) this.paramsWithoutValidation.get(key);
@@ -285,7 +289,7 @@ public class HDIVConfig {
 
 			key = (String) iter.next();
 			p = (Pattern) startValues.get(key);
-			
+
 			m = p.matcher(value);
 
 			if (m.matches()) {
@@ -310,17 +314,17 @@ public class HDIVConfig {
 			return false;
 		}
 		return true;
-	}	
+	}
 
 	public String getErrorPage() {
 		return errorPage;
 	}
 
 	public void setErrorPage(String errorPage) {
-		
+
 		if (!errorPage.startsWith("/")) {
 			errorPage = "/" + errorPage;
-		}		
+		}
 		this.errorPage = errorPage;
 		this.startPages.put(errorPage, Pattern.compile(errorPage));
 	}
@@ -388,8 +392,8 @@ public class HDIVConfig {
 	 */
 	public boolean existValidations() {
 
-		return ((this.validations != null) && (this.validations.getUrls() != null) && (this.validations
-				.getUrls().size() > 0));
+		return ((this.validations != null) && (this.validations.getUrls() != null) && (this.validations.getUrls()
+				.size() > 0));
 	}
 
 	/**
@@ -412,8 +416,7 @@ public class HDIVConfig {
 	 *         <code>parameter</code>.
 	 * @since HDIV 1.1
 	 */
-	public boolean areEditableParameterValuesValid(String url, String parameter, String[] values,
-			String dataType) {
+	public boolean areEditableParameterValuesValid(String url, String parameter, String[] values, String dataType) {
 
 		Pattern p = null;
 		Matcher m = null;
@@ -470,7 +473,7 @@ public class HDIVConfig {
 	public void setCookiesIntegrity(Boolean cookiesIntegrity) {
 		this.cookiesIntegrity = cookiesIntegrity.booleanValue();
 	}
-	
+
 	/**
 	 * @return Returns true if validation in urls without parameters 
 	 * is activated.
@@ -491,9 +494,9 @@ public class HDIVConfig {
 	 * @since HDIV 2.0
 	 */
 	public void setProtectedExtensions(List protectedExtensions) {
-		
+
 		this.protectedURLPatterns = new Hashtable();
-		
+
 		String currentProtectedExtension;
 		for (int i = 0; i < protectedExtensions.size(); i++) {
 
@@ -501,11 +504,10 @@ public class HDIVConfig {
 			this.protectedURLPatterns.put(currentProtectedExtension, Pattern.compile(currentProtectedExtension));
 		}
 	}
-	
-	public void setExcludedExtensions(List excludedExtensions)
-	{
+
+	public void setExcludedExtensions(List excludedExtensions) {
 		this.excludedURLExtensions = new ArrayList();
-		
+
 		String currentExtension;
 		for (int i = 0; i < excludedExtensions.size(); i++) {
 
@@ -529,7 +531,7 @@ public class HDIVConfig {
 	public List getExcludedURLExtensions() {
 		return excludedURLExtensions;
 	}
-	
+
 	/**
 	 * @return the randomName
 	 */
@@ -550,7 +552,7 @@ public class HDIVConfig {
 	public String getStrategy() {
 		return strategy;
 	}
-	
+
 	/**
 	 * @return the debugMode
 	 */
@@ -565,7 +567,7 @@ public class HDIVConfig {
 		this.debugMode = debugMode;
 	}
 
-	public String toString(){
+	public String toString() {
 		StringBuffer result = new StringBuffer().append("");
 		result = result.append(" Confidentiality=").append(this.getConfidentiality().toString());
 		result.append(" avoidCookiesIntegrity=").append(this.cookiesIntegrity);
@@ -580,7 +582,7 @@ public class HDIVConfig {
 		result.append(" startParameters=").append(this.startParameters);
 		result.append(" paramsWithoutValidation=").append(this.paramsWithoutValidation);
 		result.append(" debugMode=").append(this.debugMode);
-	
+
 		return result.toString();
 	}
 }

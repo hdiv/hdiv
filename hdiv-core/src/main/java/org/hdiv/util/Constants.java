@@ -48,6 +48,8 @@ public class Constants {
 	public static final String PAGE_ID_GENERATOR_NAME = "pageIdGenerator";
 
 	public static final String HDIV_PARAMETER = "HDIVParameter";
+	
+	public static final String MODIFY_STATE_HDIV_PARAMETER = "modifyHDIVStateParameter";
 
 	public static final String ENCODING_UTF_8 = "UTF-8";
 

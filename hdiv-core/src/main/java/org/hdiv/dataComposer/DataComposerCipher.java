@@ -57,7 +57,6 @@ public class DataComposerCipher extends DataComposerMemory {
 	 */
 	private boolean savePage = false;
 
-	
 	/**
 	 * It is called by each request or form existing in the page returned by the
 	 * server.
@@ -78,25 +77,33 @@ public class DataComposerCipher extends DataComposerMemory {
 	public String endRequest() {
 
 		this.state = (IState) this.statesStack.pop();
+		this.state.setPageId(this.getPage().getName());
+
 		String stateData = encodingUtil.encode64Cipher(state);
 		String id = null;
-		
+
 		// if state's length it's too long for GET methods we have to change the
 		// strategy to memory
 		if (stateData.length() > this.allowedLength) {
 
+			if (log.isDebugEnabled()) {
+				log.debug("Move from Cipher strategy to Memory because state data [" + stateData.length()
+						+ "] is greater than allowedLength [" + this.allowedLength);
+			}
+
 			this.savePage = true;
 			super.startPage();
 
-			this.page.addState(this.state);
+			this.getPage().addState(this.state);
 			this.state.setPageId(this.getPage().getName());
 
-			id = this.getPage().getName() + "-" + this.state.getId() + "-" + this.getHdivStateSuffix();
+			id = this.getPage().getName() + DASH + this.state.getId() + DASH + this.getHdivStateSuffix();
 		}
-			
+
 		this.updateComposerState();
-		
-		return (id != null) ? id : stateData;		
+		this.isRequestStarted = false;
+
+		return (id != null) ? id : stateData;
 	}
 
 	/**

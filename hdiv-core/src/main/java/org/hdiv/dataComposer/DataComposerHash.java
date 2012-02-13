@@ -15,6 +15,8 @@
  */
 package org.hdiv.dataComposer;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.hdiv.state.IState;
 import org.hdiv.util.EncodingUtil;
 
@@ -31,6 +33,11 @@ import org.hdiv.util.EncodingUtil;
 public class DataComposerHash extends DataComposerMemory {
 
 	/**
+	 * Commons Logging instance.
+	 */
+	private static Log log = LogFactory.getLog(DataComposerHash.class);
+
+	/**
 	 * Utility methods for encoding
 	 */
 	private EncodingUtil encodingUtil;
@@ -39,7 +46,6 @@ public class DataComposerHash extends DataComposerMemory {
 	 * Maximum size allowed to represent page state
 	 */
 	private int allowedLength;
-
 
 	/**
 	 * The state that is sent to the client is generated in Base64 and the hash of
@@ -53,31 +59,37 @@ public class DataComposerHash extends DataComposerMemory {
 
 		this.state = (IState) this.statesStack.pop();
 		this.state.setPageId(this.getPage().getName());
+
 		String id = null;
 		String stateWithSuffix = null;
-		
+
 		String stateData = encodingUtil.encode64(this.state);
 
 		// if state's length it's too long for GET methods we have to change the
 		// strategy to memory
 		if (stateData.length() > this.allowedLength) {
 
+			if (log.isDebugEnabled()) {
+				log.debug("Move from Hash strategy to Memory because state data [" + stateData.length()
+						+ "] is greater than allowedLength [" + this.allowedLength);
+			}
+
 			super.startPage();
 
-			this.page.addState(this.state);
+			this.getPage().addState(this.state);
 			this.state.setPageId(this.getPage().getName());
 
-			id = this.getPage().getName() + DataComposerMemory.DASH + this.state.getId()
-					+ DataComposerMemory.DASH + this.getHdivStateSuffix();
+			id = this.getPage().getName() + DASH + this.state.getId() + DASH + this.getHdivStateSuffix();
 
 		} else {
 			// generate hash to add to the page that will be stored in session
-			stateWithSuffix = stateData + DataComposerMemory.DASH + this.getHdivStateSuffix();
+			stateWithSuffix = stateData + DASH + this.getHdivStateSuffix();
 			String stateHash = this.encodingUtil.calculateStateHash(stateWithSuffix);
-			this.page.addState(this.state.getId(), stateHash);
+			this.getPage().addState(this.state.getId(), stateHash);
 		}
 
 		this.updateComposerState();
+		this.isRequestStarted = false;
 
 		return (id != null) ? id : stateWithSuffix;
 	}

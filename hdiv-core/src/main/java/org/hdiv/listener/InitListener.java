@@ -36,6 +36,9 @@ import org.hdiv.dataComposer.IDataComposer;
 import org.hdiv.idGenerator.PageIdGenerator;
 import org.hdiv.session.ISession;
 import org.hdiv.session.IStateCache;
+import org.hdiv.state.IPage;
+import org.hdiv.state.IState;
+import org.hdiv.state.StateUtil;
 import org.hdiv.urlProcessor.FormUrlProcessor;
 import org.hdiv.urlProcessor.LinkUrlProcessor;
 import org.hdiv.util.Constants;
@@ -74,6 +77,17 @@ public class InitListener implements ServletContextListener, HttpSessionListener
 	 * Is servlet context Hdiv objects initialized?
 	 */
 	private boolean servletContextInitialized = false;
+
+	/**
+	 * StateUtil instance
+	 */
+	private StateUtil stateUtil;
+
+	/**
+	 * State that represents all the data of a request or a form existing in a
+	 * page <code>page</code>
+	 */
+	private ISession session;
 
 	/**
 	 * Initialize servlet context objects.
@@ -126,10 +140,17 @@ public class InitListener implements ServletContextListener, HttpSessionListener
 		// Store request original request uri
 		HDIVUtil.setRequestURI(request.getRequestURI(), request);
 
-		// Init page in datacomposer
-		IDataComposer dataComposer = this.dataComposerFactory.newInstance();
-		dataComposer.startPage();
-		HDIVUtil.setDataComposer(dataComposer, request);
+		//Don`t create IDataComposer if it is not necessary
+		boolean exclude = this.config.hasExtensionToExclude(request.getRequestURI());
+		if (!exclude) {
+
+			// Init datacomposer
+			IDataComposer dataComposer = this.dataComposerFactory.newInstance();
+
+			this.initDataComposer(dataComposer, request);
+
+			HDIVUtil.setDataComposer(dataComposer, request);
+		}
 
 	}
 
@@ -141,10 +162,13 @@ public class InitListener implements ServletContextListener, HttpSessionListener
 	 */
 	public void requestDestroyed(ServletRequestEvent sre) {
 
-		// End page in datacomposer
 		HttpServletRequest request = (HttpServletRequest) sre.getServletRequest();
+
+		// End page in datacomposer
 		IDataComposer dataComposer = (IDataComposer) HDIVUtil.getDataComposer(request);
-		dataComposer.endPage();
+		if (dataComposer != null) {
+			dataComposer.endPage();
+		}
 
 		// Erase request from threadlocal
 		HDIVUtil.resetLocalData();
@@ -180,7 +204,7 @@ public class InitListener implements ServletContextListener, HttpSessionListener
 		this.initStrategies(wac, httpSessionEvent.getSession());
 		this.initCache(wac, httpSessionEvent.getSession());
 		this.initPageIdGenerator(wac, httpSessionEvent.getSession());
-		this.initHDIVState(wac, httpSessionEvent.getSession());
+		this.initHDIVStateParameters(wac, httpSessionEvent.getSession());
 
 		if (log.isInfoEnabled()) {
 			log.info("HDIV's session created:" + httpSessionEvent.getSession().getId());
@@ -200,6 +224,8 @@ public class InitListener implements ServletContextListener, HttpSessionListener
 
 		this.config = (HDIVConfig) wac.getBean("config");
 		this.dataComposerFactory = (DataComposerFactory) wac.getBean("dataComposerFactory");
+		this.stateUtil = (StateUtil) wac.getBean("stateUtil");
+		this.session = (ISession) wac.getBean("sessionHDIV");
 
 		// Init servlet context scoped objects
 		HDIVUtil.setHDIVConfig(this.config, servletContext);
@@ -291,18 +317,48 @@ public class InitListener implements ServletContextListener, HttpSessionListener
 	 *            http session
 	 * @since HDIV 1.1
 	 */
-	protected void initHDIVState(ApplicationContext context, HttpSession httpSession) {
+	protected void initHDIVStateParameters(ApplicationContext context, HttpSession httpSession) {
 
 		String hdivParameterName = null;
+		String modifyHdivStateParameterName = null;
 
 		Boolean isRandomName = Boolean.valueOf(this.config.isRandomName());
 		if (Boolean.TRUE.equals(isRandomName)) {
 			hdivParameterName = HDIVUtil.createRandomToken(Integer.MAX_VALUE);
+			modifyHdivStateParameterName = HDIVUtil.createRandomToken(Integer.MAX_VALUE);
 		} else {
 			hdivParameterName = (String) context.getBean("hdivParameter");
+			modifyHdivStateParameterName = (String) context.getBean("modifyHdivStateParameter");
 		}
 
 		httpSession.setAttribute(Constants.HDIV_PARAMETER, hdivParameterName);
+		httpSession.setAttribute(Constants.MODIFY_STATE_HDIV_PARAMETER, modifyHdivStateParameterName);
+	}
+
+	/**
+	 * Initialize IDataComposer instance.
+	 * @param dataComposer IDataComposer instance
+	 * @param request actual HttpServletRequest instance
+	 */
+	protected void initDataComposer(IDataComposer dataComposer, HttpServletRequest request) {
+
+		String paramName = (String) request.getSession().getAttribute(Constants.MODIFY_STATE_HDIV_PARAMETER);
+		String preState = request.getParameter(paramName);
+		if (preState != null && preState.length() > 0) {
+
+			if (this.stateUtil.isMemoryStrategy(preState)) {
+				IState state = this.stateUtil.restoreState(preState);
+				IPage page = this.session.getPage(state.getPageId());
+				if (state != null) {
+					dataComposer.startPage(page.getName(), page.getRandomToken());
+					dataComposer.beginRequest(state);
+				}
+			} else {
+				dataComposer.startPage();
+			}
+		} else {
+			dataComposer.startPage();
+		}
 	}
 
 	/**

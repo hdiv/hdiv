@@ -101,6 +101,12 @@
                <value>_HDIV_STATE_</value>
           </constructor-arg>  
     </bean>
+    
+    <bean id="modifyHdivStateParameter" class="java.lang.String">
+         <constructor-arg>
+               <value>_MODIFY_HDIV_STATE_</value>
+          </constructor-arg>  
+    </bean>
 
 	<bean id="cacheName" class="java.lang.String">
          <constructor-arg>

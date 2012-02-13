@@ -168,4 +168,13 @@ public class State implements IState, Serializable {
 		return requiredParams;
 	}
 
+	public String toString() {
+		StringBuffer sb = new StringBuffer();
+		sb.append("id: ").append(this.id);
+		sb.append("action: ").append(this.action);
+		sb.append("parameters: ").append(this.parameters);
+		sb.append("requiredParams: ").append(this.requiredParams);
+		sb.append("pageId: ").append(this.pageId);
+		return super.toString();
+	}
 }

@@ -15,7 +15,10 @@
  */
 package org.hdiv.dataComposer;
 
+import org.hdiv.idGenerator.UidGenerator;
 import org.hdiv.session.ISession;
+import org.hdiv.state.IPage;
+import org.hdiv.state.Page;
 
 /**
  * <p>
@@ -48,14 +51,14 @@ import org.hdiv.session.ISession;
 public abstract class AbstractDataComposer implements IDataComposer {
 
 	/**
+	 * Dash character
+	 */
+	protected static final String DASH = "-";
+
+	/**
 	 * Action to which the user request is directed to
 	 */
 	private String action;
-
-	/**
-	 * Identifier of the page sent back by the server.
-	 */
-	private String pageId;
 
 	/**
 	 * Http session wrapper
@@ -63,10 +66,19 @@ public abstract class AbstractDataComposer implements IDataComposer {
 	private ISession session;
 
 	/**
+	 * Unique id generator
+	 */
+	private UidGenerator uidGenerator;
+
+	/**
+	 * Page with the possible requests or states
+	 */
+	private IPage page;
+
+	/**
 	 * It is called by each request or form of the html page sent back by the server.
 	 */
 	public void beginRequest() {
-		this.initPageId();
 	}
 
 	/**
@@ -78,28 +90,16 @@ public abstract class AbstractDataComposer implements IDataComposer {
 	public void beginRequest(String action) {
 		this.setAction(action);
 		this.beginRequest();
-	}	
-	
-	/**
-	 * Obtains the page identifier that contains the request or form in process
-	 * 
-	 * @return Returns the pageId.
-	 */
-	public String getPageId() {
-
-		if (this.pageId != null) {
-			return this.pageId;
-		} else {
-			this.pageId = this.session.getPageId();
-			return this.pageId;
-		}
 	}
 
 	/**
 	 * Obtains a new unique identifier for the page
 	 */
-	public void initPageId() {
-		this.pageId = this.session.getPageId();
+	public void initPage() {
+		this.page = new Page();
+		String pageId = this.session.getPageId();
+		this.page.setName(pageId);
+		this.page.setRandomToken(this.uidGenerator.generateUid().toString());
 	}
 
 	public String getAction() {
@@ -116,6 +116,34 @@ public abstract class AbstractDataComposer implements IDataComposer {
 
 	public void setSession(ISession session) {
 		this.session = session;
+	}
+
+	/**
+	 * @return the page
+	 */
+	public IPage getPage() {
+		return page;
+	}
+
+	/**
+	 * @param page the page to set
+	 */
+	public void setPage(IPage page) {
+		this.page = page;
+	}
+
+	/**
+	 * @return the uidGenerator
+	 */
+	public UidGenerator getUidGenerator() {
+		return uidGenerator;
+	}
+
+	/**
+	 * @param uidGenerator the uidGenerator to set
+	 */
+	public void setUidGenerator(UidGenerator uidGenerator) {
+		this.uidGenerator = uidGenerator;
 	}
 
 }

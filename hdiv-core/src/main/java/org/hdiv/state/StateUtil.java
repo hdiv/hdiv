@@ -180,7 +180,7 @@ public class StateUtil {
 	 * @return Decoded state of type <code>IState</code> obtained from
 	 *         <code>value</code>
 	 */
-	public IState restoreHashState(String value) {
+	protected IState restoreHashState(String value) {
 
 		String restoredStateHash = this.encodingUtil.calculateStateHash(value);
 

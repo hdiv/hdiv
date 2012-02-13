@@ -203,6 +203,17 @@ public class ValidatorHelperRequest implements IValidationHelper {
 				continue;
 			}
 
+			// check if the HDIV validation must be applied to the parameter
+			String modifyHdivStateParameterName = (String) request.getSession().getAttribute(
+					Constants.MODIFY_STATE_HDIV_PARAMETER);
+			if (!this.hdivConfig.needValidation(parameter, modifyHdivStateParameterName)) {
+
+				if (log.isDebugEnabled() && !parameter.equals(modifyHdivStateParameterName)) {
+					log.debug("parameter " + parameter + " doesn't need validation");
+				}
+				continue;
+			}
+
 			// if the parameter requires no validation it is considered a
 			// valid parameter
 			if (this.isUserDefinedNonValidationParameter(targetWithoutContextPath, parameter)) {

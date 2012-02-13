@@ -21,7 +21,6 @@ import java.util.Stack;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hdiv.config.HDIVConfig;
-import org.hdiv.idGenerator.UidGenerator;
 import org.hdiv.state.IPage;
 import org.hdiv.state.IParameter;
 import org.hdiv.state.IState;
@@ -44,22 +43,12 @@ import org.hdiv.state.State;
  * @see org.hdiv.dataComposer.IDataComposer
  * @author Roberto Velasco
  */
-public class DataComposerMemory extends AbstractDataComposer implements IDataComposer {
+public class DataComposerMemory extends AbstractDataComposer {
 
 	/**
 	 * Commons Logging instance.
 	 */
 	private static Log log = LogFactory.getLog(DataComposerMemory.class);
-
-	/**
-	 * Dash character
-	 */
-	protected static final String DASH = "-";
-
-	/**
-	 * Page with the possible requests or states
-	 */
-	protected IPage page;
 
 	/**
 	 * State that represents all the data of a request or a form existing in a page
@@ -89,11 +78,6 @@ public class DataComposerMemory extends AbstractDataComposer implements IDataCom
 	protected HDIVConfig hdivConfig;
 
 	/**
-	 * Unique id generator
-	 */
-	protected UidGenerator uidGenerator;
-
-	/**
 	 * True if beginRequest has been executed and endRequest not
 	 */
 	protected boolean isRequestStarted = false;
@@ -103,18 +87,8 @@ public class DataComposerMemory extends AbstractDataComposer implements IDataCom
 	 * store all states of the page <code>page</code>.
 	 */
 	public void init() {
-		this.page = new Page();
+		this.setPage(new Page());
 		this.statesStack = new Stack();
-	}
-
-	/**
-	 * DataComposerMemory initialization based on the state of another <code>page</code>.
-	 * @param page
-	 *            IPage with the state of another request
-	 */
-	public void init(IPage page) {
-		this.init();
-		this.page = page;
 	}
 
 	/**
@@ -248,6 +222,10 @@ public class DataComposerMemory extends AbstractDataComposer implements IDataCom
 	public String compose(String parameter, String value, boolean editable, String editableName, boolean isActionParam,
 			String charEncoding) {
 
+		if (!this.isRequestStarted) {
+			this.beginRequest();
+		}
+
 		this.composeParameter(parameter, value, editable, editableName, isActionParam, charEncoding);
 
 		if (this.hdivConfig.isStartParameter(parameter)) {
@@ -284,7 +262,7 @@ public class DataComposerMemory extends AbstractDataComposer implements IDataCom
 	private boolean isUserDefinedNonValidationParameter(String parameter) {
 
 		String actionWithoutContextPath = this.getAction();
-		if (actionWithoutContextPath.startsWith("/")) {
+		if (actionWithoutContextPath != null && actionWithoutContextPath.startsWith("/")) {
 			int secondSlash = actionWithoutContextPath.indexOf("/", 1);
 			if (secondSlash > 0) {
 				actionWithoutContextPath = actionWithoutContextPath.substring(secondSlash);
@@ -400,11 +378,11 @@ public class DataComposerMemory extends AbstractDataComposer implements IDataCom
 		this.state = new State();
 		this.state.setAction(this.getAction());
 
-		String currentRequestCounter = String.valueOf(requestCounter);
+		String currentRequestCounter = String.valueOf(this.requestCounter);
 		this.state.setId(currentRequestCounter);
 		this.statesStack.push(this.state);
 
-		requestCounter++;
+		this.requestCounter++;
 		this.lastParameter = null;
 
 		this.isRequestStarted = true;
@@ -425,6 +403,19 @@ public class DataComposerMemory extends AbstractDataComposer implements IDataCom
 		this.beginRequest();
 	}
 
+	public void beginRequest(IState state) {
+
+		this.state = state;
+		this.setAction(state.getAction());
+
+		this.statesStack.push(this.state);
+
+		this.requestCounter = Integer.parseInt(state.getId()) + 1;
+		this.lastParameter = null;
+
+		this.isRequestStarted = true;
+	}
+
 	/**
 	 * It is called in the pre-processing stage of each request or form existing in
 	 * the page returned by the server. It adds the state of the treated request or
@@ -438,7 +429,7 @@ public class DataComposerMemory extends AbstractDataComposer implements IDataCom
 		this.state = (IState) this.statesStack.pop();
 
 		this.state.setPageId(this.getPage().getName());
-		this.page.addState(this.state);
+		this.getPage().addState(this.state);
 
 		String id = this.getPage().getName() + DASH + this.state.getId() + DASH + this.getHdivStateSuffix();
 
@@ -457,7 +448,7 @@ public class DataComposerMemory extends AbstractDataComposer implements IDataCom
 	 * @since HDIV 1.1
 	 */
 	public String getHdivStateSuffix() {
-		return this.page.getRandomToken();
+		return this.getPage().getRandomToken();
 	}
 
 	/**
@@ -478,11 +469,19 @@ public class DataComposerMemory extends AbstractDataComposer implements IDataCom
 	 */
 	public void startPage() {
 
-		if (this.page.getName() == null) {
-			this.initPageId();
-			this.page.setName(this.getPageId());
-			this.page.setRandomToken(this.uidGenerator.generateUid().toString());
-		}
+		this.initPage();
+	}
+
+	/**
+	 * It is called in the pre-processing stage of each user request.
+	 * Create a new {@link IPage} bassed on an existing page.
+	 * @param pageId previous page id
+	 * @param suffix previous suffix 
+	 */
+	public void startPage(String pageId, String suffix) {
+
+		this.getPage().setName(pageId);
+		this.getPage().setRandomToken(suffix);
 	}
 
 	/**
@@ -492,30 +491,22 @@ public class DataComposerMemory extends AbstractDataComposer implements IDataCom
 	 */
 	public void endPage() {
 
-		if (this.page.getStates().size() > 0) {
-			this.getSession().addPage(this.getPageId(), this.page);
+		if (this.isRequestStarted) {
+			// A request is started but not ended
+			this.endRequest();
+		}
+
+		IPage page = this.getPage();
+		if (page.getStates().size() > 0) {
+			this.getSession().addPage(page.getName(), page);
 		} else {
-			log.debug("The page [" + this.page.getName() + "] has no states, is not stored in session");
+			log.debug("The page [" + page.getName() + "] has no states, is not stored in session");
 		}
 
 	}
 
 	public boolean isRequestStarted() {
 		return this.isRequestStarted;
-	}
-
-	/**
-	 * @return IPage which represents the page in memory.
-	 */
-	public IPage getPage() {
-		return this.page;
-	}
-
-	/**
-	 * @param page The page to set.
-	 */
-	public void setPage(IPage page) {
-		this.page = page;
 	}
 
 	/**
@@ -530,11 +521,7 @@ public class DataComposerMemory extends AbstractDataComposer implements IDataCom
 	 * @since HDIV 2.0.3
 	 */
 	public void addFlowId(String id) {
-		this.page.setFlowId(id);
-	}
-
-	public void setUidGenerator(UidGenerator uidGenerator) {
-		this.uidGenerator = uidGenerator;
+		super.getPage().setFlowId(id);
 	}
 
 }

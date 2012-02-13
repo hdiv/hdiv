@@ -16,6 +16,7 @@
 package org.hdiv.dataComposer;
 
 import org.hdiv.state.IPage;
+import org.hdiv.state.IState;
 
 /**
  * DataComposers's main interface. There are three implementations: encryption, hash and memory
@@ -130,6 +131,13 @@ public interface IDataComposer {
 	public void beginRequest(String action);
 
 	/**
+	 * It is called by each request or form of the html page returned by the server, as long as the destiny of the
+	 * request is an action. The created IState is based on the passed as parameter.
+	 * @param state Base state
+	 */
+	public void beginRequest(IState state);
+
+	/**
 	 * It is called in the pre-processing stage of each request or form existing in the page returned by the server.
 	 * 
 	 * @return Identifier composed by the page identifier and the state identifier.
@@ -142,17 +150,17 @@ public interface IDataComposer {
 	public void init();
 
 	/**
-	 * Initializes {@link IDataComposer} based on a previous {@link IPage}.
-	 * 
-	 * @param page
-	 *            IPage with the state of another request
-	 */
-	public void init(IPage page);
-
-	/**
 	 * It is called in the pre-processing stage of each user request.
 	 */
 	public void startPage();
+
+	/**
+	 * It is called in the pre-processing stage of each user request.
+	 * Create a new {@link IPage} bassed on an existing page.
+	 * @param pageId previous page id
+	 * @param suffix previous suffix 
+	 */
+	public void startPage(String pageId, String suffix);
 
 	/**
 	 * It is called in the post-processing stage of each user request.

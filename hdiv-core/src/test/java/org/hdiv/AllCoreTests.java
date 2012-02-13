@@ -19,9 +19,13 @@ import junit.framework.Test;
 import junit.framework.TestSuite;
 
 import org.hdiv.cipher.CipherHttpTest;
+import org.hdiv.config.EditableParameterValidationTest;
+import org.hdiv.dataComposer.DataComposerCipherTest;
+import org.hdiv.dataComposer.DataComposerHashTest;
 import org.hdiv.dataComposer.DataComposerMemoryTest;
 import org.hdiv.dataValidator.DataValidatorTest;
 import org.hdiv.filter.ValidatorHelperTest;
+import org.hdiv.idGenerator.UidGeneratorTest;
 import org.hdiv.session.StateCacheTest;
 import org.hdiv.state.StateUtilTest;
 import org.hdiv.urlProcessor.FormUrlProcessorTest;
@@ -31,20 +35,24 @@ import org.hdiv.util.EncodingUtilTest;
 public class AllCoreTests {
 
 	public static Test suite() {
-		
+
 		TestSuite suite = new TestSuite("Test for org.hdiv");
-		
+
 		//$JUnit-BEGIN$
 		suite.addTestSuite(CipherHttpTest.class);
+		suite.addTestSuite(EditableParameterValidationTest.class);
 		suite.addTestSuite(DataComposerMemoryTest.class);
+		suite.addTestSuite(DataComposerHashTest.class);
+		suite.addTestSuite(DataComposerCipherTest.class);
 		suite.addTestSuite(DataValidatorTest.class);
 		suite.addTestSuite(ValidatorHelperTest.class);
+		suite.addTestSuite(UidGeneratorTest.class);
 		suite.addTestSuite(StateCacheTest.class);
 		suite.addTestSuite(StateUtilTest.class);
-		suite.addTestSuite(EncodingUtilTest.class);
 		suite.addTestSuite(FormUrlProcessorTest.class);
 		suite.addTestSuite(LinkUrlProcessorTest.class);
-		
+		suite.addTestSuite(EncodingUtilTest.class);
+
 		return suite;
 	}
 
