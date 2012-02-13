@@ -105,6 +105,19 @@ public class HDIVUtil {
 		return newDataComposer;
 
 	}
+	
+	/**
+	 * Returns true if a data composer object exist in <code>HttpServletRequest</code>
+	 * 
+	 * @param request
+	 *            HttpServletRequest
+	 * @return boolean
+	 */
+	public static boolean isDataComposer(HttpServletRequest request) {
+
+		IDataComposer requestDataComposer = (IDataComposer) request.getAttribute(DATACOMPOSER_REQUEST_KEY);
+		return requestDataComposer != null;
+	}
 
 	/**
 	 * Set the <code>IDataComposer</code>

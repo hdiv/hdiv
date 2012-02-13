@@ -165,8 +165,9 @@ public class InitListener implements ServletContextListener, HttpSessionListener
 		HttpServletRequest request = (HttpServletRequest) sre.getServletRequest();
 
 		// End page in datacomposer
-		IDataComposer dataComposer = (IDataComposer) HDIVUtil.getDataComposer(request);
-		if (dataComposer != null) {
+		boolean exist = HDIVUtil.isDataComposer(request);
+		if (exist) {
+			IDataComposer dataComposer = HDIVUtil.getDataComposer(request);
 			dataComposer.endPage();
 		}
 
