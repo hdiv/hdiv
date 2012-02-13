@@ -474,14 +474,12 @@ public class DataComposerMemory extends AbstractDataComposer {
 
 	/**
 	 * It is called in the pre-processing stage of each user request.
-	 * Create a new {@link IPage} bassed on an existing page.
-	 * @param pageId previous page id
-	 * @param suffix previous suffix 
+	 * Create a new {@link IPage} based on an existing page.
+	 * @param existingPage other IPage
 	 */
-	public void startPage(String pageId, String suffix) {
+	public void startPage(IPage existingPage) {
 
-		this.getPage().setName(pageId);
-		this.getPage().setRandomToken(suffix);
+		this.setPage(existingPage);
 	}
 
 	/**

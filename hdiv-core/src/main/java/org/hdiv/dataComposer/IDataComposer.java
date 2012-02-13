@@ -156,11 +156,10 @@ public interface IDataComposer {
 
 	/**
 	 * It is called in the pre-processing stage of each user request.
-	 * Create a new {@link IPage} bassed on an existing page.
-	 * @param pageId previous page id
-	 * @param suffix previous suffix 
+	 * Create a new {@link IPage} based on an existing page.
+	 * @param existingPage other IPage
 	 */
-	public void startPage(String pageId, String suffix);
+	public void startPage(IPage existingPage);
 
 	/**
 	 * It is called in the post-processing stage of each user request.

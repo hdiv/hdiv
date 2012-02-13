@@ -351,7 +351,7 @@ public class InitListener implements ServletContextListener, HttpSessionListener
 				IState state = this.stateUtil.restoreState(preState);
 				IPage page = this.session.getPage(state.getPageId());
 				if (state != null) {
-					dataComposer.startPage(page.getName(), page.getRandomToken());
+					dataComposer.startPage(page);
 					dataComposer.beginRequest(state);
 				}
 			} else {
