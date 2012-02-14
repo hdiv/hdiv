@@ -10,6 +10,7 @@ Release 2.1.1
  * Add "registerDefaults" attribute to <hdiv:editableValidations> element to enable/disable default editable validations.
  * Add "enableDefaults" attribute to <hdiv:validationRule> element to enable/disable default editable validations per rule.
  * Make possible to update a existing state. Designed for ajax requests that update part of the page.
+ * New 'maxPagesPerSession' configuration attribute to control the number of states in session.
  
 Release 2.1.0
 ==================================

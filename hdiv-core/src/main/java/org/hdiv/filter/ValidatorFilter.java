@@ -71,21 +71,20 @@ public class ValidatorFilter extends OncePerRequestFilter {
 	}
 
 	/**
-	 * Called by the web container to indicate to a filter that it is being
-	 * placed into service.
-	 * 
-	 * @see javax.servlet.Filter#init(javax.servlet.FilterConfig)
+	 * Init required dependencies
 	 */
-	protected void initFilterBean() throws ServletException {
+	protected void initDependencies() {
 
-		ServletContext servletContext = getServletContext();
-		WebApplicationContext context = WebApplicationContextUtils.getRequiredWebApplicationContext(servletContext);
+		if (this.hdivConfig == null) {
+			ServletContext servletContext = getServletContext();
+			WebApplicationContext context = WebApplicationContextUtils.getRequiredWebApplicationContext(servletContext);
 
-		this.hdivConfig = (HDIVConfig) context.getBean("config");
-		this.validationHelper = (IValidationHelper) context.getBean("validatorHelper");
-		if (context.containsBean("multipartConfig")) {
-			//For applications without Multipart requests
-			this.multipartConfig = (IMultipartConfig) context.getBean("multipartConfig");
+			this.hdivConfig = (HDIVConfig) context.getBean("config");
+			this.validationHelper = (IValidationHelper) context.getBean("validatorHelper");
+			if (context.containsBean("multipartConfig")) {
+				//For applications without Multipart requests
+				this.multipartConfig = (IMultipartConfig) context.getBean("multipartConfig");
+			}
 		}
 
 	}
@@ -103,6 +102,8 @@ public class ValidatorFilter extends OncePerRequestFilter {
 	 */
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
+
+		this.initDependencies();
 
 		ResponseWrapper responseWrapper = new ResponseWrapper(response);
 		RequestWrapper requestWrapper = getRequestWrapper(request);
