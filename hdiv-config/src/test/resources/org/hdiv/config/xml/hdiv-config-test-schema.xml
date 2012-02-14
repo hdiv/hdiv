@@ -4,7 +4,6 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
 http://www.hdiv.org/schema/hdiv http://www.hdiv.org/schema/hdiv/hdiv.xsd">
 
-
 	<hdiv:validation id="id1" componentType="text">
 		<hdiv:acceptedPattern><![CDATA[^[a-zA-Z0-9@.\-_]*$]]></hdiv:acceptedPattern>
 		<hdiv:rejectedPattern><![CDATA[(\s|\S)*(--)(\s|\S)*]]></hdiv:rejectedPattern>
@@ -18,14 +17,14 @@ http://www.hdiv.org/schema/hdiv http://www.hdiv.org/schema/hdiv/hdiv.xsd">
 		<hdiv:rejectedPattern><![CDATA[(\s|\S)*(--)(\s|\S)*]]></hdiv:rejectedPattern>
 	</hdiv:validation>
 
-	<hdiv:editableValidations>
-		<hdiv:validationRule url="a">id1</hdiv:validationRule>
+	<hdiv:editableValidations registerDefaults="true">
+		<hdiv:validationRule url="a" enableDefaults="true">id1</hdiv:validationRule>
 		<hdiv:validationRule url="b">id2,id3</hdiv:validationRule>
 	</hdiv:editableValidations>
 
 	<hdiv:config confidentiality="true" avoidCookiesIntegrity="true"
 		protectedExtensions=".*,aaa" excludedExtensions="css,png" errorPage="proba.jsp"
-		randomName="true" strategy="memory">
+		randomName="true" strategy="memory" maxPagesPerSession="20">
 		<hdiv:startPages>page1,page2</hdiv:startPages>
 		<hdiv:startParameters>parameter1,parameter2</hdiv:startParameters>
 		<hdiv:paramsWithoutValidation>

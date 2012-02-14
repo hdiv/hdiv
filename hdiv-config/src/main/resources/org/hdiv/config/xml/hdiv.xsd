@@ -223,6 +223,14 @@
 					]]></xsd:documentation>
 				</xsd:annotation>
 			</xsd:attribute>
+			<xsd:attribute name="maxPagesPerSession" type="xsd:int"
+				default="5">
+				<xsd:annotation>
+					<xsd:documentation><![CDATA[
+	Maximum number of page states stored per user session.
+					]]></xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
 		</xsd:complexType>
 	</xsd:element>
 

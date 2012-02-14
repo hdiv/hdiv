@@ -170,7 +170,11 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
 		bean.setScope(BeanDefinition.SCOPE_PROTOTYPE);
 		bean.setInitMethodName("init");
-		bean.getPropertyValues().add("maxSize", "5");
+
+		String maxSize = element.getAttribute("maxPagesPerSession");
+		if (StringUtils.hasText(maxSize)) {
+			bean.getPropertyValues().add("maxSize", maxSize);
+		}
 		return bean;
 	}
 
@@ -382,7 +386,7 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 					this.processStartPages(node, bean);
 				} else if (node.getLocalName().equalsIgnoreCase("startParameters")) {
 					this.processStartParameters(node, bean);
-	
+
 				} else if (node.getLocalName().equalsIgnoreCase("paramsWithoutValidation")) {
 					this.processParamsWithoutValidation(node, bean);
 				}
