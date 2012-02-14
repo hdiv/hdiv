@@ -15,10 +15,7 @@
  */
 package org.hdiv.state;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.hdiv.AbstractHDIVTestCase;
-import org.hdiv.session.StateCacheTest;
 import org.hdiv.util.EncodingUtil;
 
 /**
@@ -28,12 +25,10 @@ import org.hdiv.util.EncodingUtil;
  */
 public class StateUtilTest extends AbstractHDIVTestCase {
 
-	private static Log log = LogFactory.getLog(StateCacheTest.class);
-
 	private EncodingUtil encodingUtil;
 
 	protected void onSetUp() throws Exception {
-		
+
 		this.encodingUtil = (EncodingUtil) this.getApplicationContext().getBean("encoding");
 	}
 
@@ -42,8 +37,8 @@ public class StateUtilTest extends AbstractHDIVTestCase {
 	 */
 	public void testEncode64() {
 
-		IState state = new State();		
-		
+		IState state = new State();
+
 		state.setAction("action1");
 		Parameter parameter = new Parameter();
 		parameter.setName("parameter1");
@@ -53,11 +48,11 @@ public class StateUtilTest extends AbstractHDIVTestCase {
 		state.addParameter("parameter1", parameter);
 		state.addParameter("parameter12", parameter);
 		state.addParameter("parameter12", parameter);
-		
-		String data = encodingUtil.encode64Cipher(state);		
-		State obj = (State) encodingUtil.decode64Cipher(data);		
-		
-		assertEquals(obj.getAction(), state.getAction());				
-	}	
-	
+
+		String data = encodingUtil.encode64Cipher(state);
+		State obj = (State) encodingUtil.decode64Cipher(data);
+
+		assertEquals(obj.getAction(), state.getAction());
+	}
+
 }

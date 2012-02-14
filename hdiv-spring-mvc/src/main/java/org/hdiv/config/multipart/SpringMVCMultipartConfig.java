@@ -15,6 +15,8 @@
  */
 package org.hdiv.config.multipart;
 
+import java.util.Enumeration;
+
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
@@ -29,6 +31,7 @@ import org.springframework.web.multipart.MultipartException;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.servlet.DispatcherServlet;
+import org.springframework.web.servlet.FrameworkServlet;
 
 /**
  * Class containing multipart request configuration.
@@ -42,6 +45,8 @@ public class SpringMVCMultipartConfig implements IMultipartConfig {
 	private static Log log = LogFactory.getLog(SpringMVCMultipartConfig.class);
 
 	private static final String MULTIPART_RESOLVER_BEAN_NAME = DispatcherServlet.MULTIPART_RESOLVER_BEAN_NAME;
+
+	private WebApplicationContext webApplicationContext;
 
 	/**
 	 * Parses the input stream and partitions the parsed items into a set of
@@ -95,7 +100,6 @@ public class SpringMVCMultipartConfig implements IMultipartConfig {
 				MultipartHttpServletRequest multientidadRequest = (MultipartHttpServletRequest) request;
 				multipartResolver.cleanupMultipart(multientidadRequest);
 			}
-
 		}
 
 	}
@@ -103,18 +107,52 @@ public class SpringMVCMultipartConfig implements IMultipartConfig {
 	/**
 	 * Obtain MultipartResolver instance for this application.
 	 * 
-	 * @param servletContext
+	 * @param servletContext app ServletContext
 	 * @return MultipartResolver instance
 	 */
+	@SuppressWarnings("rawtypes")
 	protected MultipartResolver lookupMultipartResolver(ServletContext servletContext) {
 
-		WebApplicationContext wac = WebApplicationContextUtils.getWebApplicationContext(servletContext);
-		try {
-			return wac.getBean(MULTIPART_RESOLVER_BEAN_NAME, MultipartResolver.class);
-		} catch (NoSuchBeanDefinitionException ex) {
-			// Default is no multipart resolver.
-			return null;
+		MultipartResolver resolver = null;
+
+		if (this.webApplicationContext == null) {
+			this.webApplicationContext = WebApplicationContextUtils.getWebApplicationContext(servletContext);
 		}
+
+		try {
+			resolver = this.webApplicationContext.getBean(MULTIPART_RESOLVER_BEAN_NAME, MultipartResolver.class);
+			if (resolver != null) {
+				return resolver;
+			}
+		} catch (NoSuchBeanDefinitionException ex) {
+			// No MultipartResolver in this context.
+		}
+
+		if (resolver == null) {
+			Enumeration e = servletContext.getAttributeNames();
+			while (e.hasMoreElements()) {
+				String name = (String) e.nextElement();
+				if (name.startsWith(FrameworkServlet.SERVLET_CONTEXT_PREFIX)) {
+					this.webApplicationContext = WebApplicationContextUtils.getWebApplicationContext(servletContext,
+							name);
+					break;
+				}
+			}
+		}
+
+		if (this.webApplicationContext != null) {
+			try {
+				resolver = this.webApplicationContext.getBean(MULTIPART_RESOLVER_BEAN_NAME, MultipartResolver.class);
+			} catch (NoSuchBeanDefinitionException ex) {
+				// No MultipartResolver in this context.
+			}
+		}
+
+		if (log.isDebugEnabled() && resolver == null) {
+			log.debug("Cant find MultipartResolver on any context.");
+		}
+
+		return resolver;
 	}
 
 }

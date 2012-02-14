@@ -26,6 +26,8 @@ import java.io.Serializable;
  */
 public class RandomGuidUidGenerator implements UidGenerator, Serializable {
 
+	private static final long serialVersionUID = 5187183004631843583L;
+	
 	/**
 	 * Should the random GUID generated be secure?
 	 */

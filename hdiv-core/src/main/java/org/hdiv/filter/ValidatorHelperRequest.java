@@ -171,7 +171,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 			}
 		}
 
-		// restore state from request or from memory
+		// Restore state from request or from memory
 		IState state = this.restoreState(request, target);
 		if (state == null) {
 			return false;
@@ -194,7 +194,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 
 			String parameter = (String) parameters.nextElement();
 
-			// check if the HDIV validation must be applied to the parameter
+			// Check if the HDIV validation must be applied to the parameter
 			if (!this.hdivConfig.needValidation(parameter, hdivParameter)) {
 
 				if (log.isDebugEnabled() && !parameter.equals(hdivParameter)) {
@@ -203,7 +203,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 				continue;
 			}
 
-			// check if the HDIV validation must be applied to the parameter
+			// Check if the HDIV validation must be applied to the parameter
 			String modifyHdivStateParameterName = (String) request.getSession().getAttribute(
 					Constants.MODIFY_STATE_HDIV_PARAMETER);
 			if (!this.hdivConfig.needValidation(parameter, modifyHdivStateParameterName)) {
@@ -214,8 +214,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 				continue;
 			}
 
-			// if the parameter requires no validation it is considered a
-			// valid parameter
+			// If the parameter requires no validation it is considered a valid parameter
 			if (this.isUserDefinedNonValidationParameter(targetWithoutContextPath, parameter)) {
 				continue;
 			}
@@ -224,9 +223,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 			if (stateParameter == null) {
 
 				// If the parameter is not defined in the state, it is an error.
-				// With this verification we guarantee that no extra parameters
-				// are
-				// added.
+				// With this verification we guarantee that no extra parameters are added.
 				this.logger.log(HDIVErrorCodes.PARAMETER_NOT_EXISTS, target, parameter, null);
 
 				if (log.isDebugEnabled()) {
@@ -240,7 +237,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 			// At this point we are processing a noneditable parameter
 			String[] values = request.getParameterValues(parameter);
 
-			// check if the parameter is editable
+			// Check if the parameter is editable
 			if (stateParameter.isEditable()) {
 
 				if (hdivConfig.existValidations() && (stateParameter.getEditableDataType() != null)) {
