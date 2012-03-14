@@ -2,6 +2,12 @@ HDIV CHANGELOG
 ==============
 http://www.hdiv.org
 
+Release 2.1.2
+==================================
+
+ * Confidential values are visible in the log.
+ * Expose form state id to request. Simpler Ajax support.
+
 Release 2.1.1
 ==================================
 

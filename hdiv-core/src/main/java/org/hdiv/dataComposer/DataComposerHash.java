@@ -57,13 +57,13 @@ public class DataComposerHash extends DataComposerMemory {
 	 */
 	public String endRequest() {
 
-		this.state = (IState) this.statesStack.pop();
-		this.state.setPageId(this.getPage().getName());
+		IState state = (IState) super.getStatesStack().pop();
+		state.setPageId(this.getPage().getName());
 
 		String id = null;
 		String stateWithSuffix = null;
 
-		String stateData = encodingUtil.encode64(this.state);
+		String stateData = encodingUtil.encode64(state);
 
 		// if state's length it's too long for GET methods we have to change the
 		// strategy to memory
@@ -76,19 +76,18 @@ public class DataComposerHash extends DataComposerMemory {
 
 			super.startPage();
 
-			this.getPage().addState(this.state);
-			this.state.setPageId(this.getPage().getName());
+			this.getPage().addState(state);
+			state.setPageId(this.getPage().getName());
 
-			id = this.getPage().getName() + DASH + this.state.getId() + DASH + this.getHdivStateSuffix();
+			id = this.getPage().getName() + DASH + state.getId() + DASH + this.getHdivStateSuffix();
 
 		} else {
 			// generate hash to add to the page that will be stored in session
 			stateWithSuffix = stateData + DASH + this.getHdivStateSuffix();
 			String stateHash = this.encodingUtil.calculateStateHash(stateWithSuffix);
-			this.getPage().addState(this.state.getId(), stateHash);
+			this.getPage().addState(state.getId(), stateHash);
 		}
 
-		this.updateComposerState();
 		this.isRequestStarted = false;
 
 		return (id != null) ? id : stateWithSuffix;

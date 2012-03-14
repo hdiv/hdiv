@@ -30,19 +30,20 @@ public class DataValidatorFactory {
 	 * HDIV configuration object.
 	 */
 	private HDIVConfig hdivConfig;
-	
+
 	/**
 	 * Creates a new instance of IDataValidator that validates the request over the state.
 	 * 
-	 * @param state IState object
+	 * @param state
+	 *            IState object
 	 * @return IDataValidator instance
 	 */
-	public IDataValidator newInstance(IState state){
-		
+	public IDataValidator newInstance(IState state) {
+
 		IValidationResult result = new ValidationResult();
 		DataValidator dataValidator = new DataValidator();
 		dataValidator.setValidationResult(result);
-		dataValidator.setConfidentiality(this.hdivConfig.getConfidentiality());
+		dataValidator.setConfig(this.hdivConfig);
 		dataValidator.setState(state);
 		return dataValidator;
 	}
@@ -50,5 +51,5 @@ public class DataValidatorFactory {
 	public void setHdivConfig(HDIVConfig hdivConfig) {
 		this.hdivConfig = hdivConfig;
 	}
-	
+
 }

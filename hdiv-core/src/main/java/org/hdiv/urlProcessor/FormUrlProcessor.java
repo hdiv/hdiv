@@ -31,6 +31,8 @@ import org.hdiv.util.HDIVUtil;
  */
 public class FormUrlProcessor extends AbstractUrlProcessor {
 
+	private static final String FORM_STATE_ID = "hdivFormStateId";
+
 	/**
 	 * Process form action url to add hdiv state if it is necessary.
 	 * 
@@ -46,7 +48,10 @@ public class FormUrlProcessor extends AbstractUrlProcessor {
 		if (super.isHdivStateNecessary(urlData)) {
 			// the url needs protection
 			IDataComposer dataComposer = HDIVUtil.getDataComposer(request);
-			dataComposer.beginRequest(urlData.getContextPathRelativeUrl());
+			String stateId = dataComposer.beginRequest(urlData.getContextPathRelativeUrl());
+
+			// Publish the state in request to make it accessible on jsp
+			request.setAttribute(FORM_STATE_ID, stateId);
 
 			// Process url params
 			Map params = urlData.getOriginalUrlParams();
