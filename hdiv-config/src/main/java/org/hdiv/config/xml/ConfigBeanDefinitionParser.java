@@ -15,6 +15,7 @@
  */
 package org.hdiv.config.xml;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Hashtable;
 import java.util.List;
@@ -428,9 +429,13 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 
 	private List convertToList(String data) {
 		String[] result = data.split(",");
-		List list = Arrays.asList(result);
+		List list = new ArrayList();
+		// clean the edges of the item - spaces/returns/tabs etc may be used for readability in the configs 
+		for (int i = 0; i < result.length; i++) {
+			// trims leading and trailing whitespace
+			list.add(StringUtils.trimWhitespace(result[i]));
+		}
 		return list;
-
 	}
 
 }
