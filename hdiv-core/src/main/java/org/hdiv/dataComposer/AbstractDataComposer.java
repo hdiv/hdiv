@@ -53,7 +53,7 @@ public abstract class AbstractDataComposer implements IDataComposer {
 	/**
 	 * Dash character
 	 */
-	protected static final String DASH = "-";
+	public static final String DASH = "-";
 
 	/**
 	 * Action to which the user request is directed to
@@ -99,7 +99,10 @@ public abstract class AbstractDataComposer implements IDataComposer {
 		this.page = new Page();
 		String pageId = this.session.getPageId();
 		this.page.setName(pageId);
-		this.page.setRandomToken(this.uidGenerator.generateUid().toString());
+		String tokenGenerated = this.uidGenerator.generateUid().toString();
+		// TODO the in-memory strategy generates a hex token which is matched by StateUtil.isMemoryStragtegy
+		// however this uidGenerator is pluggable, so the token should be set to hex here
+		this.page.setRandomToken(tokenGenerated);
 	}
 
 	public String getAction() {

@@ -21,6 +21,7 @@ import java.util.regex.Pattern;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hdiv.config.HDIVConfig;
+import org.hdiv.dataComposer.AbstractDataComposer;
 import org.hdiv.exception.HDIVException;
 import org.hdiv.util.EncodingUtil;
 import org.hdiv.util.HDIVErrorCodes;
@@ -55,7 +56,7 @@ public class StateUtil {
 	/**
 	 * Pattern to check if the memory strategy is being used
 	 */
-	private static final String MEMORY_PATTERN = "([0-9]+-){2}[A-Za-z0-9]+";
+	private static final String MEMORY_PATTERN = "([0-9]+"+AbstractDataComposer.DASH+"){2}[A-Za-z0-9+/=]+";
 	
 	/**
 	 * Compiled MEMORY_PATTERN
