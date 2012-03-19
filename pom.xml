@@ -116,6 +116,7 @@
 		<module>hdiv-config</module>
 		<module>hdiv-jstl-taglibs-1.2</module>
 		<module>hdiv-spring-mvc</module>
+		<module>hdiv-spring-webflow</module>
 	</modules>
 
 	<licenses>
