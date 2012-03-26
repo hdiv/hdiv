@@ -56,7 +56,7 @@ public class StateUtil {
 	/**
 	 * Pattern to check if the memory strategy is being used
 	 */
-	private static final String MEMORY_PATTERN = "([0-9]+"+AbstractDataComposer.DASH+"){2}[A-Za-z0-9+/=]+";
+	private static final String MEMORY_PATTERN = "([0-9]+"+AbstractDataComposer.DASH+"){2}[A-Za-z0-9]+";
 	
 	/**
 	 * Compiled MEMORY_PATTERN
