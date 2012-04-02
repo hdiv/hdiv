@@ -154,8 +154,15 @@ public abstract class AbstractUrlProcessor {
 		StringTokenizer st = new StringTokenizer(value, "&");
 		while (st.hasMoreTokens()) {
 			String token = st.nextToken();
-			String param = token.substring(0, token.indexOf("="));
-			String val = token.substring(token.indexOf("=") + 1);
+			int index = token.indexOf("=");
+			String param = "";
+			String val = "";
+			if (index > -1) {
+				param = token.substring(0, index);
+				val = token.substring(index + 1);
+			} else {
+				param = token;
+			}
 
 			// Ignore Hdiv state parameter
 			if (!param.equals(hdivParameter)) {
