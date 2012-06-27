@@ -118,8 +118,10 @@ public interface IDataComposer {
 
 	/**
 	 * It is called by each request or form of the html page sent back by the server.
+	 * 
+	 * @return State id for this request. It can be null if it is impossible to precalculate the id for some strategy.
 	 */
-	public void beginRequest();
+	public String beginRequest();
 
 	/**
 	 * It is called by each request or form of the html page returned by the server, as long as the destiny of the
@@ -127,15 +129,20 @@ public interface IDataComposer {
 	 * 
 	 * @param action
 	 *            Action target
+	 * @return State id for this request. It can be null if it is impossible to precalculate the id for some strategy.
 	 */
-	public void beginRequest(String action);
+	public String beginRequest(String action);
 
 	/**
 	 * It is called by each request or form of the html page returned by the server, as long as the destiny of the
 	 * request is an action. The created IState is based on the passed as parameter.
-	 * @param state Base state
+	 * 
+	 * @param state
+	 *            Base state
+	 * 
+	 * @return State id for this request. It can be null if it is impossible to precalculate the id for some strategy.
 	 */
-	public void beginRequest(IState state);
+	public String beginRequest(IState state);
 
 	/**
 	 * It is called in the pre-processing stage of each request or form existing in the page returned by the server.
@@ -155,9 +162,11 @@ public interface IDataComposer {
 	public void startPage();
 
 	/**
-	 * It is called in the pre-processing stage of each user request.
-	 * Create a new {@link IPage} based on an existing page.
-	 * @param existingPage other IPage
+	 * It is called in the pre-processing stage of each user request. Create a new {@link IPage} based on an existing
+	 * page.
+	 * 
+	 * @param existingPage
+	 *            other IPage
 	 */
 	public void startPage(IPage existingPage);
 

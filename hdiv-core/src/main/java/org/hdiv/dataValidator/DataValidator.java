@@ -20,13 +20,14 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.hdiv.config.HDIVConfig;
 import org.hdiv.state.IParameter;
 import org.hdiv.state.IState;
 import org.hdiv.util.HDIVUtil;
 
 /**
- * It uses an object of type IState and validates all the entry data, besides to
- * replacing the relative values by its real values.
+ * It uses an object of type IState and validates all the entry data, besides to replacing the relative values by its
+ * real values.
  * 
  * @author Roberto Velasco
  * @author Oscar Ocariz
@@ -49,42 +50,44 @@ public class DataValidator implements IDataValidator {
 	private IState state;
 
 	/**
-	 * Confidentiality indicator to know if information is accessible only for those
-	 * who are authorized.
+	 * HDIV general configuration.
 	 */
-	private Boolean confidentiality;
+	private HDIVConfig config;
 
 	/**
 	 * <p>
-	 * Checks if the value <code>data</code> sent by the user to the server in the
-	 * parameter <code>parameter</code> is correct or not. The received value is
-	 * checked with the one stored in the state to decide if it is correct.
+	 * Checks if the value <code>data</code> sent by the user to the server in the parameter <code>parameter</code> is
+	 * correct or not. The received value is checked with the one stored in the state to decide if it is correct.
 	 * </p>
 	 * <p>
-	 * In the encoded and hash strategies, the state is obtained from the user
-	 * request. However, in the memory strategy the state is obtained from the user
-	 * session, using the state identifier receiced within the request.
+	 * In the encoded and hash strategies, the state is obtained from the user request. However, in the memory strategy
+	 * the state is obtained from the user session, using the state identifier received within the request.
 	 * </p>
 	 * 
-	 * @param value value sent by the client
-	 * @param target target action name
-	 * @param parameter parameter name
-	 * @return object that represents the result of the validation process for the
-	 *         parameter <code>parameter</code> and the value <code>data</code>.
+	 * @param value
+	 *            value sent by the client
+	 * @param target
+	 *            target action name
+	 * @param parameter
+	 *            parameter name
+	 * @return object that represents the result of the validation process for the parameter <code>parameter</code> and
+	 *         the value <code>data</code>.
 	 */
 	public IValidationResult validate(String value, String target, String parameter) {
 
-		if (Boolean.TRUE.equals(this.confidentiality) && (!this.isInt(value))) {
-			validationResult.setLegal(false);
-			return validationResult;
+		Boolean confidentiality = this.config.getConfidentiality();
+		boolean noConfidentiality = this.config.isParameterWithoutConfidentiality(parameter);
+		if (log.isDebugEnabled() && noConfidentiality) {
+			log.debug("Parameter [" + parameter + "] is ParameterWithoutConfidentiality.");
 		}
 
 		IParameter stateParameter = this.state.getParameter(parameter);
-		if (Boolean.FALSE.equals(this.confidentiality)) {
+		if (Boolean.FALSE.equals(confidentiality) || noConfidentiality) {
+			// Confidentiality = false
 
 			if (stateParameter.existValue(value)) {
 				validationResult.setResult(value);
-				validationResult.setLegal(true);				
+				validationResult.setLegal(true);
 			} else {
 				validationResult.setLegal(false);
 			}
@@ -92,7 +95,13 @@ public class DataValidator implements IDataValidator {
 			return validationResult;
 
 		} else {
-			// confidentiality assures that data is int value
+			// Confidentiality = true
+			if (!this.isInt(value)) {
+				validationResult.setLegal(false);
+				return validationResult;
+			}
+
+			// Confidentiality assures that data is int value
 			int position = new Integer(value).intValue();
 
 			if (stateParameter.existPosition(position)) {
@@ -107,11 +116,14 @@ public class DataValidator implements IDataValidator {
 				validationResult.setLegal(false);
 				return validationResult;
 			}
-		}	
+		}
 	}
 
 	/**
-	 * @param data Data to check
+	 * Is data an integer?
+	 * 
+	 * @param data
+	 *            Data to check
 	 * @return Returns true if <code>data</code> is a number. False in otherwise.
 	 */
 	private boolean isInt(String data) {
@@ -129,24 +141,19 @@ public class DataValidator implements IDataValidator {
 	}
 
 	/**
-	 * @return Returns the validation process state.
-	 */
-	public IState getState() {
-		return state;
-	}
-
-	/**
-	 * @param state The validation process state to set.
+	 * @param state
+	 *            The validation process state to set.
 	 */
 	public void setState(IState state) {
 		this.state = state;
 	}
 
 	/**
-	 * @param confidentiality The confidentiality to set.
+	 * @param config
+	 *            the config to set
 	 */
-	public void setConfidentiality(Boolean confidentiality) {
-		this.confidentiality = confidentiality;
+	public void setConfig(HDIVConfig config) {
+		this.config = config;
 	}
 
 }

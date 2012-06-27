@@ -49,11 +49,21 @@ public class LinkUrlProcessorTest extends AbstractHDIVTestCase {
 		assertTrue(result.startsWith("/testAction.do?_HDIV_STATE_="));
 		assertTrue(result.endsWith("#anchor"));
 	}
-	
+
 	public void testProcessActionWithParams() {
 
 		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
 		String url = "/testAction.do?params=value";
+
+		String result = this.linkUrlProcessor.processUrl(request, url);
+
+		assertTrue(result.startsWith("/testAction.do?params=0&_HDIV_STATE_"));
+	}
+
+	public void testProcessActionParamWithoutValue() {
+
+		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		String url = "/testAction.do?params";
 
 		String result = this.linkUrlProcessor.processUrl(request, url);
 
@@ -89,4 +99,5 @@ public class LinkUrlProcessorTest extends AbstractHDIVTestCase {
 
 		assertTrue(result.indexOf("jsessionid") < 0);
 	}
+
 }

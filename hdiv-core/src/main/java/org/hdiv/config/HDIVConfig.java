@@ -23,6 +23,8 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.hdiv.util.Constants;
+import org.hdiv.util.HDIVUtil;
 import org.hdiv.validator.IValidation;
 import java.lang.StringBuffer;
 
@@ -36,42 +38,40 @@ import java.lang.StringBuffer;
 public class HDIVConfig {
 
 	/**
-	 * Map with the pages that will not be Treated by the HDIV filter. The init pages
-	 * are initialized by the Spring factory.
+	 * Map with the pages that will not be Treated by the HDIV filter. The init pages are initialized by the Spring
+	 * factory.
 	 */
 	protected Hashtable startPages = new Hashtable();
 
 	/**
-	 * Map with the parameters that will not be validated by the HDIV filter. The
-	 * init parameters are initialized by the Spring factory.
+	 * Map with the parameters that will not be validated by the HDIV filter. The init parameters are initialized by the
+	 * Spring factory.
 	 */
 	private Hashtable startParameters = new Hashtable();
 
 	/**
-	 * Map of the validated actions that are init pages. It is necessary to create
-	 * this map to improve the efficiency at checking init-pages.
+	 * Map of the validated actions that are init pages. It is necessary to create this map to improve the efficiency at
+	 * checking init-pages.
 	 * 
 	 * @since HDIV 1.1.1
 	 */
 	private Hashtable matchedPages = new Hashtable();
 
 	/**
-	 * Map of the validated parameters that are init parameters. It is necessary to
-	 * create this map to improve the efficiency at checking init-parameters.
+	 * Map of the validated parameters that are init parameters. It is necessary to create this map to improve the
+	 * efficiency at checking init-parameters.
 	 * 
 	 * @since HDIV 1.1.1
 	 */
 	private Hashtable matchedParameters = new Hashtable();
 
 	/**
-	 * Error page to which HDIV will redirect the request if it doesn't pass the HDIV
-	 * validation.
+	 * Error page to which HDIV will redirect the request if it doesn't pass the HDIV validation.
 	 */
 	private String errorPage;
 
 	/**
-	 * Confidentiality indicator to know if information is accessible only for those
-	 * who are authorized.
+	 * Confidentiality indicator to know if information is accessible only for those who are authorized.
 	 */
 	private Boolean confidentiality;
 
@@ -81,26 +81,24 @@ public class HDIVConfig {
 	private Map paramsWithoutValidation;
 
 	/**
-	 * Validations for editable fields (text/textarea) defined by the user in the
-	 * hdiv-validations.xml configuration file of Spring.
+	 * Validations for editable fields (text/textarea) defined by the user in the hdiv-validations.xml configuration
+	 * file of Spring.
 	 */
 	private HDIVValidations validations;
 
 	/**
-	 * If <code>cookiesIntegrity</code> is true, cookie integrity will not be
-	 * applied.
+	 * If <code>cookiesIntegrity</code> is true, cookie integrity will not be applied.
 	 */
 	private boolean cookiesIntegrity;
 
 	/**
-	 * If <code>cookiesConfidentiality</code> is true, cookie confidentiality will
-	 * not be applied.
+	 * If <code>cookiesConfidentiality</code> is true, cookie confidentiality will not be applied.
 	 */
 	private boolean cookiesConfidentiality;
 
 	/**
-	 * if <code>avoidValidationInUrlsWithoutParams</code> is true, HDIV validation will 
-	 * not be applied in urls without parameters.
+	 * if <code>avoidValidationInUrlsWithoutParams</code> is true, HDIV validation will not be applied in urls without
+	 * parameters.
 	 * 
 	 * @since HDIV 2.1.0
 	 */
@@ -108,49 +106,54 @@ public class HDIVConfig {
 
 	/**
 	 * Extensions that we have to protect with HDIV's state.
+	 * 
 	 * @since HDIV 2.0
 	 */
 	private Hashtable protectedURLPatterns;
 
 	/**
 	 * Extensions that we have not to protect with HDIV's state.
+	 * 
 	 * @since HDIV 2.1.0
 	 */
 	private List excludedURLExtensions;
 
 	/**
-	 * HDIV adds an extra parameter to all links and forms. By default this parameter is _HDIV_STATE.
-	 * If <code>randomName</code> is true a random name is generated instead of default name (_HDIV_STATE_) 
+	 * HDIV adds an extra parameter to all links and forms. By default this parameter is _HDIV_STATE. If
+	 * <code>randomName</code> is true a random name is generated instead of default name (_HDIV_STATE_)
+	 * 
 	 * @since HDIV 2.1.0
 	 */
 	private boolean randomName;
 
 	/**
 	 * HDIV behaviour strategy. There are 3 possible options: memory, cipher, hash
+	 * 
 	 * @since HDIV 2.1.0
 	 */
 	private String strategy;
 
 	/**
 	 * If debug mode is enabled, the attacks are logged but the requests are not stopped.
+	 * 
 	 * @since HDIV 2.1.1
 	 */
 	private boolean debugMode = false;
 
 	/**
-	 * @param strategy the strategy to set
+	 * @param strategy
+	 *            the strategy to set
 	 */
 	public void setStrategy(String strategy) {
 		this.strategy = strategy;
 	}
 
 	/**
-	 * Checks if <code>parameter</code> is an init parameter, in which case it will
-	 * not be treated by HDIV.
+	 * Checks if <code>parameter</code> is an init parameter, in which case it will not be treated by HDIV.
 	 * 
-	 * @param parameter Parameter name
-	 * @return True if <code>parameter</code> is an init parameter. False
-	 *         otherwise.
+	 * @param parameter
+	 *            Parameter name
+	 * @return True if <code>parameter</code> is an init parameter. False otherwise.
 	 */
 	public boolean isStartParameter(String parameter) {
 
@@ -168,10 +171,10 @@ public class HDIVConfig {
 	}
 
 	/**
-	 * Checks if <code>target</code> is an init action, in which case it will not
-	 * be treated by HDIV.
+	 * Checks if <code>target</code> is an init action, in which case it will not be treated by HDIV.
 	 * 
-	 * @param target target name
+	 * @param target
+	 *            target name
 	 * @return True if <code>target</code> is an init action. False otherwise.
 	 */
 	public boolean isStartPage(String target) {
@@ -220,11 +223,32 @@ public class HDIVConfig {
 	}
 
 	/**
-	 * Checks if the parameter <code>parameter</code> is defined by the user as a
-	 * no required validation parameter for the action <code>action</code>.
+	 * Check if the parameter needs confidentiality.
 	 * 
-	 * @param action action name
-	 * @param parameter parameter name
+	 * @param paramName
+	 *            parameter name to check
+	 * @return boolean
+	 */
+	public boolean isParameterWithoutConfidentiality(String paramName) {
+
+		if (HDIVUtil.getHttpSession() != null) {
+			String modifyHdivStateParameterName = (String) HDIVUtil.getHttpSession().getAttribute(
+					Constants.MODIFY_STATE_HDIV_PARAMETER);
+			if (modifyHdivStateParameterName != null && modifyHdivStateParameterName.equals(paramName)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Checks if the parameter <code>parameter</code> is defined by the user as a no required validation parameter for
+	 * the action <code>action</code>.
+	 * 
+	 * @param action
+	 *            action name
+	 * @param parameter
+	 *            parameter name
 	 * @return True if it is parameter that needs no validation. False otherwise.
 	 */
 	public boolean isParameterWithoutValidation(String action, String parameter) {
@@ -270,13 +294,13 @@ public class HDIVConfig {
 	}
 
 	/**
-	 * Checks if <code>value</code> is an init action or parameter, in which case
-	 * it will not be treated by HDIV.
+	 * Checks if <code>value</code> is an init action or parameter, in which case it will not be treated by HDIV.
 	 * 
-	 * @param value target or parameter name
-	 * @param startValues Map with start values
-	 * @return True if <code>value</code> is an init action or parameter. False
-	 *         otherwise.
+	 * @param value
+	 *            target or parameter name
+	 * @param startValues
+	 *            Map with start values
+	 * @return True if <code>value</code> is an init action or parameter. False otherwise.
 	 * @since HDIV 1.1.1
 	 */
 	public String checkValue(String value, Map startValues) {
@@ -300,12 +324,13 @@ public class HDIVConfig {
 	}
 
 	/**
-	 * Checks if the HDIV validation must be applied to the parameter
-	 * <code>parameter</code>
+	 * Checks if the HDIV validation must be applied to the parameter <code>parameter</code>
 	 * 
-	 * @param parameter Parameter name
-	 * @param hdivParameter Name of the parameter that HDIV will include in the
-	 *            requests or/and forms which contains the state identifier parameter
+	 * @param parameter
+	 *            Parameter name
+	 * @param hdivParameter
+	 *            Name of the parameter that HDIV will include in the requests or/and forms which contains the state
+	 *            identifier parameter
 	 * @return True if <code>parameter</code> doesn't need HDIV validation.
 	 */
 	public boolean needValidation(String parameter, String hdivParameter) {
@@ -348,7 +373,8 @@ public class HDIVConfig {
 	/**
 	 * It creates a map from the list of start pages defined by the user.
 	 * 
-	 * @param userStartPages list of start pages defined by the user
+	 * @param userStartPages
+	 *            list of start pages defined by the user
 	 */
 	public void setUserStartPages(List userStartPages) {
 
@@ -363,7 +389,8 @@ public class HDIVConfig {
 	/**
 	 * It creates a map from the list of init parameters defined by the user.
 	 * 
-	 * @param userStartParameters list of init parameters defined by the user
+	 * @param userStartParameters
+	 *            list of init parameters defined by the user
 	 */
 	public void setUserStartParameters(List userStartParameters) {
 
@@ -376,7 +403,8 @@ public class HDIVConfig {
 	}
 
 	/**
-	 * @param validations The validations to set.
+	 * @param validations
+	 *            The validations to set.
 	 * @since HDIV 1.1
 	 */
 	public void setValidations(HDIVValidations validations) {
@@ -386,8 +414,7 @@ public class HDIVConfig {
 	/**
 	 * Checks if there are validations defined for editable fields
 	 * 
-	 * @return True if validations for editable fields have been defined. False
-	 *         otherwise.
+	 * @return True if validations for editable fields have been defined. False otherwise.
 	 * @since HDIV 1.1
 	 */
 	public boolean existValidations() {
@@ -398,9 +425,8 @@ public class HDIVConfig {
 
 	/**
 	 * <p>
-	 * Checks if the values <code>values</code> are valid for the editable
-	 * parameter <code>parameter</code>, using the validations defined in the
-	 * hdiv-validations.xml configuration file of Spring.
+	 * Checks if the values <code>values</code> are valid for the editable parameter <code>parameter</code>, using the
+	 * validations defined in the hdiv-validations.xml configuration file of Spring.
 	 * </p>
 	 * <p>
 	 * There are two types of validations:
@@ -408,12 +434,15 @@ public class HDIVConfig {
 	 * <li>rejected: the value is rejected if doesn't pass the validation</li>
 	 * </p>
 	 * 
-	 * @param url target url
-	 * @param parameter parameter name
-	 * @param values parameter's values
-	 * @param dataType editable data type
-	 * @return True if the values <code>values</code> are valid for the parameter
-	 *         <code>parameter</code>.
+	 * @param url
+	 *            target url
+	 * @param parameter
+	 *            parameter name
+	 * @param values
+	 *            parameter's values
+	 * @param dataType
+	 *            editable data type
+	 * @return True if the values <code>values</code> are valid for the parameter <code>parameter</code>.
 	 * @since HDIV 1.1
 	 */
 	public boolean areEditableParameterValuesValid(String url, String parameter, String[] values, String dataType) {
@@ -454,7 +483,8 @@ public class HDIVConfig {
 	}
 
 	/**
-	 * @param cookiesConfidentiality The cookiesConfidentiality to set.
+	 * @param cookiesConfidentiality
+	 *            The cookiesConfidentiality to set.
 	 */
 	public void setCookiesConfidentiality(Boolean cookiesConfidentiality) {
 		this.cookiesConfidentiality = cookiesConfidentiality.booleanValue();
@@ -468,29 +498,31 @@ public class HDIVConfig {
 	}
 
 	/**
-	 * @param cookiesIntegrity The cookiesIntegrity to set.
+	 * @param cookiesIntegrity
+	 *            The cookiesIntegrity to set.
 	 */
 	public void setCookiesIntegrity(Boolean cookiesIntegrity) {
 		this.cookiesIntegrity = cookiesIntegrity.booleanValue();
 	}
 
 	/**
-	 * @return Returns true if validation in urls without parameters 
-	 * is activated.
+	 * @return Returns true if validation in urls without parameters is activated.
 	 */
 	public boolean isValidationInUrlsWithoutParamsActivated() {
 		return (avoidValidationInUrlsWithoutParams == false);
 	}
 
 	/**
-	 * @param avoidValidationInUrlsWithoutParams The avoidValidationInUrlsWithoutParams to set.
+	 * @param avoidValidationInUrlsWithoutParams
+	 *            The avoidValidationInUrlsWithoutParams to set.
 	 */
 	public void setAvoidValidationInUrlsWithoutParams(Boolean avoidValidationInUrlsWithoutParams) {
 		this.avoidValidationInUrlsWithoutParams = avoidValidationInUrlsWithoutParams.booleanValue();
 	}
 
 	/**
-	 * @param protectedExtensions The protected extensions to set.
+	 * @param protectedExtensions
+	 *            The protected extensions to set.
 	 * @since HDIV 2.0
 	 */
 	public void setProtectedExtensions(List protectedExtensions) {
@@ -540,7 +572,8 @@ public class HDIVConfig {
 	}
 
 	/**
-	 * @param randomName the randomName to set
+	 * @param randomName
+	 *            the randomName to set
 	 */
 	public void setRandomName(boolean randomName) {
 		this.randomName = randomName;
@@ -561,7 +594,8 @@ public class HDIVConfig {
 	}
 
 	/**
-	 * @param debugMode the debugMode to set
+	 * @param debugMode
+	 *            the debugMode to set
 	 */
 	public void setDebugMode(boolean debugMode) {
 		this.debugMode = debugMode;
