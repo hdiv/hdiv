@@ -8,6 +8,7 @@ Release 2.1.2
  * Confidential values are visible in the log.
  * Expose form state id to request. Simpler Ajax support.
  * Fixed (https://github.com/hdiv/hdiv/issues/3) error parsing parameters without value
+ * Fixed (https://github.com/hdiv/hdiv/issues/4) bug with nested tags
 
 Release 2.1.1
 ==================================
