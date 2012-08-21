@@ -100,8 +100,6 @@ public class DataComposerCipher extends DataComposerMemory {
 			id = this.getPage().getName() + DASH + state.getId() + DASH + this.getHdivStateSuffix();
 		}
 
-		this.isRequestStarted = false;
-
 		return (id != null) ? id : stateData;
 	}
 

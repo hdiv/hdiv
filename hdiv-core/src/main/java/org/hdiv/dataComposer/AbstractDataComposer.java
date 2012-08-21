@@ -54,11 +54,6 @@ public abstract class AbstractDataComposer implements IDataComposer {
 	protected static final String DASH = "-";
 
 	/**
-	 * Action to which the user request is directed to
-	 */
-	private String action;
-
-	/**
 	 * Http session wrapper
 	 */
 	private ISession session;
@@ -87,31 +82,7 @@ public abstract class AbstractDataComposer implements IDataComposer {
 	}
 
 	/**
-	 * It is called by each request or form of the html page sent back by the server.
-	 * 
-	 * @return state id is null
-	 */
-	public String beginRequest() {
-		return null;
-	}
-
-	/**
-	 * It is called by each request or form of the html page returned by the server, as long as the destiny of the
-	 * request is an action.
-	 * 
-	 * @param action
-	 *            target name
-	 * @return state id is null
-	 */
-	public String beginRequest(String action) {
-		this.setAction(action);
-		this.beginRequest();
-
-		return null;
-	}
-
-	/**
-	 * Obtains a new unique identifier for the page
+	 * Obtains a new unique identifier for the page.
 	 */
 	public void initPage() {
 		this.page = new Page();
@@ -120,18 +91,26 @@ public abstract class AbstractDataComposer implements IDataComposer {
 		this.page.setRandomToken(this.uidGenerator.generateUid().toString());
 	}
 
-	public String getAction() {
-		return action;
+	/**
+	 * True if beginRequest has been executed and endRequest not.
+	 * 
+	 * @return boolean
+	 */
+	public boolean isRequestStarted() {
+		return this.statesStack.size() > 0;
 	}
 
-	public void setAction(String action) {
-		this.action = action;
-	}
-
+	/**
+	 * @return the session
+	 */
 	public ISession getSession() {
 		return session;
 	}
 
+	/**
+	 * @param session
+	 *            the session to set
+	 */
 	public void setSession(ISession session) {
 		this.session = session;
 	}

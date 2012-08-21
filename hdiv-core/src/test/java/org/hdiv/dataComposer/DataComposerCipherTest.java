@@ -56,22 +56,22 @@ public class DataComposerCipherTest extends AbstractHDIVTestCase {
 		boolean confidentiality = this.getConfig().getConfidentiality().booleanValue();
 
 		// we add a multiple parameter that will be encoded as 0, 1, 2, ...
-		String result = dataComposer.compose("action1", "parameter1", "2", false);
+		String result = dataComposer.compose("test.do", "parameter1", "2", false);
 		String value = (!confidentiality) ? "2" : "0";
 		assertTrue(value.equals(result));
 
-		result = dataComposer.compose("action1", "parameter1", "2", false);
+		result = dataComposer.compose("test.do", "parameter1", "2", false);
 		value = (!confidentiality) ? "2" : "1";
 		assertTrue(value.equals(result));
 
-		result = dataComposer.compose("action1", "parameter1", "2", false);
+		result = dataComposer.compose("test.do", "parameter1", "2", false);
 		assertTrue("2".equals(result));
 
-		result = dataComposer.compose("action1", "parameter2", "2", false);
+		result = dataComposer.compose("test.do", "parameter2", "2", false);
 		value = (!confidentiality) ? "2" : "0";
 		assertTrue(value.equals(result));
 
-		result = dataComposer.compose("action1", "parameter2", "2", false);
+		result = dataComposer.compose("test.do", "parameter2", "2", false);
 		value = (!confidentiality) ? "2" : "1";
 		assertTrue(value.equals(result));
 	}
@@ -82,7 +82,7 @@ public class DataComposerCipherTest extends AbstractHDIVTestCase {
 
 		dataComposer.startPage();
 		dataComposer.beginRequest("test.do");
-		dataComposer.compose("action1", "parameter1", "2", false);
+		dataComposer.compose("parameter1", "2", false);
 		String stateId = dataComposer.endRequest();
 		dataComposer.endPage();
 

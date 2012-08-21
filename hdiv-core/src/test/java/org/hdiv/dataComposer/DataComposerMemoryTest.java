@@ -59,22 +59,22 @@ public class DataComposerMemoryTest extends AbstractHDIVTestCase {
 		boolean confidentiality = this.getConfig().getConfidentiality().booleanValue();
 
 		// we add a multiple parameter that will be encoded as 0, 1, 2, ...
-		String result = dataComposer.compose("action1", "parameter1", "2", false);
+		String result = dataComposer.compose("test.do", "parameter1", "2", false);
 		String value = (!confidentiality) ? "2" : "0";
 		assertTrue(value.equals(result));
 
-		result = dataComposer.compose("action1", "parameter1", "2", false);
+		result = dataComposer.compose("test.do", "parameter1", "2", false);
 		value = (!confidentiality) ? "2" : "1";
 		assertTrue(value.equals(result));
 
-		result = dataComposer.compose("action1", "parameter1", "2", false);
+		result = dataComposer.compose("test.do", "parameter1", "2", false);
 		assertTrue("2".equals(result));
 
-		result = dataComposer.compose("action1", "parameter2", "2", false);
+		result = dataComposer.compose("test.do", "parameter2", "2", false);
 		value = (!confidentiality) ? "2" : "0";
 		assertTrue(value.equals(result));
 
-		result = dataComposer.compose("action1", "parameter2", "2", false);
+		result = dataComposer.compose("test.do", "parameter2", "2", false);
 		value = (!confidentiality) ? "2" : "1";
 		assertTrue(value.equals(result));
 	}
@@ -85,7 +85,7 @@ public class DataComposerMemoryTest extends AbstractHDIVTestCase {
 
 		dataComposer.startPage();
 		dataComposer.beginRequest("test.do");
-		dataComposer.compose("action1", "parameter1", "2", false);
+		dataComposer.compose("parameter1", "2", false);
 		String stateId = dataComposer.endRequest();
 		dataComposer.endPage();
 
@@ -103,20 +103,20 @@ public class DataComposerMemoryTest extends AbstractHDIVTestCase {
 
 		dataComposer.startPage();
 		dataComposer.beginRequest("test.do");
-		dataComposer.compose("action1", "parameter1", "2", false);
+		dataComposer.compose("parameter1", "2", false);
 		String stateId = dataComposer.endRequest();
 		dataComposer.endPage();
 
 		assertNotNull(stateId);
 		request.addParameter("_PREVIOUS_HDIV_STATE_", stateId);
 
-		//New request
+		// New request
 		IState state = this.stateUtil.restoreState(stateId);
 		IPage page = this.session.getPage(state.getPageId());
 		dataComposer = this.dataComposerFactory.newInstance();
 		dataComposer.startPage(page);
 		dataComposer.beginRequest(state);
-		dataComposer.compose("action1", "parameter1", "3", false);
+		dataComposer.compose("parameter1", "3", false);
 		String stateId2 = dataComposer.endRequest();
 		dataComposer.endPage();
 
@@ -124,6 +124,34 @@ public class DataComposerMemoryTest extends AbstractHDIVTestCase {
 		IState state2 = this.stateUtil.restoreState(stateId2);
 		assertEquals(state2.getParameter("parameter1").getCount(), 2);
 		assertTrue(state2.getParameter("parameter1").existValue("3"));
+	}
+
+	public void testInnerState() {
+
+		IDataComposer dataComposer = this.dataComposerFactory.newInstance();
+
+		dataComposer.startPage();
+		dataComposer.beginRequest("test.do");
+		dataComposer.compose("parameter1", "2", false);
+
+		// Start inner state
+		dataComposer.beginRequest("testinner.do");
+		dataComposer.compose("parameter1", "3", false);
+		String stateIdInner = dataComposer.endRequest();
+
+		String stateId = dataComposer.endRequest();
+		dataComposer.endPage();
+
+		assertNotNull(stateId);
+		assertNotNull(stateIdInner);
+		assertNotSame(stateId, stateIdInner);
+
+		IState state = this.stateUtil.restoreState(stateId);
+		IState stateInner = this.stateUtil.restoreState(stateIdInner);
+		String action = state.getAction();
+		String actionInner = stateInner.getAction();
+		assertEquals("test.do", action);
+		assertEquals("testinner.do", actionInner);
 	}
 
 }
