@@ -60,6 +60,11 @@ public class UrlData {
 	private boolean internal = true;
 
 	/**
+	 * Protocol, server and port of the url
+	 */
+	private String server;
+
+	/**
 	 * Constructor
 	 * 
 	 * @param url
@@ -181,6 +186,21 @@ public class UrlData {
 	 */
 	public void setInternal(boolean internal) {
 		this.internal = internal;
+	}
+
+	/**
+	 * @return the server
+	 */
+	public String getServer() {
+		return server;
+	}
+
+	/**
+	 * @param server
+	 *            the server to set
+	 */
+	public void setServer(String server) {
+		this.server = server;
 	}
 
 }

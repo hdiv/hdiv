@@ -2,6 +2,11 @@ HDIV CHANGELOG
 ==============
 http://www.hdiv.org
 
+Release 2.1.3
+==================================
+
+ * Absolute URLs are returned as absolute URLs in LinkUrlProcessor.
+
 Release 2.1.2
 ==================================
 

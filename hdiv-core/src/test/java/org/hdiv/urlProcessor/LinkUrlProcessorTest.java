@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.hdiv.AbstractHDIVTestCase;
 import org.hdiv.util.HDIVUtil;
+import org.springframework.mock.web.MockHttpServletRequest;
 
 public class LinkUrlProcessorTest extends AbstractHDIVTestCase {
 
@@ -26,7 +27,6 @@ public class LinkUrlProcessorTest extends AbstractHDIVTestCase {
 
 	protected void onSetUp() throws Exception {
 		this.linkUrlProcessor = (LinkUrlProcessor) this.getApplicationContext().getBean("linkUrlProcessor");
-
 	}
 
 	public void testProcessAction() {
@@ -37,6 +37,17 @@ public class LinkUrlProcessorTest extends AbstractHDIVTestCase {
 		String result = this.linkUrlProcessor.processUrl(request, url);
 
 		assertTrue(result.startsWith("/testAction.do?_HDIV_STATE_="));
+	}
+
+	public void testProcessActionWithContextPath() {
+
+		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
+		request.setContextPath("/path");
+		String url = "/path/testAction.do";
+
+		String result = this.linkUrlProcessor.processUrl(request, url);
+
+		assertTrue(result.startsWith("/path/testAction.do?_HDIV_STATE_="));
 	}
 
 	public void testProcessActionWithAnchor() {
@@ -90,6 +101,18 @@ public class LinkUrlProcessorTest extends AbstractHDIVTestCase {
 		assertTrue(result.startsWith("/testAction.do?_HDIV_STATE_="));
 	}
 
+	public void testProcessActionRelative3() {
+
+		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
+		request.setContextPath("/path");
+
+		String url = "../testAction.do";
+
+		String result = this.linkUrlProcessor.processUrl(request, url);
+
+		assertTrue(result.equals("../testAction.do"));
+	}
+
 	public void testStripSession() {
 
 		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
@@ -98,6 +121,64 @@ public class LinkUrlProcessorTest extends AbstractHDIVTestCase {
 		String result = this.linkUrlProcessor.processUrl(request, url);
 
 		assertTrue(result.indexOf("jsessionid") < 0);
+	}
+
+	public void testProcessAbsoluteExternalUrlWithContextPath() {
+
+		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
+		request.setContextPath("/path");
+
+		String url = "http://www.google.com";
+
+		String result = this.linkUrlProcessor.processUrl(request, url);
+
+		assertEquals("http://www.google.com", result);
+	}
+
+	public void testProcessAbsoluteExternalUrl() {
+
+		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
+
+		String url = "http://www.google.com";
+
+		String result = this.linkUrlProcessor.processUrl(request, url);
+
+		assertEquals("http://www.google.com", result);
+	}
+
+	public void testProcessAbsoluteInternalUrlWithContextPath() {
+
+		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
+		request.setContextPath("/path");
+
+		String url = "http://localhost:8080/path/sample.do";
+
+		String result = this.linkUrlProcessor.processUrl(request, url);
+
+		assertTrue(result.startsWith("http://localhost:8080/path/sample.do?_HDIV_STATE_="));
+	}
+
+	public void testProcessAbsoluteInternalUrlWithContextPath2() {
+
+		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
+		request.setContextPath("/diferentPath");
+
+		String url = "http://localhost:8080/path/sample.do";
+
+		String result = this.linkUrlProcessor.processUrl(request, url);
+
+		assertTrue(result.startsWith("http://localhost:8080/path/sample.do"));
+	}
+
+	public void testProcessAbsoluteInternalUrl() {
+
+		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
+
+		String url = "http://localhost:8080/path/sample.do";
+
+		String result = this.linkUrlProcessor.processUrl(request, url);
+
+		assertTrue(result.startsWith("http://localhost:8080/path/sample.do?_HDIV_STATE_="));
 	}
 
 }

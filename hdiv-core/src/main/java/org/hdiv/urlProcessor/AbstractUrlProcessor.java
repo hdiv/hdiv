@@ -49,23 +49,6 @@ public abstract class AbstractUrlProcessor {
 	private static Log log = LogFactory.getLog(AbstractUrlProcessor.class);
 
 	/**
-	 * <p>
-	 * Valid characters in a scheme.
-	 * </p>
-	 * <p>
-	 * RFC 1738 says the following:
-	 * </p>
-	 * <blockquote> Scheme names consist of a sequence of characters. The lower case letters "a"--"z", digits, and the
-	 * characters plus ("+"), period ("."), and hyphen ("-") are allowed. For resiliency, programs interpreting URLs
-	 * should treat upper case letters as equivalent to lower case in scheme names (e.g., allow "HTTP" as well as
-	 * "http"). </blockquote>
-	 * <p>
-	 * We treat as absolute any URL that begins with such a scheme name, followed by a colon.
-	 * </p>
-	 */
-	public static final String VALID_SCHEME_CHARS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789+.-";
-
-	/**
 	 * Hdiv configuration.
 	 */
 	private HDIVConfig config;
@@ -102,16 +85,18 @@ public abstract class AbstractUrlProcessor {
 
 		}
 
-		// Detect if the url points to actual app
-		boolean internal = this.isInternalUrl(request, url);
-		urlData.setInternal(internal);
+		// Extract protocol, domain and server if exist
+		String serverUrl = this.getServerFromUrl(url);
+		if (serverUrl != null && serverUrl.length() > 0) {
+			urlData.setServer(serverUrl);
 
-		// Process absolute urls
-		if (this.isAbsoluteUrl(url)) {
-			if (url.indexOf(request.getContextPath()) != -1) {
-				url = url.substring(url.indexOf(request.getContextPath()));
-			}
+			// Remove server and port
+			url = url.replaceFirst(serverUrl, "");
 		}
+
+		// Detect if the url points to actual app
+		boolean internal = this.isInternalUrl(request, url, urlData);
+		urlData.setInternal(internal);
 
 		// Remove jsessionid
 		url = this.stripSession(url);
@@ -124,6 +109,9 @@ public abstract class AbstractUrlProcessor {
 		if (contextPathRelativeUrl.startsWith(request.getContextPath())) {
 			String urlWithoutContextPath = contextPathRelativeUrl.substring(request.getContextPath().length());
 			urlData.setUrlWithoutContextPath(urlWithoutContextPath);
+		} else {
+			// If contextPath is not present, the relative url is out of application
+			urlData.setInternal(false);
 		}
 
 		return urlData;
@@ -242,7 +230,11 @@ public abstract class AbstractUrlProcessor {
 			params = urlData.getOriginalUrlParams();
 		}
 
-		StringBuffer sb = new StringBuffer(urlData.getContextPathRelativeUrl());
+		StringBuffer sb = new StringBuffer();
+		if (urlData.getServer() != null) {
+			sb.append(urlData.getServer());
+		}
+		sb.append(urlData.getContextPathRelativeUrl());
 
 		if (params == null || params.size() == 0) {
 			return sb.toString();
@@ -341,21 +333,27 @@ public abstract class AbstractUrlProcessor {
 	 *            {@link HttpServletRequest} object
 	 * @param url
 	 *            request url
+	 * @param urlData
+	 *            url data
 	 * @return is internal?
 	 */
-	protected boolean isInternalUrl(HttpServletRequest request, String url) {
+	protected boolean isInternalUrl(HttpServletRequest request, String url, UrlData urlData) {
 
-		if (this.isAbsoluteUrl(url)) {
+		if (urlData.getServer() != null) {
 			// URL is absolute: http://...
-			String urlWithoutServer = this.removeServerFromUrl(url);
-			if (urlWithoutServer.startsWith(request.getContextPath() + "/")
-					|| urlWithoutServer.equals(request.getContextPath())) {
+
+			String serverName = request.getServerName();
+			if (!urlData.getServer().contains(serverName)) {
+				// http://www.google.com
+				return false;
+			}
+
+			if (url.startsWith(request.getContextPath() + "/") || url.equals(request.getContextPath())) {
 				// http://localhost:8080/APP/... or
 				// http://localhost:8080/APP
 				return true;
 			}
 			// http://localhost:8080/anotherApplication... or
-			// http://www.google.com
 			return false;
 
 		} else {
@@ -373,23 +371,25 @@ public abstract class AbstractUrlProcessor {
 	}
 
 	/**
-	 * Removes from url the part related with the server side in an absolute url.
+	 * Returns from url the part related with the server side in an absolute url.
 	 * 
 	 * @param url
 	 *            absolute url
-	 * @return url without server
+	 * @return url protocol, domain and port
 	 */
-	protected String removeServerFromUrl(String url) {
+	protected String getServerFromUrl(String url) {
 
-		String urlSimple = url.replaceFirst("://", "");
-		int posicion = urlSimple.indexOf("/");
-		if (posicion > 0) {
-			urlSimple = urlSimple.substring(posicion);
-		} else {
-			urlSimple = "";
+		int pos = url.indexOf("://");
+		if (pos > 0) {
+			int posicion = url.indexOf("/", pos + 3);
+			if (posicion > 0) {
+				url = url.substring(0, posicion);
+				return url;
+			} else {
+				return url;
+			}
 		}
-		return urlSimple;
-
+		return null;
 	}
 
 	/**
@@ -439,37 +439,6 @@ public abstract class AbstractUrlProcessor {
 		}
 
 		return (!contextPathRelativeUrl.startsWith("/")) && (contextPathRelativeUrl.indexOf(".") == -1);
-	}
-
-	/**
-	 * Returns <tt>true</tt> if our current URL is absolute, <tt>false</tt> otherwise.
-	 * 
-	 * @param url
-	 *            url
-	 * @return is absolute?
-	 */
-	protected boolean isAbsoluteUrl(String url) {
-		// a null URL is not absolute, by our definition
-		if (url == null) {
-			return false;
-		}
-
-		// do a fast, simple check first
-		int colonPos;
-		if ((colonPos = url.indexOf(":")) == -1) {
-			return false;
-		}
-
-		// if we DO have a colon, make sure that every character
-		// leading up to it is a valid scheme character
-		for (int i = 0; i < colonPos; i++) {
-			if (VALID_SCHEME_CHARS.indexOf(url.charAt(i)) == -1) {
-				return false;
-			}
-		}
-
-		// if so, we've got an absolute url
-		return true;
 	}
 
 	/**
