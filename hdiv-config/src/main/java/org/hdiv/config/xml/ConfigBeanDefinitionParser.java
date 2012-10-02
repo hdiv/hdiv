@@ -41,6 +41,7 @@ import org.hdiv.urlProcessor.FormUrlProcessor;
 import org.hdiv.urlProcessor.LinkUrlProcessor;
 import org.hdiv.util.EncodingUtil;
 import org.hdiv.web.servlet.support.HdivRequestDataValueProcessor;
+import org.hdiv.web.servlet.support.GrailsHdivRequestDataValueProcessor;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.RuntimeBeanReference;
 import org.springframework.beans.factory.support.RootBeanDefinition;
@@ -60,6 +61,9 @@ import org.w3c.dom.NodeList;
 public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 
 	private final boolean springMvcPresent = ClassUtils.isPresent("org.springframework.web.servlet.DispatcherServlet",
+			AnnotationDrivenBeanDefinitionParser.class.getClassLoader());
+
+	private final boolean grailsPresent = ClassUtils.isPresent("org.codehaus.groovy.grails.web.servlet.GrailsDispatcherServlet",
 			AnnotationDrivenBeanDefinitionParser.class.getClassLoader());
 
 	public BeanDefinition parse(Element element, ParserContext parserContext) {
@@ -108,7 +112,12 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 				this.createStringBean("org.hdiv.msg.MessageResources", source));
 
 		// register Spring MVC beans if we are using Spring MVC web framework
-		if (this.springMvcPresent) {
+		if (this.grailsPresent) {
+			parserContext.getRegistry().registerBeanDefinition("requestDataValueProcessor",
+					this.createGrailsRequestDataValueProcessor(element, source));
+			parserContext.getRegistry().registerBeanDefinition("multipartConfig",
+					this.createSpringMVCMultipartConfig(element, source));
+		} else if (this.springMvcPresent) {
 			parserContext.getRegistry().registerBeanDefinition("requestDataValueProcessor",
 					this.createRequestDataValueProcessor(element, source));
 			parserContext.getRegistry().registerBeanDefinition("multipartConfig",
@@ -308,6 +317,15 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		bean.getPropertyValues().add("linkUrlProcessor", new RuntimeBeanReference("linkUrlProcessor"));
 		bean.getPropertyValues().add("formUrlProcessor", new RuntimeBeanReference("formUrlProcessor"));
 		return bean;
+	}
+
+	private RootBeanDefinition createGrailsRequestDataValueProcessor(Element element, Object source) {
+		RootBeanDefinition bean = new RootBeanDefinition(GrailsHdivRequestDataValueProcessor.class);
+		bean.setSource(source);
+		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
+		bean.getPropertyValues().add("linkUrlProcessor", new RuntimeBeanReference("linkUrlProcessor"));
+		bean.getPropertyValues().add("formUrlProcessor", new RuntimeBeanReference("formUrlProcessor"));
+		return bean;	
 	}
 
 	private RootBeanDefinition createConfigBean(Element element, Object source) {
