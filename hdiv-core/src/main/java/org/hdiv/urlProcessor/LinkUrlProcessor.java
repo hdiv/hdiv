@@ -42,7 +42,7 @@ public class LinkUrlProcessor extends AbstractUrlProcessor {
 	 */
 	public String processUrl(HttpServletRequest request, String url) {
 
-		UrlData urlData = super.createUrlData(url, request);
+		UrlData urlData = super.createUrlData(url, false, request);
 		if (super.isHdivStateNecessary(urlData)) {
 			// the url needs protection
 			IDataComposer dataComposer = HDIVUtil.getDataComposer(request);

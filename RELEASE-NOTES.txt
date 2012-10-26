@@ -5,6 +5,7 @@ http://www.hdiv.org
 Release 2.1.3
 ==================================
 
+ * avoidValidationInUrlsWithoutParams only affects to link urls.
  * Absolute URLs are returned as absolute URLs in LinkUrlProcessor.
  * RequestDataValueProcessor for Grails applications.
 

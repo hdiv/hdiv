@@ -15,18 +15,8 @@
  */
 package org.hdiv.web.servlet.support;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
 
-import org.hdiv.dataComposer.IDataComposer;
-import org.hdiv.urlProcessor.FormUrlProcessor;
-import org.hdiv.urlProcessor.LinkUrlProcessor;
-import org.hdiv.util.Constants;
-import org.hdiv.util.HDIVUtil;
 import org.springframework.web.servlet.support.RequestDataValueProcessor;
 
 /**
@@ -49,13 +39,13 @@ public class GrailsHdivRequestDataValueProcessor extends HdivRequestDataValuePro
 		String urlToProcess = url;
 		Boolean modified = false;
 		String contextPath = request.getContextPath();
-		if(url.indexOf("/") == 0 && contextPath.length() > 1 && url.indexOf(contextPath) != 0) {
+		if (url.indexOf("/") == 0 && contextPath.length() > 1 && url.indexOf(contextPath) != 0) {
 			urlToProcess = contextPath + url;
 			modified = true;
 		}
-		String processedUrl = super.processUrl(request,urlToProcess);
-		if(modified) {
-			return processedUrl.substring(contextPath.length());	
+		String processedUrl = super.processUrl(request, urlToProcess);
+		if (modified) {
+			return processedUrl.substring(contextPath.length());
 		}
 		return processedUrl;
 	}

@@ -58,15 +58,17 @@ public abstract class AbstractUrlProcessor {
 	 * 
 	 * @param url
 	 *            original url
+	 * @param isFormUrl
+	 *            is form or link url?
 	 * @param request
 	 *            {@link HttpServletRequest} object
 	 * @return new instance of {@link UrlData}
 	 */
-	public UrlData createUrlData(String url, HttpServletRequest request) {
+	public UrlData createUrlData(String url, boolean isFormUrl, HttpServletRequest request) {
 
 		Assert.notNull(this.config);
 
-		UrlData urlData = new UrlData(url);
+		UrlData urlData = new UrlData(url, isFormUrl);
 
 		// Extract the anchor
 		if (url.indexOf('#') >= 0) {
@@ -317,8 +319,8 @@ public abstract class AbstractUrlProcessor {
 		}
 
 		boolean validateParamLessUrls = this.config.isValidationInUrlsWithoutParamsActivated();
-		// if url has not got parameters, we do not have to include HDIV's state
-		if (!validateParamLessUrls && !(urlData.getOriginalUrl().indexOf("?") > 0)) {
+		// if url is a link (not a form action) and has not got parameters, we do not have to include HDIV's state
+		if (!urlData.isFormUrl() && !validateParamLessUrls && !urlData.containsParams()) {
 			return false;
 		}
 

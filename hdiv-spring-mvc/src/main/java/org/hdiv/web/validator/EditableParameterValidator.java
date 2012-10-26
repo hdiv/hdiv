@@ -16,7 +16,6 @@
 package org.hdiv.web.validator;
 
 import java.util.Hashtable;
-import java.util.Iterator;
 
 import org.hdiv.util.HDIVErrorCodes;
 import org.springframework.validation.Errors;
@@ -24,8 +23,7 @@ import org.springframework.validation.Validator;
 import org.springframework.web.context.request.RequestContextHolder;
 
 /**
- * Validation to visualize the errors produced in the editable fields detected
- * by HDIV.
+ * Validation to visualize the errors produced in the editable fields detected by HDIV.
  * 
  * @author Gorka Vicente
  * @since HDIV 2.0.6
@@ -33,18 +31,17 @@ import org.springframework.web.context.request.RequestContextHolder;
 public class EditableParameterValidator implements Validator {
 
 	/**
-	 * Property that contains the error message to be shown when the value of
-	 * the editable parameter is not valid.
+	 * Property that contains the error message to be shown when the value of the editable parameter is not valid.
 	 */
 	private static final String HDIV_EDITABLE_ERROR = "hdiv.editable.error";
 
 	/**
-	 * Property that contains the error message to be shown when the value of
-	 * the editable password parameter is not valid.
+	 * Property that contains the error message to be shown when the value of the editable password parameter is not
+	 * valid.
 	 */
 	private static final String HDIV_EDITABLE_PASSWORD_ERROR = "hdiv.editable.password.error";
 
-	public boolean supports(Class arg0) {
+	public boolean supports(Class<?> arg0) {
 		return true;
 	}
 
@@ -53,25 +50,23 @@ public class EditableParameterValidator implements Validator {
 	}
 
 	/**
-	 * Obtains the errors from request detected by HDIV during the validation
-	 * process of the editable parameters.
+	 * Obtains the errors from request detected by HDIV during the validation process of the editable parameters.
 	 * 
 	 * @param formObject
 	 *            form object
 	 * @param errors
-	 *            errors detected by HDIV during the validation process of the
-	 *            editable parameters.
+	 *            errors detected by HDIV during the validation process of the editable parameters.
 	 */
+	@SuppressWarnings("unchecked")
 	public void validateEditableParameters(Object formObject, Errors errors) {
 
-		Hashtable editableParameters = (Hashtable) RequestContextHolder.getRequestAttributes().getAttribute(
-				HDIVErrorCodes.EDITABLE_PARAMETER_ERROR, 0);
+		Hashtable<String, String[]> editableParameters = (Hashtable<String, String[]>) RequestContextHolder
+				.getRequestAttributes().getAttribute(HDIVErrorCodes.EDITABLE_PARAMETER_ERROR, 0);
 		if ((editableParameters != null) && (editableParameters.size() > 0)) {
 
-			for (Iterator it = editableParameters.keySet().iterator(); it.hasNext();) {
+			for (String currentParameter : editableParameters.keySet()) {
 
-				String currentParameter = (String) it.next();
-				String[] currentUnauthorizedValues = (String[]) editableParameters.get(currentParameter);
+				String[] currentUnauthorizedValues = editableParameters.get(currentParameter);
 
 				if ((currentUnauthorizedValues.length == 1)
 						&& (currentUnauthorizedValues[0].equals(HDIV_EDITABLE_PASSWORD_ERROR))) {

@@ -22,18 +22,83 @@ import org.hdiv.dataComposer.DataComposerFactory;
 import org.hdiv.dataComposer.IDataComposer;
 import org.hdiv.util.HDIVUtil;
 
-public class FormUrlProcessorTest extends AbstractHDIVTestCase {
+public class AvoidValidationInUrlsWithoutParamsTest extends AbstractHDIVTestCase {
+
+	private LinkUrlProcessor linkUrlProcessor;
 
 	private FormUrlProcessor formUrlProcessor;
 
 	private DataComposerFactory dataComposerFactory;
 
+	/*
+	 * @see TestCase#setUp()
+	 */
 	protected void onSetUp() throws Exception {
+
+		this.linkUrlProcessor = (LinkUrlProcessor) this.getApplicationContext().getBean("linkUrlProcessor");
 		this.formUrlProcessor = (FormUrlProcessor) this.getApplicationContext().getBean("formUrlProcessor");
 		this.dataComposerFactory = (DataComposerFactory) this.getApplicationContext().getBean("dataComposerFactory");
 	}
 
+	/*
+	 * Link processing
+	 */
+
 	public void testProcessAction() {
+
+		this.getConfig().setAvoidValidationInUrlsWithoutParams(Boolean.FALSE);
+
+		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		String url = "/testAction.do";
+
+		String result = this.linkUrlProcessor.processUrl(request, url);
+
+		assertTrue(result.contains("_HDIV_STATE_"));
+	}
+
+	public void testProcessActionParams() {
+
+		this.getConfig().setAvoidValidationInUrlsWithoutParams(Boolean.FALSE);
+
+		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		String url = "/testAction.do?param=1";
+
+		String result = this.linkUrlProcessor.processUrl(request, url);
+
+		assertTrue(result.contains("_HDIV_STATE_"));
+	}
+
+	public void testProcessActionAvoid() {
+
+		this.getConfig().setAvoidValidationInUrlsWithoutParams(Boolean.TRUE);
+
+		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		String url = "/testAction.do";
+
+		String result = this.linkUrlProcessor.processUrl(request, url);
+
+		assertFalse(result.contains("_HDIV_STATE_"));
+	}
+
+	public void testProcessActionAvoidParams() {
+
+		this.getConfig().setAvoidValidationInUrlsWithoutParams(Boolean.TRUE);
+
+		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		String url = "/testAction.do?param=1";
+
+		String result = this.linkUrlProcessor.processUrl(request, url);
+
+		assertTrue(result.contains("_HDIV_STATE_"));
+	}
+
+	/*
+	 * Form processing. AvoidValidationInUrlsWithoutParams is ignored in forms
+	 */
+
+	public void testProcessFormAction() {
+
+		this.getConfig().setAvoidValidationInUrlsWithoutParams(Boolean.FALSE);
 
 		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
 		String action = "/testAction.do";
@@ -44,27 +109,22 @@ public class FormUrlProcessorTest extends AbstractHDIVTestCase {
 		assertEquals(action, result);
 	}
 
-	public void testProcessActionWithParam() {
+	public void testProcessFormParamAction() {
+
+		this.getConfig().setAvoidValidationInUrlsWithoutParams(Boolean.FALSE);
 
 		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
-		String action = "/testAction.do?params=value";
+		String action = "/testAction.do?param=1";
 
 		String result = this.formUrlProcessor.processUrl(request, action);
 
-		assertEquals("/testAction.do?params=0", result);
-	}
-
-	public void testProcessActionParamWithoutValue() {
-
-		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
-		String action = "/testAction.do?params";
-
-		String result = this.formUrlProcessor.processUrl(request, action);
-
-		assertEquals("/testAction.do?params=0", result);
+		// Confidenciality
+		assertEquals("/testAction.do?param=0", result);
 	}
 
 	public void testProcessActionComplete() {
+
+		this.getConfig().setAvoidValidationInUrlsWithoutParams(Boolean.TRUE);
 
 		IDataComposer dataComposer = this.dataComposerFactory.newInstance();
 		dataComposer.startPage();
@@ -85,4 +145,5 @@ public class FormUrlProcessorTest extends AbstractHDIVTestCase {
 		assertNotNull(requestId);
 		assertTrue(requestId.length() > 0);
 	}
+
 }

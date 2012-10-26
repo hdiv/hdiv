@@ -65,13 +65,21 @@ public class UrlData {
 	private String server;
 
 	/**
+	 * True if the url is part of a form action. False if is a link url.
+	 */
+	private boolean isFormUrl;
+
+	/**
 	 * Constructor
 	 * 
 	 * @param url
 	 *            Original url
+	 * @param isFormUrl
+	 *            is form or link url?
 	 */
-	public UrlData(String url) {
+	public UrlData(String url, boolean isFormUrl) {
 		this.originalUrl = url;
+		this.isFormUrl = isFormUrl;
 	}
 
 	/**
@@ -201,6 +209,21 @@ public class UrlData {
 	 */
 	public void setServer(String server) {
 		this.server = server;
+	}
+
+	/**
+	 * @return the isFormUrl
+	 */
+	public boolean isFormUrl() {
+		return isFormUrl;
+	}
+
+	/**
+	 * @param isFormUrl
+	 *            the isFormUrl to set
+	 */
+	public void setFormUrl(boolean isFormUrl) {
+		this.isFormUrl = isFormUrl;
 	}
 
 }

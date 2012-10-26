@@ -60,7 +60,8 @@ public abstract class AbstractHDIVTestCase extends TestCase {
 				"/org/hdiv/config/hdiv-core-applicationContext.xml",
 				"/org/hdiv/config/hdiv-config.xml", 
 				"/org/hdiv/config/hdiv-validations.xml",
-				"/org/hdiv/config/applicationContext-test.xml"
+				"/org/hdiv/config/applicationContext-test.xml",
+				"/org/hdiv/config/applicationContext-extra.xml"
 		};
 
 		if (this.applicationContext == null) {

@@ -16,7 +16,6 @@
 package org.hdiv.config.xml;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
@@ -40,8 +39,8 @@ import org.hdiv.state.StateUtil;
 import org.hdiv.urlProcessor.FormUrlProcessor;
 import org.hdiv.urlProcessor.LinkUrlProcessor;
 import org.hdiv.util.EncodingUtil;
-import org.hdiv.web.servlet.support.HdivRequestDataValueProcessor;
 import org.hdiv.web.servlet.support.GrailsHdivRequestDataValueProcessor;
+import org.hdiv.web.servlet.support.HdivRequestDataValueProcessor;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.RuntimeBeanReference;
 import org.springframework.beans.factory.support.RootBeanDefinition;
@@ -63,7 +62,8 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 	private final boolean springMvcPresent = ClassUtils.isPresent("org.springframework.web.servlet.DispatcherServlet",
 			AnnotationDrivenBeanDefinitionParser.class.getClassLoader());
 
-	private final boolean grailsPresent = ClassUtils.isPresent("org.codehaus.groovy.grails.web.servlet.GrailsDispatcherServlet",
+	private final boolean grailsPresent = ClassUtils.isPresent(
+			"org.codehaus.groovy.grails.web.servlet.GrailsDispatcherServlet",
 			AnnotationDrivenBeanDefinitionParser.class.getClassLoader());
 
 	public BeanDefinition parse(Element element, ParserContext parserContext) {
@@ -325,7 +325,7 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
 		bean.getPropertyValues().add("linkUrlProcessor", new RuntimeBeanReference("linkUrlProcessor"));
 		bean.getPropertyValues().add("formUrlProcessor", new RuntimeBeanReference("formUrlProcessor"));
-		return bean;	
+		return bean;
 	}
 
 	private RootBeanDefinition createConfigBean(Element element, Object source) {
@@ -448,7 +448,7 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 	private List convertToList(String data) {
 		String[] result = data.split(",");
 		List list = new ArrayList();
-		// clean the edges of the item - spaces/returns/tabs etc may be used for readability in the configs 
+		// clean the edges of the item - spaces/returns/tabs etc may be used for readability in the configs
 		for (int i = 0; i < result.length; i++) {
 			// trims leading and trailing whitespace
 			list.add(StringUtils.trimWhitespace(result[i]));
