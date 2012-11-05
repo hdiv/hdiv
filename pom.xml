@@ -83,6 +83,7 @@
 			<plugin>
 				<groupId>com.mycila.maven-license-plugin</groupId>
 				<artifactId>maven-license-plugin</artifactId>
+				<version>1.10.b1</version>
 				<configuration>
 					<header>${basedir}/../LICENSE_HEADER</header>
 					<encoding>UTF-8</encoding>
