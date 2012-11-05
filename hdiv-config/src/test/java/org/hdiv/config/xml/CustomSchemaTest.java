@@ -30,4 +30,18 @@ public class CustomSchemaTest extends TestCase {
 
 	}
 
+	public void testStartPages() {
+		ApplicationContext context = new ClassPathXmlApplicationContext(
+				"org/hdiv/config/xml/hdiv-config-test-schema.xml");
+
+		HDIVConfig hdivConfig = (HDIVConfig) context.getBean("config");
+		assertNotNull(hdivConfig);
+
+		boolean result = hdivConfig.isStartPage("/login.html", "get");
+		assertTrue(result);
+
+		result = hdivConfig.isStartPage("/login.html", "post");
+		assertFalse(result);
+	}
+
 }

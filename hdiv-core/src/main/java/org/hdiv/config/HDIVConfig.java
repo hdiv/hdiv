@@ -175,20 +175,41 @@ public class HDIVConfig {
 	 * 
 	 * @param target
 	 *            target name
+	 * @param isFormUrl
+	 *            true if is a Form Url
 	 * @return True if <code>target</code> is an init action. False otherwise.
 	 */
-	public boolean isStartPage(String target) {
+	public boolean isStartPage(String target, boolean isFormUrl) {
+		String method = "GET";
+		if (isFormUrl) {
+			method = "POST";
+		}
+		return this.isStartPage(target, method);
+	}
 
-		if (this.matchedPages.containsKey(target)) {
+	/**
+	 * Checks if <code>target</code> is an init action, in which case it will not be treated by HDIV.
+	 * 
+	 * @param target
+	 *            target name
+	 * @param method
+	 *            request method (get,post...)
+	 * @return True if <code>target</code> is an init action. False otherwise.
+	 */
+	public boolean isStartPage(String target, String method) {
+
+		String key = target + "_" + method;
+
+		if (this.matchedPages.containsKey(key)) {
 			return true;
 		}
 
-		String value = this.checkValue(target, this.startPages);
+		String value = this.checkStartPageValue(target, method, this.startPages);
 		if (value == null) {
 			return false;
 		}
 
-		this.matchedPages.put(target, value);
+		this.matchedPages.put(key, value);
 		return true;
 	}
 
@@ -305,19 +326,47 @@ public class HDIVConfig {
 	 */
 	public String checkValue(String value, Map startValues) {
 
-		String key = null;
-		Pattern p = null;
-		Matcher m = null;
-
 		for (Iterator iter = startValues.keySet().iterator(); iter.hasNext();) {
 
-			key = (String) iter.next();
-			p = (Pattern) startValues.get(key);
+			String key = (String) iter.next();
+			Pattern p = (Pattern) startValues.get(key);
 
-			m = p.matcher(value);
+			Matcher m = p.matcher(value);
 
 			if (m.matches()) {
 				return key;
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Checks if <code>value</code> is an init action or parameter, in which case it will not be treated by HDIV.
+	 * 
+	 * @param value
+	 *            target or parameter name
+	 * @param method
+	 *            request method (get,post)
+	 * @param startValues
+	 *            Map with start values
+	 * @return True if <code>value</code> is an init action or parameter. False otherwise.
+	 * @since HDIV 1.1.1
+	 */
+	public String checkStartPageValue(String value, String method, Map startValues) {
+
+		for (Iterator iter = startValues.keySet().iterator(); iter.hasNext();) {
+
+			String key = (String) iter.next();
+			StartPage startPage = (StartPage) startValues.get(key);
+
+			Matcher m = startPage.getCompiledPattern().matcher(value);
+
+			if (m.matches()) {
+				if (startPage.isAnyMethod()) {
+					return key;
+				} else if (startPage.getMethod().equalsIgnoreCase(method)) {
+					return key;
+				}
 			}
 		}
 		return null;
@@ -351,7 +400,7 @@ public class HDIVConfig {
 			errorPage = "/" + errorPage;
 		}
 		this.errorPage = errorPage;
-		this.startPages.put(errorPage, Pattern.compile(errorPage));
+		this.startPages.put(errorPage, new StartPage(null, errorPage));
 	}
 
 	public Boolean getConfidentiality() {
@@ -378,11 +427,19 @@ public class HDIVConfig {
 	 */
 	public void setUserStartPages(List userStartPages) {
 
-		String currentPattern;
 		for (int i = 0; i < userStartPages.size(); i++) {
 
-			currentPattern = (String) userStartPages.get(i);
-			this.startPages.put(currentPattern, Pattern.compile(currentPattern));
+			StartPage startPage;
+
+			Object o = userStartPages.get(i);
+			if (o instanceof String) {
+				String currentPattern = (String) o;
+				startPage = new StartPage(null, currentPattern);
+			} else {
+				startPage = (StartPage) o;
+			}
+
+			this.startPages.put(startPage.getPattern(), startPage);
 		}
 	}
 
@@ -394,10 +451,9 @@ public class HDIVConfig {
 	 */
 	public void setUserStartParameters(List userStartParameters) {
 
-		String currentPattern;
 		for (int i = 0; i < userStartParameters.size(); i++) {
 
-			currentPattern = (String) userStartParameters.get(i);
+			String currentPattern = (String) userStartParameters.get(i);
 			this.startParameters.put(currentPattern, Pattern.compile(currentPattern));
 		}
 	}

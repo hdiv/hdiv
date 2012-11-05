@@ -149,7 +149,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 			}
 		}
 
-		if (this.hdivConfig.isStartPage(targetWithoutContextPath)) {
+		if (this.hdivConfig.isStartPage(targetWithoutContextPath, request.getMethod())) {
 			return (this.validateStartPageParameters(request, target));
 		}
 

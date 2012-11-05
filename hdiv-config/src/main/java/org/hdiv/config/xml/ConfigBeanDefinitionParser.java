@@ -24,6 +24,7 @@ import org.hdiv.application.ApplicationHDIV;
 import org.hdiv.cipher.CipherHTTP;
 import org.hdiv.cipher.KeyFactory;
 import org.hdiv.config.HDIVConfig;
+import org.hdiv.config.StartPage;
 import org.hdiv.config.multipart.SpringMVCMultipartConfig;
 import org.hdiv.dataComposer.DataComposerFactory;
 import org.hdiv.dataValidator.DataValidatorFactory;
@@ -58,6 +59,8 @@ import org.w3c.dom.NodeList;
  * BeanDefinitionParser for <hdiv:config> element.
  */
 public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
+
+	private List startPages = new ArrayList(); // List of StartPage objetct
 
 	private final boolean springMvcPresent = ClassUtils.isPresent("org.springframework.web.servlet.DispatcherServlet",
 			AnnotationDrivenBeanDefinitionParser.class.getClassLoader());
@@ -414,8 +417,23 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 	}
 
 	private void processStartPages(Node node, RootBeanDefinition bean) {
+
+		String method = null;
+		if (node.getNodeType() == Node.ELEMENT_NODE) {
+			Element element = (Element) node;
+			method = element.getAttribute("method");
+		}
+
 		String value = node.getTextContent();
-		bean.getPropertyValues().add("userStartPages", this.convertToList(value));
+
+		List patterns = this.convertToList(value);
+		for (int i = 0; i < patterns.size(); i++) {
+			String pattern = (String) patterns.get(i);
+			StartPage startPage = new StartPage(method, pattern);
+			this.startPages.add(startPage);
+		}
+
+		bean.getPropertyValues().add("userStartPages", this.startPages);
 	}
 
 	private void processStartParameters(Node node, RootBeanDefinition bean) {

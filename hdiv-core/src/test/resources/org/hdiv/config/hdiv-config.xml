@@ -14,9 +14,26 @@
 
 		<property name="userStartPages">
 			<list>
-				<value>/</value>
-				<value>/index.jsp</value>
-				<value>/testing.do</value>
+			    <bean class="org.hdiv.config.StartPage">
+			        <constructor-arg index="0" value=""/>
+			        <constructor-arg index="1" value="/"/>
+			    </bean>
+				<bean class="org.hdiv.config.StartPage">
+			        <constructor-arg index="0" value=""/>
+			        <constructor-arg index="1" value="/index.jsp"/>
+			    </bean>
+				<bean class="org.hdiv.config.StartPage">
+			        <constructor-arg index="0" value=""/>
+			        <constructor-arg index="1" value="/testing.do"/>
+			    </bean>
+				<bean class="org.hdiv.config.StartPage">
+			        <constructor-arg index="0" value="get"/>
+			        <constructor-arg index="1" value="/onlyget.do"/>
+			    </bean>
+			    <bean class="org.hdiv.config.StartPage">
+			        <constructor-arg index="0" value="post"/>
+			        <constructor-arg index="1" value="/onlypost.do"/>
+			    </bean>
 			</list>
 		</property>
 

@@ -171,13 +171,13 @@ public abstract class AbstractUrlProcessor {
 	protected boolean isStartPage(UrlData urlData) {
 
 		// If this is a start page, don't compose
-		if (this.config.isStartPage(urlData.getContextPathRelativeUrl())) {
+		if (this.config.isStartPage(urlData.getContextPathRelativeUrl(), urlData.isFormUrl())) {
 			return true;
 		}
 
 		// If the url contains the context path and is a start page, don't
 		// compose
-		if (this.config.isStartPage(urlData.getUrlWithoutContextPath())) {
+		if (this.config.isStartPage(urlData.getUrlWithoutContextPath(), urlData.isFormUrl())) {
 			return true;
 		}
 

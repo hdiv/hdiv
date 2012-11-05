@@ -2,6 +2,11 @@ HDIV CHANGELOG
 ==============
 http://www.hdiv.org
 
+Release 2.1.4
+==================================
+
+ * Use request method to define StartPages (https://github.com/hdiv/hdiv/issues/5).
+
 Release 2.1.3
 ==================================
 

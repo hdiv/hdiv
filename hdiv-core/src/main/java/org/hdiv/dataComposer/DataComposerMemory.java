@@ -237,7 +237,7 @@ public class DataComposerMemory extends AbstractDataComposer {
 		IState state = (IState) this.getStatesStack().peek();
 		String action = state.getAction();
 		if (action != null) {
-			if (this.hdivConfig.isStartPage(action)) {
+			if (this.hdivConfig.isStartPage(action, isActionParam)) {
 				return value;
 			}
 		}

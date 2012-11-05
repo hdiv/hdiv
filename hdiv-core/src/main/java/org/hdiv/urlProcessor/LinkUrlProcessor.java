@@ -55,7 +55,7 @@ public class LinkUrlProcessor extends AbstractUrlProcessor {
 					String key = (String) it.next();
 					String value = (String) params.get(key);
 
-					String composedParam = dataComposer.compose(key, value, false, true, Constants.ENCODING_UTF_8);
+					String composedParam = dataComposer.compose(key, value, false, false, Constants.ENCODING_UTF_8);
 
 					params.put(key, composedParam);
 				}

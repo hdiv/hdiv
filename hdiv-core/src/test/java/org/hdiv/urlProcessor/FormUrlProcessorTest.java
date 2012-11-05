@@ -85,4 +85,21 @@ public class FormUrlProcessorTest extends AbstractHDIVTestCase {
 		assertNotNull(requestId);
 		assertTrue(requestId.length() > 0);
 	}
+
+	public void testProcessActionStartPage() {
+
+		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+
+		String action = "/testing.do?params=value";// is a startPage
+		String result = this.formUrlProcessor.processUrl(request, action);
+		assertEquals(action, result);
+
+		action = "/onlyget.do?params=value"; // is a startPage only in Get requests
+		result = this.formUrlProcessor.processUrl(request, action);
+		assertEquals("/onlyget.do?params=0", result);
+
+		action = "/onlypost.do?params=value"; // is a startPage only in POST requests
+		result = this.formUrlProcessor.processUrl(request, action);
+		assertEquals(action, result);
+	}
 }
