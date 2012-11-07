@@ -18,8 +18,10 @@ package org.hdiv.web.validator;
 import java.util.Hashtable;
 
 import org.hdiv.util.HDIVErrorCodes;
+import org.springframework.util.ClassUtils;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
+import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.context.request.RequestContextHolder;
 
 /**
@@ -30,6 +32,14 @@ import org.springframework.web.context.request.RequestContextHolder;
  */
 public class EditableParameterValidator implements Validator {
 
+	private static final boolean jsr303Present = ClassUtils.isPresent(
+			"javax.validation.Validator", EditableParameterValidator.class.getClassLoader());
+	
+	// FIXME : injected via Spring IoC !! I try @Autowired but this not work because the instance is 
+	// not yet ready at yhis step
+	// So i instanciate it manually to demonstrate the expected behaviour 
+	private LocalValidatorFactoryBean jsr303SpringValidatorWrapper = new LocalValidatorFactoryBean();
+	
 	/**
 	 * Property that contains the error message to be shown when the value of the editable parameter is not valid.
 	 */
@@ -79,6 +89,10 @@ public class EditableParameterValidator implements Validator {
 							printedValue + " has not allowed characters");
 				}
 			}
+		}
+		// If XSS validation OK, I delegate to JSR303 validation
+		if(!errors.hasErrors() && jsr303Present){
+			jsr303SpringValidatorWrapper.validate(formObject, errors);
 		}
 	}
 
