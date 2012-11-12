@@ -17,6 +17,7 @@ package org.hdiv.web.validator;
 
 import java.util.Hashtable;
 
+import org.hdiv.util.Constants;
 import org.hdiv.util.HDIVErrorCodes;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
@@ -26,20 +27,10 @@ import org.springframework.web.context.request.RequestContextHolder;
  * Validation to visualize the errors produced in the editable fields detected by HDIV.
  * 
  * @author Gorka Vicente
+ * @author Gotzon Illarramendi
  * @since HDIV 2.0.6
  */
 public class EditableParameterValidator implements Validator {
-
-	/**
-	 * Property that contains the error message to be shown when the value of the editable parameter is not valid.
-	 */
-	private static final String HDIV_EDITABLE_ERROR = "hdiv.editable.error";
-
-	/**
-	 * Property that contains the error message to be shown when the value of the editable password parameter is not
-	 * valid.
-	 */
-	private static final String HDIV_EDITABLE_PASSWORD_ERROR = "hdiv.editable.password.error";
 
 	public boolean supports(Class<?> arg0) {
 		return true;
@@ -62,21 +53,21 @@ public class EditableParameterValidator implements Validator {
 
 		Hashtable<String, String[]> editableParameters = (Hashtable<String, String[]>) RequestContextHolder
 				.getRequestAttributes().getAttribute(HDIVErrorCodes.EDITABLE_PARAMETER_ERROR, 0);
-		if ((editableParameters != null) && (editableParameters.size() > 0)) {
+		if (editableParameters != null && editableParameters.size() > 0) {
 
 			for (String currentParameter : editableParameters.keySet()) {
 
 				String[] currentUnauthorizedValues = editableParameters.get(currentParameter);
 
 				if ((currentUnauthorizedValues.length == 1)
-						&& (currentUnauthorizedValues[0].equals(HDIV_EDITABLE_PASSWORD_ERROR))) {
+						&& (currentUnauthorizedValues[0].equals(Constants.HDIV_EDITABLE_PASSWORD_ERROR_KEY))) {
 
-					errors.rejectValue(currentParameter, HDIV_EDITABLE_PASSWORD_ERROR);
+					errors.rejectValue(currentParameter, Constants.HDIV_EDITABLE_PASSWORD_ERROR_KEY);
 
 				} else {
 					String printedValue = this.createMessageError(currentUnauthorizedValues);
-					errors.rejectValue(currentParameter, HDIV_EDITABLE_ERROR, new String[] { printedValue },
-							printedValue + " has not allowed characters");
+					errors.rejectValue(currentParameter, Constants.HDIV_EDITABLE_ERROR_KEY,
+							new String[] { printedValue }, printedValue + " has not allowed characters");
 				}
 			}
 		}
@@ -95,15 +86,17 @@ public class EditableParameterValidator implements Validator {
 
 		for (int i = 0; i < values.length; i++) {
 
-			if (i > 0)
+			if (i > 0) {
 				printedValue.append(", ");
-			if (values[i].length() > 20)
+			}
+			if (values[i].length() > 20) {
 				printedValue.append(values[i].substring(0, 20) + "...");
-			else
+			} else {
 				printedValue.append(values[i]);
-
-			if (printedValue.length() > 20)
+			}
+			if (printedValue.length() > 20) {
 				break;
+			}
 		}
 		return printedValue.toString();
 	}

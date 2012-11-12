@@ -20,6 +20,7 @@ import java.util.regex.Pattern;
 /**
  * Contains the information of a start page.
  * 
+ * @since 2.1.4
  * @author Gotzon Illarramendi
  */
 public class StartPage {
