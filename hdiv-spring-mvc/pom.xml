@@ -11,6 +11,11 @@
 	<description>Java Web Application Security Framework</description>
 	<modelVersion>4.0.0</modelVersion>
 	<url>http://www.hdiv.org</url>
+
+	<properties>
+		<org.grails.version>2.2.0.RC2</org.grails.version>
+	</properties>
+
 	<build>
 		<plugins>
 			<plugin>
@@ -46,6 +51,24 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-webmvc</artifactId>
 			<version>${org.springframework.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.validation</groupId>
+			<artifactId>validation-api</artifactId>
+			<version>1.0.0.GA</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.grails</groupId>
+			<artifactId>grails-core</artifactId>
+			<version>${org.grails.version}</version>
+			<scope>compile</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>*</groupId>
+					<artifactId>*</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>

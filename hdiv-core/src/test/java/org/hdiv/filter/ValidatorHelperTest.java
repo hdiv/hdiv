@@ -15,9 +15,12 @@
  */
 package org.hdiv.filter;
 
+import java.util.Hashtable;
+
 import org.hdiv.AbstractHDIVTestCase;
 import org.hdiv.dataComposer.DataComposerFactory;
 import org.hdiv.dataComposer.IDataComposer;
+import org.hdiv.util.HDIVErrorCodes;
 import org.hdiv.util.HDIVUtil;
 import org.springframework.mock.web.MockHttpServletRequest;
 
@@ -345,4 +348,28 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 		}
 	}
 
+	public void testEditableParameterValidation() {
+
+		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil
+				.getHttpServletRequest();
+
+		this.dataComposer.beginRequest(this.targetName);
+		this.dataComposer.compose("paramName", "", true, "text");
+
+		String pageState = this.dataComposer.endRequest();
+		this.dataComposer.endPage();
+
+		request.addParameter(hdivParameter, pageState);
+		request.addParameter("paramName", "<script>storeCookie()</script>");
+
+		RequestWrapper requestWrapper = new RequestWrapper(request);
+		boolean result = helper.validate(requestWrapper);
+		assertTrue(result);
+
+		// Editable errors in request?
+		Hashtable parameters = (Hashtable) requestWrapper
+				.getAttribute(HDIVErrorCodes.EDITABLE_PARAMETER_ERROR);
+		assertEquals(1, parameters.size());
+
+	}
 }

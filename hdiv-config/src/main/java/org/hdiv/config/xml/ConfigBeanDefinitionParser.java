@@ -47,7 +47,6 @@ import org.springframework.beans.factory.config.RuntimeBeanReference;
 import org.springframework.beans.factory.support.RootBeanDefinition;
 import org.springframework.beans.factory.xml.BeanDefinitionParser;
 import org.springframework.beans.factory.xml.ParserContext;
-import org.springframework.scheduling.config.AnnotationDrivenBeanDefinitionParser;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.StringUtils;
 import org.w3c.dom.Element;
@@ -60,14 +59,17 @@ import org.w3c.dom.NodeList;
  */
 public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 
-	private List startPages = new ArrayList(); // List of StartPage objetct
+	/**
+	 * List of StartPage objects
+	 */
+	private List startPages = new ArrayList();
 
 	private final boolean springMvcPresent = ClassUtils.isPresent("org.springframework.web.servlet.DispatcherServlet",
-			AnnotationDrivenBeanDefinitionParser.class.getClassLoader());
+			ConfigBeanDefinitionParser.class.getClassLoader());
 
 	private final boolean grailsPresent = ClassUtils.isPresent(
 			"org.codehaus.groovy.grails.web.servlet.GrailsDispatcherServlet",
-			AnnotationDrivenBeanDefinitionParser.class.getClassLoader());
+			ConfigBeanDefinitionParser.class.getClassLoader());
 
 	public BeanDefinition parse(Element element, ParserContext parserContext) {
 

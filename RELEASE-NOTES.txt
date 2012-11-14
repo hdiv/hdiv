@@ -6,6 +6,8 @@ Release 2.1.4
 ==================================
 
  * Use request method to define StartPages (https://github.com/hdiv/hdiv/issues/5).
+ * Editable Validation and JSR303 validations in Spring MVC (https://github.com/hdiv/hdiv/issues/10)
+ * Editable Validation support in Grails
 
 Release 2.1.3
 ==================================
