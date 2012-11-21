@@ -71,6 +71,8 @@
 		<property name="strategy" value="memory"/>
 
 		<property name="randomName" value="false"/>
+		
+		<property name="showErrorPageOnEditableValidation" value="false"/>
 	</bean>
 
 </beans>

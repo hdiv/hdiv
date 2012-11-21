@@ -1,5 +1,5 @@
 /*
- * Copyright 2004-2005 The Apache Software Foundation.
+ * Copyright 2004-2012 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,6 +28,7 @@ import org.springframework.mock.web.MockHttpServletRequest;
  * Unit tests for the <code>org.hdiv.filter.ValidatorHelper</code> class.
  * 
  * @author Gorka Vicente
+ * @author Gotzon Illarramendi
  */
 public class ValidatorHelperTest extends AbstractHDIVTestCase {
 
@@ -350,8 +351,7 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 
 	public void testEditableParameterValidation() {
 
-		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil
-				.getHttpServletRequest();
+		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
 
 		this.dataComposer.beginRequest(this.targetName);
 		this.dataComposer.compose("paramName", "", true, "text");
@@ -367,9 +367,29 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 		assertTrue(result);
 
 		// Editable errors in request?
-		Hashtable parameters = (Hashtable) requestWrapper
-				.getAttribute(HDIVErrorCodes.EDITABLE_PARAMETER_ERROR);
+		Hashtable parameters = (Hashtable) requestWrapper.getAttribute(HDIVErrorCodes.EDITABLE_PARAMETER_ERROR);
 		assertEquals(1, parameters.size());
+
+	}
+
+	public void testEditableParameterValidationRedirect() {
+
+		getConfig().setShowErrorPageOnEditableValidation(true);
+
+		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
+
+		this.dataComposer.beginRequest(this.targetName);
+		this.dataComposer.compose("paramName", "", true, "text");
+
+		String pageState = this.dataComposer.endRequest();
+		this.dataComposer.endPage();
+
+		request.addParameter(hdivParameter, pageState);
+		request.addParameter("paramName", "<script>storeCookie()</script>");
+
+		RequestWrapper requestWrapper = new RequestWrapper(request);
+		boolean result = helper.validate(requestWrapper);
+		assertFalse(result);
 
 	}
 }

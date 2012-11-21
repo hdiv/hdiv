@@ -241,6 +241,14 @@
 					]]></xsd:documentation>
 				</xsd:annotation>
 			</xsd:attribute>
+			<xsd:attribute name="showErrorPageOnEditableValidation" type="xsd:boolean"
+				default="false">
+				<xsd:annotation>
+					<xsd:documentation><![CDATA[
+	Show error page on Editable Validation errors.
+					]]></xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
 		</xsd:complexType>
 	</xsd:element>
 

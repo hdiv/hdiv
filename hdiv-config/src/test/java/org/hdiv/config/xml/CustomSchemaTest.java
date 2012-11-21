@@ -23,6 +23,7 @@ public class CustomSchemaTest extends TestCase {
 		assertNotNull(hdivConfig);
 		System.out.println(hdivConfig.toString());
 		System.out.println("-----------------------");
+		assertTrue(hdivConfig.isShowErrorPageOnEditableValidation());
 
 		HDIVValidations validations = (HDIVValidations) context.getBean("editableParametersValidations");
 		assertNotNull(validations);

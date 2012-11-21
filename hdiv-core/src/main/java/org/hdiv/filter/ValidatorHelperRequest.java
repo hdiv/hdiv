@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -235,9 +236,8 @@ public class ValidatorHelperRequest implements IValidationHelper {
 		}
 
 		if (unauthorizedEditableParameters.size() > 0) {
-			if (!this.hdivConfig.isDebugMode()) {
-				request.setAttribute(HDIVErrorCodes.EDITABLE_PARAMETER_ERROR, unauthorizedEditableParameters);
-			}
+
+			return this.processValidateParameterErrors(request, unauthorizedEditableParameters);
 		}
 
 		return true;
@@ -312,9 +312,35 @@ public class ValidatorHelperRequest implements IValidationHelper {
 			}
 
 			if (unauthorizedEditableParameters.size() > 0) {
-				if (!this.hdivConfig.isDebugMode()) {
-					request.setAttribute(HDIVErrorCodes.EDITABLE_PARAMETER_ERROR, unauthorizedEditableParameters);
-				}
+
+				return this.processValidateParameterErrors(request, unauthorizedEditableParameters);
+			}
+		}
+		return true;
+	}
+
+	/**
+	 * Called if there are editable validation errors. Process these errors.
+	 * 
+	 * @param request
+	 *            HttpServletRequest instance
+	 * @param unauthorizedEditableParameters
+	 *            Request parameters with errors
+	 * @return continue with the request?
+	 * @since 2.1.4
+	 */
+	protected boolean processValidateParameterErrors(HttpServletRequest request, Map unauthorizedEditableParameters) {
+
+		if (!this.hdivConfig.isDebugMode()) {
+			// Put the errors on request to be accessible from the Web framework
+			request.setAttribute(HDIVErrorCodes.EDITABLE_PARAMETER_ERROR, unauthorizedEditableParameters);
+
+			if (this.hdivConfig.isShowErrorPageOnEditableValidation()) {
+				// Redirect to error page
+				// Put errors in session to be accessible from error page
+				request.getSession().setAttribute(HDIVErrorCodes.EDITABLE_PARAMETER_ERROR,
+						unauthorizedEditableParameters);
+				return false;
 			}
 		}
 		return true;

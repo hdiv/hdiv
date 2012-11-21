@@ -349,6 +349,7 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		String protectedExtensions = element.getAttribute("protectedExtensions");
 		String excludedExtensions = element.getAttribute("excludedExtensions");
 		String debugMode = element.getAttribute("debugMode");
+		String showErrorPageOnEditableValidation = element.getAttribute("showErrorPageOnEditableValidation");
 
 		if (StringUtils.hasText(confidentiality)) {
 			bean.getPropertyValues().add("confidentiality", confidentiality);
@@ -388,6 +389,10 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 
 		if (StringUtils.hasText(debugMode)) {
 			bean.getPropertyValues().add("debugMode", debugMode);
+		}
+
+		if (StringUtils.hasText(showErrorPageOnEditableValidation)) {
+			bean.getPropertyValues().add("showErrorPageOnEditableValidation", showErrorPageOnEditableValidation);
 		}
 
 		bean.getPropertyValues().add("validations", new RuntimeBeanReference("editableParametersValidations"));

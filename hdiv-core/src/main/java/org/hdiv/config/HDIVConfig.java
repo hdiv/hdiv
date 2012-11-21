@@ -141,6 +141,13 @@ public class HDIVConfig {
 	private boolean debugMode = false;
 
 	/**
+	 * Show error page on request with editable validation errors
+	 * 
+	 * @since 2.1.4
+	 */
+	private boolean showErrorPageOnEditableValidation;
+
+	/**
 	 * @param strategy
 	 *            the strategy to set
 	 */
@@ -655,6 +662,21 @@ public class HDIVConfig {
 	 */
 	public void setDebugMode(boolean debugMode) {
 		this.debugMode = debugMode;
+	}
+
+	/**
+	 * @return the showErrorPageOnEditableValidation
+	 */
+	public boolean isShowErrorPageOnEditableValidation() {
+		return showErrorPageOnEditableValidation;
+	}
+
+	/**
+	 * @param showErrorPageOnEditableValidation
+	 *            the showErrorPageOnEditableValidation to set
+	 */
+	public void setShowErrorPageOnEditableValidation(boolean showErrorPageOnEditableValidation) {
+		this.showErrorPageOnEditableValidation = showErrorPageOnEditableValidation;
 	}
 
 	public String toString() {
