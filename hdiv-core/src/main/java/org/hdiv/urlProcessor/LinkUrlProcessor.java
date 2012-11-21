@@ -41,6 +41,22 @@ public class LinkUrlProcessor extends AbstractUrlProcessor {
 	 * @return processed url
 	 */
 	public String processUrl(HttpServletRequest request, String url) {
+		// Default encoding UTF-8
+		return this.processUrl(request, url, Constants.ENCODING_UTF_8);
+	}
+
+	/**
+	 * Process the url to add hdiv state if it is necessary.
+	 * 
+	 * @param request
+	 *            {@link HttpServletRequest} object
+	 * @param url
+	 *            url to process
+	 * @param encoding
+	 *            char encoding
+	 * @return processed url
+	 */
+	public String processUrl(HttpServletRequest request, String url, String encoding) {
 
 		UrlData urlData = super.createUrlData(url, false, request);
 		if (super.isHdivStateNecessary(urlData)) {
@@ -55,7 +71,7 @@ public class LinkUrlProcessor extends AbstractUrlProcessor {
 					String key = (String) it.next();
 					String value = (String) params.get(key);
 
-					String composedParam = dataComposer.compose(key, value, false, false, Constants.ENCODING_UTF_8);
+					String composedParam = dataComposer.compose(key, value, false, false, encoding);
 
 					params.put(key, composedParam);
 				}

@@ -153,10 +153,10 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		RootBeanDefinition bean = new RootBeanDefinition(KeyFactory.class);
 		bean.setSource(source);
 		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
-		bean.getPropertyValues().add("algorithm", "AES");
-		bean.getPropertyValues().add("keySize", "128");
-		bean.getPropertyValues().add("prngAlgorithm", "SHA1PRNG");
-		bean.getPropertyValues().add("provider", "SUN");
+		bean.getPropertyValues().addPropertyValue("algorithm", "AES");
+		bean.getPropertyValues().addPropertyValue("keySize", "128");
+		bean.getPropertyValues().addPropertyValue("prngAlgorithm", "SHA1PRNG");
+		bean.getPropertyValues().addPropertyValue("provider", "SUN");
 		return bean;
 	}
 
@@ -175,7 +175,7 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		RootBeanDefinition bean = new RootBeanDefinition(Logger.class);
 		bean.setSource(source);
 		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
-		bean.getPropertyValues().add("userData", new RuntimeBeanReference(userData));
+		bean.getPropertyValues().addPropertyValue("userData", new RuntimeBeanReference(userData));
 		return bean;
 	}
 
@@ -188,7 +188,7 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 
 		String maxSize = element.getAttribute("maxPagesPerSession");
 		if (StringUtils.hasText(maxSize)) {
-			bean.getPropertyValues().add("maxSize", maxSize);
+			bean.getPropertyValues().addPropertyValue("maxSize", maxSize);
 		}
 		return bean;
 	}
@@ -198,7 +198,7 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		bean.setSource(source);
 		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
 		bean.setInitMethodName("init");
-		bean.getPropertyValues().add("session", new RuntimeBeanReference("sessionHDIV"));
+		bean.getPropertyValues().addPropertyValue("session", new RuntimeBeanReference("sessionHDIV"));
 		return bean;
 	}
 
@@ -207,10 +207,11 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		bean.setSource(source);
 		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
 		bean.setInitMethodName("init");
-		bean.getPropertyValues().add("cipherName", "cipher");
-		bean.getPropertyValues().add("pageIdGeneratorName", new RuntimeBeanReference("pageIdGeneratorName"));
-		bean.getPropertyValues().add("cacheName", new RuntimeBeanReference("cacheName"));
-		bean.getPropertyValues().add("keyName", new RuntimeBeanReference("keyName"));
+		bean.getPropertyValues().addPropertyValue("cipherName", "cipher");
+		bean.getPropertyValues().addPropertyValue("pageIdGeneratorName",
+				new RuntimeBeanReference("pageIdGeneratorName"));
+		bean.getPropertyValues().addPropertyValue("cacheName", new RuntimeBeanReference("cacheName"));
+		bean.getPropertyValues().addPropertyValue("keyName", new RuntimeBeanReference("keyName"));
 		return bean;
 	}
 
@@ -226,7 +227,7 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		bean.setSource(source);
 		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
 		bean.setInitMethodName("init");
-		bean.getPropertyValues().add("transformation", "AES/CBC/PKCS5Padding");
+		bean.getPropertyValues().addPropertyValue("transformation", "AES/CBC/PKCS5Padding");
 		return bean;
 	}
 
@@ -242,8 +243,8 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		bean.setSource(source);
 		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
 		bean.setInitMethodName("init");
-		bean.getPropertyValues().add("encodingUtil", new RuntimeBeanReference("encoding"));
-		bean.getPropertyValues().add("config", new RuntimeBeanReference("config"));
+		bean.getPropertyValues().addPropertyValue("encodingUtil", new RuntimeBeanReference("encoding"));
+		bean.getPropertyValues().addPropertyValue("config", new RuntimeBeanReference("config"));
 		return bean;
 	}
 
@@ -251,7 +252,7 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		RootBeanDefinition bean = new RootBeanDefinition(DataValidatorFactory.class);
 		bean.setSource(source);
 		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
-		bean.getPropertyValues().add("hdivConfig", new RuntimeBeanReference("config"));
+		bean.getPropertyValues().addPropertyValue("hdivConfig", new RuntimeBeanReference("config"));
 		return bean;
 	}
 
@@ -259,11 +260,11 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		RootBeanDefinition bean = new RootBeanDefinition(DataComposerFactory.class);
 		bean.setSource(source);
 		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
-		bean.getPropertyValues().add("hdivConfig", new RuntimeBeanReference("config"));
-		bean.getPropertyValues().add("session", new RuntimeBeanReference("sessionHDIV"));
-		bean.getPropertyValues().add("encodingUtil", new RuntimeBeanReference("encoding"));
-		bean.getPropertyValues().add("uidGenerator", new RuntimeBeanReference("uidGenerator"));
-		bean.getPropertyValues().add("allowedLength", "4000");
+		bean.getPropertyValues().addPropertyValue("hdivConfig", new RuntimeBeanReference("config"));
+		bean.getPropertyValues().addPropertyValue("session", new RuntimeBeanReference("sessionHDIV"));
+		bean.getPropertyValues().addPropertyValue("encodingUtil", new RuntimeBeanReference("encoding"));
+		bean.getPropertyValues().addPropertyValue("uidGenerator", new RuntimeBeanReference("uidGenerator"));
+		bean.getPropertyValues().addPropertyValue("allowedLength", "4000");
 
 		return bean;
 	}
@@ -274,11 +275,12 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		bean.setSource(source);
 		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
 		bean.setInitMethodName("init");
-		bean.getPropertyValues().add("logger", new RuntimeBeanReference("logger"));
-		bean.getPropertyValues().add("stateUtil", new RuntimeBeanReference("stateUtil"));
-		bean.getPropertyValues().add("hdivConfig", new RuntimeBeanReference("config"));
-		bean.getPropertyValues().add("session", new RuntimeBeanReference("sessionHDIV"));
-		bean.getPropertyValues().add("dataValidatorFactory", new RuntimeBeanReference("dataValidatorFactory"));
+		bean.getPropertyValues().addPropertyValue("logger", new RuntimeBeanReference("logger"));
+		bean.getPropertyValues().addPropertyValue("stateUtil", new RuntimeBeanReference("stateUtil"));
+		bean.getPropertyValues().addPropertyValue("hdivConfig", new RuntimeBeanReference("config"));
+		bean.getPropertyValues().addPropertyValue("session", new RuntimeBeanReference("sessionHDIV"));
+		bean.getPropertyValues().addPropertyValue("dataValidatorFactory",
+				new RuntimeBeanReference("dataValidatorFactory"));
 		return bean;
 	}
 
@@ -286,7 +288,7 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		RootBeanDefinition bean = new RootBeanDefinition(LinkUrlProcessor.class);
 		bean.setSource(source);
 		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
-		bean.getPropertyValues().add("config", new RuntimeBeanReference("config"));
+		bean.getPropertyValues().addPropertyValue("config", new RuntimeBeanReference("config"));
 
 		return bean;
 	}
@@ -295,7 +297,7 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		RootBeanDefinition bean = new RootBeanDefinition(FormUrlProcessor.class);
 		bean.setSource(source);
 		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
-		bean.getPropertyValues().add("config", new RuntimeBeanReference("config"));
+		bean.getPropertyValues().addPropertyValue("config", new RuntimeBeanReference("config"));
 
 		return bean;
 	}
@@ -319,8 +321,8 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		RootBeanDefinition bean = new RootBeanDefinition(HdivRequestDataValueProcessor.class);
 		bean.setSource(source);
 		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
-		bean.getPropertyValues().add("linkUrlProcessor", new RuntimeBeanReference("linkUrlProcessor"));
-		bean.getPropertyValues().add("formUrlProcessor", new RuntimeBeanReference("formUrlProcessor"));
+		bean.getPropertyValues().addPropertyValue("linkUrlProcessor", new RuntimeBeanReference("linkUrlProcessor"));
+		bean.getPropertyValues().addPropertyValue("formUrlProcessor", new RuntimeBeanReference("formUrlProcessor"));
 		return bean;
 	}
 
@@ -328,8 +330,8 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		RootBeanDefinition bean = new RootBeanDefinition(GrailsHdivRequestDataValueProcessor.class);
 		bean.setSource(source);
 		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
-		bean.getPropertyValues().add("linkUrlProcessor", new RuntimeBeanReference("linkUrlProcessor"));
-		bean.getPropertyValues().add("formUrlProcessor", new RuntimeBeanReference("formUrlProcessor"));
+		bean.getPropertyValues().addPropertyValue("linkUrlProcessor", new RuntimeBeanReference("linkUrlProcessor"));
+		bean.getPropertyValues().addPropertyValue("formUrlProcessor", new RuntimeBeanReference("formUrlProcessor"));
 		return bean;
 	}
 
@@ -352,50 +354,53 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		String showErrorPageOnEditableValidation = element.getAttribute("showErrorPageOnEditableValidation");
 
 		if (StringUtils.hasText(confidentiality)) {
-			bean.getPropertyValues().add("confidentiality", confidentiality);
+			bean.getPropertyValues().addPropertyValue("confidentiality", confidentiality);
 		}
 
 		if (StringUtils.hasText(avoidCookiesIntegrity)) {
-			bean.getPropertyValues().add("cookiesIntegrity", avoidCookiesIntegrity);
+			bean.getPropertyValues().addPropertyValue("cookiesIntegrity", avoidCookiesIntegrity);
 		}
 
 		if (StringUtils.hasText(avoidCookiesIntegrity)) {
-			bean.getPropertyValues().add("cookiesConfidentiality", cookiesConfidentiality);
+			bean.getPropertyValues().addPropertyValue("cookiesConfidentiality", cookiesConfidentiality);
 		}
 
 		if (StringUtils.hasText(avoidValidationInUrlsWithoutParams)) {
-			bean.getPropertyValues().add("avoidValidationInUrlsWithoutParams", avoidValidationInUrlsWithoutParams);
+			bean.getPropertyValues().addPropertyValue("avoidValidationInUrlsWithoutParams",
+					avoidValidationInUrlsWithoutParams);
 		}
 
 		if (StringUtils.hasText(strategy)) {
-			bean.getPropertyValues().add("strategy", strategy);
+			bean.getPropertyValues().addPropertyValue("strategy", strategy);
 		}
 
 		if (StringUtils.hasText(randomName)) {
-			bean.getPropertyValues().add("randomName", randomName);
+			bean.getPropertyValues().addPropertyValue("randomName", randomName);
 		}
 
 		if (StringUtils.hasText(errorPage)) {
-			bean.getPropertyValues().add("errorPage", errorPage);
+			bean.getPropertyValues().addPropertyValue("errorPage", errorPage);
 		}
 
 		if (StringUtils.hasText(protectedExtensions)) {
-			bean.getPropertyValues().add("protectedExtensions", this.convertToList(protectedExtensions));
+			bean.getPropertyValues().addPropertyValue("protectedExtensions", this.convertToList(protectedExtensions));
 		}
 
 		if (StringUtils.hasText(excludedExtensions)) {
-			bean.getPropertyValues().add("excludedExtensions", this.convertToList(excludedExtensions));
+			bean.getPropertyValues().addPropertyValue("excludedExtensions", this.convertToList(excludedExtensions));
 		}
 
 		if (StringUtils.hasText(debugMode)) {
-			bean.getPropertyValues().add("debugMode", debugMode);
+			bean.getPropertyValues().addPropertyValue("debugMode", debugMode);
 		}
 
 		if (StringUtils.hasText(showErrorPageOnEditableValidation)) {
-			bean.getPropertyValues().add("showErrorPageOnEditableValidation", showErrorPageOnEditableValidation);
+			bean.getPropertyValues().addPropertyValue("showErrorPageOnEditableValidation",
+					showErrorPageOnEditableValidation);
 		}
 
-		bean.getPropertyValues().add("validations", new RuntimeBeanReference("editableParametersValidations"));
+		bean.getPropertyValues().addPropertyValue("validations",
+				new RuntimeBeanReference("editableParametersValidations"));
 
 		// process startPages, startParameters and paramsWithoutValidation
 		// elements
@@ -440,19 +445,19 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 			this.startPages.add(startPage);
 		}
 
-		bean.getPropertyValues().add("userStartPages", this.startPages);
+		bean.getPropertyValues().addPropertyValue("userStartPages", this.startPages);
 	}
 
 	private void processStartParameters(Node node, RootBeanDefinition bean) {
 		String value = node.getTextContent();
-		bean.getPropertyValues().add("userStartParameters", this.convertToList(value));
+		bean.getPropertyValues().addPropertyValue("userStartParameters", this.convertToList(value));
 	}
 
 	private void processParamsWithoutValidation(Node node, RootBeanDefinition bean) {
 		NodeList nodeList = node.getChildNodes();
 
 		Map map = new Hashtable();
-		bean.getPropertyValues().add("ParamsWithoutValidation", map);
+		bean.getPropertyValues().addPropertyValue("paramsWithoutValidation", map);
 		for (int i = 0; i < nodeList.getLength(); i++) {
 			Node mappingNode = nodeList.item(i);
 			if (mappingNode.getNodeType() == Node.ELEMENT_NODE) {

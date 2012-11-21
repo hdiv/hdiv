@@ -204,7 +204,7 @@ public class EditableValidationsBeanDefinitionParser extends AbstractSingleBeanD
 			RootBeanDefinition bean = new RootBeanDefinition(Validation.class);
 			bean.setSource(source);
 			bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
-			bean.getPropertyValues().add("rejectedPattern", regex);
+			bean.getPropertyValues().addPropertyValue("rejectedPattern", regex);
 
 			// Register bean
 			parserContext.getRegistry().registerBeanDefinition(id, bean);
@@ -225,7 +225,7 @@ public class EditableValidationsBeanDefinitionParser extends AbstractSingleBeanD
 			String validatorName = parserContext.getReaderContext().registerWithGeneratedName(validatorDef);
 			parserContext.registerComponent(new BeanComponentDefinition(validatorDef, validatorName));
 
-			bean.getPropertyValues().add("innerValidator", new RuntimeBeanReference(validatorName));
+			bean.getPropertyValues().addPropertyValue("innerValidator", new RuntimeBeanReference(validatorName));
 		}
 		return bean;
 	}
