@@ -56,6 +56,7 @@ public class HDIVUtil {
 	public static final String HDIVCONFIG_SERVLETCONTEXT_KEY = "HDIVCONFIG_SERVLETCONTEXT_KEY";
 	public static final String DATACOMPOSER_REQUEST_KEY = "DATACOMPOSER_REQUEST_KEY";
 	public static final String REQUESTURI_REQUEST_KEY = "REQUESTURI_REQUEST_KEY";
+	public static final String BASEURL_REQUEST_KEY = "BASEURL_REQUEST_KEY";
 	public static final String ISESSION_SERVLETCONTEXT_KEY = "ISESSION_SERVLETCONTEXT_KEY";
 	public static final String LINKURLPROCESSOR_SERVLETCONTEXT_KEY = "LINKURLPROCESSOR_SERVLETCONTEXT_KEY";
 	public static final String FORMURLPROCESSOR_SERVLETCONTEXT_KEY = "FORMURLPROCESSOR_SERVLETCONTEXT_KEY";
@@ -160,6 +161,35 @@ public class HDIVUtil {
 	public static void setRequestURI(String requestURI, HttpServletRequest request) {
 
 		request.setAttribute(REQUESTURI_REQUEST_KEY, requestURI);
+
+	}
+	
+	/* BaseURL */
+
+	/**
+	 * Returns BaseURL value from <code>HttpServletRequest</code>
+	 * 
+	 * @param request
+	 *            HttpServletRequest
+	 * @return String
+	 */
+	public static String getBaseURL(HttpServletRequest request) {
+
+		String baseURL = (String) request.getAttribute(BASEURL_REQUEST_KEY);
+		return baseURL;
+	}
+
+	/**
+	 * Set the BaseURL
+	 * 
+	 * @param BaseURL
+	 *            BaseURL to set
+	 * @param request
+	 *            {@link HttpServletRequest} object
+	 */
+	public static void setBaseURL(String baseURL, HttpServletRequest request) {
+
+		request.setAttribute(BASEURL_REQUEST_KEY, baseURL);
 
 	}
 

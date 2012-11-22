@@ -456,22 +456,34 @@ public abstract class AbstractUrlProcessor {
 
 		String returnValue = null;
 
-		String originalRequestUri = HDIVUtil.getRequestURI(request);
+		// Base url defined by <base> tag in some frameworks
+		String baseUrl = HDIVUtil.getBaseURL(request);
+		if (baseUrl != null) {
+			// Remove server part from the url
+			String serverUrl = this.getServerFromUrl(baseUrl);
+			if (serverUrl != null && serverUrl.length() > 0) {
+				// Remove server and port
+				baseUrl = baseUrl.replaceFirst(serverUrl, "");
+			}
+		} else {
+			// Original RequestUri before Jsp processing
+			baseUrl = HDIVUtil.getRequestURI(request);
+		}
 
 		if (url.equals("")) {
-			return originalRequestUri;
+			return baseUrl;
 		} else if (url.startsWith("/")) {
 			returnValue = url;
 		} else if (url.startsWith("..")) {
 			returnValue = url;
 		} else {
 			// relative path
-			String uri = originalRequestUri;
+			String uri = baseUrl;
 			uri = uri.substring(uri.indexOf("/"), uri.lastIndexOf("/"));
 			returnValue = uri + "/" + url;
 		}
 
-		return removeRelativePaths(returnValue, originalRequestUri);
+		return removeRelativePaths(returnValue, baseUrl);
 	}
 
 	/**
