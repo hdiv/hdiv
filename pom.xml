@@ -117,6 +117,7 @@
 		<module>hdiv-config</module>
 		<module>hdiv-jstl-taglibs-1.2</module>
 		<module>hdiv-spring-mvc</module>
+		<module>hdiv-struts-1</module>
 	</modules>
 
 	<licenses>

@@ -10,6 +10,7 @@ Release 2.1.4
  * Editable Validation support in Grails
  * New 'showErrorPageOnEditableValidation' attribute in <hdiv:config> to show error page on Editable validation error.
  * Hdiv custom schema support for Spring 2.5.x.
+ * Struts1 module for Hdiv. (Struts 1.3.8 support)
 
 Release 2.1.3
 ==================================
