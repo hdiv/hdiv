@@ -66,10 +66,11 @@ public class FormUrlProcessorTest extends AbstractHDIVTestCase {
 
 	public void testProcessActionComplete() {
 
+		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
 		IDataComposer dataComposer = this.dataComposerFactory.newInstance();
+		HDIVUtil.setDataComposer(dataComposer, request);
 		dataComposer.startPage();
 
-		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
 		String action = "/testAction.do";
 
 		String result = this.formUrlProcessor.processUrl(request, action);

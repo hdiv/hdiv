@@ -15,10 +15,13 @@
  */
 package org.hdiv.dataComposer;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.hdiv.AbstractHDIVTestCase;
 import org.hdiv.config.HDIVConfig;
 import org.hdiv.state.IState;
 import org.hdiv.state.StateUtil;
+import org.hdiv.util.HDIVUtil;
 
 /**
  * Unit tests for the <code>org.hdiv.composer.DataComposerMemory</code> class.
@@ -49,6 +52,8 @@ public class DataComposerCipherTest extends AbstractHDIVTestCase {
 	public void testComposeSimple() {
 
 		IDataComposer dataComposer = this.dataComposerFactory.newInstance();
+		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		HDIVUtil.setDataComposer(dataComposer, request);
 
 		dataComposer.startPage();
 		dataComposer.beginRequest("test.do");

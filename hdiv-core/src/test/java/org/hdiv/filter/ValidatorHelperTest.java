@@ -17,6 +17,8 @@ package org.hdiv.filter;
 
 import java.util.Hashtable;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.hdiv.AbstractHDIVTestCase;
 import org.hdiv.dataComposer.DataComposerFactory;
 import org.hdiv.dataComposer.IDataComposer;
@@ -51,6 +53,8 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 		DataComposerFactory dataComposerFactory = (DataComposerFactory) this.getApplicationContext().getBean(
 				"dataComposerFactory");
 		this.dataComposer = dataComposerFactory.newInstance();
+		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		HDIVUtil.setDataComposer(dataComposer, request);
 		this.dataComposer.startPage();
 	}
 

@@ -216,7 +216,8 @@ public class DataComposerMemory extends AbstractDataComposer {
 			String charEncoding) {
 
 		if (!this.isRequestStarted()) {
-			this.beginRequest();
+			// If request not started, do nothing
+			return value;
 		}
 
 		this.composeParameter(parameter, value, editable, editableName, isActionParam, charEncoding);

@@ -15,6 +15,8 @@
  */
 package org.hdiv.dataComposer;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.hdiv.AbstractHDIVTestCase;
 import org.hdiv.session.ISession;
 import org.hdiv.state.IPage;
@@ -52,7 +54,9 @@ public class DataComposerMemoryTest extends AbstractHDIVTestCase {
 	public void testComposeSimple() {
 
 		IDataComposer dataComposer = this.dataComposerFactory.newInstance();
-
+		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		HDIVUtil.setDataComposer(dataComposer, request);
+		
 		dataComposer.startPage();
 		dataComposer.beginRequest("test.do");
 
@@ -82,7 +86,9 @@ public class DataComposerMemoryTest extends AbstractHDIVTestCase {
 	public void testComposeAndRestore() {
 
 		IDataComposer dataComposer = this.dataComposerFactory.newInstance();
-
+		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		HDIVUtil.setDataComposer(dataComposer, request);
+		
 		dataComposer.startPage();
 		dataComposer.beginRequest("test.do");
 		dataComposer.compose("parameter1", "2", false);
@@ -100,7 +106,8 @@ public class DataComposerMemoryTest extends AbstractHDIVTestCase {
 		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
 
 		IDataComposer dataComposer = this.dataComposerFactory.newInstance();
-
+		HDIVUtil.setDataComposer(dataComposer, request);
+		
 		dataComposer.startPage();
 		dataComposer.beginRequest("test.do");
 		dataComposer.compose("parameter1", "2", false);
@@ -114,6 +121,8 @@ public class DataComposerMemoryTest extends AbstractHDIVTestCase {
 		IState state = this.stateUtil.restoreState(stateId);
 		IPage page = this.session.getPage(state.getPageId());
 		dataComposer = this.dataComposerFactory.newInstance();
+		HDIVUtil.setDataComposer(dataComposer, request);
+		
 		dataComposer.startPage(page);
 		dataComposer.beginRequest(state);
 		dataComposer.compose("parameter1", "3", false);
@@ -129,7 +138,9 @@ public class DataComposerMemoryTest extends AbstractHDIVTestCase {
 	public void testInnerState() {
 
 		IDataComposer dataComposer = this.dataComposerFactory.newInstance();
-
+		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		HDIVUtil.setDataComposer(dataComposer, request);
+		
 		dataComposer.startPage();
 		dataComposer.beginRequest("test.do");
 		dataComposer.compose("parameter1", "2", false);

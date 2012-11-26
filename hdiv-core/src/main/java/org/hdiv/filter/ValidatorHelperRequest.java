@@ -439,7 +439,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 			}
 
 			if (dataType.equals("password")) {
-				String[] passwordError = { "hdiv.editable.password.error" };
+				String[] passwordError = { Constants.HDIV_EDITABLE_PASSWORD_ERROR_KEY};
 				unauthorizedParameters.put(parameter, passwordError);
 			} else {
 				unauthorizedParameters.put(parameter, values);

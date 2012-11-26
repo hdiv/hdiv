@@ -126,10 +126,12 @@ public class AvoidValidationInUrlsWithoutParamsTest extends AbstractHDIVTestCase
 
 		this.getConfig().setAvoidValidationInUrlsWithoutParams(Boolean.TRUE);
 
-		IDataComposer dataComposer = this.dataComposerFactory.newInstance();
-		dataComposer.startPage();
-
 		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		
+		IDataComposer dataComposer = this.dataComposerFactory.newInstance();
+		HDIVUtil.setDataComposer(dataComposer, request);
+		dataComposer.startPage();
+		
 		String action = "/testAction.do";
 
 		String result = this.formUrlProcessor.processUrl(request, action);
