@@ -59,7 +59,7 @@
 		<dependency>
 			<groupId>org.hdiv</groupId>
 			<artifactId>hdiv-core</artifactId>
-			<version>${pom.version}</version>
+			<version>${project.version}</version>
 		</dependency>
 
 		<!-- Struts-EL -->
@@ -90,9 +90,9 @@
 				<artifactId>maven-javadoc-plugin</artifactId>
 				<configuration>
 					<doctitle>HDIV Tags (compatible with Struts 1.3.8)</doctitle>
-					<header>HDIV API ${pom.version}</header>
-					<footer>HDIV ${pom.version}</footer>
-					<destDir>../docs/api/${pom.artifactId}</destDir>
+					<header>HDIV API ${project.version}</header>
+					<footer>HDIV ${project.version}</footer>
+					<destDir>../docs/api/${project.artifactId}</destDir>
 				</configuration>
 			</plugin>
 		</plugins>
