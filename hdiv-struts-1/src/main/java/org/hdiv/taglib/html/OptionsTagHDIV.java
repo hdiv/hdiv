@@ -68,7 +68,7 @@ public class OptionsTagHDIV extends OptionsTag {
 	 * @param value Value to be returned to the server for this option
 	 * @param label Value to be shown to the user for this option
 	 * @param matched Should this value be marked as selected?
-	 * @see org.hdiv.composer.IDataComposer#compose(String, String, boolean)
+	 * @see org.hdiv.dataComposer.IDataComposer#compose(String, String, boolean)
 	 */
 	protected void addOption(StringBuffer sb, String value, String label, boolean matched) {
 		

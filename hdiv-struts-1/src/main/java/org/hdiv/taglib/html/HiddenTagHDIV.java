@@ -56,7 +56,7 @@ public class HiddenTagHDIV extends HiddenTag {
 	 * Support for <code>write</code> property since Struts 1.1.
 	 * 
 	 * @exception JspException if a JSP exception has occurred
-	 * @see org.hdiv.composer.IDataComposer#compose(String, String, boolean)
+	 * @see org.hdiv.dataComposer.IDataComposer#compose(String, String, boolean)
 	 */
 	public int doStartTag() throws JspException {
 

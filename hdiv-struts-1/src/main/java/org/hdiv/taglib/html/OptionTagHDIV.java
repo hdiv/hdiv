@@ -54,7 +54,7 @@ public class OptionTagHDIV extends OptionTag {
 	 * The message text to be displayed to the user for this tag if no body text and no
 	 * key to lookup so display the value
 	 * 
-	 * @see org.hdiv.composer.IDataComposer#compose(String, String, boolean)
+	 * @see org.hdiv.dataComposer.IDataComposer#compose(String, String, boolean)
 	 */
 	protected String valueWithoutEncrypt = null;
 

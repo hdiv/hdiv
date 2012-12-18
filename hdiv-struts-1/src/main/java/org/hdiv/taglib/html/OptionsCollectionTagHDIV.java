@@ -80,7 +80,7 @@ public class OptionsCollectionTagHDIV extends OptionsCollectionTag {
      * @param label Value to be shown to the user for this option
      * @param matched Should this value be marked as selected?
      * 
-     * @see org.hdiv.composer.IDataComposer#compose(String, String, boolean)
+     * @see org.hdiv.dataComposer.IDataComposer#compose(String, String, boolean)
      */
     protected void addOption(StringBuffer sb, String label, String value, boolean matched) {
 

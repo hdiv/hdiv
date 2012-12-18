@@ -45,7 +45,7 @@ public class SubmitTagHDIV extends SubmitTag {
 	 * Process the start of this tag.
 	 * 
 	 * @exception JspException if a JSP exception has occurred
-	 * @see org.hdiv.composer.IDataComposer#compose(String, String, boolean)
+	 * @see org.hdiv.dataComposer.IDataComposer#compose(String, String, boolean)
 	 */
 	public int doStartTag() throws JspException {
 

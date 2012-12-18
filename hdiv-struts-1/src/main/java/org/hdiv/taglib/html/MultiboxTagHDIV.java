@@ -66,7 +66,7 @@ public class MultiboxTagHDIV extends MultiboxTag {
 	 * Render the value element
 	 * 
 	 * @param results The StringBuffer that output will be appended to.
-	 * @see org.hdiv.composer.IDataComposer#compose(String, String, boolean)
+	 * @see org.hdiv.dataComposer.IDataComposer#compose(String, String, boolean)
 	 */
     protected String prepareValue(StringBuffer results) throws JspException {
 

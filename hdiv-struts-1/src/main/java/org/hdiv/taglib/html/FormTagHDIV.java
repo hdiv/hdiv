@@ -49,8 +49,8 @@ public class FormTagHDIV extends FormTag {
 
 	/**
 	 * Renders the action attribute
-	 * @see org.hdiv.composer.IDataComposer
-	 * @see org.hdiv.util.HDIVUtil#composeAction(String, int, String)
+	 * @see org.hdiv.dataComposer.IDataComposer
+	 * @see org.hdiv.urlProcessor.FormUrlProcessor
 	 */
 	protected void renderAction(StringBuffer results) {
 

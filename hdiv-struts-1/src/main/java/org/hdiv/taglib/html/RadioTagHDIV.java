@@ -58,7 +58,7 @@ public class RadioTagHDIV extends RadioTag {
      * will be checked.
      * @return A radio input element.
      * @throws JspException
-     * @see org.hdiv.composer.IDataComposer#compose(String, String, boolean)
+     * @see org.hdiv.dataComposer.IDataComposer#compose(String, String, boolean)
      * @since Struts 1.1
      */
     protected String renderRadioElement(String serverValue, String checkedValue)

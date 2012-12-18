@@ -39,7 +39,7 @@ import org.hdiv.util.HDIVUtil;
  * 
  * @author Gorka Vicente
  * @see org.apache.struts.taglib.html.FrameTag
- * @see org.apache.struts.taglib.html.LinkTagHDIV
+ * @see org.apache.struts.taglib.html.LinkTag
  */
 public class FrameTagHDIV extends LinkTagHDIV {
 
@@ -151,7 +151,7 @@ public class FrameTagHDIV extends LinkTagHDIV {
 	 * Render the appropriately encoded URI.
 	 * 
 	 * @exception JspException if a JSP exception has occurred
-	 * @see org.hdiv.taglib.util.RequestUtilsHDIV
+	 * @see org.hdiv.urlProcessor.LinkUrlProcessor
 	 */
 	public int doStartTag() throws JspException {
 
