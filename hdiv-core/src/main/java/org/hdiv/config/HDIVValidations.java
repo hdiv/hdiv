@@ -27,8 +27,7 @@ import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
 
 /**
- * Validations for urls defined by the user in the hdiv-validations.xml file of
- * Spring.
+ * Validations for urls defined by the user in the hdiv-validations.xml file of Spring.
  * 
  * @author Gorka Vicente
  * @since HDIV 1.1
@@ -36,8 +35,7 @@ import org.springframework.beans.factory.BeanFactoryAware;
 public class HDIVValidations implements BeanFactoryAware {
 
 	/**
-	 * Map containing the urls to which the user wants to apply validation for
-	 * the editable parameters.
+	 * Map containing the urls to which the user wants to apply validation for the editable parameters.
 	 */
 	protected Map urls;
 
@@ -52,8 +50,7 @@ public class HDIVValidations implements BeanFactoryAware {
 	private BeanFactory beanFactory;
 
 	/**
-	 * Using data read from HDIV custom schema and stored within 'rawUrls'
-	 * attribute, initiliaze 'urls' attribute.
+	 * Using data read from HDIV custom schema and stored within 'rawUrls' attribute, initiliaze 'urls' attribute.
 	 * 
 	 */
 	public void init() {
@@ -71,7 +68,9 @@ public class HDIVValidations implements BeanFactoryAware {
 
 	/**
 	 * Convert List with bean ids in another List with the bean instances.
-	 * @param ids List with bean ids.
+	 * 
+	 * @param ids
+	 *            List with bean ids.
 	 * @return List with bean instances.
 	 */
 	private List createValidationList(List ids) {
@@ -88,6 +87,7 @@ public class HDIVValidations implements BeanFactoryAware {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	public String toString() {
@@ -96,7 +96,9 @@ public class HDIVValidations implements BeanFactoryAware {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.springframework.beans.factory.BeanFactoryAware#setBeanFactory(org.springframework.beans.factory.BeanFactory)
+	 * 
+	 * @see
+	 * org.springframework.beans.factory.BeanFactoryAware#setBeanFactory(org.springframework.beans.factory.BeanFactory)
 	 */
 	public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
 		this.beanFactory = beanFactory;
@@ -125,7 +127,8 @@ public class HDIVValidations implements BeanFactoryAware {
 	}
 
 	/**
-	 * @param rawUrls the rawUrls to set
+	 * @param rawUrls
+	 *            the rawUrls to set
 	 */
 	public void setRawUrls(Map rawUrls) {
 		this.rawUrls = rawUrls;

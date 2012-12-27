@@ -42,6 +42,7 @@ import org.hdiv.state.StateUtil;
 import org.hdiv.util.Constants;
 import org.hdiv.util.HDIVErrorCodes;
 import org.hdiv.util.HDIVUtil;
+import org.springframework.web.util.WebUtils;
 
 /**
  * It validates client requests by comsuming an object of type IState and validating all the entry data, besides
@@ -439,7 +440,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 			}
 
 			if (dataType.equals("password")) {
-				String[] passwordError = { Constants.HDIV_EDITABLE_PASSWORD_ERROR_KEY};
+				String[] passwordError = { Constants.HDIV_EDITABLE_PASSWORD_ERROR_KEY };
 				unauthorizedParameters.put(parameter, passwordError);
 			} else {
 				unauthorizedParameters.put(parameter, values);
@@ -860,13 +861,19 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	 */
 	protected void addParameterToRequest(HttpServletRequest request, String name, Object value) {
 
+		RequestWrapper wrapper = null;
+
 		if (request instanceof RequestWrapper) {
-
-			RequestWrapper wrapper = (RequestWrapper) request;
-			wrapper.addParameter(name, value);
-
+			wrapper = (RequestWrapper) request;
 		} else {
-			throw new HDIVException("El objeto request no es de tipo RequestWrapper.");
+			wrapper = (RequestWrapper) WebUtils.getNativeRequest(request, RequestWrapper.class);
+		}
+
+		if (wrapper != null) {
+			wrapper.addParameter(name, value);
+		} else {
+			String errorMessage = HDIVUtil.getMessage("helper.notwrapper");
+			throw new HDIVException(errorMessage);
 		}
 
 	}

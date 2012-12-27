@@ -182,7 +182,7 @@ public class HDIVUtil {
 	/**
 	 * Set the BaseURL
 	 * 
-	 * @param BaseURL
+	 * @param baseURL
 	 *            BaseURL to set
 	 * @param request
 	 *            {@link HttpServletRequest} object

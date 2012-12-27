@@ -23,6 +23,7 @@ import org.hdiv.filter.RequestWrapper;
 import org.springframework.web.multipart.MultipartException;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
+import org.springframework.web.util.WebUtils;
 
 /**
  * MultipartResolver to use instead of CommonsMultipartResolver.
@@ -51,18 +52,18 @@ public class HdivCommonsMultipartResolver extends CommonsMultipartResolver {
 			}
 		}
 
-		if (request instanceof RequestWrapper) {
+		// If MultipartHttpServletRequest instance is present in request wrappers path, don't call to MultipartResolver
+		MultipartHttpServletRequest original = WebUtils.getNativeRequest(request, MultipartHttpServletRequest.class);
+		if (original != null) {
 
-			RequestWrapper wrapper = (RequestWrapper) request;
-			HttpServletRequest orig = (HttpServletRequest) wrapper.getRequest();
-			if (orig instanceof MultipartHttpServletRequest) {
-
-				return (MultipartHttpServletRequest) orig;
-
-			}
-
+			// Use MultipartHttpServletRequestWrapper to maintain MultipartHttpServletRequest in first place
+			// and obtains parameter values from RequestWrapper, with real values with confidentiality activated
+			RequestWrapper requestWrapper = WebUtils.getNativeRequest(request, RequestWrapper.class);
+			return new MultipartHttpServletRequestWrapper(request, requestWrapper, original);
 		}
 
+		// If MultipartHttpServletRequest instance is not present, parse multipart request
 		return super.resolveMultipart(request);
 	}
+
 }

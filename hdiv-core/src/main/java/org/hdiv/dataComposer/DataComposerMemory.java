@@ -491,7 +491,9 @@ public class DataComposerMemory extends AbstractDataComposer {
 		if (page.getStates().size() > 0) {
 			this.getSession().addPage(page.getName(), page);
 		} else {
-			log.debug("The page [" + page.getName() + "] has no states, is not stored in session");
+			if (log.isDebugEnabled()) {
+				log.debug("The page [" + page.getName() + "] has no states, is not stored in session");
+			}
 		}
 
 	}

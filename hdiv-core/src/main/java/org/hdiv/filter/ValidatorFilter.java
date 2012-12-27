@@ -33,7 +33,7 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 /**
- * An unique filter exists within HDIV. This filter has two responsabilities:
+ * An unique filter exists within HDIV. This filter has two responsibilities:
  * initialize and validate. In fact, the actual validation is not implemented in
  * this class, it is delegated to ValidatorHelper.
  * 
@@ -206,7 +206,7 @@ public class ValidatorFilter extends OncePerRequestFilter {
 	}
 
 	/**
-	 * Crea el wrapper del request
+	 * Create request wrapper.
 	 * 
 	 * @param request HTTP request
 	 * @return the request wrapper
