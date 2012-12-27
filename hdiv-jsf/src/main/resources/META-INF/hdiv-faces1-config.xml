@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE faces-config PUBLIC "-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.1//EN" "http://java.sun.com/dtd/web-facesconfig_1_1.dtd">
+<faces-config>
+
+	<component>
+		<component-type>javax.faces.Parameter</component-type>
+		<component-class>org.hdiv.components.UIParameterExtension</component-class>
+	</component>
+	<component>
+		<component-type>javax.faces.HtmlInputHidden</component-type>
+		<component-class>org.hdiv.components.HtmlInputHiddenExtension</component-class>
+	</component>
+	<component>
+		<component-type>javax.faces.HtmlOutputLink</component-type>
+		<component-class>org.hdiv.components.HtmlOutputLinkExtension</component-class>
+	</component>
+	<component>
+		<component-type>javax.faces.HtmlCommandLink</component-type>
+		<component-class>org.hdiv.components.HtmlCommandLinkExtension</component-class>
+	</component>
+	<component>
+		<component-type>javax.faces.HtmlCommandButton</component-type>
+		<component-class>org.hdiv.components.HtmlCommandButtonExtension</component-class>
+	</component>
+
+	<lifecycle>
+		<phase-listener>org.hdiv.phaseListeners.ComponentMessagesPhaseListener</phase-listener>
+		<phase-listener>org.hdiv.phaseListeners.ConfigPhaseListener</phase-listener>
+		<phase-listener>org.hdiv.phaseListeners.ValidationPhaseListener</phase-listener>
+		<!-- <phase-listener>org.hdiv.phaseListeners.PrintComponentTreePhaseListener</phase-listener> -->
+	</lifecycle>
+
+	<factory>
+		<faces-context-factory>org.hdiv.context.jsf1.FacesContextFactoryWrapper</faces-context-factory>
+	</factory>
+
+</faces-config>

@@ -29,6 +29,13 @@
 			<optional>true</optional>
 		</dependency>
 		<dependency>
+			<groupId>org.hdiv</groupId>
+			<artifactId>hdiv-jsf</artifactId>
+			<version>${project.version}</version>
+			<scope>compile</scope>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-web</artifactId>
 			<version>${org.springframework.version}</version>
@@ -48,10 +55,10 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-		    <groupId>org.hibernate</groupId>
-		    <artifactId>hibernate-validator</artifactId>
-		    <version>4.3.0.Final</version>
-		    <scope>test</scope>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>4.3.0.Final</version>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 
