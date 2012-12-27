@@ -57,21 +57,17 @@ public class MultipartHttpServletRequestWrapper extends HttpServletRequestWrappe
 		return this.getRequest().getParameter(name);
 	}
 
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public Map getParameterMap() {
-		Map params = this.innerRequestWrapper.getParameterMap();
-		if (params != null && params.size() > 0) {
-			return params;
-		}
-		return this.getRequest().getParameterMap();
+		Map params = this.getRequest().getParameterMap();
+		params.putAll(this.innerRequestWrapper.getParameterMap());
+
+		return params;
 	}
 
 	@SuppressWarnings("rawtypes")
 	public Enumeration getParameterNames() {
-		Enumeration params = this.innerRequestWrapper.getParameterNames();
-		if (params != null && params.hasMoreElements()) {
-			return params;
-		}
+
 		return this.getRequest().getParameterNames();
 	}
 

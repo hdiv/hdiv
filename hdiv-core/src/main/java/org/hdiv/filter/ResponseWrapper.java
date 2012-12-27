@@ -81,6 +81,10 @@ public class ResponseWrapper extends HttpServletResponseWrapper {
 		HDIVConfig config = (HDIVConfig)HDIVUtil.getApplication().getBean("config");
 		this.confidentiality = config.getConfidentiality().booleanValue();
 		this.avoidCookiesConfidentiality = !config.isCookiesConfidentialityActivated();
+		
+		if (log.isDebugEnabled()) {
+			log.debug("New ResponseWrapper instance.");
+		}
 	}
 
 	/**
