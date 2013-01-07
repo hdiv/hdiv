@@ -211,4 +211,29 @@ public class LinkUrlProcessorTest extends AbstractHDIVTestCase {
 		assertTrue(result.startsWith("/path/extra/testing.do?_HDIV_STATE_="));
 	}
 
+	public void testProcessMultiValueParam() {
+
+		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		String url = "/testAction.do?name=X&name=Y&name=Z";
+
+		String result = this.linkUrlProcessor.processUrl(request, url);
+
+		assertTrue(result.startsWith("/testAction.do?name=0&name=1&name=2&_HDIV_STATE_="));
+
+	}
+
+	public void testProcessMultiValueParamConfidentialityFalse() {
+
+		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		Boolean conf = this.getConfig().getConfidentiality();
+		this.getConfig().setConfidentiality(Boolean.FALSE);
+		String url = "/testAction.do?name=X&name=Y&name=Z";
+
+		String result = this.linkUrlProcessor.processUrl(request, url);
+
+		assertTrue(result.startsWith("/testAction.do?name=X&name=Y&name=Z&_HDIV_STATE_="));
+
+		this.getConfig().setConfidentiality(conf);
+	}
+
 }

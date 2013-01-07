@@ -15,6 +15,7 @@
  */
 package org.hdiv.urlProcessor;
 
+import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -156,7 +157,16 @@ public abstract class AbstractUrlProcessor {
 
 			// Ignore Hdiv state parameter
 			if (!param.equals(hdivParameter)) {
-				params.put(param, val);
+				// Add value to array or create it
+				String[] values = (String[]) params.get(param);
+				if (values == null) {
+					values = new String[] { val };
+				} else {
+					int l = values.length;
+					values = (String[]) Arrays.copyOf(values, l + 1);
+					values[l] = val;
+				}
+				params.put(param, values);
 			}
 		}
 
@@ -247,11 +257,14 @@ public abstract class AbstractUrlProcessor {
 		Iterator it = params.keySet().iterator();
 		while (it.hasNext()) {
 			String key = (String) it.next();
-			String value = (String) params.get(key);
+			String[] values = (String[]) params.get(key);
 
-			sb.append(separator).append(key).append("=").append(value);
-			if (separator.equals("?")) {
-				separator = "&";
+			for (int i = 0; i < values.length; i++) {
+				String value = values[i];
+				sb.append(separator).append(key).append("=").append(value);
+				if (separator.equals("?")) {
+					separator = "&";
+				}
 			}
 		}
 

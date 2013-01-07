@@ -103,4 +103,29 @@ public class FormUrlProcessorTest extends AbstractHDIVTestCase {
 		result = this.formUrlProcessor.processUrl(request, action);
 		assertEquals(action, result);
 	}
+
+	public void testProcessMultiValueParam() {
+
+		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		String url = "/testAction.do?name=X&name=Y&name=Z";
+
+		String result = this.formUrlProcessor.processUrl(request, url);
+
+		assertTrue(result.startsWith("/testAction.do?name=0&name=1&name=2"));
+
+	}
+
+	public void testProcessMultiValueParamConfidentialityFalse() {
+
+		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		Boolean conf = this.getConfig().getConfidentiality();
+		this.getConfig().setConfidentiality(Boolean.FALSE);
+		String url = "/testAction.do?name=X&name=Y&name=Z";
+
+		String result = this.formUrlProcessor.processUrl(request, url);
+
+		assertTrue(result.startsWith("/testAction.do?name=X&name=Y&name=Z"));
+
+		this.getConfig().setConfidentiality(conf);
+	}
 }

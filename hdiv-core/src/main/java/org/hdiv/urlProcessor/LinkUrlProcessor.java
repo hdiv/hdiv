@@ -69,11 +69,14 @@ public class LinkUrlProcessor extends AbstractUrlProcessor {
 				Iterator it = params.keySet().iterator();
 				while (it.hasNext()) {
 					String key = (String) it.next();
-					String value = (String) params.get(key);
+					String[] values = (String[]) params.get(key);
 
-					String composedParam = dataComposer.compose(key, value, false, false, encoding);
-
-					params.put(key, composedParam);
+					for (int i = 0; i < values.length; i++) {
+						String value = values[i];
+						String composedParam = dataComposer.compose(key, value, false, false, encoding);
+						values[i] = composedParam;
+					}
+					params.put(key, values);
 				}
 				urlData.setProcessedUrlParams(params);
 			}
