@@ -8,7 +8,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>hdiv-jsf</artifactId>
 	<packaging>jar</packaging>
-	<name>HDIV-JSF</name>
+	<name>HDIV JSF</name>
 	<description>HTTP Data Integrity Validator</description>
 	<url>http://www.hdiv.org</url>
 	<build>

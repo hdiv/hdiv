@@ -74,7 +74,7 @@ public class ValidationPhaseListener implements PhaseListener {
 		if (this.hdivConfig == null) {
 			WebApplicationContext context = FacesContextUtils.getRequiredWebApplicationContext(event.getFacesContext());
 			this.hdivConfig = (HDIVConfig) context.getBean("config");
-			this.validationHelper = (IValidationHelper) context.getBean("validatorHelper");
+			this.validationHelper = (IValidationHelper) context.getBean("jsfValidatorHelper");
 		}
 	}
 

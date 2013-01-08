@@ -31,6 +31,11 @@ public abstract class AbstractJsfHDIVTestCase extends AbstractHDIVTestCase {
 		shaleMockObjects = new ShaleMockObjects();
 		shaleMockObjects.setUp(request);
 
+		// Disable not supported features
+		super.getConfig().setConfidentiality(Boolean.FALSE);
+		super.getConfig().setCookiesConfidentiality(Boolean.TRUE);
+		super.getConfig().setCookiesIntegrity(Boolean.TRUE);
+
 		this.innerSetUp();
 	}
 

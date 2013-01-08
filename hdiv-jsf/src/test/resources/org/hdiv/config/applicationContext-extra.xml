@@ -30,7 +30,7 @@
 		<property name="linkUrlProcessor" ref="linkUrlProcessor" />
 	</bean>
 
-	<bean id="validatorHelper" class="org.hdiv.filter.JsfValidatorHelper"
+	<bean id="jsfValidatorHelper" class="org.hdiv.filter.JsfValidatorHelper"
 		init-method="init">
 		<property name="logger" ref="logger" />
 		<property name="stateUtil" ref="stateUtil" />

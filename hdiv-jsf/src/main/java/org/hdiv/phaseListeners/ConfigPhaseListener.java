@@ -16,15 +16,21 @@
 package org.hdiv.phaseListeners;
 
 import javax.faces.component.UIViewRoot;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseEvent;
 import javax.faces.event.PhaseId;
 import javax.faces.event.PhaseListener;
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.hdiv.config.HDIVConfig;
 import org.hdiv.events.HDIVFacesEventListener;
+import org.hdiv.exception.HDIVException;
+import org.hdiv.util.HDIVUtil;
 import org.hdiv.util.HDIVUtilJsf;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.jsf.FacesContextUtils;
@@ -75,6 +81,10 @@ public class ConfigPhaseListener implements PhaseListener {
 				}
 
 				FacesContext context = event.getFacesContext();
+				// Check not supported features
+				this.checkSupportedFeatures(context);
+
+				// Get listener instances
 				WebApplicationContext wac = FacesContextUtils.getRequiredWebApplicationContext(context);
 				HDIVFacesEventListener facesEventListener = (HDIVFacesEventListener) wac
 						.getBean("HDIVFacesEventListener");
@@ -124,6 +134,36 @@ public class ConfigPhaseListener implements PhaseListener {
 
 			}
 		}
+	}
+
+	/**
+	 * Check {@link HDIVConfig} to ensure all enabled features are supported by Jsf module.
+	 * 
+	 * @param context
+	 *            request context
+	 */
+	private void checkSupportedFeatures(FacesContext context) {
+
+		ExternalContext externalContext = context.getExternalContext();
+		HttpServletRequest request = (HttpServletRequest) externalContext.getRequest();
+		ServletContext servletContext = request.getSession().getServletContext();
+
+		HDIVConfig config = HDIVUtil.getHDIVConfig(servletContext);
+
+		if (Boolean.TRUE.equals(config.getConfidentiality())) {
+			throw new HDIVException("Confidentiality is not implemented in HDIV for JSF, disable it in hdiv-config.xml");
+		}
+
+		if (config.isCookiesIntegrityActivated()) {
+			throw new HDIVException(
+					"CookiesIntegrity is not implemented in HDIV for JSF, disable it in hdiv-config.xml");
+		}
+
+		if (config.isCookiesConfidentialityActivated()) {
+			throw new HDIVException(
+					"CookiesConfidentiality is not implemented in HDIV for JSF, disable it in hdiv-config.xml");
+		}
+
 	}
 
 }

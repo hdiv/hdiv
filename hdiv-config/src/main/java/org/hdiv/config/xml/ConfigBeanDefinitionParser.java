@@ -32,7 +32,6 @@ import org.hdiv.dataComposer.DataComposerFactory;
 import org.hdiv.dataValidator.DataValidatorFactory;
 import org.hdiv.dataValidator.ValidationResult;
 import org.hdiv.events.HDIVFacesEventListener;
-import org.hdiv.exception.HDIVException;
 import org.hdiv.filter.JsfValidatorHelper;
 import org.hdiv.filter.ValidatorHelperRequest;
 import org.hdiv.idGenerator.RandomGuidUidGenerator;
@@ -83,6 +82,9 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 	private final boolean jsfPresent = ClassUtils.isPresent("javax.faces.webapp.FacesServlet",
 			ConfigBeanDefinitionParser.class.getClassLoader());
 
+	private final boolean jsfModulePresent = ClassUtils.isPresent("org.hdiv.filter.JsfValidatorHelper",
+			ConfigBeanDefinitionParser.class.getClassLoader());
+
 	public BeanDefinition parse(Element element, ParserContext parserContext) {
 
 		Object source = parserContext.extractSource(element);
@@ -97,7 +99,7 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		parserContext.getRegistry().registerBeanDefinition("keyFactory", this.createKeyFactory(element, source));
 		String userData = element.getAttribute("userData");
 		if (userData == null || userData.length() < 1) {
-			// If user dont define userData bean, create default
+			// If user don't define userData bean, create default
 			parserContext.getRegistry().registerBeanDefinition("userData", this.createUserData(element, source));
 		}
 		parserContext.getRegistry().registerBeanDefinition("logger", this.createLogger(element, source));
@@ -143,8 +145,10 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 
 		}
 
-		// register JSF especific beans if we are using this web framework
-		if (this.jsfPresent) {
+		// register JSF specific beans if we are using this web framework
+		if (this.jsfPresent && this.jsfModulePresent) {
+			parserContext.getRegistry().registerBeanDefinition("jsfValidatorHelper",
+					this.createJsfValidatorHelper(element, source));
 			parserContext.getRegistry().registerBeanDefinition("HDIVFacesEventListener",
 					this.createFacesEventListener(element, source));
 
@@ -303,12 +307,7 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 
 	private RootBeanDefinition createValidatorHelper(Element element, Object source) {
 
-		RootBeanDefinition bean = null;
-		if (this.jsfPresent) {
-			bean = new RootBeanDefinition(JsfValidatorHelper.class);
-		} else {
-			bean = new RootBeanDefinition(ValidatorHelperRequest.class);
-		}
+		RootBeanDefinition bean = new RootBeanDefinition(ValidatorHelperRequest.class);
 		bean.setSource(source);
 		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
 		bean.setInitMethodName("init");
@@ -391,28 +390,14 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		String showErrorPageOnEditableValidation = element.getAttribute("showErrorPageOnEditableValidation");
 
 		if (StringUtils.hasText(confidentiality)) {
-			if (jsfPresent == true && confidentiality.equalsIgnoreCase("true")) {
-				throw new HDIVException(
-						"Confidentiality is not implemented in HDIV for JSF, disable it in hdiv-config.xml");
-			}
 			bean.getPropertyValues().addPropertyValue("confidentiality", confidentiality);
 		}
 
 		if (StringUtils.hasText(avoidCookiesIntegrity)) {
-			if (jsfPresent == true && avoidCookiesIntegrity.equalsIgnoreCase("false")) {
-				throw new HDIVException(
-						"CookiesIntegrity is not implemented in HDIV for JSF, disable it in hdiv-config.xml");
-			}
 			bean.getPropertyValues().addPropertyValue("cookiesIntegrity", avoidCookiesIntegrity);
 		}
 
 		if (StringUtils.hasText(cookiesConfidentiality)) {
-
-			if (jsfPresent == true && cookiesConfidentiality.equalsIgnoreCase("false")) {
-				throw new HDIVException(
-						"CookiesConfidentiality is not implemented in HDIV for JSF, disable it in hdiv-config.xml");
-			}
-
 			bean.getPropertyValues().addPropertyValue("cookiesConfidentiality", cookiesConfidentiality);
 		}
 
@@ -490,6 +475,21 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 	}
 
 	// JSF Beans
+
+	private RootBeanDefinition createJsfValidatorHelper(Element element, Object source) {
+
+		RootBeanDefinition bean = new RootBeanDefinition(JsfValidatorHelper.class);
+		bean.setSource(source);
+		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
+		bean.setInitMethodName("init");
+		bean.getPropertyValues().addPropertyValue("logger", new RuntimeBeanReference("logger"));
+		bean.getPropertyValues().addPropertyValue("stateUtil", new RuntimeBeanReference("stateUtil"));
+		bean.getPropertyValues().addPropertyValue("hdivConfig", new RuntimeBeanReference("config"));
+		bean.getPropertyValues().addPropertyValue("session", new RuntimeBeanReference("sessionHDIV"));
+		bean.getPropertyValues().addPropertyValue("dataValidatorFactory",
+				new RuntimeBeanReference("dataValidatorFactory"));
+		return bean;
+	}
 
 	private RootBeanDefinition createRequestParameterValidator(Element element, Object source) {
 		RootBeanDefinition bean = new RootBeanDefinition(RequestParameterValidator.class);
