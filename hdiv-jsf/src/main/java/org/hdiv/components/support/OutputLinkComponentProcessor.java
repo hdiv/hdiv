@@ -64,13 +64,19 @@ public class OutputLinkComponentProcessor extends AbstractComponentProcessor {
 				IDataComposer dataComposer = HDIVUtil.getDataComposer(request);
 				dataComposer.beginRequest(urlData.getContextPathRelativeUrl());
 
-				Map<String, String> params = urlData.getOriginalUrlParams();
+				Map<String, String[]> params = urlData.getOriginalUrlParams();
 				if (params != null) {
 					// Process url params
 					for (String key : params.keySet()) {
-						String value = (String) params.get(key);
-						String composedParam = dataComposer.compose(key, value, false, true, Constants.ENCODING_UTF_8);
-						params.put(key, composedParam);
+						String[] values = params.get(key);
+
+						for (int i = 0; i < values.length; i++) {
+							String value = values[i];
+							String composedParam = dataComposer.compose(key, value, false, true,
+									Constants.ENCODING_UTF_8);
+							values[i] = composedParam;
+						}
+						params.put(key, values);
 					}
 					urlData.setProcessedUrlParams(params);
 				}
