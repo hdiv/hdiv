@@ -14,6 +14,7 @@ Release 2.1.4
  * Fix Multipart request handing in Spring MVC (https://github.com/hdiv/hdiv/issues/14) and (https://github.com/hdiv/hdiv/issues/18).
  * JSF module for Hdiv. (JSF 1.1, 1.2, 2.0 and 2.1 support). Tested with Apache MyFaces and Sun RI.
  * Fix error with multivalue url params.
+ * New 'loginPage' attribute in <hdiv:config> to use as error page when session has expired.
 
 Release 2.1.3
 ==================================

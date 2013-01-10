@@ -106,7 +106,7 @@ public class HDIVUtil {
 		return newDataComposer;
 
 	}
-	
+
 	/**
 	 * Returns true if a data composer object exist in <code>HttpServletRequest</code>
 	 * 
@@ -123,8 +123,10 @@ public class HDIVUtil {
 	/**
 	 * Set the <code>IDataComposer</code>
 	 * 
-	 * @param newDataComposer new {@link IDataComposer}
-	 * @param request {@link HttpServletRequest} instance
+	 * @param newDataComposer
+	 *            new {@link IDataComposer}
+	 * @param request
+	 *            {@link HttpServletRequest} instance
 	 */
 	public static void setDataComposer(IDataComposer newDataComposer, HttpServletRequest request) {
 
@@ -163,7 +165,7 @@ public class HDIVUtil {
 		request.setAttribute(REQUESTURI_REQUEST_KEY, requestURI);
 
 	}
-	
+
 	/* BaseURL */
 
 	/**
@@ -502,6 +504,38 @@ public class HDIVUtil {
 		}
 
 		return String.valueOf(i);
+	}
+
+	/**
+	 * Strips a servlet session ID from <tt>url</tt>. The session ID is encoded as a URL "path parameter" beginning with
+	 * "jsessionid=". We thus remove anything we find between ";jsessionid=" (inclusive) and either EOS or a subsequent
+	 * ';' (exclusive).
+	 * 
+	 * @param url
+	 *            url
+	 * @return url without sessionId
+	 */
+	public static String stripSession(String url) {
+
+		if (log.isDebugEnabled()) {
+			log.debug("Stripping jsessionid from url " + url);
+		}
+		StringBuffer u = new StringBuffer(url);
+		int sessionStart;
+
+		while (((sessionStart = u.toString().indexOf(";jsessionid=")) != -1)
+				|| ((sessionStart = u.toString().indexOf(";JSESSIONID=")) != -1)) {
+
+			int sessionEnd = u.toString().indexOf(";", sessionStart + 1);
+			if (sessionEnd == -1) {
+				sessionEnd = u.toString().indexOf("?", sessionStart + 1);
+			}
+			if (sessionEnd == -1) { // still
+				sessionEnd = u.length();
+			}
+			u.delete(sessionStart, sessionEnd);
+		}
+		return u.toString();
 	}
 
 }

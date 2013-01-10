@@ -889,6 +889,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	protected String getTarget(HttpServletRequest request) {
 		try {
 			String requestUri = request.getRequestURI();
+			requestUri = HDIVUtil.stripSession(requestUri);
 			return requestUri;
 		} catch (Exception e) {
 			String errorMessage = HDIVUtil.getMessage("helper.actionName");
@@ -902,7 +903,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	 * @param request
 	 *            HttpServletRequest to validate
 	 * @param target
-	 *            target to stripp the ContextPath
+	 *            target to strip the ContextPath
 	 * @return target without the ContextPath
 	 */
 	protected String getTargetWithoutContextPath(HttpServletRequest request, String target) {

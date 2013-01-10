@@ -24,6 +24,7 @@ public class CustomSchemaTest extends TestCase {
 		System.out.println(hdivConfig.toString());
 		System.out.println("-----------------------");
 		assertTrue(hdivConfig.isShowErrorPageOnEditableValidation());
+		assertEquals("/", hdivConfig.getLoginPage());
 
 		HDIVValidations validations = (HDIVValidations) context.getBean("editableParametersValidations");
 		assertNotNull(validations);

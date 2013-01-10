@@ -50,7 +50,7 @@ public class HDIVValidations implements BeanFactoryAware {
 	private BeanFactory beanFactory;
 
 	/**
-	 * Using data read from HDIV custom schema and stored within 'rawUrls' attribute, initiliaze 'urls' attribute.
+	 * Using data read from HDIV custom schema and stored within 'rawUrls' attribute, initialize 'urls' attribute.
 	 * 
 	 */
 	public void init() {

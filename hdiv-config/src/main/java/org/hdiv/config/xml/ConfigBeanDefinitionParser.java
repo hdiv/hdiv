@@ -384,6 +384,7 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		String strategy = element.getAttribute("strategy");
 		String randomName = element.getAttribute("randomName");
 		String errorPage = element.getAttribute("errorPage");
+		String loginPage = element.getAttribute("loginPage");
 		String protectedExtensions = element.getAttribute("protectedExtensions");
 		String excludedExtensions = element.getAttribute("excludedExtensions");
 		String debugMode = element.getAttribute("debugMode");
@@ -416,6 +417,10 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 
 		if (StringUtils.hasText(errorPage)) {
 			bean.getPropertyValues().addPropertyValue("errorPage", errorPage);
+		}
+
+		if (StringUtils.hasText(loginPage)) {
+			bean.getPropertyValues().addPropertyValue("loginPage", loginPage);
 		}
 
 		if (StringUtils.hasText(protectedExtensions)) {

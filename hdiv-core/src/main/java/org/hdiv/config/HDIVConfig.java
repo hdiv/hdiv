@@ -66,9 +66,15 @@ public class HDIVConfig {
 	private Hashtable matchedParameters = new Hashtable();
 
 	/**
-	 * Error page to which HDIV will redirect the request if it doesn't pass the HDIV validation.
+	 * Url of the error page to which HDIV will redirect the request if it doesn't pass the HDIV validation.
 	 */
 	private String errorPage;
+
+	/**
+	 * Url of the error page to which HDIV will redirect the request if it doesn't pass the HDIV validation caused by
+	 * session expiration.
+	 */
+	private String loginPage;
 
 	/**
 	 * Confidentiality indicator to know if information is accessible only for those who are authorized.
@@ -76,7 +82,7 @@ public class HDIVConfig {
 	private Boolean confidentiality;
 
 	/**
-	 * Parameters which HDIV validation will not be appied to.
+	 * Parameters which HDIV validation will not be applied to.
 	 */
 	private Map paramsWithoutValidation;
 
@@ -410,6 +416,18 @@ public class HDIVConfig {
 		this.startPages.put(errorPage, new StartPage(null, errorPage));
 	}
 
+	public String getLoginPage() {
+		return loginPage;
+	}
+
+	public void setLoginPage(String loginPage) {
+		if (!loginPage.startsWith("/")) {
+			loginPage = "/" + loginPage;
+		}
+		this.loginPage = loginPage;
+		this.startPages.put(loginPage, new StartPage(null, loginPage));
+	}
+
 	public Boolean getConfidentiality() {
 		return confidentiality;
 	}
@@ -688,12 +706,14 @@ public class HDIVConfig {
 		result.append(" strategy=").append(this.getStrategy());
 		result.append(" randomName=").append(this.isRandomName());
 		result.append(" errorPage=").append(this.getErrorPage());
+		result.append(" loginPage=").append(this.loginPage);
 		result.append(" excludedExtensions=").append(this.excludedURLExtensions);
 		result.append(" protectedExtensions=").append(this.getProtectedURLPatterns());
 		result.append(" startPages=").append(this.startPages);
 		result.append(" startParameters=").append(this.startParameters);
 		result.append(" paramsWithoutValidation=").append(this.paramsWithoutValidation);
 		result.append(" debugMode=").append(this.debugMode);
+		result.append(" showErrorPageOnEditableValidation=").append(this.showErrorPageOnEditableValidation);
 
 		return result.toString();
 	}

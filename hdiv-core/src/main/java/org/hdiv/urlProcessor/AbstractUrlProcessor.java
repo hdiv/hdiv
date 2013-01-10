@@ -547,9 +547,7 @@ public abstract class AbstractUrlProcessor {
 	}
 
 	/**
-	 * Strips a servlet session ID from <tt>url</tt>. The session ID is encoded as a URL "path parameter" beginning with
-	 * "jsessionid=". We thus remove anything we find between ";jsessionid=" (inclusive) and either EOS or a subsequent
-	 * ';' (exclusive).
+	 * Strips a servlet session ID from <tt>url</tt>.
 	 * 
 	 * @param url
 	 *            url
@@ -557,25 +555,7 @@ public abstract class AbstractUrlProcessor {
 	 */
 	protected String stripSession(String url) {
 
-		if (log.isDebugEnabled()) {
-			log.debug("Stripping jsessionid from url " + url);
-		}
-		StringBuffer u = new StringBuffer(url);
-		int sessionStart;
-
-		while (((sessionStart = u.toString().indexOf(";jsessionid=")) != -1)
-				|| ((sessionStart = u.toString().indexOf(";JSESSIONID=")) != -1)) {
-
-			int sessionEnd = u.toString().indexOf(";", sessionStart + 1);
-			if (sessionEnd == -1) {
-				sessionEnd = u.toString().indexOf("?", sessionStart + 1);
-			}
-			if (sessionEnd == -1) { // still
-				sessionEnd = u.length();
-			}
-			u.delete(sessionStart, sessionEnd);
-		}
-		return u.toString();
+		return HDIVUtil.stripSession(url);
 	}
 
 	/**

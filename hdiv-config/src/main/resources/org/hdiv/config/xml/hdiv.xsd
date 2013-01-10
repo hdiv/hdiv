@@ -198,7 +198,16 @@
 				default="error.jsp">
 				<xsd:annotation>
 					<xsd:documentation><![CDATA[
-	Url of the error page. 
+	Url of the error page to which HDIV will redirect the request if it doesn't pass the HDIV validation.
+					]]></xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+			<xsd:attribute name="loginPage" type="xsd:string"
+				default="/">
+				<xsd:annotation>
+					<xsd:documentation><![CDATA[
+	Url of the error page to which HDIV will redirect the request if it doesn't pass the HDIV validation caused by session
+	expiration.
 					]]></xsd:documentation>
 				</xsd:annotation>
 			</xsd:attribute>

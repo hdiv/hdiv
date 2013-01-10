@@ -22,6 +22,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -33,9 +34,8 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 /**
- * An unique filter exists within HDIV. This filter has two responsibilities:
- * initialize and validate. In fact, the actual validation is not implemented in
- * this class, it is delegated to ValidatorHelper.
+ * An unique filter exists within HDIV. This filter has two responsibilities: initialize and validate. In fact, the
+ * actual validation is not implemented in this class, it is delegated to ValidatorHelper.
  * 
  * @author Roberto Velasco
  * @author Gorka Vicente
@@ -82,7 +82,7 @@ public class ValidatorFilter extends OncePerRequestFilter {
 			this.hdivConfig = (HDIVConfig) context.getBean("config");
 			this.validationHelper = (IValidationHelper) context.getBean("validatorHelper");
 			if (context.containsBean("multipartConfig")) {
-				//For applications without Multipart requests
+				// For applications without Multipart requests
 				this.multipartConfig = (IMultipartConfig) context.getBean("multipartConfig");
 			}
 		}
@@ -90,15 +90,17 @@ public class ValidatorFilter extends OncePerRequestFilter {
 	}
 
 	/**
-	 * Called by the container each time a request/response pair is passed
-	 * through the chain due to a client request for a resource at the end of
-	 * the chain.
+	 * Called by the container each time a request/response pair is passed through the chain due to a client request for
+	 * a resource at the end of the chain.
 	 * 
-	 * @param request request object
-	 * @param response response object
-	 * @param filterChain filter chain
-	 * @see javax.servlet.Filter#doFilter(javax.servlet.ServletRequest,
-	 *      javax.servlet.ServletResponse, javax.servlet.FilterChain)
+	 * @param request
+	 *            request object
+	 * @param response
+	 *            response object
+	 * @param filterChain
+	 *            filter chain
+	 * @see javax.servlet.Filter#doFilter(javax.servlet.ServletRequest, javax.servlet.ServletResponse,
+	 *      javax.servlet.FilterChain)
 	 */
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
@@ -143,16 +145,26 @@ public class ValidatorFilter extends OncePerRequestFilter {
 			if (legal || this.hdivConfig.isDebugMode()) {
 				processRequest(multipartProcessedRequest, responseWrapper, filterChain);
 			} else {
-				// Redirect to error page
-				response.sendRedirect(response.encodeRedirectURL(request.getContextPath()
-						+ this.hdivConfig.getErrorPage()));
+
+				HttpSession session = request.getSession(false);
+				if (session == null || session.isNew()) {
+					// New session, maybe expired session
+					// Redirect to login page instead of error page
+					response.sendRedirect(response.encodeRedirectURL(request.getContextPath()
+							+ this.hdivConfig.getLoginPage()));
+				} else {
+
+					// Redirect to error page
+					response.sendRedirect(response.encodeRedirectURL(request.getContextPath()
+							+ this.hdivConfig.getErrorPage()));
+				}
 			}
 
 		} catch (IOException e) {
-			//Internal framework exception, rethrow exception
+			// Internal framework exception, rethrow exception
 			throw e;
 		} catch (ServletException e) {
-			//Internal framework exception, rethrow exception
+			// Internal framework exception, rethrow exception
 			throw e;
 		} catch (Exception e) {
 			if (log.isErrorEnabled()) {
@@ -177,25 +189,27 @@ public class ValidatorFilter extends OncePerRequestFilter {
 	}
 
 	/**
-	 * Utility method that determines whether the request contains multipart
-	 * content.
+	 * Utility method that determines whether the request contains multipart content.
 	 * 
-	 * @param contentType content type
-	 * @return <code>true</code> if the request is multipart.
-	 *         <code>false</code> otherwise.
+	 * @param contentType
+	 *            content type
+	 * @return <code>true</code> if the request is multipart. <code>false</code> otherwise.
 	 */
 	public boolean isMultipartContent(String contentType) {
 		return ((contentType != null) && (contentType.indexOf("multipart/form-data") != -1));
 	}
 
 	/**
-	 * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-	 * methods.
+	 * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
 	 * 
-	 * @param requestWrapper request wrapper
-	 * @param responseWrapper response wrapper
-	 * @param filterChain filter chain
-	 * @throws Exception if there is an error in request process.
+	 * @param requestWrapper
+	 *            request wrapper
+	 * @param responseWrapper
+	 *            response wrapper
+	 * @param filterChain
+	 *            filter chain
+	 * @throws Exception
+	 *             if there is an error in request process.
 	 */
 	protected void processRequest(HttpServletRequest requestWrapper, ResponseWrapper responseWrapper,
 			FilterChain filterChain) throws IOException, ServletException {
@@ -208,7 +222,8 @@ public class ValidatorFilter extends OncePerRequestFilter {
 	/**
 	 * Create request wrapper.
 	 * 
-	 * @param request HTTP request
+	 * @param request
+	 *            HTTP request
 	 * @return the request wrapper
 	 */
 	protected RequestWrapper getRequestWrapper(HttpServletRequest request) {
