@@ -25,6 +25,8 @@ http://www.hdiv.org/schema/hdiv http://www.hdiv.org/schema/hdiv/hdiv.xsd">
 	<hdiv:config confidentiality="true" avoidCookiesIntegrity="true"
 		protectedExtensions=".*,aaa" excludedExtensions="css,png" errorPage="proba.jsp"
 		randomName="true" strategy="memory" maxPagesPerSession="20"
+		avoidCookiesConfidentiality="true" avoidValidationInUrlsWithoutParams="true"
+		debugMode="true" userData="testUserData"
 		showErrorPageOnEditableValidation="true">
 		<hdiv:startPages>page1,page2</hdiv:startPages>
 		<hdiv:startPages method="get">/login.html,/logout.html</hdiv:startPages>
@@ -34,5 +36,7 @@ http://www.hdiv.org/schema/hdiv http://www.hdiv.org/schema/hdiv/hdiv.xsd">
 			<hdiv:mapping url="/page2" parameters="param3,param4" />
 		</hdiv:paramsWithoutValidation>
 	</hdiv:config>
+
+	<bean id="testUserData" class="org.hdiv.logs.UserData"></bean>
 
 </beans>
