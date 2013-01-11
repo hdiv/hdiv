@@ -23,7 +23,7 @@ import org.hdiv.dataComposer.DataComposerFactory;
 import org.hdiv.dataComposer.IDataComposer;
 import org.hdiv.filter.IValidationHelper;
 import org.hdiv.filter.RequestWrapper;
-import org.hdiv.util.HDIVErrorCodes;
+import org.hdiv.util.Constants;
 import org.hdiv.util.HDIVUtil;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.validation.Errors;
@@ -72,7 +72,7 @@ public class EditableParameterValidatorTest extends AbstractHDIVTestCase {
 
 		// Editable errors in request?
 		Hashtable<String, String[]> parameters = (Hashtable<String, String[]>) requestWrapper
-				.getAttribute(HDIVErrorCodes.EDITABLE_PARAMETER_ERROR);
+				.getAttribute(Constants.EDITABLE_PARAMETER_ERROR);
 		assertEquals(1, parameters.size());
 
 		// Set request attributes on threadlocal

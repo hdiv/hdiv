@@ -334,12 +334,12 @@ public class ValidatorHelperRequest implements IValidationHelper {
 
 		if (!this.hdivConfig.isDebugMode()) {
 			// Put the errors on request to be accessible from the Web framework
-			request.setAttribute(HDIVErrorCodes.EDITABLE_PARAMETER_ERROR, unauthorizedEditableParameters);
+			request.setAttribute(Constants.EDITABLE_PARAMETER_ERROR, unauthorizedEditableParameters);
 
 			if (this.hdivConfig.isShowErrorPageOnEditableValidation()) {
 				// Redirect to error page
 				// Put errors in session to be accessible from error page
-				request.getSession().setAttribute(HDIVErrorCodes.EDITABLE_PARAMETER_ERROR,
+				request.getSession().setAttribute(Constants.EDITABLE_PARAMETER_ERROR,
 						unauthorizedEditableParameters);
 				return false;
 			}

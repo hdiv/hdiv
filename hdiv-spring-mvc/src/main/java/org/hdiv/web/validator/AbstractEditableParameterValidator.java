@@ -18,7 +18,6 @@ package org.hdiv.web.validator;
 import java.util.Hashtable;
 
 import org.hdiv.util.Constants;
-import org.hdiv.util.HDIVErrorCodes;
 import org.springframework.validation.Errors;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -47,7 +46,7 @@ public abstract class AbstractEditableParameterValidator {
 		}
 
 		Hashtable<String, String[]> parameters = (Hashtable<String, String[]>) attr.getAttribute(
-				HDIVErrorCodes.EDITABLE_PARAMETER_ERROR, 0);
+				Constants.EDITABLE_PARAMETER_ERROR, 0);
 		if (parameters != null && parameters.size() > 0) {
 
 			for (String param : parameters.keySet()) {
@@ -69,7 +68,7 @@ public abstract class AbstractEditableParameterValidator {
 		}
 
 		Hashtable<String, String[]> parameters = (Hashtable<String, String[]>) attr.getAttribute(
-				HDIVErrorCodes.EDITABLE_PARAMETER_ERROR, 0);
+				Constants.EDITABLE_PARAMETER_ERROR, 0);
 		if (parameters != null && parameters.size() > 0) {
 
 			String[] unauthorizedValues = parameters.get(param);

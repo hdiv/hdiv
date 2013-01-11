@@ -35,7 +35,6 @@ import org.apache.struts.taglib.TagUtils;
 import org.apache.struts.util.RequestUtils;
 import org.hdiv.urlProcessor.LinkUrlProcessor;
 import org.hdiv.util.Constants;
-import org.hdiv.util.HDIVErrorCodes;
 import org.hdiv.util.HDIVUtil;
 
 /**
@@ -53,7 +52,7 @@ public class HDIVRequestProcessor extends RequestProcessor {
 	 * The request attributes key under HDIV should store errors produced in the
 	 * editable fields.
 	 */
-	private static final String EDITABLE_PARAMETER_ERROR = HDIVErrorCodes.EDITABLE_PARAMETER_ERROR;
+	private static final String EDITABLE_PARAMETER_ERROR = Constants.EDITABLE_PARAMETER_ERROR;
 
 	/**
 	 * Property that contains the error message to be shown by Struts when the value

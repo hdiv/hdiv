@@ -32,6 +32,7 @@ import org.apache.struts.action.InvalidCancelException;
 import org.apache.struts.config.ForwardConfig;
 import org.apache.struts.taglib.TagUtils;
 import org.apache.struts.tiles.TilesRequestProcessor;
+import org.hdiv.util.Constants;
 
 /**
  * <p><strong>RequestProcessor</strong> contains the processing logic that
@@ -59,19 +60,19 @@ public class HDIVTilesRequestProcessor extends TilesRequestProcessor {
 	 * The request attributes key under HDIV should store errors produced in the
 	 * editable fields.
 	 */
-	private static final String EDITABLE_PARAMETER_ERROR = "org.hdiv.action.EDITABLE_PARAMETER_ERROR";
+	private static final String EDITABLE_PARAMETER_ERROR = Constants.EDITABLE_PARAMETER_ERROR;
 
 	/**
 	 * Property that contains the error message to be shown by Struts when the value
 	 * of the editable parameter is not valid.
 	 */
-	private static final String HDIV_EDITABLE_ERROR = "hdiv.editable.error";
+	private static final String HDIV_EDITABLE_ERROR = Constants.HDIV_EDITABLE_ERROR_KEY;
 
 	/**
 	 * Property that contains the error message to be shown by Struts when the value
 	 * of the editable password parameter is not valid.
 	 */
-	private static final String HDIV_EDITABLE_PASSWORD_ERROR = "hdiv.editable.password.error";	
+	private static final String HDIV_EDITABLE_PASSWORD_ERROR = Constants.HDIV_EDITABLE_PASSWORD_ERROR_KEY;	
 
 	/**
 	 * <p>

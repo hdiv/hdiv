@@ -22,7 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.hdiv.AbstractHDIVTestCase;
 import org.hdiv.dataComposer.DataComposerFactory;
 import org.hdiv.dataComposer.IDataComposer;
-import org.hdiv.util.HDIVErrorCodes;
+import org.hdiv.util.Constants;
 import org.hdiv.util.HDIVUtil;
 import org.springframework.mock.web.MockHttpServletRequest;
 
@@ -371,7 +371,7 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 		assertTrue(result);
 
 		// Editable errors in request?
-		Hashtable parameters = (Hashtable) requestWrapper.getAttribute(HDIVErrorCodes.EDITABLE_PARAMETER_ERROR);
+		Hashtable parameters = (Hashtable) requestWrapper.getAttribute(Constants.EDITABLE_PARAMETER_ERROR);
 		assertEquals(1, parameters.size());
 
 	}

@@ -23,12 +23,6 @@ package org.hdiv.util;
 public class HDIVErrorCodes {
 
 	/**
-	 * The request attributes key under HDIV should store errors produced in the
-	 * editable fields.
-	 */
-	public static final String EDITABLE_PARAMETER_ERROR = "org.hdiv.action.EDITABLE_PARAMETER_ERROR";
-
-	/**
 	 * The action received in the request does not match the state action.
 	 */
 	public static final String ACTION_ERROR = "INVALID_ACTION";
