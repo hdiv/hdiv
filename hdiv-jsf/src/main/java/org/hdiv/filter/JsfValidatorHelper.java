@@ -93,21 +93,22 @@ public class JsfValidatorHelper extends ValidatorHelperRequest {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.hdiv.filter.AbstractValidatorHelper#isTheSameAction(javax.servlet.http.HttpServletRequest,
+	 * @see org.hdiv.filter.ValidatorHelperRequest#isTheSameAction(javax.servlet.http.HttpServletRequest,
 	 * java.lang.String, org.hdiv.state.IState)
 	 */
-	public boolean isTheSameAction(HttpServletRequest request, String target, IState state) {
+	@Override
+	public ValidatorHelperResult isTheSameAction(HttpServletRequest request, String target, IState state) {
 
 		// First check if target and action are the same
 		// When outputlink is used target matches action
 		if (state.getAction().equalsIgnoreCase(target)) {
-			return true;
+			return ValidatorHelperResult.VALID;
 		}
 
 		if (target.endsWith("/")) {
 			String actionSlash = state.getAction() + "/";
 			if (actionSlash.equalsIgnoreCase(target)) {
-				return true;
+				return ValidatorHelperResult.VALID;
 			}
 		}
 
@@ -121,14 +122,14 @@ public class JsfValidatorHelper extends ValidatorHelperRequest {
 				targetWithoutContextPath.indexOf("."));
 		boolean isActionState = state.getAction().equalsIgnoreCase(targetWithoutServletAndContextPath);
 		if (isActionState) {
-			return true;
+			return ValidatorHelperResult.VALID;
 		}
 
 		// In other case, <h:link> component may have context path but not servlet mapping
 		String targetWithoutServlet = target.substring(0, target.indexOf("."));
 		isActionState = state.getAction().equalsIgnoreCase(targetWithoutServlet);
 		if (isActionState) {
-			return true;
+			return ValidatorHelperResult.VALID;
 		}
 
 		if (log.isDebugEnabled()) {
@@ -138,13 +139,13 @@ public class JsfValidatorHelper extends ValidatorHelperRequest {
 		}
 		this.getLogger().log(HDIVErrorCodes.ACTION_ERROR, target, null, null);
 
-		return false;
+		return new ValidatorHelperResult(HDIVErrorCodes.ACTION_ERROR);
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.hdiv.filter.AbstractValidatorHelper#addParameterToRequest(javax.servlet .http.HttpServletRequest,
+	 * @see org.hdiv.filter.ValidatorHelperRequest#addParameterToRequest(javax.servlet.http.HttpServletRequest,
 	 * java.lang.String, java.lang.Object)
 	 */
 	protected void addParameterToRequest(HttpServletRequest request, String name, Object value) {

@@ -32,6 +32,7 @@ import org.hdiv.dataComposer.DataComposerFactory;
 import org.hdiv.dataValidator.DataValidatorFactory;
 import org.hdiv.dataValidator.ValidationResult;
 import org.hdiv.events.HDIVFacesEventListener;
+import org.hdiv.filter.DefaultValidatorErrorHandler;
 import org.hdiv.filter.JsfValidatorHelper;
 import org.hdiv.filter.ValidatorHelperRequest;
 import org.hdiv.idGenerator.RandomGuidUidGenerator;
@@ -102,6 +103,8 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 			// If user don't define userData bean, create default
 			parserContext.getRegistry().registerBeanDefinition("userData", this.createUserData(element, source));
 		}
+		parserContext.getRegistry().registerBeanDefinition("validatorErrorHandler",
+				this.createValidatorErrorHandler(element, source));
 		parserContext.getRegistry().registerBeanDefinition("logger", this.createLogger(element, source));
 		parserContext.getRegistry().registerBeanDefinition("cache", this.createStateCache(element, source));
 		parserContext.getRegistry().registerBeanDefinition("encoding", this.createEncodingUtil(element, source));
@@ -212,6 +215,19 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		bean.setSource(source);
 		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
 		bean.getPropertyValues().addPropertyValue("userData", new RuntimeBeanReference(userData));
+		return bean;
+	}
+
+	private RootBeanDefinition createValidatorErrorHandler(Element element, Object source) {
+		String userData = element.getAttribute("userData");
+		if (userData == null || userData.length() < 1) {
+			userData = "userData";// default userData bean id
+		}
+		RootBeanDefinition bean = new RootBeanDefinition(DefaultValidatorErrorHandler.class);
+		bean.setSource(source);
+		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
+		bean.getPropertyValues().addPropertyValue("userData", new RuntimeBeanReference(userData));
+		bean.getPropertyValues().addPropertyValue("config", new RuntimeBeanReference("config"));
 		return bean;
 	}
 
@@ -384,7 +400,6 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		String strategy = element.getAttribute("strategy");
 		String randomName = element.getAttribute("randomName");
 		String errorPage = element.getAttribute("errorPage");
-		String loginPage = element.getAttribute("loginPage");
 		String protectedExtensions = element.getAttribute("protectedExtensions");
 		String excludedExtensions = element.getAttribute("excludedExtensions");
 		String debugMode = element.getAttribute("debugMode");
@@ -417,10 +432,6 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 
 		if (StringUtils.hasText(errorPage)) {
 			bean.getPropertyValues().addPropertyValue("errorPage", errorPage);
-		}
-
-		if (StringUtils.hasText(loginPage)) {
-			bean.getPropertyValues().addPropertyValue("loginPage", loginPage);
 		}
 
 		if (StringUtils.hasText(protectedExtensions)) {
@@ -545,9 +556,10 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 					this.processStartPages(node, bean);
 				} else if (node.getLocalName().equalsIgnoreCase("startParameters")) {
 					this.processStartParameters(node, bean);
-
 				} else if (node.getLocalName().equalsIgnoreCase("paramsWithoutValidation")) {
 					this.processParamsWithoutValidation(node, bean);
+				} else if (node.getLocalName().equalsIgnoreCase("sessionExpired")) {
+					this.processSessionExpired(node, bean);
 				}
 			}
 		}
@@ -591,6 +603,17 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 				}
 			}
 		}
+	}
+
+	private void processSessionExpired(Node node, RootBeanDefinition bean) {
+
+		NamedNodeMap attributes = node.getAttributes();
+		String loginPage = attributes.getNamedItem("loginPage").getTextContent();
+		bean.getPropertyValues().addPropertyValue("sessionExpiredLoginPage", loginPage);
+
+		String homePage = attributes.getNamedItem("homePage").getTextContent();
+		bean.getPropertyValues().addPropertyValue("sessionExpiredHomePage", homePage);
+
 	}
 
 	private void processMapping(Node node, Map map) {

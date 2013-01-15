@@ -90,6 +90,31 @@
 		</xsd:annotation>
 		<xsd:complexType>
 			<xsd:sequence>
+				<xsd:element name="sessionExpired" minOccurs="0" maxOccurs="1">
+					<xsd:annotation>
+						<xsd:documentation><![CDATA[
+	Configuration for Session Expiration related cases. 
+						]]></xsd:documentation>
+					</xsd:annotation>
+					<xsd:complexType mixed="true">
+						<xsd:attribute name="loginPage" type="xsd:string"
+							default="">
+							<xsd:annotation>
+								<xsd:documentation><![CDATA[
+	Url of the login page. Users that cause a session expiration related error and are not logged in are redirected here. 
+								]]></xsd:documentation>
+							</xsd:annotation>
+						</xsd:attribute>
+						<xsd:attribute name="homePage" type="xsd:string"
+							default="">
+							<xsd:annotation>
+								<xsd:documentation><![CDATA[
+	Url of the login page. Users that cause a session expiration related error and are logged in are redirected here. 
+								]]></xsd:documentation>
+							</xsd:annotation>
+						</xsd:attribute>
+					</xsd:complexType>
+				</xsd:element>
 				<xsd:element name="startPages" minOccurs="0" maxOccurs="unbounded">
 					<xsd:annotation>
 						<xsd:documentation><![CDATA[
@@ -199,15 +224,6 @@
 				<xsd:annotation>
 					<xsd:documentation><![CDATA[
 	Url of the error page to which HDIV will redirect the request if it doesn't pass the HDIV validation.
-					]]></xsd:documentation>
-				</xsd:annotation>
-			</xsd:attribute>
-			<xsd:attribute name="loginPage" type="xsd:string"
-				default="/">
-				<xsd:annotation>
-					<xsd:documentation><![CDATA[
-	Url of the error page to which HDIV will redirect the request if it doesn't pass the HDIV validation caused by session
-	expiration.
 					]]></xsd:documentation>
 				</xsd:annotation>
 			</xsd:attribute>

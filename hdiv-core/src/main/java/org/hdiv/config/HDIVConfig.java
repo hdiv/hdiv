@@ -26,7 +26,6 @@ import java.util.regex.Pattern;
 import org.hdiv.util.Constants;
 import org.hdiv.util.HDIVUtil;
 import org.hdiv.validator.IValidation;
-import java.lang.StringBuffer;
 
 /**
  * Class containing HDIV configuration initialized from Spring Factory.
@@ -72,9 +71,15 @@ public class HDIVConfig {
 
 	/**
 	 * Url of the error page to which HDIV will redirect the request if it doesn't pass the HDIV validation caused by
-	 * session expiration.
+	 * session expiration and the user is not logged in the application.
 	 */
-	private String loginPage;
+	private String sessionExpiredLoginPage;
+
+	/**
+	 * Url of the error page to which HDIV will redirect the request if it doesn't pass the HDIV validation caused by
+	 * session expiration and the user is logged in the application.
+	 */
+	private String sessionExpiredHomePage;
 
 	/**
 	 * Confidentiality indicator to know if information is accessible only for those who are authorized.
@@ -409,23 +414,41 @@ public class HDIVConfig {
 
 	public void setErrorPage(String errorPage) {
 
-		if (!errorPage.startsWith("/")) {
+		if (errorPage != null && !errorPage.startsWith("/")) {
 			errorPage = "/" + errorPage;
 		}
 		this.errorPage = errorPage;
-		this.startPages.put(errorPage, new StartPage(null, errorPage));
-	}
-
-	public String getLoginPage() {
-		return loginPage;
-	}
-
-	public void setLoginPage(String loginPage) {
-		if (!loginPage.startsWith("/")) {
-			loginPage = "/" + loginPage;
+		if (errorPage != null) {
+			this.startPages.put(errorPage, new StartPage(null, errorPage));
 		}
-		this.loginPage = loginPage;
-		this.startPages.put(loginPage, new StartPage(null, loginPage));
+	}
+
+	public String getSessionExpiredLoginPage() {
+		return sessionExpiredLoginPage;
+	}
+
+	public void setSessionExpiredLoginPage(String sessionExpiredLoginPage) {
+		if (sessionExpiredLoginPage != null && !sessionExpiredLoginPage.startsWith("/")) {
+			sessionExpiredLoginPage = "/" + sessionExpiredLoginPage;
+		}
+		this.sessionExpiredLoginPage = sessionExpiredLoginPage;
+		if (sessionExpiredLoginPage != null) {
+			this.startPages.put(sessionExpiredLoginPage, new StartPage(null, sessionExpiredLoginPage));
+		}
+	}
+
+	public String getSessionExpiredHomePage() {
+		return sessionExpiredHomePage;
+	}
+
+	public void setSessionExpiredHomePage(String sessionExpiredHomePage) {
+		if (sessionExpiredHomePage != null && !sessionExpiredHomePage.startsWith("/")) {
+			sessionExpiredHomePage = "/" + sessionExpiredHomePage;
+		}
+		this.sessionExpiredHomePage = sessionExpiredHomePage;
+		if (sessionExpiredHomePage != null) {
+			this.startPages.put(sessionExpiredHomePage, new StartPage(null, sessionExpiredHomePage));
+		}
 	}
 
 	public Boolean getConfidentiality() {
@@ -706,7 +729,8 @@ public class HDIVConfig {
 		result.append(" strategy=").append(this.getStrategy());
 		result.append(" randomName=").append(this.isRandomName());
 		result.append(" errorPage=").append(this.getErrorPage());
-		result.append(" loginPage=").append(this.loginPage);
+		result.append(" sessionExpiredLoginPage=").append(this.sessionExpiredLoginPage);
+		result.append(" sessionExpiredHomePage=").append(this.sessionExpiredHomePage);
 		result.append(" excludedExtensions=").append(this.excludedURLExtensions);
 		result.append(" protectedExtensions=").append(this.getProtectedURLPatterns());
 		result.append(" startPages=").append(this.startPages);

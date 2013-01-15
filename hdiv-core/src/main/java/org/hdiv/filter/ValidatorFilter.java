@@ -22,7 +22,6 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -64,6 +63,11 @@ public class ValidatorFilter extends OncePerRequestFilter {
 	private IMultipartConfig multipartConfig;
 
 	/**
+	 * Validation error handler
+	 */
+	private ValidatorErrorHandler errorHandler;
+
+	/**
 	 * Creates a new ValidatorFilter object.
 	 */
 	public ValidatorFilter() {
@@ -85,6 +89,8 @@ public class ValidatorFilter extends OncePerRequestFilter {
 				// For applications without Multipart requests
 				this.multipartConfig = (IMultipartConfig) context.getBean("multipartConfig");
 			}
+
+			this.errorHandler = (ValidatorErrorHandler) context.getBean("validatorErrorHandler");
 		}
 
 	}
@@ -138,26 +144,18 @@ public class ValidatorFilter extends OncePerRequestFilter {
 				}
 			}
 
+			ValidatorHelperResult result = null;
 			if (!isMultipartException) {
-				legal = this.validationHelper.validate(multipartProcessedRequest);
+				result = this.validationHelper.validate(multipartProcessedRequest);
+				legal = result.isValid();
 			}
 
 			if (legal || this.hdivConfig.isDebugMode()) {
 				processRequest(multipartProcessedRequest, responseWrapper, filterChain);
 			} else {
 
-				HttpSession session = request.getSession(false);
-				if (session == null || session.isNew()) {
-					// New session, maybe expired session
-					// Redirect to login page instead of error page
-					response.sendRedirect(response.encodeRedirectURL(request.getContextPath()
-							+ this.hdivConfig.getLoginPage()));
-				} else {
-
-					// Redirect to error page
-					response.sendRedirect(response.encodeRedirectURL(request.getContextPath()
-							+ this.hdivConfig.getErrorPage()));
-				}
+				// Call to ValidatorErrorHandler
+				this.errorHandler.handleValidatorError(multipartProcessedRequest, response, result.getErrorCode());
 			}
 
 		} catch (IOException e) {

@@ -28,6 +28,7 @@ http://www.hdiv.org/schema/hdiv http://www.hdiv.org/schema/hdiv/hdiv.xsd">
 		avoidCookiesConfidentiality="true" avoidValidationInUrlsWithoutParams="true"
 		debugMode="true" userData="testUserData"
 		showErrorPageOnEditableValidation="true">
+		<hdiv:sessionExpired loginPage="/login.html" homePage="/"/>
 		<hdiv:startPages>page1,page2</hdiv:startPages>
 		<hdiv:startPages method="get">/login.html,/logout.html</hdiv:startPages>
 		<hdiv:startParameters>parameter1,parameter2</hdiv:startParameters>

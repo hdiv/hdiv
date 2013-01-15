@@ -73,7 +73,7 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 		request.addParameter(hdivParameter, pageState);
 
 		RequestWrapper requestWrapper = new RequestWrapper(request);
-		boolean result = helper.validate(requestWrapper);
+		boolean result = helper.validate(requestWrapper).isValid();
 		assertTrue(result);
 	}
 
@@ -93,7 +93,7 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 		request.addParameter(hdivParameter, pageState);
 
 		RequestWrapper requestWrapper = new RequestWrapper(request);
-		assertTrue(helper.validate(requestWrapper));
+		assertTrue(helper.validate(requestWrapper).isValid());
 	}
 
 	/**
@@ -111,7 +111,7 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 		request.addParameter(hdivParameter, pageState);
 
 		RequestWrapper requestWrapper = new RequestWrapper(request);
-		assertTrue(helper.validate(requestWrapper));
+		assertTrue(helper.validate(requestWrapper).isValid());
 	}
 
 	/**
@@ -133,7 +133,7 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 		request.addParameter("param1", value);
 
 		RequestWrapper requestWrapper = new RequestWrapper(request);
-		assertTrue(helper.validate(requestWrapper));
+		assertTrue(helper.validate(requestWrapper).isValid());
 	}
 
 	/**
@@ -159,7 +159,7 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 		request.addParameter("param1", value);
 
 		RequestWrapper requestWrapper = new RequestWrapper(request);
-		assertTrue(helper.validate(requestWrapper));
+		assertTrue(helper.validate(requestWrapper).isValid());
 	}
 
 	/**
@@ -189,7 +189,7 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 
 		this.dataComposer.endPage();
 		RequestWrapper requestWrapper = new RequestWrapper(request);
-		assertTrue(helper.validate(requestWrapper));
+		assertTrue(helper.validate(requestWrapper).isValid());
 	}
 
 	/**
@@ -213,7 +213,7 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 		request.addParameter(hdivParameter, pageState);
 
 		RequestWrapper requestWrapper = new RequestWrapper(request);
-		assertTrue(helper.validate(requestWrapper));
+		assertTrue(helper.validate(requestWrapper).isValid());
 	}
 
 	/**
@@ -239,7 +239,7 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 			request.addParameter("param1", "2");
 
 			RequestWrapper requestWrapper = new RequestWrapper(request);
-			assertTrue(!helper.validate(requestWrapper));
+			assertTrue(!helper.validate(requestWrapper).isValid());
 		}
 		assertTrue(true);
 	}
@@ -267,7 +267,7 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 		request.addParameter(hdivParameter, pageState);
 
 		RequestWrapper requestWrapper = new RequestWrapper(request);
-		assertTrue(!helper.validate(requestWrapper));
+		assertTrue(!helper.validate(requestWrapper).isValid());
 	}
 
 	/**
@@ -294,7 +294,7 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 		request.addParameter(hdivParameter, pageState);
 
 		RequestWrapper requestWrapper = new RequestWrapper(request);
-		assertTrue(!helper.validate(requestWrapper));
+		assertTrue(!helper.validate(requestWrapper).isValid());
 	}
 
 	/**
@@ -317,7 +317,7 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 			request.addParameter("param1", "1");
 
 			RequestWrapper requestWrapper = new RequestWrapper(request);
-			assertTrue(!helper.validate(requestWrapper));
+			assertTrue(!helper.validate(requestWrapper).isValid());
 		}
 		assertTrue(true);
 	}
@@ -346,7 +346,7 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 		boolean result = true;
 		try {
 			RequestWrapper requestWrapper = new RequestWrapper(request);
-			result = helper.validate(requestWrapper);
+			result = helper.validate(requestWrapper).isValid();
 			assertFalse(result);
 		} catch (Exception e) {
 			assertTrue(true);
@@ -367,7 +367,7 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 		request.addParameter("paramName", "<script>storeCookie()</script>");
 
 		RequestWrapper requestWrapper = new RequestWrapper(request);
-		boolean result = helper.validate(requestWrapper);
+		boolean result = helper.validate(requestWrapper).isValid();
 		assertTrue(result);
 
 		// Editable errors in request?
@@ -392,7 +392,7 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 		request.addParameter("paramName", "<script>storeCookie()</script>");
 
 		RequestWrapper requestWrapper = new RequestWrapper(request);
-		boolean result = helper.validate(requestWrapper);
+		boolean result = helper.validate(requestWrapper).isValid();
 		assertFalse(result);
 
 	}

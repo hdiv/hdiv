@@ -67,7 +67,7 @@ public class EditableParameterValidatorTest extends AbstractHDIVTestCase {
 		request.addParameter("paramName", "<script>storeCookie()</script>");
 
 		RequestWrapper requestWrapper = new RequestWrapper(request);
-		boolean result = helper.validate(requestWrapper);
+		boolean result = helper.validate(requestWrapper).isValid();
 		assertTrue(result);
 
 		// Editable errors in request?

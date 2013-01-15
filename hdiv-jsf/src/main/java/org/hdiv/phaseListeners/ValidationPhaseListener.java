@@ -31,6 +31,7 @@ import org.hdiv.config.HDIVConfig;
 import org.hdiv.exception.HDIVException;
 import org.hdiv.exception.StateValidationException;
 import org.hdiv.filter.IValidationHelper;
+import org.hdiv.filter.ValidatorHelperResult;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.jsf.FacesContextUtils;
 
@@ -89,9 +90,9 @@ public class ValidationPhaseListener implements PhaseListener {
 		HttpServletRequest request = (HttpServletRequest) exContext.getRequest();
 
 		try {
-			boolean legal = validationHelper.validate(request);
+			ValidatorHelperResult result = this.validationHelper.validate(request);
 
-			if (!legal) {
+			if (!result.isValid()) {
 				try {
 					FacesContext fContext = FacesContext.getCurrentInstance();
 					String contextPath = fContext.getExternalContext().getRequestContextPath();

@@ -40,6 +40,14 @@
 		<property name="errorPage">
 			<value>/error.jsp</value>
 		</property>
+		
+		<property name="sessionExpiredLoginPage">
+			<value>/login.html</value>
+		</property>
+		
+		<property name="sessionExpiredHomePage">
+			<value>/login.html</value>
+		</property>
 
 		<property name="paramsWithoutValidation">
 			<map>								

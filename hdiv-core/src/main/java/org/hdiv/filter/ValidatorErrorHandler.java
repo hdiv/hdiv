@@ -13,31 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.hdiv.logs;
+package org.hdiv.filter;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.hdiv.util.HDIVErrorCodes;
 
 /**
- * Interface to get request's username
+ * Process a request with validation errors.
  * 
- * @author Roberto Velasco
+ * @author Gotzon Illarramendi
+ * @since 2.1.4
  */
-public interface IUserData {
-
-	public static final String ANONYMOUS = "anonymous";
+public interface ValidatorErrorHandler {
 
 	/**
-	 * <p>
-	 * Get application username to log attacks.
-	 * </p>
-	 * <p>
-	 * If the user is anonymous, not logged in for example, return {@link IUserData.ANONYMOUS}.
-	 * </p>
+	 * Process a request with validation errors.
 	 * 
 	 * @param request
-	 *            request object
-	 * @return application user name
+	 *            {@link HttpServletRequest} instance
+	 * @param response
+	 *            {@link HttpServletResponse} instance
+	 * @param errorCode
+	 *            Error code from {@link HDIVErrorCodes}
 	 */
-	public String getUsername(HttpServletRequest request);
-
+	void handleValidatorError(HttpServletRequest request, HttpServletResponse response, String errorCode);
 }
