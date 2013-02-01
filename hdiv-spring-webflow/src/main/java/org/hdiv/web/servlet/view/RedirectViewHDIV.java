@@ -106,6 +106,19 @@ public class RedirectViewHDIV extends RedirectView {
 	}
 
 	/**
+	 * Create a new RedirectView with the given URL.
+	 * @param url the URL to redirect to
+	 * @param contextRelative whether to interpret the given URL as
+	 * relative to the current ServletContext
+	 * @param http10Compatible whether to stay compatible with HTTP 1.0 clients
+	 * @param exposeModelAttributes whether or not model attributes should be
+	 * exposed as query parameters
+	 */
+	public RedirectViewHDIV(String url, boolean contextRelative, boolean http10Compatible, boolean exposeModelAttributes) {
+		super(url, contextRelative, http10Compatible, exposeModelAttributes);
+	}
+
+	/**
 	 * Send a redirect back to the HTTP client and adds HDIV state as a
 	 * parameter if <code>targetUrl</code> references our application.
 	 * 
@@ -124,56 +137,11 @@ public class RedirectViewHDIV extends RedirectView {
 			LinkUrlProcessor linkUrlProcessor = HDIVUtil.getLinkUrlProcessor(request.getSession().getServletContext());
 			targetUrl = linkUrlProcessor.processUrl(request, targetUrl);
 		}
-		/*
-		if (request.getSession(false) != null) {
-			ServletContext servletContext = request.getSession().getServletContext();
-			HDIVConfig hdivConfig = HDIVUtil.getHDIVConfig(servletContext);
-			if (HDIVRequestUtils.hasActionOrServletExtension(targetUrl, hdivConfig.getProtectedURLPatterns())) {
-				targetUrl = HDIVRequestUtils.addHDIVParameterIfNecessary(request, targetUrl, hdivConfig.isValidationInUrlsWithoutParamsActivated());
-			}
-		}
-		*/
 
-		if (http10Compatible) {
-			// Always send status code 302.
-			response.sendRedirect(response.encodeRedirectURL(targetUrl));
-		} else {
-			HttpStatus statusCode = getHttp11StatusCode(request, response, targetUrl);
-			response.setStatus(statusCode.value());
-			response.setHeader("Location", response.encodeRedirectURL(targetUrl));
-		}
-	}
-	
-	/**
-	 * Determines the status code to use for HTTP 1.1 compatible requests.
-	 * <p>The default implemenetation returns the {@link #setStatusCode(HttpStatus) statusCode}
-	 * property if set, or the value of the {@link #RESPONSE_STATUS_ATTRIBUTE} attribute. If neither are
-	 * set, it defaults to {@link HttpStatus#SEE_OTHER} (303).
-	 * @param request the request to inspect
-	 * @return the response
-	 */
-	/* the "this.statusCode != null" is now in spring, so this is identical and not needed
-	@Override
-	protected HttpStatus getHttp11StatusCode(HttpServletRequest request, HttpServletResponse response, String targetUrl) {
-		
-		//TODO: testear habi�ndole asignado valor a statusCode mediante el applicationContext.xml
-		if (this.statusCode != null) {
-			return statusCode;
-		}
-		HttpStatus attributeStatusCode = (HttpStatus) request.getAttribute(View.RESPONSE_STATUS_ATTRIBUTE);
-		if (attributeStatusCode != null) {
-			return attributeStatusCode;
-		}
-		return HttpStatus.SEE_OTHER;
-	}
-	*/
-	/**
-	 * Set the status code for this view.
-	 * <p>Default is to send 302/303, depending on the value of the
-	 * {@link #setHttp10Compatible(boolean) http10Compatible} flag.
-	 */
-	public void setStatusCode(HttpStatus statusCode) {
-		this.statusCode = statusCode;
+		// simply use super to retain the latest of whatever spring version is used (hence the removal of the commented getHttp11StatusCode which is only in 3.x)
+		// this was a 'sendRedirect' method as per 2.5.x branch - https://src.springframework.org/svn/spring-maintenance/trunk/src/org/springframework/web/servlet/view/RedirectView.java
+		// where the version of that repo is indicated by https://src.springframework.org/svn/spring-maintenance/trunk/changelog.txt
+		super.sendRedirect(request, response, targetUrl, http10Compatible);
 	}
 
 }
