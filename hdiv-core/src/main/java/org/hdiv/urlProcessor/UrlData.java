@@ -35,6 +35,11 @@ public class UrlData {
 	private String anchor;
 
 	/**
+	 * JSessionId value
+	 */
+	private String jSessionId;
+
+	/**
 	 * Url that starts with contextPath
 	 */
 	private String contextPathRelativeUrl;
@@ -224,6 +229,21 @@ public class UrlData {
 	 */
 	public void setFormUrl(boolean isFormUrl) {
 		this.isFormUrl = isFormUrl;
+	}
+
+	/**
+	 * @return the jSessionId
+	 */
+	public String getjSessionId() {
+		return jSessionId;
+	}
+
+	/**
+	 * @param jSessionId
+	 *            the jSessionId to set
+	 */
+	public void setjSessionId(String jSessionId) {
+		this.jSessionId = jSessionId;
 	}
 
 }

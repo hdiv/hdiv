@@ -102,7 +102,7 @@ public abstract class AbstractUrlProcessor {
 		urlData.setInternal(internal);
 
 		// Remove jsessionid
-		url = this.stripSession(url);
+		url = this.stripSession(url, urlData);
 
 		// Calculate contextPath beginning url
 		String contextPathRelativeUrl = this.getContextPathRelative(request, url);
@@ -247,6 +247,12 @@ public abstract class AbstractUrlProcessor {
 			sb.append(urlData.getServer());
 		}
 		sb.append(urlData.getContextPathRelativeUrl());
+
+		// Add jSessionId
+		if (urlData.getjSessionId() != null) {
+			sb.append(";");
+			sb.append(urlData.getjSessionId());
+		}
 
 		if (params == null || params.size() == 0) {
 			return sb.toString();
@@ -551,11 +557,30 @@ public abstract class AbstractUrlProcessor {
 	 * 
 	 * @param url
 	 *            url
+	 * @param urlData
+	 *            actual url data
 	 * @return url without sessionId
 	 */
-	protected String stripSession(String url) {
+	protected String stripSession(String url, UrlData urlData) {
 
-		return HDIVUtil.stripSession(url);
+		if (url.contains(Constants.JSESSIONID) || url.contains(Constants.JSESSIONID.toLowerCase())) {
+
+			int last = url.length();
+			if (url.contains("?")) {
+				last = url.indexOf("?");
+			}
+			String jSessionId = url.substring(url.indexOf(";") + 1, last);
+			urlData.setjSessionId(jSessionId);
+
+			if (log.isDebugEnabled()) {
+				log.debug("jSessionId value: " + jSessionId);
+			}
+
+			return HDIVUtil.stripSession(url);
+		} else {
+			return url;
+		}
+
 	}
 
 	/**

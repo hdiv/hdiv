@@ -113,16 +113,6 @@ public class LinkUrlProcessorTest extends AbstractHDIVTestCase {
 		assertTrue(result.equals("../testAction.do"));
 	}
 
-	public void testStripSession() {
-
-		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
-		String url = "/app/list.do;jsessionid=AAAAAA?_HDIV_STATE_=14-2-8AB072360ABD8A2B2FBC484B0BC61BA4";
-
-		String result = this.linkUrlProcessor.processUrl(request, url);
-
-		assertTrue(result.indexOf("jsessionid") < 0);
-	}
-
 	public void testProcessAbsoluteExternalUrlWithContextPath() {
 
 		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
@@ -234,6 +224,37 @@ public class LinkUrlProcessorTest extends AbstractHDIVTestCase {
 		assertTrue(result.startsWith("/testAction.do?name=X&name=Y&name=Z&_HDIV_STATE_="));
 
 		this.getConfig().setConfidentiality(conf);
+	}
+
+	public void testProcessActionJsessionId() {
+
+		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		String url = "/testAction.do;jsessionid=67CFB560B6EC2677D51814A2A2B16B24";
+
+		String result = this.linkUrlProcessor.processUrl(request, url);
+
+		assertTrue(result.startsWith("/testAction.do;jsessionid=67CFB560B6EC2677D51814A2A2B16B24?_HDIV_STATE_"));
+	}
+
+	public void testProcessActionJsessionIdParam() {
+
+		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		String url = "/testAction.do;jsessionid=67CFB560B6EC2677D51814A2A2B16B24?params=1";
+
+		String result = this.linkUrlProcessor.processUrl(request, url);
+
+		assertTrue(result
+				.startsWith("/testAction.do;jsessionid=67CFB560B6EC2677D51814A2A2B16B24?params=0&_HDIV_STATE_"));
+	}
+
+	public void testProcessActionJsessionStartPage() {
+
+		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+
+		String url = "/testing.do;jsessionid=67CFB560B6EC2677D51814A2A2B16B24"; // is a startPage
+		String result = this.linkUrlProcessor.processUrl(request, url);
+		assertEquals(url, result);
+
 	}
 
 }
