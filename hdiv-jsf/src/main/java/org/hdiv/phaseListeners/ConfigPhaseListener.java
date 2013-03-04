@@ -49,7 +49,7 @@ public class ConfigPhaseListener implements PhaseListener {
 	/**
 	 * Name of the attribute that contains the user token
 	 */
-	private static final String HDIV_USER_TOKEN_ATRR_NAME = "HDIV_USER_TOKEN";
+	private static final String HDIV_USER_TOKEN_ATTR_NAME = "HDIV_USER_TOKEN";
 
 	/**
 	 * Is SevletContext object initialized?
@@ -124,12 +124,12 @@ public class ConfigPhaseListener implements PhaseListener {
 		UIViewRoot viewRoot = facesContext.getViewRoot();
 		if (viewRoot != null) {
 
-			String userToken = (String) viewRoot.getAttributes().get(HDIV_USER_TOKEN_ATRR_NAME);
+			String userToken = (String) viewRoot.getAttributes().get(HDIV_USER_TOKEN_ATTR_NAME);
 			if (userToken == null) {
 
 				HttpSession session = (HttpSession) facesContext.getExternalContext().getSession(false);
 				if (session != null) {
-					viewRoot.getAttributes().put(HDIV_USER_TOKEN_ATRR_NAME, session.getId());
+					viewRoot.getAttributes().put(HDIV_USER_TOKEN_ATTR_NAME, session.getId());
 				}
 
 			}
