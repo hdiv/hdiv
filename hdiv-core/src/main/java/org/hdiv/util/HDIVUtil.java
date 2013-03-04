@@ -88,9 +88,6 @@ public class HDIVUtil {
 	public static IDataComposer getDataComposer(HttpServletRequest request) {
 
 		IDataComposer requestDataComposer = (IDataComposer) request.getAttribute(DATACOMPOSER_REQUEST_KEY);
-		if (requestDataComposer == null) {
-			throw new HDIVException("IDataComposer has not been initialized in request");
-		}
 		return requestDataComposer;
 	}
 
