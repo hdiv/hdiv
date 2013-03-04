@@ -20,6 +20,8 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.hdiv.dataComposer.IDataComposer;
 import org.hdiv.util.Constants;
 import org.hdiv.util.HDIVUtil;
@@ -30,6 +32,11 @@ import org.hdiv.util.HDIVUtil;
  * @author Gotzon Illarramendi
  */
 public class LinkUrlProcessor extends AbstractUrlProcessor {
+
+	/**
+	 * Commons Logging instance.
+	 */
+	private static Log log = LogFactory.getLog(LinkUrlProcessor.class);
 
 	/**
 	 * Process the url to add hdiv state if it is necessary.
@@ -58,10 +65,18 @@ public class LinkUrlProcessor extends AbstractUrlProcessor {
 	 */
 	public String processUrl(HttpServletRequest request, String url, String encoding) {
 
+		IDataComposer dataComposer = HDIVUtil.getDataComposer(request);
+		if (dataComposer == null) {
+			// IDataComposer not initialized on request, request is out of filter
+			if (log.isDebugEnabled()) {
+				log.debug("IDataComposer not initialized on request, request is out of filter");
+			}
+			return url;
+		}
+
 		UrlData urlData = super.createUrlData(url, false, request);
 		if (super.isHdivStateNecessary(urlData)) {
 			// the url needs protection
-			IDataComposer dataComposer = HDIVUtil.getDataComposer(request);
 			dataComposer.beginRequest(urlData.getContextPathRelativeUrl());
 
 			Map params = urlData.getOriginalUrlParams();

@@ -20,6 +20,8 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.hdiv.dataComposer.IDataComposer;
 import org.hdiv.util.Constants;
 import org.hdiv.util.HDIVUtil;
@@ -34,6 +36,11 @@ public class FormUrlProcessor extends AbstractUrlProcessor {
 	private static final String FORM_STATE_ID = "hdivFormStateId";
 
 	/**
+	 * Commons Logging instance.
+	 */
+	private static Log log = LogFactory.getLog(FormUrlProcessor.class);
+
+	/**
 	 * Process form action url to add hdiv state if it is necessary.
 	 * 
 	 * @param request
@@ -44,10 +51,18 @@ public class FormUrlProcessor extends AbstractUrlProcessor {
 	 */
 	public String processUrl(HttpServletRequest request, String url) {
 
+		IDataComposer dataComposer = HDIVUtil.getDataComposer(request);
+		if (dataComposer == null) {
+			// IDataComposer not initialized on request, request is out of filter
+			if (log.isDebugEnabled()) {
+				log.debug("IDataComposer not initialized on request, request is out of filter");
+			}
+			return url;
+		}
+
 		UrlData urlData = super.createUrlData(url, true, request);
 		if (super.isHdivStateNecessary(urlData)) {
 			// the url needs protection
-			IDataComposer dataComposer = HDIVUtil.getDataComposer(request);
 			String stateId = dataComposer.beginRequest(urlData.getContextPathRelativeUrl());
 
 			// Publish the state in request to make it accessible on jsp
