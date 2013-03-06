@@ -18,6 +18,8 @@ package org.hdiv.web.validator;
 import java.util.HashMap;
 import java.util.Hashtable;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.hdiv.AbstractHDIVTestCase;
 import org.hdiv.dataComposer.DataComposerFactory;
 import org.hdiv.dataComposer.IDataComposer;
@@ -48,7 +50,8 @@ public class EditableParameterValidatorTest extends AbstractHDIVTestCase {
 
 		DataComposerFactory dataComposerFactory = (DataComposerFactory) this.getApplicationContext().getBean(
 				"dataComposerFactory");
-		this.dataComposer = dataComposerFactory.newInstance();
+		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		this.dataComposer = dataComposerFactory.newInstance(request);
 		this.dataComposer.startPage();
 	}
 

@@ -28,6 +28,7 @@ import org.apache.commons.logging.LogFactory;
 import org.hdiv.config.HDIVConfig;
 import org.hdiv.config.multipart.IMultipartConfig;
 import org.hdiv.config.multipart.exception.HdivMultipartException;
+import org.hdiv.util.HDIVUtil;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -96,6 +97,35 @@ public class ValidatorFilter extends OncePerRequestFilter {
 	}
 
 	/**
+	 * Init request scoped data
+	 * 
+	 * @param request
+	 *            request object
+	 */
+	protected void initRequestData(HttpServletRequest request) {
+
+		// Put the request in threadlocal
+		HDIVUtil.setHttpServletRequest(request);
+
+		// Store request original request uri
+		HDIVUtil.setRequestURI(request.getRequestURI(), request);
+
+	}
+
+	/**
+	 * Destroy request scoped data
+	 * 
+	 * @param request
+	 *            request object
+	 */
+	protected void destroyRequestData(HttpServletRequest request) {
+
+		// Erase request from threadlocal
+		HDIVUtil.resetLocalData();
+
+	}
+
+	/**
 	 * Called by the container each time a request/response pair is passed through the chain due to a client request for
 	 * a resource at the end of the chain.
 	 * 
@@ -111,10 +141,14 @@ public class ValidatorFilter extends OncePerRequestFilter {
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
 
+		// Initialize dependencies
 		this.initDependencies();
 
-		ResponseWrapper responseWrapper = new ResponseWrapper(response);
-		RequestWrapper requestWrapper = getRequestWrapper(request);
+		// Initialize request scoped data
+		this.initRequestData(request);
+
+		ResponseWrapper responseWrapper = this.getResponseWrapper(response);
+		RequestWrapper requestWrapper = this.getRequestWrapper(request);
 
 		HttpServletRequest multipartProcessedRequest = requestWrapper;
 
@@ -183,6 +217,10 @@ public class ValidatorFilter extends OncePerRequestFilter {
 				response.sendRedirect(response.encodeRedirectURL(request.getContextPath()
 						+ this.hdivConfig.getErrorPage()));
 			}
+		} finally {
+
+			// Destroy request scoped data
+			this.destroyRequestData(request);
 		}
 	}
 
@@ -231,6 +269,22 @@ public class ValidatorFilter extends OncePerRequestFilter {
 		requestWrapper.setCookiesConfidentiality(this.hdivConfig.isCookiesConfidentialityActivated());
 
 		return requestWrapper;
+	}
+
+	/**
+	 * Create response wrapper.
+	 * 
+	 * @param response
+	 *            HTTP response
+	 * @return the response wrapper
+	 */
+	protected ResponseWrapper getResponseWrapper(HttpServletResponse response) {
+
+		ResponseWrapper responseWrapper = new ResponseWrapper(response);
+		responseWrapper.setConfidentiality(this.hdivConfig.getConfidentiality().booleanValue());
+		responseWrapper.setAvoidCookiesConfidentiality(!this.hdivConfig.isCookiesConfidentialityActivated());
+
+		return responseWrapper;
 	}
 
 }

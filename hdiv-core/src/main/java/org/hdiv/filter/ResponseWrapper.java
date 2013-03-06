@@ -26,7 +26,6 @@ import javax.servlet.http.HttpServletResponseWrapper;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.hdiv.config.HDIVConfig;
 import org.hdiv.util.Constants;
 import org.hdiv.util.HDIVUtil;
 
@@ -78,9 +77,6 @@ public class ResponseWrapper extends HttpServletResponseWrapper {
 
 		super(originalResponse);
 		this.cookies = new Hashtable();
-		HDIVConfig config = (HDIVConfig)HDIVUtil.getApplication().getBean("config");
-		this.confidentiality = config.getConfidentiality().booleanValue();
-		this.avoidCookiesConfidentiality = !config.isCookiesConfidentialityActivated();
 		
 		if (log.isDebugEnabled()) {
 			log.debug("New ResponseWrapper instance.");
@@ -257,4 +253,18 @@ public class ResponseWrapper extends HttpServletResponseWrapper {
 		return this.cookies;
 	}
 
+	/**
+	 * @param confidentiality the confidentiality to set
+	 */
+	public void setConfidentiality(boolean confidentiality) {
+		this.confidentiality = confidentiality;
+	}
+
+	/**
+	 * @param avoidCookiesConfidentiality the avoidCookiesConfidentiality to set
+	 */
+	public void setAvoidCookiesConfidentiality(boolean avoidCookiesConfidentiality) {
+		this.avoidCookiesConfidentiality = avoidCookiesConfidentiality;
+	}
+	
 }

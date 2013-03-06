@@ -67,7 +67,7 @@ public class FormUrlProcessorTest extends AbstractHDIVTestCase {
 	public void testProcessActionComplete() {
 
 		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
-		IDataComposer dataComposer = this.dataComposerFactory.newInstance();
+		IDataComposer dataComposer = this.dataComposerFactory.newInstance(request);
 		HDIVUtil.setDataComposer(dataComposer, request);
 		dataComposer.startPage();
 
@@ -127,5 +127,35 @@ public class FormUrlProcessorTest extends AbstractHDIVTestCase {
 		assertTrue(result.startsWith("/testAction.do?name=X&name=Y&name=Z"));
 
 		this.getConfig().setConfidentiality(conf);
+	}
+	
+	public void testProcessActionJsessionId() {
+
+		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		String url = "/testAction.do;jsessionid=67CFB560B6EC2677D51814A2A2B16B24";
+
+		String result = this.formUrlProcessor.processUrl(request, url);
+
+		assertEquals(result, url);
+	}
+
+	public void testProcessActionJsessionIdParam() {
+
+		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		String url = "/testAction.do;jsessionid=67CFB560B6EC2677D51814A2A2B16B24?params=0";
+
+		String result = this.formUrlProcessor.processUrl(request, url);
+
+		assertEquals(result, url);
+	}
+
+	public void testProcessActionJsessionStartPage() {
+
+		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+
+		String url = "/testing.do;jsessionid=67CFB560B6EC2677D51814A2A2B16B24"; // is a startPage
+		String result = this.formUrlProcessor.processUrl(request, url);
+		assertEquals(url, result);
+
 	}
 }

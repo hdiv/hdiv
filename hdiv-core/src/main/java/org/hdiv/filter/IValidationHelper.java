@@ -52,14 +52,16 @@ public interface IValidationHelper {
 	/**
 	 * It is called in the pre-processing stage of each user request.
 	 * 
-	 * @deprecated DataComposer startPage moved to InitListener
+	 * @param request
+	 *            HTTP servlet request
 	 */
 	public void startPage(HttpServletRequest request);
 
 	/**
 	 * It is called in the post-processing stage of each user request.
 	 * 
-	 * @deprecated DataComposer endPage moved to InitListener
+	 * @param request
+	 *            HTTP servlet request
 	 */
 	public void endPage(HttpServletRequest request);
 

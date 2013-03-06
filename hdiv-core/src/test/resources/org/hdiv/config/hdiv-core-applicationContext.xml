@@ -100,6 +100,9 @@
 		<property name="encodingUtil">
 			<ref bean="encoding" />
 		</property>
+		<property name="stateUtil">
+			<ref bean="stateUtil" />
+		</property>
 		<property name="allowedLength">
 			<value>4000</value>
 		</property>
@@ -115,6 +118,7 @@
 		<property name="hdivConfig" ref="config" />
 		<property name="session" ref="sessionHDIV" />
 		<property name="dataValidatorFactory" ref="dataValidatorFactory" />
+		<property name="dataComposerFactory" ref="dataComposerFactory" />
 	</bean>
 
 	<bean id="validatorErrorHandler" class="org.hdiv.filter.DefaultValidatorErrorHandler">

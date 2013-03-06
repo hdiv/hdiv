@@ -18,9 +18,6 @@ package org.hdiv.listener;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
-import javax.servlet.ServletRequestEvent;
-import javax.servlet.ServletRequestListener;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
@@ -31,14 +28,9 @@ import org.hdiv.application.IApplication;
 import org.hdiv.cipher.IKeyFactory;
 import org.hdiv.cipher.Key;
 import org.hdiv.config.HDIVConfig;
-import org.hdiv.dataComposer.DataComposerFactory;
-import org.hdiv.dataComposer.IDataComposer;
 import org.hdiv.idGenerator.PageIdGenerator;
 import org.hdiv.session.ISession;
 import org.hdiv.session.IStateCache;
-import org.hdiv.state.IPage;
-import org.hdiv.state.IState;
-import org.hdiv.state.StateUtil;
 import org.hdiv.urlProcessor.FormUrlProcessor;
 import org.hdiv.urlProcessor.LinkUrlProcessor;
 import org.hdiv.util.Constants;
@@ -56,7 +48,7 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
  * @author Gorka Vicente
  * @author Gotzon Illarramendi
  */
-public class InitListener implements ServletContextListener, HttpSessionListener, ServletRequestListener {
+public class InitListener implements ServletContextListener, HttpSessionListener {
 
 	/**
 	 * Commons Logging instance.
@@ -69,25 +61,9 @@ public class InitListener implements ServletContextListener, HttpSessionListener
 	private HDIVConfig config;
 
 	/**
-	 * Factory used to create IDataComposer instances.
-	 */
-	private DataComposerFactory dataComposerFactory;
-
-	/**
 	 * Is servlet context Hdiv objects initialized?
 	 */
 	private boolean servletContextInitialized = false;
-
-	/**
-	 * StateUtil instance
-	 */
-	private StateUtil stateUtil;
-
-	/**
-	 * State that represents all the data of a request or a form existing in a
-	 * page <code>page</code>
-	 */
-	private ISession session;
 
 	/**
 	 * Initialize servlet context objects.
@@ -116,63 +92,6 @@ public class InitListener implements ServletContextListener, HttpSessionListener
 	 * @see javax.servlet.ServletContextListener#contextDestroyed(javax.servlet. ServletContextEvent)
 	 */
 	public void contextDestroyed(ServletContextEvent servletContextEvent) {
-
-	}
-
-	/**
-	 * Initialize request associated objects.
-	 * 
-	 * @param sre
-	 *            request created event
-	 */
-	public void requestInitialized(ServletRequestEvent sre) {
-
-		HttpServletRequest request = (HttpServletRequest) sre.getServletRequest();
-
-		if (!this.servletContextInitialized) {
-			ServletContext servletContext = request.getSession().getServletContext();
-			this.initServletContext(servletContext);
-		}
-
-		// Put the request in threadlocal
-		HDIVUtil.setHttpServletRequest(request);
-
-		// Store request original request uri
-		HDIVUtil.setRequestURI(request.getRequestURI(), request);
-
-		//Don`t create IDataComposer if it is not necessary
-		boolean exclude = this.config.hasExtensionToExclude(request.getRequestURI());
-		if (!exclude) {
-
-			// Init datacomposer
-			IDataComposer dataComposer = this.dataComposerFactory.newInstance();
-
-			this.initDataComposer(dataComposer, request);
-
-			HDIVUtil.setDataComposer(dataComposer, request);
-		}
-
-	}
-
-	/**
-	 * End request associated objects.
-	 * 
-	 * @param sre
-	 *            request destroyed event
-	 */
-	public void requestDestroyed(ServletRequestEvent sre) {
-
-		HttpServletRequest request = (HttpServletRequest) sre.getServletRequest();
-
-		// End page in datacomposer
-		boolean exist = HDIVUtil.isDataComposer(request);
-		if (exist) {
-			IDataComposer dataComposer = HDIVUtil.getDataComposer(request);
-			dataComposer.endPage();
-		}
-
-		// Erase request from threadlocal
-		HDIVUtil.resetLocalData();
 
 	}
 
@@ -224,9 +143,6 @@ public class InitListener implements ServletContextListener, HttpSessionListener
 		WebApplicationContext wac = WebApplicationContextUtils.getRequiredWebApplicationContext(servletContext);
 
 		this.config = (HDIVConfig) wac.getBean("config");
-		this.dataComposerFactory = (DataComposerFactory) wac.getBean("dataComposerFactory");
-		this.stateUtil = (StateUtil) wac.getBean("stateUtil");
-		this.session = (ISession) wac.getBean("sessionHDIV");
 
 		// Init servlet context scoped objects
 		HDIVUtil.setHDIVConfig(this.config, servletContext);
@@ -334,32 +250,6 @@ public class InitListener implements ServletContextListener, HttpSessionListener
 
 		httpSession.setAttribute(Constants.HDIV_PARAMETER, hdivParameterName);
 		httpSession.setAttribute(Constants.MODIFY_STATE_HDIV_PARAMETER, modifyHdivStateParameterName);
-	}
-
-	/**
-	 * Initialize IDataComposer instance.
-	 * @param dataComposer IDataComposer instance
-	 * @param request actual HttpServletRequest instance
-	 */
-	protected void initDataComposer(IDataComposer dataComposer, HttpServletRequest request) {
-
-		String paramName = (String) request.getSession().getAttribute(Constants.MODIFY_STATE_HDIV_PARAMETER);
-		String preState = request.getParameter(paramName);
-		if (preState != null && preState.length() > 0) {
-
-			if (this.stateUtil.isMemoryStrategy(preState)) {
-				IState state = this.stateUtil.restoreState(preState);
-				IPage page = this.session.getPage(state.getPageId());
-				if (state != null) {
-					dataComposer.startPage(page);
-					dataComposer.beginRequest(state);
-				}
-			} else {
-				dataComposer.startPage();
-			}
-		} else {
-			dataComposer.startPage();
-		}
 	}
 
 	/**

@@ -30,13 +30,14 @@
 		<property name="linkUrlProcessor" ref="linkUrlProcessor" />
 	</bean>
 
-	<bean id="jsfValidatorHelper" class="org.hdiv.filter.JsfValidatorHelper"
+	<bean id="validatorHelper" class="org.hdiv.filter.JsfValidatorHelper"
 		init-method="init">
 		<property name="logger" ref="logger" />
 		<property name="stateUtil" ref="stateUtil" />
 		<property name="hdivConfig" ref="config" />
 		<property name="session" ref="sessionHDIV" />
 		<property name="dataValidatorFactory" ref="dataValidatorFactory" />
+		<property name="dataComposerFactory" ref="dataComposerFactory" />
 	</bean>
 
 </beans>

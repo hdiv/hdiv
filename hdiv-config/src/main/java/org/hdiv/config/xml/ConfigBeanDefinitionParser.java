@@ -26,6 +26,7 @@ import org.hdiv.cipher.KeyFactory;
 import org.hdiv.config.HDIVConfig;
 import org.hdiv.config.HDIVValidations;
 import org.hdiv.config.StartPage;
+import org.hdiv.config.multipart.JsfMultipartConfig;
 import org.hdiv.config.multipart.SpringMVCMultipartConfig;
 import org.hdiv.context.RedirectHelper;
 import org.hdiv.dataComposer.DataComposerFactory;
@@ -150,8 +151,11 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 
 		// register JSF specific beans if we are using this web framework
 		if (this.jsfPresent && this.jsfModulePresent) {
-			parserContext.getRegistry().registerBeanDefinition("jsfValidatorHelper",
+			parserContext.getRegistry().registerBeanDefinition("validatorHelper",
 					this.createJsfValidatorHelper(element, source));
+			parserContext.getRegistry().registerBeanDefinition("multipartConfig",
+					this.createJsfMultipartConfig(element, source));
+			
 			parserContext.getRegistry().registerBeanDefinition("HDIVFacesEventListener",
 					this.createFacesEventListener(element, source));
 
@@ -315,6 +319,7 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		bean.getPropertyValues().addPropertyValue("hdivConfig", new RuntimeBeanReference("config"));
 		bean.getPropertyValues().addPropertyValue("session", new RuntimeBeanReference("sessionHDIV"));
 		bean.getPropertyValues().addPropertyValue("encodingUtil", new RuntimeBeanReference("encoding"));
+		bean.getPropertyValues().addPropertyValue("stateUtil", new RuntimeBeanReference("stateUtil"));
 		bean.getPropertyValues().addPropertyValue("uidGenerator", new RuntimeBeanReference("uidGenerator"));
 		bean.getPropertyValues().addPropertyValue("allowedLength", "4000");
 
@@ -333,6 +338,8 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		bean.getPropertyValues().addPropertyValue("session", new RuntimeBeanReference("sessionHDIV"));
 		bean.getPropertyValues().addPropertyValue("dataValidatorFactory",
 				new RuntimeBeanReference("dataValidatorFactory"));
+		bean.getPropertyValues().addPropertyValue("dataComposerFactory",
+				new RuntimeBeanReference("dataComposerFactory"));
 		return bean;
 	}
 
@@ -504,6 +511,15 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		bean.getPropertyValues().addPropertyValue("session", new RuntimeBeanReference("sessionHDIV"));
 		bean.getPropertyValues().addPropertyValue("dataValidatorFactory",
 				new RuntimeBeanReference("dataValidatorFactory"));
+		bean.getPropertyValues().addPropertyValue("dataComposerFactory",
+				new RuntimeBeanReference("dataComposerFactory"));
+		return bean;
+	}
+	
+	private RootBeanDefinition createJsfMultipartConfig(Element element, Object source) {
+		RootBeanDefinition bean = new RootBeanDefinition(JsfMultipartConfig.class);
+		bean.setSource(source);
+		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
 		return bean;
 	}
 

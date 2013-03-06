@@ -51,8 +51,8 @@ public class DataComposerCipherTest extends AbstractHDIVTestCase {
 	 */
 	public void testComposeSimple() {
 
-		IDataComposer dataComposer = this.dataComposerFactory.newInstance();
 		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		IDataComposer dataComposer = this.dataComposerFactory.newInstance(request);
 		HDIVUtil.setDataComposer(dataComposer, request);
 
 		dataComposer.startPage();
@@ -83,7 +83,8 @@ public class DataComposerCipherTest extends AbstractHDIVTestCase {
 
 	public void testComposeAndRestore() {
 
-		IDataComposer dataComposer = this.dataComposerFactory.newInstance();
+		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		IDataComposer dataComposer = this.dataComposerFactory.newInstance(request);
 
 		dataComposer.startPage();
 		dataComposer.beginRequest("test.do");

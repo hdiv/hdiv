@@ -53,8 +53,8 @@ public class DataComposerMemoryTest extends AbstractHDIVTestCase {
 	 */
 	public void testComposeSimple() {
 
-		IDataComposer dataComposer = this.dataComposerFactory.newInstance();
 		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		IDataComposer dataComposer = this.dataComposerFactory.newInstance(request);
 		HDIVUtil.setDataComposer(dataComposer, request);
 		
 		dataComposer.startPage();
@@ -85,8 +85,8 @@ public class DataComposerMemoryTest extends AbstractHDIVTestCase {
 
 	public void testComposeAndRestore() {
 
-		IDataComposer dataComposer = this.dataComposerFactory.newInstance();
 		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		IDataComposer dataComposer = this.dataComposerFactory.newInstance(request);
 		HDIVUtil.setDataComposer(dataComposer, request);
 		
 		dataComposer.startPage();
@@ -105,7 +105,7 @@ public class DataComposerMemoryTest extends AbstractHDIVTestCase {
 	public void testComposeExistingState() {
 		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
 
-		IDataComposer dataComposer = this.dataComposerFactory.newInstance();
+		IDataComposer dataComposer = this.dataComposerFactory.newInstance(request);
 		HDIVUtil.setDataComposer(dataComposer, request);
 		
 		dataComposer.startPage();
@@ -120,7 +120,7 @@ public class DataComposerMemoryTest extends AbstractHDIVTestCase {
 		// New request
 		IState state = this.stateUtil.restoreState(stateId);
 		IPage page = this.session.getPage(state.getPageId());
-		dataComposer = this.dataComposerFactory.newInstance();
+		dataComposer = this.dataComposerFactory.newInstance(request);
 		HDIVUtil.setDataComposer(dataComposer, request);
 		
 		dataComposer.startPage(page);
@@ -137,8 +137,8 @@ public class DataComposerMemoryTest extends AbstractHDIVTestCase {
 
 	public void testInnerState() {
 
-		IDataComposer dataComposer = this.dataComposerFactory.newInstance();
 		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		IDataComposer dataComposer = this.dataComposerFactory.newInstance(request);
 		HDIVUtil.setDataComposer(dataComposer, request);
 		
 		dataComposer.startPage();

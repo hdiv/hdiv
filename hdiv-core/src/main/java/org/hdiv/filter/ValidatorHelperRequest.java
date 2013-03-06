@@ -29,6 +29,8 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hdiv.config.HDIVConfig;
+import org.hdiv.dataComposer.DataComposerFactory;
+import org.hdiv.dataComposer.IDataComposer;
 import org.hdiv.dataValidator.DataValidatorFactory;
 import org.hdiv.dataValidator.IDataValidator;
 import org.hdiv.dataValidator.IValidationResult;
@@ -84,6 +86,11 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	 * IDataValidator factory
 	 */
 	private DataValidatorFactory dataValidatorFactory;
+	
+	/**
+	 * {@link IDataComposer} factory
+	 */
+	private DataComposerFactory dataComposerFactory;
 
 	/**
 	 * Compiled numeric <code>Pattern</code>
@@ -962,7 +969,17 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	 * @see org.hdiv.filter.IValidationHelper#startPage(javax.servlet.http. HttpServletRequest)
 	 */
 	public void startPage(HttpServletRequest request) {
-		// DataComposer startPage moved to InitListener
+
+		//Don`t create IDataComposer if it is not necessary
+		boolean exclude = this.hdivConfig.hasExtensionToExclude(request.getRequestURI());
+		if (!exclude) {
+
+			// Init datacomposer
+			IDataComposer dataComposer = this.dataComposerFactory.newInstance(request);
+
+			HDIVUtil.setDataComposer(dataComposer, request);
+		}
+		
 	}
 
 	/*
@@ -971,29 +988,22 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	 * @see org.hdiv.filter.IValidationHelper#endPage(javax.servlet.http. HttpServletRequest)
 	 */
 	public void endPage(HttpServletRequest request) {
-		// DataComposer endPage moved to InitListener
-	}
+		
+		// End page in datacomposer
+		boolean exist = HDIVUtil.isDataComposer(request);
+		if (exist) {
+			IDataComposer dataComposer = HDIVUtil.getDataComposer(request);
+			dataComposer.endPage();
+		}
 
-	/**
-	 * @return Returns the user logger.
-	 */
-	public Logger getLogger() {
-		return logger;
 	}
-
+	
 	/**
 	 * @param logger
 	 *            The user logger to set.
 	 */
 	public void setLogger(Logger logger) {
 		this.logger = logger;
-	}
-
-	/**
-	 * @return Returns the utility methods for state.
-	 */
-	public StateUtil getStateUtil() {
-		return stateUtil;
 	}
 
 	/**
@@ -1005,25 +1015,11 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	}
 
 	/**
-	 * @return Returns the HDIV configuration object.
-	 */
-	public HDIVConfig getHdivConfig() {
-		return hdivConfig;
-	}
-
-	/**
 	 * @param hdivConfig
 	 *            The HDIV configuration object to set.
 	 */
 	public void setHdivConfig(HDIVConfig hdivConfig) {
 		this.hdivConfig = hdivConfig;
-	}
-
-	/**
-	 * @return the session
-	 */
-	public ISession getSession() {
-		return session;
 	}
 
 	/**
@@ -1035,25 +1031,11 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	}
 
 	/**
-	 * @return the dataValidatorFactory
-	 */
-	public DataValidatorFactory getDataValidatorFactory() {
-		return dataValidatorFactory;
-	}
-
-	/**
 	 * @param dataValidatorFactory
 	 *            the dataValidatorFactory to set
 	 */
 	public void setDataValidatorFactory(DataValidatorFactory dataValidatorFactory) {
 		this.dataValidatorFactory = dataValidatorFactory;
-	}
-
-	/**
-	 * @return the numberPattern
-	 */
-	public Pattern getNumberPattern() {
-		return numberPattern;
 	}
 
 	/**
@@ -1064,4 +1046,25 @@ public class ValidatorHelperRequest implements IValidationHelper {
 		this.numberPattern = numberPattern;
 	}
 
+	/**
+	 * @param dataComposerFactory the dataComposerFactory to set
+	 */
+	public void setDataComposerFactory(DataComposerFactory dataComposerFactory) {
+		this.dataComposerFactory = dataComposerFactory;
+	}
+
+	/**
+	 * @return the hdivConfig
+	 */
+	protected HDIVConfig getHdivConfig() {
+		return hdivConfig;
+	}
+
+	/**
+	 * @return the logger
+	 */
+	protected Logger getLogger() {
+		return logger;
+	}
+	
 }

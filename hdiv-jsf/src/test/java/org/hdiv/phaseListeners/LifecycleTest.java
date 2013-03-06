@@ -17,6 +17,7 @@ package org.hdiv.phaseListeners;
 
 import javax.faces.event.PhaseEvent;
 import javax.faces.event.PhaseId;
+import javax.servlet.http.HttpServletRequest;
 
 import org.hdiv.AbstractJsfHDIVTestCase;
 import org.hdiv.dataComposer.DataComposerFactory;
@@ -39,8 +40,9 @@ public class LifecycleTest extends AbstractJsfHDIVTestCase {
 
 		DataComposerFactory dataComposerFactory = (DataComposerFactory) this.getApplicationContext().getBean(
 				"dataComposerFactory");
-		this.dataComposer = dataComposerFactory.newInstance();
-		HDIVUtil.setDataComposer(this.dataComposer, HDIVUtil.getHttpServletRequest());
+		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		this.dataComposer = dataComposerFactory.newInstance(request);
+		HDIVUtil.setDataComposer(this.dataComposer, request);
 
 	}
 
@@ -87,10 +89,6 @@ public class LifecycleTest extends AbstractJsfHDIVTestCase {
 
 		ConfigPhaseListener conf = new ConfigPhaseListener();
 		conf.beforePhase(event);
-
-		ValidationPhaseListener val = new ValidationPhaseListener();
-		val.beforePhase(event);
-		val.afterPhase(event);
 
 		// PROCESS_VALIDATIONS phase
 		ComponentMessagesPhaseListener msg = new ComponentMessagesPhaseListener();

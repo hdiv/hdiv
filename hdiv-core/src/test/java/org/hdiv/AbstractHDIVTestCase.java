@@ -17,7 +17,6 @@ package org.hdiv;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletRequestEvent;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpSessionEvent;
@@ -27,6 +26,8 @@ import junit.framework.TestCase;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hdiv.config.HDIVConfig;
+import org.hdiv.dataComposer.DataComposerFactory;
+import org.hdiv.dataComposer.IDataComposer;
 import org.hdiv.listener.InitListener;
 import org.hdiv.util.HDIVUtil;
 import org.springframework.context.ApplicationContext;
@@ -91,10 +92,13 @@ public abstract class AbstractHDIVTestCase extends TestCase {
 		// Initialize HttpSession
 		HttpSessionEvent httpSessionEvent = new HttpSessionEvent(httpSession);
 		initListener.sessionCreated(httpSessionEvent);
-		// Initialize request
-		ServletRequestEvent requestEvent = new ServletRequestEvent(servletContext, request);
-		initListener.requestInitialized(requestEvent);
 
+		// Init Request scoped data
+		HDIVUtil.setRequestURI(request.getRequestURI(), request);
+		DataComposerFactory dataComposerFactory = (DataComposerFactory) this.applicationContext.getBean("dataComposerFactory");
+		IDataComposer dataComposer = dataComposerFactory.newInstance(request);
+		HDIVUtil.setDataComposer(dataComposer, request);
+		
 		if (log.isDebugEnabled()) {
 			log.debug("Hdiv test context initialized");
 		}

@@ -15,10 +15,16 @@
  */
 package org.hdiv.dataComposer;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.hdiv.config.HDIVConfig;
 import org.hdiv.exception.HDIVException;
 import org.hdiv.idGenerator.UidGenerator;
 import org.hdiv.session.ISession;
+import org.hdiv.state.IPage;
+import org.hdiv.state.IState;
+import org.hdiv.state.StateUtil;
+import org.hdiv.util.Constants;
 import org.hdiv.util.EncodingUtil;
 import org.hdiv.util.HDIVUtil;
 
@@ -56,11 +62,21 @@ public class DataComposerFactory {
 	private EncodingUtil encodingUtil;
 
 	/**
+	 * State management utility
+	 */
+	private StateUtil stateUtil;
+
+	/**
 	 * Creates a new instance of DataComposer based on the defined strategy.
+	 * 
+	 * @param request
+	 *            {@link HttpServletRequest} instance
 	 * 
 	 * @return IDataComposer instance
 	 */
-	public IDataComposer newInstance() {
+	public IDataComposer newInstance(HttpServletRequest request) {
+
+		IDataComposer dataComposer = null;
 
 		if (this.hdivConfig.getStrategy().equalsIgnoreCase("memory")) {
 			DataComposerMemory composer = new DataComposerMemory();
@@ -68,7 +84,7 @@ public class DataComposerFactory {
 			composer.setSession(this.session);
 			composer.setUidGenerator(this.uidGenerator);
 			composer.init();
-			return composer;
+			dataComposer = composer;
 
 		} else if (this.hdivConfig.getStrategy().equalsIgnoreCase("cipher")) {
 			DataComposerCipher composer = new DataComposerCipher();
@@ -78,7 +94,7 @@ public class DataComposerFactory {
 			composer.setAllowedLength(this.allowedLength);
 			composer.setEncodingUtil(this.encodingUtil);
 			composer.init();
-			return composer;
+			dataComposer = composer;
 
 		} else if (this.hdivConfig.getStrategy().equalsIgnoreCase("hash")) {
 			DataComposerHash composer = new DataComposerHash();
@@ -88,48 +104,93 @@ public class DataComposerFactory {
 			composer.setAllowedLength(this.allowedLength);
 			composer.setEncodingUtil(this.encodingUtil);
 			composer.init();
-			return composer;
+			dataComposer = composer;
 
 		} else {
 			String errorMessage = HDIVUtil.getMessage("strategy.error", this.hdivConfig.getStrategy());
 			throw new HDIVException(errorMessage);
 		}
 
+		this.initDataComposer(dataComposer, request);
+
+		return dataComposer;
 	}
 
 	/**
-	 * @param hdivConfig the hdivConfig to set
+	 * Initialize IDataComposer instance.
+	 * 
+	 * @param dataComposer
+	 *            IDataComposer instance
+	 * @param request
+	 *            actual HttpServletRequest instance
+	 */
+	protected void initDataComposer(IDataComposer dataComposer, HttpServletRequest request) {
+
+		String paramName = (String) request.getSession().getAttribute(Constants.MODIFY_STATE_HDIV_PARAMETER);
+		String preState = request.getParameter(paramName);
+		if (preState != null && preState.length() > 0) {
+
+			if (this.stateUtil.isMemoryStrategy(preState)) {
+				IState state = this.stateUtil.restoreState(preState);
+				IPage page = this.session.getPage(state.getPageId());
+				if (state != null) {
+					dataComposer.startPage(page);
+					dataComposer.beginRequest(state);
+				}
+			} else {
+				dataComposer.startPage();
+			}
+		} else {
+			dataComposer.startPage();
+		}
+	}
+
+	/**
+	 * @param hdivConfig
+	 *            the hdivConfig to set
 	 */
 	public void setHdivConfig(HDIVConfig hdivConfig) {
 		this.hdivConfig = hdivConfig;
 	}
 
 	/**
-	 * @param session the session to set
+	 * @param session
+	 *            the session to set
 	 */
 	public void setSession(ISession session) {
 		this.session = session;
 	}
 
 	/**
-	 * @param uidGenerator the uidGenerator to set
+	 * @param uidGenerator
+	 *            the uidGenerator to set
 	 */
 	public void setUidGenerator(UidGenerator uidGenerator) {
 		this.uidGenerator = uidGenerator;
 	}
 
 	/**
-	 * @param allowedLength the allowedLength to set
+	 * @param allowedLength
+	 *            the allowedLength to set
 	 */
 	public void setAllowedLength(int allowedLength) {
 		this.allowedLength = allowedLength;
 	}
 
 	/**
-	 * @param encodingUtil the encodingUtil to set
+	 * @param encodingUtil
+	 *            the encodingUtil to set
 	 */
 	public void setEncodingUtil(EncodingUtil encodingUtil) {
 		this.encodingUtil = encodingUtil;
+	}
+
+	/**
+	 * @param stateUtil
+	 *            the stateUtil to set
+	 */
+	public void setStateUtil(StateUtil stateUtil) {
+		this.stateUtil = stateUtil;
 	}
 
 }
