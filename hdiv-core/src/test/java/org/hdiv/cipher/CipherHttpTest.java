@@ -16,6 +16,7 @@
 package org.hdiv.cipher;
 
 import org.hdiv.AbstractHDIVTestCase;
+import org.hdiv.util.EncodingUtil;
 
 /**
  * Unit tests for the <code>org.hdiv.cipher.CipherHttp</code> class.
@@ -42,10 +43,10 @@ public class CipherHttpTest extends AbstractHDIVTestCase {
 
 		String data = "Data to encrypt";
 		this.cipherHttp.initEncryptMode(key);
-		String encryptedData = new String(this.cipherHttp.encrypt(data.getBytes()));
+		String encryptedData = new String(this.cipherHttp.encrypt(data.getBytes()), EncodingUtil.ZIP_CHARSET);
 
 		this.cipherHttp.initDecryptMode(key);
-		String clearData = new String(this.cipherHttp.decrypt(encryptedData.getBytes()));
+		String clearData = new String(this.cipherHttp.decrypt(encryptedData.getBytes(EncodingUtil.ZIP_CHARSET)));
 
 		assertTrue(clearData.equalsIgnoreCase(data));
 	}

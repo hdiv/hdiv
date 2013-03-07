@@ -15,10 +15,14 @@
  */
 package org.hdiv.cipher;
 
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 
+import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.IvParameterSpec;
 
@@ -124,7 +128,10 @@ public class CipherHTTP implements ICipherHTTP {
 			this.cipher.init(Cipher.ENCRYPT_MODE, key.getKey(), this.ivSpec);
 			this.encryptMode = true;
 
-		} catch (Exception e) {
+		} catch (InvalidKeyException e) {
+			String errorMessage = HDIVUtil.getMessage("cipher.init.encrypt", e.getMessage());
+			throw new HDIVException(errorMessage, e);
+		} catch (InvalidAlgorithmParameterException e) {
 			String errorMessage = HDIVUtil.getMessage("cipher.init.encrypt", e.getMessage());
 			throw new HDIVException(errorMessage, e);
 		}
@@ -148,7 +155,10 @@ public class CipherHTTP implements ICipherHTTP {
 			this.cipher.init(Cipher.DECRYPT_MODE, key.getKey(), this.ivSpec);
 			this.encryptMode = false;
 
-		} catch (Exception e) {
+		} catch (InvalidKeyException e) {
+			String errorMessage = HDIVUtil.getMessage("cipher.init.decrypt", e.getMessage());
+			throw new HDIVException(errorMessage, e);
+		} catch (InvalidAlgorithmParameterException e) {
 			String errorMessage = HDIVUtil.getMessage("cipher.init.decrypt", e.getMessage());
 			throw new HDIVException(errorMessage, e);
 		}
@@ -176,10 +186,14 @@ public class CipherHTTP implements ICipherHTTP {
 		try {
 			return cipher.doFinal(data);
 
-		} catch (Exception e) {
+		} catch (IllegalBlockSizeException e) {
+			String errorMessage = HDIVUtil.getMessage("cipher.encrypt", e.getMessage());
+			throw new HDIVException(errorMessage, e);
+		} catch (BadPaddingException e) {
 			String errorMessage = HDIVUtil.getMessage("cipher.encrypt", e.getMessage());
 			throw new HDIVException(errorMessage, e);
 		}
+
 	}
 
 	/**
@@ -204,7 +218,10 @@ public class CipherHTTP implements ICipherHTTP {
 		try {
 			return cipher.doFinal(data);
 
-		} catch (Exception e) {
+		} catch (IllegalBlockSizeException e) {
+			String errorMessage = HDIVUtil.getMessage("cipher.decrypt", e.getMessage());
+			throw new HDIVException(errorMessage, e);
+		} catch (BadPaddingException e) {
 			String errorMessage = HDIVUtil.getMessage("cipher.decrypt", e.getMessage());
 			throw new HDIVException(errorMessage, e);
 		}

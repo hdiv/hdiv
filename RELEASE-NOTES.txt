@@ -17,7 +17,8 @@ Release 2.1.4
  * New 'sessionExpired' attribute in <hdiv:config> to define error pages when session has expired.
  * New 'org.hdiv.filter.ValidatorErrorHandler' interface to handle request validation errors. 'DefaultValidatorErrorHandler' class contains default implementation.
  * IDataComposer initialization dropped from InitListener and moved to ValidatorFilter to avoid problems with premature request initialization. Fix (https://github.com/hdiv/hdiv/issues/21)
- * JSF requires ValidatorFilter for GET request validation and IDataComposer initialization 
+ * JSF requires ValidatorFilter for GET request validation and IDataComposer initialization
+ * Fix Thread safe error on Cipher strategy (https://github.com/hdiv/hdiv/issues/23).
 
 Release 2.1.3
 ==================================

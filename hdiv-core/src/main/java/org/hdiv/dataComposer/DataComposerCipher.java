@@ -79,7 +79,7 @@ public class DataComposerCipher extends DataComposerMemory {
 		IState state = (IState) super.getStatesStack().pop();
 		state.setPageId(this.getPage().getName());
 
-		String stateData = encodingUtil.encode64Cipher(state);
+		String stateData = this.encodingUtil.encode64Cipher(state);
 		String id = null;
 
 		// if state's length it's too long for GET methods we have to change the

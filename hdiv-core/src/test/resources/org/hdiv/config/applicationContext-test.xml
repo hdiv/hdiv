@@ -6,31 +6,7 @@
 	<!-- Servlet API mock -->
 	<bean id="mockRequest" class="org.springframework.mock.web.MockHttpServletRequest" scope="prototype">
 		<property name="requestURI">
-		    <value>/path/testAction.do</value>
-		</property>
-	</bean>
-
-	<!--HDIV API mock -->
-
-	<!-- CIPHER BEANS -->
-	<bean id="cipher" class="org.hdiv.cipher.MockCipherHTTP">
-		<property name="algorithm">
-			<value>AES</value>
-		</property>
-	</bean>
-
-	<bean id="keyFactory" class="org.hdiv.cipher.KeyFactory">
-		<property name="algorithm">
-			<value>AES</value>
-		</property>
-		<property name="keySize">
-			<value>128</value>
-		</property>
-		<property name="prngAlgorithm">
-			<value>SHA1PRNG</value>
-		</property>
-		<property name="provider">
-			<value>SUN</value>
+			<value>/path/testAction.do</value>
 		</property>
 	</bean>
 
