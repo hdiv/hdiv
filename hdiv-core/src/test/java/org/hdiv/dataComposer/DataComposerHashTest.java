@@ -18,7 +18,6 @@ package org.hdiv.dataComposer;
 import javax.servlet.http.HttpServletRequest;
 
 import org.hdiv.AbstractHDIVTestCase;
-import org.hdiv.config.HDIVConfig;
 import org.hdiv.state.IState;
 import org.hdiv.state.StateUtil;
 import org.hdiv.util.HDIVUtil;
@@ -34,15 +33,16 @@ public class DataComposerHashTest extends AbstractHDIVTestCase {
 
 	private StateUtil stateUtil;
 
+	public DataComposerHashTest() {
+		super("hash");
+	}
+	
 	/*
 	 * @see TestCase#setUp()
 	 */
 	protected void onSetUp() throws Exception {
 
 		this.dataComposerFactory = (DataComposerFactory) this.getApplicationContext().getBean("dataComposerFactory");
-		HDIVConfig config = this.getConfig();
-		config.setStrategy("hash");
-		this.dataComposerFactory.setHdivConfig(config);
 		this.stateUtil = (StateUtil) this.getApplicationContext().getBean("stateUtil");
 	}
 
@@ -54,6 +54,7 @@ public class DataComposerHashTest extends AbstractHDIVTestCase {
 		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
 		IDataComposer dataComposer = this.dataComposerFactory.newInstance(request);
 		HDIVUtil.setDataComposer(dataComposer, request);
+		assertTrue(dataComposer instanceof DataComposerHash);
 		
 		dataComposer.startPage();
 		dataComposer.beginRequest("test.do");

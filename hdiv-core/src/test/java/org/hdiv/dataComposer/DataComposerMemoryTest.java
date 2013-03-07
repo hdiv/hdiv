@@ -56,6 +56,7 @@ public class DataComposerMemoryTest extends AbstractHDIVTestCase {
 		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
 		IDataComposer dataComposer = this.dataComposerFactory.newInstance(request);
 		HDIVUtil.setDataComposer(dataComposer, request);
+		assertTrue(dataComposer instanceof DataComposerMemory);
 		
 		dataComposer.startPage();
 		dataComposer.beginRequest("test.do");

@@ -18,10 +18,10 @@
 			<value>128</value>
 		</property>
 		<property name="prngAlgorithm">
-			<value>IBMSecureRandom</value>
+			<value>SHA1PRNG</value>
 		</property>
 		<property name="provider">
-			<value>IBMJCE</value>
+			<value>SUN</value>
 		</property>
 	</bean>
 

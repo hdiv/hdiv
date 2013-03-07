@@ -18,7 +18,6 @@ package org.hdiv.dataComposer;
 import javax.servlet.http.HttpServletRequest;
 
 import org.hdiv.AbstractHDIVTestCase;
-import org.hdiv.config.HDIVConfig;
 import org.hdiv.state.IState;
 import org.hdiv.state.StateUtil;
 import org.hdiv.util.HDIVUtil;
@@ -34,15 +33,16 @@ public class DataComposerCipherTest extends AbstractHDIVTestCase {
 
 	private StateUtil stateUtil;
 
+	public DataComposerCipherTest() {
+		super("cipher");
+	}
+
 	/*
 	 * @see TestCase#setUp()
 	 */
 	protected void onSetUp() throws Exception {
 
 		this.dataComposerFactory = (DataComposerFactory) this.getApplicationContext().getBean("dataComposerFactory");
-		HDIVConfig config = this.getConfig();
-		config.setStrategy("cipher");
-		this.dataComposerFactory.setHdivConfig(config);
 		this.stateUtil = (StateUtil) this.getApplicationContext().getBean("stateUtil");
 	}
 
@@ -54,6 +54,7 @@ public class DataComposerCipherTest extends AbstractHDIVTestCase {
 		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
 		IDataComposer dataComposer = this.dataComposerFactory.newInstance(request);
 		HDIVUtil.setDataComposer(dataComposer, request);
+		assertTrue(dataComposer instanceof DataComposerCipher);
 
 		dataComposer.startPage();
 		dataComposer.beginRequest("test.do");
@@ -79,6 +80,9 @@ public class DataComposerCipherTest extends AbstractHDIVTestCase {
 		result = dataComposer.compose("test.do", "parameter2", "2", false);
 		value = (!confidentiality) ? "2" : "1";
 		assertTrue(value.equals(result));
+
+		String id = dataComposer.endRequest();
+		assertNotNull(id);
 	}
 
 	public void testComposeAndRestore() {

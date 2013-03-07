@@ -54,6 +54,18 @@ public abstract class AbstractHDIVTestCase extends TestCase {
 	 * Hdiv config for this app.
 	 */
 	private HDIVConfig config;
+	
+	/**
+	 * Prefered strategy
+	 */
+	private String strategy;
+	
+	public AbstractHDIVTestCase() {
+	}
+	
+	public AbstractHDIVTestCase(String strategy) {
+		this.strategy = strategy;
+	}
 
 	protected final void setUp() throws Exception {
 
@@ -84,6 +96,9 @@ public abstract class AbstractHDIVTestCase extends TestCase {
 
 		// Initialize config
 		this.config = (HDIVConfig) this.applicationContext.getBean("config");
+		if(this.strategy != null){
+			this.config.setStrategy(this.strategy);
+		}
 
 		InitListener initListener = new InitListener();
 		// Initialize ServletContext
