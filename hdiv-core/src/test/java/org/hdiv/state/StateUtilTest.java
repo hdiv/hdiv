@@ -16,6 +16,7 @@
 package org.hdiv.state;
 
 import org.hdiv.AbstractHDIVTestCase;
+import org.hdiv.config.HDIVConfig;
 import org.hdiv.util.EncodingUtil;
 
 /**
@@ -27,8 +28,8 @@ public class StateUtilTest extends AbstractHDIVTestCase {
 
 	private EncodingUtil encodingUtil;
 
-	public StateUtilTest() {
-		super("cipher");
+	protected void postCreateHdivConfig(HDIVConfig config) {
+		config.setStrategy("cipher");
 	}
 
 	protected void onSetUp() throws Exception {

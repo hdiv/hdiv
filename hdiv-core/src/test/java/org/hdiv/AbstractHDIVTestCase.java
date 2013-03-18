@@ -54,28 +54,12 @@ public abstract class AbstractHDIVTestCase extends TestCase {
 	 * Hdiv config for this app.
 	 */
 	private HDIVConfig config;
-	
-	/**
-	 * Prefered strategy
-	 */
-	private String strategy;
-	
-	public AbstractHDIVTestCase() {
-	}
-	
-	public AbstractHDIVTestCase(String strategy) {
-		this.strategy = strategy;
-	}
 
 	protected final void setUp() throws Exception {
 
-		String[] files = { 
-				"/org/hdiv/config/hdiv-core-applicationContext.xml",
-				"/org/hdiv/config/hdiv-config.xml", 
-				"/org/hdiv/config/hdiv-validations.xml",
-				"/org/hdiv/config/applicationContext-test.xml",
-				"/org/hdiv/config/applicationContext-extra.xml"
-		};
+		String[] files = { "/org/hdiv/config/hdiv-core-applicationContext.xml", "/org/hdiv/config/hdiv-config.xml",
+				"/org/hdiv/config/hdiv-validations.xml", "/org/hdiv/config/applicationContext-test.xml",
+				"/org/hdiv/config/applicationContext-extra.xml" };
 
 		if (this.applicationContext == null) {
 			this.applicationContext = new ClassPathXmlApplicationContext(files);
@@ -96,9 +80,8 @@ public abstract class AbstractHDIVTestCase extends TestCase {
 
 		// Initialize config
 		this.config = (HDIVConfig) this.applicationContext.getBean("config");
-		if(this.strategy != null){
-			this.config.setStrategy(this.strategy);
-		}
+		// Configure for testing
+		this.postCreateHdivConfig(this.config);
 
 		InitListener initListener = new InitListener();
 		// Initialize ServletContext
@@ -110,10 +93,11 @@ public abstract class AbstractHDIVTestCase extends TestCase {
 
 		// Init Request scoped data
 		HDIVUtil.setRequestURI(request.getRequestURI(), request);
-		DataComposerFactory dataComposerFactory = (DataComposerFactory) this.applicationContext.getBean("dataComposerFactory");
+		DataComposerFactory dataComposerFactory = (DataComposerFactory) this.applicationContext
+				.getBean("dataComposerFactory");
 		IDataComposer dataComposer = dataComposerFactory.newInstance(request);
 		HDIVUtil.setDataComposer(dataComposer, request);
-		
+
 		if (log.isDebugEnabled()) {
 			log.debug("Hdiv test context initialized");
 		}
@@ -122,6 +106,15 @@ public abstract class AbstractHDIVTestCase extends TestCase {
 	}
 
 	protected abstract void onSetUp() throws Exception;
+
+	/**
+	 * Hook method for {@link HDIVConfig} customization
+	 * 
+	 * @param config
+	 */
+	protected void postCreateHdivConfig(HDIVConfig config) {
+
+	}
 
 	public ApplicationContext getApplicationContext() {
 		return applicationContext;
