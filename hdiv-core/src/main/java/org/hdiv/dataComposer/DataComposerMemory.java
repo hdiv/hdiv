@@ -25,6 +25,7 @@ import org.hdiv.state.IParameter;
 import org.hdiv.state.IState;
 import org.hdiv.state.Parameter;
 import org.hdiv.state.State;
+import org.springframework.web.util.HtmlUtils;
 
 /**
  * <p>
@@ -363,8 +364,20 @@ public class DataComposerMemory extends AbstractDataComposer {
 	}
 
 	/**
+	 * <p>
 	 * Decoded <code>value</code> using input <code>charEncoding</code>.
-	 * 
+	 * </p>
+	 * <p>
+	 * Removes Html Entity elements too. Like that:
+	 * </p>
+	 * <blockquote> 
+	 * &amp;#<i>Entity</i>; - <i>(Example: &amp;amp;) case sensitive</i> 
+	 * &amp;#<i>Decimal</i>; - <i>(Example: &amp;#68;)</i><br>
+	 * &amp;#x<i>Hex</i>; - <i>(Example: &amp;#xE5;) case insensitive</i><br>
+	 * </blockquote>
+	 * <p>
+	 * Based on {@link HtmlUtils.htmlUnescape}.
+	 * </p>
 	 * @param value
 	 *            value to decode
 	 * @param charEncoding
@@ -378,6 +391,16 @@ public class DataComposerMemory extends AbstractDataComposer {
 			decodedValue = URLDecoder.decode(value, charEncoding);
 		} catch (Exception e) {
 			decodedValue = value;
+		}
+
+		if (decodedValue == null) {
+			return "";
+		}
+
+		// Remove escaped Html elements
+		if (decodedValue.contains("&")) {
+			// Can contain escaped characters
+			decodedValue = HtmlUtils.htmlUnescape(decodedValue);
 		}
 
 		return (decodedValue == null) ? "" : decodedValue;

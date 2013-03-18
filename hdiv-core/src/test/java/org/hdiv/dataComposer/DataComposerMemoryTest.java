@@ -15,11 +15,14 @@
  */
 package org.hdiv.dataComposer;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.hdiv.AbstractHDIVTestCase;
 import org.hdiv.session.ISession;
 import org.hdiv.state.IPage;
+import org.hdiv.state.IParameter;
 import org.hdiv.state.IState;
 import org.hdiv.state.StateUtil;
 import org.hdiv.util.HDIVUtil;
@@ -57,7 +60,7 @@ public class DataComposerMemoryTest extends AbstractHDIVTestCase {
 		IDataComposer dataComposer = this.dataComposerFactory.newInstance(request);
 		HDIVUtil.setDataComposer(dataComposer, request);
 		assertTrue(dataComposer instanceof DataComposerMemory);
-		
+
 		dataComposer.startPage();
 		dataComposer.beginRequest("test.do");
 
@@ -89,7 +92,7 @@ public class DataComposerMemoryTest extends AbstractHDIVTestCase {
 		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
 		IDataComposer dataComposer = this.dataComposerFactory.newInstance(request);
 		HDIVUtil.setDataComposer(dataComposer, request);
-		
+
 		dataComposer.startPage();
 		dataComposer.beginRequest("test.do");
 		dataComposer.compose("parameter1", "2", false);
@@ -108,7 +111,7 @@ public class DataComposerMemoryTest extends AbstractHDIVTestCase {
 
 		IDataComposer dataComposer = this.dataComposerFactory.newInstance(request);
 		HDIVUtil.setDataComposer(dataComposer, request);
-		
+
 		dataComposer.startPage();
 		dataComposer.beginRequest("test.do");
 		dataComposer.compose("parameter1", "2", false);
@@ -123,7 +126,7 @@ public class DataComposerMemoryTest extends AbstractHDIVTestCase {
 		IPage page = this.session.getPage(state.getPageId());
 		dataComposer = this.dataComposerFactory.newInstance(request);
 		HDIVUtil.setDataComposer(dataComposer, request);
-		
+
 		dataComposer.startPage(page);
 		dataComposer.beginRequest(state);
 		dataComposer.compose("parameter1", "3", false);
@@ -141,7 +144,7 @@ public class DataComposerMemoryTest extends AbstractHDIVTestCase {
 		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
 		IDataComposer dataComposer = this.dataComposerFactory.newInstance(request);
 		HDIVUtil.setDataComposer(dataComposer, request);
-		
+
 		dataComposer.startPage();
 		dataComposer.beginRequest("test.do");
 		dataComposer.compose("parameter1", "2", false);
@@ -164,6 +167,37 @@ public class DataComposerMemoryTest extends AbstractHDIVTestCase {
 		String actionInner = stateInner.getAction();
 		assertEquals("test.do", action);
 		assertEquals("testinner.do", actionInner);
+	}
+
+	public void testEscapeHtml() {
+
+		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		IDataComposer dataComposer = this.dataComposerFactory.newInstance(request);
+		HDIVUtil.setDataComposer(dataComposer, request);
+
+		dataComposer.startPage();
+		dataComposer.beginRequest("test.do");
+		dataComposer.compose("parameter1", "è-test", true);// not escaped value
+		dataComposer.compose("parameterEscaped", "&egrave;-test", true);// escaped value
+		String stateId = dataComposer.endRequest();
+		dataComposer.endPage();
+
+		assertNotNull(stateId);
+
+		IState state = this.stateUtil.restoreState(stateId);
+
+		assertEquals("test.do", state.getAction());
+
+		IParameter param = state.getParameter("parameter1");
+		List values = param.getValues();
+		assertEquals(1, values.size());
+		assertEquals("è-test", values.get(0));// escaped value is the same
+
+		IParameter param2 = state.getParameter("parameterEscaped");
+		List values2 = param2.getValues();
+		assertEquals(1, values2.size());
+		// State stored value is not escaped value, it is the unescaped value
+		assertEquals("è-test", values2.get(0));
 	}
 
 }
