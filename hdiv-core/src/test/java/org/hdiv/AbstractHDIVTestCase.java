@@ -57,8 +57,11 @@ public abstract class AbstractHDIVTestCase extends TestCase {
 
 	protected final void setUp() throws Exception {
 
-		String[] files = { "/org/hdiv/config/hdiv-core-applicationContext.xml", "/org/hdiv/config/hdiv-config.xml",
-				"/org/hdiv/config/hdiv-validations.xml", "/org/hdiv/config/applicationContext-test.xml",
+		String[] files = { 
+				"/org/hdiv/config/hdiv-core-applicationContext.xml", 
+				"/org/hdiv/config/hdiv-config.xml",
+				"/org/hdiv/config/hdiv-validations.xml", 
+				"/org/hdiv/config/applicationContext-test.xml",
 				"/org/hdiv/config/applicationContext-extra.xml" };
 
 		if (this.applicationContext == null) {
