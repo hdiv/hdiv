@@ -123,7 +123,8 @@ public class HDIVMultipartRequestHandler extends CommonsMultipartRequestHandler 
 	 * parameter value.
 	 *
 	 * @param request The request in which the parameter was specified.
-	 * @param item    The file item for the parameter to add.
+	 * @param name    Parameter name.
+	 * @param value   Parameter value.
 	 */
 	protected void addTextParameter(HttpServletRequest request, String name, String [] value) {
 

@@ -17,6 +17,7 @@ package org.hdiv.filter;
 
 import java.util.Hashtable;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
 import org.hdiv.AbstractHDIVTestCase;
@@ -25,6 +26,7 @@ import org.hdiv.dataComposer.IDataComposer;
 import org.hdiv.util.Constants;
 import org.hdiv.util.HDIVUtil;
 import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.mock.web.MockHttpServletResponse;
 
 /**
  * Unit tests for the <code>org.hdiv.filter.ValidatorHelper</code> class.
@@ -333,7 +335,7 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 		this.dataComposer.beginRequest(this.targetName);
 		this.dataComposer.compose("param1", "value1", false);
 
-		// page indentifier is incorrect
+		// page identifier is incorrect
 		String pageState = "1-1";
 
 		request.addParameter(hdivParameter, pageState);
@@ -395,5 +397,34 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 		boolean result = helper.validate(requestWrapper).isValid();
 		assertFalse(result);
 
+	}
+
+	/**
+	 * Test for cookies integrity.
+	 */
+	public void testValidateCookiesIntegrity() {
+
+		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
+		RequestWrapper requestWrapper = new RequestWrapper(request);
+
+		MockHttpServletResponse response = new MockHttpServletResponse();
+		ResponseWrapper responseWrapper = new ResponseWrapper(response);
+
+		responseWrapper.addCookie(new Cookie("name", "value"));
+
+		this.dataComposer.beginRequest(this.targetName);
+		this.dataComposer.compose("param1", "value1", false);
+		String pageState = this.dataComposer.endRequest();
+		assertNotNull(pageState);
+		request.addParameter(hdivParameter, pageState);
+
+		this.dataComposer.endPage();
+
+		// Modify cookie value on client
+		request.setCookies(new Cookie[] { new Cookie("name", "changedValue") });
+
+		requestWrapper = new RequestWrapper(request);
+		boolean result = helper.validate(requestWrapper).isValid();
+		assertFalse(result);
 	}
 }

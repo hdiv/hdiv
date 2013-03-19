@@ -31,7 +31,7 @@ public interface IUserData {
 	 * Get application username to log attacks.
 	 * </p>
 	 * <p>
-	 * If the user is anonymous, not logged in for example, return {@link IUserData.ANONYMOUS}.
+	 * If the user is anonymous, not logged in for example, return {@link IUserData#ANONYMOUS}.
 	 * </p>
 	 * 
 	 * @param request
