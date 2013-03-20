@@ -15,15 +15,43 @@
  */
 package org.hdiv.logs;
 
+import java.security.Principal;
+
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.util.ClassUtils;
+
 /**
+ * Default implementation of {@link IUserData} interface
+ * 
  * @author Roberto Velasco
+ * @author Gotzon Illarramendi
  */
 public class UserData implements IUserData {
-	
-	public String getUsername(HttpServletRequest request){
-		return "user";
+
+	private final boolean springSecurityPresent = ClassUtils.isPresent(
+			"org.springframework.security.core.context.SecurityContextHolder", UserData.class.getClassLoader());
+
+	public String getUsername(HttpServletRequest request) {
+
+		// Find username in JEE standard security
+		Principal principal = request.getUserPrincipal();
+		if (principal != null && principal.getName() != null) {
+			return principal.getName();
+		}
+
+		// Find username in Spring Security
+		if (springSecurityPresent) {
+			SecurityContext securityContext = SecurityContextHolder.getContext();
+			if (securityContext != null && securityContext.getAuthentication() != null) {
+				return securityContext.getAuthentication().getName();
+			}
+		}
+
+		// Return anonymous
+		return IUserData.ANONYMOUS;
 	}
-	
+
 }

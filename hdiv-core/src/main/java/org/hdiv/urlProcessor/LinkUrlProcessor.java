@@ -20,6 +20,8 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.hdiv.dataComposer.IDataComposer;
 import org.hdiv.util.Constants;
 import org.hdiv.util.HDIVUtil;
@@ -32,6 +34,11 @@ import org.hdiv.util.HDIVUtil;
 public class LinkUrlProcessor extends AbstractUrlProcessor {
 
 	/**
+	 * Commons Logging instance.
+	 */
+	private static Log log = LogFactory.getLog(LinkUrlProcessor.class);
+
+	/**
 	 * Process the url to add hdiv state if it is necessary.
 	 * 
 	 * @param request
@@ -41,11 +48,35 @@ public class LinkUrlProcessor extends AbstractUrlProcessor {
 	 * @return processed url
 	 */
 	public String processUrl(HttpServletRequest request, String url) {
+		// Default encoding UTF-8
+		return this.processUrl(request, url, Constants.ENCODING_UTF_8);
+	}
 
-		UrlData urlData = super.createUrlData(url, request);
+	/**
+	 * Process the url to add hdiv state if it is necessary.
+	 * 
+	 * @param request
+	 *            {@link HttpServletRequest} object
+	 * @param url
+	 *            url to process
+	 * @param encoding
+	 *            char encoding
+	 * @return processed url
+	 */
+	public String processUrl(HttpServletRequest request, String url, String encoding) {
+
+		IDataComposer dataComposer = HDIVUtil.getDataComposer(request);
+		if (dataComposer == null) {
+			// IDataComposer not initialized on request, request is out of filter
+			if (log.isDebugEnabled()) {
+				log.debug("IDataComposer not initialized on request, request is out of filter");
+			}
+			return url;
+		}
+
+		UrlData urlData = super.createUrlData(url, false, request);
 		if (super.isHdivStateNecessary(urlData)) {
 			// the url needs protection
-			IDataComposer dataComposer = HDIVUtil.getDataComposer(request);
 			dataComposer.beginRequest(urlData.getContextPathRelativeUrl());
 
 			Map params = urlData.getOriginalUrlParams();
@@ -53,11 +84,14 @@ public class LinkUrlProcessor extends AbstractUrlProcessor {
 				Iterator it = params.keySet().iterator();
 				while (it.hasNext()) {
 					String key = (String) it.next();
-					String value = (String) params.get(key);
+					String[] values = (String[]) params.get(key);
 
-					String composedParam = dataComposer.compose(key, value, false, true, Constants.ENCODING_UTF_8);
-
-					params.put(key, composedParam);
+					for (int i = 0; i < values.length; i++) {
+						String value = values[i];
+						String composedParam = dataComposer.compose(key, value, false, false, encoding);
+						values[i] = composedParam;
+					}
+					params.put(key, values);
 				}
 				urlData.setProcessedUrlParams(params);
 			}

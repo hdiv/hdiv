@@ -49,8 +49,7 @@ public class SpringMVCMultipartConfig implements IMultipartConfig {
 	private WebApplicationContext webApplicationContext;
 
 	/**
-	 * Parses the input stream and partitions the parsed items into a set of
-	 * form fields and a set of file items.
+	 * Parses the input stream and partitions the parsed items into a set of form fields and a set of file items.
 	 * 
 	 * @param request
 	 *            The multipart request wrapper.
@@ -62,7 +61,7 @@ public class SpringMVCMultipartConfig implements IMultipartConfig {
 	public HttpServletRequest handleMultipartRequest(RequestWrapper request, ServletContext servletContext)
 			throws HdivMultipartException {
 
-		MultipartResolver multipartResolver = lookupMultipartResolver(servletContext);
+		MultipartResolver multipartResolver = this.lookupMultipartResolver(servletContext);
 
 		if (multipartResolver == null) {
 			return request;
@@ -70,7 +69,7 @@ public class SpringMVCMultipartConfig implements IMultipartConfig {
 
 		MultipartHttpServletRequest processedRequest = null;
 		try {
-			processedRequest = multipartResolver.resolveMultipart((HttpServletRequest) request.getRequest());
+			processedRequest = multipartResolver.resolveMultipart(request);
 
 		} catch (MultipartException e) {
 
@@ -78,15 +77,11 @@ public class SpringMVCMultipartConfig implements IMultipartConfig {
 			throw exc;
 		}
 
-		request.setRequest(processedRequest);
-
 		return processedRequest;
-
 	}
 
 	/**
-	 * Cleanup any resources used for the multipart handling, like a storage for
-	 * the uploaded files.
+	 * Cleanup any resources used for the multipart handling, like a storage for the uploaded files.
 	 * 
 	 * @param request
 	 *            the request to cleanup resources for
@@ -107,7 +102,8 @@ public class SpringMVCMultipartConfig implements IMultipartConfig {
 	/**
 	 * Obtain MultipartResolver instance for this application.
 	 * 
-	 * @param servletContext app ServletContext
+	 * @param servletContext
+	 *            app ServletContext
 	 * @return MultipartResolver instance
 	 */
 	@SuppressWarnings("rawtypes")

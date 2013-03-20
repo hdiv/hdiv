@@ -88,8 +88,6 @@ public class DataComposerHash extends DataComposerMemory {
 			this.getPage().addState(state.getId(), stateHash);
 		}
 
-		this.isRequestStarted = false;
-
 		return (id != null) ? id : stateWithSuffix;
 	}
 

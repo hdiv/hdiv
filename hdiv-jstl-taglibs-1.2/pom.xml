@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	
 	<parent>
 		<artifactId>hdiv</artifactId>
 		<groupId>org.hdiv</groupId>
-		<version>2.1.2.ECCO-SNAPSHOT</version>
+		<version>2.1.4.ECCO-SNAPSHOT</version>
 	</parent>
 	<artifactId>hdiv-jstl-taglibs-1.2</artifactId>
 	<name>HDIV jstl-taglibs-1.2</name>
@@ -15,7 +16,9 @@
 	<build>
 		<plugins>
 			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.5.1</version>
 				<configuration>
 					<source>1.5</source>
 					<target>1.5</target>
@@ -53,7 +56,9 @@
 	<reporting>
 		<plugins>
 			<plugin>
+			    <groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>2.9</version>
 				<configuration>
 					<doctitle>HDIV JSTL Tags</doctitle>
 					<header>HDIV API ${project.version}</header>

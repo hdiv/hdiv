@@ -35,6 +35,11 @@ public class UrlData {
 	private String anchor;
 
 	/**
+	 * JSessionId value
+	 */
+	private String jSessionId;
+
+	/**
 	 * Url that starts with contextPath
 	 */
 	private String contextPathRelativeUrl;
@@ -60,13 +65,26 @@ public class UrlData {
 	private boolean internal = true;
 
 	/**
+	 * Protocol, server and port of the url
+	 */
+	private String server;
+
+	/**
+	 * True if the url is part of a form action. False if is a link url.
+	 */
+	private boolean isFormUrl;
+
+	/**
 	 * Constructor
 	 * 
 	 * @param url
 	 *            Original url
+	 * @param isFormUrl
+	 *            is form or link url?
 	 */
-	public UrlData(String url) {
+	public UrlData(String url, boolean isFormUrl) {
 		this.originalUrl = url;
+		this.isFormUrl = isFormUrl;
 	}
 
 	/**
@@ -181,6 +199,51 @@ public class UrlData {
 	 */
 	public void setInternal(boolean internal) {
 		this.internal = internal;
+	}
+
+	/**
+	 * @return the server
+	 */
+	public String getServer() {
+		return server;
+	}
+
+	/**
+	 * @param server
+	 *            the server to set
+	 */
+	public void setServer(String server) {
+		this.server = server;
+	}
+
+	/**
+	 * @return the isFormUrl
+	 */
+	public boolean isFormUrl() {
+		return isFormUrl;
+	}
+
+	/**
+	 * @param isFormUrl
+	 *            the isFormUrl to set
+	 */
+	public void setFormUrl(boolean isFormUrl) {
+		this.isFormUrl = isFormUrl;
+	}
+
+	/**
+	 * @return the jSessionId
+	 */
+	public String getjSessionId() {
+		return jSessionId;
+	}
+
+	/**
+	 * @param jSessionId
+	 *            the jSessionId to set
+	 */
+	public void setjSessionId(String jSessionId) {
+		this.jSessionId = jSessionId;
 	}
 
 }

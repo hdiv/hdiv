@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.hdiv.AbstractHDIVTestCase;
 import org.hdiv.util.HDIVUtil;
+import org.springframework.mock.web.MockHttpServletRequest;
 
 public class LinkUrlProcessorTest extends AbstractHDIVTestCase {
 
@@ -26,7 +27,6 @@ public class LinkUrlProcessorTest extends AbstractHDIVTestCase {
 
 	protected void onSetUp() throws Exception {
 		this.linkUrlProcessor = (LinkUrlProcessor) this.getApplicationContext().getBean("linkUrlProcessor");
-
 	}
 
 	public void testProcessAction() {
@@ -37,6 +37,17 @@ public class LinkUrlProcessorTest extends AbstractHDIVTestCase {
 		String result = this.linkUrlProcessor.processUrl(request, url);
 
 		assertTrue(result.startsWith("/testAction.do?_HDIV_STATE_="));
+	}
+
+	public void testProcessActionWithContextPath() {
+
+		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
+		request.setContextPath("/path");
+		String url = "/path/testAction.do";
+
+		String result = this.linkUrlProcessor.processUrl(request, url);
+
+		assertTrue(result.startsWith("/path/testAction.do?_HDIV_STATE_="));
 	}
 
 	public void testProcessActionWithAnchor() {
@@ -90,14 +101,160 @@ public class LinkUrlProcessorTest extends AbstractHDIVTestCase {
 		assertTrue(result.startsWith("/testAction.do?_HDIV_STATE_="));
 	}
 
-	public void testStripSession() {
+	public void testProcessActionRelative3() {
 
-		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
-		String url = "/app/list.do;jsessionid=AAAAAA?_HDIV_STATE_=14-2-8AB072360ABD8A2B2FBC484B0BC61BA4";
+		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
+		request.setContextPath("/path");
+
+		String url = "../testAction.do";
 
 		String result = this.linkUrlProcessor.processUrl(request, url);
 
-		assertTrue(result.indexOf("jsessionid") < 0);
+		assertTrue(result.equals("../testAction.do"));
+	}
+
+	public void testProcessAbsoluteExternalUrlWithContextPath() {
+
+		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
+		request.setContextPath("/path");
+
+		String url = "http://www.google.com";
+
+		String result = this.linkUrlProcessor.processUrl(request, url);
+
+		assertEquals("http://www.google.com", result);
+	}
+
+	public void testProcessAbsoluteExternalUrl() {
+
+		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
+
+		String url = "http://www.google.com";
+
+		String result = this.linkUrlProcessor.processUrl(request, url);
+
+		assertEquals("http://www.google.com", result);
+	}
+
+	public void testProcessAbsoluteInternalUrlWithContextPath() {
+
+		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
+		request.setContextPath("/path");
+
+		String url = "http://localhost:8080/path/sample.do";
+
+		String result = this.linkUrlProcessor.processUrl(request, url);
+
+		assertTrue(result.startsWith("http://localhost:8080/path/sample.do?_HDIV_STATE_="));
+	}
+
+	public void testProcessAbsoluteInternalUrlWithContextPath2() {
+
+		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
+		request.setContextPath("/diferentPath");
+
+		String url = "http://localhost:8080/path/sample.do";
+
+		String result = this.linkUrlProcessor.processUrl(request, url);
+
+		assertTrue(result.startsWith("http://localhost:8080/path/sample.do"));
+	}
+
+	public void testProcessAbsoluteInternalUrl() {
+
+		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
+
+		String url = "http://localhost:8080/path/sample.do";
+
+		String result = this.linkUrlProcessor.processUrl(request, url);
+
+		assertTrue(result.startsWith("http://localhost:8080/path/sample.do?_HDIV_STATE_="));
+	}
+
+	public void testProcessActionStartPage() {
+
+		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+
+		String url = "/testing.do"; // is a startPage
+		String result = this.linkUrlProcessor.processUrl(request, url);
+		assertEquals(url, result);
+
+		url = "/onlyget.do"; // is a startPage only in Get requests
+		result = this.linkUrlProcessor.processUrl(request, url);
+		assertEquals(url, result);
+
+		url = "/onlypost.do"; // is a startPage only in POST requests
+		result = this.linkUrlProcessor.processUrl(request, url);
+		assertTrue(result.startsWith("/onlypost.do?_HDIV_STATE_="));
+	}
+
+	public void testProcessWithBaseUrl() {
+
+		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
+
+		HDIVUtil.setBaseURL("/path/extra/plus/more", request);
+
+		String url = "../testing.do";
+
+		String result = this.linkUrlProcessor.processUrl(request, url);
+
+		assertTrue(result.startsWith("/path/extra/testing.do?_HDIV_STATE_="));
+	}
+
+	public void testProcessMultiValueParam() {
+
+		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		String url = "/testAction.do?name=X&name=Y&name=Z";
+
+		String result = this.linkUrlProcessor.processUrl(request, url);
+
+		assertTrue(result.startsWith("/testAction.do?name=0&name=1&name=2&_HDIV_STATE_="));
+
+	}
+
+	public void testProcessMultiValueParamConfidentialityFalse() {
+
+		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		Boolean conf = this.getConfig().getConfidentiality();
+		this.getConfig().setConfidentiality(Boolean.FALSE);
+		String url = "/testAction.do?name=X&name=Y&name=Z";
+
+		String result = this.linkUrlProcessor.processUrl(request, url);
+
+		assertTrue(result.startsWith("/testAction.do?name=X&name=Y&name=Z&_HDIV_STATE_="));
+
+		this.getConfig().setConfidentiality(conf);
+	}
+
+	public void testProcessActionJsessionId() {
+
+		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		String url = "/testAction.do;jsessionid=67CFB560B6EC2677D51814A2A2B16B24";
+
+		String result = this.linkUrlProcessor.processUrl(request, url);
+
+		assertTrue(result.startsWith("/testAction.do;jsessionid=67CFB560B6EC2677D51814A2A2B16B24?_HDIV_STATE_"));
+	}
+
+	public void testProcessActionJsessionIdParam() {
+
+		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		String url = "/testAction.do;jsessionid=67CFB560B6EC2677D51814A2A2B16B24?params=1";
+
+		String result = this.linkUrlProcessor.processUrl(request, url);
+
+		assertTrue(result
+				.startsWith("/testAction.do;jsessionid=67CFB560B6EC2677D51814A2A2B16B24?params=0&_HDIV_STATE_"));
+	}
+
+	public void testProcessActionJsessionStartPage() {
+
+		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+
+		String url = "/testing.do;jsessionid=67CFB560B6EC2677D51814A2A2B16B24"; // is a startPage
+		String result = this.linkUrlProcessor.processUrl(request, url);
+		assertEquals(url, result);
+
 	}
 
 }

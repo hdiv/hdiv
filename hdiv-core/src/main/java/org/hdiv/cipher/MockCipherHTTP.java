@@ -1,5 +1,5 @@
 /**
- * Copyright 2005-2011 hdiv.org
+ * Copyright 2005-2013 hdiv.org
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,19 +22,9 @@ package org.hdiv.cipher;
  */
 public class MockCipherHTTP implements ICipherHTTP {
 
-
-	private static final long serialVersionUID = 1406354467403622899L;
+	private static final long serialVersionUID = 4294295561941023512L;
 
 	private String algorithm;
-
-
-	public String decrypt(String data) {
-		return data.substring(1);
-	}
-
-	public String encrypt(String data) {
-		return "_" + data;
-	} 
 
 	public byte[] decrypt(byte[] data) {
 		return data;

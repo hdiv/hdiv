@@ -26,13 +26,17 @@ package org.hdiv.util;
 public class Constants {
 
 	/**
+	 * The request attributes key under HDIV should store errors produced in the editable fields.
+	 */
+	public static final String EDITABLE_PARAMETER_ERROR = "org.hdiv.action.EDITABLE_PARAMETER_ERROR";
+
+	/**
 	 * Name of the attribute which is used for storing cookies in session.
 	 */
 	public static final String HDIV_COOKIES_KEY = "hdivCookies";
 
 	/**
-	 * Name of the attribute which is used for storing the suffix added to the
-	 * HDIV state.
+	 * Name of the attribute which is used for storing the suffix added to the HDIV state.
 	 */
 	public static final String STATE_SUFFIX = "hdivStateSuffix";
 
@@ -48,9 +52,21 @@ public class Constants {
 	public static final String PAGE_ID_GENERATOR_NAME = "pageIdGenerator";
 
 	public static final String HDIV_PARAMETER = "HDIVParameter";
-	
+
 	public static final String MODIFY_STATE_HDIV_PARAMETER = "modifyHDIVStateParameter";
 
 	public static final String ENCODING_UTF_8 = "UTF-8";
+
+	/**
+	 * Properties key that contains the error message to be shown when the value of the editable parameter is not valid.
+	 * Only used for Editable Validation errors.
+	 */
+	public static final String HDIV_EDITABLE_ERROR_KEY = "hdiv.editable.error";
+
+	/**
+	 * Properties key that contains the error message to be shown when the value of the editable password parameter is
+	 * not valid. Only used for Editable Validation errors.
+	 */
+	public static final String HDIV_EDITABLE_PASSWORD_ERROR_KEY = "hdiv.editable.password.error";
 
 }

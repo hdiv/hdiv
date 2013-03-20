@@ -25,6 +25,7 @@ import org.hdiv.state.IParameter;
 import org.hdiv.state.IState;
 import org.hdiv.state.Parameter;
 import org.hdiv.state.State;
+import org.springframework.web.util.HtmlUtils;
 
 /**
  * <p>
@@ -61,11 +62,6 @@ public class DataComposerMemory extends AbstractDataComposer {
 	 * HDIV configuration object.
 	 */
 	protected HDIVConfig hdivConfig;
-
-	/**
-	 * True if beginRequest has been executed and endRequest not
-	 */
-	protected boolean isRequestStarted = false;
 
 	/**
 	 * It generates a new encoded value for the parameter <code>parameter</code> and the value <code>value</code> passed
@@ -167,7 +163,11 @@ public class DataComposerMemory extends AbstractDataComposer {
 	public String compose(String action, String parameter, String value, boolean editable, boolean isActionParam,
 			String charEncoding) {
 
-		this.setAction(action);
+		// Get actual IState
+		IState state = (IState) this.getStatesStack().peek();
+		if (state.getAction() != null && state.getAction().trim().length() == 0) {
+			state.setAction(action);
+		}
 		return this.compose(parameter, value, editable, isActionParam, charEncoding);
 	}
 
@@ -216,8 +216,9 @@ public class DataComposerMemory extends AbstractDataComposer {
 	public String compose(String parameter, String value, boolean editable, String editableName, boolean isActionParam,
 			String charEncoding) {
 
-		if (!this.isRequestStarted) {
-			this.beginRequest();
+		if (!this.isRequestStarted()) {
+			// If request not started, do nothing
+			return value;
 		}
 
 		this.composeParameter(parameter, value, editable, editableName, isActionParam, charEncoding);
@@ -234,8 +235,11 @@ public class DataComposerMemory extends AbstractDataComposer {
 			return value;
 		}
 
-		if (this.getAction() != null) {
-			if (this.hdivConfig.isStartPage(this.getAction())) {
+		// Get actual IState
+		IState state = (IState) this.getStatesStack().peek();
+		String action = state.getAction();
+		if (action != null) {
+			if (this.hdivConfig.isStartPage(action, isActionParam)) {
 				return value;
 			}
 		}
@@ -258,7 +262,9 @@ public class DataComposerMemory extends AbstractDataComposer {
 	 */
 	private boolean isUserDefinedNonValidationParameter(String parameter) {
 
-		String actionWithoutContextPath = this.getAction();
+		// Get actual IState
+		IState state = (IState) this.getStatesStack().peek();
+		String actionWithoutContextPath = state.getAction();
 		if (actionWithoutContextPath != null && actionWithoutContextPath.startsWith("/")) {
 			int secondSlash = actionWithoutContextPath.indexOf("/", 1);
 			if (secondSlash > 0) {
@@ -358,8 +364,20 @@ public class DataComposerMemory extends AbstractDataComposer {
 	}
 
 	/**
+	 * <p>
 	 * Decoded <code>value</code> using input <code>charEncoding</code>.
-	 * 
+	 * </p>
+	 * <p>
+	 * Removes Html Entity elements too. Like that:
+	 * </p>
+	 * <blockquote> 
+	 * &amp;#<i>Entity</i>; - <i>(Example: &amp;amp;) case sensitive</i> 
+	 * &amp;#<i>Decimal</i>; - <i>(Example: &amp;#68;)</i><br>
+	 * &amp;#x<i>Hex</i>; - <i>(Example: &amp;#xE5;) case insensitive</i><br>
+	 * </blockquote>
+	 * <p>
+	 * Based on {@link HtmlUtils.htmlUnescape}.
+	 * </p>
 	 * @param value
 	 *            value to decode
 	 * @param charEncoding
@@ -375,6 +393,16 @@ public class DataComposerMemory extends AbstractDataComposer {
 			decodedValue = value;
 		}
 
+		if (decodedValue == null) {
+			return "";
+		}
+
+		// Remove escaped Html elements
+		if (decodedValue.contains("&")) {
+			// Can contain escaped characters
+			decodedValue = HtmlUtils.htmlUnescape(decodedValue);
+		}
+
 		return (decodedValue == null) ? "" : decodedValue;
 	}
 
@@ -386,20 +414,7 @@ public class DataComposerMemory extends AbstractDataComposer {
 	 */
 	public String beginRequest() {
 
-		IState state = new State();
-		state.setAction(this.getAction());
-
-		String currentRequestCounter = String.valueOf(this.requestCounter);
-		state.setId(currentRequestCounter);
-		this.getStatesStack().push(state);
-
-		this.requestCounter++;
-		this.lastParameter = null;
-
-		this.isRequestStarted = true;
-
-		String id = this.getPage().getName() + DASH + state.getId() + DASH + this.getHdivStateSuffix();
-		return id;
+		return this.beginRequest("");
 	}
 
 	/**
@@ -415,20 +430,22 @@ public class DataComposerMemory extends AbstractDataComposer {
 	 */
 	public String beginRequest(String action) {
 
-		this.setAction(action);
-		return this.beginRequest();
+		// Create new IState
+		IState state = new State();
+		state.setAction(action);
+
+		String currentRequestCounter = String.valueOf(this.requestCounter);
+		state.setId(currentRequestCounter);
+
+		return this.beginRequest(state);
 	}
 
 	public String beginRequest(IState state) {
-
-		this.setAction(state.getAction());
 
 		this.getStatesStack().push(state);
 
 		this.requestCounter = Integer.parseInt(state.getId()) + 1;
 		this.lastParameter = null;
-
-		this.isRequestStarted = true;
 
 		String id = this.getPage().getName() + DASH + state.getId() + DASH + this.getHdivStateSuffix();
 		return id;
@@ -449,9 +466,6 @@ public class DataComposerMemory extends AbstractDataComposer {
 		this.getPage().addState(state);
 
 		String id = this.getPage().getName() + DASH + state.getId() + DASH + this.getHdivStateSuffix();
-
-		this.isRequestStarted = false;
-
 		return id;
 	}
 
@@ -491,7 +505,7 @@ public class DataComposerMemory extends AbstractDataComposer {
 	 */
 	public void endPage() {
 
-		if (this.isRequestStarted) {
+		if (this.isRequestStarted()) {
 			// A request is started but not ended
 			this.endRequest();
 		}
@@ -500,13 +514,11 @@ public class DataComposerMemory extends AbstractDataComposer {
 		if (page.getStates().size() > 0) {
 			this.getSession().addPage(page.getName(), page);
 		} else {
-			log.debug("The page [" + page.getName() + "] has no states, is not stored in session");
+			if (log.isDebugEnabled()) {
+				log.debug("The page [" + page.getName() + "] has no states, is not stored in session");
+			}
 		}
 
-	}
-
-	public boolean isRequestStarted() {
-		return this.isRequestStarted;
 	}
 
 	/**

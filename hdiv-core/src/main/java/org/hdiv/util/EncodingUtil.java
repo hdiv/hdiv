@@ -30,6 +30,8 @@ import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.net.URLCodec;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.hdiv.cipher.ICipherHTTP;
+import org.hdiv.cipher.Key;
 import org.hdiv.exception.HDIVException;
 import org.hdiv.session.ISession;
 
@@ -66,7 +68,6 @@ public class EncodingUtil {
 	 */
 	private String algorithmName = "MD5";
 
-
 	/**
 	 * Initialize the EncodingUtil with Http Session and message resource.
 	 */
@@ -74,6 +75,9 @@ public class EncodingUtil {
 
 		try {
 			this.messageDigest = MessageDigest.getInstance(algorithmName);
+			if (log.isDebugEnabled()) {
+				log.debug("MessageDigest created: " + messageDigest);
+			}
 		} catch (NoSuchAlgorithmException e) {
 			throw new HDIVException(e.getMessage());
 		}
@@ -82,9 +86,11 @@ public class EncodingUtil {
 	/**
 	 * The object <code>obj</code> is compressed, encrypted and coded in Base64.
 	 * 
-	 * @param obj Object to encrypt
+	 * @param obj
+	 *            Object to encrypt
 	 * @return Objet <code>obj</code> compressed, encrypted and coded in Base64
-	 * @throws HDIVException if there is an error encoding object <code>data</code>
+	 * @throws HDIVException
+	 *             if there is an error encoding object <code>data</code>
 	 * @see java.util.zip.GZIPOutputStream#GZIPOutputStream(java.io.OutputStream)
 	 * @see org.apache.commons.codec.net.URLCodec#encodeUrl(java.util.BitSet, byte[])
 	 * @see org.apache.commons.codec.binary.Base64#encode(byte[])
@@ -100,7 +106,14 @@ public class EncodingUtil {
 			zos.close();
 			baos.close();
 
-			byte[] cipherData = this.session.getEncryptCipher().encrypt(baos.toByteArray());
+			ICipherHTTP cipher = this.session.getEncryptCipher();
+			// Get Key from session
+			Key key = this.session.getCipherKey();
+			byte[] cipherData;
+			synchronized (cipher) {
+				cipher.initEncryptMode(key);
+				cipherData = cipher.encrypt(baos.toByteArray());
+			}
 
 			// Encodes an array of bytes into an array of URL safe 7-bit characters.
 			// Unsafe characters are escaped.
@@ -118,12 +131,14 @@ public class EncodingUtil {
 	}
 
 	/**
-	 * Decodes Base64 alphabet characters of the string <code>s</code>, decrypts
-	 * this string and finally decompresses it.
+	 * Decodes Base64 alphabet characters of the string <code>s</code>, decrypts this string and finally decompresses
+	 * it.
 	 * 
-	 * @param s data to decrypt
+	 * @param s
+	 *            data to decrypt
 	 * @return decoded data
-	 * @throws HDIVException if there is an error decoding object <code>data</code>
+	 * @throws HDIVException
+	 *             if there is an error decoding object <code>data</code>
 	 * @see org.apache.commons.codec.binary.Base64#decode(byte[])
 	 * @see org.apache.commons.codec.net.URLCodec#decode(byte[])
 	 * @see java.util.zip.GZIPInputStream#GZIPInputStream(java.io.InputStream)
@@ -140,7 +155,14 @@ public class EncodingUtil {
 			// original representation.
 			byte[] encodedData = URLCodec.decodeUrl(encryptedData);
 
-			byte[] data = this.session.getDecryptCipher().decrypt(encodedData);
+			ICipherHTTP cipher = this.session.getDecryptCipher();
+			// Get Key from session
+			Key key = this.session.getCipherKey();
+			byte[] data;
+			synchronized (cipher) {
+				cipher.initDecryptMode(key);
+				data = cipher.decrypt(encodedData);
+			}
 
 			ByteArrayInputStream decodedStream = new ByteArrayInputStream(data);
 			InputStream unzippedStream = new GZIPInputStream(decodedStream);
@@ -160,9 +182,11 @@ public class EncodingUtil {
 	/**
 	 * The object <code>obj</code> is compressed and coded in Base64.
 	 * 
-	 * @param obj Object to encode
+	 * @param obj
+	 *            Object to encode
 	 * @return Object <code>obj</code> compressed y encoded in Base64
-	 * @throws HDIVException if there is an error encoding object <code>data</code>
+	 * @throws HDIVException
+	 *             if there is an error encoding object <code>data</code>
 	 * @see java.util.zip.GZIPOutputStream#GZIPOutputStream(java.io.OutputStream)
 	 * @see org.apache.commons.codec.net.URLCodec#encodeUrl(java.util.BitSet, byte[])
 	 * @see org.apache.commons.codec.binary.Base64#encode(byte[])
@@ -194,12 +218,13 @@ public class EncodingUtil {
 	}
 
 	/**
-	 * Decodes Base64 alphabet characters of the string <code>s</code> and
-	 * decompresses it.
+	 * Decodes Base64 alphabet characters of the string <code>s</code> and decompresses it.
 	 * 
-	 * @param s data to decode
+	 * @param s
+	 *            data to decode
 	 * @return decoded <code>s</code> string
-	 * @throws HDIVException if there is an error decoding object <code>data</code>
+	 * @throws HDIVException
+	 *             if there is an error decoding object <code>data</code>
 	 * @see org.apache.commons.codec.binary.Base64#decode(byte[])
 	 * @see org.apache.commons.codec.net.URLCodec#decode(byte[])
 	 * @see java.util.zip.GZIPInputStream#GZIPInputStream(java.io.InputStream)
@@ -234,7 +259,8 @@ public class EncodingUtil {
 	/**
 	 * Calculate <code>data</code> hash value.
 	 * 
-	 * @param data data
+	 * @param data
+	 *            data
 	 * @return <code>data</code> hash value
 	 */
 	public String calculateStateHash(String data) {
@@ -261,21 +287,24 @@ public class EncodingUtil {
 	}
 
 	/**
-	 * @param session The session to set.
+	 * @param session
+	 *            The session to set.
 	 */
 	public void setSession(ISession session) {
 		this.session = session;
 	}
 
 	/**
-	 * @param md The message digest to set.
+	 * @param md
+	 *            The message digest to set.
 	 */
 	public void setMessageDigest(MessageDigest md) {
 		this.messageDigest = md;
 	}
 
 	/**
-	 * @param algorithmName The algorithm to set for the message digest.
+	 * @param algorithmName
+	 *            The algorithm to set for the message digest.
 	 */
 	public void setAlgorithmName(String algorithmName) {
 		this.algorithmName = algorithmName;

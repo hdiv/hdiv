@@ -15,10 +15,13 @@
  */
 package org.hdiv.dataComposer;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.hdiv.AbstractHDIVTestCase;
 import org.hdiv.config.HDIVConfig;
 import org.hdiv.state.IState;
 import org.hdiv.state.StateUtil;
+import org.hdiv.util.HDIVUtil;
 
 /**
  * Unit tests for the <code>org.hdiv.composer.DataComposerMemory</code> class.
@@ -31,15 +34,16 @@ public class DataComposerHashTest extends AbstractHDIVTestCase {
 
 	private StateUtil stateUtil;
 
+	protected void postCreateHdivConfig(HDIVConfig config) {
+		config.setStrategy("hash");
+	}
+
 	/*
 	 * @see TestCase#setUp()
 	 */
 	protected void onSetUp() throws Exception {
 
 		this.dataComposerFactory = (DataComposerFactory) this.getApplicationContext().getBean("dataComposerFactory");
-		HDIVConfig config = this.getConfig();
-		config.setStrategy("hash");
-		this.dataComposerFactory.setHdivConfig(config);
 		this.stateUtil = (StateUtil) this.getApplicationContext().getBean("stateUtil");
 	}
 
@@ -48,7 +52,10 @@ public class DataComposerHashTest extends AbstractHDIVTestCase {
 	 */
 	public void testComposeSimple() {
 
-		IDataComposer dataComposer = this.dataComposerFactory.newInstance();
+		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		IDataComposer dataComposer = this.dataComposerFactory.newInstance(request);
+		HDIVUtil.setDataComposer(dataComposer, request);
+		assertTrue(dataComposer instanceof DataComposerHash);
 
 		dataComposer.startPage();
 		dataComposer.beginRequest("test.do");
@@ -56,33 +63,34 @@ public class DataComposerHashTest extends AbstractHDIVTestCase {
 		boolean confidentiality = this.getConfig().getConfidentiality().booleanValue();
 
 		// we add a multiple parameter that will be encoded as 0, 1, 2, ...
-		String result = dataComposer.compose("action1", "parameter1", "2", false);
+		String result = dataComposer.compose("test.do", "parameter1", "2", false);
 		String value = (!confidentiality) ? "2" : "0";
 		assertTrue(value.equals(result));
 
-		result = dataComposer.compose("action1", "parameter1", "2", false);
+		result = dataComposer.compose("test.do", "parameter1", "2", false);
 		value = (!confidentiality) ? "2" : "1";
 		assertTrue(value.equals(result));
 
-		result = dataComposer.compose("action1", "parameter1", "2", false);
+		result = dataComposer.compose("test.do", "parameter1", "2", false);
 		assertTrue("2".equals(result));
 
-		result = dataComposer.compose("action1", "parameter2", "2", false);
+		result = dataComposer.compose("test.do", "parameter2", "2", false);
 		value = (!confidentiality) ? "2" : "0";
 		assertTrue(value.equals(result));
 
-		result = dataComposer.compose("action1", "parameter2", "2", false);
+		result = dataComposer.compose("test.do", "parameter2", "2", false);
 		value = (!confidentiality) ? "2" : "1";
 		assertTrue(value.equals(result));
 	}
 
 	public void testComposeAndRestore() {
 
-		IDataComposer dataComposer = this.dataComposerFactory.newInstance();
+		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		IDataComposer dataComposer = this.dataComposerFactory.newInstance(request);
 
 		dataComposer.startPage();
 		dataComposer.beginRequest("test.do");
-		dataComposer.compose("action1", "parameter1", "2", false);
+		dataComposer.compose("parameter1", "2", false);
 		String stateId = dataComposer.endRequest();
 		dataComposer.endPage();
 

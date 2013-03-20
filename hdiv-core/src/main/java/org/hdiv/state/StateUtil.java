@@ -81,9 +81,12 @@ public class StateUtil {
 	private HDIVConfig config;
 
 	/**
-	 * StateUtil initialization with HDIV parameter name stored in http session.
+	 * StateUtil initialization.
 	 */
 	public void init() {
+		if (log.isDebugEnabled()) {
+			log.debug("StateUtil instance created.");
+		}
 	}	
 
 	/**

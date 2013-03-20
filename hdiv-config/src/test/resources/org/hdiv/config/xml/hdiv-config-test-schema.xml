@@ -24,13 +24,20 @@ http://www.hdiv.org/schema/hdiv http://www.hdiv.org/schema/hdiv/hdiv.xsd">
 
 	<hdiv:config confidentiality="true" avoidCookiesIntegrity="true"
 		protectedExtensions=".*,aaa" excludedExtensions="css,png" errorPage="proba.jsp"
-		randomName="true" strategy="memory" maxPagesPerSession="20">
+		randomName="true" strategy="memory" maxPagesPerSession="20"
+		avoidCookiesConfidentiality="true" avoidValidationInUrlsWithoutParams="true"
+		debugMode="true" userData="testUserData"
+		showErrorPageOnEditableValidation="true">
+		<hdiv:sessionExpired loginPage="/login.html" homePage="/"/>
 		<hdiv:startPages>page1,page2</hdiv:startPages>
+		<hdiv:startPages method="get">/login.html,/logout.html</hdiv:startPages>
 		<hdiv:startParameters>parameter1,parameter2</hdiv:startParameters>
 		<hdiv:paramsWithoutValidation>
 			<hdiv:mapping url="/page1" parameters="param1,param2" />
 			<hdiv:mapping url="/page2" parameters="param3,param4" />
 		</hdiv:paramsWithoutValidation>
 	</hdiv:config>
+
+	<bean id="testUserData" class="org.hdiv.logs.UserData"></bean>
 
 </beans>

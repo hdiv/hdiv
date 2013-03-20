@@ -24,6 +24,20 @@ import javax.servlet.http.HttpServletRequest;
  */
 public interface IUserData {
 
+	public static final String ANONYMOUS = "anonymous";
+
+	/**
+	 * <p>
+	 * Get application username to log attacks.
+	 * </p>
+	 * <p>
+	 * If the user is anonymous, not logged in for example, return {@link IUserData#ANONYMOUS}.
+	 * </p>
+	 * 
+	 * @param request
+	 *            request object
+	 * @return application user name
+	 */
 	public String getUsername(HttpServletRequest request);
 
 }

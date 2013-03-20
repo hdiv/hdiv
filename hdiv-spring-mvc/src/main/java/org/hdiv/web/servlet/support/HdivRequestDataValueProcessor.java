@@ -121,7 +121,7 @@ public class HdivRequestDataValueProcessor implements RequestDataValueProcessor 
 
 		IDataComposer dataComposer = (IDataComposer) request.getAttribute(HDIVUtil.DATACOMPOSER_REQUEST_KEY);
 
-		if (dataComposer.isRequestStarted() == false) {
+		if (dataComposer == null || dataComposer.isRequestStarted() == false) {
 			return value;
 		}
 
@@ -147,7 +147,7 @@ public class HdivRequestDataValueProcessor implements RequestDataValueProcessor 
 		IDataComposer dataComposer = (IDataComposer) request.getAttribute(HDIVUtil.DATACOMPOSER_REQUEST_KEY);
 		Map<String, String> extraFields = new HashMap<String, String>();
 
-		if (dataComposer.isRequestStarted() == false) {
+		if (dataComposer == null || dataComposer.isRequestStarted() == false) {
 			return extraFields;
 		}
 

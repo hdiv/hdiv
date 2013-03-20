@@ -33,11 +33,11 @@ import org.hdiv.cipher.Key;
 public class EncodingUtilTest extends AbstractHDIVTestCase {
 
 	private static Log log = LogFactory.getLog(EncodingUtilTest.class);
-	
+
 	private EncodingUtil encodingUtil;
 
 	protected void onSetUp() throws Exception {
-		
+
 		IKeyFactory keyFactory = (IKeyFactory) this.getApplicationContext().getBean("keyFactory");
 		Key key = keyFactory.generateKey();
 		HttpSession httpSession = HDIVUtil.getHttpSession();
@@ -62,13 +62,14 @@ public class EncodingUtilTest extends AbstractHDIVTestCase {
 	 */
 	public void testDecode64Cipher() {
 
-		try {			
+		try {
 			String clearData = "clearDa+tadsfasdfsdfsd";
 			String encodedData = encodingUtil.encode64Cipher(clearData);
-		
+
 			String result = (String) encodingUtil.decode64Cipher("head" + encodedData + "tail");
+			log.debug("result:" + result);
 			assertFalse(true);
-			
+
 		} catch (Exception e) {
 			assertTrue(true);
 		}
@@ -83,6 +84,6 @@ public class EncodingUtilTest extends AbstractHDIVTestCase {
 
 		log.debug("decodedData:" + decodedData);
 		Assert.assertEquals(clearData, decodedData);
-	}	
+	}
 
 }

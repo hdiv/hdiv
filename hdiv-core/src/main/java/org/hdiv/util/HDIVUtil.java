@@ -56,6 +56,7 @@ public class HDIVUtil {
 	public static final String HDIVCONFIG_SERVLETCONTEXT_KEY = "HDIVCONFIG_SERVLETCONTEXT_KEY";
 	public static final String DATACOMPOSER_REQUEST_KEY = "DATACOMPOSER_REQUEST_KEY";
 	public static final String REQUESTURI_REQUEST_KEY = "REQUESTURI_REQUEST_KEY";
+	public static final String BASEURL_REQUEST_KEY = "BASEURL_REQUEST_KEY";
 	public static final String ISESSION_SERVLETCONTEXT_KEY = "ISESSION_SERVLETCONTEXT_KEY";
 	public static final String LINKURLPROCESSOR_SERVLETCONTEXT_KEY = "LINKURLPROCESSOR_SERVLETCONTEXT_KEY";
 	public static final String FORMURLPROCESSOR_SERVLETCONTEXT_KEY = "FORMURLPROCESSOR_SERVLETCONTEXT_KEY";
@@ -87,9 +88,6 @@ public class HDIVUtil {
 	public static IDataComposer getDataComposer(HttpServletRequest request) {
 
 		IDataComposer requestDataComposer = (IDataComposer) request.getAttribute(DATACOMPOSER_REQUEST_KEY);
-		if (requestDataComposer == null) {
-			throw new HDIVException("IDataComposer has not been initialized in request");
-		}
 		return requestDataComposer;
 	}
 
@@ -105,7 +103,7 @@ public class HDIVUtil {
 		return newDataComposer;
 
 	}
-	
+
 	/**
 	 * Returns true if a data composer object exist in <code>HttpServletRequest</code>
 	 * 
@@ -122,8 +120,10 @@ public class HDIVUtil {
 	/**
 	 * Set the <code>IDataComposer</code>
 	 * 
-	 * @param newDataComposer new {@link IDataComposer}
-	 * @param request {@link HttpServletRequest} instance
+	 * @param newDataComposer
+	 *            new {@link IDataComposer}
+	 * @param request
+	 *            {@link HttpServletRequest} instance
 	 */
 	public static void setDataComposer(IDataComposer newDataComposer, HttpServletRequest request) {
 
@@ -160,6 +160,35 @@ public class HDIVUtil {
 	public static void setRequestURI(String requestURI, HttpServletRequest request) {
 
 		request.setAttribute(REQUESTURI_REQUEST_KEY, requestURI);
+
+	}
+
+	/* BaseURL */
+
+	/**
+	 * Returns BaseURL value from <code>HttpServletRequest</code>
+	 * 
+	 * @param request
+	 *            HttpServletRequest
+	 * @return String
+	 */
+	public static String getBaseURL(HttpServletRequest request) {
+
+		String baseURL = (String) request.getAttribute(BASEURL_REQUEST_KEY);
+		return baseURL;
+	}
+
+	/**
+	 * Set the BaseURL
+	 * 
+	 * @param baseURL
+	 *            BaseURL to set
+	 * @param request
+	 *            {@link HttpServletRequest} object
+	 */
+	public static void setBaseURL(String baseURL, HttpServletRequest request) {
+
+		request.setAttribute(BASEURL_REQUEST_KEY, baseURL);
 
 	}
 
@@ -472,6 +501,38 @@ public class HDIVUtil {
 		}
 
 		return String.valueOf(i);
+	}
+
+	/**
+	 * Strips a servlet session ID from <tt>url</tt>. The session ID is encoded as a URL "path parameter" beginning with
+	 * "jsessionid=". We thus remove anything we find between ";jsessionid=" (inclusive) and either EOS or a subsequent
+	 * ';' (exclusive).
+	 * 
+	 * @param url
+	 *            url
+	 * @return url without sessionId
+	 */
+	public static String stripSession(String url) {
+
+		if (log.isDebugEnabled()) {
+			log.debug("Stripping jsessionid from url " + url);
+		}
+		StringBuffer u = new StringBuffer(url);
+		int sessionStart;
+
+		while (((sessionStart = u.toString().indexOf(";jsessionid=")) != -1)
+				|| ((sessionStart = u.toString().indexOf(";JSESSIONID=")) != -1)) {
+
+			int sessionEnd = u.toString().indexOf(";", sessionStart + 1);
+			if (sessionEnd == -1) {
+				sessionEnd = u.toString().indexOf("?", sessionStart + 1);
+			}
+			if (sessionEnd == -1) { // still
+				sessionEnd = u.length();
+			}
+			u.delete(sessionStart, sessionEnd);
+		}
+		return u.toString();
 	}
 
 }

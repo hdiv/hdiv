@@ -26,7 +26,6 @@ import java.util.regex.Pattern;
 import org.hdiv.util.Constants;
 import org.hdiv.util.HDIVUtil;
 import org.hdiv.validator.IValidation;
-import java.lang.StringBuffer;
 
 /**
  * Class containing HDIV configuration initialized from Spring Factory.
@@ -66,9 +65,21 @@ public class HDIVConfig {
 	private Hashtable matchedParameters = new Hashtable();
 
 	/**
-	 * Error page to which HDIV will redirect the request if it doesn't pass the HDIV validation.
+	 * Url of the error page to which HDIV will redirect the request if it doesn't pass the HDIV validation.
 	 */
 	private String errorPage;
+
+	/**
+	 * Url of the error page to which HDIV will redirect the request if it doesn't pass the HDIV validation caused by
+	 * session expiration and the user is not logged in the application.
+	 */
+	private String sessionExpiredLoginPage;
+
+	/**
+	 * Url of the error page to which HDIV will redirect the request if it doesn't pass the HDIV validation caused by
+	 * session expiration and the user is logged in the application.
+	 */
+	private String sessionExpiredHomePage;
 
 	/**
 	 * Confidentiality indicator to know if information is accessible only for those who are authorized.
@@ -76,7 +87,7 @@ public class HDIVConfig {
 	private Boolean confidentiality;
 
 	/**
-	 * Parameters which HDIV validation will not be appied to.
+	 * Parameters which HDIV validation will not be applied to.
 	 */
 	private Map paramsWithoutValidation;
 
@@ -141,6 +152,13 @@ public class HDIVConfig {
 	private boolean debugMode = false;
 
 	/**
+	 * Show error page on request with editable validation errors
+	 * 
+	 * @since 2.1.4
+	 */
+	private boolean showErrorPageOnEditableValidation;
+
+	/**
 	 * @param strategy
 	 *            the strategy to set
 	 */
@@ -175,20 +193,41 @@ public class HDIVConfig {
 	 * 
 	 * @param target
 	 *            target name
+	 * @param isFormUrl
+	 *            true if is a Form Url
 	 * @return True if <code>target</code> is an init action. False otherwise.
 	 */
-	public boolean isStartPage(String target) {
+	public boolean isStartPage(String target, boolean isFormUrl) {
+		String method = "GET";
+		if (isFormUrl) {
+			method = "POST";
+		}
+		return this.isStartPage(target, method);
+	}
 
-		if (this.matchedPages.containsKey(target)) {
+	/**
+	 * Checks if <code>target</code> is an init action, in which case it will not be treated by HDIV.
+	 * 
+	 * @param target
+	 *            target name
+	 * @param method
+	 *            request method (get,post...)
+	 * @return True if <code>target</code> is an init action. False otherwise.
+	 */
+	public boolean isStartPage(String target, String method) {
+
+		String key = target + "_" + method;
+
+		if (this.matchedPages.containsKey(key)) {
 			return true;
 		}
 
-		String value = this.checkValue(target, this.startPages);
+		String value = this.checkStartPageValue(target, method, this.startPages);
 		if (value == null) {
 			return false;
 		}
 
-		this.matchedPages.put(target, value);
+		this.matchedPages.put(key, value);
 		return true;
 	}
 
@@ -305,19 +344,47 @@ public class HDIVConfig {
 	 */
 	public String checkValue(String value, Map startValues) {
 
-		String key = null;
-		Pattern p = null;
-		Matcher m = null;
-
 		for (Iterator iter = startValues.keySet().iterator(); iter.hasNext();) {
 
-			key = (String) iter.next();
-			p = (Pattern) startValues.get(key);
+			String key = (String) iter.next();
+			Pattern p = (Pattern) startValues.get(key);
 
-			m = p.matcher(value);
+			Matcher m = p.matcher(value);
 
 			if (m.matches()) {
 				return key;
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Checks if <code>value</code> is an init action or parameter, in which case it will not be treated by HDIV.
+	 * 
+	 * @param value
+	 *            target or parameter name
+	 * @param method
+	 *            request method (get,post)
+	 * @param startValues
+	 *            Map with start values
+	 * @return True if <code>value</code> is an init action or parameter. False otherwise.
+	 * @since HDIV 1.1.1
+	 */
+	public String checkStartPageValue(String value, String method, Map startValues) {
+
+		for (Iterator iter = startValues.keySet().iterator(); iter.hasNext();) {
+
+			String key = (String) iter.next();
+			StartPage startPage = (StartPage) startValues.get(key);
+
+			Matcher m = startPage.getCompiledPattern().matcher(value);
+
+			if (m.matches()) {
+				if (startPage.isAnyMethod()) {
+					return key;
+				} else if (startPage.getMethod().equalsIgnoreCase(method)) {
+					return key;
+				}
 			}
 		}
 		return null;
@@ -347,11 +414,41 @@ public class HDIVConfig {
 
 	public void setErrorPage(String errorPage) {
 
-		if (!errorPage.startsWith("/")) {
+		if (errorPage != null && !errorPage.startsWith("/")) {
 			errorPage = "/" + errorPage;
 		}
 		this.errorPage = errorPage;
-		this.startPages.put(errorPage, Pattern.compile(errorPage));
+		if (errorPage != null) {
+			this.startPages.put(errorPage, new StartPage(null, errorPage));
+		}
+	}
+
+	public String getSessionExpiredLoginPage() {
+		return sessionExpiredLoginPage;
+	}
+
+	public void setSessionExpiredLoginPage(String sessionExpiredLoginPage) {
+		if (sessionExpiredLoginPage != null && !sessionExpiredLoginPage.startsWith("/")) {
+			sessionExpiredLoginPage = "/" + sessionExpiredLoginPage;
+		}
+		this.sessionExpiredLoginPage = sessionExpiredLoginPage;
+		if (sessionExpiredLoginPage != null) {
+			this.startPages.put(sessionExpiredLoginPage, new StartPage(null, sessionExpiredLoginPage));
+		}
+	}
+
+	public String getSessionExpiredHomePage() {
+		return sessionExpiredHomePage;
+	}
+
+	public void setSessionExpiredHomePage(String sessionExpiredHomePage) {
+		if (sessionExpiredHomePage != null && !sessionExpiredHomePage.startsWith("/")) {
+			sessionExpiredHomePage = "/" + sessionExpiredHomePage;
+		}
+		this.sessionExpiredHomePage = sessionExpiredHomePage;
+		if (sessionExpiredHomePage != null) {
+			this.startPages.put(sessionExpiredHomePage, new StartPage(null, sessionExpiredHomePage));
+		}
 	}
 
 	public Boolean getConfidentiality() {
@@ -378,11 +475,19 @@ public class HDIVConfig {
 	 */
 	public void setUserStartPages(List userStartPages) {
 
-		String currentPattern;
 		for (int i = 0; i < userStartPages.size(); i++) {
 
-			currentPattern = (String) userStartPages.get(i);
-			this.startPages.put(currentPattern, Pattern.compile(currentPattern));
+			StartPage startPage;
+
+			Object o = userStartPages.get(i);
+			if (o instanceof String) {
+				String currentPattern = (String) o;
+				startPage = new StartPage(null, currentPattern);
+			} else {
+				startPage = (StartPage) o;
+			}
+
+			this.startPages.put(startPage.getPattern(), startPage);
 		}
 	}
 
@@ -394,10 +499,9 @@ public class HDIVConfig {
 	 */
 	public void setUserStartParameters(List userStartParameters) {
 
-		String currentPattern;
 		for (int i = 0; i < userStartParameters.size(); i++) {
 
-			currentPattern = (String) userStartParameters.get(i);
+			String currentPattern = (String) userStartParameters.get(i);
 			this.startParameters.put(currentPattern, Pattern.compile(currentPattern));
 		}
 	}
@@ -601,6 +705,21 @@ public class HDIVConfig {
 		this.debugMode = debugMode;
 	}
 
+	/**
+	 * @return the showErrorPageOnEditableValidation
+	 */
+	public boolean isShowErrorPageOnEditableValidation() {
+		return showErrorPageOnEditableValidation;
+	}
+
+	/**
+	 * @param showErrorPageOnEditableValidation
+	 *            the showErrorPageOnEditableValidation to set
+	 */
+	public void setShowErrorPageOnEditableValidation(boolean showErrorPageOnEditableValidation) {
+		this.showErrorPageOnEditableValidation = showErrorPageOnEditableValidation;
+	}
+
 	public String toString() {
 		StringBuffer result = new StringBuffer().append("");
 		result = result.append(" Confidentiality=").append(this.getConfidentiality().toString());
@@ -610,12 +729,15 @@ public class HDIVConfig {
 		result.append(" strategy=").append(this.getStrategy());
 		result.append(" randomName=").append(this.isRandomName());
 		result.append(" errorPage=").append(this.getErrorPage());
+		result.append(" sessionExpiredLoginPage=").append(this.sessionExpiredLoginPage);
+		result.append(" sessionExpiredHomePage=").append(this.sessionExpiredHomePage);
 		result.append(" excludedExtensions=").append(this.excludedURLExtensions);
 		result.append(" protectedExtensions=").append(this.getProtectedURLPatterns());
 		result.append(" startPages=").append(this.startPages);
 		result.append(" startParameters=").append(this.startParameters);
 		result.append(" paramsWithoutValidation=").append(this.paramsWithoutValidation);
 		result.append(" debugMode=").append(this.debugMode);
+		result.append(" showErrorPageOnEditableValidation=").append(this.showErrorPageOnEditableValidation);
 
 		return result.toString();
 	}

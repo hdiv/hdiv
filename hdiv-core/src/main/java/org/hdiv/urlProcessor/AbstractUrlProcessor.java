@@ -15,6 +15,7 @@
  */
 package org.hdiv.urlProcessor;
 
+import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -49,23 +50,6 @@ public abstract class AbstractUrlProcessor {
 	private static Log log = LogFactory.getLog(AbstractUrlProcessor.class);
 
 	/**
-	 * <p>
-	 * Valid characters in a scheme.
-	 * </p>
-	 * <p>
-	 * RFC 1738 says the following:
-	 * </p>
-	 * <blockquote> Scheme names consist of a sequence of characters. The lower case letters "a"--"z", digits, and the
-	 * characters plus ("+"), period ("."), and hyphen ("-") are allowed. For resiliency, programs interpreting URLs
-	 * should treat upper case letters as equivalent to lower case in scheme names (e.g., allow "HTTP" as well as
-	 * "http"). </blockquote>
-	 * <p>
-	 * We treat as absolute any URL that begins with such a scheme name, followed by a colon.
-	 * </p>
-	 */
-	public static final String VALID_SCHEME_CHARS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789+.-";
-
-	/**
 	 * Hdiv configuration.
 	 */
 	private HDIVConfig config;
@@ -75,15 +59,17 @@ public abstract class AbstractUrlProcessor {
 	 * 
 	 * @param url
 	 *            original url
+	 * @param isFormUrl
+	 *            is form or link url?
 	 * @param request
 	 *            {@link HttpServletRequest} object
 	 * @return new instance of {@link UrlData}
 	 */
-	public UrlData createUrlData(String url, HttpServletRequest request) {
+	public UrlData createUrlData(String url, boolean isFormUrl, HttpServletRequest request) {
 
 		Assert.notNull(this.config);
 
-		UrlData urlData = new UrlData(url);
+		UrlData urlData = new UrlData(url, isFormUrl);
 
 		// Extract the anchor
 		if (url.indexOf('#') >= 0) {
@@ -102,19 +88,21 @@ public abstract class AbstractUrlProcessor {
 
 		}
 
-		// Detect if the url points to actual app
-		boolean internal = this.isInternalUrl(request, url);
-		urlData.setInternal(internal);
+		// Extract protocol, domain and server if exist
+		String serverUrl = this.getServerFromUrl(url);
+		if (serverUrl != null && serverUrl.length() > 0) {
+			urlData.setServer(serverUrl);
 
-		// Process absolute urls
-		if (this.isAbsoluteUrl(url)) {
-			if (url.indexOf(request.getContextPath()) != -1) {
-				url = url.substring(url.indexOf(request.getContextPath()));
-			}
+			// Remove server and port
+			url = url.replaceFirst(serverUrl, "");
 		}
 
+		// Detect if the url points to actual app
+		boolean internal = this.isInternalUrl(request, url, urlData);
+		urlData.setInternal(internal);
+
 		// Remove jsessionid
-		url = this.stripSession(url);
+		url = this.stripSession(url, urlData);
 
 		// Calculate contextPath beginning url
 		String contextPathRelativeUrl = this.getContextPathRelative(request, url);
@@ -124,6 +112,9 @@ public abstract class AbstractUrlProcessor {
 		if (contextPathRelativeUrl.startsWith(request.getContextPath())) {
 			String urlWithoutContextPath = contextPathRelativeUrl.substring(request.getContextPath().length());
 			urlData.setUrlWithoutContextPath(urlWithoutContextPath);
+		} else {
+			// If contextPath is not present, the relative url is out of application
+			urlData.setInternal(false);
 		}
 
 		return urlData;
@@ -166,7 +157,16 @@ public abstract class AbstractUrlProcessor {
 
 			// Ignore Hdiv state parameter
 			if (!param.equals(hdivParameter)) {
-				params.put(param, val);
+				// Add value to array or create it
+				String[] values = (String[]) params.get(param);
+				if (values == null) {
+					values = new String[] { val };
+				} else {
+					int l = values.length;
+					values = (String[]) Arrays.copyOf(values, l + 1);
+					values[l] = val;
+				}
+				params.put(param, values);
 			}
 		}
 
@@ -181,13 +181,13 @@ public abstract class AbstractUrlProcessor {
 	protected boolean isStartPage(UrlData urlData) {
 
 		// If this is a start page, don't compose
-		if (this.config.isStartPage(urlData.getContextPathRelativeUrl())) {
+		if (this.config.isStartPage(urlData.getContextPathRelativeUrl(), urlData.isFormUrl())) {
 			return true;
 		}
 
 		// If the url contains the context path and is a start page, don't
 		// compose
-		if (this.config.isStartPage(urlData.getUrlWithoutContextPath())) {
+		if (this.config.isStartPage(urlData.getUrlWithoutContextPath(), urlData.isFormUrl())) {
 			return true;
 		}
 
@@ -242,7 +242,17 @@ public abstract class AbstractUrlProcessor {
 			params = urlData.getOriginalUrlParams();
 		}
 
-		StringBuffer sb = new StringBuffer(urlData.getContextPathRelativeUrl());
+		StringBuffer sb = new StringBuffer();
+		if (urlData.getServer() != null) {
+			sb.append(urlData.getServer());
+		}
+		sb.append(urlData.getContextPathRelativeUrl());
+
+		// Add jSessionId
+		if (urlData.getjSessionId() != null) {
+			sb.append(";");
+			sb.append(urlData.getjSessionId());
+		}
 
 		if (params == null || params.size() == 0) {
 			return sb.toString();
@@ -253,11 +263,14 @@ public abstract class AbstractUrlProcessor {
 		Iterator it = params.keySet().iterator();
 		while (it.hasNext()) {
 			String key = (String) it.next();
-			String value = (String) params.get(key);
+			String[] values = (String[]) params.get(key);
 
-			sb.append(separator).append(key).append("=").append(value);
-			if (separator.equals("?")) {
-				separator = "&";
+			for (int i = 0; i < values.length; i++) {
+				String value = values[i];
+				sb.append(separator).append(key).append("=").append(value);
+				if (separator.equals("?")) {
+					separator = "&";
+				}
 			}
 		}
 
@@ -325,8 +338,8 @@ public abstract class AbstractUrlProcessor {
 		}
 
 		boolean validateParamLessUrls = this.config.isValidationInUrlsWithoutParamsActivated();
-		// if url has not got parameters, we do not have to include HDIV's state
-		if (!validateParamLessUrls && !(urlData.getOriginalUrl().indexOf("?") > 0)) {
+		// if url is a link (not a form action) and has not got parameters, we do not have to include HDIV's state
+		if (!urlData.isFormUrl() && !validateParamLessUrls && !urlData.containsParams()) {
 			return false;
 		}
 
@@ -341,21 +354,27 @@ public abstract class AbstractUrlProcessor {
 	 *            {@link HttpServletRequest} object
 	 * @param url
 	 *            request url
+	 * @param urlData
+	 *            url data
 	 * @return is internal?
 	 */
-	protected boolean isInternalUrl(HttpServletRequest request, String url) {
+	protected boolean isInternalUrl(HttpServletRequest request, String url, UrlData urlData) {
 
-		if (this.isAbsoluteUrl(url)) {
+		if (urlData.getServer() != null) {
 			// URL is absolute: http://...
-			String urlWithoutServer = this.removeServerFromUrl(url);
-			if (urlWithoutServer.startsWith(request.getContextPath() + "/")
-					|| urlWithoutServer.equals(request.getContextPath())) {
+
+			String serverName = request.getServerName();
+			if (!urlData.getServer().contains(serverName)) {
+				// http://www.google.com
+				return false;
+			}
+
+			if (url.startsWith(request.getContextPath() + "/") || url.equals(request.getContextPath())) {
 				// http://localhost:8080/APP/... or
 				// http://localhost:8080/APP
 				return true;
 			}
 			// http://localhost:8080/anotherApplication... or
-			// http://www.google.com
 			return false;
 
 		} else {
@@ -373,23 +392,25 @@ public abstract class AbstractUrlProcessor {
 	}
 
 	/**
-	 * Removes from url the part related with the server side in an absolute url.
+	 * Returns from url the part related with the server side in an absolute url.
 	 * 
 	 * @param url
 	 *            absolute url
-	 * @return url without server
+	 * @return url protocol, domain and port
 	 */
-	protected String removeServerFromUrl(String url) {
+	protected String getServerFromUrl(String url) {
 
-		String urlSimple = url.replaceFirst("://", "");
-		int posicion = urlSimple.indexOf("/");
-		if (posicion > 0) {
-			urlSimple = urlSimple.substring(posicion);
-		} else {
-			urlSimple = "";
+		int pos = url.indexOf("://");
+		if (pos > 0) {
+			int posicion = url.indexOf("/", pos + 3);
+			if (posicion > 0) {
+				url = url.substring(0, posicion);
+				return url;
+			} else {
+				return url;
+			}
 		}
-		return urlSimple;
-
+		return null;
 	}
 
 	/**
@@ -442,37 +463,6 @@ public abstract class AbstractUrlProcessor {
 	}
 
 	/**
-	 * Returns <tt>true</tt> if our current URL is absolute, <tt>false</tt> otherwise.
-	 * 
-	 * @param url
-	 *            url
-	 * @return is absolute?
-	 */
-	protected boolean isAbsoluteUrl(String url) {
-		// a null URL is not absolute, by our definition
-		if (url == null) {
-			return false;
-		}
-
-		// do a fast, simple check first
-		int colonPos;
-		if ((colonPos = url.indexOf(":")) == -1) {
-			return false;
-		}
-
-		// if we DO have a colon, make sure that every character
-		// leading up to it is a valid scheme character
-		for (int i = 0; i < colonPos; i++) {
-			if (VALID_SCHEME_CHARS.indexOf(url.charAt(i)) == -1) {
-				return false;
-			}
-		}
-
-		// if so, we've got an absolute url
-		return true;
-	}
-
-	/**
 	 * Composes the url starting with context path. Removes any relative url.
 	 * 
 	 * @param request
@@ -485,22 +475,34 @@ public abstract class AbstractUrlProcessor {
 
 		String returnValue = null;
 
-		String originalRequestUri = HDIVUtil.getRequestURI(request);
+		// Base url defined by <base> tag in some frameworks
+		String baseUrl = HDIVUtil.getBaseURL(request);
+		if (baseUrl != null) {
+			// Remove server part from the url
+			String serverUrl = this.getServerFromUrl(baseUrl);
+			if (serverUrl != null && serverUrl.length() > 0) {
+				// Remove server and port
+				baseUrl = baseUrl.replaceFirst(serverUrl, "");
+			}
+		} else {
+			// Original RequestUri before Jsp processing
+			baseUrl = HDIVUtil.getRequestURI(request);
+		}
 
 		if (url.equals("")) {
-			return originalRequestUri;
+			return baseUrl;
 		} else if (url.startsWith("/")) {
 			returnValue = url;
 		} else if (url.startsWith("..")) {
 			returnValue = url;
 		} else {
 			// relative path
-			String uri = originalRequestUri;
+			String uri = baseUrl;
 			uri = uri.substring(uri.indexOf("/"), uri.lastIndexOf("/"));
 			returnValue = uri + "/" + url;
 		}
 
-		return removeRelativePaths(returnValue, originalRequestUri);
+		return removeRelativePaths(returnValue, baseUrl);
 	}
 
 	/**
@@ -551,35 +553,34 @@ public abstract class AbstractUrlProcessor {
 	}
 
 	/**
-	 * Strips a servlet session ID from <tt>url</tt>. The session ID is encoded as a URL "path parameter" beginning with
-	 * "jsessionid=". We thus remove anything we find between ";jsessionid=" (inclusive) and either EOS or a subsequent
-	 * ';' (exclusive).
+	 * Strips a servlet session ID from <tt>url</tt>.
 	 * 
 	 * @param url
 	 *            url
+	 * @param urlData
+	 *            actual url data
 	 * @return url without sessionId
 	 */
-	protected String stripSession(String url) {
+	protected String stripSession(String url, UrlData urlData) {
 
-		if (log.isDebugEnabled()) {
-			log.debug("Stripping jsessionid from url " + url);
-		}
-		StringBuffer u = new StringBuffer(url);
-		int sessionStart;
+		if (url.contains(Constants.JSESSIONID) || url.contains(Constants.JSESSIONID.toLowerCase())) {
 
-		while (((sessionStart = u.toString().indexOf(";jsessionid=")) != -1)
-				|| ((sessionStart = u.toString().indexOf(";JSESSIONID=")) != -1)) {
-
-			int sessionEnd = u.toString().indexOf(";", sessionStart + 1);
-			if (sessionEnd == -1) {
-				sessionEnd = u.toString().indexOf("?", sessionStart + 1);
+			int last = url.length();
+			if (url.contains("?")) {
+				last = url.indexOf("?");
 			}
-			if (sessionEnd == -1) { // still
-				sessionEnd = u.length();
+			String jSessionId = url.substring(url.indexOf(";") + 1, last);
+			urlData.setjSessionId(jSessionId);
+
+			if (log.isDebugEnabled()) {
+				log.debug("jSessionId value: " + jSessionId);
 			}
-			u.delete(sessionStart, sessionEnd);
+
+			return HDIVUtil.stripSession(url);
+		} else {
+			return url;
 		}
-		return u.toString();
+
 	}
 
 	/**

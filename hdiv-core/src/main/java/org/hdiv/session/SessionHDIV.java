@@ -33,8 +33,7 @@ import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
 
 /**
- * A custom wrapper for http session request that returns a wrapped http
- * session.
+ * A custom wrapper for http session request that returns a wrapped http session.
  * 
  * @author Roberto Velasco
  */
@@ -75,64 +74,66 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 	/**
 	 * Initialization method
 	 */
-	public void init() {	
+	public void init() {
 	}
-	
+
 	/**
-	 * Obtains from the user session the page identifier where the current
-	 * request or form is
+	 * Obtains from the user session the page identifier where the current request or form is
 	 * 
 	 * @return Returns the pageId.
 	 */
 	public String getPageId() {
 
 		HttpSession session = this.getHttpSession();
-		
+
 		String id = null;
-		
-		PageIdGenerator pageIdGenerator = (PageIdGenerator)session.getAttribute(this.pageIdGeneratorName);
-		if(pageIdGenerator == null){
+
+		PageIdGenerator pageIdGenerator = (PageIdGenerator) session.getAttribute(this.pageIdGeneratorName);
+		if (pageIdGenerator == null) {
 			throw new HDIVException("session.nopageidgenerator");
 		}
-		
+
 		id = pageIdGenerator.getNextPageId();
 		session.setAttribute(this.pageIdGeneratorName, pageIdGenerator);
-		
+
 		return id;
-		
+
 	}
-	
+
 	/**
 	 * Returns the page with id <code>pageId</code>.
-	 * @param pageId page id
+	 * 
+	 * @param pageId
+	 *            page id
 	 * @return Returns the page with id <code>pageId</code>.
 	 * @since HDIV 2.0.4
 	 */
 	public IPage getPage(String pageId) {
 		try {
-			if(log.isDebugEnabled()){
-				log.debug("Getting page with id:"+pageId);
+			if (log.isDebugEnabled()) {
+				log.debug("Getting page with id:" + pageId);
 			}
 
 			return (IPage) getHttpSession().getAttribute(pageId);
-			
+
 		} catch (Exception e) {
 			throw new HDIVException(HDIVErrorCodes.PAGE_ID_INCORRECT);
 		}
-	}	
+	}
 
 	/**
-	 * It adds a new page to the user session. To do this it adds a new page
-	 * identifier to the cache and if it has reached the maximun size allowed,
-	 * the oldest page is deleted from the session and from the cache itself.
+	 * It adds a new page to the user session. To do this it adds a new page identifier to the cache and if it has
+	 * reached the maximun size allowed, the oldest page is deleted from the session and from the cache itself.
 	 * 
-	 * @param pageId Page identifier
-	 * @param page Page with all the information about states
+	 * @param pageId
+	 *            Page identifier
+	 * @param page
+	 *            Page with all the information about states
 	 */
 	public void addPage(String pageId, IPage page) {
 
 		HttpSession session = this.getHttpSession();
-		
+
 		IStateCache cache = (IStateCache) session.getAttribute(this.cacheName);
 
 		page.setName(pageId);
@@ -143,9 +144,9 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 		// stored for the longest time
 		if (removedPageId != null) {
 			session.removeAttribute(removedPageId);
-			
-			if(log.isDebugEnabled()){
-				log.debug("Deleted page with id:"+removedPageId);
+
+			if (log.isDebugEnabled()) {
+				log.debug("Deleted page with id:" + removedPageId);
 			}
 		}
 
@@ -154,24 +155,24 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 
 		// we add a new page in session
 		session.setAttribute(page.getName(), page);
-		if(log.isDebugEnabled()){
-			log.debug("Added page with id:"+pageId);
+		if (log.isDebugEnabled()) {
+			log.debug("Added page with id:" + pageId);
 		}
 
 	}
 
-	 /**
-	  * Deletes from session the data related to the finished flows. This means 
-	  * a memory consumption optimization because useless objects of type 
-	  * <code>IPage</code> are deleted.
-	  * 
-	  * @param conversationId finished flow identifier
-	  * @since HDIV 2.0.3
-	  */	
+	/**
+	 * Deletes from session the data related to the finished flows. This means a memory consumption optimization because
+	 * useless objects of type <code>IPage</code> are deleted.
+	 * 
+	 * @param conversationId
+	 *            finished flow identifier
+	 * @since HDIV 2.0.3
+	 */
 	public void removeEndedPages(String conversationId) {
 
 		HttpSession session = this.getHttpSession();
-		
+
 		IStateCache cache = (IStateCache) session.getAttribute(this.cacheName);
 		if (log.isDebugEnabled()) {
 			log.debug("Cache pages before finished pages are deleted:" + cache.toString());
@@ -186,8 +187,8 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 			pageId = (String) pageIds.get(i);
 			currentPage = (IPage) session.getAttribute(pageId);
 			if ((currentPage != null) && (currentPage.getFlowId() != null)) {
-				
-				String pageFlowId = currentPage.getFlowId();	
+
+				String pageFlowId = currentPage.getFlowId();
 
 				if (conversationId.equalsIgnoreCase(pageFlowId)) {
 
@@ -210,11 +211,10 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 	}
 
 	/**
-	 * Obtains the state identifier <code>stateId</code> related to the page
-	 * identifier <code>pageId</code>.
+	 * Obtains the state identifier <code>stateId</code> related to the page identifier <code>pageId</code>.
 	 * 
-	 * @return State identifier <code>stateId</code> throws HDIVException If
-	 *         the state doesn't exist a new HDIV exception is thrown.
+	 * @return State identifier <code>stateId</code> throws HDIVException If the state doesn't exist a new HDIV
+	 *         exception is thrown.
 	 */
 	public IState getState(String pageId, String stateId) {
 
@@ -228,12 +228,11 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 	}
 
 	/**
-	 * Obtains the hash of the state identifier <code>stateId</code> related
-	 * to page identifier <code>pageId</code>.
+	 * Obtains the hash of the state identifier <code>stateId</code> related to page identifier <code>pageId</code>.
 	 * 
 	 * @return Hash of the state identifier <code>stateId</code>
-	 * @throws HDIVException If the state doesn't exist a new HDIV exception is
-	 *             thrown.
+	 * @throws HDIVException
+	 *             If the state doesn't exist a new HDIV exception is thrown.
 	 */
 	public String getStateHash(String pageId, String stateId) {
 
@@ -247,54 +246,58 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 	}
 
 	/**
-	 * Callback that supplies the owning factory to a bean instance. Invoked
-	 * after population of normal bean properties but before an init callback
-	 * like InitializingBean's afterPropertiesSet or a custom init-method.
+	 * Callback that supplies the owning factory to a bean instance. Invoked after population of normal bean properties
+	 * but before an init callback like InitializingBean's afterPropertiesSet or a custom init-method.
 	 * 
-	 * @param beanFactory owning BeanFactory (may not be null). The bean can
-	 *            immediately call methods on the factory.
+	 * @param beanFactory
+	 *            owning BeanFactory (may not be null). The bean can immediately call methods on the factory.
 	 */
 	public void setBeanFactory(BeanFactory beanFactory) {
 		this.beanFactory = beanFactory;
 	}
 
-	/**
-	 * Initializes the data cipher.
+	/*
+	 * (non-Javadoc)
 	 * 
-	 * @return Returns the data cipher initialized with the symmetric key
-	 * @throws HDIVException If the state doesn't exist a new HDIV exception is
-	 *             thrown.
+	 * @see org.hdiv.session.ISession#getEncryptCipher()
 	 */
 	public ICipherHTTP getEncryptCipher() {
-		try {
-			Key key = (Key) getHttpSession().getAttribute(this.keyName);
-			ICipherHTTP cipher = (ICipherHTTP) this.beanFactory.getBean(this.cipherName);
-			cipher.initEncryptMode(key);
-			return cipher;
-
-		} catch (Exception e) {
+		ICipherHTTP cipher = (ICipherHTTP) this.beanFactory.getBean(this.cipherName);
+		if (cipher == null) {
 			String errorMessage = HDIVUtil.getMessage("encrypt.message");
-			throw new HDIVException(errorMessage, e);
+			throw new HDIVException(errorMessage);
 		}
+		return cipher;
+
 	}
 
-	/**
-	 * Inilitializes the data decrypter.
+	/*
+	 * (non-Javadoc)
 	 * 
-	 * @return Returns the data decrypter initialized with the symmetric key.
-	 * @throws HDIVException if there is an error in cipher initialization.
+	 * @see org.hdiv.session.ISession#getDecryptCipher()
 	 */
 	public ICipherHTTP getDecryptCipher() {
-		try {
-			Key key = (Key) getHttpSession().getAttribute(this.keyName);
-			ICipherHTTP cipher = (ICipherHTTP) this.beanFactory.getBean(this.cipherName);
-			cipher.initDecryptMode(key);
-			return cipher;
-
-		} catch (Exception e) {
+		ICipherHTTP cipher = (ICipherHTTP) this.beanFactory.getBean(this.cipherName);
+		if (cipher == null) {
 			String errorMessage = HDIVUtil.getMessage("decrypt.message");
-			throw new HDIVException(errorMessage, e);
+			throw new HDIVException(errorMessage);
 		}
+		return cipher;
+
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.hdiv.session.ISession#getCipherKey()
+	 */
+	public Key getCipherKey() {
+
+		Key key = (Key) getHttpSession().getAttribute(this.keyName);
+		if (key == null) {
+			throw new HDIVException("Key not initialized on session");
+		}
+		return key;
 	}
 
 	/**
@@ -305,7 +308,8 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 	}
 
 	/**
-	 * @param cacheName The cacheName to set.
+	 * @param cacheName
+	 *            The cacheName to set.
 	 */
 	public void setCacheName(String cacheName) {
 		this.cacheName = cacheName;
@@ -319,7 +323,8 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 	}
 
 	/**
-	 * @param cipherName The cipherName to set.
+	 * @param cipherName
+	 *            The cipherName to set.
 	 */
 	public void setCipherName(String cipherName) {
 		this.cipherName = cipherName;
@@ -333,7 +338,8 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 	}
 
 	/**
-	 * @param pageIdGeneratorName The pageIdGeneratorName to set.
+	 * @param pageIdGeneratorName
+	 *            The pageIdGeneratorName to set.
 	 */
 	public void setPageIdGeneratorName(String pageIdGeneratorName) {
 		this.pageIdGeneratorName = pageIdGeneratorName;
@@ -347,12 +353,13 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 	}
 
 	/**
-	 * @param keyName The keyName to set.
+	 * @param keyName
+	 *            The keyName to set.
 	 */
 	public void setKeyName(String keyName) {
 		this.keyName = keyName;
 	}
-	
+
 	private HttpSession getHttpSession() {
 		return HDIVUtil.getHttpSession();
 	}
