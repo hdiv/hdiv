@@ -16,7 +16,7 @@ public class RandomNameTest extends AbstractHDIVTestCase {
 
 	protected void onSetUp() throws Exception {
 
-		this.linkUrlProcessor = (LinkUrlProcessor) this.getApplicationContext().getBean("linkUrlProcessor");
+		this.linkUrlProcessor = (LinkUrlProcessor) this.getApplicationContext().getBean(LinkUrlProcessor.class);
 	}
 
 	public void testProcessAction() {

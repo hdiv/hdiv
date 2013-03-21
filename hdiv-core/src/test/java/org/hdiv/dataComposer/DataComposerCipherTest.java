@@ -43,8 +43,8 @@ public class DataComposerCipherTest extends AbstractHDIVTestCase {
 	 */
 	protected void onSetUp() throws Exception {
 
-		this.dataComposerFactory = (DataComposerFactory) this.getApplicationContext().getBean("dataComposerFactory");
-		this.stateUtil = (StateUtil) this.getApplicationContext().getBean("stateUtil");
+		this.dataComposerFactory = (DataComposerFactory) this.getApplicationContext().getBean(DataComposerFactory.class);
+		this.stateUtil = (StateUtil) this.getApplicationContext().getBean(StateUtil.class);
 	}
 
 	/**

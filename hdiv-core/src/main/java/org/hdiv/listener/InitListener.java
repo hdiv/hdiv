@@ -142,15 +142,15 @@ public class InitListener implements ServletContextListener, HttpSessionListener
 
 		WebApplicationContext wac = WebApplicationContextUtils.getRequiredWebApplicationContext(servletContext);
 
-		this.config = (HDIVConfig) wac.getBean("config");
+		this.config = (HDIVConfig) wac.getBean(HDIVConfig.class);
 
 		// Init servlet context scoped objects
 		HDIVUtil.setHDIVConfig(this.config, servletContext);
 
-		IApplication application = (IApplication) wac.getBean("application");
+		IApplication application = (IApplication) wac.getBean(IApplication.class);
 		HDIVUtil.setApplication(application, servletContext);
 
-		ISession session = (ISession) wac.getBean("sessionHDIV");
+		ISession session = (ISession) wac.getBean(ISession.class);
 		HDIVUtil.setISession(session, servletContext);
 
 		ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
@@ -159,10 +159,10 @@ public class InitListener implements ServletContextListener, HttpSessionListener
 		messageSource.setBasename(messageSourcePath);
 		HDIVUtil.setMessageSource(messageSource, servletContext);
 
-		LinkUrlProcessor linkUrlProcessor = (LinkUrlProcessor) wac.getBean("linkUrlProcessor");
+		LinkUrlProcessor linkUrlProcessor = (LinkUrlProcessor) wac.getBean(LinkUrlProcessor.class);
 		HDIVUtil.setLinkUrlProcessor(linkUrlProcessor, servletContext);
 
-		FormUrlProcessor formUrlProcessor = (FormUrlProcessor) wac.getBean("formUrlProcessor");
+		FormUrlProcessor formUrlProcessor = (FormUrlProcessor) wac.getBean(FormUrlProcessor.class);
 		HDIVUtil.setFormUrlProcessor(formUrlProcessor, servletContext);
 
 		this.servletContextInitialized = true;
@@ -179,7 +179,7 @@ public class InitListener implements ServletContextListener, HttpSessionListener
 	protected void initStrategies(ApplicationContext context, HttpSession httpSession) {
 
 		if (this.config.getStrategy().equalsIgnoreCase("cipher")) {
-			IKeyFactory keyFactory = (IKeyFactory) context.getBean("keyFactory");
+			IKeyFactory keyFactory = (IKeyFactory) context.getBean(IKeyFactory.class);
 			// creating encryption key
 			Key key = keyFactory.generateKeyWithDefaultValues();
 			String keyName = (String) context.getBean("keyName");
@@ -202,7 +202,7 @@ public class InitListener implements ServletContextListener, HttpSessionListener
 	 */
 	protected void initCache(ApplicationContext context, HttpSession httpSession) {
 
-		IStateCache cache = (IStateCache) context.getBean("cache");
+		IStateCache cache = (IStateCache) context.getBean(IStateCache.class);
 		String cacheName = (String) context.getBean("cacheName");
 		httpSession.setAttribute((cacheName == null) ? Constants.CACHE_NAME : cacheName, cache);
 	}
@@ -219,7 +219,7 @@ public class InitListener implements ServletContextListener, HttpSessionListener
 
 		String pageIdGeneratorName = (String) context.getBean("pageIdGeneratorName");
 		// Obtain new instance of PageIdGenerator
-		PageIdGenerator pageIdGenerator = (PageIdGenerator) context.getBean("pageIdGenerator");
+		PageIdGenerator pageIdGenerator = (PageIdGenerator) context.getBean(PageIdGenerator.class);
 		httpSession
 				.setAttribute((pageIdGeneratorName == null) ? Constants.PAGE_ID_GENERATOR_NAME : pageIdGeneratorName,
 						pageIdGenerator);

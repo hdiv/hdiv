@@ -38,12 +38,12 @@ public class EncodingUtilTest extends AbstractHDIVTestCase {
 
 	protected void onSetUp() throws Exception {
 
-		IKeyFactory keyFactory = (IKeyFactory) this.getApplicationContext().getBean("keyFactory");
+		IKeyFactory keyFactory = (IKeyFactory) this.getApplicationContext().getBean(IKeyFactory.class);
 		Key key = keyFactory.generateKey();
 		HttpSession httpSession = HDIVUtil.getHttpSession();
 		httpSession.setAttribute("key", key);
 
-		this.encodingUtil = (EncodingUtil) this.getApplicationContext().getBean("encoding");
+		this.encodingUtil = (EncodingUtil) this.getApplicationContext().getBean(EncodingUtil.class);
 	}
 
 	public void testEncodeAndDecode64Cipher() {

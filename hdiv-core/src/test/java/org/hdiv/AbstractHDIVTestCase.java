@@ -69,7 +69,7 @@ public abstract class AbstractHDIVTestCase extends TestCase {
 		}
 
 		// Servlet API mock
-		HttpServletRequest request = (MockHttpServletRequest) this.applicationContext.getBean("mockRequest");
+		HttpServletRequest request = (MockHttpServletRequest) this.applicationContext.getBean(MockHttpServletRequest.class);
 		HttpSession httpSession = request.getSession();
 		ServletContext servletContext = httpSession.getServletContext();
 		HDIVUtil.setHttpServletRequest(request);
@@ -82,7 +82,7 @@ public abstract class AbstractHDIVTestCase extends TestCase {
 				.setAttribute(WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE, webApplicationContext);
 
 		// Initialize config
-		this.config = (HDIVConfig) this.applicationContext.getBean("config");
+		this.config = (HDIVConfig) this.applicationContext.getBean(HDIVConfig.class);
 		// Configure for testing
 		this.postCreateHdivConfig(this.config);
 

@@ -35,7 +35,7 @@ public class DataValidatorTest extends AbstractHDIVTestCase {
 	
 	protected void onSetUp() throws Exception {
 		
-		this.dataValidatorFactory = (DataValidatorFactory) this.getApplicationContext().getBean("dataValidatorFactory");
+		this.dataValidatorFactory = (DataValidatorFactory) this.getApplicationContext().getBean(DataValidatorFactory.class);
 	}
 
 	/**

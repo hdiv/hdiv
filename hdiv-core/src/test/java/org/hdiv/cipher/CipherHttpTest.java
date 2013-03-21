@@ -34,8 +34,8 @@ public class CipherHttpTest extends AbstractHDIVTestCase {
 	 */
 	protected void onSetUp() throws Exception {
 
-		this.cipherHttp = (ICipherHTTP) this.getApplicationContext().getBean("cipher");
-		this.keyFactory = (IKeyFactory) this.getApplicationContext().getBean("keyFactory");
+		this.cipherHttp = (ICipherHTTP) this.getApplicationContext().getBean(ICipherHTTP.class);
+		this.keyFactory = (IKeyFactory) this.getApplicationContext().getBean(IKeyFactory.class);
 		this.key = this.keyFactory.generateKey();
 	}
 
