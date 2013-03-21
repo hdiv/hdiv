@@ -35,9 +35,9 @@ public class AvoidValidationInUrlsWithoutParamsTest extends AbstractHDIVTestCase
 	 */
 	protected void onSetUp() throws Exception {
 
-		this.linkUrlProcessor = (LinkUrlProcessor) this.getApplicationContext().getBean("linkUrlProcessor");
-		this.formUrlProcessor = (FormUrlProcessor) this.getApplicationContext().getBean("formUrlProcessor");
-		this.dataComposerFactory = (DataComposerFactory) this.getApplicationContext().getBean("dataComposerFactory");
+		this.linkUrlProcessor = (LinkUrlProcessor) this.getApplicationContext().getBean(LinkUrlProcessor.class);
+		this.formUrlProcessor = (FormUrlProcessor) this.getApplicationContext().getBean(FormUrlProcessor.class);
+		this.dataComposerFactory = (DataComposerFactory) this.getApplicationContext().getBean(DataComposerFactory.class);
 	}
 
 	/*

@@ -29,8 +29,8 @@ public class FormUrlProcessorTest extends AbstractHDIVTestCase {
 	private DataComposerFactory dataComposerFactory;
 
 	protected void onSetUp() throws Exception {
-		this.formUrlProcessor = (FormUrlProcessor) this.getApplicationContext().getBean("formUrlProcessor");
-		this.dataComposerFactory = (DataComposerFactory) this.getApplicationContext().getBean("dataComposerFactory");
+		this.formUrlProcessor = (FormUrlProcessor) this.getApplicationContext().getBean(FormUrlProcessor.class);
+		this.dataComposerFactory = (DataComposerFactory) this.getApplicationContext().getBean(DataComposerFactory.class);
 	}
 
 	public void testProcessAction() {

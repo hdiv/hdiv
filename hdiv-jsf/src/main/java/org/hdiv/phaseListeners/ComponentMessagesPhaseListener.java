@@ -66,7 +66,7 @@ public class ComponentMessagesPhaseListener implements PhaseListener {
 			}
 
 			WebApplicationContext wac = FacesContextUtils.getRequiredWebApplicationContext(event.getFacesContext());
-			Logger logger = (Logger) wac.getBean("logger");
+			Logger logger = (Logger) wac.getBean(Logger.class);
 			this.messagesLog = new ComponentMessagesLog(logger);
 		}
 	}

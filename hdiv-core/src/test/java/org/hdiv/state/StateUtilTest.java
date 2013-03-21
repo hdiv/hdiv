@@ -34,7 +34,7 @@ public class StateUtilTest extends AbstractHDIVTestCase {
 
 	protected void onSetUp() throws Exception {
 
-		this.encodingUtil = (EncodingUtil) this.getApplicationContext().getBean("encoding");
+		this.encodingUtil = (EncodingUtil) this.getApplicationContext().getBean(EncodingUtil.class);
 	}
 
 	/*
