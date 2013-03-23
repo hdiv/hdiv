@@ -17,6 +17,7 @@ package org.hdiv;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.hdiv.config.HDIVConfig;
 import org.hdiv.util.HDIVUtil;
 
 public abstract class AbstractJsfHDIVTestCase extends AbstractHDIVTestCase {
@@ -28,15 +29,19 @@ public abstract class AbstractJsfHDIVTestCase extends AbstractHDIVTestCase {
 
 		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
 
-		shaleMockObjects = new ShaleMockObjects();
-		shaleMockObjects.setUp(request);
-
-		// Disable not supported features
-		super.getConfig().setConfidentiality(Boolean.FALSE);
-		super.getConfig().setCookiesConfidentiality(Boolean.TRUE);
-		super.getConfig().setCookiesIntegrity(Boolean.TRUE);
+		this.shaleMockObjects = new ShaleMockObjects();
+		this.shaleMockObjects.setUp(request);
 
 		this.innerSetUp();
+	}
+
+	@Override
+	protected void postCreateHdivConfig(HDIVConfig config) {
+
+		// Disable not supported features
+		config.setConfidentiality(Boolean.FALSE);
+		config.setAvoidCookiesConfidentiality(Boolean.TRUE);
+		config.setAvoidCookiesIntegrity(Boolean.TRUE);
 	}
 
 	abstract protected void innerSetUp() throws Exception;
@@ -45,7 +50,7 @@ public abstract class AbstractJsfHDIVTestCase extends AbstractHDIVTestCase {
 	protected void tearDown() throws Exception {
 		super.tearDown();
 
-		shaleMockObjects.tearDown();
+		this.shaleMockObjects.tearDown();
 	}
 
 }

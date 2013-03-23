@@ -72,11 +72,9 @@
 
 		<property name="confidentiality" value="true" />
 
-		<!-- Activated, reverse logic -->
-		<property name="cookiesIntegrity" value="false" />
+		<property name="avoidCookiesIntegrity" value="false" />
 
-		<!-- Activated, reverse logic -->
-		<property name="cookiesConfidentiality" value="false" />
+		<property name="avoidCookiesConfidentiality" value="false" />
 
 		<property name="strategy" value="memory" />
 

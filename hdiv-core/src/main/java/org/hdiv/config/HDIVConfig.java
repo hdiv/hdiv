@@ -98,14 +98,14 @@ public class HDIVConfig {
 	private HDIVValidations validations;
 
 	/**
-	 * If <code>cookiesIntegrity</code> is true, cookie integrity will not be applied.
+	 * If <code>avoidCookiesIntegrity</code> is true, cookie integrity will not be applied.
 	 */
-	private boolean cookiesIntegrity;
+	private boolean avoidCookiesIntegrity;
 
 	/**
-	 * If <code>cookiesConfidentiality</code> is true, cookie confidentiality will not be applied.
+	 * If <code>avoidCookiesConfidentiality</code> is true, cookie confidentiality will not be applied.
 	 */
-	private boolean cookiesConfidentiality;
+	private boolean avoidCookiesConfidentiality;
 
 	/**
 	 * if <code>avoidValidationInUrlsWithoutParams</code> is true, HDIV validation will not be applied in urls without
@@ -583,30 +583,30 @@ public class HDIVConfig {
 	 * @return Returns true if cookies' confidentiality is activated.
 	 */
 	public boolean isCookiesConfidentialityActivated() {
-		return (cookiesConfidentiality == false);
+		return (this.avoidCookiesConfidentiality == false);
 	}
 
 	/**
-	 * @param cookiesConfidentiality
-	 *            The cookiesConfidentiality to set.
+	 * @param avoidCookiesConfidentiality
+	 *            the avoidCookiesConfidentiality to set
 	 */
-	public void setCookiesConfidentiality(Boolean cookiesConfidentiality) {
-		this.cookiesConfidentiality = cookiesConfidentiality.booleanValue();
+	public void setAvoidCookiesConfidentiality(boolean avoidCookiesConfidentiality) {
+		this.avoidCookiesConfidentiality = avoidCookiesConfidentiality;
 	}
 
 	/**
 	 * @return Returns true if cookies' integrity is activated.
 	 */
 	public boolean isCookiesIntegrityActivated() {
-		return (cookiesIntegrity == false);
+		return (this.avoidCookiesIntegrity == false);
 	}
 
 	/**
-	 * @param cookiesIntegrity
-	 *            The cookiesIntegrity to set.
+	 * @param avoidCookiesIntegrity
+	 *            the avoidCookiesIntegrity to set
 	 */
-	public void setCookiesIntegrity(Boolean cookiesIntegrity) {
-		this.cookiesIntegrity = cookiesIntegrity.booleanValue();
+	public void setAvoidCookiesIntegrity(boolean avoidCookiesIntegrity) {
+		this.avoidCookiesIntegrity = avoidCookiesIntegrity;
 	}
 
 	/**
@@ -723,8 +723,8 @@ public class HDIVConfig {
 	public String toString() {
 		StringBuffer result = new StringBuffer().append("");
 		result = result.append(" Confidentiality=").append(this.getConfidentiality().toString());
-		result.append(" avoidCookiesIntegrity=").append(this.cookiesIntegrity);
-		result.append(" avoidCookiesConfidentiality=").append(this.cookiesConfidentiality);
+		result.append(" avoidCookiesIntegrity=").append(this.avoidCookiesIntegrity);
+		result.append(" avoidCookiesConfidentiality=").append(this.avoidCookiesConfidentiality);
 		result.append(" avoidValidationInUrlsWithoutParams=").append(this.avoidValidationInUrlsWithoutParams);
 		result.append(" strategy=").append(this.getStrategy());
 		result.append(" randomName=").append(this.isRandomName());

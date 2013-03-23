@@ -155,7 +155,7 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 					this.createJsfValidatorHelper(element, source));
 			parserContext.getRegistry().registerBeanDefinition("multipartConfig",
 					this.createJsfMultipartConfig(element, source));
-			
+
 			parserContext.getRegistry().registerBeanDefinition("HDIVFacesEventListener",
 					this.createFacesEventListener(element, source));
 
@@ -402,7 +402,7 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 
 		String confidentiality = element.getAttribute("confidentiality");
 		String avoidCookiesIntegrity = element.getAttribute("avoidCookiesIntegrity");
-		String cookiesConfidentiality = element.getAttribute("avoidCookiesConfidentiality");
+		String avoidCookiesConfidentiality = element.getAttribute("avoidCookiesConfidentiality");
 		String avoidValidationInUrlsWithoutParams = element.getAttribute("avoidValidationInUrlsWithoutParams");
 		String strategy = element.getAttribute("strategy");
 		String randomName = element.getAttribute("randomName");
@@ -417,11 +417,11 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		}
 
 		if (StringUtils.hasText(avoidCookiesIntegrity)) {
-			bean.getPropertyValues().addPropertyValue("cookiesIntegrity", avoidCookiesIntegrity);
+			bean.getPropertyValues().addPropertyValue("avoidCookiesIntegrity", avoidCookiesIntegrity);
 		}
 
-		if (StringUtils.hasText(cookiesConfidentiality)) {
-			bean.getPropertyValues().addPropertyValue("cookiesConfidentiality", cookiesConfidentiality);
+		if (StringUtils.hasText(avoidCookiesConfidentiality)) {
+			bean.getPropertyValues().addPropertyValue("avoidCookiesConfidentiality", avoidCookiesConfidentiality);
 		}
 
 		if (StringUtils.hasText(avoidValidationInUrlsWithoutParams)) {
@@ -515,7 +515,7 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 				new RuntimeBeanReference("dataComposerFactory"));
 		return bean;
 	}
-	
+
 	private RootBeanDefinition createJsfMultipartConfig(Element element, Object source) {
 		RootBeanDefinition bean = new RootBeanDefinition(JsfMultipartConfig.class);
 		bean.setSource(source);

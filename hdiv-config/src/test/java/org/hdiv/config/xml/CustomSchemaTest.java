@@ -12,8 +12,7 @@ public class CustomSchemaTest extends TestCase {
 
 	public void testSchema() {
 		ApplicationContext context = new ClassPathXmlApplicationContext(
-				"org/hdiv/config/xml/hdiv-config-test-schema.x" +
-				"ml");
+				"org/hdiv/config/xml/hdiv-config-test-schema.xml");
 
 		Validation validation = (Validation) context.getBean("id1");
 		assertNotNull(validation);
