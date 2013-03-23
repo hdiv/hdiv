@@ -46,9 +46,9 @@ public class DataComposerMemoryTest extends AbstractHDIVTestCase {
 	 */
 	protected void onSetUp() throws Exception {
 
-		this.dataComposerFactory = (DataComposerFactory) this.getApplicationContext().getBean("dataComposerFactory");
-		this.stateUtil = (StateUtil) this.getApplicationContext().getBean("stateUtil");
-		this.session = (ISession) this.getApplicationContext().getBean("sessionHDIV");
+		this.dataComposerFactory = (DataComposerFactory) this.getApplicationContext().getBean(DataComposerFactory.class);
+		this.stateUtil = (StateUtil) this.getApplicationContext().getBean(StateUtil.class);
+		this.session = (ISession) this.getApplicationContext().getBean(ISession.class);
 	}
 
 	/**

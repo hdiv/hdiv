@@ -12,20 +12,21 @@ public class CustomSchemaTest extends TestCase {
 
 	public void testSchema() {
 		ApplicationContext context = new ClassPathXmlApplicationContext(
-				"org/hdiv/config/xml/hdiv-config-test-schema.xml");
+				"org/hdiv/config/xml/hdiv-config-test-schema.x" +
+				"ml");
 
 		Validation validation = (Validation) context.getBean("id1");
 		assertNotNull(validation);
 		System.out.println(validation.toString());
 		System.out.println("-----------------------");
 
-		HDIVConfig hdivConfig = (HDIVConfig) context.getBean("config");
+		HDIVConfig hdivConfig = (HDIVConfig) context.getBean(HDIVConfig.class);
 		assertNotNull(hdivConfig);
 		System.out.println(hdivConfig.toString());
 		System.out.println("-----------------------");
 		assertTrue(hdivConfig.isShowErrorPageOnEditableValidation());
 
-		HDIVValidations validations = (HDIVValidations) context.getBean("editableParametersValidations");
+		HDIVValidations validations = (HDIVValidations) context.getBean(HDIVValidations.class);
 		assertNotNull(validations);
 		System.out.println(validations.toString());
 
@@ -35,7 +36,7 @@ public class CustomSchemaTest extends TestCase {
 		ApplicationContext context = new ClassPathXmlApplicationContext(
 				"org/hdiv/config/xml/hdiv-config-test-schema.xml");
 
-		HDIVConfig hdivConfig = (HDIVConfig) context.getBean("config");
+		HDIVConfig hdivConfig = (HDIVConfig) context.getBean(HDIVConfig.class);
 		assertNotNull(hdivConfig);
 
 		boolean result = hdivConfig.isStartPage("/login.html", "get");
@@ -49,7 +50,7 @@ public class CustomSchemaTest extends TestCase {
 		ApplicationContext context = new ClassPathXmlApplicationContext(
 				"org/hdiv/config/xml/hdiv-config-test-schema.xml");
 
-		HDIVConfig hdivConfig = (HDIVConfig) context.getBean("config");
+		HDIVConfig hdivConfig = (HDIVConfig) context.getBean(HDIVConfig.class);
 		assertNotNull(hdivConfig);
 
 		String result = hdivConfig.getSessionExpiredLoginPage();
