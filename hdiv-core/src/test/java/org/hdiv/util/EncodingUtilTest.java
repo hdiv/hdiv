@@ -15,15 +15,12 @@
  */
 package org.hdiv.util;
 
-import javax.servlet.http.HttpSession;
-
 import junit.framework.Assert;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hdiv.AbstractHDIVTestCase;
-import org.hdiv.cipher.IKeyFactory;
-import org.hdiv.cipher.Key;
+import org.hdiv.config.HDIVConfig;
 
 /**
  * Unit tests for the <code>org.hdiv.util.EncodingUtil</code> class.
@@ -36,12 +33,12 @@ public class EncodingUtilTest extends AbstractHDIVTestCase {
 
 	private EncodingUtil encodingUtil;
 
-	protected void onSetUp() throws Exception {
+	protected void postCreateHdivConfig(HDIVConfig config) {
 
-		IKeyFactory keyFactory = (IKeyFactory) this.getApplicationContext().getBean(IKeyFactory.class);
-		Key key = keyFactory.generateKey();
-		HttpSession httpSession = HDIVUtil.getHttpSession();
-		httpSession.setAttribute("key", key);
+		config.setStrategy("cipher");
+	}
+
+	protected void onSetUp() throws Exception {
 
 		this.encodingUtil = (EncodingUtil) this.getApplicationContext().getBean(EncodingUtil.class);
 	}

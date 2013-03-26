@@ -29,7 +29,6 @@ import org.hdiv.cipher.IKeyFactory;
 import org.hdiv.cipher.Key;
 import org.hdiv.config.HDIVConfig;
 import org.hdiv.idGenerator.PageIdGenerator;
-import org.hdiv.session.ISession;
 import org.hdiv.session.IStateCache;
 import org.hdiv.urlProcessor.FormUrlProcessor;
 import org.hdiv.urlProcessor.LinkUrlProcessor;
@@ -150,13 +149,9 @@ public class InitListener implements ServletContextListener, HttpSessionListener
 		IApplication application = (IApplication) wac.getBean(IApplication.class);
 		HDIVUtil.setApplication(application, servletContext);
 
-		ISession session = (ISession) wac.getBean(ISession.class);
-		HDIVUtil.setISession(session, servletContext);
-
 		ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
 		messageSource.setBeanClassLoader(wac.getClassLoader());
-		String messageSourcePath = (String) wac.getBean("messageSourcePath");
-		messageSource.setBasename(messageSourcePath);
+		messageSource.setBasename(Constants.MESSAGE_SOURCE_PATH);
 		HDIVUtil.setMessageSource(messageSource, servletContext);
 
 		LinkUrlProcessor linkUrlProcessor = (LinkUrlProcessor) wac.getBean(LinkUrlProcessor.class);
@@ -182,13 +177,8 @@ public class InitListener implements ServletContextListener, HttpSessionListener
 			IKeyFactory keyFactory = (IKeyFactory) context.getBean(IKeyFactory.class);
 			// creating encryption key
 			Key key = keyFactory.generateKeyWithDefaultValues();
-			String keyName = (String) context.getBean("keyName");
+			httpSession.setAttribute(Constants.KEY_NAME, key);
 
-			httpSession.setAttribute((keyName == null) ? Constants.KEY_NAME : keyName, key);
-
-		} else {
-			// @since HDIV 1.1
-			httpSession.setAttribute(Constants.STATE_SUFFIX, String.valueOf(System.currentTimeMillis()));
 		}
 	}
 
@@ -203,8 +193,7 @@ public class InitListener implements ServletContextListener, HttpSessionListener
 	protected void initCache(ApplicationContext context, HttpSession httpSession) {
 
 		IStateCache cache = (IStateCache) context.getBean(IStateCache.class);
-		String cacheName = (String) context.getBean("cacheName");
-		httpSession.setAttribute((cacheName == null) ? Constants.CACHE_NAME : cacheName, cache);
+		httpSession.setAttribute(Constants.STATE_CACHE_NAME, cache);
 	}
 
 	/**
@@ -217,12 +206,9 @@ public class InitListener implements ServletContextListener, HttpSessionListener
 	 */
 	protected void initPageIdGenerator(ApplicationContext context, HttpSession httpSession) {
 
-		String pageIdGeneratorName = (String) context.getBean("pageIdGeneratorName");
 		// Obtain new instance of PageIdGenerator
 		PageIdGenerator pageIdGenerator = (PageIdGenerator) context.getBean(PageIdGenerator.class);
-		httpSession
-				.setAttribute((pageIdGeneratorName == null) ? Constants.PAGE_ID_GENERATOR_NAME : pageIdGeneratorName,
-						pageIdGenerator);
+		httpSession.setAttribute(Constants.PAGE_ID_GENERATOR_NAME, pageIdGenerator);
 	}
 
 	/**
@@ -250,21 +236,6 @@ public class InitListener implements ServletContextListener, HttpSessionListener
 
 		httpSession.setAttribute(Constants.HDIV_PARAMETER, hdivParameterName);
 		httpSession.setAttribute(Constants.MODIFY_STATE_HDIV_PARAMETER, modifyHdivStateParameterName);
-	}
-
-	/**
-	 * @return the config
-	 */
-	public HDIVConfig getConfig() {
-		return config;
-	}
-
-	/**
-	 * @param config
-	 *            the config to set
-	 */
-	public void setConfig(HDIVConfig config) {
-		this.config = config;
 	}
 
 }

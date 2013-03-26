@@ -48,18 +48,6 @@
 	<!--CONTEXT BEANS -->
 	<bean id="sessionHDIV" class="org.hdiv.session.SessionHDIV"
 		init-method="init">
-		<property name="cipherName">
-			<value>cipher</value>
-		</property>
-		<property name="pageIdGeneratorName">
-			<ref bean="pageIdGeneratorName" />
-		</property>
-		<property name="cacheName">
-			<ref bean="cacheName" />
-		</property>
-		<property name="keyName">
-			<ref bean="keyName" />
-		</property>
 	</bean>
 
 	<bean id="application" class="org.hdiv.application.ApplicationHDIV" />
@@ -135,30 +123,6 @@
 	<bean id="modifyHdivStateParameter" class="java.lang.String">
 		<constructor-arg>
 			<value>_MODIFY_HDIV_STATE_</value>
-		</constructor-arg>
-	</bean>
-
-	<bean id="cacheName" class="java.lang.String">
-		<constructor-arg>
-			<value>cache</value>
-		</constructor-arg>
-	</bean>
-
-	<bean id="pageIdGeneratorName" class="java.lang.String">
-		<constructor-arg>
-			<value>pageIdGenerator</value>
-		</constructor-arg>
-	</bean>
-
-	<bean id="keyName" class="java.lang.String">
-		<constructor-arg>
-			<value>key</value>
-		</constructor-arg>
-	</bean>
-
-	<bean id="messageSourcePath" class="java.lang.String">
-		<constructor-arg>
-			<value>org.hdiv.msg.MessageResources</value>
 		</constructor-arg>
 	</bean>
 

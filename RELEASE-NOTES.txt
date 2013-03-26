@@ -19,6 +19,7 @@ Release 2.1.4
  * IDataComposer initialization dropped from InitListener and moved to ValidatorFilter to avoid problems with premature request initialization. Fix (https://github.com/hdiv/hdiv/issues/21)
  * JSF requires ValidatorFilter for GET request validation and IDataComposer initialization
  * Fix Thread safe error on Cipher strategy (https://github.com/hdiv/hdiv/issues/23).
+ * Spring beans with generated names (https://github.com/hdiv/hdiv/issues/27).
 
 Release 2.1.3
 ==================================

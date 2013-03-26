@@ -24,6 +24,7 @@ import org.apache.struts.taglib.TagUtils;
 import org.apache.struts.taglib.html.FormTag;
 import org.hdiv.dataComposer.IDataComposer;
 import org.hdiv.urlProcessor.FormUrlProcessor;
+import org.hdiv.util.Constants;
 import org.hdiv.util.HDIVUtil;
 
 /**
@@ -112,7 +113,7 @@ public class FormTagHDIV extends FormTag {
 		String requestId = dataComposer.endRequest();
 		
 		if (requestId.length() > 0) {
-			String hdivParameter = (String) request.getSession().getAttribute("HDIVParameter");
+			String hdivParameter = (String) request.getSession().getAttribute(Constants.HDIV_PARAMETER);
 			TagUtils.getInstance().write(pageContext, this.generateHiddenTag(hdivParameter, requestId));
 		}		
 	}	

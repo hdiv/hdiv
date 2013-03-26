@@ -59,6 +59,7 @@ import org.springframework.beans.factory.xml.BeanDefinitionParser;
 import org.springframework.beans.factory.xml.ParserContext;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.StringUtils;
+import org.springframework.web.servlet.support.RequestDataValueProcessor;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -70,9 +71,10 @@ import org.w3c.dom.NodeList;
 public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 
 	/**
-	 * List of StartPage objects
+	 * The name of the bean to use to look up in an implementation of {@link RequestDataValueProcessor} has been
+	 * configured.
 	 */
-	private List startPages = new ArrayList();
+	private static final String REQUEST_DATA_VALUE_PROCESSOR_BEAN_NAME = "requestDataValueProcessor";
 
 	private final boolean springMvcPresent = ClassUtils.isPresent("org.springframework.web.servlet.DispatcherServlet",
 			ConfigBeanDefinitionParser.class.getClassLoader());
@@ -87,112 +89,107 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 	private final boolean jsfModulePresent = ClassUtils.isPresent("org.hdiv.filter.JsfValidatorHelper",
 			ConfigBeanDefinitionParser.class.getClassLoader());
 
+	/**
+	 * List of StartPage objects
+	 */
+	private List startPages = new ArrayList();
+
+	/* Bean references */
+
+	private RuntimeBeanReference configRef;
+
+	private RuntimeBeanReference sessionRef;
+
+	private RuntimeBeanReference encodingUtilRef;
+
+	private RuntimeBeanReference uidGeneratorRef;
+
+	private RuntimeBeanReference stateUtilRef;
+
+	private RuntimeBeanReference dataValidatorFactoryRef;
+
+	private RuntimeBeanReference dataComposerFactoryRef;
+
+	private RuntimeBeanReference linkUrlProcessorRef;
+
+	private RuntimeBeanReference formUrlProcessorRef;
+
+	private RuntimeBeanReference loggerRef;
+
+	private RuntimeBeanReference userDataRef;
+
 	public BeanDefinition parse(Element element, ParserContext parserContext) {
 
 		Object source = parserContext.extractSource(element);
 
-		parserContext.getRegistry().registerBeanDefinition("config",
-				this.createConfigBean(element, source, parserContext));
+		this.configRef = this.createConfigBean(element, source, parserContext);
 
-		parserContext.getRegistry().registerBeanDefinition("uidGenerator",
-				this.createUidGenerator(element, source, parserContext));
-		parserContext.getRegistry().registerBeanDefinition("pageIdGenerator",
-				this.createPageIdGenerator(element, source));
-		parserContext.getRegistry().registerBeanDefinition("keyFactory", this.createKeyFactory(element, source));
+		this.uidGeneratorRef = this.createSimpleBean(element, source, parserContext, RandomGuidUidGenerator.class);
+		this.createPageIdGenerator(element, source, parserContext);
+		this.createKeyFactory(element, source, parserContext);
 		String userData = element.getAttribute("userData");
 		if (userData == null || userData.length() < 1) {
 			// If user don't define userData bean, create default
-			parserContext.getRegistry().registerBeanDefinition("userData", this.createUserData(element, source));
+			this.userDataRef = this.createSimpleBean(element, source, parserContext, UserData.class);
+		} else {
+			// Use user defined
+			this.userDataRef = new RuntimeBeanReference(userData);
 		}
-		parserContext.getRegistry().registerBeanDefinition("validatorErrorHandler",
-				this.createValidatorErrorHandler(element, source));
-		parserContext.getRegistry().registerBeanDefinition("logger", this.createLogger(element, source));
-		parserContext.getRegistry().registerBeanDefinition("cache", this.createStateCache(element, source));
-		parserContext.getRegistry().registerBeanDefinition("encoding", this.createEncodingUtil(element, source));
-		parserContext.getRegistry().registerBeanDefinition("sessionHDIV", this.createSessionHDIV(element, source));
-		parserContext.getRegistry().registerBeanDefinition("application", this.createApplication(element, source));
-		parserContext.getRegistry().registerBeanDefinition("cipher", this.createCipher(element, source));
-		parserContext.getRegistry().registerBeanDefinition("results", this.createValidationResult(element, source));
-		parserContext.getRegistry().registerBeanDefinition("stateUtil", this.createStateUtil(element, source));
-		parserContext.getRegistry().registerBeanDefinition("dataValidatorFactory",
-				this.createDataValidatorFactory(element, source));
-		parserContext.getRegistry().registerBeanDefinition("dataComposerFactory",
-				this.createDataComposerFactory(element, source));
-		parserContext.getRegistry().registerBeanDefinition("validatorHelper",
-				this.createValidatorHelper(element, source));
-		parserContext.getRegistry().registerBeanDefinition("linkUrlProcessor",
-				this.createLinkUrlProcessor(element, source));
-		parserContext.getRegistry().registerBeanDefinition("formUrlProcessor",
-				this.createFormUrlProcessor(element, source));
-		parserContext.getRegistry().registerBeanDefinition("hdivParameter",
-				this.createStringBean("_HDIV_STATE_", source));
-		parserContext.getRegistry().registerBeanDefinition("modifyHdivStateParameter",
-				this.createStringBean("_MODIFY_HDIV_STATE_", source));
-		parserContext.getRegistry().registerBeanDefinition("cacheName", this.createStringBean("cache", source));
-		parserContext.getRegistry().registerBeanDefinition("pageIdGeneratorName",
-				this.createStringBean("pageIdGenerator", source));
-		parserContext.getRegistry().registerBeanDefinition("keyName", this.createStringBean("key", source));
-		parserContext.getRegistry().registerBeanDefinition("messageSourcePath",
-				this.createStringBean("org.hdiv.msg.MessageResources", source));
+
+		this.createStringBean("hdivParameter", "_HDIV_STATE_", source, parserContext);
+		this.createStringBean("modifyHdivStateParameter", "_MODIFY_HDIV_STATE_", source, parserContext);
+
+		this.createValidatorErrorHandler(element, source, parserContext);
+		this.loggerRef = this.createLogger(element, source, parserContext);
+		this.createStateCache(element, source, parserContext);
+		this.sessionRef = this.createSessionHDIV(element, source, parserContext);
+		this.encodingUtilRef = this.createEncodingUtil(element, source, parserContext);
+		this.createSimpleBean(element, source, parserContext, ApplicationHDIV.class);
+		this.createCipher(element, source, parserContext);
+		this.createSimpleBean(element, source, parserContext, ValidationResult.class);
+		this.stateUtilRef = this.createStateUtil(element, source, parserContext);
+		this.dataValidatorFactoryRef = this.createDataValidatorFactory(element, source, parserContext);
+		this.dataComposerFactoryRef = this.createDataComposerFactory(element, source, parserContext);
+		this.linkUrlProcessorRef = this.createLinkUrlProcessor(element, source, parserContext);
+		this.formUrlProcessorRef = this.createFormUrlProcessor(element, source, parserContext);
 
 		// register Spring MVC beans if we are using Spring MVC web framework
 		if (this.grailsPresent) {
-			parserContext.getRegistry().registerBeanDefinition("requestDataValueProcessor",
-					this.createGrailsRequestDataValueProcessor(element, source));
-			parserContext.getRegistry().registerBeanDefinition("multipartConfig",
-					this.createSpringMVCMultipartConfig(element, source));
+			this.createGrailsRequestDataValueProcessor(element, source, parserContext);
+			this.createSimpleBean(element, source, parserContext, SpringMVCMultipartConfig.class);
 		} else if (this.springMvcPresent) {
-			parserContext.getRegistry().registerBeanDefinition("requestDataValueProcessor",
-					this.createRequestDataValueProcessor(element, source));
-			parserContext.getRegistry().registerBeanDefinition("multipartConfig",
-					this.createSpringMVCMultipartConfig(element, source));
-
+			this.createRequestDataValueProcessor(element, source, parserContext);
+			this.createSimpleBean(element, source, parserContext, SpringMVCMultipartConfig.class);
 		}
 
 		// register JSF specific beans if we are using this web framework
 		if (this.jsfPresent && this.jsfModulePresent) {
-			parserContext.getRegistry().registerBeanDefinition("validatorHelper",
-					this.createJsfValidatorHelper(element, source));
-			parserContext.getRegistry().registerBeanDefinition("multipartConfig",
-					this.createJsfMultipartConfig(element, source));
+			this.createJsfValidatorHelper(element, source, parserContext);
+			this.createSimpleBean(element, source, parserContext, JsfMultipartConfig.class);
 
-			parserContext.getRegistry().registerBeanDefinition("HDIVFacesEventListener",
-					this.createFacesEventListener(element, source));
+			this.createFacesEventListener(element, source, parserContext);
 
-			// Register ComponentValidator objects
-			parserContext.getRegistry().registerBeanDefinition("requestParameterValidator",
-					this.createRequestParameterValidator(element, source));
-			parserContext.getRegistry().registerBeanDefinition("uiCommandValidator",
-					this.createUiCommandValidator(element, source));
-			parserContext.getRegistry().registerBeanDefinition("htmlInputHiddenValidator",
-					this.createHtmlInputHiddenValidator(element, source));
-			parserContext.getRegistry().registerBeanDefinition("editableValidator",
-					this.createEditableValidator(element, source));
-			parserContext.getRegistry().registerBeanDefinition("redirectHelper",
-					this.createRedirectHelper(element, source));
+			this.createRedirectHelper(element, source, parserContext);
 
+		} else {
+			this.createValidatorHelper(element, source, parserContext);
 		}
 
 		return null;
 
 	}
 
-	private RootBeanDefinition createUidGenerator(Element element, Object source, ParserContext parserContext) {
-		RootBeanDefinition bean = new RootBeanDefinition(RandomGuidUidGenerator.class);
-		bean.setSource(source);
-		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
-		return bean;
-	}
-
-	private RootBeanDefinition createPageIdGenerator(Element element, Object source) {
+	private RuntimeBeanReference createPageIdGenerator(Element element, Object source, ParserContext parserContext) {
 		RootBeanDefinition bean = new RootBeanDefinition(SequentialPageIdGenerator.class);
 		bean.setSource(source);
 		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
 		bean.setScope(BeanDefinition.SCOPE_PROTOTYPE);
-		return bean;
+		String name = parserContext.getReaderContext().generateBeanName(bean);
+		parserContext.getRegistry().registerBeanDefinition(name, bean);
+		return new RuntimeBeanReference(name);
 	}
 
-	private RootBeanDefinition createKeyFactory(Element element, Object source) {
+	private RuntimeBeanReference createKeyFactory(Element element, Object source, ParserContext parserContext) {
 		RootBeanDefinition bean = new RootBeanDefinition(KeyFactory.class);
 		bean.setSource(source);
 		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
@@ -200,42 +197,33 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		bean.getPropertyValues().addPropertyValue("keySize", "128");
 		bean.getPropertyValues().addPropertyValue("prngAlgorithm", "SHA1PRNG");
 		bean.getPropertyValues().addPropertyValue("provider", "SUN");
-		return bean;
+		String name = parserContext.getReaderContext().generateBeanName(bean);
+		parserContext.getRegistry().registerBeanDefinition(name, bean);
+		return new RuntimeBeanReference(name);
 	}
 
-	private RootBeanDefinition createUserData(Element element, Object source) {
-		RootBeanDefinition bean = new RootBeanDefinition(UserData.class);
-		bean.setSource(source);
-		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
-		return bean;
-	}
-
-	private RootBeanDefinition createLogger(Element element, Object source) {
-		String userData = element.getAttribute("userData");
-		if (userData == null || userData.length() < 1) {
-			userData = "userData";// default userData bean id
-		}
+	private RuntimeBeanReference createLogger(Element element, Object source, ParserContext parserContext) {
 		RootBeanDefinition bean = new RootBeanDefinition(Logger.class);
 		bean.setSource(source);
 		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
-		bean.getPropertyValues().addPropertyValue("userData", new RuntimeBeanReference(userData));
-		return bean;
+		bean.getPropertyValues().addPropertyValue("userData", this.userDataRef);
+		String name = parserContext.getReaderContext().generateBeanName(bean);
+		parserContext.getRegistry().registerBeanDefinition(name, bean);
+		return new RuntimeBeanReference(name);
 	}
 
-	private RootBeanDefinition createValidatorErrorHandler(Element element, Object source) {
-		String userData = element.getAttribute("userData");
-		if (userData == null || userData.length() < 1) {
-			userData = "userData";// default userData bean id
-		}
+	private RuntimeBeanReference createValidatorErrorHandler(Element element, Object source, ParserContext parserContext) {
 		RootBeanDefinition bean = new RootBeanDefinition(DefaultValidatorErrorHandler.class);
 		bean.setSource(source);
 		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
-		bean.getPropertyValues().addPropertyValue("userData", new RuntimeBeanReference(userData));
-		bean.getPropertyValues().addPropertyValue("config", new RuntimeBeanReference("config"));
-		return bean;
+		bean.getPropertyValues().addPropertyValue("userData", this.userDataRef);
+		bean.getPropertyValues().addPropertyValue("config", this.configRef);
+		String name = parserContext.getReaderContext().generateBeanName(bean);
+		parserContext.getRegistry().registerBeanDefinition(name, bean);
+		return new RuntimeBeanReference(name);
 	}
 
-	private RootBeanDefinition createStateCache(Element element, Object source) {
+	private RuntimeBeanReference createStateCache(Element element, Object source, ParserContext parserContext) {
 		RootBeanDefinition bean = new RootBeanDefinition(StateCache.class);
 		bean.setSource(source);
 		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
@@ -246,155 +234,144 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		if (StringUtils.hasText(maxSize)) {
 			bean.getPropertyValues().addPropertyValue("maxSize", maxSize);
 		}
-		return bean;
+		String name = parserContext.getReaderContext().generateBeanName(bean);
+		parserContext.getRegistry().registerBeanDefinition(name, bean);
+		return new RuntimeBeanReference(name);
 	}
 
-	private RootBeanDefinition createEncodingUtil(Element element, Object source) {
+	private RuntimeBeanReference createEncodingUtil(Element element, Object source, ParserContext parserContext) {
 		RootBeanDefinition bean = new RootBeanDefinition(EncodingUtil.class);
 		bean.setSource(source);
 		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
 		bean.setInitMethodName("init");
-		bean.getPropertyValues().addPropertyValue("session", new RuntimeBeanReference("sessionHDIV"));
-		return bean;
+		bean.getPropertyValues().addPropertyValue("session", this.sessionRef);
+		String name = parserContext.getReaderContext().generateBeanName(bean);
+		parserContext.getRegistry().registerBeanDefinition(name, bean);
+		return new RuntimeBeanReference(name);
 	}
 
-	private RootBeanDefinition createSessionHDIV(Element element, Object source) {
+	private RuntimeBeanReference createSessionHDIV(Element element, Object source, ParserContext parserContext) {
 		RootBeanDefinition bean = new RootBeanDefinition(SessionHDIV.class);
 		bean.setSource(source);
 		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
 		bean.setInitMethodName("init");
-		bean.getPropertyValues().addPropertyValue("cipherName", "cipher");
-		bean.getPropertyValues().addPropertyValue("pageIdGeneratorName",
-				new RuntimeBeanReference("pageIdGeneratorName"));
-		bean.getPropertyValues().addPropertyValue("cacheName", new RuntimeBeanReference("cacheName"));
-		bean.getPropertyValues().addPropertyValue("keyName", new RuntimeBeanReference("keyName"));
-		return bean;
+		String name = parserContext.getReaderContext().generateBeanName(bean);
+		parserContext.getRegistry().registerBeanDefinition(name, bean);
+		return new RuntimeBeanReference(name);
 	}
 
-	private RootBeanDefinition createApplication(Element element, Object source) {
-		RootBeanDefinition bean = new RootBeanDefinition(ApplicationHDIV.class);
-		bean.setSource(source);
-		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
-		return bean;
-	}
-
-	private RootBeanDefinition createCipher(Element element, Object source) {
+	private RuntimeBeanReference createCipher(Element element, Object source, ParserContext parserContext) {
 		RootBeanDefinition bean = new RootBeanDefinition(CipherHTTP.class);
 		bean.setSource(source);
 		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
+		bean.setScope(BeanDefinition.SCOPE_PROTOTYPE);
 		bean.setInitMethodName("init");
 		bean.getPropertyValues().addPropertyValue("transformation", "AES/CBC/PKCS5Padding");
-		return bean;
+		String name = parserContext.getReaderContext().generateBeanName(bean);
+		parserContext.getRegistry().registerBeanDefinition(name, bean);
+		return new RuntimeBeanReference(name);
 	}
 
-	private RootBeanDefinition createValidationResult(Element element, Object source) {
-		RootBeanDefinition bean = new RootBeanDefinition(ValidationResult.class);
-		bean.setSource(source);
-		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
-		return bean;
-	}
-
-	private RootBeanDefinition createStateUtil(Element element, Object source) {
+	private RuntimeBeanReference createStateUtil(Element element, Object source, ParserContext parserContext) {
 		RootBeanDefinition bean = new RootBeanDefinition(StateUtil.class);
 		bean.setSource(source);
 		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
 		bean.setInitMethodName("init");
-		bean.getPropertyValues().addPropertyValue("encodingUtil", new RuntimeBeanReference("encoding"));
-		bean.getPropertyValues().addPropertyValue("config", new RuntimeBeanReference("config"));
-		return bean;
+		bean.getPropertyValues().addPropertyValue("encodingUtil", this.encodingUtilRef);
+		bean.getPropertyValues().addPropertyValue("config", this.configRef);
+		String name = parserContext.getReaderContext().generateBeanName(bean);
+		parserContext.getRegistry().registerBeanDefinition(name, bean);
+		return new RuntimeBeanReference(name);
 	}
 
-	private RootBeanDefinition createDataValidatorFactory(Element element, Object source) {
+	private RuntimeBeanReference createDataValidatorFactory(Element element, Object source, ParserContext parserContext) {
 		RootBeanDefinition bean = new RootBeanDefinition(DataValidatorFactory.class);
 		bean.setSource(source);
 		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
-		bean.getPropertyValues().addPropertyValue("hdivConfig", new RuntimeBeanReference("config"));
-		return bean;
+		bean.getPropertyValues().addPropertyValue("hdivConfig", this.configRef);
+		String name = parserContext.getReaderContext().generateBeanName(bean);
+		parserContext.getRegistry().registerBeanDefinition(name, bean);
+		return new RuntimeBeanReference(name);
 	}
 
-	private RootBeanDefinition createDataComposerFactory(Element element, Object source) {
+	private RuntimeBeanReference createDataComposerFactory(Element element, Object source, ParserContext parserContext) {
 		RootBeanDefinition bean = new RootBeanDefinition(DataComposerFactory.class);
 		bean.setSource(source);
 		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
-		bean.getPropertyValues().addPropertyValue("hdivConfig", new RuntimeBeanReference("config"));
-		bean.getPropertyValues().addPropertyValue("session", new RuntimeBeanReference("sessionHDIV"));
-		bean.getPropertyValues().addPropertyValue("encodingUtil", new RuntimeBeanReference("encoding"));
-		bean.getPropertyValues().addPropertyValue("stateUtil", new RuntimeBeanReference("stateUtil"));
-		bean.getPropertyValues().addPropertyValue("uidGenerator", new RuntimeBeanReference("uidGenerator"));
+		bean.getPropertyValues().addPropertyValue("hdivConfig", this.configRef);
+		bean.getPropertyValues().addPropertyValue("session", this.sessionRef);
+		bean.getPropertyValues().addPropertyValue("encodingUtil", this.encodingUtilRef);
+		bean.getPropertyValues().addPropertyValue("stateUtil", this.stateUtilRef);
+		bean.getPropertyValues().addPropertyValue("uidGenerator", this.uidGeneratorRef);
 		bean.getPropertyValues().addPropertyValue("allowedLength", "4000");
 
-		return bean;
+		String name = parserContext.getReaderContext().generateBeanName(bean);
+		parserContext.getRegistry().registerBeanDefinition(name, bean);
+		return new RuntimeBeanReference(name);
 	}
 
-	private RootBeanDefinition createValidatorHelper(Element element, Object source) {
+	private RuntimeBeanReference createValidatorHelper(Element element, Object source, ParserContext parserContext) {
 
 		RootBeanDefinition bean = new RootBeanDefinition(ValidatorHelperRequest.class);
 		bean.setSource(source);
 		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
 		bean.setInitMethodName("init");
-		bean.getPropertyValues().addPropertyValue("logger", new RuntimeBeanReference("logger"));
-		bean.getPropertyValues().addPropertyValue("stateUtil", new RuntimeBeanReference("stateUtil"));
-		bean.getPropertyValues().addPropertyValue("hdivConfig", new RuntimeBeanReference("config"));
-		bean.getPropertyValues().addPropertyValue("session", new RuntimeBeanReference("sessionHDIV"));
-		bean.getPropertyValues().addPropertyValue("dataValidatorFactory",
-				new RuntimeBeanReference("dataValidatorFactory"));
-		bean.getPropertyValues().addPropertyValue("dataComposerFactory",
-				new RuntimeBeanReference("dataComposerFactory"));
-		return bean;
+		bean.getPropertyValues().addPropertyValue("logger", this.loggerRef);
+		bean.getPropertyValues().addPropertyValue("stateUtil", this.stateUtilRef);
+		bean.getPropertyValues().addPropertyValue("hdivConfig", this.configRef);
+		bean.getPropertyValues().addPropertyValue("session", this.sessionRef);
+		bean.getPropertyValues().addPropertyValue("dataValidatorFactory", this.dataValidatorFactoryRef);
+		bean.getPropertyValues().addPropertyValue("dataComposerFactory", this.dataComposerFactoryRef);
+		String name = parserContext.getReaderContext().generateBeanName(bean);
+		parserContext.getRegistry().registerBeanDefinition(name, bean);
+		return new RuntimeBeanReference(name);
 	}
 
-	private RootBeanDefinition createLinkUrlProcessor(Element element, Object source) {
+	private RuntimeBeanReference createLinkUrlProcessor(Element element, Object source, ParserContext parserContext) {
 		RootBeanDefinition bean = new RootBeanDefinition(LinkUrlProcessor.class);
 		bean.setSource(source);
 		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
-		bean.getPropertyValues().addPropertyValue("config", new RuntimeBeanReference("config"));
+		bean.getPropertyValues().addPropertyValue("config", this.configRef);
 
-		return bean;
+		String name = parserContext.getReaderContext().generateBeanName(bean);
+		parserContext.getRegistry().registerBeanDefinition(name, bean);
+		return new RuntimeBeanReference(name);
 	}
 
-	private RootBeanDefinition createFormUrlProcessor(Element element, Object source) {
+	private RuntimeBeanReference createFormUrlProcessor(Element element, Object source, ParserContext parserContext) {
 		RootBeanDefinition bean = new RootBeanDefinition(FormUrlProcessor.class);
 		bean.setSource(source);
 		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
-		bean.getPropertyValues().addPropertyValue("config", new RuntimeBeanReference("config"));
+		bean.getPropertyValues().addPropertyValue("config", this.configRef);
 
-		return bean;
+		String name = parserContext.getReaderContext().generateBeanName(bean);
+		parserContext.getRegistry().registerBeanDefinition(name, bean);
+		return new RuntimeBeanReference(name);
 	}
 
-	private RootBeanDefinition createStringBean(String value, Object source) {
-		RootBeanDefinition bean = new RootBeanDefinition(java.lang.String.class);
-		bean.setSource(source);
-		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
-		bean.getConstructorArgumentValues().addIndexedArgumentValue(0, value);
-		return bean;
-	}
-
-	private RootBeanDefinition createSpringMVCMultipartConfig(Element element, Object source) {
-		RootBeanDefinition bean = new RootBeanDefinition(SpringMVCMultipartConfig.class);
-		bean.setSource(source);
-		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
-		return bean;
-	}
-
-	private RootBeanDefinition createRequestDataValueProcessor(Element element, Object source) {
+	private RuntimeBeanReference createRequestDataValueProcessor(Element element, Object source,
+			ParserContext parserContext) {
 		RootBeanDefinition bean = new RootBeanDefinition(HdivRequestDataValueProcessor.class);
 		bean.setSource(source);
 		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
-		bean.getPropertyValues().addPropertyValue("linkUrlProcessor", new RuntimeBeanReference("linkUrlProcessor"));
-		bean.getPropertyValues().addPropertyValue("formUrlProcessor", new RuntimeBeanReference("formUrlProcessor"));
-		return bean;
+		bean.getPropertyValues().addPropertyValue("linkUrlProcessor", this.linkUrlProcessorRef);
+		bean.getPropertyValues().addPropertyValue("formUrlProcessor", this.formUrlProcessorRef);
+		parserContext.getRegistry().registerBeanDefinition(REQUEST_DATA_VALUE_PROCESSOR_BEAN_NAME, bean);
+		return new RuntimeBeanReference(REQUEST_DATA_VALUE_PROCESSOR_BEAN_NAME);
 	}
 
-	private RootBeanDefinition createGrailsRequestDataValueProcessor(Element element, Object source) {
+	private RuntimeBeanReference createGrailsRequestDataValueProcessor(Element element, Object source,
+			ParserContext parserContext) {
 		RootBeanDefinition bean = new RootBeanDefinition(GrailsHdivRequestDataValueProcessor.class);
 		bean.setSource(source);
 		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
-		bean.getPropertyValues().addPropertyValue("linkUrlProcessor", new RuntimeBeanReference("linkUrlProcessor"));
-		bean.getPropertyValues().addPropertyValue("formUrlProcessor", new RuntimeBeanReference("formUrlProcessor"));
-		return bean;
+		bean.getPropertyValues().addPropertyValue("linkUrlProcessor", this.linkUrlProcessorRef);
+		bean.getPropertyValues().addPropertyValue("formUrlProcessor", this.formUrlProcessorRef);
+		parserContext.getRegistry().registerBeanDefinition(REQUEST_DATA_VALUE_PROCESSOR_BEAN_NAME, bean);
+		return new RuntimeBeanReference(REQUEST_DATA_VALUE_PROCESSOR_BEAN_NAME);
 	}
 
-	private RootBeanDefinition createConfigBean(Element element, Object source, ParserContext parserContext) {
+	private RuntimeBeanReference createConfigBean(Element element, Object source, ParserContext parserContext) {
 
 		RootBeanDefinition bean = new RootBeanDefinition(HDIVConfig.class);
 		bean.setSource(source);
@@ -462,103 +439,125 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 				new RuntimeBeanReference("editableParametersValidations"));
 
 		if (!parserContext.getRegistry().containsBeanDefinition("editableParametersValidations")) {
-			parserContext.getRegistry().registerBeanDefinition("editableParametersValidations",
-					this.createDefaultEditableParametersValidations(element, source));
+			this.createDefaultEditableParametersValidations(element, source, parserContext);
 		}
 
 		// Process startPages, startParameters and paramsWithoutValidation elements
 		this.processChilds(element, bean);
-		return bean;
+
+		String name = parserContext.getReaderContext().generateBeanName(bean);
+		parserContext.getRegistry().registerBeanDefinition(name, bean);
+		return new RuntimeBeanReference(name);
 
 	}
 
-	private RootBeanDefinition createDefaultEditableParametersValidations(Element element, Object source) {
+	private RuntimeBeanReference createDefaultEditableParametersValidations(Element element, Object source,
+			ParserContext parserContext) {
 		RootBeanDefinition bean = new RootBeanDefinition(HDIVValidations.class);
 		bean.setSource(source);
 		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
 		bean.setInitMethodName("init");
 		Map map = new Hashtable();
 		bean.getPropertyValues().addPropertyValue("rawUrls", map);
-		return bean;
+		String name = parserContext.getReaderContext().generateBeanName(bean);
+		parserContext.getRegistry().registerBeanDefinition(name, bean);
+		return new RuntimeBeanReference(name);
 	}
 
-	private RootBeanDefinition createFacesEventListener(Element element, Object source) {
+	private RuntimeBeanReference createFacesEventListener(Element element, Object source, ParserContext parserContext) {
+
+		// Register ComponentValidator objects
+		RuntimeBeanReference requestParameterValidatorRef = this.createRequestParameterValidator(element, source,
+				parserContext);
+		RuntimeBeanReference uiCommandValidatorRef = this.createSimpleBean(element, source, parserContext,
+				UICommandValidator.class);
+		RuntimeBeanReference htmlInputHiddenValidatorRef = this.createSimpleBean(element, source, parserContext,
+				HtmlInputHiddenValidator.class);
+		RuntimeBeanReference editableValidatorRef = this.createEditableValidator(element, source, parserContext);
+
 		RootBeanDefinition bean = new RootBeanDefinition(HDIVFacesEventListener.class);
 		bean.setSource(source);
 		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
-		bean.getPropertyValues().addPropertyValue("config", new RuntimeBeanReference("config"));
-		bean.getPropertyValues().addPropertyValue("logger", new RuntimeBeanReference("logger"));
-		bean.getPropertyValues().addPropertyValue("htmlInputHiddenValidator",
-				new RuntimeBeanReference("htmlInputHiddenValidator"));
-		bean.getPropertyValues().addPropertyValue("requestParamValidator",
-				new RuntimeBeanReference("requestParameterValidator"));
-		bean.getPropertyValues().addPropertyValue("uiCommandValidator", new RuntimeBeanReference("uiCommandValidator"));
-		bean.getPropertyValues().addPropertyValue("editabeValidator", new RuntimeBeanReference("editableValidator"));
-		return bean;
+		bean.getPropertyValues().addPropertyValue("config", this.configRef);
+		bean.getPropertyValues().addPropertyValue("logger", this.loggerRef);
+		bean.getPropertyValues().addPropertyValue("htmlInputHiddenValidator", htmlInputHiddenValidatorRef);
+		bean.getPropertyValues().addPropertyValue("requestParamValidator", requestParameterValidatorRef);
+		bean.getPropertyValues().addPropertyValue("uiCommandValidator", uiCommandValidatorRef);
+		bean.getPropertyValues().addPropertyValue("editabeValidator", editableValidatorRef);
+
+		String name = parserContext.getReaderContext().generateBeanName(bean);
+		parserContext.getRegistry().registerBeanDefinition(name, bean);
+		return new RuntimeBeanReference(name);
 	}
 
 	// JSF Beans
 
-	private RootBeanDefinition createJsfValidatorHelper(Element element, Object source) {
+	private RuntimeBeanReference createJsfValidatorHelper(Element element, Object source, ParserContext parserContext) {
 
 		RootBeanDefinition bean = new RootBeanDefinition(JsfValidatorHelper.class);
 		bean.setSource(source);
 		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
 		bean.setInitMethodName("init");
-		bean.getPropertyValues().addPropertyValue("logger", new RuntimeBeanReference("logger"));
-		bean.getPropertyValues().addPropertyValue("stateUtil", new RuntimeBeanReference("stateUtil"));
-		bean.getPropertyValues().addPropertyValue("hdivConfig", new RuntimeBeanReference("config"));
-		bean.getPropertyValues().addPropertyValue("session", new RuntimeBeanReference("sessionHDIV"));
-		bean.getPropertyValues().addPropertyValue("dataValidatorFactory",
-				new RuntimeBeanReference("dataValidatorFactory"));
-		bean.getPropertyValues().addPropertyValue("dataComposerFactory",
-				new RuntimeBeanReference("dataComposerFactory"));
-		return bean;
+		bean.getPropertyValues().addPropertyValue("logger", this.loggerRef);
+		bean.getPropertyValues().addPropertyValue("stateUtil", this.stateUtilRef);
+		bean.getPropertyValues().addPropertyValue("hdivConfig", this.configRef);
+		bean.getPropertyValues().addPropertyValue("session", this.sessionRef);
+		bean.getPropertyValues().addPropertyValue("dataValidatorFactory", this.dataValidatorFactoryRef);
+		bean.getPropertyValues().addPropertyValue("dataComposerFactory", this.dataComposerFactoryRef);
+
+		String name = parserContext.getReaderContext().generateBeanName(bean);
+		parserContext.getRegistry().registerBeanDefinition(name, bean);
+		return new RuntimeBeanReference(name);
 	}
 
-	private RootBeanDefinition createJsfMultipartConfig(Element element, Object source) {
-		RootBeanDefinition bean = new RootBeanDefinition(JsfMultipartConfig.class);
-		bean.setSource(source);
-		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
-		return bean;
-	}
-
-	private RootBeanDefinition createRequestParameterValidator(Element element, Object source) {
+	private RuntimeBeanReference createRequestParameterValidator(Element element, Object source,
+			ParserContext parserContext) {
 		RootBeanDefinition bean = new RootBeanDefinition(RequestParameterValidator.class);
 		bean.setSource(source);
 		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
-		bean.getPropertyValues().addPropertyValue("hdivConfig", new RuntimeBeanReference("config"));
-		return bean;
+		bean.getPropertyValues().addPropertyValue("hdivConfig", this.configRef);
+		String name = parserContext.getReaderContext().generateBeanName(bean);
+		parserContext.getRegistry().registerBeanDefinition(name, bean);
+		return new RuntimeBeanReference(name);
 	}
 
-	private RootBeanDefinition createUiCommandValidator(Element element, Object source) {
-		RootBeanDefinition bean = new RootBeanDefinition(UICommandValidator.class);
-		bean.setSource(source);
-		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
-		return bean;
-	}
-
-	private RootBeanDefinition createHtmlInputHiddenValidator(Element element, Object source) {
-		RootBeanDefinition bean = new RootBeanDefinition(HtmlInputHiddenValidator.class);
-		bean.setSource(source);
-		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
-		return bean;
-	}
-
-	private RootBeanDefinition createEditableValidator(Element element, Object source) {
+	private RuntimeBeanReference createEditableValidator(Element element, Object source, ParserContext parserContext) {
 		RootBeanDefinition bean = new RootBeanDefinition(EditableValidator.class);
 		bean.setSource(source);
 		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
-		bean.getPropertyValues().addPropertyValue("hdivConfig", new RuntimeBeanReference("config"));
-		return bean;
+		bean.getPropertyValues().addPropertyValue("hdivConfig", this.configRef);
+		String name = parserContext.getReaderContext().generateBeanName(bean);
+		parserContext.getRegistry().registerBeanDefinition(name, bean);
+		return new RuntimeBeanReference(name);
 	}
 
-	private RootBeanDefinition createRedirectHelper(Element element, Object source) {
+	private RuntimeBeanReference createRedirectHelper(Element element, Object source, ParserContext parserContext) {
 		RootBeanDefinition bean = new RootBeanDefinition(RedirectHelper.class);
 		bean.setSource(source);
 		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
-		bean.getPropertyValues().addPropertyValue("linkUrlProcessor", new RuntimeBeanReference("linkUrlProcessor"));
-		return bean;
+		bean.getPropertyValues().addPropertyValue("linkUrlProcessor", this.linkUrlProcessorRef);
+		String name = parserContext.getReaderContext().generateBeanName(bean);
+		parserContext.getRegistry().registerBeanDefinition(name, bean);
+		return new RuntimeBeanReference(name);
+	}
+
+	private RuntimeBeanReference createStringBean(String name, String value, Object source, ParserContext parserContext) {
+		RootBeanDefinition bean = new RootBeanDefinition(java.lang.String.class);
+		bean.setSource(source);
+		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
+		bean.getConstructorArgumentValues().addIndexedArgumentValue(0, value);
+		parserContext.getRegistry().registerBeanDefinition(name, bean);
+		return new RuntimeBeanReference(name);
+	}
+
+	private RuntimeBeanReference createSimpleBean(Element element, Object source, ParserContext parserContext,
+			Class clazz) {
+		RootBeanDefinition bean = new RootBeanDefinition(clazz);
+		bean.setSource(source);
+		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
+		String name = parserContext.getReaderContext().generateBeanName(bean);
+		parserContext.getRegistry().registerBeanDefinition(name, bean);
+		return new RuntimeBeanReference(name);
 	}
 
 	private void processChilds(Element element, RootBeanDefinition bean) {

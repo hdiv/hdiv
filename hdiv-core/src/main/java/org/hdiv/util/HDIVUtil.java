@@ -29,7 +29,6 @@ import org.hdiv.application.IApplication;
 import org.hdiv.config.HDIVConfig;
 import org.hdiv.dataComposer.IDataComposer;
 import org.hdiv.exception.HDIVException;
-import org.hdiv.session.ISession;
 import org.hdiv.urlProcessor.FormUrlProcessor;
 import org.hdiv.urlProcessor.LinkUrlProcessor;
 import org.springframework.context.MessageSource;
@@ -57,7 +56,6 @@ public class HDIVUtil {
 	public static final String DATACOMPOSER_REQUEST_KEY = "DATACOMPOSER_REQUEST_KEY";
 	public static final String REQUESTURI_REQUEST_KEY = "REQUESTURI_REQUEST_KEY";
 	public static final String BASEURL_REQUEST_KEY = "BASEURL_REQUEST_KEY";
-	public static final String ISESSION_SERVLETCONTEXT_KEY = "ISESSION_SERVLETCONTEXT_KEY";
 	public static final String LINKURLPROCESSOR_SERVLETCONTEXT_KEY = "LINKURLPROCESSOR_SERVLETCONTEXT_KEY";
 	public static final String FORMURLPROCESSOR_SERVLETCONTEXT_KEY = "FORMURLPROCESSOR_SERVLETCONTEXT_KEY";
 
@@ -266,44 +264,6 @@ public class HDIVUtil {
 	 */
 	public static void setHDIVConfig(HDIVConfig hdivConfig, ServletContext servletContext) {
 		servletContext.setAttribute(HDIVCONFIG_SERVLETCONTEXT_KEY, hdivConfig);
-	}
-
-	/* ISession */
-
-	/**
-	 * Return the <code>ISession</code> instance.
-	 * 
-	 * @return {@link ISession} instance
-	 */
-	public static ISession getISession() {
-
-		ServletContext servletContext = getHttpServletRequest().getSession().getServletContext();
-		return getISession(servletContext);
-
-	}
-
-	/**
-	 * Return the <code>ISession</code> instance.
-	 * 
-	 * @param servletContext
-	 * @return {@link ISession} instance
-	 */
-	public static ISession getISession(ServletContext servletContext) {
-		ISession session = (ISession) servletContext.getAttribute(ISESSION_SERVLETCONTEXT_KEY);
-		if (session == null) {
-			throw new HDIVException("ISession has not been initialized in servlet context");
-		}
-		return session;
-	}
-
-	/**
-	 * Set the <code>ISession</code> instance.
-	 * 
-	 * @param session
-	 * @param servletContext
-	 */
-	public static void setISession(ISession session, ServletContext servletContext) {
-		servletContext.setAttribute(ISESSION_SERVLETCONTEXT_KEY, session);
 	}
 
 	/* UrlProcessor */

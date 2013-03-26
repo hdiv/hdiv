@@ -57,4 +57,19 @@ public class CustomSchemaTest extends TestCase {
 
 	}
 
+	public void testNames() {
+		ApplicationContext context = new ClassPathXmlApplicationContext(
+				"org/hdiv/config/xml/hdiv-config-test-schema.xml");
+
+		HDIVConfig hdivConfig = (HDIVConfig) context.getBean(HDIVConfig.class);
+		assertNotNull(hdivConfig);
+
+		String[] names = context.getBeanDefinitionNames();
+		for (int i = 0; i < names.length; i++) {
+			String name = names[i];
+			System.out.println(name);
+		}
+
+	}
+
 }

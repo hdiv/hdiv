@@ -15,6 +15,10 @@
  */
 package org.hdiv.util;
 
+import org.hdiv.cipher.Key;
+import org.hdiv.idGenerator.PageIdGenerator;
+import org.hdiv.session.IStateCache;
+
 /**
  * <p>
  * Global constants.
@@ -33,23 +37,27 @@ public class Constants {
 	/**
 	 * Name of the attribute which is used for storing cookies in session.
 	 */
-	public static final String HDIV_COOKIES_KEY = "hdivCookies";
-
-	/**
-	 * Name of the attribute which is used for storing the suffix added to the HDIV state.
-	 */
-	public static final String STATE_SUFFIX = "hdivStateSuffix";
+	public static final String HDIV_COOKIES_KEY = "org.hdiv.HdivCookies";
 
 	/**
 	 * Session's cookie identifier
 	 */
 	public static final String JSESSIONID = "JSESSIONID";
 
-	public static final String KEY_NAME = "key";
+	/**
+	 * Session attribute name for {@link Key} instance
+	 */
+	public static final String KEY_NAME = "org.hdiv.Key";
 
-	public static final String CACHE_NAME = "cache";
+	/**
+	 * Session attribute name for {@link PageIdGenerator} instance
+	 */
+	public static final String PAGE_ID_GENERATOR_NAME = "org.hdiv.PageIdGenerator";
 
-	public static final String PAGE_ID_GENERATOR_NAME = "pageIdGenerator";
+	/**
+	 * Session attribute name for {@link IStateCache} instance
+	 */
+	public static final String STATE_CACHE_NAME = "org.hdiv.StateCache";
 
 	public static final String HDIV_PARAMETER = "HDIVParameter";
 
@@ -68,5 +76,10 @@ public class Constants {
 	 * not valid. Only used for Editable Validation errors.
 	 */
 	public static final String HDIV_EDITABLE_PASSWORD_ERROR_KEY = "hdiv.editable.password.error";
+
+	/**
+	 * Location of the internal resources files
+	 */
+	public static final String MESSAGE_SOURCE_PATH = "org.hdiv.msg.MessageResources";
 
 }

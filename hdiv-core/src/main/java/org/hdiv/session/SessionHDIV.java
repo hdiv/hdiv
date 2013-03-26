@@ -27,6 +27,7 @@ import org.hdiv.exception.HDIVException;
 import org.hdiv.idGenerator.PageIdGenerator;
 import org.hdiv.state.IPage;
 import org.hdiv.state.IState;
+import org.hdiv.util.Constants;
 import org.hdiv.util.HDIVErrorCodes;
 import org.hdiv.util.HDIVUtil;
 import org.springframework.beans.factory.BeanFactory;
@@ -52,24 +53,19 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 	private BeanFactory beanFactory;
 
 	/**
-	 * The cipherName
-	 */
-	private String cipherName;
-
-	/**
 	 * The cacheName
 	 */
-	private String cacheName;
+	private String cacheName = Constants.STATE_CACHE_NAME;
 
 	/**
 	 * The pageIdGeneratorName
 	 */
-	private String pageIdGeneratorName;
+	private String pageIdGeneratorName = Constants.PAGE_ID_GENERATOR_NAME;
 
 	/**
 	 * The keyName
 	 */
-	private String keyName;
+	private String keyName = Constants.KEY_NAME;
 
 	/**
 	 * Initialization method
@@ -86,14 +82,12 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 
 		HttpSession session = this.getHttpSession();
 
-		String id = null;
-
 		PageIdGenerator pageIdGenerator = (PageIdGenerator) session.getAttribute(this.pageIdGeneratorName);
 		if (pageIdGenerator == null) {
 			throw new HDIVException("session.nopageidgenerator");
 		}
 
-		id = pageIdGenerator.getNextPageId();
+		String id = pageIdGenerator.getNextPageId();
 		session.setAttribute(this.pageIdGeneratorName, pageIdGenerator);
 
 		return id;
@@ -262,7 +256,7 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 	 * @see org.hdiv.session.ISession#getEncryptCipher()
 	 */
 	public ICipherHTTP getEncryptCipher() {
-		ICipherHTTP cipher = (ICipherHTTP) this.beanFactory.getBean(this.cipherName);
+		ICipherHTTP cipher = (ICipherHTTP) this.beanFactory.getBean(ICipherHTTP.class);
 		if (cipher == null) {
 			String errorMessage = HDIVUtil.getMessage("encrypt.message");
 			throw new HDIVException(errorMessage);
@@ -277,7 +271,7 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 	 * @see org.hdiv.session.ISession#getDecryptCipher()
 	 */
 	public ICipherHTTP getDecryptCipher() {
-		ICipherHTTP cipher = (ICipherHTTP) this.beanFactory.getBean(this.cipherName);
+		ICipherHTTP cipher = (ICipherHTTP) this.beanFactory.getBean(ICipherHTTP.class);
 		if (cipher == null) {
 			String errorMessage = HDIVUtil.getMessage("decrypt.message");
 			throw new HDIVException(errorMessage);
@@ -301,10 +295,12 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 	}
 
 	/**
-	 * @return Returns the cacheName.
+	 * Obtain {@link HttpSession} instance for ThreadLocal
+	 * 
+	 * @return HttpSession instance
 	 */
-	public String getCacheName() {
-		return cacheName;
+	private HttpSession getHttpSession() {
+		return HDIVUtil.getHttpSession();
 	}
 
 	/**
@@ -316,28 +312,6 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 	}
 
 	/**
-	 * @return Returns the cipherName.
-	 */
-	public String getCipherName() {
-		return cipherName;
-	}
-
-	/**
-	 * @param cipherName
-	 *            The cipherName to set.
-	 */
-	public void setCipherName(String cipherName) {
-		this.cipherName = cipherName;
-	}
-
-	/**
-	 * @return Returns the pageIdGeneratorName.
-	 */
-	public String getPageIdGeneratorName() {
-		return pageIdGeneratorName;
-	}
-
-	/**
 	 * @param pageIdGeneratorName
 	 *            The pageIdGeneratorName to set.
 	 */
@@ -346,22 +320,11 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 	}
 
 	/**
-	 * @return Returns the keyName.
-	 */
-	public String getKeyName() {
-		return keyName;
-	}
-
-	/**
 	 * @param keyName
 	 *            The keyName to set.
 	 */
 	public void setKeyName(String keyName) {
 		this.keyName = keyName;
-	}
-
-	private HttpSession getHttpSession() {
-		return HDIVUtil.getHttpSession();
 	}
 
 }

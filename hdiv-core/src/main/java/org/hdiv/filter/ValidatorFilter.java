@@ -29,6 +29,7 @@ import org.hdiv.config.HDIVConfig;
 import org.hdiv.config.multipart.IMultipartConfig;
 import org.hdiv.config.multipart.exception.HdivMultipartException;
 import org.hdiv.util.HDIVUtil;
+import org.springframework.beans.BeansException;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -86,9 +87,11 @@ public class ValidatorFilter extends OncePerRequestFilter {
 
 			this.hdivConfig = (HDIVConfig) context.getBean(HDIVConfig.class);
 			this.validationHelper = (IValidationHelper) context.getBean(IValidationHelper.class);
-			if (context.containsBean("multipartConfig")) {
+			try {
 				// For applications without Multipart requests
 				this.multipartConfig = (IMultipartConfig) context.getBean(IMultipartConfig.class);
+			} catch (BeansException ex) {
+				this.multipartConfig = null;
 			}
 
 			this.errorHandler = (ValidatorErrorHandler) context.getBean(ValidatorErrorHandler.class);
