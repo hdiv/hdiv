@@ -15,9 +15,12 @@
  */
 package org.hdiv.validators;
 
+import java.util.Locale;
+
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIForm;
+import javax.faces.component.UIInput;
 import javax.faces.component.html.HtmlInputHidden;
 import javax.faces.component.html.HtmlInputSecret;
 import javax.faces.component.html.HtmlInputText;
@@ -26,6 +29,7 @@ import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 
 import org.hdiv.config.HDIVConfig;
+import org.hdiv.util.Constants;
 import org.hdiv.util.HDIVErrorCodes;
 import org.hdiv.util.HDIVUtil;
 import org.hdiv.util.MessageFactory;
@@ -66,11 +70,11 @@ public class EditableValidator implements ComponentValidator {
 	 *            UIForm component to validate
 	 * @return result
 	 */
-	private ValidationError validateEditablesForm(FacesContext context, UIForm formComponent) {
+	protected ValidationError validateEditablesForm(FacesContext context, UIForm formComponent) {
 		ValidationError error = null;
 
 		for (UIComponent component : formComponent.getChildren()) {
-			ValidationError tempError = this.validateEditablesComponent(context, component);
+			ValidationError tempError = this.validateComponent(context, component);
 			if (tempError != null) {
 				error = tempError;
 			}
@@ -87,14 +91,15 @@ public class EditableValidator implements ComponentValidator {
 	 *            UIComponent to validate
 	 * @return result
 	 */
-	private ValidationError validateEditablesComponent(FacesContext context, UIComponent uiComponent) {
+	protected ValidationError validateComponent(FacesContext context, UIComponent uiComponent) {
 		if ((uiComponent instanceof HtmlInputText) || (uiComponent instanceof HtmlInputTextarea)
 				|| (uiComponent instanceof HtmlInputSecret) || (uiComponent instanceof HtmlInputHidden)) {
-			return validateInput(context, uiComponent);
+			UIInput inputComponent = (UIInput) uiComponent;
+			return validateInput(context, inputComponent);
 		} else {
 			ValidationError error = null;
 			for (UIComponent child : uiComponent.getChildren()) {
-				ValidationError tempError = validateEditablesComponent(context, child);
+				ValidationError tempError = validateComponent(context, child);
 				if (tempError != null) {
 					error = tempError;
 				}
@@ -109,43 +114,32 @@ public class EditableValidator implements ComponentValidator {
 	 * @param context
 	 *            Request context
 	 * @param inputComponent
-	 *            UIComponent to validate
+	 *            {@link UIInput} to validate
 	 * @return result
 	 */
-	private ValidationError validateInput(FacesContext context, UIComponent inputComponent) {
+	protected ValidationError validateInput(FacesContext context, UIInput inputComponent) {
 
-		Object value = null;
+		Object value = inputComponent.getValue();
 		String clientId = inputComponent.getClientId(context);
 		String contentType = null;
 		if (inputComponent instanceof HtmlInputHidden) {
 			contentType = "hidden";
-			value = ((HtmlInputHidden) inputComponent).getValue();
 		} else if (inputComponent instanceof HtmlInputTextarea) {
 			contentType = "textarea";
-			value = ((HtmlInputTextarea) inputComponent).getValue();
 		} else if (inputComponent instanceof HtmlInputText) {
 			contentType = "text";
-			value = ((HtmlInputText) inputComponent).getValue();
 		} else if (inputComponent instanceof HtmlInputSecret) {
 			contentType = "password";
-			value = ((HtmlInputSecret) inputComponent).getValue();
 		}
+
 		if (!this.validateContent(context, clientId, value, contentType)) {
-			Object[] params = { clientId };
-			FacesMessage facesMessage = MessageFactory.getMessage("hdiv.editable.error", params);
-			if (facesMessage == null) {
-				facesMessage = new FacesMessage("Invalid content for field");
-			}
-			context.addMessage(clientId, facesMessage);
-			if (inputComponent instanceof HtmlInputHidden) {
-				((HtmlInputHidden) inputComponent).setValid(false);
-			} else if (inputComponent instanceof HtmlInputTextarea) {
-				((HtmlInputTextarea) inputComponent).setValid(false);
-			} else if (inputComponent instanceof HtmlInputText) {
-				((HtmlInputText) inputComponent).setValid(false);
-			} else if (inputComponent instanceof HtmlInputSecret) {
-				((HtmlInputSecret) inputComponent).setValid(false);
-			}
+
+			// Add message
+			FacesMessage msg = this.createFacesMessage(context, inputComponent);
+			context.addMessage(clientId, msg);
+
+			inputComponent.setValid(false);
+
 			return new ValidationError(HDIVErrorCodes.EDITABLE_VALIDATION_ERROR, null, clientId, value.toString());
 		}
 		return null;
@@ -164,7 +158,7 @@ public class EditableValidator implements ComponentValidator {
 	 *            type of content
 	 * @return is the content valid?
 	 */
-	private boolean validateContent(FacesContext context, String clientId, Object contentObj, String contentType) {
+	protected boolean validateContent(FacesContext context, String clientId, Object contentObj, String contentType) {
 		boolean result = true;
 		if (!(contentObj instanceof String)) {
 			return result;
@@ -193,6 +187,57 @@ public class EditableValidator implements ComponentValidator {
 	protected String getTargetWithoutContextPath(HttpServletRequest request, String target) {
 		String targetWithoutContextPath = target.substring(request.getContextPath().length());
 		return targetWithoutContextPath;
+	}
+
+	/**
+	 * Create {@link FacesMessage} for error
+	 * 
+	 * @param context
+	 *            Request context
+	 * @param inputComponent
+	 *            {@link UIInput} to validate
+	 * @return FacesMessage
+	 */
+	protected FacesMessage createFacesMessage(FacesContext context, UIInput inputComponent) {
+
+		String clientId = inputComponent.getClientId();
+
+		String label = null;
+
+		if (inputComponent instanceof HtmlInputTextarea) {
+			label = ((HtmlInputTextarea) inputComponent).getLabel();
+		} else if (inputComponent instanceof HtmlInputText) {
+			label = ((HtmlInputText) inputComponent).getLabel();
+		} else if (inputComponent instanceof HtmlInputSecret) {
+			label = ((HtmlInputSecret) inputComponent).getLabel();
+		}
+
+		label = label != null ? label : clientId;
+
+		// First, use component own message
+		String msg = inputComponent.getValidatorMessage();
+
+		if (msg == null) {
+
+			// Search in JSF resource bundle
+			Object[] params = { label };
+
+			FacesMessage facesMessage = MessageFactory.getMessage(Constants.HDIV_EDITABLE_ERROR_KEY, params);
+			if (facesMessage != null) {
+				return facesMessage;
+			}
+		}
+
+		if (msg == null) {
+
+			// Use Hdiv core message
+			Locale locale = context.getViewRoot().getLocale();
+			msg = HDIVUtil.getMessage(Constants.HDIV_EDITABLE_ERROR_KEY, label, locale);
+		}
+
+		FacesMessage facesMessage = new FacesMessage(msg);
+		facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
+		return facesMessage;
 	}
 
 	public void setHdivConfig(HDIVConfig hdivConfig) {
