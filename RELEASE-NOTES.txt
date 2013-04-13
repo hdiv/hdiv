@@ -9,7 +9,6 @@ Release 2.1.4
  * Editable Validation and JSR303 validations in Spring MVC (https://github.com/hdiv/hdiv/issues/10).
  * Editable Validation support in Grails.
  * New 'showErrorPageOnEditableValidation' attribute in <hdiv:config> to show error page on Editable validation error.
- * Hdiv custom schema support for Spring 2.5.x (only core configuration, not Spring MVC).
  * Struts1 module for Hdiv. (Struts 1.3.8 support).
  * Fix Multipart request handing in Spring MVC (https://github.com/hdiv/hdiv/issues/14) and (https://github.com/hdiv/hdiv/issues/18).
  * JSF module for Hdiv. (JSF 1.1, 1.2, 2.0 and 2.1 support). Tested with Apache MyFaces and Sun RI.
@@ -20,6 +19,7 @@ Release 2.1.4
  * JSF requires ValidatorFilter for GET request validation and IDataComposer initialization
  * Fix Thread safe error on Cipher strategy (https://github.com/hdiv/hdiv/issues/23).
  * Spring beans with generated names (https://github.com/hdiv/hdiv/issues/27).
+ * Spring 3.0 or greater is required.
 
 Release 2.1.3
 ==================================

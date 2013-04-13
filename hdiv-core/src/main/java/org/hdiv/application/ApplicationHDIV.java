@@ -15,70 +15,51 @@
  */
 package org.hdiv.application;
 
-import javax.servlet.ServletContext;
-
 import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.BeanFactory;
-import org.springframework.beans.factory.BeanFactoryAware;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 
 /**
- * ServletContext's Wrapper class
+ * Spring bean container Wrapper class
  * 
  * @author Roberto Velasco
- * @see org.springframework.beans.factory.BeanFactoryAware
+ * @see org.springframework.context.ApplicationContextAware
  */
-public class ApplicationHDIV implements IApplication, BeanFactoryAware {
+public class ApplicationHDIV implements IApplication, ApplicationContextAware {
 
-	private ServletContext application;
-
-	/**
-	 * The root interface for accessing a Spring bean container.
-	 * 
-	 * @see org.springframework.beans.factory.BeanFactory
-	 */
-	private BeanFactory beanFactory;
-
-
-	public ServletContext getApplication() {
-		return application;
-	}
-
-	public void setApplication(ServletContext application) {
-		this.application = application;
-	}
+	private ApplicationContext applicationContext;
 
 	/**
-	 * Return an instance, which may be shared or independent, of the given bean
-	 * name. This method allows a Spring BeanFactory to be used as a replacement for
-	 * the Singleton or Prototype design pattern.
+	 * Return an instance, which may be shared or independent, of the given bean name. This method allows a Spring
+	 * BeanFactory to be used as a replacement for the Singleton or Prototype design pattern.
 	 * <p>
-	 * Callers may retain references to returned objects in the case of Singleton
-	 * beans.
+	 * Callers may retain references to returned objects in the case of Singleton beans.
 	 * <p>
-	 * Translates aliases back to the corresponding canonical bean name. Will ask the
-	 * parent factory if the bean cannot be found in this factory instance.
+	 * Translates aliases back to the corresponding canonical bean name. Will ask the parent factory if the bean cannot
+	 * be found in this factory instance.
 	 * 
-	 * @param name the name of the bean to return
+	 * @param name
+	 *            the name of the bean to return
 	 * @return the instance of the bean
-	 * @throws NoSuchBeanDefinitionException if there is no bean definition with the
-	 *             specified name
-	 * @throws BeansException if the bean could not be obtained
+	 * @throws NoSuchBeanDefinitionException
+	 *             if there is no bean definition with the specified name
+	 * @throws BeansException
+	 *             if the bean could not be obtained
 	 */
 	public Object getBean(String name) {
-		return this.beanFactory.getBean(name);
+		return this.applicationContext.getBean(name);
 	}
 
-	/**
-	 * Callback that supplies the owning factory to a bean instance. Invoked after
-	 * population of normal bean properties but before an init callback like
-	 * InitializingBean's afterPropertiesSet or a custom init-method.
+	/*
+	 * (non-Javadoc)
 	 * 
-	 * @param beanFactory owning BeanFactory (may not be null). The bean can
-	 *            immediately call methods on the factory.
-	 */	
-	public void setBeanFactory(BeanFactory beanFactory) {
-		this.beanFactory = beanFactory;
+	 * @see org.springframework.context.ApplicationContextAware#setApplicationContext(org.springframework.context.
+	 * ApplicationContext)
+	 */
+	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+		this.applicationContext = applicationContext;
+
 	}
 
 }

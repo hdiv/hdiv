@@ -52,7 +52,7 @@ public abstract class AbstractUrlProcessor {
 	/**
 	 * Hdiv configuration.
 	 */
-	private HDIVConfig config;
+	protected HDIVConfig config;
 
 	/**
 	 * Create a new instance of {@link UrlData}.
