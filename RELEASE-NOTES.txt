@@ -19,7 +19,7 @@ Release 2.1.4
  * JSF requires ValidatorFilter for GET request validation and IDataComposer initialization
  * Fix Thread safe error on Cipher strategy (https://github.com/hdiv/hdiv/issues/23).
  * Spring beans with generated names (https://github.com/hdiv/hdiv/issues/27).
- * Spring 3.0 or greater is required.
+ * Spring 3.0 or greater is required for hdiv-core.
 
 Release 2.1.3
 ==================================

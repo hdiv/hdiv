@@ -23,6 +23,8 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletRequestWrapper;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
@@ -44,7 +46,6 @@ import org.hdiv.state.StateUtil;
 import org.hdiv.util.Constants;
 import org.hdiv.util.HDIVErrorCodes;
 import org.hdiv.util.HDIVUtil;
-import org.springframework.web.util.WebUtils;
 
 /**
  * It validates client requests by comsuming an object of type IState and validating all the entry data, besides
@@ -86,7 +87,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	 * IDataValidator factory
 	 */
 	private DataValidatorFactory dataValidatorFactory;
-	
+
 	/**
 	 * {@link IDataComposer} factory
 	 */
@@ -243,7 +244,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 				if (!result.isValid()) {
 					return result;
 				}
-			} catch (Exception e) {
+			} catch (HDIVException e) {
 				String errorMessage = HDIVUtil.getMessage("validation.error", e.getMessage());
 				throw new HDIVException(errorMessage, e);
 			}
@@ -885,7 +886,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 		if (request instanceof RequestWrapper) {
 			wrapper = (RequestWrapper) request;
 		} else {
-			wrapper = (RequestWrapper) WebUtils.getNativeRequest(request, RequestWrapper.class);
+			wrapper = (RequestWrapper) this.getNativeRequest(request, RequestWrapper.class);
 		}
 
 		if (wrapper != null) {
@@ -895,6 +896,17 @@ public class ValidatorHelperRequest implements IValidationHelper {
 			throw new HDIVException(errorMessage);
 		}
 
+	}
+
+	protected ServletRequest getNativeRequest(ServletRequest request, Class requiredType) {
+		if (requiredType != null) {
+			if (requiredType.isInstance(request)) {
+				return request;
+			} else if (request instanceof ServletRequestWrapper) {
+				return getNativeRequest(((ServletRequestWrapper) request).getRequest(), requiredType);
+			}
+		}
+		return null;
 	}
 
 	/**
@@ -970,7 +982,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	 */
 	public void startPage(HttpServletRequest request) {
 
-		//Don`t create IDataComposer if it is not necessary
+		// Don`t create IDataComposer if it is not necessary
 		boolean exclude = this.hdivConfig.hasExtensionToExclude(request.getRequestURI());
 		if (!exclude) {
 
@@ -979,7 +991,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 
 			HDIVUtil.setDataComposer(dataComposer, request);
 		}
-		
+
 	}
 
 	/*
@@ -988,7 +1000,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	 * @see org.hdiv.filter.IValidationHelper#endPage(javax.servlet.http. HttpServletRequest)
 	 */
 	public void endPage(HttpServletRequest request) {
-		
+
 		// End page in datacomposer
 		boolean exist = HDIVUtil.isDataComposer(request);
 		if (exist) {
@@ -997,7 +1009,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 		}
 
 	}
-	
+
 	/**
 	 * @param logger
 	 *            The user logger to set.
@@ -1047,7 +1059,8 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	}
 
 	/**
-	 * @param dataComposerFactory the dataComposerFactory to set
+	 * @param dataComposerFactory
+	 *            the dataComposerFactory to set
 	 */
 	public void setDataComposerFactory(DataComposerFactory dataComposerFactory) {
 		this.dataComposerFactory = dataComposerFactory;
@@ -1066,5 +1079,5 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	protected Logger getLogger() {
 		return logger;
 	}
-	
+
 }
