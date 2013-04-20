@@ -154,16 +154,6 @@ public class ConfigPhaseListener implements PhaseListener {
 			throw new HDIVException("Confidentiality is not implemented in HDIV for JSF, disable it in hdiv-config.xml");
 		}
 
-		if (config.isCookiesIntegrityActivated()) {
-			throw new HDIVException(
-					"CookiesIntegrity is not implemented in HDIV for JSF, disable it in hdiv-config.xml");
-		}
-
-		if (config.isCookiesConfidentialityActivated()) {
-			throw new HDIVException(
-					"CookiesConfidentiality is not implemented in HDIV for JSF, disable it in hdiv-config.xml");
-		}
-
 	}
 
 }
