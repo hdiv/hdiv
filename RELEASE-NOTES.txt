@@ -6,6 +6,7 @@ Release 2.1.5
 ==================================
 
  * Java >= 1.5 is required.
+ * Fix form field confidentiality error on RESTfull configuration (https://github.com/hdiv/hdiv/issues/31).
 
 Release 2.1.4
 ==================================

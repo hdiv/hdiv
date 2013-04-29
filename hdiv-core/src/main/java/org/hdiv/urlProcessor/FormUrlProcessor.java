@@ -78,7 +78,7 @@ public class FormUrlProcessor extends AbstractUrlProcessor {
 
 					for (int i = 0; i < values.length; i++) {
 						String value = values[i];
-						String composedParam = dataComposer.compose(key, value, false, true, Constants.ENCODING_UTF_8);
+						String composedParam = dataComposer.compose(key, value, false, null, true, "POST", Constants.ENCODING_UTF_8);
 						values[i] = composedParam;
 					}
 					params.put(key, values);

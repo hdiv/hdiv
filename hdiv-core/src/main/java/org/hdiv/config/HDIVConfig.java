@@ -216,6 +216,10 @@ public class HDIVConfig {
 	 */
 	public boolean isStartPage(String target, String method) {
 
+		if (method != null) {
+			method = method.toUpperCase();
+		}
+
 		String key = target + "_" + method;
 
 		if (this.matchedPages.containsKey(key)) {

@@ -66,7 +66,7 @@ public class MultiboxTagHDIV extends MultiboxTag {
 	 * Render the value element
 	 * 
 	 * @param results The StringBuffer that output will be appended to.
-	 * @see org.hdiv.dataComposer.IDataComposer#compose(String, String, boolean)
+	 * @see org.hdiv.dataComposer.IDataComposer#composeFormField(String, String, boolean, String)
 	 */
     protected String prepareValue(StringBuffer results) throws JspException {
 
@@ -79,7 +79,7 @@ public class MultiboxTagHDIV extends MultiboxTag {
 
         HttpServletRequest request = (HttpServletRequest) this.pageContext.getRequest();
 		IDataComposer dataComposer = HDIVUtil.getDataComposer(request);
-		String cipheredValue = dataComposer.compose(property, value, false);
+		String cipheredValue = dataComposer.composeFormField(property, value, false, null);
         
 		prepareAttribute(results, "value", TagUtils.getInstance().filter(cipheredValue));
         

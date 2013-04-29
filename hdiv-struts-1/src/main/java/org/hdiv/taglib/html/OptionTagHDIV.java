@@ -54,7 +54,7 @@ public class OptionTagHDIV extends OptionTag {
 	 * The message text to be displayed to the user for this tag if no body text and no
 	 * key to lookup so display the value
 	 * 
-	 * @see org.hdiv.dataComposer.IDataComposer#compose(String, String, boolean)
+	 * @see org.hdiv.dataComposer.IDataComposer#composeFormField(String, String, boolean, String)
 	 */
 	protected String valueWithoutEncrypt = null;
 
@@ -78,7 +78,7 @@ public class OptionTagHDIV extends OptionTag {
 			throw e;
 		}
 
-		String cipheredValue = dataComposer.compose(selectTag.getProperty(), value, false);
+		String cipheredValue = dataComposer.composeFormField(selectTag.getProperty(), value, false, null);
 
 		// If there isn't any content in the body of the tag option, and there isn't
 		// any value for the property key, the value of the property value is shown.

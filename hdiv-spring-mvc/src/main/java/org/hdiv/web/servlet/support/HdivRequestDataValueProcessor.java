@@ -126,10 +126,10 @@ public class HdivRequestDataValueProcessor implements RequestDataValueProcessor 
 		}
 
 		if (isEditable(type)) {
-			dataComposer.compose(name, value, true, type);
+			dataComposer.composeFormField(name, value, true, type);
 			return value;
 		} else {
-			String result = dataComposer.compose(name, value, false, type);
+			String result = dataComposer.composeFormField(name, value, false, type);
 			return result;
 		}
 

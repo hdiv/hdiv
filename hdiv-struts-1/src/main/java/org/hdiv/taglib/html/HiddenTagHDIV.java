@@ -56,7 +56,7 @@ public class HiddenTagHDIV extends HiddenTag {
 	 * Support for <code>write</code> property since Struts 1.1.
 	 * 
 	 * @exception JspException if a JSP exception has occurred
-	 * @see org.hdiv.dataComposer.IDataComposer#compose(String, String, boolean)
+	 * @see org.hdiv.dataComposer.IDataComposer#composeFormField(String, String, boolean, String)
 	 */
 	public int doStartTag() throws JspException {
 
@@ -75,7 +75,7 @@ public class HiddenTagHDIV extends HiddenTag {
 								
 			HttpServletRequest request = (HttpServletRequest) this.pageContext.getRequest();
 			IDataComposer dataComposer = HDIVUtil.getDataComposer(request);
-			this.encodedValue = dataComposer.compose(prepareName(), hiddenValue, false);
+			this.encodedValue = dataComposer.composeFormField(prepareName(), hiddenValue, false, null);
 			 
 			// Render the result to the output writer
 			TagUtils.getInstance().write(this.pageContext, this.renderInputElement());

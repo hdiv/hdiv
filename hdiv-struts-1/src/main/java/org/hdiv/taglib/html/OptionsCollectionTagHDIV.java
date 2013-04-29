@@ -80,7 +80,7 @@ public class OptionsCollectionTagHDIV extends OptionsCollectionTag {
      * @param label Value to be shown to the user for this option
      * @param matched Should this value be marked as selected?
      * 
-     * @see org.hdiv.dataComposer.IDataComposer#compose(String, String, boolean)
+     * @see org.hdiv.dataComposer.IDataComposer#composeFormField(String, String, boolean, String)
      */
     protected void addOption(StringBuffer sb, String label, String value, boolean matched) {
 
@@ -92,7 +92,7 @@ public class OptionsCollectionTagHDIV extends OptionsCollectionTag {
         
         HttpServletRequest request = (HttpServletRequest) this.pageContext.getRequest();
 		IDataComposer dataComposer = HDIVUtil.getDataComposer(request);
-        String cipheredValue = dataComposer.compose(selectTag.getProperty(), value, false);
+        String cipheredValue = dataComposer.composeFormField(selectTag.getProperty(), value, false, null);
         
         if (filter) {
             sb.append(TagUtils.getInstance().filter(cipheredValue));

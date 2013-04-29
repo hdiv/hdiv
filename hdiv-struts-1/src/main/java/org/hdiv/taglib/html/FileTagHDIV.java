@@ -49,7 +49,7 @@ public class FileTagHDIV extends FileTag {
 	 * Process the start of this tag.
 	 * 
 	 * @exception JspException if a JSP exception has occurred
-	 * @see org.hdiv.dataComposer.IDataComposer#compose(String, String, boolean)
+	 * @see org.hdiv.dataComposer.IDataComposer#composeFormField(String, String, boolean, String)
 	 */
 	public int doStartTag() throws JspException {
 
@@ -57,7 +57,7 @@ public class FileTagHDIV extends FileTag {
 		IDataComposer dataComposer = HDIVUtil.getDataComposer(request);
 		
 		// this property is editable and we must check it
-		dataComposer.compose(prepareName(), "", true);
+		dataComposer.composeFormField(prepareName(), "", true, null);
 
 		return super.doStartTag();
 	}		

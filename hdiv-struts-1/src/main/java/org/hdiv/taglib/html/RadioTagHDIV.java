@@ -58,7 +58,7 @@ public class RadioTagHDIV extends RadioTag {
      * will be checked.
      * @return A radio input element.
      * @throws JspException
-     * @see org.hdiv.dataComposer.IDataComposer#compose(String, String, boolean)
+     * @see org.hdiv.dataComposer.IDataComposer#composeFormField(String, String, boolean, String)
      * @since Struts 1.1
      */
     protected String renderRadioElement(String serverValue, String checkedValue)
@@ -69,7 +69,7 @@ public class RadioTagHDIV extends RadioTag {
     	String preparedName = prepareName();
     	HttpServletRequest request = (HttpServletRequest) this.pageContext.getRequest();
 		IDataComposer dataComposer = HDIVUtil.getDataComposer(request);
-		cipheredValue = dataComposer.compose(preparedName, serverValue, false);
+		cipheredValue = dataComposer.composeFormField(preparedName, serverValue, false, null);
 	    	
         StringBuffer results = new StringBuffer("<input type=\"radio\"");
         
