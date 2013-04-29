@@ -66,20 +66,6 @@
 		</dependency>
 	</dependencies>
 
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>2.5.1</version>
-				<configuration>
-					<source>1.4</source>
-					<target>1.4</target>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
-
 	<reporting>
 		<plugins>
 			<plugin>
