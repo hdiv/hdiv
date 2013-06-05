@@ -68,12 +68,6 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 	private String keyName = Constants.KEY_NAME;
 
 	/**
-	 * Initialization method
-	 */
-	public void init() {
-	}
-
-	/**
 	 * Obtains from the user session the page identifier where the current request or form is
 	 * 
 	 * @return Returns the pageId.
@@ -128,7 +122,7 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 
 		HttpSession session = this.getHttpSession();
 
-		IStateCache cache = (IStateCache) session.getAttribute(this.cacheName);
+		IStateCache cache = this.getStateCache();
 
 		page.setName(pageId);
 		String removedPageId = cache.addPage(pageId);
@@ -167,7 +161,7 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 
 		HttpSession session = this.getHttpSession();
 
-		IStateCache cache = (IStateCache) session.getAttribute(this.cacheName);
+		IStateCache cache = this.getStateCache();
 		if (log.isDebugEnabled()) {
 			log.debug("Cache pages before finished pages are deleted:" + cache.toString());
 		}
@@ -248,6 +242,23 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 	 */
 	public void setBeanFactory(BeanFactory beanFactory) {
 		this.beanFactory = beanFactory;
+	}
+
+	/**
+	 * Create new or obtain existing state Cache instance.
+	 * 
+	 * @return IStateCache instance
+	 */
+	protected IStateCache getStateCache() {
+
+		HttpSession session = this.getHttpSession();
+		IStateCache cache = (IStateCache) session.getAttribute(this.cacheName);
+		if (cache == null) {
+			cache = (IStateCache) this.beanFactory.getBean(IStateCache.class);
+			session.setAttribute(this.cacheName, cache);
+		}
+
+		return cache;
 	}
 
 	/*

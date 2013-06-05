@@ -46,8 +46,7 @@
 	</bean>
 
 	<!--CONTEXT BEANS -->
-	<bean id="sessionHDIV" class="org.hdiv.session.SessionHDIV"
-		init-method="init">
+	<bean id="sessionHDIV" class="org.hdiv.session.SessionHDIV">
 	</bean>
 
 	<bean id="application" class="org.hdiv.application.ApplicationHDIV" />
