@@ -22,7 +22,7 @@ import org.hdiv.state.IPage;
 import org.hdiv.state.IState;
 
 /**
- * A custom wrapper for http session request that returns a wrapped http session.
+ * A custom wrapper for Http session request that returns a wrapped Http session.
  * 
  * @author Roberto Velasco
  */
@@ -30,7 +30,7 @@ public interface ISession {
 
 	/**
 	 * It adds a new page to the user session. To do this it adds a new page identifier to the cache and if it has
-	 * reached the maximun size allowed, the oldest page is deleted from the session and from the cache itself.
+	 * reached the maximum size allowed, the oldest page is deleted from the session and from the cache itself.
 	 * 
 	 * @param pageId
 	 *            Page identifier
@@ -102,7 +102,7 @@ public interface ISession {
 	public ICipherHTTP getDecryptCipher();
 
 	/**
-	 * Returns the symmetric key used to encrypt and ddecrypt data.
+	 * Returns the symmetric key used to encrypt and decrypt data.
 	 * 
 	 * @return The symmetric key
 	 * @throws HDIVException
