@@ -130,15 +130,16 @@ public class DataComposerFactory {
 		String preState = request.getParameter(paramName);
 		if (preState != null && preState.length() > 0) {
 
-			if (this.stateUtil.isMemoryStrategy(preState)) {
-				IState state = this.stateUtil.restoreState(preState);
+			// We are modifying an existing state, preload dataComposer with it
+			IState state = this.stateUtil.restoreState(preState);
+			if(state.getPageId() != null){
 				IPage page = this.session.getPage(state.getPageId());
-				if (state != null) {
+				if (page != null) {
 					dataComposer.startPage(page);
-					dataComposer.beginRequest(state);
 				}
-			} else {
-				dataComposer.startPage();
+			} 
+			if (state != null) {
+				dataComposer.beginRequest(state);
 			}
 		} else {
 			dataComposer.startPage();

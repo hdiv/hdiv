@@ -33,7 +33,7 @@ import org.hdiv.util.HDIVUtil;
  */
 public class FormUrlProcessor extends AbstractUrlProcessor {
 
-	private static final String FORM_STATE_ID = "hdivFormStateId";
+	public static final String FORM_STATE_ID = "hdivFormStateId";
 
 	/**
 	 * Commons Logging instance.

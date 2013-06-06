@@ -46,7 +46,8 @@ public class DataComposerMemoryTest extends AbstractHDIVTestCase {
 	 */
 	protected void onSetUp() throws Exception {
 
-		this.dataComposerFactory = (DataComposerFactory) this.getApplicationContext().getBean(DataComposerFactory.class);
+		this.dataComposerFactory = (DataComposerFactory) this.getApplicationContext()
+				.getBean(DataComposerFactory.class);
 		this.stateUtil = (StateUtil) this.getApplicationContext().getBean(StateUtil.class);
 		this.session = (ISession) this.getApplicationContext().getBean(ISession.class);
 	}
@@ -198,6 +199,46 @@ public class DataComposerMemoryTest extends AbstractHDIVTestCase {
 		assertEquals(1, values2.size());
 		// State stored value is not escaped value, it is the unescaped value
 		assertEquals("è-test", values2.get(0));
+	}
+
+	public void testAjax() {
+
+		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
+		IDataComposer dataComposer = this.dataComposerFactory.newInstance(request);
+		HDIVUtil.setDataComposer(dataComposer, request);
+
+		dataComposer.startPage();
+		dataComposer.beginRequest("test.do");
+		dataComposer.compose("parameter1", "1", false);
+		String stateId = dataComposer.endRequest();
+		dataComposer.endPage();
+
+		assertNotNull(stateId);
+
+		// Ajax request to modify state
+
+		request.addParameter("_MODIFY_HDIV_STATE_", stateId);
+		IDataComposer dataComposer2 = this.dataComposerFactory.newInstance(request);
+		HDIVUtil.setDataComposer(dataComposer2, request);
+
+		// Add new parameter
+		dataComposer2.compose("parameter2", "2", false);
+		String stateId2 = dataComposer2.endRequest();
+		dataComposer2.endPage();
+
+		assertEquals(stateId, stateId2);
+
+		// Restore state
+		IState state = this.stateUtil.restoreState(stateId);
+
+		// State contains both parameters
+		IParameter param = state.getParameter("parameter1");
+		String val = (String) param.getValues().get(0);
+		assertEquals("1", val);
+
+		param = state.getParameter("parameter2");
+		val = (String) param.getValues().get(0);
+		assertEquals("2", val);
 	}
 
 }
