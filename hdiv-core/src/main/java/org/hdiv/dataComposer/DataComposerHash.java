@@ -87,13 +87,6 @@ public class DataComposerHash extends DataComposerMemory {
 	}
 
 	/**
-	 * @return Returns the encoding util.
-	 */
-	public EncodingUtil getEncodingUtil() {
-		return encodingUtil;
-	}
-
-	/**
 	 * @param encodingUtil
 	 *            The encoding util to set.
 	 */
