@@ -127,14 +127,7 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		this.uidGeneratorRef = this.createSimpleBean(element, source, parserContext, RandomGuidUidGenerator.class);
 		this.createPageIdGenerator(element, source, parserContext);
 		this.createKeyFactory(element, source, parserContext);
-		String userData = element.getAttribute("userData");
-		if (userData == null || userData.length() < 1) {
-			// If user don't define userData bean, create default
-			this.userDataRef = this.createSimpleBean(element, source, parserContext, UserData.class);
-		} else {
-			// Use user defined
-			this.userDataRef = new RuntimeBeanReference(userData);
-		}
+		this.userDataRef = this.createUserData(element, source, parserContext);
 
 		this.createStringBean("hdivParameter", "_HDIV_STATE_", source, parserContext);
 		this.createStringBean("modifyHdivStateParameter", "_MODIFY_HDIV_STATE_", source, parserContext);
@@ -142,7 +135,7 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		this.createValidatorErrorHandler(element, source, parserContext);
 		this.loggerRef = this.createLogger(element, source, parserContext);
 		this.createStateCache(element, source, parserContext);
-		this.sessionRef = this.createSessionHDIV(element, source, parserContext);
+		this.sessionRef = this.createSession(element, source, parserContext);
 		this.encodingUtilRef = this.createEncodingUtil(element, source, parserContext);
 		this.createSimpleBean(element, source, parserContext, ApplicationHDIV.class);
 		this.createCipher(element, source, parserContext);
@@ -202,6 +195,17 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		return new RuntimeBeanReference(name);
 	}
 
+	private RuntimeBeanReference createUserData(Element element, Object source, ParserContext parserContext) {
+		String userData = element.getAttribute("userData");
+		if (userData == null || userData.length() < 1) {
+			// If user don't define userData bean, create default
+			return this.createSimpleBean(element, source, parserContext, UserData.class);
+		} else {
+			// Use user defined
+			return new RuntimeBeanReference(userData);
+		}
+	}
+
 	private RuntimeBeanReference createLogger(Element element, Object source, ParserContext parserContext) {
 		RootBeanDefinition bean = new RootBeanDefinition(Logger.class);
 		bean.setSource(source);
@@ -250,13 +254,18 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		return new RuntimeBeanReference(name);
 	}
 
-	private RuntimeBeanReference createSessionHDIV(Element element, Object source, ParserContext parserContext) {
-		RootBeanDefinition bean = new RootBeanDefinition(SessionHDIV.class);
-		bean.setSource(source);
-		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
-		String name = parserContext.getReaderContext().generateBeanName(bean);
-		parserContext.getRegistry().registerBeanDefinition(name, bean);
-		return new RuntimeBeanReference(name);
+	private RuntimeBeanReference createSession(Element element, Object source, ParserContext parserContext) {
+
+		// Simple bean overriding
+		boolean existSession = parserContext.getRegistry().containsBeanDefinition("org.hdiv.session");
+
+		if (!existSession) {
+			// If user don't define ISession bean, create default
+			return this.createSimpleBean(element, source, parserContext, SessionHDIV.class);
+		} else {
+			// Use user defined
+			return new RuntimeBeanReference("org.hdiv.session");
+		}
 	}
 
 	private RuntimeBeanReference createCipher(Element element, Object source, ParserContext parserContext) {
