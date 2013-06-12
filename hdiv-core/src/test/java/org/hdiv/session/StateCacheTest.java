@@ -37,7 +37,7 @@ public class StateCacheTest extends AbstractHDIVTestCase {
 
 	public void testAddPage() {
 		
-		// cache's maximun size is defined using the Spring factory.
+		// cache's maximum size is defined using the Spring factory.
 		IStateCache cache = (IStateCache) this.getApplicationContext().getBean(IStateCache.class);
 		
 		IPage page1 = new Page();

@@ -111,7 +111,7 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 
 	/**
 	 * It adds a new page to the user session. To do this it adds a new page identifier to the cache and if it has
-	 * reached the maximun size allowed, the oldest page is deleted from the session and from the cache itself.
+	 * reached the maximum size allowed, the oldest page is deleted from the session and from the cache itself.
 	 * 
 	 * @param pageId
 	 *            Page identifier
@@ -128,7 +128,7 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 		String removedPageId = cache.addPage(pageId);
 
 		// if it returns a page identifier it is because the cache has reached
-		// the maximun size and therefore we must delete the page which has been
+		// the maximum size and therefore we must delete the page which has been
 		// stored for the longest time
 		if (removedPageId != null) {
 			session.removeAttribute(removedPageId);
