@@ -35,5 +35,5 @@ public interface IStateCache extends Serializable {
 	/**
 	 * @return the pageIds
 	 */
-	public List getPageIds();
+	public List<String> getPageIds();
 }

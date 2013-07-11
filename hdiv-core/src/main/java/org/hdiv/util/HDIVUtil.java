@@ -64,7 +64,7 @@ public class HDIVUtil {
 	/**
 	 * HttpServletRequest thread local
 	 */
-	private static ThreadLocal httpRequest = new ThreadLocal();
+	private static ThreadLocal<HttpServletRequest> httpRequest = new ThreadLocal<HttpServletRequest>();
 
 	/**
 	 * ThreadLocales is always guaranteed to be cleaned up when returning the thread to the server's pool.

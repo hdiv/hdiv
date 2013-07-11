@@ -16,7 +16,7 @@
 package org.hdiv.state;
 
 import java.io.Serializable;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -41,7 +41,7 @@ public class State implements IState, Serializable {
 	/**
 	 * Map to store all the parameters in a HTTP (GET or POST) request
 	 */
-	private Map parameters;
+	private Map<String, IParameter> parameters = new HashMap<String, IParameter>();
 
 	/**
 	 * State identifier <code>this</code>
@@ -58,16 +58,7 @@ public class State implements IState, Serializable {
 	 * <code>this</code>. We consider required parameters all of the parameters
 	 * that can be sent via GET or those that are added to the name of an action.
 	 */
-	private Hashtable requiredParams;
-
-	/**
-	 * Creates a new State object with a new parameters map and a new required
-	 * parameters map.
-	 */
-	public State() {
-		this.parameters = new Hashtable();
-		this.requiredParams = new Hashtable();
-	}
+	private Map<String, IParameter> requiredParams = new HashMap<String, IParameter>();
 
 	/**
 	 * Adds a new parameter to the state <code>this</code>. If it is a required parameter
@@ -122,14 +113,14 @@ public class State implements IState, Serializable {
 	/**
 	 * @return Returns the parameters asociated to state <code>this</code>.
 	 */
-	public Map getParameters() {
+	public Map<String, IParameter> getParameters() {
 		return parameters;
 	}
 
 	/**
 	 * @param parameters The parameters to set.
 	 */
-	public void setParameters(Map parameters) {
+	public void setParameters(Map<String, IParameter> parameters) {
 		this.parameters = parameters;
 	}
 
@@ -164,7 +155,7 @@ public class State implements IState, Serializable {
 	/**
 	 * @return Returns required parameters map.
 	 */
-	public Hashtable getRequiredParams() {
+	public Map<String, IParameter> getRequiredParams() {
 		return requiredParams;
 	}
 

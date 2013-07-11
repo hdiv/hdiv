@@ -15,7 +15,6 @@
  */
 package org.hdiv.urlProcessor;
 
-import java.util.Iterator;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -69,11 +68,9 @@ public class FormUrlProcessor extends AbstractUrlProcessor {
 			request.setAttribute(FORM_STATE_ID, stateId);
 
 			// Process url params
-			Map params = urlData.getOriginalUrlParams();
+			Map<String, String[]> params = urlData.getOriginalUrlParams();
 			if (params != null) {
-				Iterator it = params.keySet().iterator();
-				while (it.hasNext()) {
-					String key = (String) it.next();
+				for (String key : params.keySet()) {
 					String[] values = (String[]) params.get(key);
 
 					for (int i = 0; i < values.length; i++) {

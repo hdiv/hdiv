@@ -16,8 +16,7 @@
 package org.hdiv.state;
 
 import java.io.Serializable;
-import java.util.Hashtable;
-import java.util.Iterator;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -36,7 +35,7 @@ public class Page implements IPage, Serializable {
 	/**
 	 * Map with the states of the page <code>this</code>.
 	 */
-	protected Map states;
+	protected Map<String, Object> states = new HashMap<String, Object>();
 
 	/**
 	 * Page <code>this</code> identifier.
@@ -53,13 +52,6 @@ public class Page implements IPage, Serializable {
 	 * @since HDIV 2.0.4
 	 */
 	private String randomToken;	
-	
-	/**
-	 * Creates a new Page object with a new states map.
-	 */
-	public Page () {
-		states = new Hashtable();
-	}
 	
 	/**
 	 * Adds a new state to the page <code>this</code>.
@@ -128,7 +120,7 @@ public class Page implements IPage, Serializable {
 	/**
 	 * @return Returns the page states.
 	 */
-	public Map getStates() {
+	public Map<String, Object> getStates() {
 		return states;
 	}
 
@@ -166,11 +158,9 @@ public class Page implements IPage, Serializable {
 	public String toString() {
 
 		StringBuffer result = new StringBuffer();
-		Iterator iterator = this.states.values().iterator();
 		result.append("Page:" + this.name + " ");
 
-		while (iterator.hasNext()) {
-			IState state = (IState) iterator.next();
+		for (Object state : states.values()) {
 			result.append(" " + state.toString());
 		}
 

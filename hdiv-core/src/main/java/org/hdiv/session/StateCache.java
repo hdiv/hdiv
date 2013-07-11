@@ -16,7 +16,6 @@
 package org.hdiv.session;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
@@ -50,15 +49,7 @@ public class StateCache implements IStateCache {
 	/**
 	 * page's ids map
 	 */
-	private List pageIds;
-
-	
-	/**
-	 * pageIds map initialization
-	 */
-	public void init() {		
-		this.pageIds = new ArrayList();
-	}	
+	private List<String> pageIds = new ArrayList<String>();
 
 	/**
 	 * Adds a new page identifier to the map <code>pageIds</code>.
@@ -104,10 +95,8 @@ public class StateCache implements IStateCache {
 	public String toString() {
 
 		StringBuffer result = new StringBuffer();
-		Iterator values = this.pageIds.iterator();
 		
-		while (values.hasNext()) {
-			String pageId = (String) values.next();
+		for (String pageId : pageIds) {
 			result.append(" " + pageId);
 		}
 		
@@ -131,7 +120,7 @@ public class StateCache implements IStateCache {
 	/**
 	 * @return the pageIds
 	 */
-	public List getPageIds() {
+	public List<String> getPageIds() {
 		return pageIds;
 	}
 	

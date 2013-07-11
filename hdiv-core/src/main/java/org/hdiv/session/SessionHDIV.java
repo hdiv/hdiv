@@ -166,7 +166,7 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 			log.debug("Cache pages before finished pages are deleted:" + cache.toString());
 		}
 
-		List pageIds = cache.getPageIds();
+		List<String> pageIds = cache.getPageIds();
 		String pageId = null;
 		IPage currentPage = null;
 

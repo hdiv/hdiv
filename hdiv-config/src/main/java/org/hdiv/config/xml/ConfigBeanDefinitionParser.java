@@ -16,7 +16,7 @@
 package org.hdiv.config.xml;
 
 import java.util.ArrayList;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -92,7 +92,7 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 	/**
 	 * List of StartPage objects
 	 */
-	private List startPages = new ArrayList();
+	private List<StartPage> startPages = new ArrayList<StartPage>();
 
 	/* Bean references */
 
@@ -465,8 +465,7 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		bean.setSource(source);
 		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
 		bean.setInitMethodName("init");
-		Map map = new Hashtable();
-		bean.getPropertyValues().addPropertyValue("rawUrls", map);
+		bean.getPropertyValues().addPropertyValue("rawUrls", new HashMap<String, List<String>>());
 		String name = parserContext.getReaderContext().generateBeanName(bean);
 		parserContext.getRegistry().registerBeanDefinition(name, bean);
 		return new RuntimeBeanReference(name);
@@ -559,7 +558,7 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 	}
 
 	private RuntimeBeanReference createSimpleBean(Element element, Object source, ParserContext parserContext,
-			Class clazz) {
+			Class<?> clazz) {
 		RootBeanDefinition bean = new RootBeanDefinition(clazz);
 		bean.setSource(source);
 		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
@@ -598,7 +597,7 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 
 		String value = node.getTextContent();
 
-		List patterns = this.convertToList(value);
+		List<String> patterns = this.convertToList(value);
 		for (int i = 0; i < patterns.size(); i++) {
 			String pattern = (String) patterns.get(i);
 			StartPage startPage = new StartPage(method, pattern);
@@ -616,7 +615,7 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 	private void processParamsWithoutValidation(Node node, RootBeanDefinition bean) {
 		NodeList nodeList = node.getChildNodes();
 
-		Map map = new Hashtable();
+		Map<String, List<String>> map = new HashMap<String, List<String>>();
 		bean.getPropertyValues().addPropertyValue("paramsWithoutValidation", map);
 		for (int i = 0; i < nodeList.getLength(); i++) {
 			Node mappingNode = nodeList.item(i);
@@ -639,16 +638,16 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 
 	}
 
-	private void processMapping(Node node, Map map) {
+	private void processMapping(Node node, Map<String, List<String>> map) {
 		NamedNodeMap attributes = node.getAttributes();
 		String url = attributes.getNamedItem("url").getTextContent();
 		String parameters = attributes.getNamedItem("parameters").getTextContent();
 		map.put(url, this.convertToList(parameters));
 	}
 
-	private List convertToList(String data) {
+	private List<String> convertToList(String data) {
 		String[] result = data.split(",");
-		List list = new ArrayList();
+		List<String> list = new ArrayList<String>();
 		// clean the edges of the item - spaces/returns/tabs etc may be used for readability in the configs
 		for (int i = 0; i < result.length; i++) {
 			// trims leading and trailing whitespace

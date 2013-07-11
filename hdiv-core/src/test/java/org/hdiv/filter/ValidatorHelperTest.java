@@ -15,7 +15,7 @@
  */
 package org.hdiv.filter;
 
-import java.util.Hashtable;
+import java.util.Map;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -373,7 +373,7 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 		assertTrue(result);
 
 		// Editable errors in request?
-		Hashtable parameters = (Hashtable) requestWrapper.getAttribute(Constants.EDITABLE_PARAMETER_ERROR);
+		Map<String, String[]> parameters = (Map<String, String[]>) requestWrapper.getAttribute(Constants.EDITABLE_PARAMETER_ERROR);
 		assertEquals(1, parameters.size());
 
 	}

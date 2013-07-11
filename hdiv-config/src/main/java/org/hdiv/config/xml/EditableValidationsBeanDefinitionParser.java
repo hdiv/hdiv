@@ -17,8 +17,7 @@ package org.hdiv.config.xml;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Hashtable;
-import java.util.Iterator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -65,14 +64,14 @@ public class EditableValidationsBeanDefinitionParser extends AbstractSingleBeanD
 	/**
 	 * List with default editable validation bean ids.
 	 */
-	private List defaultValidationIds = new ArrayList();;
+	private List<String> defaultValidationIds = new ArrayList<String>();
 
 	/*
 	 * (non-Javadoc)
 	 * 
 	 * @see org.springframework.beans.factory.xml.AbstractSingleBeanDefinitionParser#getBeanClass(org.w3c.dom.Element)
 	 */
-	protected Class getBeanClass(Element element) {
+	protected Class<?> getBeanClass(Element element) {
 		return HDIVValidations.class;
 	}
 
@@ -87,7 +86,7 @@ public class EditableValidationsBeanDefinitionParser extends AbstractSingleBeanD
 
 		Object source = parserContext.extractSource(element);
 
-		Map map = new Hashtable();
+		Map<String, List<String>> map = new HashMap<String, List<String>>();
 		bean.addPropertyValue("rawUrls", map);
 		bean.setInitMethodName("init");
 
@@ -131,10 +130,10 @@ public class EditableValidationsBeanDefinitionParser extends AbstractSingleBeanD
 	 * @param map
 	 *            Map with url and ValidationRule data
 	 */
-	private void processValidationRule(Node node, BeanDefinitionBuilder bean, Map map) {
+	private void processValidationRule(Node node, BeanDefinitionBuilder bean, Map<String, List<String>> map) {
 
 		String value = node.getTextContent();
-		List ids = this.convertToList(value);
+		List<String> ids = this.convertToList(value);
 
 		NamedNodeMap attributes = node.getAttributes();
 		String url = attributes.getNamedItem("url").getTextContent();
@@ -160,14 +159,14 @@ public class EditableValidationsBeanDefinitionParser extends AbstractSingleBeanD
 	 *            String data
 	 * @return List with bean id's
 	 */
-	private List convertToList(String data) {
+	private List<String> convertToList(String data) {
 		data = data.trim();
 		if (data == null || data.length() == 0) {
-			return new ArrayList();
+			return new ArrayList<String>();
 		}
 		String[] result = data.split(",");
-		List list = Arrays.asList(result);
-		return new ArrayList(list);
+		List<String> list = Arrays.asList(result);
+		return new ArrayList<String>(list);
 
 	}
 
@@ -184,15 +183,12 @@ public class EditableValidationsBeanDefinitionParser extends AbstractSingleBeanD
 		// Load validations from xml
 		DefaultValidationParser parser = new DefaultValidationParser();
 		parser.readDefaultValidations(DEFAULT_VALIDATION_PATH);
-		List validations = parser.getValidations();
+		List<Map<String, String>> validations = parser.getValidations();
 
-		this.defaultValidationIds = new ArrayList();
+		this.defaultValidationIds = new ArrayList<String>();
 
-		Iterator it = validations.iterator();
-		while (it.hasNext()) {
-
+		for (Map<String, String> validation : validations) {
 			// Map contains validation id and regex extracted from the xml
-			Map validation = (Map) it.next();
 			String id = (String) validation.get("id");
 			id = "defaultValidation_" + id;
 			String regex = (String) validation.get("regex");

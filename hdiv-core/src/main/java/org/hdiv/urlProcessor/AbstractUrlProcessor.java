@@ -16,9 +16,6 @@
 package org.hdiv.urlProcessor;
 
 import java.util.Arrays;
-import java.util.Enumeration;
-import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -82,7 +79,7 @@ public abstract class AbstractUrlProcessor {
 		// Remove parameters
 		if (url.indexOf("?") > 0) {
 			String urlParams = url.substring(url.indexOf("?") + 1);
-			Map ulrParamsMap = this.getUrlParamsAsMap(request, urlParams);
+			Map<String, String[]> ulrParamsMap = this.getUrlParamsAsMap(request, urlParams);
 			urlData.setOriginalUrlParams(ulrParamsMap);
 			url = url.substring(0, url.indexOf("?"));
 
@@ -130,9 +127,9 @@ public abstract class AbstractUrlProcessor {
 	 *            urls query string
 	 * @return Map
 	 */
-	protected Map getUrlParamsAsMap(HttpServletRequest request, String urlParams) {
+	protected Map<String, String[]> getUrlParamsAsMap(HttpServletRequest request, String urlParams) {
 
-		Map params = new LinkedHashMap();
+		Map<String, String[]> params = new LinkedHashMap<String, String[]>();
 
 		if (urlParams == null) {
 			return params;
@@ -235,7 +232,7 @@ public abstract class AbstractUrlProcessor {
 	 */
 	public String getParamProcessedUrl(UrlData urlData) {
 
-		Map params = null;
+		Map<String, String[]> params = null;
 		if (urlData.getProcessedUrlParams() != null) {
 			params = urlData.getProcessedUrlParams();
 		} else {
@@ -260,9 +257,7 @@ public abstract class AbstractUrlProcessor {
 
 		String separator = "?";
 
-		Iterator it = params.keySet().iterator();
-		while (it.hasNext()) {
-			String key = (String) it.next();
+		for (String key : params.keySet()) {
 			String[] values = (String[]) params.get(key);
 
 			for (int i = 0; i < values.length; i++) {
@@ -426,20 +421,18 @@ public abstract class AbstractUrlProcessor {
 			return false;
 		}
 
-		List excludedExtensions = this.config.getExcludedURLExtensions();
+		List<String> excludedExtensions = this.config.getExcludedURLExtensions();
 
 		if (excludedExtensions != null) {
 
-			for (Iterator iter = excludedExtensions.iterator(); iter.hasNext();) {
-
-				String extension = (String) iter.next();
+			for (String extension : excludedExtensions) {
 				if (contextPathRelativeUrl.endsWith(extension)) {
 					return true;
 				}
 			}
 		}
 
-		Hashtable protectedExtension = this.config.getProtectedURLPatterns();
+		Map<String, Pattern> protectedExtension = this.config.getProtectedURLPatterns();
 
 		// jsp is always protected
 		if (contextPathRelativeUrl.endsWith(".jsp")) {
@@ -447,10 +440,7 @@ public abstract class AbstractUrlProcessor {
 		}
 
 		if (protectedExtension != null) {
-
-			for (Enumeration extensionsIds = protectedExtension.elements(); extensionsIds.hasMoreElements();) {
-
-				Pattern extensionPattern = (Pattern) extensionsIds.nextElement();
+			for (Pattern extensionPattern : protectedExtension.values()) {
 				Matcher m = extensionPattern.matcher(contextPathRelativeUrl);
 
 				if (m.matches()) {
@@ -519,7 +509,7 @@ public abstract class AbstractUrlProcessor {
 		String urlWithoutRelativePath = url;
 
 		if (url.startsWith("..")) {
-			Stack stack = new Stack();
+			Stack<String> stack = new Stack<String>();
 			String localUri = originalRequestUri.substring(originalRequestUri.indexOf("/"),
 					originalRequestUri.lastIndexOf("/"));
 			StringTokenizer localUriParts = new StringTokenizer(localUri.replace('\\', '/'), "/");

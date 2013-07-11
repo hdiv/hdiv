@@ -16,7 +16,7 @@
 package org.hdiv.web.validator;
 
 import java.util.HashMap;
-import java.util.Hashtable;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -74,7 +74,7 @@ public class EditableParameterValidatorTest extends AbstractHDIVTestCase {
 		assertTrue(result);
 
 		// Editable errors in request?
-		Hashtable<String, String[]> parameters = (Hashtable<String, String[]>) requestWrapper
+		Map<String, String[]> parameters = (Map<String, String[]>) requestWrapper
 				.getAttribute(Constants.EDITABLE_PARAMETER_ERROR);
 		assertEquals(1, parameters.size());
 

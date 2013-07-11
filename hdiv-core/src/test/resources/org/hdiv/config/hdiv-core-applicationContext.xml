@@ -33,8 +33,7 @@
 		</property>
 	</bean>
 
-	<bean id="cache" class="org.hdiv.session.StateCache" singleton="false"
-		init-method="init">
+	<bean id="cache" class="org.hdiv.session.StateCache" singleton="false">
 		<property name="maxSize">
 			<value>5</value>
 		</property>

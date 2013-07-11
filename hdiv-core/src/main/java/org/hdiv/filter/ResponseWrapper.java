@@ -16,8 +16,9 @@
 package org.hdiv.filter;
 
 import java.util.ArrayList;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.StringTokenizer;
 
 import javax.servlet.http.Cookie;
@@ -51,7 +52,7 @@ public class ResponseWrapper extends HttpServletResponseWrapper {
 	/**
 	 * The set of Cookies associated with this Response.
 	 */
-	private Hashtable cookies;
+	private Map<String, SavedCookie> cookies = new HashMap<String, SavedCookie>();
 
 	/**
 	 * Confidentiality indicator to know if information is accessible only for those
@@ -76,7 +77,6 @@ public class ResponseWrapper extends HttpServletResponseWrapper {
 	public ResponseWrapper(HttpServletResponse originalResponse) {
 
 		super(originalResponse);
-		this.cookies = new Hashtable();
 		
 		if (log.isDebugEnabled()) {
 			log.debug("New ResponseWrapper instance.");
@@ -100,7 +100,7 @@ public class ResponseWrapper extends HttpServletResponseWrapper {
 			this.cookies.clear();
 			this.removeCookiesFromSession();
 
-			List parseValues = this.parseCookieString(value);
+			List<String> parseValues = this.parseCookieString(value);
 
 			if (this.confidentiality && !this.avoidCookiesConfidentiality) {
 				confidentialValue = this.replaceOriginalValues(parseValues, value);
@@ -124,7 +124,7 @@ public class ResponseWrapper extends HttpServletResponseWrapper {
 
 		if (name.equalsIgnoreCase(SET_COOKIE)) {
 
-			List parseValues = this.parseCookieString(value);
+			List<String> parseValues = this.parseCookieString(value);
 
 			if (this.confidentiality && !this.avoidCookiesConfidentiality) {
 				confidentialValue = this.replaceOriginalValues(parseValues, value);
@@ -142,13 +142,12 @@ public class ResponseWrapper extends HttpServletResponseWrapper {
 	 * @param value Original value of the cookie to be added
 	 * @return Confidential values for the cookies
 	 */
-	public String replaceOriginalValues(List values, String value) {
+	protected String replaceOriginalValues(List<String> values, String value) {
 
-		String currentValue = null;
-		for (int i = 0; i < values.size(); i++) {
-			currentValue = (String) values.get(i);
+		for (String currentValue : values) {
 			value = value.replaceFirst("=" + currentValue, "=0");
 		}
+
 		return value;
 	}
 
@@ -156,7 +155,7 @@ public class ResponseWrapper extends HttpServletResponseWrapper {
 	 * Resets the response.
 	 */
 	public void reset() {
-
+		
 		super.reset();
 		this.cookies.clear();
 		this.removeCookiesFromSession();
@@ -168,9 +167,9 @@ public class ResponseWrapper extends HttpServletResponseWrapper {
 	 * 
 	 * @param cookieString value assigned to Set-Cookie attribute
 	 */
-	private List parseCookieString(String cookieString) {
+	private List<String> parseCookieString(String cookieString) {
 
-		List values = new ArrayList();
+		List<String> values = new ArrayList<String>();
 		cookieString = cookieString.trim();
 
 		// Cookie fields are separated by ';'
@@ -218,7 +217,7 @@ public class ResponseWrapper extends HttpServletResponseWrapper {
 
 		if (HDIVUtil.getHttpSession() != null) {
 		
-			Hashtable sessionOriginalCookies = (Hashtable) HDIVUtil.getHttpSession()
+			Map<String, SavedCookie> sessionOriginalCookies = (Map<String, SavedCookie>) HDIVUtil.getHttpSession()
 					.getAttribute(Constants.HDIV_COOKIES_KEY);
 	
 			if ((sessionOriginalCookies != null) && (sessionOriginalCookies.size() > 0)) {
@@ -237,7 +236,7 @@ public class ResponseWrapper extends HttpServletResponseWrapper {
 	/**
 	 * Removes from user's session the cookies added by the application.
 	 */
-	public void removeCookiesFromSession() {
+	protected void removeCookiesFromSession() {
 		
 		if (HDIVUtil.getHttpSession() != null) {
 			HDIVUtil.getHttpSession().removeAttribute(Constants.HDIV_COOKIES_KEY);
@@ -249,7 +248,7 @@ public class ResponseWrapper extends HttpServletResponseWrapper {
 	 * 
 	 * @return cookies added by the application
 	 */
-	public Hashtable getCookies() {
+	public Map<String, SavedCookie> getCookies() {
 		return this.cookies;
 	}
 

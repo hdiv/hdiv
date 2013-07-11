@@ -52,12 +52,12 @@ public class UrlData {
 	/**
 	 * Map with original url parameter name and values
 	 */
-	private Map originalUrlParams;
+	private Map<String, String[]> originalUrlParams;
 
 	/**
 	 * Map with processed url parameter name and values
 	 */
-	private Map processedUrlParams;
+	private Map<String, String[]> processedUrlParams;
 
 	/**
 	 * True if the url points to this app
@@ -159,7 +159,7 @@ public class UrlData {
 	/**
 	 * @return the originalUrlParams
 	 */
-	public Map getOriginalUrlParams() {
+	public Map<String, String[]> getOriginalUrlParams() {
 		return originalUrlParams;
 	}
 
@@ -167,14 +167,14 @@ public class UrlData {
 	 * @param originalUrlParams
 	 *            the originalUrlParams to set
 	 */
-	public void setOriginalUrlParams(Map originalUrlParams) {
+	public void setOriginalUrlParams(Map<String, String[]> originalUrlParams) {
 		this.originalUrlParams = originalUrlParams;
 	}
 
 	/**
 	 * @return the processedUrlParams
 	 */
-	public Map getProcessedUrlParams() {
+	public Map<String, String[]> getProcessedUrlParams() {
 		return processedUrlParams;
 	}
 
@@ -182,7 +182,7 @@ public class UrlData {
 	 * @param processedUrlParams
 	 *            the processedUrlParams to set
 	 */
-	public void setProcessedUrlParams(Map processedUrlParams) {
+	public void setProcessedUrlParams(Map<String, String[]> processedUrlParams) {
 		this.processedUrlParams = processedUrlParams;
 	}
 
