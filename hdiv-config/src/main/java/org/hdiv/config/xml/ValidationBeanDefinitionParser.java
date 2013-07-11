@@ -28,7 +28,7 @@ import org.w3c.dom.NodeList;
  */
 public class ValidationBeanDefinitionParser extends AbstractSingleBeanDefinitionParser {
 
-	protected Class getBeanClass(Element element) {
+	protected Class<?> getBeanClass(Element element) {
 		return Validation.class;
 	}
 

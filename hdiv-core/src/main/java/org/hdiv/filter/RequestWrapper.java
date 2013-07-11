@@ -19,7 +19,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -56,22 +55,22 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 	/**
 	 * Map with request parameters
 	 */
-	private Hashtable parameters = new Hashtable();
+	private Map<String, Object> parameters = new HashMap<String, Object>();
 
 	/**
 	 * The file request parameters.
 	 */
-	private Hashtable elementsFile;
+	private Map<String, Object> elementsFile = new HashMap<String, Object>();
 
 	/**
 	 * The text request parameters.
 	 */
-	private Hashtable elementsText;
+	private Map<String, Object> elementsText = new HashMap<String, Object>();
 
 	/**
 	 * Determines whether this request is multipart.
 	 */
-	private boolean isMultipart;
+	private boolean isMultipart = false;
 
 	/**
 	 * Confidentiality indicator to know if information is accessible only for those who are authorized.
@@ -94,10 +93,6 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 	public RequestWrapper(HttpServletRequest servletRequest) {
 
 		super(servletRequest);
-
-		this.elementsText = new Hashtable();
-		this.elementsFile = new Hashtable();
-		this.isMultipart = false;
 
 		if (log.isDebugEnabled()) {
 			log.debug("New RequestWrapper instance.");
@@ -159,25 +154,22 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 	 * Returns the names of the parameters for this request. The enumeration consists of the normal request parameter
 	 * names plus the parameters read from the multipart request.
 	 */
-	public Enumeration getParameterNames() {
+	public Enumeration<?> getParameterNames() {
 
-		Enumeration baseParams = super.getParameterNames();
+		Enumeration<?> baseParams = super.getParameterNames();
 
 		if (!this.isMultipart)
 			return baseParams;
 
-		Vector list = new Vector();
+		Vector<Object> list = new Vector<Object>();
 
 		while (baseParams.hasMoreElements()) {
 			list.add(baseParams.nextElement());
 		}
 
-		Collection multipartParams = this.parameters.keySet();
-		Iterator iterator = multipartParams.iterator();
+		Collection<String> multipartParams = this.parameters.keySet();
 
-		while (iterator.hasNext()) {
-			list.add(iterator.next());
-		}
+		list.add(multipartParams);
 
 		return Collections.enumeration(list);
 	}
@@ -196,7 +188,7 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 		String cookieHeader = super.getHeader(name);
 		if (name.equalsIgnoreCase(COOKIE) && Boolean.TRUE.equals(this.confidentiality) && this.cookiesConfidentiality) {
 
-			Hashtable sessionCookies = (Hashtable) super.getSession().getAttribute(Constants.HDIV_COOKIES_KEY);
+			Map<String, SavedCookie> sessionCookies = (Map<String, SavedCookie>) super.getSession().getAttribute(Constants.HDIV_COOKIES_KEY);
 
 			if (sessionCookies != null) {
 				return this.replaceCookieString(cookieHeader, sessionCookies);
@@ -215,14 +207,14 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 	 *         return null.
 	 * @since HDIV 1.1.1
 	 */
-	public Enumeration getHeaders(String name) {
+	public Enumeration<?> getHeaders(String name) {
 
-		Enumeration headerValues = super.getHeaders(name);
+		Enumeration<?> headerValues = super.getHeaders(name);
 
 		if (name.equalsIgnoreCase(COOKIE) && Boolean.TRUE.equals(this.confidentiality) && this.cookiesConfidentiality) {
 
-			Vector values = new Vector();
-			Hashtable sessionCookies = (Hashtable) super.getSession().getAttribute(Constants.HDIV_COOKIES_KEY);
+			Vector<String> values = new Vector<String>();
+			Map<String, SavedCookie> sessionCookies = (Map<String, SavedCookie>) super.getSession().getAttribute(Constants.HDIV_COOKIES_KEY);
 
 			if (sessionCookies != null) {
 				while (headerValues.hasMoreElements()) {
@@ -246,7 +238,7 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 	 * @return cookie request header with replaced values
 	 * @since HDIV 1.1.1
 	 */
-	private String replaceCookieString(String cookieHeader, Hashtable sessionCookies) {
+	private String replaceCookieString(String cookieHeader, Map<String, SavedCookie> sessionCookies) {
 
 		String header = cookieHeader.trim();
 
@@ -265,7 +257,7 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 			if (sessionCookies.containsKey(name)) {
 				if (t.hasMoreTokens()) {
 					String value = t.nextToken().trim();
-					SavedCookie savedCookie = (SavedCookie) sessionCookies.get(name);
+					SavedCookie savedCookie = sessionCookies.get(name);
 					header = header.replaceFirst("=" + value, "=" + savedCookie.getValue());
 				}
 			}
@@ -296,29 +288,29 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 	 * 
 	 * @since HDIV 1.3
 	 */
-	public Map getParameterMap() {
+	public Map<? extends String, ?> getParameterMap() {
 
-		Map map = new HashMap(super.getRequest().getParameterMap());
+		Map<String, Object> map = new HashMap<String, Object>(super.getRequest().getParameterMap());
 		map.putAll(this.parameters);
 
 		return map;
 	}
 
 	/**
-	 * Returns a hash table containing the text (that is, non-file) request parameters.
+	 * Returns a map containing the text (that is, non-file) request parameters.
 	 * 
 	 * @return The text request parameters.
 	 */
-	public Hashtable getTextElements() {
+	public Map<String, Object> getTextElements() {
 		return this.elementsText;
 	}
 
 	/**
-	 * Returns a hash table containing the file (that is, non-text) request parameters.
+	 * Returns a map containing the file (that is, non-text) request parameters.
 	 * 
 	 * @return The file request parameters.
 	 */
-	public Hashtable getFileElements() {
+	public Map<String, Object> getFileElements() {
 		return this.elementsFile;
 	}
 

@@ -16,14 +16,13 @@
 package org.hdiv.session;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
- * It is composed by a data structure limited by a maximun size (maxSize). Map data
+ * It is composed by a data structure limited by a maximum size (maxSize). Map data
  * structure is composed by elements of type IPage (all the possible requests
  * generated in the request processing).
  * 
@@ -50,20 +49,12 @@ public class StateCache implements IStateCache {
 	/**
 	 * page's ids map
 	 */
-	private List pageIds;
-
-	
-	/**
-	 * pageIds map initialization
-	 */
-	public void init() {		
-		this.pageIds = new ArrayList();
-	}	
+	private List<String> pageIds = new ArrayList<String>();
 
 	/**
 	 * Adds a new page identifier to the map <code>pageIds</code>.
 	 * 
-	 * @return If the map <code>pageIds</code> has reached its maximun size
+	 * @return If the map <code>pageIds</code> has reached its maximum size
 	 *         <code>maxSize</code>, the oldest page identifier is deleted.
 	 *         Otherwise, null will be returned.
 	 */
@@ -79,7 +70,7 @@ public class StateCache implements IStateCache {
 	}
 
 	/**
-	 * If the map <code>pageIds</code> has reached its maximun size
+	 * If the map <code>pageIds</code> has reached its maximum size
 	 * <code>maxSize</code>, the oldest page identifier in the map is deleted.
 	 * 
 	 * @return Oldest page identifier in the map <code>pageIds</code>. Null in
@@ -104,10 +95,8 @@ public class StateCache implements IStateCache {
 	public String toString() {
 
 		StringBuffer result = new StringBuffer();
-		Iterator values = this.pageIds.iterator();
 		
-		while (values.hasNext()) {
-			String pageId = (String) values.next();
+		for (String pageId : pageIds) {
 			result.append(" " + pageId);
 		}
 		
@@ -131,7 +120,7 @@ public class StateCache implements IStateCache {
 	/**
 	 * @return the pageIds
 	 */
-	public List getPageIds() {
+	public List<String> getPageIds() {
 		return pageIds;
 	}
 	

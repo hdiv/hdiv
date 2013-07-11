@@ -29,6 +29,7 @@ import org.hdiv.cipher.IKeyFactory;
 import org.hdiv.cipher.Key;
 import org.hdiv.config.HDIVConfig;
 import org.hdiv.idGenerator.PageIdGenerator;
+import org.hdiv.session.ISession;
 import org.hdiv.session.IStateCache;
 import org.hdiv.urlProcessor.FormUrlProcessor;
 import org.hdiv.urlProcessor.LinkUrlProcessor;
@@ -114,6 +115,8 @@ public class InitListener implements ServletContextListener, HttpSessionListener
 
 		ServletContext servletContext = httpSessionEvent.getSession().getServletContext();
 
+		WebApplicationContextUtils.getRequiredWebApplicationContext(servletContext).getBean(ISession.class);
+		
 		if (!this.servletContextInitialized) {
 			this.initServletContext(servletContext);
 		}
@@ -121,7 +124,6 @@ public class InitListener implements ServletContextListener, HttpSessionListener
 		WebApplicationContext wac = WebApplicationContextUtils.getRequiredWebApplicationContext(servletContext);
 
 		this.initStrategies(wac, httpSessionEvent.getSession());
-		this.initCache(wac, httpSessionEvent.getSession());
 		this.initPageIdGenerator(wac, httpSessionEvent.getSession());
 		this.initHDIVStateParameters(wac, httpSessionEvent.getSession());
 
@@ -180,20 +182,6 @@ public class InitListener implements ServletContextListener, HttpSessionListener
 			httpSession.setAttribute(Constants.KEY_NAME, key);
 
 		}
-	}
-
-	/**
-	 * Cache initialization.
-	 * 
-	 * @param context
-	 *            application context
-	 * @param httpSession
-	 *            http session
-	 */
-	protected void initCache(ApplicationContext context, HttpSession httpSession) {
-
-		IStateCache cache = (IStateCache) context.getBean(IStateCache.class);
-		httpSession.setAttribute(Constants.STATE_CACHE_NAME, cache);
 	}
 
 	/**

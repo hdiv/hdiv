@@ -20,6 +20,7 @@ import java.util.Stack;
 import org.hdiv.idGenerator.UidGenerator;
 import org.hdiv.session.ISession;
 import org.hdiv.state.IPage;
+import org.hdiv.state.IState;
 import org.hdiv.state.Page;
 
 /**
@@ -71,14 +72,14 @@ public abstract class AbstractDataComposer implements IDataComposer {
 	/**
 	 * States stack to store all states of the page <code>page</code>
 	 */
-	private Stack statesStack;
+	private Stack<IState> statesStack;
 
 	/**
 	 * DataComposer initialization with new stack to store all states of the page <code>page</code>.
 	 */
 	public void init() {
 		this.setPage(new Page());
-		this.statesStack = new Stack();
+		this.statesStack = new Stack<IState>();
 	}
 
 	/**
@@ -141,7 +142,7 @@ public abstract class AbstractDataComposer implements IDataComposer {
 	/**
 	 * @return the statesStack
 	 */
-	public Stack getStatesStack() {
+	public Stack<IState> getStatesStack() {
 		return statesStack;
 	}
 

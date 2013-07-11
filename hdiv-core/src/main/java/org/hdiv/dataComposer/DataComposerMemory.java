@@ -510,7 +510,7 @@ public class DataComposerMemory extends AbstractDataComposer {
 
 	/**
 	 * It is called in the pre-processing stage of each request or form existing in the page returned by the server. It
-	 * adds the state of the treated request or form to the page <code>page</code> and returns and identifier compoded
+	 * adds the state of the treated request or form to the page <code>page</code> and returns and identifier composed
 	 * by the page identifier and the state identifier.
 	 * 
 	 * @return Identifier composed by the page identifier and the state identifier.

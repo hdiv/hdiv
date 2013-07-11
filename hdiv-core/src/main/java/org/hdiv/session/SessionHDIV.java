@@ -68,12 +68,6 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 	private String keyName = Constants.KEY_NAME;
 
 	/**
-	 * Initialization method
-	 */
-	public void init() {
-	}
-
-	/**
 	 * Obtains from the user session the page identifier where the current request or form is
 	 * 
 	 * @return Returns the pageId.
@@ -110,14 +104,14 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 
 			return (IPage) getHttpSession().getAttribute(pageId);
 
-		} catch (Exception e) {
-			throw new HDIVException(HDIVErrorCodes.PAGE_ID_INCORRECT);
+		} catch (IllegalStateException e) {
+			throw new HDIVException(HDIVErrorCodes.PAGE_ID_INCORRECT, e);
 		}
 	}
 
 	/**
 	 * It adds a new page to the user session. To do this it adds a new page identifier to the cache and if it has
-	 * reached the maximun size allowed, the oldest page is deleted from the session and from the cache itself.
+	 * reached the maximum size allowed, the oldest page is deleted from the session and from the cache itself.
 	 * 
 	 * @param pageId
 	 *            Page identifier
@@ -128,13 +122,13 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 
 		HttpSession session = this.getHttpSession();
 
-		IStateCache cache = (IStateCache) session.getAttribute(this.cacheName);
+		IStateCache cache = this.getStateCache();
 
 		page.setName(pageId);
 		String removedPageId = cache.addPage(pageId);
 
 		// if it returns a page identifier it is because the cache has reached
-		// the maximun size and therefore we must delete the page which has been
+		// the maximum size and therefore we must delete the page which has been
 		// stored for the longest time
 		if (removedPageId != null) {
 			session.removeAttribute(removedPageId);
@@ -167,12 +161,12 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 
 		HttpSession session = this.getHttpSession();
 
-		IStateCache cache = (IStateCache) session.getAttribute(this.cacheName);
+		IStateCache cache = this.getStateCache();
 		if (log.isDebugEnabled()) {
 			log.debug("Cache pages before finished pages are deleted:" + cache.toString());
 		}
 
-		List pageIds = cache.getPageIds();
+		List<String> pageIds = cache.getPageIds();
 		String pageId = null;
 		IPage currentPage = null;
 
@@ -217,7 +211,7 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 			return currentPage.getState(stateId);
 
 		} catch (Exception e) {
-			throw new HDIVException(HDIVErrorCodes.PAGE_ID_INCORRECT);
+			throw new HDIVException(HDIVErrorCodes.PAGE_ID_INCORRECT, e);
 		}
 	}
 
@@ -235,7 +229,7 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 			return currentPage.getStateHash(stateId);
 
 		} catch (Exception e) {
-			throw new HDIVException(HDIVErrorCodes.PAGE_ID_INCORRECT);
+			throw new HDIVException(HDIVErrorCodes.PAGE_ID_INCORRECT, e);
 		}
 	}
 
@@ -248,6 +242,23 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 	 */
 	public void setBeanFactory(BeanFactory beanFactory) {
 		this.beanFactory = beanFactory;
+	}
+
+	/**
+	 * Create new or obtain existing state Cache instance.
+	 * 
+	 * @return IStateCache instance
+	 */
+	protected IStateCache getStateCache() {
+
+		HttpSession session = this.getHttpSession();
+		IStateCache cache = (IStateCache) session.getAttribute(this.cacheName);
+		if (cache == null) {
+			cache = (IStateCache) this.beanFactory.getBean(IStateCache.class);
+			session.setAttribute(this.cacheName, cache);
+		}
+
+		return cache;
 	}
 
 	/*

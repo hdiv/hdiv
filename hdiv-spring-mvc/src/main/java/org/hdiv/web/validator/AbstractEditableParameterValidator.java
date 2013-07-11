@@ -15,7 +15,7 @@
  */
 package org.hdiv.web.validator;
 
-import java.util.Hashtable;
+import java.util.Map;
 
 import org.hdiv.util.Constants;
 import org.springframework.validation.Errors;
@@ -45,7 +45,7 @@ public abstract class AbstractEditableParameterValidator {
 			return;
 		}
 
-		Hashtable<String, String[]> parameters = (Hashtable<String, String[]>) attr.getAttribute(
+		Map<String, String[]> parameters = (Map<String, String[]>) attr.getAttribute(
 				Constants.EDITABLE_PARAMETER_ERROR, 0);
 		if (parameters != null && parameters.size() > 0) {
 
@@ -67,7 +67,7 @@ public abstract class AbstractEditableParameterValidator {
 			return;
 		}
 
-		Hashtable<String, String[]> parameters = (Hashtable<String, String[]>) attr.getAttribute(
+		Map<String, String[]> parameters = (Map<String, String[]>) attr.getAttribute(
 				Constants.EDITABLE_PARAMETER_ERROR, 0);
 		if (parameters != null && parameters.size() > 0) {
 

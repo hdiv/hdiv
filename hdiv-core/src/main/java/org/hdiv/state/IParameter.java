@@ -60,7 +60,7 @@ public interface IParameter {
 	/**
 	 * @return Returns the values of parameter.
 	 */
-	public List getValues();
+	public List<String> getValues();
 
 	/**
 	 * @return Returns if parameter <code>this</code> is editbale or not.

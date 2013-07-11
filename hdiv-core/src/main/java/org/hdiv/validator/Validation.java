@@ -15,13 +15,11 @@
  */
 package org.hdiv.validator;
 
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import org.hdiv.validator.IValidation;
 
 /**
  * Validation defined by the user in the hdiv-validation.xml for the editable
@@ -46,7 +44,7 @@ public class Validation implements IValidation {
 	 * Map with the paratemers to be ignored in the validation process of the
 	 * parameters.
 	 */
-	private Map ignoreParametersMap;
+	private Map<String, String> ignoreParametersMap;
 
 	/**
 	 * Component type to which apply the validation <code>this</code>.
@@ -60,17 +58,20 @@ public class Validation implements IValidation {
 	/**
 	 * It creates a map from the list of ignore parameters defined for a URL.
 	 * 
+	 * TODO Is this thread-safe?
+	 * 
 	 * @param ignoreParameters
 	 *            list of ignore parameters
 	 */
-	public void setIgnoreParameters(List ignoreParameters) {
+	public void setIgnoreParameters(List<String> ignoreParameters) {
 
-		this.ignoreParametersMap = new Hashtable();
+		this.ignoreParametersMap = new HashMap<String, String>();
 
 		String currentIgnoreParameter;
+		
 		for (int i = 0; i < ignoreParameters.size(); i++) {
-
 			currentIgnoreParameter = (String) ignoreParameters.get(i);
+			//TODO review this line
 			this.ignoreParametersMap.put(currentIgnoreParameter, currentIgnoreParameter);
 		}
 	}

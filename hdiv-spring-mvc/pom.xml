@@ -45,12 +45,14 @@
 			<artifactId>validation-api</artifactId>
 			<version>1.0.0.GA</version>
 			<scope>compile</scope>
+			<optional>true</optional>
 		</dependency>
 		<dependency>
 			<groupId>org.grails</groupId>
 			<artifactId>grails-core</artifactId>
 			<version>${org.grails.version}</version>
 			<scope>compile</scope>
+			<optional>true</optional>
 			<exclusions>
 				<exclusion>
 					<groupId>*</groupId>

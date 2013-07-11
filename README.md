@@ -18,3 +18,10 @@ The jars will be created in a folder named "target" and installed in local Maven
 ## License
 The HDIV Framework is released under version 2.0 of the
 [Apache License](http://www.apache.org/licenses/LICENSE-2.0).
+
+##Profiler
+YourKit is kindly supporting HDIV open source project with its full-featured Java Profiler.
+YourKit, LLC is the creator of innovative and intelligent tools for profiling Java and .NET applications. 
+Take a look at YourKit's leading software products:
+<a href="http://www.yourkit.com/java/profiler/index.jsp">YourKit Java Profiler</a> and
+<a href="http://www.yourkit.com/.net/profiler/index.jsp">YourKit  .NET Profiler</a>.

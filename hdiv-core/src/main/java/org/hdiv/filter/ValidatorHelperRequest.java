@@ -17,7 +17,7 @@ package org.hdiv.filter;
 
 import java.util.ArrayList;
 import java.util.Enumeration;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -191,8 +191,8 @@ public class ValidatorHelperRequest implements IValidationHelper {
 		// Hdiv parameter name
 		String hdivParameter = getHdivParameter(request);
 
-		Hashtable unauthorizedEditableParameters = new Hashtable();
-		Enumeration parameters = request.getParameterNames();
+		Map<String, String[]> unauthorizedEditableParameters = new HashMap<String, String[]>();
+		Enumeration<?> parameters = request.getParameterNames();
 		while (parameters.hasMoreElements()) {
 
 			String parameter = (String) parameters.nextElement();
@@ -313,21 +313,19 @@ public class ValidatorHelperRequest implements IValidationHelper {
 
 		if (this.hdivConfig.existValidations()) {
 
-			Hashtable unauthorizedEditableParameters = new Hashtable();
+			Map<String, String[]> unauthorizedEditableParameters = new HashMap<String, String[]>();
 
-			Enumeration parameters = request.getParameterNames();
+			Enumeration<?> parameters = request.getParameterNames();
 			while (parameters.hasMoreElements()) {
 
 				String parameter = (String) parameters.nextElement();
 				String[] values = request.getParameterValues(parameter);
 
-				this.validateEditableParameter(request, target, parameter, values, "text",
-						unauthorizedEditableParameters);
+				this.validateEditableParameter(request, target, parameter, values, "text", 	unauthorizedEditableParameters);
 
 			}
 
 			if (unauthorizedEditableParameters.size() > 0) {
-
 				return this.processValidateParameterErrors(request, unauthorizedEditableParameters);
 			}
 		}
@@ -345,7 +343,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	 * @since 2.1.4
 	 */
 	protected ValidatorHelperResult processValidateParameterErrors(HttpServletRequest request,
-			Map unauthorizedEditableParameters) {
+			Map<String, String[]> unauthorizedEditableParameters) {
 
 		if (!this.hdivConfig.isDebugMode()) {
 			// Put the errors on request to be accessible from the Web framework
@@ -380,7 +378,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 			return ValidatorHelperResult.VALID;
 		}
 
-		Hashtable sessionCookies = (Hashtable) request.getSession().getAttribute(Constants.HDIV_COOKIES_KEY);
+		Map<String, SavedCookie> sessionCookies = (Map<String, SavedCookie>) request.getSession().getAttribute(Constants.HDIV_COOKIES_KEY);
 
 		if (sessionCookies == null) {
 			return ValidatorHelperResult.VALID;
@@ -439,7 +437,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	 * @since HDIV 1.1
 	 */
 	public void validateEditableParameter(HttpServletRequest request, String target, String parameter, String[] values,
-			String dataType, Hashtable unauthorizedParameters) {
+			String dataType, Map<String, String[]> unauthorizedParameters) {
 
 		String targetWithoutContextPath = this.getTargetWithoutContextPath(request, target);
 
@@ -477,10 +475,10 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	 */
 	private ValidatorHelperResult allRequiredParametersReceived(HttpServletRequest request, IState state, String target) {
 
-		Hashtable receivedParameters = new Hashtable(state.getRequiredParams());
+		Map<String, IParameter> receivedParameters = new HashMap<String, IParameter>(state.getRequiredParams());
 
 		String currentParameter = null;
-		Enumeration requestParameters = request.getParameterNames();
+		Enumeration<?> requestParameters = request.getParameterNames();
 		while (requestParameters.hasMoreElements()) {
 
 			currentParameter = (String) requestParameters.nextElement();
@@ -696,9 +694,9 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	 * @return True If repeated or no valid values have been received for the parameter <code>parameter</code>.
 	 */
 	private ValidatorHelperResult hasRepeatedOrInvalidValues(String target, String parameter, String[] values,
-			List stateValues) {
+			List<String> stateValues) {
 
-		List tempStateValues = new ArrayList();
+		List<String> tempStateValues = new ArrayList<String>();
 		tempStateValues.addAll(stateValues);
 
 		if (Boolean.TRUE.equals(this.hdivConfig.getConfidentiality())) {
@@ -722,9 +720,9 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	 * @return True If repeated values have been received for the parameter <code>parameter</code>.
 	 */
 	private ValidatorHelperResult hasConfidentialIncorrectValues(String target, String parameter, String[] values,
-			List stateValues) {
+			List<String> stateValues) {
 
-		Hashtable receivedValues = new Hashtable();
+		Map<String, String> receivedValues = new HashMap<String, String>();
 
 		for (int i = 0; i < values.length; i++) {
 
@@ -760,9 +758,9 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	 * @return True If repeated or no valid values have been received for the parameter <code>parameter</code>.
 	 */
 	private ValidatorHelperResult hasNonConfidentialIncorrectValues(String target, String parameter, String[] values,
-			List tempStateValues) {
+			List<String> tempStateValues) {
 
-		Hashtable receivedValues = new Hashtable();
+		Map<String, String> receivedValues = new HashMap<String, String>();
 
 		for (int i = 0; i < values.length; i++) {
 
@@ -807,7 +805,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	 * @return True if <code>value</code> is correct. False otherwise.
 	 * @since HDIV 2.0
 	 */
-	private boolean isInRange(String target, String parameter, String value, List stateValues) {
+	private boolean isInRange(String target, String parameter, String value, List<String> stateValues) {
 
 		Matcher m = this.numberPattern.matcher(value);
 
@@ -898,7 +896,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 
 	}
 
-	protected ServletRequest getNativeRequest(ServletRequest request, Class requiredType) {
+	protected ServletRequest getNativeRequest(ServletRequest request, Class<?> requiredType) {
 		if (requiredType != null) {
 			if (requiredType.isInstance(request)) {
 				return request;

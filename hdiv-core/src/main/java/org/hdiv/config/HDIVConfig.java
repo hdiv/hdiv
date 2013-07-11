@@ -16,8 +16,7 @@
 package org.hdiv.config;
 
 import java.util.ArrayList;
-import java.util.Hashtable;
-import java.util.Iterator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -40,29 +39,13 @@ public class HDIVConfig {
 	 * Map with the pages that will not be Treated by the HDIV filter. The init pages are initialized by the Spring
 	 * factory.
 	 */
-	protected Hashtable startPages = new Hashtable();
+	protected Map<String, StartPage> startPages = new HashMap<String, StartPage>();
 
 	/**
 	 * Map with the parameters that will not be validated by the HDIV filter. The init parameters are initialized by the
 	 * Spring factory.
 	 */
-	private Hashtable startParameters = new Hashtable();
-
-	/**
-	 * Map of the validated actions that are init pages. It is necessary to create this map to improve the efficiency at
-	 * checking init-pages.
-	 * 
-	 * @since HDIV 1.1.1
-	 */
-	private Hashtable matchedPages = new Hashtable();
-
-	/**
-	 * Map of the validated parameters that are init parameters. It is necessary to create this map to improve the
-	 * efficiency at checking init-parameters.
-	 * 
-	 * @since HDIV 1.1.1
-	 */
-	private Hashtable matchedParameters = new Hashtable();
+	private Map<String, Pattern> startParameters = new HashMap<String, Pattern>();
 
 	/**
 	 * Url of the error page to which HDIV will redirect the request if it doesn't pass the HDIV validation.
@@ -89,7 +72,7 @@ public class HDIVConfig {
 	/**
 	 * Parameters which HDIV validation will not be applied to.
 	 */
-	private Map paramsWithoutValidation;
+	private Map<String, List<String>> paramsWithoutValidation;
 
 	/**
 	 * Validations for editable fields (text/textarea) defined by the user in the hdiv-validations.xml configuration
@@ -120,14 +103,14 @@ public class HDIVConfig {
 	 * 
 	 * @since HDIV 2.0
 	 */
-	private Hashtable protectedURLPatterns;
+	private Map<String, Pattern> protectedURLPatterns;
 
 	/**
 	 * Extensions that we have not to protect with HDIV's state.
 	 * 
 	 * @since HDIV 2.1.0
 	 */
-	private List excludedURLExtensions;
+	private List<String> excludedURLExtensions = new ArrayList<String>();
 
 	/**
 	 * HDIV adds an extra parameter to all links and forms. By default this parameter is _HDIV_STATE. If
@@ -174,17 +157,12 @@ public class HDIVConfig {
 	 * @return True if <code>parameter</code> is an init parameter. False otherwise.
 	 */
 	public boolean isStartParameter(String parameter) {
-
-		if (this.matchedParameters.containsKey(parameter)) {
-			return true;
-		}
-
+		
 		String value = this.checkValue(parameter, this.startParameters);
 		if (value == null) {
 			return false;
 		}
 
-		this.matchedParameters.put(parameter, value);
 		return true;
 	}
 
@@ -220,19 +198,9 @@ public class HDIVConfig {
 			method = method.toUpperCase();
 		}
 
-		String key = target + "_" + method;
-
-		if (this.matchedPages.containsKey(key)) {
-			return true;
-		}
-
-		String value = this.checkStartPageValue(target, method, this.startPages);
-		if (value == null) {
-			return false;
-		}
-
-		this.matchedPages.put(key, value);
-		return true;
+		String value = this.checkStartPageValue(target, method);
+		
+		return value != null;
 	}
 
 	public boolean hasExtensionToExclude(String path) {
@@ -253,10 +221,8 @@ public class HDIVConfig {
 		if (pound >= 0) {
 			path = path.substring(0, pound);
 		}
-
-		for (Iterator iter = this.excludedURLExtensions.iterator(); iter.hasNext();) {
-
-			String extension = (String) iter.next();
+		
+		for (String extension : this.excludedURLExtensions) {
 			if (path.endsWith(extension)) {
 				return true;
 			}
@@ -307,17 +273,13 @@ public class HDIVConfig {
 		Pattern p = null;
 		Matcher m = null;
 
-		String key = null;
-		for (Iterator iter = this.paramsWithoutValidation.keySet().iterator(); iter.hasNext();) {
-
-			key = (String) iter.next();
-
+		for (String key : this.paramsWithoutValidation.keySet()) {
 			p = Pattern.compile(key);
 			m = p.matcher(action);
 
 			if (m.matches()) {
 
-				List parametersWithoutValidation = (List) this.paramsWithoutValidation.get(key);
+				List<String> parametersWithoutValidation = this.paramsWithoutValidation.get(key);
 
 				String definedParameter = null;
 				for (int i = 0; i < parametersWithoutValidation.size(); i++) {
@@ -346,19 +308,16 @@ public class HDIVConfig {
 	 * @return True if <code>value</code> is an init action or parameter. False otherwise.
 	 * @since HDIV 1.1.1
 	 */
-	public String checkValue(String value, Map startValues) {
+	public String checkValue(String value, Map<String, Pattern> startValues) {
 
-		for (Iterator iter = startValues.keySet().iterator(); iter.hasNext();) {
-
-			String key = (String) iter.next();
-			Pattern p = (Pattern) startValues.get(key);
-
-			Matcher m = p.matcher(value);
-
-			if (m.matches()) {
-				return key;
+		for (Map.Entry<String, Pattern> startValue : startValues.entrySet()) {
+			Matcher matcher = startValue.getValue().matcher(value);
+			
+			if (matcher.matches()) {
+				return startValue.getKey();
 			}
 		}
+		
 		return null;
 	}
 
@@ -374,12 +333,10 @@ public class HDIVConfig {
 	 * @return True if <code>value</code> is an init action or parameter. False otherwise.
 	 * @since HDIV 1.1.1
 	 */
-	public String checkStartPageValue(String value, String method, Map startValues) {
-
-		for (Iterator iter = startValues.keySet().iterator(); iter.hasNext();) {
-
-			String key = (String) iter.next();
-			StartPage startPage = (StartPage) startValues.get(key);
+	protected String checkStartPageValue(String value, String method) {
+		
+		for (String key : this.startPages.keySet()) {
+			StartPage startPage = (StartPage) this.startPages.get(key);
 
 			Matcher m = startPage.getCompiledPattern().matcher(value);
 
@@ -463,11 +420,11 @@ public class HDIVConfig {
 		this.confidentiality = confidentiality;
 	}
 
-	public Map getParamsWithoutValidation() {
+	public Map<String, List<String>> getParamsWithoutValidation() {
 		return paramsWithoutValidation;
 	}
 
-	public void setParamsWithoutValidation(Map paramsWithoutValidation) {
+	public void setParamsWithoutValidation(Map<String, List<String>> paramsWithoutValidation) {
 		this.paramsWithoutValidation = paramsWithoutValidation;
 	}
 
@@ -477,21 +434,20 @@ public class HDIVConfig {
 	 * @param userStartPages
 	 *            list of start pages defined by the user
 	 */
-	public void setUserStartPages(List userStartPages) {
+	public void setUserStartPages(List<Object> userStartPages) {
 
-		for (int i = 0; i < userStartPages.size(); i++) {
-
+		for (Object userStartPage : userStartPages) {
 			StartPage startPage;
-
-			Object o = userStartPages.get(i);
-			if (o instanceof String) {
-				String currentPattern = (String) o;
+			
+			if (userStartPage instanceof String) {
+				String currentPattern = (String) userStartPage;
 				startPage = new StartPage(null, currentPattern);
 			} else {
-				startPage = (StartPage) o;
+				startPage = (StartPage) userStartPage;
 			}
 
 			this.startPages.put(startPage.getPattern(), startPage);
+			
 		}
 	}
 
@@ -501,12 +457,10 @@ public class HDIVConfig {
 	 * @param userStartParameters
 	 *            list of init parameters defined by the user
 	 */
-	public void setUserStartParameters(List userStartParameters) {
+	public void setUserStartParameters(List<String> userStartParameters) {
 
-		for (int i = 0; i < userStartParameters.size(); i++) {
-
-			String currentPattern = (String) userStartParameters.get(i);
-			this.startParameters.put(currentPattern, Pattern.compile(currentPattern));
+		for (String useStartParameter : userStartParameters) {
+			this.startParameters.put(useStartParameter, Pattern.compile(useStartParameter));
 		}
 	}
 
@@ -558,17 +512,13 @@ public class HDIVConfig {
 		Pattern p = null;
 		Matcher m = null;
 
-		Iterator userDefinedURLs = this.validations.getUrls().keySet().iterator();
-		while (userDefinedURLs.hasNext()) {
-
-			String regExp = (String) userDefinedURLs.next();
-
+		for (String regExp : this.validations.getUrls().keySet()) {
 			p = Pattern.compile(regExp);
 			m = p.matcher(url);
 
 			if (m.matches()) {
 
-				List userDefinedValidations = (List) this.validations.getUrls().get(regExp);
+				List<IValidation> userDefinedValidations = this.validations.getUrls().get(regExp);
 				for (int i = 0; i < userDefinedValidations.size(); i++) {
 
 					IValidation currentValidation = (IValidation) userDefinedValidations.get(i);
@@ -633,34 +583,24 @@ public class HDIVConfig {
 	 *            The protected extensions to set.
 	 * @since HDIV 2.0
 	 */
-	public void setProtectedExtensions(List protectedExtensions) {
+	public void setProtectedExtensions(List<String> protectedExtensions) {
 
-		this.protectedURLPatterns = new Hashtable();
-
-		String currentProtectedExtension;
-		for (int i = 0; i < protectedExtensions.size(); i++) {
-
-			currentProtectedExtension = (String) protectedExtensions.get(i);
-			this.protectedURLPatterns.put(currentProtectedExtension, Pattern.compile(currentProtectedExtension));
+		this.protectedURLPatterns = new HashMap<String, Pattern>();
+		
+		for (String protectedExtension : protectedExtensions) {
+			this.protectedURLPatterns.put(protectedExtension, Pattern.compile(protectedExtension));
 		}
 	}
 
-	public void setExcludedExtensions(List excludedExtensions) {
-		this.excludedURLExtensions = new ArrayList();
-
-		String currentExtension;
-		for (int i = 0; i < excludedExtensions.size(); i++) {
-
-			currentExtension = (String) excludedExtensions.get(i);
-			this.excludedURLExtensions.add(currentExtension);
-		}
+	public void setExcludedExtensions(List<String> excludedExtensions) {
+		this.excludedURLExtensions.addAll(excludedExtensions);
 	}
 
 	/**
 	 * @return Returns the protected extensions.
 	 * @since HDIV 2.0
 	 */
-	public Hashtable getProtectedURLPatterns() {
+	public Map<String, Pattern> getProtectedURLPatterns() {
 		return protectedURLPatterns;
 	}
 
@@ -668,7 +608,7 @@ public class HDIVConfig {
 	 * @return Returns the excluded extensions.
 	 * @since HDIV 2.1.0
 	 */
-	public List getExcludedURLExtensions() {
+	public List<String> getExcludedURLExtensions() {
 		return excludedURLExtensions;
 	}
 

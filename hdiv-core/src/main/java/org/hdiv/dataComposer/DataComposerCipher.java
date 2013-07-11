@@ -21,16 +21,15 @@ import org.hdiv.state.IState;
 import org.hdiv.util.EncodingUtil;
 
 /**
- * It generates the states of each page storing them in the client. These states will
- * be encoded to guarantee its integrity.
+ * It generates the states of each page storing them in the client. These states will be encoded to guarantee its
+ * integrity.
  * <p>
- * Non editable values are hidden to the client to guarantee confidentiality
- * <b>confidentiality</b>.
+ * Non editable values are hidden to the client to guarantee confidentiality <b>confidentiality</b>.
  * </p>
  * 
  * @see org.hdiv.dataComposer.DataComposerMemory
  * @author Roberto Velasco
- * @author Gorka Vicente 
+ * @author Gorka Vicente
  */
 public class DataComposerCipher extends DataComposerMemory {
 
@@ -50,29 +49,24 @@ public class DataComposerCipher extends DataComposerMemory {
 	private int allowedLength;
 
 	/**
-	 * Indicates if the Encoded strategy has used the Memory strategy to store a
-	 * state, because if the generated state to store all the data of a link or form
-	 * exceeds the allowed length <code>allowedLength</code> this state is stored
-	 * in the user session, as in the Memory strategy.
+	 * Indicates if the Encoded strategy has used the Memory strategy to store a state, because if the generated state
+	 * to store all the data of a link or form exceeds the allowed length <code>allowedLength</code> this state is
+	 * stored in the user session, as in the Memory strategy.
 	 */
 	private boolean savePage = false;
 
 	/**
-	 * It is called by each request or form existing in the page returned by the
-	 * server.
+	 * It is called by each request or form existing in the page returned by the server.
 	 * <p>
 	 * it generates an encoded string containing the current state.
 	 * </p>
 	 * <p>
-	 * If the size of the generated state exceeds the maximun length allowed
-	 * <code>allowedLength</code> the Memory strategy will be used, adding the
-	 * state of the request or form to the page <code>page</code> and returning an
-	 * identifier composed by the page identifier and the state identifier as a
-	 * result.
+	 * If the size of the generated state exceeds the maximum length allowed <code>allowedLength</code> the Memory
+	 * strategy will be used, adding the state of the request or form to the page <code>page</code> and returning an
+	 * identifier composed by the page identifier and the state identifier as a result.
 	 * </p>
 	 * 
-	 * @return String with the encoded state. If the Memory strategy has been used,
-	 *         an identifier.
+	 * @return String with the encoded state. If the Memory strategy has been used, an identifier.
 	 */
 	public String endRequest() {
 
@@ -104,10 +98,10 @@ public class DataComposerCipher extends DataComposerMemory {
 	}
 
 	/**
-	 * Only if the generated encoded state exceeds the maximun length allowed it will be
-	 * necessary to store in session the object representing the current page.
+	 * Only if the generated encoded state exceeds the maximum length allowed it will be necessary to store in session
+	 * the object representing the current page.
 	 * 
-	 * @see org.hdiv.dataComposer.DataComposerMemory#endPage() 
+	 * @see org.hdiv.dataComposer.DataComposerMemory#endPage()
 	 */
 	public void endPage() {
 
@@ -120,21 +114,16 @@ public class DataComposerCipher extends DataComposerMemory {
 	}
 
 	/**
-	 * @return Returns the encoding util.
-	 */
-	public EncodingUtil getEncodingUtil() {
-		return encodingUtil;
-	}
-
-	/**
-	 * @param encodingUtil The encoding util to set.
+	 * @param encodingUtil
+	 *            The encoding util to set.
 	 */
 	public void setEncodingUtil(EncodingUtil encodingUtil) {
 		this.encodingUtil = encodingUtil;
 	}
 
 	/**
-	 * @param allowedLength The allowed length to set.
+	 * @param allowedLength
+	 *            The allowed length to set.
 	 */
 	public void setAllowedLength(int allowedLength) {
 		this.allowedLength = allowedLength;

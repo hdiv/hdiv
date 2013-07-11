@@ -156,6 +156,9 @@ public class HdivRequestDataValueProcessor implements RequestDataValueProcessor 
 		if (requestId != null && requestId.length() > 0) {
 			String hdivStateParam = (String) request.getSession().getAttribute(Constants.HDIV_PARAMETER);
 			extraFields.put(hdivStateParam, requestId);
+			
+			// Publish the state in request to make it accessible on jsp
+			request.setAttribute(FormUrlProcessor.FORM_STATE_ID, requestId);
 		}
 		return extraFields;
 	}

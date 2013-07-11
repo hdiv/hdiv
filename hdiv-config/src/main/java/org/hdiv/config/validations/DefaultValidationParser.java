@@ -26,12 +26,12 @@ public class DefaultValidationParser extends DefaultHandler {
 	/**
 	 * List with processed validations.
 	 */
-	private List validations = new ArrayList();
+	private List<Map<String, String>> validations = new ArrayList<Map<String, String>>();
 
 	/**
 	 * Current Validation data.
 	 */
-	private Map validation = null;
+	private Map<String, String> validation = null;
 
 	/**
 	 * Read xml file from the given path.
@@ -57,7 +57,7 @@ public class DefaultValidationParser extends DefaultHandler {
 	public void startElement(String uri, String localName, String qName, Attributes attributes) {
 
 		if (qName != null && qName.equals("validation")) {
-			this.validation = new HashMap();
+			this.validation = new HashMap<String, String>();
 			String id = attributes.getValue("id");
 			this.validation.put("id", id);
 		}
@@ -82,7 +82,7 @@ public class DefaultValidationParser extends DefaultHandler {
 	/**
 	 * @return the validations
 	 */
-	public List getValidations() {
+	public List<Map<String, String>> getValidations() {
 		return validations;
 	}
 

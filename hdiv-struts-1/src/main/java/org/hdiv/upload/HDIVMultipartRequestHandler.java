@@ -20,10 +20,12 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -47,17 +49,17 @@ public class HDIVMultipartRequestHandler extends CommonsMultipartRequestHandler 
 	/**
 	 * The combined text and file request parameters.
 	 */
-	private Hashtable elementsAll;
+	private Hashtable elementsAll = new Hashtable();
 
 	/**
 	 * The file request parameters.
 	 */ 
-	private Hashtable elementsFile;
+	private Hashtable elementsFile = new Hashtable();
 
 	/**
 	 * The text request parameters.
 	 */
-	private Hashtable elementsText;
+	private Hashtable elementsText = new Hashtable();
 	
 
 	/**
@@ -70,11 +72,6 @@ public class HDIVMultipartRequestHandler extends CommonsMultipartRequestHandler 
 	 * @throws ServletException if an unrecoverable error occurs.
 	 */
 	public void handleRequest(HttpServletRequest request) throws ServletException {
-				
-		// Create the hash tables to be populated.
-		elementsText = new Hashtable();
-		elementsFile = new Hashtable();
-		elementsAll = new Hashtable();
 		
 		if (request instanceof MultipartRequestWrapper) {
 
@@ -92,27 +89,21 @@ public class HDIVMultipartRequestHandler extends CommonsMultipartRequestHandler 
 			}			
 			
 			// file items
-			Hashtable items = requestWrapper.getFileElements();
+			Map items = requestWrapper.getFileElements();
 			
-			Enumeration fileElements = items.elements();
-			while (fileElements.hasMoreElements()) {
-								
-		        List currentItems = (List) fileElements.nextElement();
-		        if (items != null) {
-		        	addFileParameter(currentItems);
-		        }				
+			for (Object fileItem : items.values()) {
+				if (items != null) {
+		        	addFileParameter((List)fileItem);
+		        }	
 			}
 			
 			// text items
-			items = requestWrapper.getTextElements();
+			Map<String, Object> textElements = requestWrapper.getTextElements();
 			
-			Enumeration fileKeys = items.keys();
-			while (fileKeys.hasMoreElements()) {
-				
-				String currentTextKey = (String) fileKeys.nextElement();
-				String [] currentTextValue = (String []) items.get(currentTextKey);
-				this.addTextParameter(wrapper, currentTextKey, currentTextValue);				
-			}		
+			for (String key : textElements.keySet()) {
+				String [] currentTextValue = (String []) items.get(key);
+				this.addTextParameter(wrapper, key, currentTextValue);	
+			}	
 		}
 	}
 

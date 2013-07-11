@@ -15,7 +15,6 @@
  */
 package org.hdiv.state;
 
-import java.util.Hashtable;
 import java.util.Map;
 
 public interface IState {
@@ -23,7 +22,7 @@ public interface IState {
 	/**
 	 * @return Returns the parameters
 	 */
-	public Map getParameters();
+	public Map<String, IParameter> getParameters();
 
 	/**
 	 * Adds a new parameter to the state <code>this</code>. If it is a required parameter
@@ -84,6 +83,6 @@ public interface IState {
 	/**
 	 * @return Returns required parameters map.
 	 */
-	public Hashtable getRequiredParams();
+	public Map<String, IParameter> getRequiredParams();
 	
 }

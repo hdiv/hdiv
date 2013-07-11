@@ -21,11 +21,10 @@ import org.hdiv.state.IState;
 import org.hdiv.util.EncodingUtil;
 
 /**
- * It generates the page states stored in the client and in the user session. These
- * states will be added to each possible request encoded in Base64 and the hash of
- * each state will be stored in the user session. With this implementation we are
- * able to check if the hash received in a request is equal to the one stored in
- * session, which means the request is correct.
+ * It generates the page states stored in the client and in the user session. These states will be added to each
+ * possible request encoded in Base64 and the hash of each state will be stored in the user session. With this
+ * implementation we are able to check if the hash received in a request is equal to the one stored in session, which
+ * means the request is correct.
  * 
  * @see org.hdiv.dataComposer.DataComposerMemory
  * @author Gorka Vicente
@@ -48,12 +47,10 @@ public class DataComposerHash extends DataComposerMemory {
 	private int allowedLength;
 
 	/**
-	 * The state that is sent to the client is generated in Base64 and the hash of
-	 * this state is stored in the session. Thus, it is able to check the state
-	 * received in the request with the hash in the server.
+	 * The state that is sent to the client is generated in Base64 and the hash of this state is stored in the session.
+	 * Thus, it is able to check the state received in the request with the hash in the server.
 	 * 
-	 * @return Obtains the state encoded in Base64 that will be added to the request
-	 *         in the HDIV extra parameter.
+	 * @return Obtains the state encoded in Base64 that will be added to the request in the HDIV extra parameter.
 	 */
 	public String endRequest() {
 
@@ -74,8 +71,6 @@ public class DataComposerHash extends DataComposerMemory {
 						+ "] is greater than allowedLength [" + this.allowedLength);
 			}
 
-			super.startPage();
-
 			this.getPage().addState(state);
 			state.setPageId(this.getPage().getName());
 
@@ -92,21 +87,16 @@ public class DataComposerHash extends DataComposerMemory {
 	}
 
 	/**
-	 * @return Returns the encoding util.
-	 */
-	public EncodingUtil getEncodingUtil() {
-		return encodingUtil;
-	}
-
-	/**
-	 * @param encodingUtil The encoding util to set.
+	 * @param encodingUtil
+	 *            The encoding util to set.
 	 */
 	public void setEncodingUtil(EncodingUtil encodingUtil) {
 		this.encodingUtil = encodingUtil;
 	}
 
 	/**
-	 * @param allowedLength The allowed length to set.
+	 * @param allowedLength
+	 *            The allowed length to set.
 	 */
 	public void setAllowedLength(int allowedLength) {
 		this.allowedLength = allowedLength;

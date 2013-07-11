@@ -19,9 +19,11 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.hdiv.AbstractHDIVTestCase;
 import org.hdiv.config.HDIVConfig;
+import org.hdiv.state.IParameter;
 import org.hdiv.state.IState;
 import org.hdiv.state.StateUtil;
 import org.hdiv.util.HDIVUtil;
+import org.springframework.mock.web.MockHttpServletRequest;
 
 /**
  * Unit tests for the <code>org.hdiv.composer.DataComposerMemory</code> class.
@@ -43,7 +45,8 @@ public class DataComposerHashTest extends AbstractHDIVTestCase {
 	 */
 	protected void onSetUp() throws Exception {
 
-		this.dataComposerFactory = (DataComposerFactory) this.getApplicationContext().getBean(DataComposerFactory.class);
+		this.dataComposerFactory = (DataComposerFactory) this.getApplicationContext()
+				.getBean(DataComposerFactory.class);
 		this.stateUtil = (StateUtil) this.getApplicationContext().getBean(StateUtil.class);
 	}
 
@@ -99,6 +102,44 @@ public class DataComposerHashTest extends AbstractHDIVTestCase {
 		IState state = this.stateUtil.restoreState(stateId);
 
 		assertEquals("test.do", state.getAction());
+	}
+
+	public void testAjax() {
+
+		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
+		IDataComposer dataComposer = this.dataComposerFactory.newInstance(request);
+		HDIVUtil.setDataComposer(dataComposer, request);
+
+		dataComposer.startPage();
+		dataComposer.beginRequest("test.do");
+		dataComposer.compose("parameter1", "1", false);
+		String state1 = dataComposer.endRequest();
+		dataComposer.endPage();
+
+		assertNotNull(state1);
+
+		// Ajax request to modify state
+
+		request.addParameter("_MODIFY_HDIV_STATE_", state1);
+		IDataComposer dataComposer2 = this.dataComposerFactory.newInstance(request);
+		HDIVUtil.setDataComposer(dataComposer2, request);
+
+		// Add new parameter
+		dataComposer2.compose("parameter2", "2", false);
+		String state2 = dataComposer2.endRequest();
+		dataComposer2.endPage();
+
+		// Restore state
+		IState state = this.stateUtil.restoreState(state2);
+
+		// State contains both parameters
+		IParameter param = state.getParameter("parameter1");
+		String val = (String) param.getValues().get(0);
+		assertEquals("1", val);
+
+		param = state.getParameter("parameter2");
+		val = (String) param.getValues().get(0);
+		assertEquals("2", val);
 	}
 
 }

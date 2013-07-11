@@ -74,7 +74,7 @@ public interface IPage {
 	/**
 	 * @return Returns the page states.
 	 */
-	public Map getStates();
+	public Map<String, Object> getStates();
 	
 	/**
 	 * Returns the unique id of flow.

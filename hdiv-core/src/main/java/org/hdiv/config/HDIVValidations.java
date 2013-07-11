@@ -17,10 +17,10 @@ package org.hdiv.config;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.hdiv.validator.IValidation;
 import org.hdiv.validator.Validation;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
@@ -37,12 +37,12 @@ public class HDIVValidations implements BeanFactoryAware {
 	/**
 	 * Map containing the urls to which the user wants to apply validation for the editable parameters.
 	 */
-	protected Map urls;
+	protected Map<String, List<IValidation>> urls;
 
 	/**
 	 * Map for configuration purpose.
 	 */
-	protected Map rawUrls;
+	protected Map<String, List<String>> rawUrls;
 
 	/**
 	 * Spring bean container factory.
@@ -55,12 +55,10 @@ public class HDIVValidations implements BeanFactoryAware {
 	 */
 	public void init() {
 
-		this.urls = new HashMap();
-
-		Iterator iterator = this.rawUrls.keySet().iterator();
-		while (iterator.hasNext()) {
-			String key = (String) iterator.next();
-			List ids = (List) rawUrls.get(key);
+		this.urls = new HashMap<String, List<IValidation>>();
+		
+		for (String key : this.rawUrls.keySet()) {
+			List<String> ids = rawUrls.get(key);
 			this.urls.put(key, this.createValidationList(ids));
 		}
 
@@ -73,15 +71,14 @@ public class HDIVValidations implements BeanFactoryAware {
 	 *            List with bean ids.
 	 * @return List with bean instances.
 	 */
-	private List createValidationList(List ids) {
-		List newList = new ArrayList();
+	private List<IValidation> createValidationList(List<String> ids) {
+		List<IValidation> newList = new ArrayList<IValidation>();
 
-		Iterator iterator = ids.iterator();
-		while (iterator.hasNext()) {
-			String id = (String) iterator.next();
+		for (String id : ids) {
 			Validation validation = (Validation) this.beanFactory.getBean(id);
 			newList.add(validation);
 		}
+		
 		return newList;
 	}
 
@@ -107,7 +104,7 @@ public class HDIVValidations implements BeanFactoryAware {
 	/**
 	 * @return Returns the urls.
 	 */
-	public Map getUrls() {
+	public Map<String, List<IValidation>> getUrls() {
 		return urls;
 	}
 
@@ -115,14 +112,14 @@ public class HDIVValidations implements BeanFactoryAware {
 	 * @param urls
 	 *            The urls to set.
 	 */
-	public void setUrls(Map urls) {
+	public void setUrls(Map<String, List<IValidation>> urls) {
 		this.urls = urls;
 	}
 
 	/**
 	 * @return the rawUrls
 	 */
-	public Map getRawUrls() {
+	public Map<String, List<String>> getRawUrls() {
 		return rawUrls;
 	}
 
@@ -130,7 +127,7 @@ public class HDIVValidations implements BeanFactoryAware {
 	 * @param rawUrls
 	 *            the rawUrls to set
 	 */
-	public void setRawUrls(Map rawUrls) {
+	public void setRawUrls(Map<String, List<String>> rawUrls) {
 		this.rawUrls = rawUrls;
 	}
 

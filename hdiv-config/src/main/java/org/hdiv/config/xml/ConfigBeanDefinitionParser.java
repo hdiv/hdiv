@@ -16,7 +16,7 @@
 package org.hdiv.config.xml;
 
 import java.util.ArrayList;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -92,7 +92,7 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 	/**
 	 * List of StartPage objects
 	 */
-	private List startPages = new ArrayList();
+	private List<StartPage> startPages = new ArrayList<StartPage>();
 
 	/* Bean references */
 
@@ -127,14 +127,7 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		this.uidGeneratorRef = this.createSimpleBean(element, source, parserContext, RandomGuidUidGenerator.class);
 		this.createPageIdGenerator(element, source, parserContext);
 		this.createKeyFactory(element, source, parserContext);
-		String userData = element.getAttribute("userData");
-		if (userData == null || userData.length() < 1) {
-			// If user don't define userData bean, create default
-			this.userDataRef = this.createSimpleBean(element, source, parserContext, UserData.class);
-		} else {
-			// Use user defined
-			this.userDataRef = new RuntimeBeanReference(userData);
-		}
+		this.userDataRef = this.createUserData(element, source, parserContext);
 
 		this.createStringBean("hdivParameter", "_HDIV_STATE_", source, parserContext);
 		this.createStringBean("modifyHdivStateParameter", "_MODIFY_HDIV_STATE_", source, parserContext);
@@ -142,7 +135,7 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		this.createValidatorErrorHandler(element, source, parserContext);
 		this.loggerRef = this.createLogger(element, source, parserContext);
 		this.createStateCache(element, source, parserContext);
-		this.sessionRef = this.createSessionHDIV(element, source, parserContext);
+		this.sessionRef = this.createSession(element, source, parserContext);
 		this.encodingUtilRef = this.createEncodingUtil(element, source, parserContext);
 		this.createSimpleBean(element, source, parserContext, ApplicationHDIV.class);
 		this.createCipher(element, source, parserContext);
@@ -202,6 +195,17 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		return new RuntimeBeanReference(name);
 	}
 
+	private RuntimeBeanReference createUserData(Element element, Object source, ParserContext parserContext) {
+		String userData = element.getAttribute("userData");
+		if (userData == null || userData.length() < 1) {
+			// If user don't define userData bean, create default
+			return this.createSimpleBean(element, source, parserContext, UserData.class);
+		} else {
+			// Use user defined
+			return new RuntimeBeanReference(userData);
+		}
+	}
+
 	private RuntimeBeanReference createLogger(Element element, Object source, ParserContext parserContext) {
 		RootBeanDefinition bean = new RootBeanDefinition(Logger.class);
 		bean.setSource(source);
@@ -250,14 +254,18 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		return new RuntimeBeanReference(name);
 	}
 
-	private RuntimeBeanReference createSessionHDIV(Element element, Object source, ParserContext parserContext) {
-		RootBeanDefinition bean = new RootBeanDefinition(SessionHDIV.class);
-		bean.setSource(source);
-		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
-		bean.setInitMethodName("init");
-		String name = parserContext.getReaderContext().generateBeanName(bean);
-		parserContext.getRegistry().registerBeanDefinition(name, bean);
-		return new RuntimeBeanReference(name);
+	private RuntimeBeanReference createSession(Element element, Object source, ParserContext parserContext) {
+
+		// Simple bean overriding
+		boolean existSession = parserContext.getRegistry().containsBeanDefinition("org.hdiv.session");
+
+		if (!existSession) {
+			// If user don't define ISession bean, create default
+			return this.createSimpleBean(element, source, parserContext, SessionHDIV.class);
+		} else {
+			// Use user defined
+			return new RuntimeBeanReference("org.hdiv.session");
+		}
 	}
 
 	private RuntimeBeanReference createCipher(Element element, Object source, ParserContext parserContext) {
@@ -457,8 +465,7 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		bean.setSource(source);
 		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
 		bean.setInitMethodName("init");
-		Map map = new Hashtable();
-		bean.getPropertyValues().addPropertyValue("rawUrls", map);
+		bean.getPropertyValues().addPropertyValue("rawUrls", new HashMap<String, List<String>>());
 		String name = parserContext.getReaderContext().generateBeanName(bean);
 		parserContext.getRegistry().registerBeanDefinition(name, bean);
 		return new RuntimeBeanReference(name);
@@ -551,7 +558,7 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 	}
 
 	private RuntimeBeanReference createSimpleBean(Element element, Object source, ParserContext parserContext,
-			Class clazz) {
+			Class<?> clazz) {
 		RootBeanDefinition bean = new RootBeanDefinition(clazz);
 		bean.setSource(source);
 		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
@@ -590,7 +597,7 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 
 		String value = node.getTextContent();
 
-		List patterns = this.convertToList(value);
+		List<String> patterns = this.convertToList(value);
 		for (int i = 0; i < patterns.size(); i++) {
 			String pattern = (String) patterns.get(i);
 			StartPage startPage = new StartPage(method, pattern);
@@ -608,7 +615,7 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 	private void processParamsWithoutValidation(Node node, RootBeanDefinition bean) {
 		NodeList nodeList = node.getChildNodes();
 
-		Map map = new Hashtable();
+		Map<String, List<String>> map = new HashMap<String, List<String>>();
 		bean.getPropertyValues().addPropertyValue("paramsWithoutValidation", map);
 		for (int i = 0; i < nodeList.getLength(); i++) {
 			Node mappingNode = nodeList.item(i);
@@ -631,16 +638,16 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 
 	}
 
-	private void processMapping(Node node, Map map) {
+	private void processMapping(Node node, Map<String, List<String>> map) {
 		NamedNodeMap attributes = node.getAttributes();
 		String url = attributes.getNamedItem("url").getTextContent();
 		String parameters = attributes.getNamedItem("parameters").getTextContent();
 		map.put(url, this.convertToList(parameters));
 	}
 
-	private List convertToList(String data) {
+	private List<String> convertToList(String data) {
 		String[] result = data.split(",");
-		List list = new ArrayList();
+		List<String> list = new ArrayList<String>();
 		// clean the edges of the item - spaces/returns/tabs etc may be used for readability in the configs
 		for (int i = 0; i < result.length; i++) {
 			// trims leading and trailing whitespace

@@ -33,8 +33,7 @@
 		</property>
 	</bean>
 
-	<bean id="cache" class="org.hdiv.session.StateCache" singleton="false"
-		init-method="init">
+	<bean id="cache" class="org.hdiv.session.StateCache" singleton="false">
 		<property name="maxSize">
 			<value>5</value>
 		</property>
@@ -46,8 +45,7 @@
 	</bean>
 
 	<!--CONTEXT BEANS -->
-	<bean id="sessionHDIV" class="org.hdiv.session.SessionHDIV"
-		init-method="init">
+	<bean id="sessionHDIV" class="org.hdiv.session.SessionHDIV">
 	</bean>
 
 	<bean id="application" class="org.hdiv.application.ApplicationHDIV" />

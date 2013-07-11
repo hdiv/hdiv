@@ -40,7 +40,7 @@ public class Parameter implements IParameter, Serializable {
 	/**
 	 * List of values for parameter <code>this</code>
 	 */
-	private List values;
+	private List<String> values = new ArrayList<String>();
 
 	/**
 	 * Indicates if the parameter <code>this</code> is editable or not.
@@ -70,23 +70,6 @@ public class Parameter implements IParameter, Serializable {
 	 * modified the request on purpose.
 	 */
 	private boolean actionParam;
-
-
-	/**
-	 * Creates a new Parameter object.
-	 *
-	 */
-	public Parameter() {
-		init();
-	}
-
-	/**
-	 * Initialization of the parameter <code>this</code> value array
-	 */
-	public void init() {
-		// constructs an empty list with an initial capacity of ten.
-		this.values = new ArrayList();
-	}
 
 	/**
 	 * Adds the value <code>value</code> to the parameter <code>this</code>.
@@ -149,14 +132,14 @@ public class Parameter implements IParameter, Serializable {
 	/**
 	 * @return Returns the values of parameter <code>this</code>.
 	 */
-	public List getValues() {
+	public List<String> getValues() {
 		return this.values;
 	}
 
 	/**
 	 * @param values The values to set.
 	 */
-	public void setValues(List values) {
+	public void setValues(List<String> values) {
 		this.values = values;
 	}
 
