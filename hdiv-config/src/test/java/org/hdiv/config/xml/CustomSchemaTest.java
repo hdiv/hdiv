@@ -4,6 +4,7 @@ import junit.framework.TestCase;
 
 import org.hdiv.config.HDIVConfig;
 import org.hdiv.config.HDIVValidations;
+import org.hdiv.session.StateCache;
 import org.hdiv.validator.Validation;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -69,6 +70,16 @@ public class CustomSchemaTest extends TestCase {
 			String name = names[i];
 			System.out.println(name);
 		}
+
+	}
+
+	public void testStateCache() {
+
+		ApplicationContext context = new ClassPathXmlApplicationContext(
+				"org/hdiv/config/xml/hdiv-config-test-schema.xml");
+
+		StateCache stateCache = context.getBean(StateCache.class);
+		assertNotNull(stateCache);
 
 	}
 
