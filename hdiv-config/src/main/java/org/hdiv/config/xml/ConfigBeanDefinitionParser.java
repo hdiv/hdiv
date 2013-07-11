@@ -70,6 +70,10 @@ import org.w3c.dom.NodeList;
  */
 public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 
+	private static final String SESSION_BEAN_NAME = "org.hdiv.session";
+
+	private static final String VALIDATOR_ERROR_HANDLER_BEAN_NAME = "org.hdiv.validatorErrorHandler";
+
 	/**
 	 * The name of the bean to use to look up in an implementation of {@link RequestDataValueProcessor} has been
 	 * configured.
@@ -217,14 +221,26 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 	}
 
 	private RuntimeBeanReference createValidatorErrorHandler(Element element, Object source, ParserContext parserContext) {
-		RootBeanDefinition bean = new RootBeanDefinition(DefaultValidatorErrorHandler.class);
-		bean.setSource(source);
-		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
-		bean.getPropertyValues().addPropertyValue("userData", this.userDataRef);
-		bean.getPropertyValues().addPropertyValue("config", this.configRef);
-		String name = parserContext.getReaderContext().generateBeanName(bean);
-		parserContext.getRegistry().registerBeanDefinition(name, bean);
-		return new RuntimeBeanReference(name);
+
+		// Simple bean overriding
+		boolean existBean = parserContext.getRegistry().containsBeanDefinition(VALIDATOR_ERROR_HANDLER_BEAN_NAME);
+
+		if (!existBean) {
+			// If user don't define ValidatorErrorHandler bean, create default
+			RootBeanDefinition bean = new RootBeanDefinition(DefaultValidatorErrorHandler.class);
+			bean.setSource(source);
+			bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
+			bean.getPropertyValues().addPropertyValue("userData", this.userDataRef);
+			bean.getPropertyValues().addPropertyValue("config", this.configRef);
+			String name = parserContext.getReaderContext().generateBeanName(bean);
+			parserContext.getRegistry().registerBeanDefinition(name, bean);
+			return new RuntimeBeanReference(name);
+
+		} else {
+			// Use user defined
+			return new RuntimeBeanReference(VALIDATOR_ERROR_HANDLER_BEAN_NAME);
+		}
+
 	}
 
 	private RuntimeBeanReference createStateCache(Element element, Object source, ParserContext parserContext) {
@@ -232,7 +248,6 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		bean.setSource(source);
 		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
 		bean.setScope(BeanDefinition.SCOPE_PROTOTYPE);
-		bean.setInitMethodName("init");
 
 		String maxSize = element.getAttribute("maxPagesPerSession");
 		if (StringUtils.hasText(maxSize)) {
@@ -257,14 +272,14 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 	private RuntimeBeanReference createSession(Element element, Object source, ParserContext parserContext) {
 
 		// Simple bean overriding
-		boolean existSession = parserContext.getRegistry().containsBeanDefinition("org.hdiv.session");
+		boolean existSession = parserContext.getRegistry().containsBeanDefinition(SESSION_BEAN_NAME);
 
 		if (!existSession) {
 			// If user don't define ISession bean, create default
 			return this.createSimpleBean(element, source, parserContext, SessionHDIV.class);
 		} else {
 			// Use user defined
-			return new RuntimeBeanReference("org.hdiv.session");
+			return new RuntimeBeanReference(SESSION_BEAN_NAME);
 		}
 	}
 
@@ -648,7 +663,8 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 	private List<String> convertToList(String data) {
 		String[] result = data.split(",");
 		List<String> list = new ArrayList<String>();
-		// clean the edges of the item - spaces/returns/tabs etc may be used for readability in the configs
+		// clean the edges of the item - spaces/returns/tabs etc may be used for readability in the
+		// configs
 		for (int i = 0; i < result.length; i++) {
 			// trims leading and trailing whitespace
 			list.add(StringUtils.trimWhitespace(result[i]));
