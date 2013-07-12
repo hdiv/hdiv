@@ -25,9 +25,11 @@ import org.hdiv.config.HDIVValidations;
 import org.hdiv.config.validations.DefaultValidationParser;
 import org.hdiv.validator.Validation;
 import org.hdiv.web.validator.EditableParameterValidator;
+import org.springframework.beans.factory.BeanDefinitionStoreException;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.RuntimeBeanReference;
 import org.springframework.beans.factory.parsing.BeanComponentDefinition;
+import org.springframework.beans.factory.support.AbstractBeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.RootBeanDefinition;
 import org.springframework.beans.factory.xml.AbstractSingleBeanDefinitionParser;
@@ -43,6 +45,8 @@ import org.w3c.dom.NodeList;
  * BeanDefinitionParser for <hdiv:editableValidations> element.
  */
 public class EditableValidationsBeanDefinitionParser extends AbstractSingleBeanDefinitionParser {
+
+	public static final String EDITABLE_VALIDATIONS_BEAN_NAME = "org.hdiv.editableValidations";
 
 	/**
 	 * Location of the xml file with default editable validations.
@@ -65,6 +69,20 @@ public class EditableValidationsBeanDefinitionParser extends AbstractSingleBeanD
 	 * List with default editable validation bean ids.
 	 */
 	private List<String> defaultValidationIds = new ArrayList<String>();
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.springframework.beans.factory.xml.AbstractBeanDefinitionParser#resolveId(org.w3c.dom.Element,
+	 * org.springframework.beans.factory.support.AbstractBeanDefinition,
+	 * org.springframework.beans.factory.xml.ParserContext)
+	 */
+	@Override
+	protected String resolveId(Element element, AbstractBeanDefinition definition, ParserContext parserContext)
+			throws BeanDefinitionStoreException {
+
+		return EDITABLE_VALIDATIONS_BEAN_NAME;
+	}
 
 	/*
 	 * (non-Javadoc)

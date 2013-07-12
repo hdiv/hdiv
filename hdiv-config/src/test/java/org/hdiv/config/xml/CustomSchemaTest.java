@@ -11,32 +11,37 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class CustomSchemaTest extends TestCase {
 
-	public void testSchema() {
-		ApplicationContext context = new ClassPathXmlApplicationContext(
-				"org/hdiv/config/xml/hdiv-config-test-schema.xml");
+	private ApplicationContext context;
 
-		Validation validation = (Validation) context.getBean("id1");
+	@Override
+	protected void setUp() throws Exception {
+
+		this.context = new ClassPathXmlApplicationContext("org/hdiv/config/xml/hdiv-config-test-schema.xml");
+
+	}
+
+	public void testSchema() {
+
+		Validation validation = (Validation) this.context.getBean("id1");
 		assertNotNull(validation);
 		System.out.println(validation.toString());
 		System.out.println("-----------------------");
 
-		HDIVConfig hdivConfig = (HDIVConfig) context.getBean(HDIVConfig.class);
+		HDIVConfig hdivConfig = (HDIVConfig) this.context.getBean(HDIVConfig.class);
 		assertNotNull(hdivConfig);
 		System.out.println(hdivConfig.toString());
 		System.out.println("-----------------------");
 		assertTrue(hdivConfig.isShowErrorPageOnEditableValidation());
 
-		HDIVValidations validations = (HDIVValidations) context.getBean(HDIVValidations.class);
+		HDIVValidations validations = (HDIVValidations) this.context.getBean(HDIVValidations.class);
 		assertNotNull(validations);
 		System.out.println(validations.toString());
 
 	}
 
 	public void testStartPages() {
-		ApplicationContext context = new ClassPathXmlApplicationContext(
-				"org/hdiv/config/xml/hdiv-config-test-schema.xml");
 
-		HDIVConfig hdivConfig = (HDIVConfig) context.getBean(HDIVConfig.class);
+		HDIVConfig hdivConfig = (HDIVConfig) this.context.getBean(HDIVConfig.class);
 		assertNotNull(hdivConfig);
 
 		boolean result = hdivConfig.isStartPage("/login.html", "get");
@@ -47,10 +52,8 @@ public class CustomSchemaTest extends TestCase {
 	}
 
 	public void testExpiredSession() {
-		ApplicationContext context = new ClassPathXmlApplicationContext(
-				"org/hdiv/config/xml/hdiv-config-test-schema.xml");
 
-		HDIVConfig hdivConfig = (HDIVConfig) context.getBean(HDIVConfig.class);
+		HDIVConfig hdivConfig = (HDIVConfig) this.context.getBean(HDIVConfig.class);
 		assertNotNull(hdivConfig);
 
 		String result = hdivConfig.getSessionExpiredLoginPage();
@@ -59,13 +62,11 @@ public class CustomSchemaTest extends TestCase {
 	}
 
 	public void testNames() {
-		ApplicationContext context = new ClassPathXmlApplicationContext(
-				"org/hdiv/config/xml/hdiv-config-test-schema.xml");
 
-		HDIVConfig hdivConfig = (HDIVConfig) context.getBean(HDIVConfig.class);
+		HDIVConfig hdivConfig = (HDIVConfig) this.context.getBean(HDIVConfig.class);
 		assertNotNull(hdivConfig);
 
-		String[] names = context.getBeanDefinitionNames();
+		String[] names = this.context.getBeanDefinitionNames();
 		for (int i = 0; i < names.length; i++) {
 			String name = names[i];
 			System.out.println(name);
@@ -75,10 +76,7 @@ public class CustomSchemaTest extends TestCase {
 
 	public void testStateCache() {
 
-		ApplicationContext context = new ClassPathXmlApplicationContext(
-				"org/hdiv/config/xml/hdiv-config-test-schema.xml");
-
-		StateCache stateCache = context.getBean(StateCache.class);
+		StateCache stateCache = this.context.getBean(StateCache.class);
 		assertNotNull(stateCache);
 
 	}
