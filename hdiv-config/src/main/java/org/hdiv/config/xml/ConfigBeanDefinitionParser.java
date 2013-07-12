@@ -459,9 +459,10 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		}
 
 		bean.getPropertyValues().addPropertyValue("validations",
-				new RuntimeBeanReference("editableParametersValidations"));
+				new RuntimeBeanReference(EditableValidationsBeanDefinitionParser.EDITABLE_VALIDATIONS_BEAN_NAME));
 
-		if (!parserContext.getRegistry().containsBeanDefinition("editableParametersValidations")) {
+		if (!parserContext.getRegistry().containsBeanDefinition(
+				EditableValidationsBeanDefinitionParser.EDITABLE_VALIDATIONS_BEAN_NAME)) {
 			this.createDefaultEditableParametersValidations(element, source, parserContext);
 		}
 
@@ -481,9 +482,9 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
 		bean.setInitMethodName("init");
 		bean.getPropertyValues().addPropertyValue("rawUrls", new HashMap<String, List<String>>());
-		String name = parserContext.getReaderContext().generateBeanName(bean);
-		parserContext.getRegistry().registerBeanDefinition(name, bean);
-		return new RuntimeBeanReference(name);
+		parserContext.getRegistry().registerBeanDefinition(
+				EditableValidationsBeanDefinitionParser.EDITABLE_VALIDATIONS_BEAN_NAME, bean);
+		return new RuntimeBeanReference(EditableValidationsBeanDefinitionParser.EDITABLE_VALIDATIONS_BEAN_NAME);
 	}
 
 	private RuntimeBeanReference createFacesEventListener(Element element, Object source, ParserContext parserContext) {
