@@ -1,6 +1,6 @@
 package org.hdiv.web.hateoas;
 
-import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -11,7 +11,6 @@ import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.ResourceProcessor;
 import org.springframework.hateoas.ResourceSupport;
 import org.springframework.hateoas.Resources;
-import org.springframework.util.ReflectionUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.support.RequestDataValueProcessor;
@@ -22,9 +21,6 @@ import org.springframework.web.servlet.support.RequestDataValueProcessor;
  * @author inigo
  */
 public class ResourceRequestDataValueProcessor implements ResourceProcessor<ResourceSupport> {
-
-	/** Field of {@link Link} which stores the link address */
-	private static final Field HREF_FIELD = ReflectionUtils.findField(Link.class, "href");
 
 	/** Implementation of {@link RequestDataValueProcessor} which processes the resources' links */
 	@Autowired RequestDataValueProcessor requestDataValueProcessor;
@@ -54,7 +50,7 @@ public class ResourceRequestDataValueProcessor implements ResourceProcessor<Reso
 	 * @param resources
 	 */
 	protected void processResources(Resources<?> resources) {
-		processLink(resources.getLinks());
+		processLinks(resources);
 
 		for (Object resourceCandidate : resources.getContent()) {
 			if (resourceCandidate instanceof ResourceSupport) {
@@ -69,7 +65,7 @@ public class ResourceRequestDataValueProcessor implements ResourceProcessor<Reso
 	 * @param resource
 	 */
 	protected void processResource(Resource<?> resource) {
-		processLink(resource.getLinks());
+		processLinks(resource);
 
 		if (resource.getContent() instanceof ResourceSupport) {
 			process((ResourceSupport) resource.getContent());
@@ -81,15 +77,21 @@ public class ResourceRequestDataValueProcessor implements ResourceProcessor<Reso
 	 * 
 	 * @param links
 	 */
-	protected void processLink(List<Link> links) {
+	protected void processLinks(ResourceSupport resourceSupport) {
 		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
 				.getRequest();
-
+		
+		List<Link> links = resourceSupport.getLinks();
+		List<Link> processedLinks = new ArrayList<Link>();
+		
+		
 		for (Link link : links) {
 			String processedUrl = requestDataValueProcessor.processUrl(request, link.getHref());
-			ReflectionUtils.makeAccessible(HREF_FIELD);
-			ReflectionUtils.setField(HREF_FIELD, link, processedUrl);
+			processedLinks.add(new Link(processedUrl, link.getRel()));
 		}
+		
+		resourceSupport.removeLinks();
+		resourceSupport.add(processedLinks);
 	}
 
 }
