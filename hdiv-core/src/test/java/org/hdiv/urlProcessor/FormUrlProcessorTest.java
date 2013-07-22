@@ -44,6 +44,17 @@ public class FormUrlProcessorTest extends AbstractHDIVTestCase {
 		assertEquals(action, result);
 	}
 
+	public void testProcessActionGetMethod() {
+
+		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		String action = "/testAction.do";
+
+		String result = this.formUrlProcessor.processUrl(request, action, "GET");
+
+		// Post urls are not modified
+		assertEquals(action, result);
+	}
+	
 	public void testProcessActionWithParam() {
 
 		HttpServletRequest request = HDIVUtil.getHttpServletRequest();

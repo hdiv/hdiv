@@ -49,7 +49,7 @@ public class OutcomeTargetComponentProcessor extends AbstractComponentProcessor 
 
 			String url = this.helper.getUrl(context, component);
 
-			UrlData urlData = this.urlProcessor.createUrlData(url, false, request);
+			UrlData urlData = this.urlProcessor.createUrlData(url, "GET", request);
 			if (this.urlProcessor.isHdivStateNecessary(urlData)) {
 
 				boolean hasUIParams = UtilsJsf.hasUIParameterChild(component);

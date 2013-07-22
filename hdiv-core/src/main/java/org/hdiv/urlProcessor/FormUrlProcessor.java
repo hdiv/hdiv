@@ -50,6 +50,26 @@ public class FormUrlProcessor extends AbstractUrlProcessor {
 	 */
 	public String processUrl(HttpServletRequest request, String url) {
 
+		return this.processUrl(request, url, "POST");
+	}
+
+	/**
+	 * Process form action url to add hdiv state if it is necessary.
+	 * 
+	 * @param request
+	 *            {@link HttpServletRequest} object
+	 * @param url
+	 *            url to process
+	 * @param method
+	 *            form submit method
+	 * @return processed url
+	 */
+	public String processUrl(HttpServletRequest request, String url, String method) {
+
+		if (method == null) {
+			method = "POST";
+		}
+
 		IDataComposer dataComposer = HDIVUtil.getDataComposer(request);
 		if (dataComposer == null) {
 			// IDataComposer not initialized on request, request is out of filter
@@ -59,7 +79,7 @@ public class FormUrlProcessor extends AbstractUrlProcessor {
 			return url;
 		}
 
-		UrlData urlData = super.createUrlData(url, true, request);
+		UrlData urlData = super.createUrlData(url, method, request);
 		if (super.isHdivStateNecessary(urlData)) {
 			// the url needs protection
 			String stateId = dataComposer.beginRequest(urlData.getContextPathRelativeUrl());
@@ -75,7 +95,8 @@ public class FormUrlProcessor extends AbstractUrlProcessor {
 
 					for (int i = 0; i < values.length; i++) {
 						String value = values[i];
-						String composedParam = dataComposer.compose(key, value, false, null, true, "POST", Constants.ENCODING_UTF_8);
+						String composedParam = dataComposer.compose(key, value, false, null, true, method,
+								Constants.ENCODING_UTF_8);
 						values[i] = composedParam;
 					}
 					params.put(key, values);

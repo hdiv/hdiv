@@ -48,7 +48,7 @@ public class OutputLinkComponentProcessor extends AbstractComponentProcessor {
 
 			String url = component.getValue().toString();
 
-			UrlData urlData = this.urlProcessor.createUrlData(url, false, request);
+			UrlData urlData = this.urlProcessor.createUrlData(url, "GET", request);
 			if (this.urlProcessor.isHdivStateNecessary(urlData)) {
 
 				boolean hasUIParams = UtilsJsf.hasUIParameterChild(component);

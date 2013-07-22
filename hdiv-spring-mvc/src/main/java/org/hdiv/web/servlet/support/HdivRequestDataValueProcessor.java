@@ -94,8 +94,23 @@ public class HdivRequestDataValueProcessor implements RequestDataValueProcessor 
 	 * @return processed action url
 	 */
 	public String processAction(HttpServletRequest request, String action) {
+		return this.processAction(request, action, "POST");
+	}
 
-		String result = this.formUrlProcessor.processUrl(request, action);
+	/**
+	 * Process the action url of the form tag.
+	 * 
+	 * @param request
+	 *            request object
+	 * @param action
+	 *            form action url
+	 * @param method
+	 *            form submit method
+	 * @return processed action url
+	 */
+	public String processAction(HttpServletRequest request, String action, String method) {
+
+		String result = this.formUrlProcessor.processUrl(request, action, method);
 		return result;
 
 	}
@@ -156,7 +171,7 @@ public class HdivRequestDataValueProcessor implements RequestDataValueProcessor 
 		if (requestId != null && requestId.length() > 0) {
 			String hdivStateParam = (String) request.getSession().getAttribute(Constants.HDIV_PARAMETER);
 			extraFields.put(hdivStateParam, requestId);
-			
+
 			// Publish the state in request to make it accessible on jsp
 			request.setAttribute(FormUrlProcessor.FORM_STATE_ID, requestId);
 		}

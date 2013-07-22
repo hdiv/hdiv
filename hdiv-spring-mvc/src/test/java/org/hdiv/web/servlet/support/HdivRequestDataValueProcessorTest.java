@@ -72,6 +72,24 @@ public class HdivRequestDataValueProcessorTest extends AbstractHDIVTestCase {
 		assertNotNull(extraParams);
 		assertTrue(extraParams.size() > 0);
 	}
+	
+	public void testProcessActionGetMethod() {
+
+		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		String action = "/onlyget.do"; // Is startPage only for get
+
+		String result = this.dataValueProcessor.processAction(request, action, "GET");
+		// Post urls are not modified
+		assertEquals(action, result);
+
+		String val = this.dataValueProcessor.processFormFieldValue(request, "param", "value", "select");
+		assertEquals("value", val);
+
+		Map<String, String> extraParams = this.dataValueProcessor.getExtraHiddenFields(request);
+
+		assertNotNull(extraParams);
+		assertTrue(extraParams.size() == 0);
+	}
 
 	public void testProcessActionAvoid() {
 

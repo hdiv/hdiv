@@ -70,9 +70,9 @@ public class UrlData {
 	private String server;
 
 	/**
-	 * True if the url is part of a form action. False if is a link url.
+	 * Http method.
 	 */
-	private boolean isFormUrl;
+	private String method;
 
 	/**
 	 * Constructor
@@ -80,11 +80,21 @@ public class UrlData {
 	 * @param url
 	 *            Original url
 	 * @param isFormUrl
-	 *            is form or link url?
+	 *            Http method.
 	 */
-	public UrlData(String url, boolean isFormUrl) {
+	public UrlData(String url, String method) {
 		this.originalUrl = url;
-		this.isFormUrl = isFormUrl;
+		this.method = method;
+	}
+
+	/**
+	 * Is url method GET?
+	 * 
+	 * @return true is it is GET
+	 */
+	public boolean isGetMethod() {
+
+		return this.method != null && this.method.equalsIgnoreCase("GET");
 	}
 
 	/**
@@ -217,18 +227,18 @@ public class UrlData {
 	}
 
 	/**
-	 * @return the isFormUrl
+	 * @return the method
 	 */
-	public boolean isFormUrl() {
-		return isFormUrl;
+	public String getMethod() {
+		return method;
 	}
 
 	/**
-	 * @param isFormUrl
-	 *            the isFormUrl to set
+	 * @param method
+	 *            the method to set
 	 */
-	public void setFormUrl(boolean isFormUrl) {
-		this.isFormUrl = isFormUrl;
+	public void setMethod(String method) {
+		this.method = method;
 	}
 
 	/**

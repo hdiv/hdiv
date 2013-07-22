@@ -48,24 +48,4 @@ public class HDIVConfigTest extends AbstractHDIVTestCase {
 
 	}
 
-	public void testIsStartPageBoolean() {
-
-		HDIVConfig config = getConfig();
-
-		// method not defined
-		boolean result = config.isStartPage("/testing.do", true);
-		assertEquals(true, result);
-
-		result = config.isStartPage("/testing.do", false);
-		assertEquals(true, result);
-
-		// method = get
-		result = config.isStartPage("/onlyget.do", true);
-		assertEquals(false, result);
-
-		result = config.isStartPage("/onlyget.do", false);
-		assertEquals(true, result);
-
-	}
-
 }

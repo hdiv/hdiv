@@ -157,30 +157,13 @@ public class HDIVConfig {
 	 * @return True if <code>parameter</code> is an init parameter. False otherwise.
 	 */
 	public boolean isStartParameter(String parameter) {
-		
+
 		String value = this.checkValue(parameter, this.startParameters);
 		if (value == null) {
 			return false;
 		}
 
 		return true;
-	}
-
-	/**
-	 * Checks if <code>target</code> is an init action, in which case it will not be treated by HDIV.
-	 * 
-	 * @param target
-	 *            target name
-	 * @param isFormUrl
-	 *            true if is a Form Url
-	 * @return True if <code>target</code> is an init action. False otherwise.
-	 */
-	public boolean isStartPage(String target, boolean isFormUrl) {
-		String method = "GET";
-		if (isFormUrl) {
-			method = "POST";
-		}
-		return this.isStartPage(target, method);
 	}
 
 	/**
@@ -199,7 +182,7 @@ public class HDIVConfig {
 		}
 
 		String value = this.checkStartPageValue(target, method);
-		
+
 		return value != null;
 	}
 
@@ -221,7 +204,7 @@ public class HDIVConfig {
 		if (pound >= 0) {
 			path = path.substring(0, pound);
 		}
-		
+
 		for (String extension : this.excludedURLExtensions) {
 			if (path.endsWith(extension)) {
 				return true;
@@ -312,12 +295,12 @@ public class HDIVConfig {
 
 		for (Map.Entry<String, Pattern> startValue : startValues.entrySet()) {
 			Matcher matcher = startValue.getValue().matcher(value);
-			
+
 			if (matcher.matches()) {
 				return startValue.getKey();
 			}
 		}
-		
+
 		return null;
 	}
 
@@ -334,7 +317,7 @@ public class HDIVConfig {
 	 * @since HDIV 1.1.1
 	 */
 	protected String checkStartPageValue(String value, String method) {
-		
+
 		for (String key : this.startPages.keySet()) {
 			StartPage startPage = (StartPage) this.startPages.get(key);
 
@@ -438,7 +421,7 @@ public class HDIVConfig {
 
 		for (Object userStartPage : userStartPages) {
 			StartPage startPage;
-			
+
 			if (userStartPage instanceof String) {
 				String currentPattern = (String) userStartPage;
 				startPage = new StartPage(null, currentPattern);
@@ -447,7 +430,7 @@ public class HDIVConfig {
 			}
 
 			this.startPages.put(startPage.getPattern(), startPage);
-			
+
 		}
 	}
 
@@ -586,7 +569,7 @@ public class HDIVConfig {
 	public void setProtectedExtensions(List<String> protectedExtensions) {
 
 		this.protectedURLPatterns = new HashMap<String, Pattern>();
-		
+
 		for (String protectedExtension : protectedExtensions) {
 			this.protectedURLPatterns.put(protectedExtension, Pattern.compile(protectedExtension));
 		}
