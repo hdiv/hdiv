@@ -8,7 +8,7 @@ Release 2.1.5
  * Java >= 1.5 is required.
  * Fix form field confidentiality error on RESTfull configuration (https://github.com/hdiv/hdiv/issues/31).
  * Hash and Cipher strategy support for Ajax requests (https://github.com/hdiv/hdiv/issues/36).
- * Support Spring 4.0.0.M1 and changes to org.springframework.web.servlet.support.RequestDataValueProcessor
+ * Support Spring 4.0.0 (4.0.0.BUILD-SNAPSHOT) and changes to org.springframework.web.servlet.support.RequestDataValueProcessor
 
 Release 2.1.4
 ==================================
