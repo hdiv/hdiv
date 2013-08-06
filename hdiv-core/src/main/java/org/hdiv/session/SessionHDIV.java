@@ -254,7 +254,7 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 		HttpSession session = this.getHttpSession();
 		IStateCache cache = (IStateCache) session.getAttribute(this.cacheName);
 		if (cache == null) {
-			cache = (IStateCache) this.beanFactory.getBean(IStateCache.class);
+			cache = this.beanFactory.getBean(IStateCache.class);
 			session.setAttribute(this.cacheName, cache);
 		}
 
@@ -267,7 +267,7 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 	 * @see org.hdiv.session.ISession#getEncryptCipher()
 	 */
 	public ICipherHTTP getEncryptCipher() {
-		ICipherHTTP cipher = (ICipherHTTP) this.beanFactory.getBean(ICipherHTTP.class);
+		ICipherHTTP cipher = this.beanFactory.getBean(ICipherHTTP.class);
 		if (cipher == null) {
 			String errorMessage = HDIVUtil.getMessage("encrypt.message");
 			throw new HDIVException(errorMessage);
@@ -282,7 +282,7 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 	 * @see org.hdiv.session.ISession#getDecryptCipher()
 	 */
 	public ICipherHTTP getDecryptCipher() {
-		ICipherHTTP cipher = (ICipherHTTP) this.beanFactory.getBean(ICipherHTTP.class);
+		ICipherHTTP cipher = this.beanFactory.getBean(ICipherHTTP.class);
 		if (cipher == null) {
 			String errorMessage = HDIVUtil.getMessage("decrypt.message");
 			throw new HDIVException(errorMessage);

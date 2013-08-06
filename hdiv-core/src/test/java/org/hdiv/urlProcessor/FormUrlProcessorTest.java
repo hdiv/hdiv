@@ -29,8 +29,8 @@ public class FormUrlProcessorTest extends AbstractHDIVTestCase {
 	private DataComposerFactory dataComposerFactory;
 
 	protected void onSetUp() throws Exception {
-		this.formUrlProcessor = (FormUrlProcessor) this.getApplicationContext().getBean(FormUrlProcessor.class);
-		this.dataComposerFactory = (DataComposerFactory) this.getApplicationContext().getBean(DataComposerFactory.class);
+		this.formUrlProcessor = this.getApplicationContext().getBean(FormUrlProcessor.class);
+		this.dataComposerFactory = this.getApplicationContext().getBean(DataComposerFactory.class);
 	}
 
 	public void testProcessAction() {
@@ -54,7 +54,7 @@ public class FormUrlProcessorTest extends AbstractHDIVTestCase {
 		// Post urls are not modified
 		assertEquals(action, result);
 	}
-	
+
 	public void testProcessActionWithParam() {
 
 		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
@@ -139,7 +139,7 @@ public class FormUrlProcessorTest extends AbstractHDIVTestCase {
 
 		this.getConfig().setConfidentiality(conf);
 	}
-	
+
 	public void testProcessActionJsessionId() {
 
 		HttpServletRequest request = HDIVUtil.getHttpServletRequest();

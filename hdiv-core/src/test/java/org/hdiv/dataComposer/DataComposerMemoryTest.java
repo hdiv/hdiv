@@ -46,10 +46,9 @@ public class DataComposerMemoryTest extends AbstractHDIVTestCase {
 	 */
 	protected void onSetUp() throws Exception {
 
-		this.dataComposerFactory = (DataComposerFactory) this.getApplicationContext()
-				.getBean(DataComposerFactory.class);
-		this.stateUtil = (StateUtil) this.getApplicationContext().getBean(StateUtil.class);
-		this.session = (ISession) this.getApplicationContext().getBean(ISession.class);
+		this.dataComposerFactory = this.getApplicationContext().getBean(DataComposerFactory.class);
+		this.stateUtil = this.getApplicationContext().getBean(StateUtil.class);
+		this.session = this.getApplicationContext().getBean(ISession.class);
 	}
 
 	/**
@@ -190,12 +189,12 @@ public class DataComposerMemoryTest extends AbstractHDIVTestCase {
 		assertEquals("test.do", state.getAction());
 
 		IParameter param = state.getParameter("parameter1");
-		List values = param.getValues();
+		List<String> values = param.getValues();
 		assertEquals(1, values.size());
 		assertEquals("è-test", values.get(0));// escaped value is the same
 
 		IParameter param2 = state.getParameter("parameterEscaped");
-		List values2 = param2.getValues();
+		List<String> values2 = param2.getValues();
 		assertEquals(1, values2.size());
 		// State stored value is not escaped value, it is the unescaped value
 		assertEquals("è-test", values2.get(0));

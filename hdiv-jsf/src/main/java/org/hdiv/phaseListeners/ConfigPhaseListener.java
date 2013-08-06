@@ -86,8 +86,7 @@ public class ConfigPhaseListener implements PhaseListener {
 
 				// Get listener instances
 				WebApplicationContext wac = FacesContextUtils.getRequiredWebApplicationContext(context);
-				HDIVFacesEventListener facesEventListener = (HDIVFacesEventListener) wac
-						.getBean(HDIVFacesEventListener.class);
+				HDIVFacesEventListener facesEventListener = wac.getBean(HDIVFacesEventListener.class);
 
 				// It is added to the servletContext to be able to consume it from components
 				HDIVUtilJsf.setFacesEventListener(facesEventListener, context);

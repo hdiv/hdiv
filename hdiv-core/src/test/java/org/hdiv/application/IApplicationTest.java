@@ -8,7 +8,7 @@ public class IApplicationTest extends AbstractHDIVTestCase {
 
 	protected void onSetUp() throws Exception {
 
-		this.application = (IApplication) this.getApplicationContext().getBean(IApplication.class);
+		this.application = this.getApplicationContext().getBean(IApplication.class);
 	}
 
 	public void testGetBean() throws Exception {

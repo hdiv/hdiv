@@ -85,16 +85,16 @@ public class ValidatorFilter extends OncePerRequestFilter {
 			ServletContext servletContext = getServletContext();
 			WebApplicationContext context = WebApplicationContextUtils.getRequiredWebApplicationContext(servletContext);
 
-			this.hdivConfig = (HDIVConfig) context.getBean(HDIVConfig.class);
-			this.validationHelper = (IValidationHelper) context.getBean(IValidationHelper.class);
+			this.hdivConfig = context.getBean(HDIVConfig.class);
+			this.validationHelper = context.getBean(IValidationHelper.class);
 			try {
 				// For applications without Multipart requests
-				this.multipartConfig = (IMultipartConfig) context.getBean(IMultipartConfig.class);
+				this.multipartConfig = context.getBean(IMultipartConfig.class);
 			} catch (BeansException ex) {
 				this.multipartConfig = null;
 			}
 
-			this.errorHandler = (ValidatorErrorHandler) context.getBean(ValidatorErrorHandler.class);
+			this.errorHandler = context.getBean(ValidatorErrorHandler.class);
 		}
 
 	}

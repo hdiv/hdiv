@@ -28,113 +28,113 @@ import org.hdiv.state.State;
  * @author Gorka Vicente
  */
 public class DataValidatorTest extends AbstractHDIVTestCase {
-	
+
 	protected DataValidatorFactory dataValidatorFactory;
 
 	protected IDataComposer composer;
-	
+
 	protected void onSetUp() throws Exception {
-		
-		this.dataValidatorFactory = (DataValidatorFactory) this.getApplicationContext().getBean(DataValidatorFactory.class);
+
+		this.dataValidatorFactory = this.getApplicationContext().getBean(DataValidatorFactory.class);
 	}
 
 	/**
-	 * Validation test with a noneditable parameter. It should not pass the
-	 * validation as the received value is not an integer.
+	 * Validation test with a noneditable parameter. It should not pass the validation as the received value is not an
+	 * integer.
 	 */
 	public void testValidateDataIsNotInt() {
-		
+
 		IState state = new State();
 		IDataValidator validator = this.dataValidatorFactory.newInstance(state);
-		
+
 		IParameter param1 = new Parameter();
 		param1.addValue("value1");
 		param1.setName("param1");
-		param1.setEditable(false);		
-		
+		param1.setEditable(false);
+
 		state.addParameter("param1", param1);
-		
+
 		validator.setState(state);
-		
+
 		IValidationResult result = validator.validate("dataIsNotInt", "simpleAction", "param1");
 		assertFalse(result.getLegal());
 	}
-	
+
 	/**
-	 * Validation test with a noneditable parameter. It should not pass the validation
-	 * as the received parameter doesn't exists.
+	 * Validation test with a noneditable parameter. It should not pass the validation as the received parameter doesn't
+	 * exists.
 	 */
 	public void testValidateParameterDoesNotExist() {
-		
+
 		IState state = new State();
 		IDataValidator validator = this.dataValidatorFactory.newInstance(state);
-		
+
 		IParameter param1 = new Parameter();
 		param1.addValue("value1");
 		param1.setName("param1");
-		param1.setEditable(false);		
-		
+		param1.setEditable(false);
+
 		state.addParameter("param1", param1);
-		
+
 		validator.setState(state);
-		
+
 		boolean confidentiality = this.getConfig().getConfidentiality().booleanValue();
-		String value = (confidentiality) ? "0" : "value1";	
+		String value = (confidentiality) ? "0" : "value1";
 		try {
-			IValidationResult result = validator.validate(value, "simpleAction",
-																"parameterDoesNotExist");
-		} catch (NullPointerException e) {		
+			IValidationResult result = validator.validate(value, "simpleAction", "parameterDoesNotExist");
+			assertFalse(result != null);
+		} catch (NullPointerException e) {
 			assertTrue(true);
 			return;
 		}
-		assertFalse(true);		
-	}	
+		assertFalse(true);
+	}
 
 	/**
-	 * Validation test with a noneditable parameter. It should not pass the
-	 * validation as the received parameter doesn't exists.
+	 * Validation test with a noneditable parameter. It should not pass the validation as the received parameter doesn't
+	 * exists.
 	 */
 	public void testValidatePositionDoesNotExist() {
-		
+
 		IState state = new State();
 		IDataValidator validator = this.dataValidatorFactory.newInstance(state);
-		
+
 		IParameter param1 = new Parameter();
 		param1.addValue("value1");
 		param1.setName("param1");
-		param1.setEditable(false);		
-		
+		param1.setEditable(false);
+
 		state.addParameter("param1", param1);
-		
+
 		validator.setState(state);
-		
+
 		IValidationResult result = validator.validate("1", "simpleAction", "param1");
 		assertFalse(result.getLegal());
 	}
-	
+
 	/**
 	 * Validation test with a noneditable parameter. The validation is correct.
 	 */
 	public void testValidateCorrectData() {
-		
+
 		IState state = new State();
 		IDataValidator validator = this.dataValidatorFactory.newInstance(state);
-		
+
 		IParameter param1 = new Parameter();
 		param1.addValue("value1");
 		param1.setName("param1");
-		param1.setEditable(false);		
-		
+		param1.setEditable(false);
+
 		state = new State();
 		state.addParameter("param1", param1);
-		
+
 		validator.setState(state);
-		
+
 		boolean confidentiality = this.getConfig().getConfidentiality().booleanValue();
-		String value = (confidentiality) ? "0" : "value1";		
+		String value = (confidentiality) ? "0" : "value1";
 		IValidationResult result = validator.validate(value, "simpleAction", "param1");
-		
-		assertEquals(((String) result.getResult()), "value1");				
+
+		assertEquals(((String) result.getResult()), "value1");
 		assertTrue(result.getLegal());
-	}	
+	}
 }

@@ -26,7 +26,7 @@ public class LinkUrlProcessorTest extends AbstractHDIVTestCase {
 	private LinkUrlProcessor linkUrlProcessor;
 
 	protected void onSetUp() throws Exception {
-		this.linkUrlProcessor = (LinkUrlProcessor) this.getApplicationContext().getBean(LinkUrlProcessor.class);
+		this.linkUrlProcessor = this.getApplicationContext().getBean(LinkUrlProcessor.class);
 	}
 
 	public void testProcessAction() {

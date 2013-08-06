@@ -61,8 +61,8 @@ public class RedirectExternalContext extends javax.faces.context.ExternalContext
 	public RedirectExternalContext(ExternalContext wrapped) {
 
 		ServletContext servletContext = (ServletContext) wrapped.getContext();
-		this.redirectHelper = (RedirectHelper) WebApplicationContextUtils.getRequiredWebApplicationContext(
-				servletContext).getBean(RedirectHelper.class);
+		this.redirectHelper = WebApplicationContextUtils.getRequiredWebApplicationContext(servletContext).getBean(
+				RedirectHelper.class);
 
 		Assert.notNull(this.redirectHelper);
 

@@ -40,7 +40,7 @@ public class EncodingUtilTest extends AbstractHDIVTestCase {
 
 	protected void onSetUp() throws Exception {
 
-		this.encodingUtil = (EncodingUtil) this.getApplicationContext().getBean(EncodingUtil.class);
+		this.encodingUtil = this.getApplicationContext().getBean(EncodingUtil.class);
 	}
 
 	public void testEncodeAndDecode64Cipher() {

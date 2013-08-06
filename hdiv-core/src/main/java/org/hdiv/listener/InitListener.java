@@ -30,7 +30,6 @@ import org.hdiv.cipher.Key;
 import org.hdiv.config.HDIVConfig;
 import org.hdiv.idGenerator.PageIdGenerator;
 import org.hdiv.session.ISession;
-import org.hdiv.session.IStateCache;
 import org.hdiv.urlProcessor.FormUrlProcessor;
 import org.hdiv.urlProcessor.LinkUrlProcessor;
 import org.hdiv.util.Constants;
@@ -116,7 +115,7 @@ public class InitListener implements ServletContextListener, HttpSessionListener
 		ServletContext servletContext = httpSessionEvent.getSession().getServletContext();
 
 		WebApplicationContextUtils.getRequiredWebApplicationContext(servletContext).getBean(ISession.class);
-		
+
 		if (!this.servletContextInitialized) {
 			this.initServletContext(servletContext);
 		}
@@ -143,12 +142,12 @@ public class InitListener implements ServletContextListener, HttpSessionListener
 
 		WebApplicationContext wac = WebApplicationContextUtils.getRequiredWebApplicationContext(servletContext);
 
-		this.config = (HDIVConfig) wac.getBean(HDIVConfig.class);
+		this.config = wac.getBean(HDIVConfig.class);
 
 		// Init servlet context scoped objects
 		HDIVUtil.setHDIVConfig(this.config, servletContext);
 
-		IApplication application = (IApplication) wac.getBean(IApplication.class);
+		IApplication application = wac.getBean(IApplication.class);
 		HDIVUtil.setApplication(application, servletContext);
 
 		ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
@@ -156,10 +155,10 @@ public class InitListener implements ServletContextListener, HttpSessionListener
 		messageSource.setBasename(Constants.MESSAGE_SOURCE_PATH);
 		HDIVUtil.setMessageSource(messageSource, servletContext);
 
-		LinkUrlProcessor linkUrlProcessor = (LinkUrlProcessor) wac.getBean(LinkUrlProcessor.class);
+		LinkUrlProcessor linkUrlProcessor = wac.getBean(LinkUrlProcessor.class);
 		HDIVUtil.setLinkUrlProcessor(linkUrlProcessor, servletContext);
 
-		FormUrlProcessor formUrlProcessor = (FormUrlProcessor) wac.getBean(FormUrlProcessor.class);
+		FormUrlProcessor formUrlProcessor = wac.getBean(FormUrlProcessor.class);
 		HDIVUtil.setFormUrlProcessor(formUrlProcessor, servletContext);
 
 		this.servletContextInitialized = true;
@@ -176,7 +175,7 @@ public class InitListener implements ServletContextListener, HttpSessionListener
 	protected void initStrategies(ApplicationContext context, HttpSession httpSession) {
 
 		if (this.config.getStrategy().equalsIgnoreCase("cipher")) {
-			IKeyFactory keyFactory = (IKeyFactory) context.getBean(IKeyFactory.class);
+			IKeyFactory keyFactory = context.getBean(IKeyFactory.class);
 			// creating encryption key
 			Key key = keyFactory.generateKeyWithDefaultValues();
 			httpSession.setAttribute(Constants.KEY_NAME, key);
@@ -195,7 +194,7 @@ public class InitListener implements ServletContextListener, HttpSessionListener
 	protected void initPageIdGenerator(ApplicationContext context, HttpSession httpSession) {
 
 		// Obtain new instance of PageIdGenerator
-		PageIdGenerator pageIdGenerator = (PageIdGenerator) context.getBean(PageIdGenerator.class);
+		PageIdGenerator pageIdGenerator = context.getBean(PageIdGenerator.class);
 		httpSession.setAttribute(Constants.PAGE_ID_GENERATOR_NAME, pageIdGenerator);
 	}
 

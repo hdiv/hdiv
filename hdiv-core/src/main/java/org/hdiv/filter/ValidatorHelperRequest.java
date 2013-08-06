@@ -363,7 +363,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 
 			if (sessionCookies.containsKey(requestCookies[i].getName())) {
 
-				SavedCookie savedCookie = (SavedCookie) sessionCookies.get(requestCookies[i].getName());
+				SavedCookie savedCookie = sessionCookies.get(requestCookies[i].getName());
 				if (savedCookie.equals(requestCookies[i], cookiesConfidentiality)) {
 
 					found = true;
@@ -528,7 +528,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 		// Check if the parameter is editable
 		if (stateParameter.isEditable()) {
 
-			if (hdivConfig.existValidations() && (stateParameter.getEditableDataType() != null)) {
+			if (this.hdivConfig.existValidations() && (stateParameter.getEditableDataType() != null)) {
 				this.validateEditableParameter(request, target, parameter, values,
 						stateParameter.getEditableDataType(), unauthorizedEditableParameters);
 			}
@@ -811,7 +811,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 			boolean exists = false;
 			for (int j = 0; j < tempStateValues.size() && !exists; j++) {
 
-				String tempValue = (String) tempStateValues.get(j);
+				String tempValue = tempStateValues.get(j);
 
 				if (tempValue.equalsIgnoreCase(values[i])) {
 					tempStateValues.remove(j);

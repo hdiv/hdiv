@@ -31,41 +31,40 @@ import org.hdiv.state.State;
 public class StateCacheTest extends AbstractHDIVTestCase {
 
 	private static Log log = LogFactory.getLog(StateCacheTest.class);
-	
+
 	protected void onSetUp() throws Exception {
 	}
 
 	public void testAddPage() {
-		
+
 		// cache's maximum size is defined using the Spring factory.
-		IStateCache cache = (IStateCache) this.getApplicationContext().getBean(IStateCache.class);
-		
+		IStateCache cache = this.getApplicationContext().getBean(IStateCache.class);
+
 		IPage page1 = new Page();
 		IPage page2 = new Page();
 		IPage page3 = new Page();
 
-		IState state1 = new State();		
+		IState state1 = new State();
 		IState state2 = new State();
 		IState state3 = new State();
-		
+
 		state1.setId("0");
 		state2.setId("1");
-		state3.setId("2");		
-				
+		state3.setId("2");
+
 		page1.addState(state1);
 		page1.setName("page1");
 		cache.addPage("1");
-		
+
 		page2.addState(state2);
 		page2.setName("page2");
 		cache.addPage("2");
-		
+
 		page3.addState(state3);
 		page3.setName("page3");
 		cache.addPage("3");
-		
-		log.info("cache:" + cache.toString());
-	}	
 
-	
+		log.info("cache:" + cache.toString());
+	}
+
 }

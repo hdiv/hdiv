@@ -24,12 +24,17 @@ public class UidGeneratorTest extends AbstractHDIVTestCase {
 	private UidGenerator uidGenerator;
 
 	protected void onSetUp() throws Exception {
-		this.uidGenerator = (UidGenerator) super.getApplicationContext().getBean(UidGenerator.class);
+		this.uidGenerator = super.getApplicationContext().getBean(UidGenerator.class);
 	}
 
 	public void testUidGeneration() {
 		Serializable id = this.uidGenerator.generateUid();
 		assertNotNull(id);
+
+		Serializable id2 = this.uidGenerator.generateUid();
+		assertNotNull(id2);
+
+		assertFalse(id.equals(id2));
 
 	}
 

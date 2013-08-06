@@ -38,8 +38,7 @@ public class LifecycleTest extends AbstractJsfHDIVTestCase {
 
 		this.hdivParameter = (String) this.getApplicationContext().getBean("hdivParameter");
 
-		DataComposerFactory dataComposerFactory = (DataComposerFactory) this.getApplicationContext().getBean(
-				DataComposerFactory.class);
+		DataComposerFactory dataComposerFactory = this.getApplicationContext().getBean(DataComposerFactory.class);
 		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
 		this.dataComposer = dataComposerFactory.newInstance(request);
 		HDIVUtil.setDataComposer(this.dataComposer, request);
