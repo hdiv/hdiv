@@ -15,15 +15,14 @@
  */
 package org.hdiv.validator;
 
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Validation defined by the user in the hdiv-validation.xml for the editable
- * data (text/textarea).
+ * Editable data (text/textarea) validation definition.
  * 
  * @author Gorka Vicente
  * @since HDIV 1.1
@@ -41,10 +40,9 @@ public class Validation implements IValidation {
 	protected Pattern rejectedPattern;
 
 	/**
-	 * Map with the paratemers to be ignored in the validation process of the
-	 * parameters.
+	 * Set with the parameters to be ignored in the validation process of the parameters.
 	 */
-	private Map<String, String> ignoreParametersMap;
+	private Set<String> ignoreParameters;
 
 	/**
 	 * Component type to which apply the validation <code>this</code>.
@@ -56,58 +54,44 @@ public class Validation implements IValidation {
 	}
 
 	/**
-	 * It creates a map from the list of ignore parameters defined for a URL.
-	 * 
-	 * TODO Is this thread-safe?
+	 * Initialize the list of ignore parameters defined for a URL.
 	 * 
 	 * @param ignoreParameters
 	 *            list of ignore parameters
 	 */
 	public void setIgnoreParameters(List<String> ignoreParameters) {
 
-		this.ignoreParametersMap = new HashMap<String, String>();
+		this.ignoreParameters = new HashSet<String>(ignoreParameters);
 
-		String currentIgnoreParameter;
-		
-		for (int i = 0; i < ignoreParameters.size(); i++) {
-			currentIgnoreParameter = (String) ignoreParameters.get(i);
-			//TODO review this line
-			this.ignoreParametersMap.put(currentIgnoreParameter, currentIgnoreParameter);
-		}
 	}
 
 	/**
-	 * Checks if there are editable parameters that must be ignored in the
-	 * validation process.
+	 * Checks if there are editable parameters that must be ignored in the validation process.
 	 * 
-	 * @return True if there are editable parameters that must be ignored in the
-	 *         validation process. False otherwise.
+	 * @return True if there are editable parameters that must be ignored in the validation process. False otherwise.
 	 */
 	public boolean existIgnoreParameters() {
 
-		return (this.ignoreParametersMap != null) && (this.ignoreParametersMap.size() > 0);
+		return (this.ignoreParameters != null) && (this.ignoreParameters.size() > 0);
 	}
 
 	/**
-	 * Checks if <code>parameter</code> is a parameter that must be ignored
-	 * during the validation process of the editable parameters.
+	 * Checks if <code>parameter</code> is a parameter that must be ignored during the validation process of the
+	 * editable parameters.
 	 * 
 	 * @param parameter
 	 *            parameter name
-	 * @return True if <code>parameter</code> doesn't need to be validated.
-	 *         False otherwise.
+	 * @return True if <code>parameter</code> doesn't need to be validated. False otherwise.
 	 */
 	public boolean isIgnoreParameter(String parameter) {
 
-		return this.ignoreParametersMap.containsKey(parameter);
+		return this.ignoreParameters.contains(parameter);
 	}
 
 	/**
-	 * Checks if a component type has been defined to which apply the validation
-	 * <code>this</code>.
+	 * Checks if a component type has been defined to which apply the validation <code>this</code>.
 	 * 
-	 * @return True if the component type to which apply de validation has been
-	 *         defined. False otherwise.
+	 * @return True if the component type to which apply de validation has been defined. False otherwise.
 	 */
 	public boolean existComponentType() {
 
@@ -115,13 +99,11 @@ public class Validation implements IValidation {
 	}
 
 	/**
-	 * Checks if the type <code>parameterType</code> is the same as the one
-	 * defined in the validation <code>this</code>.
+	 * Checks if the type <code>parameterType</code> is the same as the one defined in the validation <code>this</code>.
 	 * 
 	 * @param parameterType
 	 *            Component type
-	 * @return True if the validation <code>this</code> is the same as
-	 *         <code>parameterType</code>.
+	 * @return True if the validation <code>this</code> is the same as <code>parameterType</code>.
 	 */
 	public boolean isTheSameComponentType(String parameterType) {
 
@@ -133,8 +115,7 @@ public class Validation implements IValidation {
 
 	/**
 	 * <p>
-	 * Checks if the values <code>values</code> are valid for the editable
-	 * parameter <code>parameter</code>.
+	 * Checks if the values <code>values</code> are valid for the editable parameter <code>parameter</code>.
 	 * </p>
 	 * <p>
 	 * There are two types of validations:
@@ -148,8 +129,7 @@ public class Validation implements IValidation {
 	 *            parameter's values
 	 * @param dataType
 	 *            editable data type
-	 * @return True if the values <code>values</code> are valid for the
-	 *         parameter <code>parameter</code>.
+	 * @return True if the values <code>values</code> are valid for the parameter <code>parameter</code>.
 	 * @since HDIV 1.1.1
 	 */
 	public boolean validate(String parameter, String[] values, String dataType) {

@@ -19,7 +19,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
@@ -188,7 +187,8 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 		String cookieHeader = super.getHeader(name);
 		if (name.equalsIgnoreCase(COOKIE) && Boolean.TRUE.equals(this.confidentiality) && this.cookiesConfidentiality) {
 
-			Map<String, SavedCookie> sessionCookies = (Map<String, SavedCookie>) super.getSession().getAttribute(Constants.HDIV_COOKIES_KEY);
+			Map<String, SavedCookie> sessionCookies = (Map<String, SavedCookie>) super.getSession().getAttribute(
+					Constants.HDIV_COOKIES_KEY);
 
 			if (sessionCookies != null) {
 				return this.replaceCookieString(cookieHeader, sessionCookies);
@@ -214,7 +214,8 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 		if (name.equalsIgnoreCase(COOKIE) && Boolean.TRUE.equals(this.confidentiality) && this.cookiesConfidentiality) {
 
 			Vector<String> values = new Vector<String>();
-			Map<String, SavedCookie> sessionCookies = (Map<String, SavedCookie>) super.getSession().getAttribute(Constants.HDIV_COOKIES_KEY);
+			Map<String, SavedCookie> sessionCookies = (Map<String, SavedCookie>) super.getSession().getAttribute(
+					Constants.HDIV_COOKIES_KEY);
 
 			if (sessionCookies != null) {
 				while (headerValues.hasMoreElements()) {

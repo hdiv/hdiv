@@ -18,8 +18,10 @@ package org.hdiv.filter;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -766,7 +768,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	private ValidatorHelperResult hasConfidentialIncorrectValues(String target, String parameter, String[] values,
 			List<String> stateValues) {
 
-		Map<String, String> receivedValues = new HashMap<String, String>();
+		Set<String> receivedValues = new HashSet<String>();
 
 		for (int i = 0; i < values.length; i++) {
 
@@ -778,12 +780,12 @@ public class ValidatorHelperRequest implements IValidationHelper {
 				return new ValidatorHelperResult(HDIVErrorCodes.CONFIDENTIAL_VALUE_INCORRECT);
 			}
 
-			if (receivedValues.containsKey(values[i])) {
+			if (receivedValues.contains(values[i])) {
 				this.logger.log(HDIVErrorCodes.REPEATED_VALUES, target, parameter, values[i]);
 				return new ValidatorHelperResult(HDIVErrorCodes.REPEATED_VALUES);
 			}
 
-			receivedValues.put(values[i], values[i]);
+			receivedValues.add(values[i]);
 		}
 		return ValidatorHelperResult.VALID;
 	}
@@ -804,7 +806,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	private ValidatorHelperResult hasNonConfidentialIncorrectValues(String target, String parameter, String[] values,
 			List<String> tempStateValues) {
 
-		Map<String, String> receivedValues = new HashMap<String, String>();
+		Set<String> receivedValues = new HashSet<String>();
 
 		for (int i = 0; i < values.length; i++) {
 
@@ -821,7 +823,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 
 			if (!exists) {
 
-				if (receivedValues.containsKey(values[i])) {
+				if (receivedValues.contains(values[i])) {
 					this.logger.log(HDIVErrorCodes.REPEATED_VALUES, target, parameter, values[i]);
 					return new ValidatorHelperResult(HDIVErrorCodes.REPEATED_VALUES);
 				}
@@ -829,7 +831,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 				return new ValidatorHelperResult(HDIVErrorCodes.PARAMETER_VALUE_INCORRECT);
 			}
 
-			receivedValues.put(values[i], values[i]);
+			receivedValues.add(values[i]);
 		}
 		return ValidatorHelperResult.VALID;
 	}
