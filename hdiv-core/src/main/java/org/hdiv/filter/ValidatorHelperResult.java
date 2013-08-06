@@ -31,6 +31,11 @@ public class ValidatorHelperResult {
 	public static final ValidatorHelperResult VALID = new ValidatorHelperResult(true);
 
 	/**
+	 * Constant valid result for requests that do not require validation.
+	 */
+	public static final ValidatorHelperResult VALIDATION_NOT_REQUIRED = new ValidatorHelperResult(true);
+
+	/**
 	 * Validation is valid or not
 	 */
 	private boolean valid;
@@ -78,8 +83,17 @@ public class ValidatorHelperResult {
 
 	public String toString() {
 		StringBuffer b = new StringBuffer();
-		b.append("Valid: ").append(this.valid).append(" Errorcode: ").append(this.errorCode).append(" Value:")
-				.append(this.value);
+		b.append("Valid: ").append(this.valid);
+		if (this.errorCode != null) {
+			b.append(" Errorcode: ").append(this.errorCode);
+		}
+		if (this.value != null) {
+			b.append(" Value:").append(this.value);
+		}
+		if (this.equals(VALIDATION_NOT_REQUIRED)) {
+			b.append(" Type: VALIDATION_NOT_REQUIRED");
+		}
+
 		return b.toString();
 	}
 

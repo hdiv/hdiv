@@ -80,7 +80,7 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 	}
 
 	/**
-	 * Validation test for an init action.
+	 * Validation test for an start page.
 	 */
 	public void testValidateHashActionIsStartPage() {
 
@@ -95,11 +95,13 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 		request.addParameter(hdivParameter, pageState);
 
 		RequestWrapper requestWrapper = new RequestWrapper(request);
-		assertTrue(helper.validate(requestWrapper).isValid());
+		ValidatorHelperResult result = helper.validate(requestWrapper);
+		assertTrue(result.isValid());
+		assertEquals(result, ValidatorHelperResult.VALIDATION_NOT_REQUIRED);
 	}
 
 	/**
-	 * Validation test with an init parameter.
+	 * Validation test with an start parameter.
 	 */
 	public void testValidateHashOneStartParameter() {
 
@@ -113,7 +115,9 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 		request.addParameter(hdivParameter, pageState);
 
 		RequestWrapper requestWrapper = new RequestWrapper(request);
-		assertTrue(helper.validate(requestWrapper).isValid());
+		ValidatorHelperResult result = helper.validate(requestWrapper);
+		assertTrue(result.isValid());
+		assertEquals(result, ValidatorHelperResult.VALID);
 	}
 
 	/**
@@ -373,7 +377,8 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 		assertTrue(result);
 
 		// Editable errors in request?
-		Map<String, String[]> parameters = (Map<String, String[]>) requestWrapper.getAttribute(Constants.EDITABLE_PARAMETER_ERROR);
+		Map<String, String[]> parameters = (Map<String, String[]>) requestWrapper
+				.getAttribute(Constants.EDITABLE_PARAMETER_ERROR);
 		assertEquals(1, parameters.size());
 
 	}

@@ -234,7 +234,7 @@ public class ValidatorFilter extends OncePerRequestFilter {
 	 *            content type
 	 * @return <code>true</code> if the request is multipart. <code>false</code> otherwise.
 	 */
-	public boolean isMultipartContent(String contentType) {
+	protected boolean isMultipartContent(String contentType) {
 		return ((contentType != null) && (contentType.indexOf("multipart/form-data") != -1));
 	}
 

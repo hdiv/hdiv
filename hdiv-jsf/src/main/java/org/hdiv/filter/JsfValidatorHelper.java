@@ -58,7 +58,7 @@ public class JsfValidatorHelper extends ValidatorHelperRequest {
 	 * @see org.hdiv.filter.ValidatorHelperRequest#preValidate(javax.servlet.http.HttpServletRequest, java.lang.String)
 	 */
 	@SuppressWarnings("unchecked")
-	protected Boolean preValidate(HttpServletRequest request, String target) {
+	protected ValidatorHelperResult preValidate(HttpServletRequest request, String target) {
 
 		if (log.isDebugEnabled()) {
 			log.debug("URI: " + request.getRequestURI());
@@ -79,10 +79,10 @@ public class JsfValidatorHelper extends ValidatorHelperRequest {
 				if (log.isDebugEnabled()) {
 					log.debug("Request is start page");
 				}
-				return Boolean.TRUE;
+				return ValidatorHelperResult.VALIDATION_NOT_REQUIRED;
 			}
 
-			return Boolean.TRUE;
+			return ValidatorHelperResult.VALID;
 		}
 
 		// Delegate to ValidatorHelperRequest
