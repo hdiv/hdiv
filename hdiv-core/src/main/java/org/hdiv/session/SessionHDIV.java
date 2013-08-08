@@ -98,11 +98,9 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 	 */
 	public IPage getPage(String pageId) {
 		try {
-			if (log.isDebugEnabled()) {
-				log.debug("Getting page with id:" + pageId);
-			}
 
-			return (IPage) getHttpSession().getAttribute(pageId);
+			HttpSession session = getHttpSession();
+			return this.getPageFromSession(session, pageId);
 
 		} catch (IllegalStateException e) {
 			throw new HDIVException(HDIVErrorCodes.PAGE_ID_INCORRECT, e);
@@ -131,21 +129,15 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 		// the maximum size and therefore we must delete the page which has been
 		// stored for the longest time
 		if (removedPageId != null) {
-			session.removeAttribute(removedPageId);
 
-			if (log.isDebugEnabled()) {
-				log.debug("Deleted page with id:" + removedPageId);
-			}
+			this.removePageFromSession(session, removedPageId);
 		}
 
 		// we update page identifier cache in session
 		session.setAttribute(this.cacheName, cache);
 
 		// we add a new page in session
-		session.setAttribute(page.getName(), page);
-		if (log.isDebugEnabled()) {
-			log.debug("Added page with id:" + pageId);
-		}
+		this.addPageToSession(session, page);
 
 	}
 
@@ -167,28 +159,20 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 		}
 
 		List<String> pageIds = cache.getPageIds();
-		String pageId = null;
-		IPage currentPage = null;
 
 		for (int i = 0; i < pageIds.size(); i++) {
 
-			pageId = (String) pageIds.get(i);
-			currentPage = (IPage) session.getAttribute(pageId);
+			String pageId = (String) pageIds.get(i);
+			IPage currentPage = this.getPageFromSession(session, pageId);
 			if ((currentPage != null) && (currentPage.getFlowId() != null)) {
 
 				String pageFlowId = currentPage.getFlowId();
 
 				if (conversationId.equalsIgnoreCase(pageFlowId)) {
 
-					session.removeAttribute(pageId);
-					String removedId = (String) pageIds.remove(i);
+					this.removePageFromSession(session, pageId);
+					pageIds.remove(i);
 					i--;
-
-					if (removedId != null) {
-						if (log.isDebugEnabled()) {
-							log.debug("Page with id " + removedId + " have been removed");
-						}
-					}
 				}
 			}
 		}
@@ -207,7 +191,7 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 	public IState getState(String pageId, String stateId) {
 
 		try {
-			IPage currentPage = (IPage) getHttpSession().getAttribute(pageId);
+			IPage currentPage = this.getPage(pageId);
 			return currentPage.getState(stateId);
 
 		} catch (Exception e) {
@@ -225,11 +209,66 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 	public String getStateHash(String pageId, String stateId) {
 
 		try {
-			IPage currentPage = (IPage) getHttpSession().getAttribute(pageId);
+			IPage currentPage = this.getPage(pageId);
 			return currentPage.getStateHash(stateId);
 
 		} catch (Exception e) {
 			throw new HDIVException(HDIVErrorCodes.PAGE_ID_INCORRECT, e);
+		}
+	}
+
+	/**
+	 * Internal method to retrieve a IPage instance from {@link HttpSession}
+	 * 
+	 * @param session
+	 *            {@link HttpSession} instance
+	 * @param pageId
+	 *            page id to retrieve from session
+	 * @return IPage instance
+	 * @since HDIV 2.1.5
+	 */
+	protected IPage getPageFromSession(HttpSession session, String pageId) {
+
+		if (log.isDebugEnabled()) {
+			log.debug("Getting page with id:" + pageId);
+		}
+
+		return (IPage) session.getAttribute(pageId);
+	}
+
+	/**
+	 * Internal method to add a new IPage instance to {@link HttpSession}
+	 * 
+	 * @param session
+	 *            {@link HttpSession} instance
+	 * @param page
+	 *            IPage instance
+	 * @since HDIV 2.1.5
+	 */
+	protected void addPageToSession(HttpSession session, IPage page) {
+
+		session.setAttribute(page.getName(), page);
+
+		if (log.isDebugEnabled()) {
+			log.debug("Added new page with id:" + page.getName());
+		}
+	}
+
+	/**
+	 * Internal method to remove a IPage instance from {@link HttpSession}
+	 * 
+	 * @param session
+	 *            {@link HttpSession} instance
+	 * @param pageId
+	 *            page id to remove from session
+	 * @since HDIV 2.1.5
+	 */
+	protected void removePageFromSession(HttpSession session, String pageId) {
+
+		session.removeAttribute(pageId);
+
+		if (log.isDebugEnabled()) {
+			log.debug("Deleted page with id:" + pageId);
 		}
 	}
 
@@ -310,7 +349,7 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 	 * 
 	 * @return HttpSession instance
 	 */
-	private HttpSession getHttpSession() {
+	protected HttpSession getHttpSession() {
 		return HDIVUtil.getHttpSession();
 	}
 
