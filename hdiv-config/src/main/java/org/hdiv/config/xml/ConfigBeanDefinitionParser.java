@@ -646,19 +646,28 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 	private void processSessionExpired(Node node, RootBeanDefinition bean) {
 
 		NamedNodeMap attributes = node.getAttributes();
-		String loginPage = attributes.getNamedItem("loginPage").getTextContent();
-		bean.getPropertyValues().addPropertyValue("sessionExpiredLoginPage", loginPage);
+		Node named = attributes.getNamedItem("loginPage");
+		if (named != null) {
+			String loginPage = named.getTextContent();
+			bean.getPropertyValues().addPropertyValue("sessionExpiredLoginPage", loginPage);
+		}
 
-		String homePage = attributes.getNamedItem("homePage").getTextContent();
-		bean.getPropertyValues().addPropertyValue("sessionExpiredHomePage", homePage);
+		named = attributes.getNamedItem("homePage");
+		if (named != null) {
+			String homePage = named.getTextContent();
+			bean.getPropertyValues().addPropertyValue("sessionExpiredHomePage", homePage);
+		}
 
 	}
 
 	private void processMapping(Node node, Map<String, List<String>> map) {
 		NamedNodeMap attributes = node.getAttributes();
-		String url = attributes.getNamedItem("url").getTextContent();
-		String parameters = attributes.getNamedItem("parameters").getTextContent();
-		map.put(url, this.convertToList(parameters));
+		Node named = attributes.getNamedItem("url");
+		if (named != null) {
+			String url = named.getTextContent();
+			String parameters = attributes.getNamedItem("parameters").getTextContent();
+			map.put(url, this.convertToList(parameters));
+		}
 	}
 
 	private List<String> convertToList(String data) {

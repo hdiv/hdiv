@@ -110,9 +110,12 @@ public class EditableValidationsBeanDefinitionParser extends AbstractSingleBeanD
 
 		// Register default editable validation
 		boolean registerDefaults = true;
-		String registerDefaultsValue = element.getAttributes().getNamedItem("registerDefaults").getTextContent();
-		if (registerDefaultsValue != null) {
-			registerDefaults = Boolean.TRUE.toString().equalsIgnoreCase(registerDefaultsValue);
+		Node named = element.getAttributes().getNamedItem("registerDefaults");
+		if (named != null) {
+			String registerDefaultsValue = named.getTextContent();
+			if (registerDefaultsValue != null) {
+				registerDefaults = Boolean.TRUE.toString().equalsIgnoreCase(registerDefaultsValue);
+			}
 		}
 
 		if (registerDefaults) {
@@ -154,20 +157,22 @@ public class EditableValidationsBeanDefinitionParser extends AbstractSingleBeanD
 		List<String> ids = this.convertToList(value);
 
 		NamedNodeMap attributes = node.getAttributes();
-		String url = attributes.getNamedItem("url").getTextContent();
+		Node named = attributes.getNamedItem("url");
+		if (named != null) {
+			String url = named.getTextContent();
 
-		boolean enableDefaults = false;
-		String enableDefaultsVal = attributes.getNamedItem("enableDefaults").getTextContent();
-		if (enableDefaultsVal != null) {
-			enableDefaults = Boolean.TRUE.toString().equalsIgnoreCase(enableDefaultsVal);
+			boolean enableDefaults = false;
+			String enableDefaultsVal = attributes.getNamedItem("enableDefaults").getTextContent();
+			if (enableDefaultsVal != null) {
+				enableDefaults = Boolean.TRUE.toString().equalsIgnoreCase(enableDefaultsVal);
+			}
+			if (enableDefaults) {
+				// Add defaults
+				ids.addAll(this.defaultValidationIds);
+			}
+
+			map.put(url, ids);
 		}
-		if (enableDefaults) {
-			// Add defaults
-			ids.addAll(this.defaultValidationIds);
-		}
-
-		map.put(url, ids);
-
 	}
 
 	/**
