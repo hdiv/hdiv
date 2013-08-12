@@ -284,7 +284,7 @@ public class ValidatorFilter extends OncePerRequestFilter {
 	protected ResponseWrapper getResponseWrapper(HttpServletResponse response) {
 
 		ResponseWrapper responseWrapper = new ResponseWrapper(response);
-		responseWrapper.setConfidentiality(this.hdivConfig.getConfidentiality().booleanValue());
+		responseWrapper.setConfidentiality(this.hdivConfig.getConfidentiality());
 		responseWrapper.setAvoidCookiesConfidentiality(!this.hdivConfig.isCookiesConfidentialityActivated());
 
 		return responseWrapper;

@@ -78,7 +78,7 @@ public class DataValidatorTest extends AbstractHDIVTestCase {
 
 		validator.setState(state);
 
-		boolean confidentiality = this.getConfig().getConfidentiality().booleanValue();
+		boolean confidentiality = this.getConfig().getConfidentiality();
 		String value = (confidentiality) ? "0" : "value1";
 		try {
 			IValidationResult result = validator.validate(value, "simpleAction", "parameterDoesNotExist");
@@ -130,7 +130,7 @@ public class DataValidatorTest extends AbstractHDIVTestCase {
 
 		validator.setState(state);
 
-		boolean confidentiality = this.getConfig().getConfidentiality().booleanValue();
+		boolean confidentiality = this.getConfig().getConfidentiality();
 		String value = (confidentiality) ? "0" : "value1";
 		IValidationResult result = validator.validate(value, "simpleAction", "param1");
 

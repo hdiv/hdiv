@@ -62,7 +62,7 @@ public class DataComposerCipherTest extends AbstractHDIVTestCase {
 		dataComposer.startPage();
 		dataComposer.beginRequest("test.do");
 
-		boolean confidentiality = this.getConfig().getConfidentiality().booleanValue();
+		boolean confidentiality = this.getConfig().getConfidentiality();
 
 		// we add a multiple parameter that will be encoded as 0, 1, 2, ...
 		String result = dataComposer.compose("test.do", "parameter1", "2", false);

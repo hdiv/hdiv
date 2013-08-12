@@ -129,8 +129,8 @@ public class FormUrlProcessorTest extends AbstractHDIVTestCase {
 	public void testProcessMultiValueParamConfidentialityFalse() {
 
 		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
-		Boolean conf = this.getConfig().getConfidentiality();
-		this.getConfig().setConfidentiality(Boolean.FALSE);
+		boolean conf = this.getConfig().getConfidentiality();
+		this.getConfig().setConfidentiality(false);
 		String url = "/testAction.do?name=X&name=Y&name=Z";
 
 		String result = this.formUrlProcessor.processUrl(request, url);

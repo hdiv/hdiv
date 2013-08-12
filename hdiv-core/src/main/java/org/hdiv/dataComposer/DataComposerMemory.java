@@ -287,7 +287,7 @@ public class DataComposerMemory extends AbstractDataComposer {
 			return value;
 		}
 
-		if (Boolean.FALSE.equals(this.hdivConfig.getConfidentiality())) {
+		if (!this.hdivConfig.getConfidentiality()) {
 			return value;
 		}
 

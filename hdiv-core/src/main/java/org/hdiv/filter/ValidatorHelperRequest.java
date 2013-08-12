@@ -353,7 +353,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 			return ValidatorHelperResult.VALID;
 		}
 
-		boolean cookiesConfidentiality = Boolean.TRUE.equals(this.hdivConfig.getConfidentiality())
+		boolean cookiesConfidentiality = this.hdivConfig.getConfidentiality()
 				&& this.hdivConfig.isCookiesConfidentialityActivated();
 
 		for (int i = 0; i < requestCookies.length; i++) {
@@ -745,7 +745,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 		List<String> tempStateValues = new ArrayList<String>();
 		tempStateValues.addAll(stateValues);
 
-		if (Boolean.TRUE.equals(this.hdivConfig.getConfidentiality())) {
+		if (this.hdivConfig.getConfidentiality()) {
 			return this.hasConfidentialIncorrectValues(target, parameter, values, tempStateValues);
 		} else {
 			return this.hasNonConfidentialIncorrectValues(target, parameter, values, tempStateValues);
@@ -901,7 +901,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 			}
 		}
 
-		if (this.hdivConfig.getConfidentiality().equals(Boolean.TRUE)) {
+		if (this.hdivConfig.getConfidentiality()) {
 			this.addParameterToRequest(request, parameter, originalValues);
 		}
 

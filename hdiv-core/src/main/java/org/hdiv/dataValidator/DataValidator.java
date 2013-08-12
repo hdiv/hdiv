@@ -75,14 +75,14 @@ public class DataValidator implements IDataValidator {
 	 */
 	public IValidationResult validate(String value, String target, String parameter) {
 
-		Boolean confidentiality = this.config.getConfidentiality();
+		boolean confidentiality = this.config.getConfidentiality();
 		boolean noConfidentiality = this.config.isParameterWithoutConfidentiality(parameter);
 		if (log.isDebugEnabled() && noConfidentiality) {
 			log.debug("Parameter [" + parameter + "] is ParameterWithoutConfidentiality.");
 		}
 
 		IParameter stateParameter = this.state.getParameter(parameter);
-		if (Boolean.FALSE.equals(confidentiality) || noConfidentiality) {
+		if (!confidentiality || noConfidentiality) {
 			// Confidentiality = false
 
 			if (stateParameter.existValue(value)) {

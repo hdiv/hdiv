@@ -74,7 +74,7 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 	/**
 	 * Confidentiality indicator to know if information is accessible only for those who are authorized.
 	 */
-	private Boolean confidentiality;
+	private boolean confidentiality = true;
 
 	/**
 	 * Indicates if cookie confidentiality is applied or not. If the value is <code>true</code> cookie values must not
@@ -185,7 +185,7 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 	public String getHeader(String name) {
 
 		String cookieHeader = super.getHeader(name);
-		if (name.equalsIgnoreCase(COOKIE) && Boolean.TRUE.equals(this.confidentiality) && this.cookiesConfidentiality) {
+		if (name.equalsIgnoreCase(COOKIE) && this.confidentiality && this.cookiesConfidentiality) {
 
 			Map<String, SavedCookie> sessionCookies = (Map<String, SavedCookie>) super.getSession().getAttribute(
 					Constants.HDIV_COOKIES_KEY);
@@ -211,7 +211,7 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 
 		Enumeration<?> headerValues = super.getHeaders(name);
 
-		if (name.equalsIgnoreCase(COOKIE) && Boolean.TRUE.equals(this.confidentiality) && this.cookiesConfidentiality) {
+		if (name.equalsIgnoreCase(COOKIE) && this.confidentiality && this.cookiesConfidentiality) {
 
 			Vector<String> values = new Vector<String>();
 			Map<String, SavedCookie> sessionCookies = (Map<String, SavedCookie>) super.getSession().getAttribute(
@@ -372,7 +372,7 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 	 * @param confidentiality
 	 *            The confidentiality to set.
 	 */
-	public void setConfidentiality(Boolean confidentiality) {
+	public void setConfidentiality(boolean confidentiality) {
 		this.confidentiality = confidentiality;
 	}
 

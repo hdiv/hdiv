@@ -67,7 +67,7 @@ public class HDIVConfig {
 	/**
 	 * Confidentiality indicator to know if information is accessible only for those who are authorized.
 	 */
-	private Boolean confidentiality;
+	private boolean confidentiality = true;
 
 	/**
 	 * Parameters which HDIV validation will not be applied to.
@@ -395,11 +395,11 @@ public class HDIVConfig {
 		}
 	}
 
-	public Boolean getConfidentiality() {
+	public boolean getConfidentiality() {
 		return confidentiality;
 	}
 
-	public void setConfidentiality(Boolean confidentiality) {
+	public void setConfidentiality(boolean confidentiality) {
 		this.confidentiality = confidentiality;
 	}
 
@@ -649,7 +649,7 @@ public class HDIVConfig {
 
 	public String toString() {
 		StringBuffer result = new StringBuffer().append("");
-		result = result.append(" Confidentiality=").append(this.getConfidentiality().toString());
+		result = result.append(" Confidentiality=").append(this.getConfidentiality());
 		result.append(" avoidCookiesIntegrity=").append(this.avoidCookiesIntegrity);
 		result.append(" avoidCookiesConfidentiality=").append(this.avoidCookiesConfidentiality);
 		result.append(" avoidValidationInUrlsWithoutParams=").append(this.avoidValidationInUrlsWithoutParams);
