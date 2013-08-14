@@ -161,11 +161,15 @@ public class EditableValidationsBeanDefinitionParser extends AbstractSingleBeanD
 		if (named != null) {
 			String url = named.getTextContent();
 
-			boolean enableDefaults = false;
-			String enableDefaultsVal = attributes.getNamedItem("enableDefaults").getTextContent();
-			if (enableDefaultsVal != null) {
-				enableDefaults = Boolean.TRUE.toString().equalsIgnoreCase(enableDefaultsVal);
+			boolean enableDefaults = true;
+			named = attributes.getNamedItem("enableDefaults");
+			if (named != null) {
+				String enableDefaultsVal = named.getTextContent();
+				if (enableDefaultsVal != null) {
+					enableDefaults = Boolean.TRUE.toString().equalsIgnoreCase(enableDefaultsVal);
+				}
 			}
+
 			if (enableDefaults) {
 				// Add defaults
 				ids.addAll(this.defaultValidationIds);
