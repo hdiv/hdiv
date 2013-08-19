@@ -28,6 +28,7 @@ import org.apache.commons.logging.LogFactory;
 import org.hdiv.config.HDIVConfig;
 import org.hdiv.config.multipart.IMultipartConfig;
 import org.hdiv.config.multipart.exception.HdivMultipartException;
+import org.hdiv.util.Constants;
 import org.hdiv.util.HDIVUtil;
 import org.springframework.beans.BeansException;
 import org.springframework.web.context.WebApplicationContext;
@@ -185,6 +186,9 @@ public class ValidatorFilter extends OncePerRequestFilter {
 			if (!isMultipartException) {
 				result = this.validationHelper.validate(multipartProcessedRequest);
 				legal = result.isValid();
+
+				// Store validation result in request
+				request.setAttribute(Constants.VALIDATOR_HELPER_RESULT_NAME, result);
 			}
 
 			if (legal || this.hdivConfig.isDebugMode()) {

@@ -16,6 +16,7 @@
 package org.hdiv.util;
 
 import org.hdiv.cipher.Key;
+import org.hdiv.filter.ValidatorHelperResult;
 import org.hdiv.idGenerator.PageIdGenerator;
 import org.hdiv.session.IStateCache;
 
@@ -38,6 +39,13 @@ public class Constants {
 	 * Name of the attribute which is used for storing cookies in session.
 	 */
 	public static final String HDIV_COOKIES_KEY = "org.hdiv.HdivCookies";
+
+	/**
+	 * Request attribute name that contains validation result {@link ValidatorHelperResult}
+	 * 
+	 * @since 2.1.5
+	 */
+	public static final String VALIDATOR_HELPER_RESULT_NAME = "org.hdiv.ValidatorHelperResult";
 
 	/**
 	 * Session's cookie identifier
