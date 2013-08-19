@@ -34,12 +34,15 @@ import org.hdiv.dataValidator.DataValidatorFactory;
 import org.hdiv.dataValidator.ValidationResult;
 import org.hdiv.events.HDIVFacesEventListener;
 import org.hdiv.filter.DefaultValidatorErrorHandler;
+import org.hdiv.filter.IValidationHelper;
 import org.hdiv.filter.JsfValidatorHelper;
+import org.hdiv.filter.ValidatorErrorHandler;
 import org.hdiv.filter.ValidatorHelperRequest;
 import org.hdiv.idGenerator.RandomGuidUidGenerator;
 import org.hdiv.idGenerator.SequentialPageIdGenerator;
 import org.hdiv.logs.Logger;
 import org.hdiv.logs.UserData;
+import org.hdiv.session.ISession;
 import org.hdiv.session.SessionHDIV;
 import org.hdiv.session.StateCache;
 import org.hdiv.state.StateUtil;
@@ -70,9 +73,13 @@ import org.w3c.dom.NodeList;
  */
 public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 
-	private static final String SESSION_BEAN_NAME = "org.hdiv.session";
+	private static final String SESSION_BEAN_NAME = ISession.class.getName();
 
-	private static final String VALIDATOR_ERROR_HANDLER_BEAN_NAME = "org.hdiv.validatorErrorHandler";
+	private static final String VALIDATOR_ERROR_HANDLER_BEAN_NAME = ValidatorErrorHandler.class.getName();
+
+	private static final String LOGGER_BEAN_NAME = Logger.class.getName();
+
+	private static final String VALIDATOR_HELPER_NAME = IValidationHelper.class.getName();
 
 	/**
 	 * The name of the bean to use to look up in an implementation of {@link RequestDataValueProcessor} has been
@@ -211,13 +218,24 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 	}
 
 	private RuntimeBeanReference createLogger(Element element, Object source, ParserContext parserContext) {
-		RootBeanDefinition bean = new RootBeanDefinition(Logger.class);
-		bean.setSource(source);
-		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
-		bean.getPropertyValues().addPropertyValue("userData", this.userDataRef);
-		String name = parserContext.getReaderContext().generateBeanName(bean);
-		parserContext.getRegistry().registerBeanDefinition(name, bean);
-		return new RuntimeBeanReference(name);
+
+		// Simple bean overriding
+		boolean existBean = parserContext.getRegistry().containsBeanDefinition(LOGGER_BEAN_NAME);
+
+		if (!existBean) {
+			// If user don't define Logger bean, create default
+			RootBeanDefinition bean = new RootBeanDefinition(Logger.class);
+			bean.setSource(source);
+			bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
+			bean.getPropertyValues().addPropertyValue("userData", this.userDataRef);
+			parserContext.getRegistry().registerBeanDefinition(LOGGER_BEAN_NAME, bean);
+			return new RuntimeBeanReference(LOGGER_BEAN_NAME);
+
+		} else {
+			// Use user defined
+			return new RuntimeBeanReference(LOGGER_BEAN_NAME);
+		}
+
 	}
 
 	private RuntimeBeanReference createValidatorErrorHandler(Element element, Object source, ParserContext parserContext) {
@@ -232,9 +250,8 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 			bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
 			bean.getPropertyValues().addPropertyValue("userData", this.userDataRef);
 			bean.getPropertyValues().addPropertyValue("config", this.configRef);
-			String name = parserContext.getReaderContext().generateBeanName(bean);
-			parserContext.getRegistry().registerBeanDefinition(name, bean);
-			return new RuntimeBeanReference(name);
+			parserContext.getRegistry().registerBeanDefinition(VALIDATOR_ERROR_HANDLER_BEAN_NAME, bean);
+			return new RuntimeBeanReference(VALIDATOR_ERROR_HANDLER_BEAN_NAME);
 
 		} else {
 			// Use user defined
@@ -276,7 +293,7 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 
 		if (!existSession) {
 			// If user don't define ISession bean, create default
-			return this.createSimpleBean(element, source, parserContext, SessionHDIV.class);
+			return this.createSimpleBean(element, source, parserContext, SessionHDIV.class, SESSION_BEAN_NAME);
 		} else {
 			// Use user defined
 			return new RuntimeBeanReference(SESSION_BEAN_NAME);
@@ -335,19 +352,28 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 
 	private RuntimeBeanReference createValidatorHelper(Element element, Object source, ParserContext parserContext) {
 
-		RootBeanDefinition bean = new RootBeanDefinition(ValidatorHelperRequest.class);
-		bean.setSource(source);
-		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
-		bean.setInitMethodName("init");
-		bean.getPropertyValues().addPropertyValue("logger", this.loggerRef);
-		bean.getPropertyValues().addPropertyValue("stateUtil", this.stateUtilRef);
-		bean.getPropertyValues().addPropertyValue("hdivConfig", this.configRef);
-		bean.getPropertyValues().addPropertyValue("session", this.sessionRef);
-		bean.getPropertyValues().addPropertyValue("dataValidatorFactory", this.dataValidatorFactoryRef);
-		bean.getPropertyValues().addPropertyValue("dataComposerFactory", this.dataComposerFactoryRef);
-		String name = parserContext.getReaderContext().generateBeanName(bean);
-		parserContext.getRegistry().registerBeanDefinition(name, bean);
-		return new RuntimeBeanReference(name);
+		// Simple bean overriding
+		boolean existSession = parserContext.getRegistry().containsBeanDefinition(VALIDATOR_HELPER_NAME);
+
+		if (!existSession) {
+			// If user don't definen, create default
+			RootBeanDefinition bean = new RootBeanDefinition(ValidatorHelperRequest.class);
+			bean.setSource(source);
+			bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
+			bean.setInitMethodName("init");
+			bean.getPropertyValues().addPropertyValue("logger", this.loggerRef);
+			bean.getPropertyValues().addPropertyValue("stateUtil", this.stateUtilRef);
+			bean.getPropertyValues().addPropertyValue("hdivConfig", this.configRef);
+			bean.getPropertyValues().addPropertyValue("session", this.sessionRef);
+			bean.getPropertyValues().addPropertyValue("dataValidatorFactory", this.dataValidatorFactoryRef);
+			bean.getPropertyValues().addPropertyValue("dataComposerFactory", this.dataComposerFactoryRef);
+			parserContext.getRegistry().registerBeanDefinition(VALIDATOR_HELPER_NAME, bean);
+			return new RuntimeBeanReference(VALIDATOR_HELPER_NAME);
+		} else {
+			// Use user defined
+			return new RuntimeBeanReference(VALIDATOR_HELPER_NAME);
+		}
+
 	}
 
 	private RuntimeBeanReference createLinkUrlProcessor(Element element, Object source, ParserContext parserContext) {
@@ -581,6 +607,15 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		String name = parserContext.getReaderContext().generateBeanName(bean);
 		parserContext.getRegistry().registerBeanDefinition(name, bean);
 		return new RuntimeBeanReference(name);
+	}
+
+	private RuntimeBeanReference createSimpleBean(Element element, Object source, ParserContext parserContext,
+			Class<?> clazz, String beanName) {
+		RootBeanDefinition bean = new RootBeanDefinition(clazz);
+		bean.setSource(source);
+		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
+		parserContext.getRegistry().registerBeanDefinition(beanName, bean);
+		return new RuntimeBeanReference(beanName);
 	}
 
 	private void processChilds(Element element, RootBeanDefinition bean) {
