@@ -28,8 +28,7 @@ public class ValidatorErrorHandlerTest extends AbstractHDIVTestCase {
 	private ValidatorErrorHandler validatorErrorHandler;
 
 	protected void onSetUp() throws Exception {
-		this.validatorErrorHandler = (ValidatorErrorHandler) this.getApplicationContext().getBean(
-				"validatorErrorHandler");
+		this.validatorErrorHandler = this.getApplicationContext().getBean(ValidatorErrorHandler.class);
 	}
 
 	public void testPageIncorrect() {

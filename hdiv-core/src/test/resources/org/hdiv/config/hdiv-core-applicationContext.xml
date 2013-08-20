@@ -28,9 +28,7 @@
 	<!--LOGGER -->
 	<bean id="userData" class="org.hdiv.logs.UserData" />
 	<bean id="logger" class="org.hdiv.logs.Logger">
-		<property name="userData">
-			<ref bean="userData" />
-		</property>
+		<property name="userData" ref="userData" />
 	</bean>
 
 	<bean id="cache" class="org.hdiv.session.StateCache" singleton="false">
@@ -60,12 +58,8 @@
 	<bean id="results" class="org.hdiv.dataValidator.ValidationResult" />
 
 	<bean id="stateUtil" class="org.hdiv.state.StateUtil" init-method="init">
-		<property name="encodingUtil">
-			<ref bean="encoding" />
-		</property>
-		<property name="config">
-			<ref bean="config" />
-		</property>
+		<property name="encodingUtil" ref="encoding" />
+		<property name="config" ref="config" />
 	</bean>
 	<bean id="dataValidatorFactory" class="org.hdiv.dataValidator.DataValidatorFactory">
 		<property name="hdivConfig" ref="config" />
@@ -74,33 +68,23 @@
 	<!-- DATACOMPOSERS, DATAVALIDATOR -->
 
 	<bean id="dataComposerFactory" class="org.hdiv.dataComposer.DataComposerFactory">
-		<property name="hdivConfig">
-			<ref bean="config" />
-		</property>
-		<property name="session">
-			<ref bean="sessionHDIV" />
-		</property>
-		<property name="uidGenerator">
-			<ref bean="uidGenerator" />
-		</property>
-		<property name="encodingUtil">
-			<ref bean="encoding" />
-		</property>
-		<property name="stateUtil">
-			<ref bean="stateUtil" />
-		</property>
+		<property name="hdivConfig" ref="config" />
+		<property name="session" ref="sessionHDIV" />
+		<property name="uidGenerator" ref="uidGenerator" />
+		<property name="encodingUtil" ref="encoding" />
+		<property name="stateUtil" ref="stateUtil" />
 		<property name="allowedLength">
 			<value>4000</value>
 		</property>
 	</bean>
+
+	<bean id="requestInitializer" class="org.hdiv.filter.DefaultRequestInitializer">
+		<property name="config" ref="config" />
+	</bean>
 	<bean id="validatorHelper" class="org.hdiv.filter.ValidatorHelperRequest"
 		init-method="init">
-		<property name="logger">
-			<ref bean="logger" />
-		</property>
-		<property name="stateUtil">
-			<ref bean="stateUtil" />
-		</property>
+		<property name="logger" ref="logger" />
+		<property name="stateUtil" ref="stateUtil" />
 		<property name="hdivConfig" ref="config" />
 		<property name="session" ref="sessionHDIV" />
 		<property name="dataValidatorFactory" ref="dataValidatorFactory" />

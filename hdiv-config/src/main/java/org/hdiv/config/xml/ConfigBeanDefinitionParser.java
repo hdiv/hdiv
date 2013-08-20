@@ -33,9 +33,11 @@ import org.hdiv.dataComposer.DataComposerFactory;
 import org.hdiv.dataValidator.DataValidatorFactory;
 import org.hdiv.dataValidator.ValidationResult;
 import org.hdiv.events.HDIVFacesEventListener;
+import org.hdiv.filter.DefaultRequestInitializer;
 import org.hdiv.filter.DefaultValidatorErrorHandler;
 import org.hdiv.filter.IValidationHelper;
 import org.hdiv.filter.JsfValidatorHelper;
+import org.hdiv.filter.RequestInitializer;
 import org.hdiv.filter.ValidatorErrorHandler;
 import org.hdiv.filter.ValidatorHelperRequest;
 import org.hdiv.idGenerator.RandomGuidUidGenerator;
@@ -80,6 +82,8 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 	private static final String LOGGER_BEAN_NAME = Logger.class.getName();
 
 	private static final String VALIDATOR_HELPER_NAME = IValidationHelper.class.getName();
+
+	private static final String REQUEST_INITIALIZER_NAME = RequestInitializer.class.getName();
 
 	/**
 	 * The name of the bean to use to look up in an implementation of {@link RequestDataValueProcessor} has been
@@ -156,6 +160,7 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		this.dataComposerFactoryRef = this.createDataComposerFactory(element, source, parserContext);
 		this.linkUrlProcessorRef = this.createLinkUrlProcessor(element, source, parserContext);
 		this.formUrlProcessorRef = this.createFormUrlProcessor(element, source, parserContext);
+		this.createRequestInitializer(element, source, parserContext);
 
 		// register Spring MVC beans if we are using Spring MVC web framework
 		if (this.grailsPresent) {
@@ -356,7 +361,7 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		boolean existSession = parserContext.getRegistry().containsBeanDefinition(VALIDATOR_HELPER_NAME);
 
 		if (!existSession) {
-			// If user don't definen, create default
+			// If user don't define one, create default
 			RootBeanDefinition bean = new RootBeanDefinition(ValidatorHelperRequest.class);
 			bean.setSource(source);
 			bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
@@ -372,6 +377,26 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		} else {
 			// Use user defined
 			return new RuntimeBeanReference(VALIDATOR_HELPER_NAME);
+		}
+
+	}
+
+	private RuntimeBeanReference createRequestInitializer(Element element, Object source, ParserContext parserContext) {
+
+		// Simple bean overriding
+		boolean exist = parserContext.getRegistry().containsBeanDefinition(REQUEST_INITIALIZER_NAME);
+
+		if (!exist) {
+			// If user don't define one, create default
+			RootBeanDefinition bean = new RootBeanDefinition(DefaultRequestInitializer.class);
+			bean.setSource(source);
+			bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
+			bean.getPropertyValues().addPropertyValue("config", this.configRef);
+			parserContext.getRegistry().registerBeanDefinition(REQUEST_INITIALIZER_NAME, bean);
+			return new RuntimeBeanReference(REQUEST_INITIALIZER_NAME);
+		} else {
+			// Use user defined
+			return new RuntimeBeanReference(REQUEST_INITIALIZER_NAME);
 		}
 
 	}

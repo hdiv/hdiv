@@ -29,7 +29,6 @@ import org.hdiv.config.HDIVConfig;
 import org.hdiv.config.multipart.IMultipartConfig;
 import org.hdiv.config.multipart.exception.HdivMultipartException;
 import org.hdiv.util.Constants;
-import org.hdiv.util.HDIVUtil;
 import org.springframework.beans.BeansException;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
@@ -71,6 +70,11 @@ public class ValidatorFilter extends OncePerRequestFilter {
 	private ValidatorErrorHandler errorHandler;
 
 	/**
+	 * Request data and wrappers initializer.
+	 */
+	private RequestInitializer requestInitializer;
+
+	/**
 	 * Creates a new ValidatorFilter object.
 	 */
 	public ValidatorFilter() {
@@ -78,7 +82,7 @@ public class ValidatorFilter extends OncePerRequestFilter {
 	}
 
 	/**
-	 * Init required dependencies
+	 * Initialize required dependencies
 	 */
 	protected void initDependencies() {
 
@@ -96,36 +100,8 @@ public class ValidatorFilter extends OncePerRequestFilter {
 			}
 
 			this.errorHandler = context.getBean(ValidatorErrorHandler.class);
+			this.requestInitializer = context.getBean(RequestInitializer.class);
 		}
-
-	}
-
-	/**
-	 * Init request scoped data
-	 * 
-	 * @param request
-	 *            request object
-	 */
-	protected void initRequestData(HttpServletRequest request) {
-
-		// Put the request in threadlocal
-		HDIVUtil.setHttpServletRequest(request);
-
-		// Store request original request uri
-		HDIVUtil.setRequestURI(request.getRequestURI(), request);
-
-	}
-
-	/**
-	 * Destroy request scoped data
-	 * 
-	 * @param request
-	 *            request object
-	 */
-	protected void destroyRequestData(HttpServletRequest request) {
-
-		// Erase request from threadlocal
-		HDIVUtil.resetLocalData();
 
 	}
 
@@ -149,10 +125,10 @@ public class ValidatorFilter extends OncePerRequestFilter {
 		this.initDependencies();
 
 		// Initialize request scoped data
-		this.initRequestData(request);
+		this.requestInitializer.initRequest(request);
 
-		ResponseWrapper responseWrapper = this.getResponseWrapper(response);
-		RequestWrapper requestWrapper = this.getRequestWrapper(request);
+		RequestWrapper requestWrapper = this.requestInitializer.createRequestWrapper(request);
+		ResponseWrapper responseWrapper = this.requestInitializer.createResponseWrapper(response);
 
 		HttpServletRequest multipartProcessedRequest = requestWrapper;
 
@@ -227,7 +203,7 @@ public class ValidatorFilter extends OncePerRequestFilter {
 		} finally {
 
 			// Destroy request scoped data
-			this.destroyRequestData(request);
+			this.requestInitializer.endRequest(request);
 		}
 	}
 
@@ -260,38 +236,6 @@ public class ValidatorFilter extends OncePerRequestFilter {
 		this.validationHelper.startPage(requestWrapper);
 		filterChain.doFilter(requestWrapper, responseWrapper);
 		this.validationHelper.endPage(requestWrapper);
-	}
-
-	/**
-	 * Create request wrapper.
-	 * 
-	 * @param request
-	 *            HTTP request
-	 * @return the request wrapper
-	 */
-	protected RequestWrapper getRequestWrapper(HttpServletRequest request) {
-
-		RequestWrapper requestWrapper = new RequestWrapper(request);
-		requestWrapper.setConfidentiality(this.hdivConfig.getConfidentiality());
-		requestWrapper.setCookiesConfidentiality(this.hdivConfig.isCookiesConfidentialityActivated());
-
-		return requestWrapper;
-	}
-
-	/**
-	 * Create response wrapper.
-	 * 
-	 * @param response
-	 *            HTTP response
-	 * @return the response wrapper
-	 */
-	protected ResponseWrapper getResponseWrapper(HttpServletResponse response) {
-
-		ResponseWrapper responseWrapper = new ResponseWrapper(response);
-		responseWrapper.setConfidentiality(this.hdivConfig.getConfidentiality());
-		responseWrapper.setAvoidCookiesConfidentiality(!this.hdivConfig.isCookiesConfidentialityActivated());
-
-		return responseWrapper;
 	}
 
 }
