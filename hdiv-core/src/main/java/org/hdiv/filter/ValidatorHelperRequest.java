@@ -530,6 +530,9 @@ public class ValidatorHelperRequest implements IValidationHelper {
 		// Check if the parameter is editable
 		if (stateParameter.isEditable()) {
 
+			// Mark parameter as editable
+			this.addEditableParameter(request, parameter);
+
 			if (this.hdivConfig.existValidations() && (stateParameter.getEditableDataType() != null)) {
 				this.validateEditableParameter(request, target, parameter, values,
 						stateParameter.getEditableDataType(), unauthorizedEditableParameters);
@@ -938,6 +941,25 @@ public class ValidatorHelperRequest implements IValidationHelper {
 			throw new HDIVException(errorMessage);
 		}
 
+	}
+
+	/**
+	 * Mark parameter as editable.
+	 * 
+	 * @param request
+	 *            HttpServletRequest to validate
+	 * @param name
+	 *            parameter name
+	 */
+	protected void addEditableParameter(HttpServletRequest request, String name) {
+
+		if (request instanceof RequestWrapper) {
+			if (log.isDebugEnabled()) {
+				log.debug("Editable parameter [" + name + "] added.");
+			}
+			RequestWrapper wrapper = (RequestWrapper) request;
+			wrapper.addEditableParameter(name);
+		}
 	}
 
 	protected ServletRequest getNativeRequest(ServletRequest request, Class<?> requiredType) {

@@ -352,6 +352,16 @@ public class HDIVUtil {
 	}
 
 	/**
+	 * Return the <code>HttpServletRequest</code> object. Return null if request not present.
+	 * 
+	 * @return {@link HttpServletRequest} instance
+	 */
+	public static HttpServletRequest getNonRequiredHttpServletRequest() {
+		HttpServletRequest request = (HttpServletRequest) httpRequest.get();
+		return request;
+	}
+
+	/**
 	 * Set the <code>HttpServletRequest</code> instance in {@link ThreadLocal}
 	 * 
 	 * @param httpServletRequest
