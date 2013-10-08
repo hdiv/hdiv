@@ -114,8 +114,6 @@ public class InitListener implements ServletContextListener, HttpSessionListener
 
 		ServletContext servletContext = httpSessionEvent.getSession().getServletContext();
 
-		WebApplicationContextUtils.getRequiredWebApplicationContext(servletContext).getBean(ISession.class);
-
 		if (!this.servletContextInitialized) {
 			this.initServletContext(servletContext);
 		}
