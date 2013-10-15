@@ -311,8 +311,6 @@ public class HDIVConfig {
 	 *            target or parameter name
 	 * @param method
 	 *            request method (get,post)
-	 * @param startValues
-	 *            Map with start values
 	 * @return True if <code>value</code> is an init action or parameter. False otherwise.
 	 * @since HDIV 1.1.1
 	 */

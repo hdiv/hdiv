@@ -79,7 +79,7 @@ public class UrlData {
 	 * 
 	 * @param url
 	 *            Original url
-	 * @param isFormUrl
+	 * @param method
 	 *            Http method.
 	 */
 	public UrlData(String url, String method) {
