@@ -175,7 +175,7 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 
 		Collection<String> multipartParams = this.parameters.keySet();
 
-		list.add(multipartParams);
+		list.addAll(multipartParams);
 
 		return Collections.enumeration(list);
 	}
