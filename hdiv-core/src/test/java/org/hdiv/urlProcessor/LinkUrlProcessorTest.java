@@ -188,6 +188,23 @@ public class LinkUrlProcessorTest extends AbstractHDIVTestCase {
 		assertTrue(result.startsWith("/onlypost.do?_HDIV_STATE_="));
 	}
 
+	public void testProcessActionStartPageWithParams() {
+
+		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+
+		String url = "/testing.do?param=value"; // is a startPage
+		String result = this.linkUrlProcessor.processUrl(request, url);
+		assertEquals(url, result);
+
+		url = "/onlyget.do?param=value"; // is a startPage only in Get requests
+		result = this.linkUrlProcessor.processUrl(request, url);
+		assertEquals(url, result);
+
+		url = "/onlypost.do?param=value"; // is a startPage only in POST requests
+		result = this.linkUrlProcessor.processUrl(request, url);
+		assertTrue(result.startsWith("/onlypost.do?param=0&_HDIV_STATE_="));
+	}
+
 	public void testProcessWithBaseUrl() {
 
 		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();

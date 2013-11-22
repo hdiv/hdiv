@@ -136,11 +136,11 @@ public class DataComposerCipherTest extends AbstractHDIVTestCase {
 
 		// State contains both parameters
 		IParameter param = state.getParameter("parameter1");
-		String val = (String) param.getValues().get(0);
+		String val = param.getValues().get(0);
 		assertEquals("1", val);
 
 		param = state.getParameter("parameter2");
-		val = (String) param.getValues().get(0);
+		val = param.getValues().get(0);
 		assertEquals("2", val);
 	}
 

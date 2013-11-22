@@ -87,9 +87,8 @@ public class Parameter implements IParameter, Serializable {
 	 */
 	public boolean existValue(String value) {
 
-		for (int i = 0; i < this.values.size(); i++) {
-			String tempValue = (String) values.get(i);
-			if (tempValue.equalsIgnoreCase(value)) {
+		for (String val: this.values) {
+			if (val.equalsIgnoreCase(value)) {
 				return true;
 			}
 		}
@@ -112,7 +111,7 @@ public class Parameter implements IParameter, Serializable {
 	 *         of values of the parameter.
 	 */
 	public String getValuePosition(int position) {
-		return (String) this.values.get(position);
+		return this.values.get(position);
 	}
 
 	/**

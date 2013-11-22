@@ -85,7 +85,7 @@ public class StateCache implements IStateCache {
 		if (this.pageIds.size() >= this.maxSize) {
 
 			// delete first element
-			String key = (String) this.pageIds.remove(0);
+			String key = this.pageIds.remove(0);
 
 			if (log.isDebugEnabled()) {
 				log.debug("Full Cache, deleted page with id [" + key + "].");

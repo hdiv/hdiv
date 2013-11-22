@@ -15,6 +15,8 @@
  */
 package org.hdiv.filter;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -137,6 +139,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	public ValidatorHelperResult validate(HttpServletRequest request) {
 
 		String target = this.getTarget(request);
+		target = decodeUrl(target);
 		String targetWithoutContextPath = this.getTargetWithoutContextPath(request, target);
 
 		// Hook before the validation
@@ -223,6 +226,21 @@ public class ValidatorHelperRequest implements IValidationHelper {
 		}
 
 		return ValidatorHelperResult.VALID;
+	}
+
+	/**
+	 * It decodes the url to replace the character represented by percentage with its equivalent.
+	 * 
+	 * @param url
+	 *            url to decode
+	 * @return decoded url
+	 */
+	protected String decodeUrl(String url) {
+		try {
+			return URLDecoder.decode(url, Constants.ENCODING_UTF_8);
+		} catch (UnsupportedEncodingException e) {
+			throw new HDIVException("Error decoding url", e);
+		}
 	}
 
 	/**

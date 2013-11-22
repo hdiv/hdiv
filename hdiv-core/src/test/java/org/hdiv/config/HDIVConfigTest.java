@@ -48,4 +48,26 @@ public class HDIVConfigTest extends AbstractHDIVTestCase {
 
 	}
 
+	public void testIsParameterWithoutValidation() {
+
+		HDIVConfig config = getConfig();
+
+		boolean result = config.isParameterWithoutValidation("/path/testAction.do", "testingInitParameter");
+		assertTrue(result);
+
+		result = config.isParameterWithoutValidation("/path/testAction.do", "testingNOInitParameter");
+		assertFalse(result);
+	}
+
+	public void testAreEditableParameterValuesValid() {
+
+		HDIVConfig config = getConfig();
+		boolean result = config.areEditableParameterValuesValid("inicio.html", "one", new String[] { "noProblem" },
+				"text");
+		assertTrue(result);
+
+		result = config.areEditableParameterValuesValid("inicio.html", "one", new String[] { "XSS <script>" }, "text");
+		assertFalse(result);
+	}
+
 }

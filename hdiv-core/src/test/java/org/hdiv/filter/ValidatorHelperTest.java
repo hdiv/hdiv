@@ -44,7 +44,7 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 
 	private boolean confidentiality;
 
-	private String targetName = "/path/testAction.do";;
+	private String targetName = "/path/testAction.do";
 
 	protected void onSetUp() throws Exception {
 
@@ -431,5 +431,20 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 		requestWrapper = new RequestWrapper(request);
 		boolean result = helper.validate(requestWrapper).isValid();
 		assertFalse(result);
+	}
+
+	public void testValidateWhitespace() {
+
+		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
+
+		this.dataComposer.beginRequest("/path/test Action.do");
+		String pageState = this.dataComposer.endRequest();
+		this.dataComposer.endPage();
+
+		request.setRequestURI("/path/test%20Action.do");
+		request.addParameter(hdivParameter, pageState);
+
+		RequestWrapper requestWrapper = new RequestWrapper(request);
+		assertTrue(helper.validate(requestWrapper).isValid());
 	}
 }
