@@ -44,10 +44,10 @@ public class CustomSchemaTest extends TestCase {
 		HDIVConfig hdivConfig = (HDIVConfig) this.context.getBean(HDIVConfig.class);
 		assertNotNull(hdivConfig);
 
-		boolean result = hdivConfig.isStartPage("/login.html", "get");
+		boolean result = hdivConfig.isStartPage("/onlyGet.html", "get");
 		assertTrue(result);
 
-		result = hdivConfig.isStartPage("/login.html", "post");
+		result = hdivConfig.isStartPage("/onlyGet.html", "post");
 		assertFalse(result);
 	}
 
