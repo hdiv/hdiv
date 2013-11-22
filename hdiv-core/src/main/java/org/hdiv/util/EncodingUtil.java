@@ -280,13 +280,6 @@ public class EncodingUtil {
 	}
 
 	/**
-	 * @return Returns the session.
-	 */
-	public ISession getSession() {
-		return session;
-	}
-
-	/**
 	 * @param session
 	 *            The session to set.
 	 */

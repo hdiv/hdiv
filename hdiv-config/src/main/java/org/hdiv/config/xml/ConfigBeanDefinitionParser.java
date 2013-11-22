@@ -331,6 +331,7 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		bean.setInitMethodName("init");
 		bean.getPropertyValues().addPropertyValue("encodingUtil", this.encodingUtilRef);
 		bean.getPropertyValues().addPropertyValue("config", this.configRef);
+		bean.getPropertyValues().addPropertyValue("session", this.sessionRef);
 		String name = parserContext.getReaderContext().generateBeanName(bean);
 		parserContext.getRegistry().registerBeanDefinition(name, bean);
 		return new RuntimeBeanReference(name);

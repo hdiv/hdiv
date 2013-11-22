@@ -21,6 +21,9 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hdiv.AbstractHDIVTestCase;
 import org.hdiv.config.HDIVConfig;
+import org.hdiv.state.IState;
+import org.hdiv.state.Parameter;
+import org.hdiv.state.State;
 
 /**
  * Unit tests for the <code>org.hdiv.util.EncodingUtil</code> class.
@@ -81,6 +84,29 @@ public class EncodingUtilTest extends AbstractHDIVTestCase {
 
 		log.debug("decodedData:" + decodedData);
 		Assert.assertEquals(clearData, decodedData);
+	}
+
+	/*
+	 * Test method for 'org.hdiv.state.StateUtil.encode64Cipher(Object)'
+	 */
+	public void testEncode64() {
+
+		IState state = new State();
+
+		state.setAction("action1");
+		Parameter parameter = new Parameter();
+		parameter.setName("parameter1");
+		parameter.addValue("value1");
+		parameter.addValue("value2");
+
+		state.addParameter("parameter1", parameter);
+		state.addParameter("parameter12", parameter);
+		state.addParameter("parameter12", parameter);
+
+		String data = encodingUtil.encode64Cipher(state);
+		State obj = (State) encodingUtil.decode64Cipher(data);
+
+		assertEquals(obj.getAction(), state.getAction());
 	}
 
 }
