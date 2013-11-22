@@ -4,7 +4,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Abstraction for {@link Pattern} execution.
+ * {@link PatternMatcher} implementation based on java {@link Pattern}.
  * 
  * @since 2.1.6
  */
@@ -99,7 +99,7 @@ public class DefaultPatternMatcher implements PatternMatcher {
 	 */
 	@Override
 	public String toString() {
-		return "PatternMatcher [regex=" + regex + "]";
+		return "DefaultPatternMatcher [regex=" + regex + "]";
 	}
 
 }
