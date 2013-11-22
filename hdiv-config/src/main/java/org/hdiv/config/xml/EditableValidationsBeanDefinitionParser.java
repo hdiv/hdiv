@@ -104,6 +104,9 @@ public class EditableValidationsBeanDefinitionParser extends AbstractSingleBeanD
 
 		Object source = parserContext.extractSource(element);
 
+		RuntimeBeanReference beanRef = new RuntimeBeanReference(ConfigBeanDefinitionParser.PATTERN_MATCHER_FACTORY_NAME);
+		bean.getBeanDefinition().getPropertyValues().addPropertyValue("patternMatcherFactory", beanRef);
+
 		Map<String, List<String>> map = new HashMap<String, List<String>>();
 		bean.addPropertyValue("rawUrls", map);
 		bean.setInitMethodName("init");

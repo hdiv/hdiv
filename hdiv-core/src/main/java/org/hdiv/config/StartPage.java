@@ -15,7 +15,7 @@
  */
 package org.hdiv.config;
 
-import java.util.regex.Pattern;
+import org.hdiv.regex.PatternMatcher;
 
 /**
  * Contains the information of a start page.
@@ -38,12 +38,16 @@ public class StartPage {
 	/**
 	 * Compiled pattern
 	 */
-	private Pattern compiledPattern;
+	private PatternMatcher compiledPattern;
 
 	public StartPage(String method, String pattern) {
 		this.method = method;
 		this.pattern = pattern;
-		this.compiledPattern = Pattern.compile(pattern);
+	}
+
+	public StartPage(String method, PatternMatcher compiledPattern) {
+		this.method = method;
+		this.compiledPattern = compiledPattern;
 	}
 
 	/**
@@ -61,9 +65,17 @@ public class StartPage {
 	}
 
 	/**
+	 * @param compiledPattern
+	 *            the compiledPattern to set
+	 */
+	public void setCompiledPattern(PatternMatcher compiledPattern) {
+		this.compiledPattern = compiledPattern;
+	}
+
+	/**
 	 * @return the compiledPattern
 	 */
-	public Pattern getCompiledPattern() {
+	public PatternMatcher getCompiledPattern() {
 		return compiledPattern;
 	}
 
@@ -86,7 +98,11 @@ public class StartPage {
 		sb.append("StartPage[");
 		sb.append("method = " + this.method);
 		sb.append(", ");
-		sb.append("pattern = " + this.pattern);
+		if (this.pattern != null) {
+			sb.append("pattern = " + this.pattern);
+		} else if (this.compiledPattern != null) {
+			sb.append("pattern = " + this.compiledPattern);
+		}
 		sb.append("]");
 		return sb.toString();
 	}

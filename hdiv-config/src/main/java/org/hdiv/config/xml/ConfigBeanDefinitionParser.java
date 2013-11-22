@@ -44,6 +44,7 @@ import org.hdiv.idGenerator.RandomGuidUidGenerator;
 import org.hdiv.idGenerator.SequentialPageIdGenerator;
 import org.hdiv.logs.Logger;
 import org.hdiv.logs.UserData;
+import org.hdiv.regex.PatternMatcherFactory;
 import org.hdiv.session.ISession;
 import org.hdiv.session.SessionHDIV;
 import org.hdiv.session.StateCache;
@@ -85,6 +86,8 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 
 	private static final String REQUEST_INITIALIZER_NAME = RequestInitializer.class.getName();
 
+	public static final String PATTERN_MATCHER_FACTORY_NAME = PatternMatcherFactory.class.getName();
+
 	/**
 	 * The name of the bean to use to look up in an implementation of {@link RequestDataValueProcessor} has been
 	 * configured.
@@ -110,6 +113,7 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 	private List<StartPage> startPages = new ArrayList<StartPage>();
 
 	/* Bean references */
+	private RuntimeBeanReference patternMatcherFactoryRef;
 
 	private RuntimeBeanReference configRef;
 
@@ -136,6 +140,9 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 	public BeanDefinition parse(Element element, ParserContext parserContext) {
 
 		Object source = parserContext.extractSource(element);
+
+		this.patternMatcherFactoryRef = this.createSimpleBean(element, source, parserContext,
+				PatternMatcherFactory.class, PATTERN_MATCHER_FACTORY_NAME);
 
 		this.configRef = this.createConfigBean(element, source, parserContext);
 
@@ -450,6 +457,8 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		RootBeanDefinition bean = new RootBeanDefinition(HDIVConfig.class);
 		bean.setSource(source);
 		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
+
+		bean.getPropertyValues().addPropertyValue("patternMatcherFactory", this.patternMatcherFactoryRef);
 
 		String confidentiality = element.getAttribute("confidentiality");
 		String avoidCookiesIntegrity = element.getAttribute("avoidCookiesIntegrity");

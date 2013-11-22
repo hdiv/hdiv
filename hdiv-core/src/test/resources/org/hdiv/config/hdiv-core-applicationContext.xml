@@ -117,4 +117,7 @@
 		<property name="config" ref="config" />
 	</bean>
 
+	<!-- RegExp executor -->
+	<bean id="patternMatcherFactory" class="org.hdiv.regex.PatternMatcherFactory" />
+
 </beans>

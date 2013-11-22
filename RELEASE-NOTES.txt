@@ -6,6 +6,7 @@ Release 2.1.6
 ==================================
 
  * Fix form multipart issue (https://github.com/hdiv/hdiv/issues/44).
+ * New 'org.hdiv.regex' package for Java regular expression execution abstraction.
 
 Release 2.1.5
 ==================================
