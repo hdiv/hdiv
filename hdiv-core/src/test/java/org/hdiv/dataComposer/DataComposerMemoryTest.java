@@ -240,4 +240,25 @@ public class DataComposerMemoryTest extends AbstractHDIVTestCase {
 		assertEquals("2", val);
 	}
 
+	public void testSaveStateInCreation() {
+
+		// Test the validation of a state before processing all page
+
+		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		IDataComposer dataComposer = this.dataComposerFactory.newInstance(request);
+		HDIVUtil.setDataComposer(dataComposer, request);
+
+		dataComposer.startPage();
+
+		dataComposer.beginRequest("test.do");
+		String result = dataComposer.compose("test.do", "parameter1", "2", false);
+		assertEquals("0", result);
+		String stateId = dataComposer.endRequest();
+
+		IState state = this.stateUtil.restoreState(stateId);
+		assertNotNull(state);
+		assertEquals("test.do", state.getAction());
+
+		dataComposer.endPage();
+	}
 }

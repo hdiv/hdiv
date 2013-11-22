@@ -57,7 +57,7 @@ public abstract class AbstractDataComposer implements IDataComposer {
 	/**
 	 * Http session wrapper
 	 */
-	private ISession session;
+	protected ISession session;
 
 	/**
 	 * Unique id generator
@@ -99,13 +99,6 @@ public abstract class AbstractDataComposer implements IDataComposer {
 	 */
 	public boolean isRequestStarted() {
 		return this.statesStack.size() > 0;
-	}
-
-	/**
-	 * @return the session
-	 */
-	public ISession getSession() {
-		return session;
 	}
 
 	/**
