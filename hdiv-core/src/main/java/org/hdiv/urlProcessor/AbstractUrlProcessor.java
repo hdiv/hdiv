@@ -555,7 +555,7 @@ public abstract class AbstractUrlProcessor {
 	 */
 	protected String stripSession(String url, UrlData urlData) {
 
-		if (url.contains(Constants.JSESSIONID) || url.contains(Constants.JSESSIONID.toLowerCase())) {
+		if (url.contains(Constants.JSESSIONID) || url.contains(Constants.JSESSIONID_LC)) {
 
 			int last = url.length();
 			if (url.contains("?")) {

@@ -53,6 +53,11 @@ public class Constants {
 	public static final String JSESSIONID = "JSESSIONID";
 
 	/**
+	 * Session's cookie identifier in lower case.
+	 */
+	public static final String JSESSIONID_LC = JSESSIONID.toLowerCase();
+
+	/**
 	 * Session attribute name for {@link Key} instance
 	 */
 	public static final String KEY_NAME = "org.hdiv.Key";

@@ -70,7 +70,7 @@ public class DataComposerCipher extends DataComposerMemory {
 	 */
 	public String endRequest() {
 
-		IState state = (IState) super.getStatesStack().pop();
+		IState state = super.getStatesStack().pop();
 		state.setPageId(this.getPage().getName());
 
 		String stateData = this.encodingUtil.encode64Cipher(state);

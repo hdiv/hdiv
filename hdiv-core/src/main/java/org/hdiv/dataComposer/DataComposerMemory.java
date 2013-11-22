@@ -165,7 +165,7 @@ public class DataComposerMemory extends AbstractDataComposer {
 			String charEncoding) {
 
 		// Get actual IState
-		IState state = (IState) this.getStatesStack().peek();
+		IState state = this.getStatesStack().peek();
 		if (state.getAction() != null && state.getAction().trim().length() == 0) {
 			state.setAction(action);
 		}
@@ -292,7 +292,7 @@ public class DataComposerMemory extends AbstractDataComposer {
 		}
 
 		// Get actual IState
-		IState state = (IState) this.getStatesStack().peek();
+		IState state = this.getStatesStack().peek();
 		String action = state.getAction();
 		if (action != null) {
 			if (this.hdivConfig.isStartPage(action, method)) {
@@ -319,7 +319,7 @@ public class DataComposerMemory extends AbstractDataComposer {
 	private boolean isUserDefinedNonValidationParameter(String parameter) {
 
 		// Get actual IState
-		IState state = (IState) this.getStatesStack().peek();
+		IState state = this.getStatesStack().peek();
 		String actionWithoutContextPath = state.getAction();
 		if (actionWithoutContextPath != null && actionWithoutContextPath.startsWith("/")) {
 			int secondSlash = actionWithoutContextPath.indexOf("/", 1);
@@ -363,7 +363,7 @@ public class DataComposerMemory extends AbstractDataComposer {
 		// we decoded value before store it in state.
 		String decodedValue = this.getDecodedValue(value, charEncoding);
 		// Get actual IState
-		IState state = (IState) this.getStatesStack().peek();
+		IState state = this.getStatesStack().peek();
 
 		if (state.existParameter(parameter)) {
 
@@ -401,7 +401,7 @@ public class DataComposerMemory extends AbstractDataComposer {
 	public void mergeParameters(String oldParameter, String newParameter) {
 
 		// Get actual IState
-		IState state = (IState) this.getStatesStack().peek();
+		IState state = this.getStatesStack().peek();
 		IParameter storedParameter = state.getParameter(oldParameter);
 
 		if (storedParameter.getValues().size() > 0) {
@@ -517,7 +517,7 @@ public class DataComposerMemory extends AbstractDataComposer {
 	 */
 	public String endRequest() {
 
-		IState state = (IState) this.getStatesStack().pop();
+		IState state = this.getStatesStack().pop();
 
 		IPage page = this.getPage();
 		state.setPageId(page.getName());

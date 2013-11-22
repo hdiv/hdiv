@@ -54,7 +54,7 @@ public class DataComposerHash extends DataComposerMemory {
 	 */
 	public String endRequest() {
 
-		IState state = (IState) super.getStatesStack().pop();
+		IState state = super.getStatesStack().pop();
 		state.setPageId(this.getPage().getName());
 
 		String id = null;
