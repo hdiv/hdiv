@@ -140,7 +140,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 
 		String target = this.getTarget(request);
 		target = this.decodeUrl(target);
-		String targetWithoutContextPath = this.getTargetWithoutContextPath(request, target);
+		target = this.getTargetWithoutContextPath(request, target);
 
 		// Hook before the validation
 		ValidatorHelperResult result = this.preValidate(request, target);
@@ -168,7 +168,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 			}
 		}
 
-		if (this.hdivConfig.isStartPage(targetWithoutContextPath, request.getMethod())) {
+		if (this.hdivConfig.isStartPage(target, request.getMethod())) {
 			result = this.validateStartPageParameters(request, target);
 			if (result.isValid()) {
 				return ValidatorHelperResult.VALIDATION_NOT_REQUIRED;
@@ -213,7 +213,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 
 			// Validate parameter
 			result = this.validateParameter(request, state, unauthorizedEditableParameters, hdivParameter, target,
-					targetWithoutContextPath, parameter);
+					target, parameter);
 			if (!result.isValid()) {
 				return result;
 			}
@@ -426,10 +426,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	protected void validateEditableParameter(HttpServletRequest request, String target, String parameter,
 			String[] values, String dataType, Map<String, String[]> unauthorizedParameters) {
 
-		String targetWithoutContextPath = this.getTargetWithoutContextPath(request, target);
-
-		boolean isValid = hdivConfig.areEditableParameterValuesValid(targetWithoutContextPath, parameter, values,
-				dataType);
+		boolean isValid = hdivConfig.areEditableParameterValuesValid(target, parameter, values, dataType);
 		if (!isValid) {
 
 			StringBuffer unauthorizedValues = new StringBuffer(values[0]);
@@ -907,12 +904,10 @@ public class ValidatorHelperRequest implements IValidationHelper {
 
 		IDataValidator dataValidator = this.dataValidatorFactory.newInstance(state);
 
-		String targetWithoutContextPath = this.getTargetWithoutContextPath(request, target);
-
 		IValidationResult result = null;
 		for (int i = 0; i < size; i++) {
 
-			result = dataValidator.validate(values[i], targetWithoutContextPath, parameter);
+			result = dataValidator.validate(values[i], target, parameter);
 
 			if (!result.getLegal()) {
 				this.logger.log(HDIVErrorCodes.PARAMETER_VALUE_INCORRECT, target, parameter, values[i]);

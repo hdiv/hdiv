@@ -76,7 +76,7 @@ public class LinkUrlProcessor extends AbstractUrlProcessor {
 		UrlData urlData = super.createUrlData(url, "GET", request);
 		if (super.isHdivStateNecessary(urlData)) {
 			// the url needs protection
-			dataComposer.beginRequest(urlData.getContextPathRelativeUrl());
+			dataComposer.beginRequest(urlData.getUrlWithoutContextPath());
 
 			Map<String, String[]> params = urlData.getOriginalUrlParams();
 			if (params != null) {

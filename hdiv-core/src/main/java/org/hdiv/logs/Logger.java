@@ -71,6 +71,11 @@ public class Logger {
 		String remoteIp = request.getRemoteAddr();
 		String userName = this.userData.getUsername(request);
 
+		String contextPath = request.getContextPath();
+		if (!target.startsWith(contextPath)) {
+			target = request.getContextPath() + target;
+		}
+
 		this.log(type, target, parameter, value, localIp, remoteIp, userName);
 	}
 
