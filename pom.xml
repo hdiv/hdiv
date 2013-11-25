@@ -90,17 +90,25 @@
 				</configuration>
 			</plugin>
 			<plugin>
-				<groupId>com.mycila.maven-license-plugin</groupId>
-				<artifactId>maven-license-plugin</artifactId>
-				<version>1.10.b1</version>
+				<groupId>com.mycila</groupId>
+				<artifactId>license-maven-plugin</artifactId>
+				<version>2.5</version>
 				<configuration>
-					<header>${basedir}/../LICENSE_HEADER</header>
+					<header>file://${basedir}/LICENSE_HEADER</header>
 					<encoding>UTF-8</encoding>
 					<strictCheck>true</strictCheck>
 					<includes>
 						<include>src/main/java/**</include>
+						<include>src/test/java/**</include>
 					</includes>
 				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>check</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>

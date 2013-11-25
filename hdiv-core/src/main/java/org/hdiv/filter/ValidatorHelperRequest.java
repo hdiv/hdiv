@@ -1,5 +1,5 @@
 /**
- * Copyright 2005-2011 hdiv.org
+ * Copyright 2005-2013 hdiv.org
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -139,7 +139,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	public ValidatorHelperResult validate(HttpServletRequest request) {
 
 		String target = this.getTarget(request);
-		target = decodeUrl(target);
+		target = this.decodeUrl(target);
 		String targetWithoutContextPath = this.getTargetWithoutContextPath(request, target);
 
 		// Hook before the validation

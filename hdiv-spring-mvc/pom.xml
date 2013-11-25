@@ -16,7 +16,7 @@
 		<org.grails.version>2.2.0.RC2</org.grails.version>
 		<org.springframework.version>3.1.0.RELEASE</org.springframework.version>
 	</properties>
-	
+
 	<dependencies>
 		<dependency>
 			<groupId>org.hdiv</groupId>
@@ -78,6 +78,20 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>com.mycila</groupId>
+				<artifactId>license-maven-plugin</artifactId>
+				<version>2.5</version>
+				<configuration>
+					<header>file://${project.parent.basedir}/LICENSE_HEADER</header>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
 	<reporting>
 		<plugins>
 			<plugin>
