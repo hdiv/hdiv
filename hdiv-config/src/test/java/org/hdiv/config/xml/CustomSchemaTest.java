@@ -42,13 +42,13 @@ public class CustomSchemaTest extends TestCase {
 		System.out.println(validation.toString());
 		System.out.println("-----------------------");
 
-		HDIVConfig hdivConfig = (HDIVConfig) this.context.getBean(HDIVConfig.class);
+		HDIVConfig hdivConfig = this.context.getBean(HDIVConfig.class);
 		assertNotNull(hdivConfig);
 		System.out.println(hdivConfig.toString());
 		System.out.println("-----------------------");
 		assertTrue(hdivConfig.isShowErrorPageOnEditableValidation());
 
-		HDIVValidations validations = (HDIVValidations) this.context.getBean(HDIVValidations.class);
+		HDIVValidations validations = this.context.getBean(HDIVValidations.class);
 		assertNotNull(validations);
 		System.out.println(validations.toString());
 
@@ -56,7 +56,7 @@ public class CustomSchemaTest extends TestCase {
 
 	public void testStartPages() {
 
-		HDIVConfig hdivConfig = (HDIVConfig) this.context.getBean(HDIVConfig.class);
+		HDIVConfig hdivConfig = this.context.getBean(HDIVConfig.class);
 		assertNotNull(hdivConfig);
 
 		boolean result = hdivConfig.isStartPage("/onlyGet.html", "get");
@@ -68,7 +68,7 @@ public class CustomSchemaTest extends TestCase {
 
 	public void testExpiredSession() {
 
-		HDIVConfig hdivConfig = (HDIVConfig) this.context.getBean(HDIVConfig.class);
+		HDIVConfig hdivConfig = this.context.getBean(HDIVConfig.class);
 		assertNotNull(hdivConfig);
 
 		String result = hdivConfig.getSessionExpiredLoginPage();
@@ -78,7 +78,7 @@ public class CustomSchemaTest extends TestCase {
 
 	public void testNames() {
 
-		HDIVConfig hdivConfig = (HDIVConfig) this.context.getBean(HDIVConfig.class);
+		HDIVConfig hdivConfig = this.context.getBean(HDIVConfig.class);
 		assertNotNull(hdivConfig);
 
 		String[] names = this.context.getBeanDefinitionNames();

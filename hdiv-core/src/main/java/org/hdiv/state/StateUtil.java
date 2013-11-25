@@ -103,17 +103,7 @@ public class StateUtil {
 
 		if (this.isMemoryStrategy(requestState)) {
 
-			// Extract pageId and stateId from the state identifier
-			int firstSeparator = requestState.indexOf("-");
-			int lastSeparator = requestState.lastIndexOf("-");
-			if ((firstSeparator == -1) || (lastSeparator == -1)) {
-				throw new HDIVException(HDIVErrorCodes.HDIV_PARAMETER_INCORRECT_VALUE);
-			}
-
-			String pageId = requestState.substring(0, firstSeparator);
-			String stateId = requestState.substring(firstSeparator + 1, lastSeparator);
-
-			restoredState = this.getStateFromSession(pageId, stateId);
+			restoredState = this.restoreMemoryState(requestState);
 
 		} else if (this.isCipherStrategy()) {
 			restoredState = (IState) encodingUtil.decode64Cipher(requestState);
@@ -156,6 +146,32 @@ public class StateUtil {
 	 */
 	protected boolean isHashStrategy() {
 		return this.config.getStrategy().equalsIgnoreCase(HASH_STRATEGY);
+	}
+
+	/**
+	 * Restore a state from Memory Strategy.
+	 * 
+	 * @param requestState
+	 *            String that contains HDIV state received in the request
+	 * @return State Restore state data from <code>request</code>.
+	 */
+	protected IState restoreMemoryState(String requestState) {
+
+		IState restoredState = null;
+
+		// Extract pageId and stateId from the state identifier
+		int firstSeparator = requestState.indexOf("-");
+		int lastSeparator = requestState.lastIndexOf("-");
+		if ((firstSeparator == -1) || (lastSeparator == -1)) {
+			throw new HDIVException(HDIVErrorCodes.HDIV_PARAMETER_INCORRECT_VALUE);
+		}
+
+		String pageId = requestState.substring(0, firstSeparator);
+		String stateId = requestState.substring(firstSeparator + 1, lastSeparator);
+
+		restoredState = this.getStateFromSession(pageId, stateId);
+
+		return restoredState;
 	}
 
 	/**
