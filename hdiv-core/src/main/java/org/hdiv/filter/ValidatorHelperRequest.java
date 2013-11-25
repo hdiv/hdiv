@@ -70,12 +70,12 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	/**
 	 * HDIV configuration object.
 	 */
-	private HDIVConfig hdivConfig;
+	protected HDIVConfig hdivConfig;
 
 	/**
 	 * Logger to print the possible attacks detected by HDIV.
 	 */
-	private Logger logger;
+	protected Logger logger;
 
 	/**
 	 * Utility methods for state
@@ -213,7 +213,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 
 			// Validate parameter
 			result = this.validateParameter(request, state, unauthorizedEditableParameters, hdivParameter, target,
-					target, parameter);
+					parameter);
 			if (!result.isValid()) {
 				return result;
 			}
@@ -499,16 +499,13 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	 *            Hdiv state parameter name
 	 * @param target
 	 *            Part of the url that represents the target action
-	 * @param targetWithoutContextPath
-	 *            target with the ContextPath stripped
 	 * @param parameter
 	 *            Parameter name to validate
 	 * @return Valid if parameter has not errors
 	 * @since HDIV 2.1.5
 	 */
 	protected ValidatorHelperResult validateParameter(HttpServletRequest request, IState state,
-			Map<String, String[]> unauthorizedEditableParameters, String hdivParameter, String target,
-			String targetWithoutContextPath, String parameter) {
+			Map<String, String[]> unauthorizedEditableParameters, String hdivParameter, String target, String parameter) {
 
 		// Check if the HDIV validation must be applied to the parameter
 		if (!this.hdivConfig.needValidation(parameter, hdivParameter)) {
@@ -520,7 +517,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 		}
 
 		// If the parameter requires no validation it is considered a valid parameter
-		if (this.isUserDefinedNonValidationParameter(targetWithoutContextPath, parameter)) {
+		if (this.isUserDefinedNonValidationParameter(target, parameter)) {
 			return ValidatorHelperResult.VALIDATION_NOT_REQUIRED;
 		}
 

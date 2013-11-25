@@ -37,7 +37,7 @@ public interface IValidationHelper {
 
 	/**
 	 * Checks if the values of the parameters received in the request <code>request</code> are valid. These values are
-	 * valid if and only if the noneditable parameters haven�t been modified.<br>
+	 * valid if and only if the noneditable parameters haven't been modified.<br>
 	 * 
 	 * @param request
 	 *            HTTP servlet request
