@@ -76,11 +76,12 @@ public abstract class AbstractUrlProcessor {
 		}
 
 		// Remove parameters
-		if (url.indexOf("?") > 0) {
-			String urlParams = url.substring(url.indexOf("?") + 1);
+		int paramInit = url.indexOf("?");
+		if (paramInit > -1) {
+			String urlParams = url.substring(paramInit + 1);
 			Map<String, String[]> ulrParamsMap = this.getUrlParamsAsMap(request, urlParams);
 			urlData.setOriginalUrlParams(ulrParamsMap);
-			url = url.substring(0, url.indexOf("?"));
+			url = url.substring(0, paramInit);
 
 		}
 
@@ -105,8 +106,10 @@ public abstract class AbstractUrlProcessor {
 		urlData.setContextPathRelativeUrl(contextPathRelativeUrl);
 
 		// Calculate url without the context path for later processing
-		if (contextPathRelativeUrl.startsWith(request.getContextPath())) {
-			String urlWithoutContextPath = contextPathRelativeUrl.substring(request.getContextPath().length());
+		String contextPath = request.getContextPath();
+		if (contextPathRelativeUrl.startsWith(contextPath)) {
+			// Remove contextPath
+			String urlWithoutContextPath = contextPathRelativeUrl.substring(contextPath.length());
 			urlData.setUrlWithoutContextPath(urlWithoutContextPath);
 		} else {
 			// If contextPath is not present, the relative url is out of application
