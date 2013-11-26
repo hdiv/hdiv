@@ -304,7 +304,7 @@ public class DataComposerMemory extends AbstractDataComposer {
 			return value;
 		}
 
-		return (this.lastParameter.getCount() - 1) + "";
+		return this.lastParameter.getConfidentialValue();
 	}
 
 	/**
@@ -376,16 +376,9 @@ public class DataComposerMemory extends AbstractDataComposer {
 
 		} else {
 			// create a new parameter and add to the request
-			this.lastParameter = new Parameter();
+			this.lastParameter = new Parameter(parameter, decodedValue, editable, editableName, isActionParam);
 
-			this.lastParameter.addValue(decodedValue);
-			this.lastParameter.setName(parameter);
-			this.lastParameter.setEditable(editable);
-			this.lastParameter.setEditableDataType(editableName);
-
-			this.lastParameter.setActionParam(isActionParam);
-
-			state.addParameter(parameter, lastParameter);
+			state.addParameter(this.lastParameter);
 		}
 	}
 
@@ -488,11 +481,8 @@ public class DataComposerMemory extends AbstractDataComposer {
 	public String beginRequest(String action) {
 
 		// Create new IState
-		IState state = new State();
+		IState state = new State(this.requestCounter);
 		state.setAction(action);
-
-		String currentRequestCounter = String.valueOf(this.requestCounter);
-		state.setId(currentRequestCounter);
 
 		return this.beginRequest(state);
 	}
@@ -501,7 +491,7 @@ public class DataComposerMemory extends AbstractDataComposer {
 
 		this.getStatesStack().push(state);
 
-		this.requestCounter = Integer.parseInt(state.getId()) + 1;
+		this.requestCounter = state.getId() + 1;
 		this.lastParameter = null;
 
 		String id = this.getPage().getName() + DASH + state.getId() + DASH + this.getHdivStateSuffix();
@@ -524,7 +514,7 @@ public class DataComposerMemory extends AbstractDataComposer {
 		page.addState(state);
 
 		// Save Page in session if this is the first state to add
-		boolean firstState = page.getStates().size() == 1;
+		boolean firstState = page.getStatesCount() == 1;
 		if (firstState) {
 
 			super.session.addPage(page.getName(), page);
@@ -576,7 +566,7 @@ public class DataComposerMemory extends AbstractDataComposer {
 		}
 
 		IPage page = this.getPage();
-		if (page.getStates().size() > 0) {
+		if (page.getStatesCount() > 0) {
 			super.session.addPage(page.getName(), page);
 		} else {
 			if (log.isDebugEnabled()) {

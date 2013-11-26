@@ -53,11 +53,6 @@ public interface IParameter {
 	public String getName();
 
 	/**
-	 * @param name The parameter name to set.
-	 */
-	public void setName(String name);
-
-	/**
 	 * @return Returns the values of parameter.
 	 */
 	public List<String> getValues();
@@ -68,14 +63,9 @@ public interface IParameter {
 	public boolean isEditable();
 
 	/**
-	 * @param editable The editable to set.
+	 * @return Returns confidential value
 	 */
-	public void setEditable(boolean editable);
-
-	/**
-	 * @return Returns the count.
-	 */
-	public int getCount();
+	public String getConfidentialValue();
 
 	/**
 	 * Indicates if the parameter has been added to the action attribute of a link or
@@ -87,18 +77,8 @@ public interface IParameter {
 	public boolean isActionParam();
 
 	/**
-	 * @param actionParam The actionParam to set.
-	 */
-	public void setActionParam(boolean actionParam);
-	
-	/**
 	 * @return Returns the editable data type.
 	 */
 	public String getEditableDataType();
-
-	/**
-	 * @param editableDataType The editable data type to set.
-	 */
-	public void setEditableDataType(String editableDataType);
 
 }

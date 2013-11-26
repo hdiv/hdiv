@@ -19,7 +19,7 @@ import org.hdiv.AbstractHDIVTestCase;
 
 public class PatternMatcherTest extends AbstractHDIVTestCase {
 
-	private PatternMatcherFactory patternMatcherFactory = new PatternMatcherFactory();
+	private PatternMatcherFactory patternMatcherFactory;
 
 	protected void onSetUp() throws Exception {
 

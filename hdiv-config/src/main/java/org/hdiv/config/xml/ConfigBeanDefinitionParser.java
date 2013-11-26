@@ -42,6 +42,7 @@ import org.hdiv.filter.ValidatorErrorHandler;
 import org.hdiv.filter.ValidatorHelperRequest;
 import org.hdiv.idGenerator.RandomGuidUidGenerator;
 import org.hdiv.idGenerator.SequentialPageIdGenerator;
+import org.hdiv.idGenerator.UidGenerator;
 import org.hdiv.logs.Logger;
 import org.hdiv.logs.UserData;
 import org.hdiv.regex.PatternMatcherFactory;
@@ -76,15 +77,19 @@ import org.w3c.dom.NodeList;
  */
 public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 
-	private static final String SESSION_BEAN_NAME = ISession.class.getName();
+	public static final String CONFIG_BEAN_NAME = HDIVConfig.class.getName();
+	
+	public static final String UID_GENERATOR_BEAN_NAME = UidGenerator.class.getName();
+	
+	public static final String SESSION_BEAN_NAME = ISession.class.getName();
 
-	private static final String VALIDATOR_ERROR_HANDLER_BEAN_NAME = ValidatorErrorHandler.class.getName();
+	public static final String VALIDATOR_ERROR_HANDLER_BEAN_NAME = ValidatorErrorHandler.class.getName();
 
-	private static final String LOGGER_BEAN_NAME = Logger.class.getName();
+	public static final String LOGGER_BEAN_NAME = Logger.class.getName();
 
-	private static final String VALIDATOR_HELPER_NAME = IValidationHelper.class.getName();
+	public static final String VALIDATOR_HELPER_NAME = IValidationHelper.class.getName();
 
-	private static final String REQUEST_INITIALIZER_NAME = RequestInitializer.class.getName();
+	public static final String REQUEST_INITIALIZER_NAME = RequestInitializer.class.getName();
 
 	public static final String PATTERN_MATCHER_FACTORY_NAME = PatternMatcherFactory.class.getName();
 
@@ -146,7 +151,7 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 
 		this.configRef = this.createConfigBean(element, source, parserContext);
 
-		this.uidGeneratorRef = this.createSimpleBean(element, source, parserContext, RandomGuidUidGenerator.class);
+		this.uidGeneratorRef = this.createSimpleBean(element, source, parserContext, RandomGuidUidGenerator.class, UID_GENERATOR_BEAN_NAME);
 		this.createPageIdGenerator(element, source, parserContext);
 		this.createKeyFactory(element, source, parserContext);
 		this.userDataRef = this.createUserData(element, source, parserContext);
@@ -366,9 +371,9 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 	private RuntimeBeanReference createValidatorHelper(Element element, Object source, ParserContext parserContext) {
 
 		// Simple bean overriding
-		boolean existSession = parserContext.getRegistry().containsBeanDefinition(VALIDATOR_HELPER_NAME);
+		boolean exist = parserContext.getRegistry().containsBeanDefinition(VALIDATOR_HELPER_NAME);
 
-		if (!existSession) {
+		if (!exist) {
 			// If user don't define one, create default
 			RootBeanDefinition bean = new RootBeanDefinition(ValidatorHelperRequest.class);
 			bean.setSource(source);
@@ -530,9 +535,8 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		// Process startPages, startParameters and paramsWithoutValidation elements
 		this.processChilds(element, bean);
 
-		String name = parserContext.getReaderContext().generateBeanName(bean);
-		parserContext.getRegistry().registerBeanDefinition(name, bean);
-		return new RuntimeBeanReference(name);
+		parserContext.getRegistry().registerBeanDefinition(CONFIG_BEAN_NAME, bean);
+		return new RuntimeBeanReference(CONFIG_BEAN_NAME);
 
 	}
 

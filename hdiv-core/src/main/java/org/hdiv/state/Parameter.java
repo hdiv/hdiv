@@ -17,6 +17,7 @@ package org.hdiv.state;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -32,6 +33,14 @@ public class Parameter implements IParameter, Serializable {
 	 */
 	private static final long serialVersionUID = 1390866699507616631L;
 
+	public Parameter(String name, String value, boolean editable, String editableDataType, boolean actionParam) {
+		this.name = name;
+		this.addValue(value);
+		this.editable = editable;
+		this.editableDataType = editableDataType;
+		this.actionParam = actionParam;
+	}
+	
 	/**
 	 * parameter name
 	 */
@@ -143,7 +152,7 @@ public class Parameter implements IParameter, Serializable {
 	}
 
 	/**
-	 * @return Returns if parameter <code>this</code> is editbale or not.
+	 * @return Returns if parameter <code>this</code> is editable or not.
 	 */
 	public boolean isEditable() {
 		return editable;
@@ -155,12 +164,12 @@ public class Parameter implements IParameter, Serializable {
 	public void setEditable(boolean editable) {
 		this.editable = editable;
 	}
-
-	/**
-	 * @return Returns the count.
-	 */
-	public int getCount() {
-		return count;
+	
+	public String getConfidentialValue() {
+		if (count == 0) {
+			return "0";
+		}
+		return (count-1) +"";
 	}
 
 	/**

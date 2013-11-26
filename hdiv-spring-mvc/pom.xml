@@ -13,7 +13,7 @@
 	<url>http://www.hdiv.org</url>
 
 	<properties>
-		<org.grails.version>2.2.0.RC2</org.grails.version>
+		<org.grails.version>2.2.0</org.grails.version>
 		<org.springframework.version>3.1.0.RELEASE</org.springframework.version>
 	</properties>
 

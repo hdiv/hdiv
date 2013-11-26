@@ -15,7 +15,7 @@
  */
 package org.hdiv.state;
 
-import java.util.Map;
+import java.util.List;
 
 public interface IPage {
 
@@ -34,32 +34,32 @@ public interface IPage {
 	 * @param state Hash of a state that represents all the data that composes a
 	 *            possible request.
 	 */
-	public void addState(String id, String state);
+	public void addState(int id, String state);
 
 	/**
 	 * Checks if exists a state with the given identifier <code>key</code>.
 	 * 
-	 * @param key State identifier
+	 * @param id State identifier
 	 */
-	public boolean existState(String key);
+	public boolean existState(int id);
 
 	/**
 	 * Returns the state with the given identifier <code>key</code> from the
 	 * map of states
 	 * 
-	 * @param key State identifier
+	 * @param id State identifier
 	 * @return IState State with the identifier <code>key</code>.
 	 */
-	public IState getState(String key);
+	public IState getState(int id);
 
 	/**
 	 * Returns the state hash with the given identifier <code>key</code> from
 	 * the map of states
 	 * 
-	 * @param key State identifier
+	 * @param id State identifier
 	 * @return String hash with the identifier <code>key</code>.
 	 */
-	public String getStateHash(String key);
+	public String getStateHash(int id);
 
 	/**
 	 * @return Returns the page name.
@@ -72,9 +72,9 @@ public interface IPage {
 	public void setName(String name);
 
 	/**
-	 * @return Returns the page states.
+	 * @return number of states.
 	 */
-	public Map<String, Object> getStates();
+	public int getStatesCount();
 	
 	/**
 	 * Returns the unique id of flow.

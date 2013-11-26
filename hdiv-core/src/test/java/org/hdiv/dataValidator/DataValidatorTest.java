@@ -44,15 +44,12 @@ public class DataValidatorTest extends AbstractHDIVTestCase {
 	 */
 	public void testValidateDataIsNotInt() {
 
-		IState state = new State();
+		IState state = new State(0);
 		IDataValidator validator = this.dataValidatorFactory.newInstance(state);
 
-		IParameter param1 = new Parameter();
-		param1.addValue("value1");
-		param1.setName("param1");
-		param1.setEditable(false);
+		Parameter param1 = new Parameter("param1", "value1" , false, null, false);
 
-		state.addParameter("param1", param1);
+		state.addParameter(param1);
 
 		validator.setState(state);
 
@@ -66,15 +63,11 @@ public class DataValidatorTest extends AbstractHDIVTestCase {
 	 */
 	public void testValidateParameterDoesNotExist() {
 
-		IState state = new State();
+		IState state = new State(0);
 		IDataValidator validator = this.dataValidatorFactory.newInstance(state);
 
-		IParameter param1 = new Parameter();
-		param1.addValue("value1");
-		param1.setName("param1");
-		param1.setEditable(false);
-
-		state.addParameter("param1", param1);
+		Parameter param1 = new Parameter("param1", "value1" , false, null, false);
+		state.addParameter(param1);
 
 		validator.setState(state);
 
@@ -96,15 +89,12 @@ public class DataValidatorTest extends AbstractHDIVTestCase {
 	 */
 	public void testValidatePositionDoesNotExist() {
 
-		IState state = new State();
+		IState state = new State(0);
 		IDataValidator validator = this.dataValidatorFactory.newInstance(state);
 
-		IParameter param1 = new Parameter();
-		param1.addValue("value1");
-		param1.setName("param1");
-		param1.setEditable(false);
+		Parameter param1 = new Parameter("param1", "value1" , false, null, false);
 
-		state.addParameter("param1", param1);
+		state.addParameter(param1);
 
 		validator.setState(state);
 
@@ -117,16 +107,13 @@ public class DataValidatorTest extends AbstractHDIVTestCase {
 	 */
 	public void testValidateCorrectData() {
 
-		IState state = new State();
+		IState state = new State(0);
 		IDataValidator validator = this.dataValidatorFactory.newInstance(state);
 
-		IParameter param1 = new Parameter();
-		param1.addValue("value1");
-		param1.setName("param1");
-		param1.setEditable(false);
+		Parameter param1 = new Parameter("param1", "value1" , false, null, false);
 
-		state = new State();
-		state.addParameter("param1", param1);
+		state = new State(0);
+		state.addParameter(param1);
 
 		validator.setState(state);
 

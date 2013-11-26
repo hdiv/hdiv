@@ -459,14 +459,14 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	 */
 	private ValidatorHelperResult allRequiredParametersReceived(HttpServletRequest request, IState state, String target) {
 
-		Map<String, IParameter> receivedParameters = new HashMap<String, IParameter>(state.getRequiredParams());
+		List<String> receivedParameters = state.getRequiredParams();
 
-		String currentParameter = null;
 		Enumeration<?> requestParameters = request.getParameterNames();
 		while (requestParameters.hasMoreElements()) {
 
-			currentParameter = (String) requestParameters.nextElement();
-			if (receivedParameters.containsKey(currentParameter)) {
+			String currentParameter = (String) requestParameters.nextElement();
+
+			if (receivedParameters.contains(currentParameter)) {
 				receivedParameters.remove(currentParameter);
 			}
 
@@ -478,7 +478,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 		}
 
 		if (receivedParameters.size() > 0) {
-			this.logger.log(HDIVErrorCodes.REQUIRED_PARAMETERS, target, receivedParameters.keySet().toString(), null);
+			this.logger.log(HDIVErrorCodes.REQUIRED_PARAMETERS, target, receivedParameters.toString(), null);
 			return new ValidatorHelperResult(HDIVErrorCodes.REQUIRED_PARAMETERS);
 		}
 

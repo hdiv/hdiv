@@ -167,8 +167,13 @@ public class StateUtil {
 		}
 
 		String pageId = requestState.substring(0, firstSeparator);
-		String stateId = requestState.substring(firstSeparator + 1, lastSeparator);
-
+		String sId = requestState.substring(firstSeparator + 1, lastSeparator);
+		int stateId;
+		try {
+			stateId = Integer.parseInt(sId);
+		} catch (NumberFormatException e) {
+			throw new HDIVException(HDIVErrorCodes.HDIV_PARAMETER_INCORRECT_VALUE);
+		}
 		restoredState = this.getStateFromSession(pageId, stateId);
 
 		return restoredState;
@@ -183,7 +188,7 @@ public class StateUtil {
 	 *            current {@link IState} id
 	 * @return State with all the page data.
 	 */
-	protected IState getStateFromSession(String pageId, String stateId) {
+	protected IState getStateFromSession(String pageId, int stateId) {
 
 		IState sessionState = this.session.getState(pageId, stateId);
 

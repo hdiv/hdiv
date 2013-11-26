@@ -135,7 +135,7 @@ public class DataComposerMemoryTest extends AbstractHDIVTestCase {
 
 		assertEquals(stateId, stateId2);
 		IState state2 = this.stateUtil.restoreState(stateId2);
-		assertEquals(state2.getParameter("parameter1").getCount(), 2);
+		assertEquals(state2.getParameter("parameter1").getConfidentialValue(), "1");
 		assertTrue(state2.getParameter("parameter1").existValue("3"));
 	}
 

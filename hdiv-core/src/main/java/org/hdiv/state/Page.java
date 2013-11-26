@@ -35,7 +35,7 @@ public class Page implements IPage, Serializable {
 	/**
 	 * Map with the states of the page <code>this</code>.
 	 */
-	protected Map<String, Object> states = new HashMap<String, Object>();
+	protected Map<Integer, Object> states = new HashMap<Integer, Object>();
 
 	/**
 	 * Page <code>this</code> identifier.
@@ -70,27 +70,27 @@ public class Page implements IPage, Serializable {
 	 * @param stateHash Hash of a state that represents all the data that composes a
 	 *            possible request.
 	 */
-	public void addState(String id, String stateHash) {
+	public void addState(int id, String stateHash) {
 		this.states.put(id, stateHash);
 	}
 
 	/**
 	 * Checks if exists a state with the given identifier <code>key</code>.
 	 *
-	 * @param key State identifier
+	 * @param id State identifier
 	 */
-	public boolean existState(String key) {
-		return this.states.containsKey(key);
+	public boolean existState(int id) {
+		return this.states.containsKey(id);
 	}
 
 	/**
 	 * Returns the state with the given identifier <code>key</code> from the map of states
 	 *
-	 * @param key State identifier
+	 * @param id State identifier
 	 * @return IState State with the identifier <code>key</code>.
 	 */
-	public IState getState(String key) {
-		return (IState) this.states.get(key);
+	public IState getState(int id) {
+		return (IState) this.states.get(id);
 	}
 
 	/**
@@ -99,7 +99,7 @@ public class Page implements IPage, Serializable {
 	 * @param key State identifier
 	 * @return String hash with the identifier <code>key</code>.
 	 */
-	public String getStateHash(String key) {
+	public String getStateHash(int key) {
 		return (String) this.states.get(key);
 	}
 
@@ -120,8 +120,8 @@ public class Page implements IPage, Serializable {
 	/**
 	 * @return Returns the page states.
 	 */
-	public Map<String, Object> getStates() {
-		return states;
+	public int getStatesCount(){
+		return states.size();
 	}
 
 	/**

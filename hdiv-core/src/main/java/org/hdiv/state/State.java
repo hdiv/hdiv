@@ -16,7 +16,10 @@
 package org.hdiv.state;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -46,7 +49,7 @@ public class State implements IState, Serializable {
 	/**
 	 * State identifier <code>this</code>
 	 */
-	private String id;
+	private int id;
 
 	/**
 	 * Page identifier which the state <code>this</code> belongs to
@@ -54,25 +57,30 @@ public class State implements IState, Serializable {
 	private String pageId;
 	
 	/**
-	 * Map with the required parameters to be able to do a correct request with state
+	 * List with the required parameters to be able to do a correct request with state
 	 * <code>this</code>. We consider required parameters all of the parameters
 	 * that can be sent via GET or those that are added to the name of an action.
 	 */
-	private Map<String, IParameter> requiredParams = new HashMap<String, IParameter>();
+	private List<String> requiredParams = new ArrayList<String>();
+
+	public State(int id) {
+		this.id = id;
+	}
 
 	/**
 	 * Adds a new parameter to the state <code>this</code>. If it is a required parameter
 	 * <code>parameter</code>, it is also added to the required parameters map.
 	 *
-	 * @param key new parameter identifier
 	 * @param parameter The parameter
 	 */
-	public void addParameter(String key, IParameter parameter) {
+	public void addParameter(IParameter parameter) {
+		
+		String paramName = parameter.getName();
 		
 		if (parameter.isActionParam()) {
-			this.requiredParams.put(key, parameter);
+			this.requiredParams.add(paramName);
 		}
-		this.parameters.put(key, parameter);
+		this.parameters.put(paramName, parameter);
 	}
 
 	/**
@@ -113,8 +121,8 @@ public class State implements IState, Serializable {
 	/**
 	 * @return Returns the parameters asociated to state <code>this</code>.
 	 */
-	public Map<String, IParameter> getParameters() {
-		return parameters;
+	public Collection<IParameter> getParameters() {
+		return parameters.values();
 	}
 
 	/**
@@ -127,17 +135,10 @@ public class State implements IState, Serializable {
 	/**
 	 * @return Returns the <code>this</code> id.
 	 */
-	public String getId() {
+	public int getId() {
 		return id;
 	}
 
-	/**
-	 * @param id The id to set.
-	 */
-	public void setId(String id) {
-		this.id = id;
-	}	
-	
 	/**
 	 * @return Returns the page identifier which the state <code>this</code> belongs to.
 	 */	
@@ -155,7 +156,7 @@ public class State implements IState, Serializable {
 	/**
 	 * @return Returns required parameters map.
 	 */
-	public Map<String, IParameter> getRequiredParams() {
+	public List<String> getRequiredParams() {
 		return requiredParams;
 	}
 
@@ -168,4 +169,5 @@ public class State implements IState, Serializable {
 		sb.append("pageId: ").append(this.pageId);
 		return super.toString();
 	}
+
 }

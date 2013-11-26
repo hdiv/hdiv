@@ -188,7 +188,7 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 	 * @return State identifier <code>stateId</code> throws HDIVException If the state doesn't exist a new HDIV
 	 *         exception is thrown.
 	 */
-	public IState getState(String pageId, String stateId) {
+	public IState getState(String pageId, int stateId) {
 
 		try {
 			IPage currentPage = this.getPage(pageId);
@@ -206,7 +206,7 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 	 * @throws HDIVException
 	 *             If the state doesn't exist a new HDIV exception is thrown.
 	 */
-	public String getStateHash(String pageId, String stateId) {
+	public String getStateHash(String pageId, int stateId) {
 
 		try {
 			IPage currentPage = this.getPage(pageId);

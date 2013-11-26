@@ -91,17 +91,19 @@ public class EncodingUtilTest extends AbstractHDIVTestCase {
 	 */
 	public void testEncode64() {
 
-		IState state = new State();
+		IState state = new State(0);
 
 		state.setAction("action1");
-		Parameter parameter = new Parameter();
-		parameter.setName("parameter1");
-		parameter.addValue("value1");
-		parameter.addValue("value2");
-
-		state.addParameter("parameter1", parameter);
-		state.addParameter("parameter12", parameter);
-		state.addParameter("parameter12", parameter);
+		Parameter parameter1 = new Parameter("parameter1", "value1", false, "text", false);
+		parameter1.addValue("value2");
+		Parameter parameter2 = new Parameter("parameter2",  "value1", false, "text", false);
+		parameter2.addValue("value2");
+		Parameter parameter3 = new Parameter("parameter3",  "value1", false, "text", false);
+		parameter3.addValue("value2");
+		
+		state.addParameter(parameter1);
+		state.addParameter(parameter2);
+		state.addParameter(parameter3);
 
 		String data = encodingUtil.encode64Cipher(state);
 		State obj = (State) encodingUtil.decode64Cipher(data);

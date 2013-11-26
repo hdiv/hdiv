@@ -15,23 +15,18 @@
  */
 package org.hdiv.state;
 
-import java.util.Map;
+import java.util.Collection;
+import java.util.List;
 
 public interface IState {
-
-	/**
-	 * @return Returns the parameters
-	 */
-	public Map<String, IParameter> getParameters();
 
 	/**
 	 * Adds a new parameter to the state <code>this</code>. If it is a required parameter
 	 * <code>parameter</code>, it is also added to the required parameters map.
 	 *
-	 * @param key new parameter identifier
 	 * @param parameter The parameter
 	 */
-	public void addParameter(String key, IParameter parameter);
+	public void addParameter(IParameter parameter);
 
 	/**
 	 * Returns the parameter that matches the given identifier <code>key</code>.
@@ -41,6 +36,12 @@ public interface IState {
 	 */
 	public IParameter getParameter(String key);
 
+	/**
+	 * Returns all the parameters of the IState.
+	 * @return List of {@link IParameter}
+	 */
+	public Collection<IParameter> getParameters();
+	
 	/**
 	 * @return Returns the action asociated to state <code>this</code>.
 	 */
@@ -54,7 +55,7 @@ public interface IState {
 	/**
 	 * @return Returns the id.
 	 */
-	public String getId();
+	public int getId();
 
 	/**
 	 * @return Returns the page identifier which the state <code>this</code> belongs to.
@@ -67,11 +68,6 @@ public interface IState {
 	public void setPageId(String pageId);
 
 	/**
-	 * @param id The id to set.
-	 */
-	public void setId(String id);
-
-	/**
 	 * Checks if exists a parameter with the given identifier <code>key</code>.
 	 *
 	 * @param key parameter identifier
@@ -81,8 +77,8 @@ public interface IState {
 	public boolean existParameter(String key);
 
 	/**
-	 * @return Returns required parameters map.
+	 * @return Returns required parameters.
 	 */
-	public Map<String, IParameter> getRequiredParams();
+	public List<String> getRequiredParams();
 	
 }
