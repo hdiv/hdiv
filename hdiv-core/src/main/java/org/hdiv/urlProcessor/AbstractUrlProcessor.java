@@ -219,13 +219,13 @@ public abstract class AbstractUrlProcessor {
 	}
 
 	/**
-	 * Generate a url with all parameters.
+	 * Generate Query String with all parameters.
 	 * 
 	 * @param urlData
 	 *            url data object
-	 * @return complete url
+	 * @return complete query string
 	 */
-	public String getParamProcessedUrl(UrlData urlData) {
+	protected String getParamsQueryString(UrlData urlData) {
 
 		Map<String, String[]> params = null;
 		if (urlData.getProcessedUrlParams() != null) {
@@ -234,21 +234,11 @@ public abstract class AbstractUrlProcessor {
 			params = urlData.getOriginalUrlParams();
 		}
 
-		StringBuffer sb = new StringBuffer();
-		if (urlData.getServer() != null) {
-			sb.append(urlData.getServer());
-		}
-		sb.append(urlData.getContextPathRelativeUrl());
-
-		// Add jSessionId
-		if (urlData.getjSessionId() != null) {
-			sb.append(";");
-			sb.append(urlData.getjSessionId());
-		}
-
 		if (params == null || params.size() == 0) {
-			return sb.toString();
+			return "";
 		}
+
+		StringBuffer sb = new StringBuffer();
 
 		String separator = "?";
 
@@ -263,6 +253,33 @@ public abstract class AbstractUrlProcessor {
 				}
 			}
 		}
+
+		return sb.toString();
+	}
+
+	/**
+	 * Generate a url with all parameters.
+	 * 
+	 * @param urlData
+	 *            url data object
+	 * @return complete url
+	 */
+	public String getParamProcessedUrl(UrlData urlData) {
+
+		StringBuffer sb = new StringBuffer();
+		if (urlData.getServer() != null) {
+			sb.append(urlData.getServer());
+		}
+		sb.append(urlData.getContextPathRelativeUrl());
+
+		// Add jSessionId
+		if (urlData.getjSessionId() != null) {
+			sb.append(";");
+			sb.append(urlData.getjSessionId());
+		}
+
+		String queryString = this.getParamsQueryString(urlData);
+		sb.append(queryString);
 
 		return sb.toString();
 	}

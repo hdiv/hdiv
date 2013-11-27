@@ -78,9 +78,9 @@ import org.w3c.dom.NodeList;
 public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 
 	public static final String CONFIG_BEAN_NAME = HDIVConfig.class.getName();
-	
+
 	public static final String UID_GENERATOR_BEAN_NAME = UidGenerator.class.getName();
-	
+
 	public static final String SESSION_BEAN_NAME = ISession.class.getName();
 
 	public static final String VALIDATOR_ERROR_HANDLER_BEAN_NAME = ValidatorErrorHandler.class.getName();
@@ -92,6 +92,10 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 	public static final String REQUEST_INITIALIZER_NAME = RequestInitializer.class.getName();
 
 	public static final String PATTERN_MATCHER_FACTORY_NAME = PatternMatcherFactory.class.getName();
+
+	public static final String LINK_URL_PROCESSOR_NAME = LinkUrlProcessor.class.getName();
+
+	public static final String FORM_URL_PROCESSOR_NAME = FormUrlProcessor.class.getName();
 
 	/**
 	 * The name of the bean to use to look up in an implementation of {@link RequestDataValueProcessor} has been
@@ -151,7 +155,8 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 
 		this.configRef = this.createConfigBean(element, source, parserContext);
 
-		this.uidGeneratorRef = this.createSimpleBean(element, source, parserContext, RandomGuidUidGenerator.class, UID_GENERATOR_BEAN_NAME);
+		this.uidGeneratorRef = this.createSimpleBean(element, source, parserContext, RandomGuidUidGenerator.class,
+				UID_GENERATOR_BEAN_NAME);
 		this.createPageIdGenerator(element, source, parserContext);
 		this.createKeyFactory(element, source, parserContext);
 		this.userDataRef = this.createUserData(element, source, parserContext);
@@ -420,9 +425,8 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
 		bean.getPropertyValues().addPropertyValue("config", this.configRef);
 
-		String name = parserContext.getReaderContext().generateBeanName(bean);
-		parserContext.getRegistry().registerBeanDefinition(name, bean);
-		return new RuntimeBeanReference(name);
+		parserContext.getRegistry().registerBeanDefinition(LINK_URL_PROCESSOR_NAME, bean);
+		return new RuntimeBeanReference(LINK_URL_PROCESSOR_NAME);
 	}
 
 	private RuntimeBeanReference createFormUrlProcessor(Element element, Object source, ParserContext parserContext) {
@@ -431,9 +435,8 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
 		bean.getPropertyValues().addPropertyValue("config", this.configRef);
 
-		String name = parserContext.getReaderContext().generateBeanName(bean);
-		parserContext.getRegistry().registerBeanDefinition(name, bean);
-		return new RuntimeBeanReference(name);
+		parserContext.getRegistry().registerBeanDefinition(FORM_URL_PROCESSOR_NAME, bean);
+		return new RuntimeBeanReference(FORM_URL_PROCESSOR_NAME);
 	}
 
 	private RuntimeBeanReference createRequestDataValueProcessor(Element element, Object source,
