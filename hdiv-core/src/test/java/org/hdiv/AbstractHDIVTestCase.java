@@ -27,6 +27,7 @@ import org.apache.commons.logging.LogFactory;
 import org.hdiv.config.HDIVConfig;
 import org.hdiv.dataComposer.DataComposerFactory;
 import org.hdiv.dataComposer.IDataComposer;
+import org.hdiv.filter.RequestInitializer;
 import org.hdiv.listener.InitListener;
 import org.hdiv.util.HDIVUtil;
 import org.springframework.context.ApplicationContext;
@@ -93,9 +94,10 @@ public abstract class AbstractHDIVTestCase extends TestCase {
 		initListener.sessionCreated(httpSessionEvent);
 
 		// Init Request scoped data
-		HDIVUtil.setRequestURI(request.getRequestURI(), request);
+		RequestInitializer requestInitializer = this.applicationContext.getBean(RequestInitializer.class);
+		requestInitializer.initRequest(request);
 		DataComposerFactory dataComposerFactory = (DataComposerFactory) this.applicationContext
-				.getBean("dataComposerFactory");
+				.getBean(DataComposerFactory.class);
 		IDataComposer dataComposer = dataComposerFactory.newInstance(request);
 		HDIVUtil.setDataComposer(dataComposer, request);
 
