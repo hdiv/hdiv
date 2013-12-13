@@ -19,6 +19,7 @@ import junit.framework.TestCase;
 
 import org.hdiv.config.HDIVConfig;
 import org.hdiv.config.HDIVValidations;
+import org.hdiv.logs.IUserData;
 import org.hdiv.session.StateCache;
 import org.hdiv.validator.Validation;
 import org.springframework.context.ApplicationContext;
@@ -93,6 +94,14 @@ public class CustomSchemaTest extends TestCase {
 
 		StateCache stateCache = this.context.getBean(StateCache.class);
 		assertNotNull(stateCache);
+
+	}
+
+	public void testUserData() {
+
+		IUserData userData = (IUserData) this.context.getBean(ConfigBeanDefinitionParser.USER_DATA_NAME);
+		assertNotNull(userData);
+		assertTrue(userData instanceof TestUserData);
 
 	}
 

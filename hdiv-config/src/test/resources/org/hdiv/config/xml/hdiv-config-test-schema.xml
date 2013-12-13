@@ -38,6 +38,6 @@ http://www.hdiv.org/schema/hdiv http://www.hdiv.org/schema/hdiv/hdiv.xsd">
 		</hdiv:paramsWithoutValidation>
 	</hdiv:config>
 
-	<bean id="testUserData" class="org.hdiv.logs.UserData"></bean>
+	<bean id="testUserData" class="org.hdiv.config.xml.TestUserData"></bean>
 
 </beans>

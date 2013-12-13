@@ -43,6 +43,7 @@ import org.hdiv.filter.ValidatorHelperRequest;
 import org.hdiv.idGenerator.RandomGuidUidGenerator;
 import org.hdiv.idGenerator.SequentialPageIdGenerator;
 import org.hdiv.idGenerator.UidGenerator;
+import org.hdiv.logs.IUserData;
 import org.hdiv.logs.Logger;
 import org.hdiv.logs.UserData;
 import org.hdiv.regex.PatternMatcherFactory;
@@ -96,6 +97,8 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 	public static final String LINK_URL_PROCESSOR_NAME = LinkUrlProcessor.class.getName();
 
 	public static final String FORM_URL_PROCESSOR_NAME = FormUrlProcessor.class.getName();
+
+	public static final String USER_DATA_NAME = IUserData.class.getName();
 
 	/**
 	 * The name of the bean to use to look up in an implementation of {@link RequestDataValueProcessor} has been
@@ -232,10 +235,11 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		String userData = element.getAttribute("userData");
 		if (userData == null || userData.length() < 1) {
 			// If user don't define userData bean, create default
-			return this.createSimpleBean(element, source, parserContext, UserData.class);
+			return this.createSimpleBean(element, source, parserContext, UserData.class, USER_DATA_NAME);
 		} else {
 			// Use user defined
-			return new RuntimeBeanReference(userData);
+			parserContext.getRegistry().registerAlias(userData, USER_DATA_NAME);
+			return new RuntimeBeanReference(USER_DATA_NAME);
 		}
 	}
 
@@ -420,23 +424,41 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 	}
 
 	private RuntimeBeanReference createLinkUrlProcessor(Element element, Object source, ParserContext parserContext) {
-		RootBeanDefinition bean = new RootBeanDefinition(LinkUrlProcessor.class);
-		bean.setSource(source);
-		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
-		bean.getPropertyValues().addPropertyValue("config", this.configRef);
 
-		parserContext.getRegistry().registerBeanDefinition(LINK_URL_PROCESSOR_NAME, bean);
-		return new RuntimeBeanReference(LINK_URL_PROCESSOR_NAME);
+		// Simple bean overriding
+		boolean exist = parserContext.getRegistry().containsBeanDefinition(LINK_URL_PROCESSOR_NAME);
+
+		if (!exist) {
+			RootBeanDefinition bean = new RootBeanDefinition(LinkUrlProcessor.class);
+			bean.setSource(source);
+			bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
+			bean.getPropertyValues().addPropertyValue("config", this.configRef);
+
+			parserContext.getRegistry().registerBeanDefinition(LINK_URL_PROCESSOR_NAME, bean);
+			return new RuntimeBeanReference(LINK_URL_PROCESSOR_NAME);
+		} else {
+			// Use user defined
+			return new RuntimeBeanReference(LINK_URL_PROCESSOR_NAME);
+		}
 	}
 
 	private RuntimeBeanReference createFormUrlProcessor(Element element, Object source, ParserContext parserContext) {
-		RootBeanDefinition bean = new RootBeanDefinition(FormUrlProcessor.class);
-		bean.setSource(source);
-		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
-		bean.getPropertyValues().addPropertyValue("config", this.configRef);
 
-		parserContext.getRegistry().registerBeanDefinition(FORM_URL_PROCESSOR_NAME, bean);
-		return new RuntimeBeanReference(FORM_URL_PROCESSOR_NAME);
+		// Simple bean overriding
+		boolean exist = parserContext.getRegistry().containsBeanDefinition(FORM_URL_PROCESSOR_NAME);
+
+		if (!exist) {
+			RootBeanDefinition bean = new RootBeanDefinition(FormUrlProcessor.class);
+			bean.setSource(source);
+			bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
+			bean.getPropertyValues().addPropertyValue("config", this.configRef);
+
+			parserContext.getRegistry().registerBeanDefinition(FORM_URL_PROCESSOR_NAME, bean);
+			return new RuntimeBeanReference(FORM_URL_PROCESSOR_NAME);
+		} else {
+			// Use user defined
+			return new RuntimeBeanReference(FORM_URL_PROCESSOR_NAME);
+		}
 	}
 
 	private RuntimeBeanReference createRequestDataValueProcessor(Element element, Object source,
@@ -653,11 +675,21 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 
 	private RuntimeBeanReference createSimpleBean(Element element, Object source, ParserContext parserContext,
 			Class<?> clazz, String beanName) {
-		RootBeanDefinition bean = new RootBeanDefinition(clazz);
-		bean.setSource(source);
-		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
-		parserContext.getRegistry().registerBeanDefinition(beanName, bean);
-		return new RuntimeBeanReference(beanName);
+
+		// Simple bean overriding
+		boolean exist = parserContext.getRegistry().containsBeanDefinition(beanName);
+
+		if (!exist) {
+			RootBeanDefinition bean = new RootBeanDefinition(clazz);
+			bean.setSource(source);
+			bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
+			parserContext.getRegistry().registerBeanDefinition(beanName, bean);
+			return new RuntimeBeanReference(beanName);
+		} else {
+			// Use user defined
+			return new RuntimeBeanReference(beanName);
+		}
+
 	}
 
 	private void processChilds(Element element, RootBeanDefinition bean) {
