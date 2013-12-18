@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<parent>
+		<groupId>org.hdiv</groupId>
+		<artifactId>hdiv</artifactId>
+		<version>2.1.6-SNAPSHOT</version>
+	</parent>
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>hdiv-docs</artifactId>
+	<packaging>pom</packaging>
+	<name>HDIV docs</name>
+	<url>http://www.hdiv.org</url>
+	<description>Java Web Application Security Framework</description>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>com.agilejava.docbkx</groupId>
+				<artifactId>docbkx-maven-plugin</artifactId>
+				<version>2.0.13</version>
+				<executions>
+					<execution>
+						<id>draft-output</id>
+						<phase>pre-site</phase>
+						<goals>
+							<goal>generate-html</goal>
+						</goals>
+						<configuration>
+							<!-- per execution configuration -->
+							<draftMode>yes</draftMode>
+							<htmlStylesheet>manual-multipage.css</htmlStylesheet>
+						</configuration>
+					</execution>
+				</executions>
+				<configuration>
+					<sourceDirectory>${basedir}/src/docbkx</sourceDirectory>
+					<includes>index.xml</includes>
+					<generatedSourceDirectory>${project.build.directory}/docbkx/generated</generatedSourceDirectory>
+					<xincludeSupported>true</xincludeSupported>
+					<highlightSource>1</highlightSource>
+					<paperType>A4</paperType>
+					<chunkedOutput>false</chunkedOutput>
+					<sectionAutolabel>true</sectionAutolabel>
+					<sectionLabelIncludesComponentLabel>true</sectionLabelIncludesComponentLabel>
+				</configuration>
+				<dependencies>
+					<dependency>
+						<groupId>net.sf.docbook</groupId>
+						<artifactId>docbook-xml</artifactId>
+						<version>5.0-all</version>
+						<classifier>resources</classifier>
+						<type>zip</type>
+						<scope>runtime</scope>
+					</dependency>
+				</dependencies>
+			</plugin>
+
+			<plugin>
+				<groupId>com.mycila</groupId>
+				<artifactId>license-maven-plugin</artifactId>
+				<version>2.5</version>
+				<configuration>
+					<header>file://${project.parent.basedir}/LICENSE_HEADER</header>
+					<excludes>
+						<exclude>*.*</exclude>
+					</excludes>
+				</configuration>
+			</plugin>
+
+		</plugins>
+	</build>
+
+</project>

@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<chapter xml:id="configuration" xmlns="http://docbook.org/ns/docbook"
+	version="5.0" xmlns:xl="http://www.w3.org/1999/xlink" xmlns:xi="http://www.w3.org/2001/XInclude"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+        http://docbook.org/ns/docbook http://www.docbook.org/xml/5.0/xsd/docbook.xsd
+        http://www.w3.org/1999/xlink http://www.docbook.org/xml/5.0/xsd/xlink.xsd">
+	<title>Configuration</title>
+	<para>
+		HDIV configuration is based on Spring configuration. HDIV has a
+		custom
+		schema to reduce the configuration tasks. First off all we need
+		an
+		spring configuration file to add HDIV configuration.
+	</para>
+
+	<programlisting language="xml">
+ 		<![CDATA[
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" 
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+       xmlns:hdiv="http://www.hdiv.org/schema/hdiv" 
+       xsi:schemaLocation="http://www.springframework.org/schema/beans 
+                           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd 
+                           http://www.hdiv.org/schema/hdiv http://www.hdiv.org/schema/hdiv/hdiv.xsd">
+]]></programlisting>
+
+	<para>
+		In the case of Grails framework the configuration is realized
+		through
+		Config.groovy file updating
+		<ulink url="http://grails.org/plugin/hdiv">HDIV plugin</ulink>
+		configuration options.
+	</para>
+
+	<section xml:id="configuration-startpages">
+		<title>Start Pages</title>
+
+		<para>
+			By default HDIV filter doesn't allow any request that is
+			hasn't
+			been
+			registered previously by HDIV. Of course, when an user access
+			the
+			first time is not possible to register the resource (url) requested
+			by the user. For this case HDIV incorporates the concept of start
+			pages that are urls that HDIV doesn't make any kind of validation. We
+			can see start pages as the home pages
+			of your web site. Note that
+			usually HDIV is applied just to the authenticated parte of the web
+			page.
+
+			In the code below there is the configuration code to define an
+			start
+			page to access the web site home page.
+			<programlisting language="xml">
+ 				<![CDATA[
+<hdiv:config>
+	<hdiv:startPages>/home.html</hdiv:startPages>
+</hdiv:config>
+]]></programlisting>
+
+		</para>
+
+		<para>For Grails users update Config.groovy file:</para>
+		<programlisting language="xml">
+ 					<![CDATA[
+ grails {
+	plugin {
+		hdiv {
+
+			config {
+				startPages = [GET: '/home.html']
+			}
+		}
+	}
+}
+]]></programlisting>
+
+	</section>
+
+	<section xml:id="configuration-errorpage">
+		<title>Error page</title>
+		<para>
+			When HDIV detects a malicious request HDIV redirects the user to the
+			ErrorPage. It's important to note that when the possible attack is
+			related just
+			with editable data, the user is not redirected to the
+			erropage and the
+			error is visualized within the original form.
+
+			In the
+			next code we can see the previous configuration (start pages
+			configuration) and the definition of an error page:
+
+			<programlisting language="xml">
+ 				<![CDATA[
+<hdiv:config errorPage="/error.jsp">
+    <hdiv:startPages>/home.html</hdiv:startPages>
+</hdiv:config>
+]]></programlisting>
+		</para>
+		<para>For Grails users update Config.groovy file:</para>
+		<programlisting language="xml">
+ 			<![CDATA[
+ grails {
+	plugin {
+		hdiv {
+
+			config {
+				errorPage = '/error.jsp'
+			}
+		}
+	}
+}
+]]></programlisting>
+	</section>
+
+	<section xml:id="configuration-editabledata">
+		<title>Editable data validation</title>
+
+		<para>As explained above HDIV offers a generic validation
+			functionality that
+			makes possoble the application of validation rules
+			to all editable
+			data (information that comes from web forms fields
+			such as textbox and
+			textarea) sent by the client. HDIV includes a
+			default group of
+			validation
+			rules that try to avoid most common risks
+			such as XSS and
+			Sql Injection.
+
+			In order to activate HDIV editable
+			validation with the
+			default
+			configuration it's necessary to add the
+			code below to your
+			Spring
+			configuration:
+		</para>
+
+		<programlisting language="xml">
+ 			<![CDATA[
+<hdiv:editableValidations registerDefaults="true">
+</hdiv:editableValidations>
+]]></programlisting>
+
+		<para>
+			In addition to the default validations it's possible to create
+			your
+			own custom validations. In order to create your custom
+			validations
+			firts of all
+			it's necessary to create a validation entity.
+			A validation
+			entity could
+			contain two kind of patterns:
+		</para>
+		<itemizedlist>
+
+			<listitem>
+				<para>
+					<emphasis role="bold">AcceptedPattern</emphasis>
+					: the parameter value must accomplish the pattern (whitelist
+					pattern), otherwise HDIV generates an error that is visualized
+					within the original form.
+					It's possible also to redirect
+					the user to
+					the HDIV's generic error
+					page. For this option add
+					showErrorPageOnEditableValidation="true"
+					to HDIV config entity.
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+					<emphasis role="bold">RejectedPattern</emphasis>
+					if the parameter value accomplish the defined pattern (blacklist
+					pattern),
+					HDIV
+					generates an error that is visualized within the
+					original form or withim HDIV generic error page.
+				</para>
+			</listitem>
+		</itemizedlist>
+		<para>
+			In order to create a validation it's necessary to create a
+			validation
+			entity within HDIV config file:
+		</para>
+		<programlisting language="xml">
+ 			<![CDATA[
+<hdiv:validation id="id1" componentType="text">
+	<hdiv:acceptedPattern><[a-zA-Z0-9@.\-_]*$></hdiv:acceptedPattern>
+	<hdiv:rejectedPattern><[(\s|\S)*(--)(\s|\S)*></hdiv:rejectedPattern>
+</hdiv:validation>
+]]></programlisting>
+
+		<para>Once validation has been defined, it's necessary to make an
+			additional step to activate the validation, add a validation rule to
+			editableValidations entity.
+			The validation rule is applied to a
+			specific url pattern. In the next
+			example we can see an example to
+			apply the validations defined in the
+			above example:
+		</para>
+
+		<programlisting language="xml">
+ 		<![CDATA[
+<hdiv:editableValidations registerDefaults="true">
+	<hdiv:validationRule url="a" enableDefaults="true">id1</hdiv:validationRule>
+</hdiv:editableValidations>
+]]></programlisting>
+		<para>
+			In the case of Grails framework this configuration must be included
+			within Config.groovy file. In the next code we can see the
+			validations
+			defined within
+			HDIV and Grails reference application:
+		</para>
+		<programlisting language="xml">
+ 		<![CDATA[
+grails {
+	plugin {
+		hdiv {
+
+			config { ...
+			}
+
+			validations = [[id: 'safeText', acceptedPattern: '^[a-zA-Z0-9@.\\-_]*$']]
+
+			editableValidations = [
+				[id: 'editableParametersValidations', registerDefaults: true,
+				 validationRules: [[url: '/secure/.*', enableDefaults: true,  validationIds: 'safeText'],
+				                   [url: '/safetext/.*', enableDefaults: false, validationIds: 'safeText']]
+				]
+			]
+		}
+	}
+}]]></programlisting>
+
+	</section>
+
+</chapter>
