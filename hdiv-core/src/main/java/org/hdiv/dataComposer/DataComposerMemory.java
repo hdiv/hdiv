@@ -371,11 +371,33 @@ public class DataComposerMemory extends AbstractDataComposer {
 			parameter.addValue(decodedValue);
 		} else {
 			// create a new parameter and add to the request
-			parameter = new Parameter(parameterName, decodedValue, editable, editableDataType, isActionParam);
+			parameter = createParameter(parameterName, decodedValue, editable, editableDataType, isActionParam, charEncoding);
 			state.addParameter(parameter);
 		}
 
 		return parameter;
+	}
+	
+	/**
+	 * Instantiates the parameter
+	 * 
+	 * @param parameterName
+	 *            name of the parameter
+	 * @param decodedValue
+	 *            the decoded value of the parameter
+	 * @param editable
+	 *            Parameter type: editable(textbox, password,etc.) or non editable (hidden, select, radio, ...)
+	 * @param editableDataType
+	 *            editable parameter name (text or textarea)
+	 * @param isActionParam
+	 *            parameter added in action attribute
+	 * @param charEncoding
+	 *            character encoding
+	 * @return New IParameter object
+	 */
+	protected IParameter createParameter(String parameterName, String decodedValue, boolean editable,
+			String editableDataType, boolean isActionParam, String charEncoding) {
+		return new Parameter(parameterName, decodedValue, editable, editableDataType, isActionParam);
 	}
 
 	/**

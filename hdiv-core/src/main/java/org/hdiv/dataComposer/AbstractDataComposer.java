@@ -62,12 +62,12 @@ public abstract class AbstractDataComposer implements IDataComposer {
 	/**
 	 * Unique id generator
 	 */
-	private UidGenerator uidGenerator;
+	protected UidGenerator uidGenerator;
 
 	/**
 	 * Page with the possible requests or states
 	 */
-	private IPage page;
+	protected IPage page;
 
 	/**
 	 * States stack to store all states of the page <code>page</code>
