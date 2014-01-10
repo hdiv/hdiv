@@ -40,7 +40,7 @@ public class HDIVConfig {
 	 * 
 	 * @since 2.1.6
 	 */
-	private PatternMatcherFactory patternMatcherFactory;
+	protected PatternMatcherFactory patternMatcherFactory;
 
 	/**
 	 * List with the pages that will not be Treated by the HDIV filter. The init pages are initialized by the Spring
@@ -52,50 +52,50 @@ public class HDIVConfig {
 	 * List with the parameters that will not be validated by the HDIV filter. The init parameters are initialized by
 	 * the Spring factory.
 	 */
-	private List<PatternMatcher> startParameters = new ArrayList<PatternMatcher>();
+	protected List<PatternMatcher> startParameters = new ArrayList<PatternMatcher>();
 
 	/**
 	 * Url of the error page to which HDIV will redirect the request if it doesn't pass the HDIV validation.
 	 */
-	private String errorPage;
+	protected String errorPage;
 
 	/**
 	 * Url of the error page to which HDIV will redirect the request if it doesn't pass the HDIV validation caused by
 	 * session expiration and the user is not logged in the application.
 	 */
-	private String sessionExpiredLoginPage;
+	protected String sessionExpiredLoginPage;
 
 	/**
 	 * Url of the error page to which HDIV will redirect the request if it doesn't pass the HDIV validation caused by
 	 * session expiration and the user is logged in the application.
 	 */
-	private String sessionExpiredHomePage;
+	protected String sessionExpiredHomePage;
 
 	/**
 	 * Confidentiality indicator to know if information is accessible only for those who are authorized.
 	 */
-	private boolean confidentiality = true;
+	protected boolean confidentiality = true;
 
 	/**
 	 * Parameters which HDIV validation will not be applied to.
 	 */
-	private Map<PatternMatcher, List<PatternMatcher>> paramsWithoutValidation;
+	protected Map<PatternMatcher, List<PatternMatcher>> paramsWithoutValidation;
 
 	/**
 	 * Validations for editable fields (text/textarea) defined by the user in the hdiv-validations.xml configuration
 	 * file of Spring.
 	 */
-	private HDIVValidations validations;
+	protected HDIVValidations validations;
 
 	/**
 	 * If <code>avoidCookiesIntegrity</code> is true, cookie integrity will not be applied.
 	 */
-	private boolean avoidCookiesIntegrity;
+	protected boolean avoidCookiesIntegrity;
 
 	/**
 	 * If <code>avoidCookiesConfidentiality</code> is true, cookie confidentiality will not be applied.
 	 */
-	private boolean avoidCookiesConfidentiality;
+	protected boolean avoidCookiesConfidentiality;
 
 	/**
 	 * if <code>avoidValidationInUrlsWithoutParams</code> is true, HDIV validation will not be applied in urls without
@@ -103,21 +103,21 @@ public class HDIVConfig {
 	 * 
 	 * @since HDIV 2.1.0
 	 */
-	private boolean avoidValidationInUrlsWithoutParams;
+	protected boolean avoidValidationInUrlsWithoutParams;
 
 	/**
 	 * Extensions that we have to protect with HDIV's state.
 	 * 
 	 * @since HDIV 2.0
 	 */
-	private List<PatternMatcher> protectedURLPatterns;
+	protected List<PatternMatcher> protectedURLPatterns;
 
 	/**
 	 * Extensions that we have not to protect with HDIV's state.
 	 * 
 	 * @since HDIV 2.1.0
 	 */
-	private List<String> excludedURLExtensions = new ArrayList<String>();
+	protected List<String> excludedURLExtensions = new ArrayList<String>();
 
 	/**
 	 * HDIV adds an extra parameter to all links and forms. By default this parameter is _HDIV_STATE. If
@@ -125,28 +125,28 @@ public class HDIVConfig {
 	 * 
 	 * @since HDIV 2.1.0
 	 */
-	private boolean randomName;
+	protected boolean randomName;
 
 	/**
 	 * HDIV behaviour strategy. There are 3 possible options: memory, cipher, hash
 	 * 
 	 * @since HDIV 2.1.0
 	 */
-	private String strategy;
+	protected String strategy;
 
 	/**
 	 * If debug mode is enabled, the attacks are logged but the requests are not stopped.
 	 * 
 	 * @since HDIV 2.1.1
 	 */
-	private boolean debugMode = false;
+	protected boolean debugMode = false;
 
 	/**
 	 * Show error page on request with editable validation errors
 	 * 
 	 * @since 2.1.4
 	 */
-	private boolean showErrorPageOnEditableValidation;
+	protected boolean showErrorPageOnEditableValidation;
 
 	/**
 	 * @param strategy

@@ -73,15 +73,10 @@
 		</property>
 
 		<property name="confidentiality" value="true" />
-
 		<property name="avoidCookiesIntegrity" value="false" />
-
 		<property name="avoidCookiesConfidentiality" value="false" />
-
 		<property name="strategy" value="memory" />
-
 		<property name="randomName" value="false" />
-
 		<property name="showErrorPageOnEditableValidation" value="false" />
 	</bean>
 
