@@ -88,23 +88,35 @@ public class StartPage {
 		return method == null || method.length() == 0;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#toString()
-	 */
-	public String toString() {
-		StringBuffer sb = new StringBuffer();
-		sb.append("StartPage[");
-		sb.append("method = " + this.method);
-		sb.append(", ");
-		if (this.pattern != null) {
-			sb.append("pattern = " + this.pattern);
-		} else if (this.compiledPattern != null) {
-			sb.append("pattern = " + this.compiledPattern);
-		}
-		sb.append("]");
-		return sb.toString();
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((method == null) ? 0 : method.hashCode());
+		result = prime * result + ((pattern == null) ? 0 : pattern.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		StartPage other = (StartPage) obj;
+		if (method == null) {
+			if (other.method != null)
+				return false;
+		} else if (!method.equals(other.method))
+			return false;
+		if (pattern == null) {
+			if (other.pattern != null)
+				return false;
+		} else if (!pattern.equals(other.pattern))
+			return false;
+		return true;
 	}
 
 }
