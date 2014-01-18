@@ -796,7 +796,8 @@ public class ValidatorHelperRequest implements IValidationHelper {
 			}
 
 			if (receivedValues.contains(values[i])) {
-				this.logger.log(HDIVErrorCodes.REPEATED_VALUES, target, parameter, values[i]);
+				String originalValue = stateValues.size() > 1 ? stateValues.toString() : stateValues.get(0);
+				this.logger.log(HDIVErrorCodes.REPEATED_VALUES, target, parameter, values[i], originalValue);
 				return new ValidatorHelperResult(HDIVErrorCodes.REPEATED_VALUES);
 			}
 
@@ -839,10 +840,13 @@ public class ValidatorHelperRequest implements IValidationHelper {
 			if (!exists) {
 
 				if (receivedValues.contains(values[i])) {
-					this.logger.log(HDIVErrorCodes.REPEATED_VALUES, target, parameter, values[i]);
+					String originalValue = tempStateValues.size() > 1 ? tempStateValues.toString() : tempStateValues
+							.get(0);
+					this.logger.log(HDIVErrorCodes.REPEATED_VALUES, target, parameter, values[i], originalValue);
 					return new ValidatorHelperResult(HDIVErrorCodes.REPEATED_VALUES);
 				}
-				this.logger.log(HDIVErrorCodes.PARAMETER_VALUE_INCORRECT, target, parameter, values[i]);
+				String originalValue = tempStateValues.size() > 1 ? tempStateValues.toString() : tempStateValues.get(0);
+				this.logger.log(HDIVErrorCodes.PARAMETER_VALUE_INCORRECT, target, parameter, values[i], originalValue);
 				return new ValidatorHelperResult(HDIVErrorCodes.PARAMETER_VALUE_INCORRECT);
 			}
 
@@ -871,8 +875,8 @@ public class ValidatorHelperRequest implements IValidationHelper {
 		Matcher m = this.numberPattern.matcher(value);
 
 		if (!m.matches() || (Integer.valueOf(value).intValue() >= stateValues.size())) {
-			String paramValue = (stateValues.size() > 1 ? stateValues : stateValues.get(0)) + "(" + value + ")";
-			this.logger.log(HDIVErrorCodes.CONFIDENTIAL_VALUE_INCORRECT, target, parameter, paramValue);
+			String originalValue = stateValues.size() > 1 ? stateValues.toString() : stateValues.get(0);
+			this.logger.log(HDIVErrorCodes.CONFIDENTIAL_VALUE_INCORRECT, target, parameter, value, originalValue);
 			return false;
 		}
 		return true;

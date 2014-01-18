@@ -58,12 +58,34 @@ public class Logger {
 	 *            Error type
 	 * @param target
 	 *            target name
-	 * @param parameter
+	 * @param parameterName
 	 *            parameter name
-	 * @param value
+	 * @param parameterValue
 	 *            parameter value
 	 */
-	public void log(String type, String target, String parameter, String value) {
+	public void log(String type, String target, String parameterName, String parameterValue) {
+
+		this.log(type, target, parameterName, parameterValue, null);
+	}
+
+	/**
+	 * Prints formatted attack produced by the user if the logging level defined in the Web application rate should be
+	 * at least INFO.
+	 * 
+	 * @param type
+	 *            Error type
+	 * @param target
+	 *            target name
+	 * @param parameterName
+	 *            parameter name
+	 * @param parameterValue
+	 *            parameter value
+	 * @param originalParameterValue
+	 *            original parameter value
+	 * 
+	 */
+	public void log(String type, String target, String parameterName, String parameterValue,
+			String originalParameterValue) {
 
 		HttpServletRequest request = this.getHttpServletRequest();
 
@@ -76,7 +98,7 @@ public class Logger {
 			target = request.getContextPath() + target;
 		}
 
-		this.log(type, target, parameter, value, localIp, remoteIp, userName);
+		this.log(type, target, parameterName, parameterValue, originalParameterValue, localIp, remoteIp, userName);
 	}
 
 	/**
@@ -86,10 +108,12 @@ public class Logger {
 	 *            Error type
 	 * @param target
 	 *            target name
-	 * @param parameter
+	 * @param parameterName
 	 *            parameter name
-	 * @param value
+	 * @param parameterValue
 	 *            parameter value
+	 * @param originalParameterValue
+	 *            original parameter value
 	 * @param localIp
 	 *            user local ip
 	 * @param remoteIp
@@ -97,10 +121,11 @@ public class Logger {
 	 * @param userName
 	 *            user name in application
 	 */
-	protected void log(String type, String target, String parameter, String value, String localIp, String remoteIp,
-			String userName) {
+	protected void log(String type, String target, String parameterName, String parameterValue,
+			String originalParameterValue, String localIp, String remoteIp, String userName) {
 
-		String formatedData = this.format(type, target, parameter, value, localIp, remoteIp, userName);
+		String formatedData = this.format(type, target, parameterName, parameterValue, originalParameterValue, localIp,
+				remoteIp, userName);
 		log.info(formatedData);
 
 	}
@@ -117,10 +142,12 @@ public class Logger {
 	 *            Error type
 	 * @param target
 	 *            target name
-	 * @param parameter
+	 * @param parameterName
 	 *            parameter name
-	 * @param value
+	 * @param parameterValue
 	 *            parameter value
+	 * @param originalParameterValue
+	 *            original parameter value
 	 * @param localIp
 	 *            user local ip
 	 * @param remoteIp
@@ -129,18 +156,22 @@ public class Logger {
 	 *            user name in application
 	 * @return String Formatted text with the attach.
 	 */
-	protected String format(String type, String target, String parameter, String value, String localIp,
-			String remoteIp, String userName) {
+	protected String format(String type, String target, String parameterName, String parameterValue,
+			String originalParameterValue, String localIp, String remoteIp, String userName) {
 
 		StringBuffer buffer = new StringBuffer();
 		buffer.append(type);
 		buffer.append(";");
 		buffer.append(target);
 		buffer.append(";");
-		buffer.append(parameter);
+		buffer.append(parameterName);
 		buffer.append(";");
-		buffer.append(value);
+		buffer.append(parameterValue);
 		buffer.append(";");
+		if (originalParameterValue != null) {
+			buffer.append(originalParameterValue);
+			buffer.append(";");
+		}
 		buffer.append(localIp);
 		buffer.append(";");
 		buffer.append(remoteIp);
