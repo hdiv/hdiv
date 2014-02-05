@@ -65,7 +65,7 @@
 				<artifactId>license-maven-plugin</artifactId>
 				<version>2.5</version>
 				<configuration>
-					<header>file://${project.parent.basedir}/LICENSE_HEADER</header>
+					<header>${project.parent.basedir}/LICENSE_HEADER</header>
 					<excludes>
 						<exclude>*.*</exclude>
 					</excludes>
