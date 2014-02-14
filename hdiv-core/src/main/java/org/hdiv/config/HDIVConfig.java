@@ -213,7 +213,11 @@ public class HDIVConfig {
 			path = path.substring(0, path.indexOf("?"));
 		}
 
-		if (path.charAt(path.length() - 1) == '/') {
+		if (path.equals("")) {
+			return false;
+		}
+
+		if (path.equals("/") || path.charAt(path.length() - 1) == '/') {
 			return false;
 		}
 
