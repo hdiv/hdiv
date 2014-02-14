@@ -261,4 +261,39 @@ public class DataComposerMemoryTest extends AbstractHDIVTestCase {
 
 		dataComposer.endPage();
 	}
+
+	public void testEncodeFormAction() {
+
+		// No encoded url
+		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		IDataComposer dataComposer = this.dataComposerFactory.newInstance(request);
+		HDIVUtil.setDataComposer(dataComposer, request);
+
+		dataComposer.startPage();
+		dataComposer.beginRequest("test test.do");
+		String stateId = dataComposer.endRequest();
+		dataComposer.endPage();
+
+		assertNotNull(stateId);
+
+		IState state = this.stateUtil.restoreState(stateId);
+
+		assertEquals("test test.do", state.getAction());
+
+		// Encoded action url
+		dataComposer = this.dataComposerFactory.newInstance(request);
+		HDIVUtil.setDataComposer(dataComposer, request);
+
+		dataComposer.startPage();
+		dataComposer.beginRequest("test%20test.do");
+		stateId = dataComposer.endRequest();
+		dataComposer.endPage();
+
+		assertNotNull(stateId);
+
+		state = this.stateUtil.restoreState(stateId);
+
+		// State action value is decoded because we store decoded values only
+		assertEquals("test test.do", state.getAction());
+	}
 }

@@ -447,4 +447,19 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 		RequestWrapper requestWrapper = new RequestWrapper(request);
 		assertTrue(helper.validate(requestWrapper).isValid());
 	}
+
+	public void testValidateEncoded() {
+
+		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
+
+		this.dataComposer.beginRequest("/path/test%20Action.do");
+		String pageState = this.dataComposer.endRequest();
+		this.dataComposer.endPage();
+
+		request.setRequestURI("/path/test%20Action.do");
+		request.addParameter(hdivParameter, pageState);
+
+		RequestWrapper requestWrapper = new RequestWrapper(request);
+		assertTrue(helper.validate(requestWrapper).isValid());
+	}
 }

@@ -15,6 +15,7 @@
  */
 package org.hdiv.dataComposer;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 
 import org.apache.commons.logging.Log;
@@ -371,13 +372,14 @@ public class DataComposerMemory extends AbstractDataComposer {
 			parameter.addValue(decodedValue);
 		} else {
 			// create a new parameter and add to the request
-			parameter = createParameter(parameterName, decodedValue, editable, editableDataType, isActionParam, charEncoding);
+			parameter = createParameter(parameterName, decodedValue, editable, editableDataType, isActionParam,
+					charEncoding);
 			state.addParameter(parameter);
 		}
 
 		return parameter;
 	}
-	
+
 	/**
 	 * Instantiates the parameter
 	 * 
@@ -457,7 +459,7 @@ public class DataComposerMemory extends AbstractDataComposer {
 		String decodedValue = null;
 		try {
 			decodedValue = URLDecoder.decode(value, charEncoding);
-		} catch (Exception e) {
+		} catch (UnsupportedEncodingException e) {
 			decodedValue = value;
 		}
 
@@ -497,6 +499,11 @@ public class DataComposerMemory extends AbstractDataComposer {
 	 * @see org.hdiv.dataComposer.DataComposerMemory#beginRequest()
 	 */
 	public String beginRequest(String action) {
+
+		try {
+			action = URLDecoder.decode(action, Constants.ENCODING_UTF_8);
+		} catch (UnsupportedEncodingException e) {
+		}
 
 		// Create new IState
 		IState state = new State(this.requestCounter);
