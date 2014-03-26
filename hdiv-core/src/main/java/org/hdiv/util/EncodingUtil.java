@@ -79,7 +79,7 @@ public class EncodingUtil {
 				log.debug("MessageDigest created: " + messageDigest);
 			}
 		} catch (NoSuchAlgorithmException e) {
-			throw new HDIVException(e.getMessage());
+			throw new HDIVException(e.getMessage(), e);
 		}
 	}
 
@@ -175,7 +175,7 @@ public class EncodingUtil {
 			return obj;
 
 		} catch (Exception e) {
-			throw new HDIVException(HDIVErrorCodes.HDIV_PARAMETER_INCORRECT_VALUE);
+			throw new HDIVException(HDIVErrorCodes.HDIV_PARAMETER_INCORRECT_VALUE, e);
 		}
 	}
 
@@ -252,7 +252,7 @@ public class EncodingUtil {
 			return obj;
 
 		} catch (Exception e) {
-			throw new HDIVException(HDIVErrorCodes.HDIV_PARAMETER_INCORRECT_VALUE);
+			throw new HDIVException(HDIVErrorCodes.HDIV_PARAMETER_INCORRECT_VALUE, e);
 		}
 	}
 

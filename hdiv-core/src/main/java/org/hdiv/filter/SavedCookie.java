@@ -28,8 +28,8 @@ import javax.servlet.http.Cookie;
 public class SavedCookie implements Serializable {
 
 	/**
-	 * Universal version identifier. Deserialization uses this number to ensure that
-	 * a loaded class corresponds exactly to a serialized object.
+	 * Universal version identifier. Deserialization uses this number to ensure that a loaded class corresponds exactly
+	 * to a serialized object.
 	 */
 	private static final long serialVersionUID = 4731047668982223493L;
 
@@ -49,7 +49,6 @@ public class SavedCookie implements Serializable {
 
 	private int version;
 
-
 	/**
 	 * Constructs a new SavedCookie.
 	 * 
@@ -62,8 +61,8 @@ public class SavedCookie implements Serializable {
 	 * @param secure
 	 * @param version
 	 */
-	public SavedCookie(String name, String value, String comment, String domain, 
-					   int maxAge, String path, boolean secure, int version) {
+	public SavedCookie(String name, String value, String comment, String domain, int maxAge, String path,
+			boolean secure, int version) {
 
 		this.name = name;
 		this.value = value;
@@ -78,14 +77,14 @@ public class SavedCookie implements Serializable {
 	/**
 	 * Constructs a new SavedCookie from <code>cookie</code> object.
 	 * 
-	 * @param cookie original cookie
+	 * @param cookie
+	 *            original cookie
 	 */
 	public SavedCookie(Cookie cookie) {
-		
-	       this(cookie.getName(), cookie.getValue(), cookie.getComment(),
-                cookie.getDomain(), cookie.getMaxAge(), cookie.getPath(), 
-                cookie.getSecure(), cookie.getVersion());
-    }		
+
+		this(cookie.getName(), cookie.getValue(), cookie.getComment(), cookie.getDomain(), cookie.getMaxAge(), cookie
+				.getPath(), cookie.getSecure(), cookie.getVersion());
+	}
 
 	/**
 	 * Constructs a new SavedCookie.
@@ -97,21 +96,20 @@ public class SavedCookie implements Serializable {
 		this.name = name;
 		this.value = value;
 	}
-	
+
 	/**
-	 * Compares this Cookie to the specified object. The result is <code>true</code>
-	 * if and only if the argument is not <code>null</code> and is a
-	 * <code>Cookie</code> object that represents the same sequence of values as
-	 * this object.
+	 * Compares this Cookie to the specified object. The result is <code>true</code> if and only if the argument is not
+	 * <code>null</code> and is a <code>Cookie</code> object that represents the same sequence of values as this object.
 	 * 
-	 * @param c the object to compare this <code>Cookie</code> against.
-	 * @param cookiesConfidentialityActivated cookies' confidentiality indicator
+	 * @param c
+	 *            the object to compare this <code>Cookie</code> against.
+	 * @param cookiesConfidentialityActivated
+	 *            cookies' confidentiality indicator
 	 * @return True if the <code>Cookie</code> are equal. False otherwise.
 	 */
-	public boolean equals(Cookie c, boolean cookiesConfidentialityActivated) {
+	public boolean isEqual(Cookie c, boolean cookiesConfidentialityActivated) {
 
-		boolean result = (this.getName() == null ? c.getName() == null : this.getName()
-				.equals(c.getName()));
+		boolean result = (this.getName() == null ? c.getName() == null : this.getName().equals(c.getName()));
 		if (result) {
 			if (this.getValue() == null) {
 				result = (c.getValue() == null);
@@ -124,8 +122,7 @@ public class SavedCookie implements Serializable {
 			}
 		}
 		if (result) {
-			result = (this.getDomain() == null ? c.getDomain() == null : this.getDomain()
-					.equals(c.getDomain()));
+			result = (this.getDomain() == null ? c.getDomain() == null : this.getDomain().equals(c.getDomain()));
 		}
 
 		return result;
@@ -164,8 +161,8 @@ public class SavedCookie implements Serializable {
 	 */
 	public String getValue() {
 		return value;
-	}	
-	
+	}
+
 	/**
 	 * @return Returns the path.
 	 */
@@ -187,64 +184,4 @@ public class SavedCookie implements Serializable {
 		return version;
 	}
 
-	//TODO Find out why I added this methods
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((comment == null) ? 0 : comment.hashCode());
-		result = prime * result + ((domain == null) ? 0 : domain.hashCode());
-		result = prime * result + maxAge;
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result + ((path == null) ? 0 : path.hashCode());
-		result = prime * result + (secure ? 1231 : 1237);
-		result = prime * result + ((value == null) ? 0 : value.hashCode());
-		result = prime * result + version;
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		SavedCookie other = (SavedCookie) obj;
-		if (comment == null) {
-			if (other.comment != null)
-				return false;
-		} else if (!comment.equals(other.comment))
-			return false;
-		if (domain == null) {
-			if (other.domain != null)
-				return false;
-		} else if (!domain.equals(other.domain))
-			return false;
-		if (maxAge != other.maxAge)
-			return false;
-		if (name == null) {
-			if (other.name != null)
-				return false;
-		} else if (!name.equals(other.name))
-			return false;
-		if (path == null) {
-			if (other.path != null)
-				return false;
-		} else if (!path.equals(other.path))
-			return false;
-		if (secure != other.secure)
-			return false;
-		if (value == null) {
-			if (other.value != null)
-				return false;
-		} else if (!value.equals(other.value))
-			return false;
-		if (version != other.version)
-			return false;
-		return true;
-	}
-
-	
 }

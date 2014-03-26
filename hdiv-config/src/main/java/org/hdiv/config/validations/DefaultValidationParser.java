@@ -61,11 +61,11 @@ public class DefaultValidationParser extends DefaultHandler {
 			SAXParser sp = spf.newSAXParser();
 			sp.parse(is, this);
 		} catch (ParserConfigurationException e) {
-			throw new HDIVException(e.getMessage());
+			throw new HDIVException(e.getMessage(), e);
 		} catch (SAXException e) {
-			throw new HDIVException(e.getMessage());
+			throw new HDIVException(e.getMessage(), e);
 		} catch (IOException e) {
-			throw new HDIVException(e.getMessage());
+			throw new HDIVException(e.getMessage(), e);
 		}
 	}
 

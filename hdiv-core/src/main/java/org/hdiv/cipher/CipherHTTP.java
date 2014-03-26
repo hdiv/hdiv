@@ -92,13 +92,13 @@ public class CipherHTTP implements ICipherHTTP {
 			}
 
 		} catch (NoSuchProviderException e) {
-			throw new HDIVException(e.getMessage());
+			throw new HDIVException(e.getMessage(), e);
 
 		} catch (NoSuchAlgorithmException e) {
-			throw new HDIVException(e.getMessage());
+			throw new HDIVException(e.getMessage(), e);
 
 		} catch (NoSuchPaddingException e) {
-			throw new HDIVException(e.getMessage());
+			throw new HDIVException(e.getMessage(), e);
 		}
 	}
 

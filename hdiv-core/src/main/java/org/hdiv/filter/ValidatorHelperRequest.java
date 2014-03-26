@@ -384,7 +384,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 			if (sessionCookies.containsKey(requestCookies[i].getName())) {
 
 				SavedCookie savedCookie = sessionCookies.get(requestCookies[i].getName());
-				if (savedCookie.equals(requestCookies[i], cookiesConfidentiality)) {
+				if (savedCookie.isEqual(requestCookies[i], cookiesConfidentiality)) {
 
 					found = true;
 					if (cookiesConfidentiality) {
