@@ -43,7 +43,7 @@ public interface IState {
 	public Collection<IParameter> getParameters();
 	
 	/**
-	 * @return Returns the action asociated to state <code>this</code>.
+	 * @return Returns the action associated to state <code>this</code>.
 	 */
 	public String getAction();
 
