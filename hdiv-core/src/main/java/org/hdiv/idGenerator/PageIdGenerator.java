@@ -26,10 +26,15 @@ import java.io.Serializable;
 public interface PageIdGenerator extends Serializable {
 
 	/**
+	 * <p>
 	 * Create a new page id.
+	 * </p>
+	 * <p>
+	 * The identifier must be an integer greater than 0.
+	 * </p>
 	 * 
 	 * @return new id
 	 */
-	String getNextPageId();
+	int getNextPageId();
 
 }

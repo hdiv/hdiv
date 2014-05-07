@@ -15,40 +15,42 @@
  */
 package org.hdiv.dataValidator;
 
-
-import org.hdiv.state.IState;
+import org.hdiv.state.IParameter;
 
 /**
- * Interface to validate the data sent by the user.
- *  
+ * Interface to validate a parameter sent by the user.
+ * 
  * @author Roberto Velasco
  * @author Oscar Ocariz
  */
 public interface IDataValidator {
-	
+
 	/**
 	 * <p>
-	 * Checks if the value <code>data</code> sent by the user to the server in the
-	 * parameter <code>parameter</code> is correct or not. The received value is
-	 * checked with the one stored in the state to decide if it is correct.
+	 * Checks if the value <code>data</code> sent by the user to the server in the parameter <code>parameter</code> is
+	 * correct or not. The received value is checked with the one stored in the state to decide if it is correct.
 	 * </p>
 	 * <p>
-	 * In the encoded and hash strategies, the state is obtained from the user
-	 * request. However, in the memory strategy the state is obtained from the user
-	 * session, using the state identifier receiced within the request.
+	 * In the encoded and hash strategies, the state is obtained from the user request. However, in the memory strategy
+	 * the state is obtained from the user session, using the state identifier received within the request.
 	 * </p>
 	 * 
-	 * @param value value sent by the client
-	 * @param target target action name
-	 * @param parameter parameter name
-	 * @return object that represents the result of the validation process for the
-	 *         parameter <code>parameter</code> and the value <code>data</code>.
+	 * @param value
+	 *            value sent by the client
+	 * @param target
+	 *            target action name
+	 * @param parameter
+	 *            parameter name
+	 * @param stateParameter
+	 *            {@link IParameter} object with parameters data
+	 * @param actionParamValues
+	 *            values for the action parameters
+	 * @return object that represents the result of the validation process for the parameter <code>parameter</code> and
+	 *         the value <code>data</code>.
 	 */
-	public IValidationResult validate(String value, String target, String parameter);
-	
-	/**
-	 * @param state The validation process state to set.
-	 */
-	public void setState(IState state);
-	
+	public IValidationResult validate(String value, String target, String parameter, IParameter stateParameter,
+			String[] actionParamValues);
+	// TODO merge stateParameter and actionParamValues parameters
+
 }
+

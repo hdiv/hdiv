@@ -29,7 +29,6 @@ import org.hdiv.cipher.IKeyFactory;
 import org.hdiv.cipher.Key;
 import org.hdiv.config.HDIVConfig;
 import org.hdiv.idGenerator.PageIdGenerator;
-import org.hdiv.session.ISession;
 import org.hdiv.urlProcessor.FormUrlProcessor;
 import org.hdiv.urlProcessor.LinkUrlProcessor;
 import org.hdiv.util.Constants;

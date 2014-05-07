@@ -36,8 +36,9 @@
 		<property name="stateUtil" ref="stateUtil" />
 		<property name="hdivConfig" ref="config" />
 		<property name="session" ref="sessionHDIV" />
-		<property name="dataValidatorFactory" ref="dataValidatorFactory" />
+		<property name="dataValidator" ref="dataValidator" />
 		<property name="dataComposerFactory" ref="dataComposerFactory" />
+		<property name="urlProcessor" ref="basicUrlProcessor"/>
 	</bean>
 
 </beans>

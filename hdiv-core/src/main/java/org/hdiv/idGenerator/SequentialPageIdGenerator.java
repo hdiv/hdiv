@@ -30,7 +30,7 @@ public class SequentialPageIdGenerator implements PageIdGenerator {
 	/**
 	 * Sequence number
 	 */
-	private long id;
+	private int id;
 
 	/**
 	 * Constructor that initializes the sequence number in a non-constant value.
@@ -44,19 +44,18 @@ public class SequentialPageIdGenerator implements PageIdGenerator {
 	 * 
 	 * @see org.hdiv.util.PageIdGenerator#getNextPageId()
 	 */
-	public synchronized String getNextPageId() {
+	public synchronized int getNextPageId() {
 
 		this.id = this.id + 1;
-		return Long.toString(this.id);
+		return this.id;
 	}
 
 	/**
-	 * Generate the initial number of sequencer, which is based on a random value 
-	 * between 1 and 20.
+	 * Generate the initial number of sequencer, which is based on a random value between 1 and 20.
 	 * 
 	 * @return valor sequencer initial value
 	 */
-	protected long generateInitialPageId() {
+	protected int generateInitialPageId() {
 
 		Random r = new Random();
 		int i = r.nextInt(20);

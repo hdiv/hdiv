@@ -50,6 +50,13 @@ public class UrlData {
 	private String urlWithoutContextPath;
 
 	/**
+	 * URL parameters in query string format. For example: param1=val1&param2=val2
+	 * 
+	 * @since 2.1.7
+	 */
+	private String urlParams;
+
+	/**
 	 * Map with original url parameter name and values
 	 */
 	private Map<String, String[]> originalUrlParams;
@@ -103,7 +110,7 @@ public class UrlData {
 	 * @return has parameters?
 	 */
 	public boolean containsParams() {
-		return originalUrlParams != null && originalUrlParams.size() > 0;
+		return (originalUrlParams != null && originalUrlParams.size() > 0) || urlParams != null;
 	}
 
 	/**
@@ -254,6 +261,21 @@ public class UrlData {
 	 */
 	public void setjSessionId(String jSessionId) {
 		this.jSessionId = jSessionId;
+	}
+
+	/**
+	 * @return the urlParams
+	 */
+	public String getUrlParams() {
+		return urlParams;
+	}
+
+	/**
+	 * @param urlParams
+	 *            the urlParams to set
+	 */
+	public void setUrlParams(String urlParams) {
+		this.urlParams = urlParams;
 	}
 
 }

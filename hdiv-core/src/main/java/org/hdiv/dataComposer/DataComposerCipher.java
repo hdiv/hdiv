@@ -71,7 +71,7 @@ public class DataComposerCipher extends DataComposerMemory {
 	public String endRequest() {
 
 		IState state = super.getStatesStack().pop();
-		state.setPageId(this.getPage().getName());
+		state.setPageId(this.getPage().getId());
 
 		String stateData = this.encodingUtil.encode64Cipher(state);
 		String id = null;
@@ -89,9 +89,9 @@ public class DataComposerCipher extends DataComposerMemory {
 			super.startPage();
 
 			this.getPage().addState(state);
-			state.setPageId(this.getPage().getName());
+			state.setPageId(this.getPage().getId());
 
-			id = this.getPage().getName() + DASH + state.getId() + DASH + this.getHdivStateSuffix();
+			id = this.getPage().getId() + DASH + state.getId() + DASH + this.getHdivStateSuffix();
 		}
 
 		return (id != null) ? id : stateData;

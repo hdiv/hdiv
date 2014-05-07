@@ -22,12 +22,11 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hdiv.config.HDIVConfig;
 import org.hdiv.state.IParameter;
-import org.hdiv.state.IState;
 import org.hdiv.util.HDIVUtil;
 
 /**
- * It uses an object of type IState and validates all the entry data, besides to replacing the relative values by its
- * real values.
+ * Validates that one parameter value or values are correct, besides to replacing the relative values by its real
+ * values.
  * 
  * @author Roberto Velasco
  * @author Oscar Ocariz
@@ -40,40 +39,18 @@ public class DataValidator implements IDataValidator {
 	private Log log = LogFactory.getLog(DataValidator.class);
 
 	/**
-	 * Object that represents the result of the validation.
-	 */
-	private IValidationResult validationResult;
-
-	/**
-	 * State that represents all the data that composes a request or a form.
-	 */
-	private IState state;
-
-	/**
 	 * HDIV general configuration.
 	 */
 	private HDIVConfig config;
 
-	/**
-	 * <p>
-	 * Checks if the value <code>data</code> sent by the user to the server in the parameter <code>parameter</code> is
-	 * correct or not. The received value is checked with the one stored in the state to decide if it is correct.
-	 * </p>
-	 * <p>
-	 * In the encoded and hash strategies, the state is obtained from the user request. However, in the memory strategy
-	 * the state is obtained from the user session, using the state identifier received within the request.
-	 * </p>
+	/*
+	 * (non-Javadoc)
 	 * 
-	 * @param value
-	 *            value sent by the client
-	 * @param target
-	 *            target action name
-	 * @param parameter
-	 *            parameter name
-	 * @return object that represents the result of the validation process for the parameter <code>parameter</code> and
-	 *         the value <code>data</code>.
+	 * @see org.hdiv.ee.dataValidator.IDataValidator#validate(java.lang.String, java.lang.String, java.lang.String,
+	 * org.hdiv.state.IParameter, java.lang.String[])
 	 */
-	public IValidationResult validate(String value, String target, String parameter) {
+	public IValidationResult validate(String value, String target, String parameter, IParameter stateParameter,
+			String[] actionParamValues) {
 
 		boolean confidentiality = this.config.getConfidentiality();
 		boolean noConfidentiality = this.config.isParameterWithoutConfidentiality(parameter);
@@ -81,41 +58,70 @@ public class DataValidator implements IDataValidator {
 			log.debug("Parameter [" + parameter + "] is ParameterWithoutConfidentiality.");
 		}
 
-		IParameter stateParameter = this.state.getParameter(parameter);
+		IValidationResult result = new ValidationResult();
+
+		// TODO include here checking that there are no more values. Currently done in the helper
+
 		if (!confidentiality || noConfidentiality) {
 			// Confidentiality = false
 
-			if (stateParameter.existValue(value)) {
-				validationResult.setResult(value);
-				validationResult.setLegal(true);
+			if (stateParameter != null) {
+				if (stateParameter.existValue(value)) {
+					result.setResult(value);
+					result.setLegal(true);
+				} else {
+					result.setLegal(false);
+				}
+				return result;
 			} else {
-				validationResult.setLegal(false);
+				// actionParamValues contains values
+				for (int i = 0; i < actionParamValues.length; i++) {
+					if (value.equals(actionParamValues[i])) {
+						result.setResult(value);
+						result.setLegal(true);
+						return result;
+					}
+				}
+				result.setLegal(false);
+				return result;
 			}
-
-			return validationResult;
 
 		} else {
 			// Confidentiality = true
 			if (!this.isInt(value)) {
-				validationResult.setLegal(false);
-				return validationResult;
+				result.setLegal(false);
+				return result;
 			}
 
 			// Confidentiality assures that data is int value
 			int position = new Integer(value).intValue();
 
-			if (stateParameter.existPosition(position)) {
+			if (stateParameter != null) {
 
-				validationResult.setLegal(true);
+				if (stateParameter.existPosition(position)) {
 
-				// update position value with the original value
-				validationResult.setResult(stateParameter.getValuePosition(position));
-				return validationResult;
+					result.setLegal(true);
 
+					// update position value with the original value
+					result.setResult(stateParameter.getValuePosition(position));
+					return result;
+
+				} else {
+					result.setLegal(false);
+					return result;
+				}
 			} else {
-				validationResult.setLegal(false);
-				return validationResult;
+
+				if (actionParamValues.length > position) {
+
+					result.setLegal(true);
+					result.setResult(actionParamValues[position]);
+					return result;
+				}
+				result.setLegal(false);
+				return result;
 			}
+
 		}
 	}
 
@@ -130,22 +136,6 @@ public class DataValidator implements IDataValidator {
 		Pattern p = HDIVUtil.intPattern;
 		Matcher m = p.matcher(data);
 		return m.matches();
-	}
-
-	public IValidationResult getValidationResult() {
-		return validationResult;
-	}
-
-	public void setValidationResult(IValidationResult validationResult) {
-		this.validationResult = validationResult;
-	}
-
-	/**
-	 * @param state
-	 *            The validation process state to set.
-	 */
-	public void setState(IState state) {
-		this.state = state;
 	}
 
 	/**

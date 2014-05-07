@@ -87,8 +87,8 @@ public abstract class AbstractDataComposer implements IDataComposer {
 	 */
 	public void initPage() {
 		this.page = new Page();
-		String pageId = this.session.getPageId();
-		this.page.setName(pageId);
+		int pageId = this.session.getPageId();
+		this.page.setId(pageId);
 		this.page.setRandomToken(this.uidGenerator.generateUid().toString());
 	}
 

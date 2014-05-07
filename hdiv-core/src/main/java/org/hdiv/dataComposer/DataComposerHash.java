@@ -55,7 +55,7 @@ public class DataComposerHash extends DataComposerMemory {
 	public String endRequest() {
 
 		IState state = super.getStatesStack().pop();
-		state.setPageId(this.getPage().getName());
+		state.setPageId(this.getPage().getId());
 
 		String id = null;
 		String stateWithSuffix = null;
@@ -72,9 +72,9 @@ public class DataComposerHash extends DataComposerMemory {
 			}
 
 			this.getPage().addState(state);
-			state.setPageId(this.getPage().getName());
+			state.setPageId(this.getPage().getId());
 
-			id = this.getPage().getName() + DASH + state.getId() + DASH + this.getHdivStateSuffix();
+			id = this.getPage().getId() + DASH + state.getId() + DASH + this.getHdivStateSuffix();
 
 		} else {
 			// generate hash to add to the page that will be stored in session

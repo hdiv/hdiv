@@ -211,7 +211,7 @@ public class StateUtil {
 		String restoredStateHash = this.encodingUtil.calculateStateHash(value);
 
 		IState decodedState = (IState) encodingUtil.decode64(value);
-		String sessionStateHash = this.session.getStateHash(decodedState.getPageId(), decodedState.getId());
+		String sessionStateHash = this.session.getStateHash(decodedState.getPageId() + "", decodedState.getId());
 
 		if (restoredStateHash.equals(sessionStateHash)) {
 			return decodedState;

@@ -72,7 +72,7 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 	 * 
 	 * @return Returns the pageId.
 	 */
-	public String getPageId() {
+	public int getPageId() {
 
 		HttpSession session = this.getHttpSession();
 
@@ -81,7 +81,13 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 			throw new HDIVException("session.nopageidgenerator");
 		}
 
-		String id = pageIdGenerator.getNextPageId();
+		int id = pageIdGenerator.getNextPageId();
+		
+		// PageId must be greater than 0
+		if(id <= 0){
+			throw new HDIVException("Incorrect PageId generated [" + id + "]. PageId must be greater than 0.");
+		}
+		
 		session.setAttribute(this.pageIdGeneratorName, pageIdGenerator);
 
 		return id;
@@ -122,7 +128,6 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 
 		IStateCache cache = this.getStateCache(session);
 
-		page.setName(pageId);
 		String removedPageId = cache.addPage(pageId);
 
 		// if it returns a page identifier it is because the cache has reached
@@ -250,7 +255,7 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 		session.setAttribute(page.getName(), page);
 
 		if (log.isDebugEnabled()) {
-			log.debug("Added new page with id:" + page.getName());
+			log.debug("Added new page with id:" + page.getId());
 		}
 	}
 

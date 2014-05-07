@@ -15,8 +15,6 @@
  */
 package org.hdiv.components.support;
 
-import java.util.Map;
-
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIParameter;
@@ -62,24 +60,10 @@ public class OutputLinkComponentProcessor extends AbstractComponentProcessor {
 				}
 
 				IDataComposer dataComposer = HDIVUtil.getDataComposer(request);
-				dataComposer.beginRequest(urlData.getContextPathRelativeUrl());
+				dataComposer.beginRequest(urlData.getUrlWithoutContextPath());
 
-				Map<String, String[]> params = urlData.getOriginalUrlParams();
-				if (params != null) {
-					// Process url params
-					for (String key : params.keySet()) {
-						String[] values = params.get(key);
-
-						for (int i = 0; i < values.length; i++) {
-							String value = values[i];
-							String composedParam = dataComposer.compose(key, value, false, true,
-									Constants.ENCODING_UTF_8);
-							values[i] = composedParam;
-						}
-						params.put(key, values);
-					}
-					urlData.setProcessedUrlParams(params);
-				}
+				String processedParams = dataComposer.composeParams(urlData.getUrlParams(), "GET", Constants.ENCODING_UTF_8);
+				urlData.setUrlParams(processedParams);
 
 				if (hasUIParams) {
 

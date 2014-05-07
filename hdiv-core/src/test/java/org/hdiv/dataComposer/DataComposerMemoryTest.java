@@ -123,7 +123,7 @@ public class DataComposerMemoryTest extends AbstractHDIVTestCase {
 
 		// New request
 		IState state = this.stateUtil.restoreState(stateId);
-		IPage page = this.session.getPage(state.getPageId());
+		IPage page = this.session.getPage(state.getPageId() + "");
 		dataComposer = this.dataComposerFactory.newInstance(request);
 		HDIVUtil.setDataComposer(dataComposer, request);
 

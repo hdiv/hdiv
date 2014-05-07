@@ -30,7 +30,7 @@ import org.hdiv.config.multipart.JsfMultipartConfig;
 import org.hdiv.config.multipart.SpringMVCMultipartConfig;
 import org.hdiv.context.RedirectHelper;
 import org.hdiv.dataComposer.DataComposerFactory;
-import org.hdiv.dataValidator.DataValidatorFactory;
+import org.hdiv.dataValidator.DataValidator;
 import org.hdiv.dataValidator.ValidationResult;
 import org.hdiv.events.HDIVFacesEventListener;
 import org.hdiv.filter.DefaultRequestInitializer;
@@ -51,6 +51,7 @@ import org.hdiv.session.ISession;
 import org.hdiv.session.SessionHDIV;
 import org.hdiv.session.StateCache;
 import org.hdiv.state.StateUtil;
+import org.hdiv.urlProcessor.BasicUrlProcessor;
 import org.hdiv.urlProcessor.FormUrlProcessor;
 import org.hdiv.urlProcessor.LinkUrlProcessor;
 import org.hdiv.util.EncodingUtil;
@@ -137,13 +138,15 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 
 	protected RuntimeBeanReference stateUtilRef;
 
-	protected RuntimeBeanReference dataValidatorFactoryRef;
+	protected RuntimeBeanReference dataValidatorRef;
 
 	protected RuntimeBeanReference dataComposerFactoryRef;
 
 	protected RuntimeBeanReference linkUrlProcessorRef;
 
 	protected RuntimeBeanReference formUrlProcessorRef;
+	
+	protected RuntimeBeanReference basicUrlProcessorRef;
 
 	protected RuntimeBeanReference loggerRef;
 
@@ -176,10 +179,11 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		this.createCipher(element, source, parserContext);
 		this.createSimpleBean(element, source, parserContext, ValidationResult.class);
 		this.stateUtilRef = this.createStateUtil(element, source, parserContext);
-		this.dataValidatorFactoryRef = this.createDataValidatorFactory(element, source, parserContext);
+		this.dataValidatorRef = this.createDataValidator(element, source, parserContext);
 		this.dataComposerFactoryRef = this.createDataComposerFactory(element, source, parserContext);
 		this.linkUrlProcessorRef = this.createLinkUrlProcessor(element, source, parserContext);
 		this.formUrlProcessorRef = this.createFormUrlProcessor(element, source, parserContext);
+		this.basicUrlProcessorRef = this.createBasicUrlProcessor(element, source, parserContext);
 		this.createRequestInitializer(element, source, parserContext);
 
 		// register Spring MVC beans if we are using Spring MVC web framework
@@ -351,11 +355,11 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		return new RuntimeBeanReference(name);
 	}
 
-	protected RuntimeBeanReference createDataValidatorFactory(Element element, Object source, ParserContext parserContext) {
-		RootBeanDefinition bean = new RootBeanDefinition(DataValidatorFactory.class);
+	protected RuntimeBeanReference createDataValidator(Element element, Object source, ParserContext parserContext) {
+		RootBeanDefinition bean = new RootBeanDefinition(DataValidator.class);
 		bean.setSource(source);
 		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
-		bean.getPropertyValues().addPropertyValue("hdivConfig", this.configRef);
+		bean.getPropertyValues().addPropertyValue("config", this.configRef);
 		String name = parserContext.getReaderContext().generateBeanName(bean);
 		parserContext.getRegistry().registerBeanDefinition(name, bean);
 		return new RuntimeBeanReference(name);
@@ -392,7 +396,8 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 			bean.getPropertyValues().addPropertyValue("stateUtil", this.stateUtilRef);
 			bean.getPropertyValues().addPropertyValue("hdivConfig", this.configRef);
 			bean.getPropertyValues().addPropertyValue("session", this.sessionRef);
-			bean.getPropertyValues().addPropertyValue("dataValidatorFactory", this.dataValidatorFactoryRef);
+			bean.getPropertyValues().addPropertyValue("dataValidator", this.dataValidatorRef);
+			bean.getPropertyValues().addPropertyValue("urlProcessor", this.basicUrlProcessorRef);
 			bean.getPropertyValues().addPropertyValue("dataComposerFactory", this.dataComposerFactoryRef);
 			parserContext.getRegistry().registerBeanDefinition(VALIDATOR_HELPER_NAME, bean);
 			return new RuntimeBeanReference(VALIDATOR_HELPER_NAME);
@@ -459,6 +464,17 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 			// Use user defined
 			return new RuntimeBeanReference(FORM_URL_PROCESSOR_NAME);
 		}
+	}
+	
+	protected RuntimeBeanReference createBasicUrlProcessor(Element element, Object source, ParserContext parserContext) {
+		RootBeanDefinition bean = new RootBeanDefinition(BasicUrlProcessor.class);
+		bean.setSource(source);
+		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
+		bean.getPropertyValues().addPropertyValue("config", this.configRef);
+
+		String name = parserContext.getReaderContext().generateBeanName(bean);
+		parserContext.getRegistry().registerBeanDefinition(name, bean);
+		return new RuntimeBeanReference(name);
 	}
 
 	protected RuntimeBeanReference createRequestDataValueProcessor(Element element, Object source,
@@ -622,7 +638,8 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		bean.getPropertyValues().addPropertyValue("stateUtil", this.stateUtilRef);
 		bean.getPropertyValues().addPropertyValue("hdivConfig", this.configRef);
 		bean.getPropertyValues().addPropertyValue("session", this.sessionRef);
-		bean.getPropertyValues().addPropertyValue("dataValidatorFactory", this.dataValidatorFactoryRef);
+		bean.getPropertyValues().addPropertyValue("dataValidator", this.dataValidatorRef);
+		bean.getPropertyValues().addPropertyValue("urlProcessor", this.basicUrlProcessorRef);
 		bean.getPropertyValues().addPropertyValue("dataComposerFactory", this.dataComposerFactoryRef);
 
 		String name = parserContext.getReaderContext().generateBeanName(bean);

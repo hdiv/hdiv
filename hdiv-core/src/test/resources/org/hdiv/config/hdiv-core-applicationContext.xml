@@ -55,18 +55,20 @@
 		</property>
 	</bean>
 
-	<bean id="results" class="org.hdiv.dataValidator.ValidationResult" />
-
 	<bean id="stateUtil" class="org.hdiv.state.StateUtil" init-method="init">
 		<property name="encodingUtil" ref="encoding" />
 		<property name="config" ref="config" />
 		<property name="session" ref="sessionHDIV" />
 	</bean>
-	<bean id="dataValidatorFactory" class="org.hdiv.dataValidator.DataValidatorFactory">
-		<property name="hdivConfig" ref="config" />
+
+	<!-- DATAVALIDATOR -->
+	<bean id="results" class="org.hdiv.dataValidator.ValidationResult" />
+
+	<bean id="dataValidator" class="org.hdiv.dataValidator.DataValidator">
+		<property name="config" ref="config" />
 	</bean>
 
-	<!-- DATACOMPOSERS, DATAVALIDATOR -->
+	<!-- DATACOMPOSERS -->
 
 	<bean id="dataComposerFactory" class="org.hdiv.dataComposer.DataComposerFactory">
 		<property name="hdivConfig" ref="config" />
@@ -88,8 +90,9 @@
 		<property name="stateUtil" ref="stateUtil" />
 		<property name="hdivConfig" ref="config" />
 		<property name="session" ref="sessionHDIV" />
-		<property name="dataValidatorFactory" ref="dataValidatorFactory" />
+		<property name="dataValidator" ref="dataValidator" />
 		<property name="dataComposerFactory" ref="dataComposerFactory" />
+		<property name="urlProcessor" ref="basicUrlProcessor"/>
 	</bean>
 
 	<bean id="validatorErrorHandler" class="org.hdiv.filter.DefaultValidatorErrorHandler">
@@ -115,6 +118,10 @@
 	</bean>
 
 	<bean id="formUrlProcessor" class="org.hdiv.urlProcessor.FormUrlProcessor">
+		<property name="config" ref="config" />
+	</bean>
+	
+	<bean id="basicUrlProcessor" class="org.hdiv.urlProcessor.BasicUrlProcessor">
 		<property name="config" ref="config" />
 	</bean>
 

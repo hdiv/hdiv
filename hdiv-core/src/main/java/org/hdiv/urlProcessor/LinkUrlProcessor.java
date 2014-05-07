@@ -15,8 +15,6 @@
  */
 package org.hdiv.urlProcessor;
 
-import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.logging.Log;
@@ -78,20 +76,8 @@ public class LinkUrlProcessor extends AbstractUrlProcessor {
 			// the url needs protection
 			dataComposer.beginRequest(urlData.getUrlWithoutContextPath());
 
-			Map<String, String[]> params = urlData.getOriginalUrlParams();
-			if (params != null) {
-				for (String key : params.keySet()) {
-					String[] values = (String[]) params.get(key);
-
-					for (int i = 0; i < values.length; i++) {
-						String value = values[i];
-						String composedParam = dataComposer.compose(key, value, false, false, encoding);
-						values[i] = composedParam;
-					}
-					params.put(key, values);
-				}
-				urlData.setProcessedUrlParams(params);
-			}
+			String processedParams = dataComposer.composeParams(urlData.getUrlParams(), "GET", encoding);
+			urlData.setUrlParams(processedParams);
 
 			// Hdiv state param value
 			String stateParam = dataComposer.endRequest();

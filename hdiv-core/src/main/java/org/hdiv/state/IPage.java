@@ -67,12 +67,17 @@ public interface IPage {
 	 * @return Returns the page name.
 	 */
 	public String getName();
+	
+	/**
+	 * @return Returns the page id.
+	 */
+	public int getId();
 
 	/**
-	 * @param name
-	 *            The page name to set.
+	 * @param id
+	 *            The page id to set.
 	 */
-	public void setName(String name);
+	public void setId(int id);
 
 	/**
 	 * @return Returns the page states.

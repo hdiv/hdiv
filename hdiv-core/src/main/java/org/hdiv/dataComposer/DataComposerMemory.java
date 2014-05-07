@@ -17,6 +17,8 @@ package org.hdiv.dataComposer;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -213,6 +215,76 @@ public class DataComposerMemory extends AbstractDataComposer {
 	public String compose(String parameter, String value, boolean editable, String editableName, boolean isActionParam,
 			String method) {
 		return this.compose(parameter, value, editable, editableName, isActionParam, method, Constants.ENCODING_UTF_8);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.hdiv.dataComposer.IDataComposer#composeParams(java.lang.String, java.lang.String, java.lang.String)
+	 */
+	public String composeParams(String parameters, String method, String charEncoding) {
+
+		if (parameters == null || parameters.length() == 0) {
+			return null;
+		}
+
+		// Get actual IState
+		IState state = this.getStatesStack().peek();
+
+		state.setParams(parameters);
+
+		if (this.hdivConfig.getConfidentiality()) {
+			// replace real values with confidential ones
+			parameters = this.applyConfidentialityToParams(parameters, method);
+		}
+
+		return parameters;
+	}
+
+	/**
+	 * Apply confidentiality to parameters String. Replaces real values with confidential ones.
+	 * 
+	 * @param parameters
+	 *            parameters in query format
+	 * @param method
+	 *            HTTP method
+	 * @return parameters in query format with confidential values
+	 */
+	private String applyConfidentialityToParams(String parameters, String method) {
+
+		Map<String, Integer> pCount = new HashMap<String, Integer>();
+
+		String newParameters = parameters;
+
+		// Init indexes
+		int beginIndex = 0;
+		int endIndex = parameters.indexOf("&") > 0 ? parameters.indexOf("&") : parameters.length();
+		do {
+			String param = parameters.substring(beginIndex, endIndex);
+			int index = param.indexOf("=");
+			index = index < 0 ? param.length() : index;
+			String name = param.substring(0, index);
+
+			if (this.isConfidentialParam(name, method)) {
+				// Parameter is not a start parameter
+				Integer count = pCount.get(name);
+				int num = (count == null) ? 0 : count + 1;
+				pCount.put(name, num);
+
+				// Replace parameter with confidential values
+				newParameters = newParameters.replaceFirst(param, name + "=" + num);
+			}
+
+			// Update indexes
+			beginIndex = endIndex + 1;
+			endIndex = parameters.indexOf("&", endIndex + 1);
+			if (endIndex < 0) {
+				endIndex = parameters.length();
+			}
+
+		} while (endIndex > beginIndex);
+
+		return newParameters;
 	}
 
 	/**
@@ -518,7 +590,7 @@ public class DataComposerMemory extends AbstractDataComposer {
 
 		this.requestCounter = state.getId() + 1;
 
-		String id = this.getPage().getName() + DASH + state.getId() + DASH + this.getHdivStateSuffix();
+		String id = this.getPage().getId() + DASH + state.getId() + DASH + this.getHdivStateSuffix();
 		return id;
 	}
 
@@ -534,7 +606,7 @@ public class DataComposerMemory extends AbstractDataComposer {
 		IState state = this.getStatesStack().pop();
 
 		IPage page = this.getPage();
-		state.setPageId(page.getName());
+		state.setPageId(page.getId());
 		page.addState(state);
 
 		// Save Page in session if this is the first state to add
@@ -544,7 +616,7 @@ public class DataComposerMemory extends AbstractDataComposer {
 			super.session.addPage(page.getName(), page);
 		}
 
-		String id = this.getPage().getName() + DASH + state.getId() + DASH + this.getHdivStateSuffix();
+		String id = this.getPage().getId() + DASH + state.getId() + DASH + this.getHdivStateSuffix();
 		return id;
 	}
 

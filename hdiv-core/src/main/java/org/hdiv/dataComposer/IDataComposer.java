@@ -120,6 +120,20 @@ public interface IDataComposer {
 			String method, String charEncoding);
 
 	/**
+	 * Compose parameters in request query format. For example: param1=val1&param2=val2
+	 * 
+	 * @param parameters
+	 *            parameters in query format
+	 * @param method
+	 *            http method
+	 * @param charEncoding
+	 *            character encoding
+	 * @return parameters in query format with confidential values
+	 * @since HDIV 2.1.7
+	 */
+	public String composeParams(String parameters, String method, String charEncoding);
+	
+	/**
 	 * Adds a new IParameter object, generated from the values passed as parameters, to the current state
 	 * <code>state</code>. If confidentiality is activated it generates a new encoded value that will be returned by the
 	 * server for the parameter <code>parameter</code> in the encoded and memory strategies.

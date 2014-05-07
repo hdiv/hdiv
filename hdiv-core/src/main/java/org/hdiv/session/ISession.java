@@ -71,7 +71,7 @@ public interface ISession {
 	 * 
 	 * @return Returns the pageId.
 	 */
-	public String getPageId();
+	public int getPageId();
 
 	/**
 	 * Returns the page with id <code>pageId</code>.

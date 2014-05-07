@@ -16,11 +16,8 @@
 package org.hdiv.dataValidator;
 
 import org.hdiv.AbstractHDIVTestCase;
-import org.hdiv.dataComposer.IDataComposer;
 import org.hdiv.state.IParameter;
-import org.hdiv.state.IState;
 import org.hdiv.state.Parameter;
-import org.hdiv.state.State;
 
 /**
  * Unit tests for the <code>org.hdiv.dataValidator.DataValidator</code> class.
@@ -29,13 +26,11 @@ import org.hdiv.state.State;
  */
 public class DataValidatorTest extends AbstractHDIVTestCase {
 
-	protected DataValidatorFactory dataValidatorFactory;
-
-	protected IDataComposer composer;
+	protected IDataValidator dataValidator;
 
 	protected void onSetUp() throws Exception {
 
-		this.dataValidatorFactory = this.getApplicationContext().getBean(DataValidatorFactory.class);
+		this.dataValidator = this.getApplicationContext().getBean(IDataValidator.class);
 	}
 
 	/**
@@ -44,44 +39,33 @@ public class DataValidatorTest extends AbstractHDIVTestCase {
 	 */
 	public void testValidateDataIsNotInt() {
 
-		IState state = new State(0);
-		IDataValidator validator = this.dataValidatorFactory.newInstance(state);
+		// XXX String editableDataType, boolean actionParam no estaban definidos
+		IParameter param1 = new Parameter("param1", "value1", false, null, false);
 
-		Parameter param1 = new Parameter("param1", "value1" , false, null, false);
-
-		state.addParameter(param1);
-
-		validator.setState(state);
-
-		IValidationResult result = validator.validate("dataIsNotInt", "simpleAction", "param1");
+		IValidationResult result = dataValidator.validate("dataIsNotInt", "simpleAction", "param1", param1, null);
 		assertFalse(result.getLegal());
 	}
 
-	/**
-	 * Validation test with a noneditable parameter. It should not pass the validation as the received parameter doesn't
-	 * exists.
-	 */
-	public void testValidateParameterDoesNotExist() {
-
-		IState state = new State(0);
-		IDataValidator validator = this.dataValidatorFactory.newInstance(state);
-
-		Parameter param1 = new Parameter("param1", "value1" , false, null, false);
-		state.addParameter(param1);
-
-		validator.setState(state);
-
-		boolean confidentiality = this.getConfig().getConfidentiality();
-		String value = (confidentiality) ? "0" : "value1";
-		try {
-			IValidationResult result = validator.validate(value, "simpleAction", "parameterDoesNotExist");
-			assertFalse(result != null);
-		} catch (NullPointerException e) {
-			assertTrue(true);
-			return;
-		}
-		assertFalse(true);
-	}
+//	/**
+//	 * Validation test with a noneditable parameter. It should not pass the validation as the received parameter doesn't
+//	 * exists.
+//	 */
+//	public void testValidateParameterDoesNotExist() {
+//
+//		IParameter param1 = new Parameter("param1", "value1", false, null, false);
+//
+//		boolean confidentiality = this.getConfig().getConfidentiality();
+//		String value = (confidentiality) ? "0" : "value1";
+//		try {
+//			IValidationResult result = dataValidator.validate(value, "simpleAction", "parameterDoesNotExist", param1,
+//					null);
+//			assertFalse(result != null);
+//		} catch (NullPointerException e) {
+//			assertTrue(true);
+//			return;
+//		}
+//		assertFalse(true);
+//	}
 
 	/**
 	 * Validation test with a noneditable parameter. It should not pass the validation as the received parameter doesn't
@@ -89,16 +73,9 @@ public class DataValidatorTest extends AbstractHDIVTestCase {
 	 */
 	public void testValidatePositionDoesNotExist() {
 
-		IState state = new State(0);
-		IDataValidator validator = this.dataValidatorFactory.newInstance(state);
+		IParameter param1 = new Parameter("param1", "value1", false, null, false);
 
-		Parameter param1 = new Parameter("param1", "value1" , false, null, false);
-
-		state.addParameter(param1);
-
-		validator.setState(state);
-
-		IValidationResult result = validator.validate("1", "simpleAction", "param1");
+		IValidationResult result = dataValidator.validate("1", "simpleAction", "param1", param1, null);
 		assertFalse(result.getLegal());
 	}
 
@@ -107,19 +84,23 @@ public class DataValidatorTest extends AbstractHDIVTestCase {
 	 */
 	public void testValidateCorrectData() {
 
-		IState state = new State(0);
-		IDataValidator validator = this.dataValidatorFactory.newInstance(state);
-
-		Parameter param1 = new Parameter("param1", "value1" , false, null, false);
-
-		state = new State(0);
-		state.addParameter(param1);
-
-		validator.setState(state);
+		IParameter param1 = new Parameter("param1", "value1", false, null, false);
 
 		boolean confidentiality = this.getConfig().getConfidentiality();
 		String value = (confidentiality) ? "0" : "value1";
-		IValidationResult result = validator.validate(value, "simpleAction", "param1");
+		IValidationResult result = dataValidator.validate(value, "simpleAction", "param1", param1, null);
+
+		assertEquals(((String) result.getResult()), "value1");
+		assertTrue(result.getLegal());
+	}
+	
+	public void testValidateActionParams() {
+
+		String[] values = new String[]{"value1"};
+
+		boolean confidentiality = this.getConfig().getConfidentiality();
+		String value = (confidentiality) ? "0" : "value1";
+		IValidationResult result = dataValidator.validate(value, "simpleAction", "param1", null, values);
 
 		assertEquals(((String) result.getResult()), "value1");
 		assertTrue(result.getLegal());

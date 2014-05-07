@@ -79,8 +79,8 @@ public abstract class AbstractUrlProcessor {
 		int paramInit = url.indexOf("?");
 		if (paramInit > -1) {
 			String urlParams = url.substring(paramInit + 1);
-			Map<String, String[]> ulrParamsMap = this.getUrlParamsAsMap(request, urlParams);
-			urlData.setOriginalUrlParams(ulrParamsMap);
+			urlData.setUrlParams(urlParams);
+
 			url = url.substring(0, paramInit);
 
 		}
@@ -227,34 +227,15 @@ public abstract class AbstractUrlProcessor {
 	 */
 	protected String getParamsQueryString(UrlData urlData) {
 
-		Map<String, String[]> params = null;
-		if (urlData.getProcessedUrlParams() != null) {
-			params = urlData.getProcessedUrlParams();
-		} else {
-			params = urlData.getOriginalUrlParams();
+		UrlData eeUrlData = (UrlData) urlData;
+
+		String queryString = "";
+
+		if (eeUrlData.getUrlParams() != null) {
+			queryString = "?" + eeUrlData.getUrlParams();
 		}
 
-		if (params == null || params.size() == 0) {
-			return "";
-		}
-
-		StringBuffer sb = new StringBuffer();
-
-		String separator = "?";
-
-		for (String key : params.keySet()) {
-			String[] values = (String[]) params.get(key);
-
-			for (int i = 0; i < values.length; i++) {
-				String value = values[i];
-				sb.append(separator).append(key).append("=").append(value);
-				if (separator.equals("?")) {
-					separator = "&";
-				}
-			}
-		}
-
-		return sb.toString();
+		return queryString;
 	}
 
 	/**

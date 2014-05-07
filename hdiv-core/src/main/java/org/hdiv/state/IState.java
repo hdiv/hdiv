@@ -60,12 +60,12 @@ public interface IState {
 	/**
 	 * @return Returns the page identifier which the state <code>this</code> belongs to.
 	 */
-	public String getPageId();
+	public int getPageId();
 
 	/**
 	 * @param pageId The pageId to set.
 	 */
-	public void setPageId(String pageId);
+	public void setPageId(int pageId);
 
 	/**
 	 * Checks if exists a parameter with the given identifier <code>key</code>.
@@ -80,5 +80,9 @@ public interface IState {
 	 * @return Returns required parameters.
 	 */
 	public List<String> getRequiredParams();
+	
+	public String getParams();
+
+	public void setParams(String params);
 	
 }

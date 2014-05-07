@@ -73,7 +73,7 @@ public class JsfValidatorHelper extends ValidatorHelperRequest {
 				log.debug("Request contains view state");
 			}
 
-			if (this.getHdivConfig().isStartPage(target, request.getMethod())) {
+			if (this.hdivConfig.isStartPage(target, request.getMethod())) {
 				// It is an init page
 				if (log.isDebugEnabled()) {
 					log.debug("Request is start page");
@@ -133,7 +133,7 @@ public class JsfValidatorHelper extends ValidatorHelperRequest {
 			log.debug(" target:" + target);
 			log.debug(" state action:" + state.getAction());
 		}
-		this.getLogger().log(HDIVErrorCodes.ACTION_ERROR, target, null, null);
+		this.logger.log(HDIVErrorCodes.ACTION_ERROR, target, null, null);
 
 		return new ValidatorHelperResult(HDIVErrorCodes.ACTION_ERROR);
 	}

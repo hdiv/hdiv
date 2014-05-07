@@ -45,19 +45,19 @@ public class StateCacheTest extends AbstractHDIVTestCase {
 		IPage page3 = new Page();
 
 		IState state1 = new State(0);
-		IState state2 = new State(1);
-		IState state3 = new State(2);
+		IState state2 = new State(0);
+		IState state3 = new State(0);
 
 		page1.addState(state1);
-		page1.setName("page1");
+		page1.setId(1);
 		cache.addPage("1");
 
 		page2.addState(state2);
-		page2.setName("page2");
+		page2.setId(2);
 		cache.addPage("2");
 
 		page3.addState(state3);
-		page3.setName("page3");
+		page3.setId(3);
 		cache.addPage("3");
 
 		log.info("cache:" + cache.toString());

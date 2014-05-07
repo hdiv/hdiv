@@ -15,8 +15,6 @@
  */
 package org.hdiv.urlProcessor;
 
-import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.logging.Log;
@@ -88,21 +86,9 @@ public class FormUrlProcessor extends AbstractUrlProcessor {
 			request.setAttribute(FORM_STATE_ID, stateId);
 
 			// Process url params
-			Map<String, String[]> params = urlData.getOriginalUrlParams();
-			if (params != null) {
-				for (String key : params.keySet()) {
-					String[] values = (String[]) params.get(key);
-
-					for (int i = 0; i < values.length; i++) {
-						String value = values[i];
-						String composedParam = dataComposer.compose(key, value, false, null, true, method,
-								Constants.ENCODING_UTF_8);
-						values[i] = composedParam;
-					}
-					params.put(key, values);
-				}
-				urlData.setProcessedUrlParams(params);
-			}
+			String processedParams = dataComposer.composeParams(urlData.getUrlParams(), method,
+					Constants.ENCODING_UTF_8);
+			urlData.setUrlParams(processedParams);
 
 			// Action url with confidential values
 			url = this.getProcessedUrl(urlData);
