@@ -39,7 +39,6 @@ public class DataValidatorTest extends AbstractHDIVTestCase {
 	 */
 	public void testValidateDataIsNotInt() {
 
-		// XXX String editableDataType, boolean actionParam no estaban definidos
 		IParameter param1 = new Parameter("param1", "value1", false, null, false);
 
 		IValidationResult result = dataValidator.validate("dataIsNotInt", "simpleAction", "param1", param1, null);
@@ -56,15 +55,8 @@ public class DataValidatorTest extends AbstractHDIVTestCase {
 //
 //		boolean confidentiality = this.getConfig().getConfidentiality();
 //		String value = (confidentiality) ? "0" : "value1";
-//		try {
-//			IValidationResult result = dataValidator.validate(value, "simpleAction", "parameterDoesNotExist", param1,
-//					null);
-//			assertFalse(result != null);
-//		} catch (NullPointerException e) {
-//			assertTrue(true);
-//			return;
-//		}
-//		assertFalse(true);
+//		IValidationResult result = dataValidator.validate(value, "simpleAction", "parameterDoesNotExist", param1, null);
+//		assertFalse(result.getLegal());
 //	}
 
 	/**
@@ -93,10 +85,10 @@ public class DataValidatorTest extends AbstractHDIVTestCase {
 		assertEquals(((String) result.getResult()), "value1");
 		assertTrue(result.getLegal());
 	}
-	
+
 	public void testValidateActionParams() {
 
-		String[] values = new String[]{"value1"};
+		String[] values = new String[] { "value1" };
 
 		boolean confidentiality = this.getConfig().getConfidentiality();
 		String value = (confidentiality) ? "0" : "value1";
