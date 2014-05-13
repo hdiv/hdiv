@@ -34,6 +34,9 @@ public class ValidationBeanDefinitionParser extends AbstractSingleBeanDefinition
 
 	protected void doParse(Element element, BeanDefinitionBuilder bean) {
 
+		String id = element.getAttribute("id");
+		bean.addPropertyValue("name", id);
+		
 		String componentType = element.getAttribute("componentType");
 
 		if (StringUtils.hasText(componentType)) {

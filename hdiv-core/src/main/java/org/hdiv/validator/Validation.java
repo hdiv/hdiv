@@ -15,9 +15,6 @@
  */
 package org.hdiv.validator;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -30,6 +27,11 @@ import java.util.regex.Pattern;
 public class Validation implements IValidation {
 
 	/**
+	 * Name of the editable validation.
+	 */
+	protected String name;
+
+	/**
 	 * Regular expression that values received in the parameter must fit.
 	 */
 	protected Pattern acceptedPattern;
@@ -40,53 +42,9 @@ public class Validation implements IValidation {
 	protected Pattern rejectedPattern;
 
 	/**
-	 * Set with the parameters to be ignored in the validation process of the parameters.
-	 */
-	private Set<String> ignoreParameters;
-
-	/**
 	 * Component type to which apply the validation <code>this</code>.
 	 */
-	private String componentType;
-
-	public String getComponentType() {
-		return componentType;
-	}
-
-	/**
-	 * Initialize the list of ignore parameters defined for a URL.
-	 * 
-	 * @param ignoreParameters
-	 *            list of ignore parameters
-	 */
-	public void setIgnoreParameters(List<String> ignoreParameters) {
-
-		this.ignoreParameters = new HashSet<String>(ignoreParameters);
-
-	}
-
-	/**
-	 * Checks if there are editable parameters that must be ignored in the validation process.
-	 * 
-	 * @return True if there are editable parameters that must be ignored in the validation process. False otherwise.
-	 */
-	public boolean existIgnoreParameters() {
-
-		return (this.ignoreParameters != null) && (this.ignoreParameters.size() > 0);
-	}
-
-	/**
-	 * Checks if <code>parameter</code> is a parameter that must be ignored during the validation process of the
-	 * editable parameters.
-	 * 
-	 * @param parameter
-	 *            parameter name
-	 * @return True if <code>parameter</code> doesn't need to be validated. False otherwise.
-	 */
-	public boolean isIgnoreParameter(String parameter) {
-
-		return this.ignoreParameters.contains(parameter);
-	}
+	protected String componentType;
 
 	/**
 	 * Checks if a component type has been defined to which apply the validation <code>this</code>.
@@ -142,11 +100,6 @@ public class Validation implements IValidation {
 			return true;
 		}
 
-		// we check if parameter must be ignored
-		if (this.existIgnoreParameters() && (this.isIgnoreParameter(parameter))) {
-			return true;
-		}
-
 		// we validate all the values for the parameter
 		for (int j = 0; j < values.length; j++) {
 
@@ -169,6 +122,25 @@ public class Validation implements IValidation {
 			}
 		}
 		return true;
+	}
+
+	/**
+	 * @return the name
+	 */
+	public String getName() {
+		return name;
+	}
+
+	/**
+	 * @param name
+	 *            the name to set
+	 */
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getComponentType() {
+		return componentType;
 	}
 
 	/**
@@ -197,6 +169,7 @@ public class Validation implements IValidation {
 
 	public String toString() {
 		StringBuffer result = new StringBuffer().append("");
+		result = result.append(" name=").append(this.getName());
 		result = result.append(" componentType=").append(this.getComponentType());
 		result = result.append(" acceptedPattern=").append(
 				this.acceptedPattern == null ? "" : this.acceptedPattern.toString());
@@ -205,50 +178,5 @@ public class Validation implements IValidation {
 		return result.toString();
 
 	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((acceptedPattern == null) ? 0 : acceptedPattern.pattern().hashCode());
-		result = prime * result + ((componentType == null) ? 0 : componentType.hashCode());
-		result = prime * result + ((ignoreParameters == null) ? 0 : ignoreParameters.hashCode());
-		result = prime * result + ((rejectedPattern == null) ? 0 : rejectedPattern.pattern().hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Validation other = (Validation) obj;
-		if (acceptedPattern == null) {
-			if (other.acceptedPattern != null)
-				return false;
-		} else if (!acceptedPattern.pattern().equals(other.acceptedPattern.pattern()))
-			return false;
-		if (componentType == null) {
-			if (other.componentType != null)
-				return false;
-		} else if (!componentType.equals(other.componentType))
-			return false;
-		if (ignoreParameters == null) {
-			if (other.ignoreParameters != null)
-				return false;
-		} else if (!ignoreParameters.equals(other.ignoreParameters))
-			return false;
-		if (rejectedPattern == null) {
-			if (other.rejectedPattern != null)
-				return false;
-		} else if (!rejectedPattern.pattern().equals(other.rejectedPattern.pattern()))
-			return false;
-		return true;
-	}
-	
-	
 
 }
