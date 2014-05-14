@@ -107,8 +107,8 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 	 */
 	protected static final String REQUEST_DATA_VALUE_PROCESSOR_BEAN_NAME = "requestDataValueProcessor";
 
-	protected final boolean springMvcPresent = ClassUtils.isPresent("org.springframework.web.servlet.DispatcherServlet",
-			ConfigBeanDefinitionParser.class.getClassLoader());
+	protected final boolean springMvcPresent = ClassUtils.isPresent(
+			"org.springframework.web.servlet.DispatcherServlet", ConfigBeanDefinitionParser.class.getClassLoader());
 
 	protected final boolean grailsPresent = ClassUtils.isPresent(
 			"org.codehaus.groovy.grails.web.servlet.GrailsDispatcherServlet",
@@ -145,7 +145,7 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 	protected RuntimeBeanReference linkUrlProcessorRef;
 
 	protected RuntimeBeanReference formUrlProcessorRef;
-	
+
 	protected RuntimeBeanReference basicUrlProcessorRef;
 
 	protected RuntimeBeanReference loggerRef;
@@ -156,8 +156,7 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 
 		Object source = parserContext.extractSource(element);
 
-		this.patternMatcherFactoryRef = this.createSimpleBean(element, source, parserContext,
-				PatternMatcherFactory.class, PATTERN_MATCHER_FACTORY_NAME);
+		this.patternMatcherFactoryRef = this.createPatternMatcherFactory(element, source, parserContext);
 
 		this.configRef = this.createConfigBean(element, source, parserContext);
 
@@ -210,6 +209,13 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 
 		return null;
 
+	}
+
+	protected RuntimeBeanReference createPatternMatcherFactory(Element element, Object source,
+			ParserContext parserContext) {
+
+		return createSimpleBean(element, source, parserContext, PatternMatcherFactory.class,
+				PATTERN_MATCHER_FACTORY_NAME);
 	}
 
 	protected RuntimeBeanReference createPageIdGenerator(Element element, Object source, ParserContext parserContext) {
@@ -268,7 +274,8 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 
 	}
 
-	protected RuntimeBeanReference createValidatorErrorHandler(Element element, Object source, ParserContext parserContext) {
+	protected RuntimeBeanReference createValidatorErrorHandler(Element element, Object source,
+			ParserContext parserContext) {
 
 		// Simple bean overriding
 		boolean existBean = parserContext.getRegistry().containsBeanDefinition(VALIDATOR_ERROR_HANDLER_BEAN_NAME);
@@ -465,7 +472,7 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 			return new RuntimeBeanReference(FORM_URL_PROCESSOR_NAME);
 		}
 	}
-	
+
 	protected RuntimeBeanReference createBasicUrlProcessor(Element element, Object source, ParserContext parserContext) {
 		RootBeanDefinition bean = new RootBeanDefinition(BasicUrlProcessor.class);
 		bean.setSource(source);
@@ -678,7 +685,8 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		return new RuntimeBeanReference(name);
 	}
 
-	protected RuntimeBeanReference createStringBean(String name, String value, Object source, ParserContext parserContext) {
+	protected RuntimeBeanReference createStringBean(String name, String value, Object source,
+			ParserContext parserContext) {
 		RootBeanDefinition bean = new RootBeanDefinition(java.lang.String.class);
 		bean.setSource(source);
 		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
