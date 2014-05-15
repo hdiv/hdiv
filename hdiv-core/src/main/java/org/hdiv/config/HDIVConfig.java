@@ -15,6 +15,7 @@
  */
 package org.hdiv.config;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -33,14 +34,16 @@ import org.hdiv.validator.IValidation;
  * @author Gorka Vicente
  * @author Gotzon Illarramendi
  */
-public class HDIVConfig {
+public class HDIVConfig implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * Regular expression executor factory.
 	 * 
 	 * @since 2.1.6
 	 */
-	protected PatternMatcherFactory patternMatcherFactory;
+	protected transient PatternMatcherFactory patternMatcherFactory;
 
 	/**
 	 * List with the pages that will not be Treated by the HDIV filter. The init pages are initialized by the Spring
@@ -79,7 +82,7 @@ public class HDIVConfig {
 	/**
 	 * Parameters which HDIV validation will not be applied to.
 	 */
-	protected Map<PatternMatcher, List<PatternMatcher>> paramsWithoutValidation;
+	protected transient Map<PatternMatcher, List<PatternMatcher>> paramsWithoutValidation;
 
 	/**
 	 * Validations for editable fields (text/textarea) defined by the user in the hdiv-validations.xml configuration

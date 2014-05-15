@@ -15,6 +15,8 @@
  */
 package org.hdiv.config;
 
+import java.io.Serializable;
+
 import org.hdiv.regex.PatternMatcher;
 
 /**
@@ -23,7 +25,9 @@ import org.hdiv.regex.PatternMatcher;
  * @since 2.1.4
  * @author Gotzon Illarramendi
  */
-public class StartPage {
+public class StartPage implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * StartPage method. null or "" value is equivalent to 'any method'

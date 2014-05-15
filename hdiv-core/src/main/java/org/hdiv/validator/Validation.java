@@ -15,6 +15,7 @@
  */
 package org.hdiv.validator;
 
+import java.io.Serializable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -24,7 +25,9 @@ import java.util.regex.Pattern;
  * @author Gorka Vicente
  * @since HDIV 1.1
  */
-public class Validation implements IValidation {
+public class Validation implements IValidation, Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * Name of the editable validation.

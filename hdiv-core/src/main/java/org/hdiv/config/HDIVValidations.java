@@ -15,6 +15,7 @@
  */
 package org.hdiv.config;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -34,14 +35,16 @@ import org.springframework.beans.factory.BeanFactoryAware;
  * @author Gorka Vicente
  * @since HDIV 1.1
  */
-public class HDIVValidations implements BeanFactoryAware {
+public class HDIVValidations implements BeanFactoryAware, Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * Regular expression executor factory.
 	 * 
 	 * @since 2.1.6
 	 */
-	private PatternMatcherFactory patternMatcherFactory;
+	private transient PatternMatcherFactory patternMatcherFactory;
 
 	/**
 	 * Map containing the urls to which the user wants to apply validation for the editable parameters.
@@ -56,7 +59,7 @@ public class HDIVValidations implements BeanFactoryAware {
 	/**
 	 * Spring bean container factory.
 	 */
-	private BeanFactory beanFactory;
+	private transient BeanFactory beanFactory;
 
 	/**
 	 * Using data read from HDIV custom schema and stored within 'rawUrls' attribute, initialize 'urls' attribute.
