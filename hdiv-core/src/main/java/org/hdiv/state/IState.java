@@ -80,9 +80,15 @@ public interface IState {
 	 * @return Returns required parameters.
 	 */
 	public List<String> getRequiredParams();
-	
+
+	/**
+	 * @return IState parameters in one String.
+	 */
 	public String getParams();
 
+	/**
+	 * @param params IState parameters in one String.
+	 */
 	public void setParams(String params);
 	
 }

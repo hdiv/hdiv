@@ -212,34 +212,4 @@ public class Parameter implements IParameter, Serializable {
 		return result.toString();
 	}
 
-	@Override
-	public boolean equals(Object obj) {
-
-		if (obj instanceof Parameter) {
-
-			IParameter param = (IParameter) obj;
-
-			if (!this.name.equals(param.getName())) {
-				return false;
-			}
-			if (this.actionParam != param.isActionParam()) {
-				return false;
-			}
-			if (this.editable != param.isEditable()) {
-				return false;
-			}
-			List<String> values = param.getValues();
-			if (values.size() != this.getValues().size()) {
-				return false;
-			}
-			for (String paramValue : values) {
-				if (!this.existValue(paramValue)) {
-					return false;
-				}
-			}
-			return true;
-		}
-		return false;
-	}
-
 }

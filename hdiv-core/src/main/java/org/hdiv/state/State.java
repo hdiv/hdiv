@@ -18,7 +18,6 @@ package org.hdiv.state;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -184,59 +183,6 @@ public class State implements IState, Serializable {
 		return requiredParams;
 	}
 
-	public String toString() {
-		StringBuffer sb = new StringBuffer();
-		sb.append("id: ").append(this.id);
-		sb.append("action: ").append(this.action);
-		sb.append("parameters: ").append(this.parameters);
-		sb.append("requiredParams: ").append(this.requiredParams);
-		return super.toString();
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-
-		if (obj instanceof IState) {
-
-			IState state = (IState) obj;
-
-			// Same action
-			if (!(this.getAction().equals(state.getAction()))) {
-				return false;
-			}
-
-			// Same Parameters
-			Collection<IParameter> otherParams = state.getParameters();
-			if (otherParams != null && this.parameters != null) {
-				if (otherParams.size() != this.parameters.size()) {
-					return false;
-				}
-				for (IParameter param : this.parameters) {
-
-					if (!otherParams.contains(param)) {
-						return false;
-					}
-				}
-			}
-
-			// Same required Parameters
-			List<String> otherRequiredParams = state.getRequiredParams();
-			if (otherRequiredParams != null && this.requiredParams != null) {
-				if (otherRequiredParams.size() != this.requiredParams.size()) {
-					return false;
-				}
-				for (String requiredParam : this.requiredParams) {
-					if (!otherRequiredParams.contains(requiredParam)) {
-						return false;
-					}
-				}
-			}
-
-			return true;
-		}
-		return false;
-	}
-
 	public int getPageId() {
 		return this.pageId;
 	}
@@ -247,6 +193,17 @@ public class State implements IState, Serializable {
 
 	public boolean existParameter(String key) {
 		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public String toString() {
+		StringBuffer sb = new StringBuffer();
+		sb.append("id: ").append(this.id);
+		sb.append("action: ").append(this.action);
+		sb.append("parameters: ").append(this.parameters);
+		sb.append("params: ").append(this.params);
+		sb.append("requiredParams: ").append(this.requiredParams);
+		return super.toString();
 	}
 
 }

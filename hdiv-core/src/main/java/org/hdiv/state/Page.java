@@ -161,8 +161,8 @@ public class Page implements IPage, Serializable {
 	/**
 	 * @return Returns the page states.
 	 */
-	public Collection<Object> getStates() {
-		return (List) states;
+	public Collection<? extends Object> getStates() {
+		return states;
 	}
 
 	/**

@@ -67,7 +67,7 @@ public interface IPage {
 	 * @return Returns the page name.
 	 */
 	public String getName();
-	
+
 	/**
 	 * @return Returns the page id.
 	 */
@@ -82,7 +82,7 @@ public interface IPage {
 	/**
 	 * @return Returns the page states.
 	 */
-	public Collection<Object> getStates();
+	public Collection<? extends Object> getStates();
 
 	/**
 	 * @return number of states.
