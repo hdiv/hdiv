@@ -1,5 +1,5 @@
 /**
- * Copyright 2005-2011 hdiv.org
+ * Copyright 2005-2013 hdiv.org
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -103,6 +103,9 @@ public class EditableValidationsBeanDefinitionParser extends AbstractSingleBeanD
 	protected void doParse(Element element, ParserContext parserContext, BeanDefinitionBuilder bean) {
 
 		Object source = parserContext.extractSource(element);
+
+		RuntimeBeanReference beanRef = new RuntimeBeanReference(ConfigBeanDefinitionParser.PATTERN_MATCHER_FACTORY_NAME);
+		bean.getBeanDefinition().getPropertyValues().addPropertyValue("patternMatcherFactory", beanRef);
 
 		Map<String, List<String>> map = new HashMap<String, List<String>>();
 		bean.addPropertyValue("rawUrls", map);

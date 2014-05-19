@@ -1,5 +1,5 @@
 /**
- * Copyright 2005-2011 hdiv.org
+ * Copyright 2005-2013 hdiv.org
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -348,6 +348,16 @@ public class HDIVUtil {
 		if (request == null) {
 			throw new HDIVException("Request has not been initialized in threadlocal");
 		}
+		return request;
+	}
+
+	/**
+	 * Return the <code>HttpServletRequest</code> object. Return null if request not present.
+	 * 
+	 * @return {@link HttpServletRequest} instance
+	 */
+	public static HttpServletRequest getNonRequiredHttpServletRequest() {
+		HttpServletRequest request = (HttpServletRequest) httpRequest.get();
 		return request;
 	}
 

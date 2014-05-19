@@ -1,5 +1,5 @@
 /**
- * Copyright 2005-2012 hdiv.org
+ * Copyright 2005-2013 hdiv.org
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -79,7 +79,7 @@ public class UrlData {
 	 * 
 	 * @param url
 	 *            Original url
-	 * @param isFormUrl
+	 * @param method
 	 *            Http method.
 	 */
 	public UrlData(String url, String method) {

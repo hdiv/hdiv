@@ -1,11 +1,11 @@
-/*
- * Copyright 2004-2012 The Apache Software Foundation.
+/**
+ * Copyright 2005-2013 hdiv.org
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * 	http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -46,6 +46,28 @@ public class HDIVConfigTest extends AbstractHDIVTestCase {
 		result = config.isStartPage("/onlyget.do", "post");
 		assertEquals(false, result);
 
+	}
+
+	public void testIsParameterWithoutValidation() {
+
+		HDIVConfig config = getConfig();
+
+		boolean result = config.isParameterWithoutValidation("/path/testAction.do", "testingInitParameter");
+		assertTrue(result);
+
+		result = config.isParameterWithoutValidation("/path/testAction.do", "testingNOInitParameter");
+		assertFalse(result);
+	}
+
+	public void testAreEditableParameterValuesValid() {
+
+		HDIVConfig config = getConfig();
+		boolean result = config.areEditableParameterValuesValid("inicio.html", "one", new String[] { "noProblem" },
+				"text");
+		assertTrue(result);
+
+		result = config.areEditableParameterValuesValid("inicio.html", "one", new String[] { "XSS <script>" }, "text");
+		assertFalse(result);
 	}
 
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright 2005-2011 hdiv.org
+ * Copyright 2005-2013 hdiv.org
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -51,6 +51,11 @@ public class Constants {
 	 * Session's cookie identifier
 	 */
 	public static final String JSESSIONID = "JSESSIONID";
+
+	/**
+	 * Session's cookie identifier in lower case.
+	 */
+	public static final String JSESSIONID_LC = JSESSIONID.toLowerCase();
 
 	/**
 	 * Session attribute name for {@link Key} instance

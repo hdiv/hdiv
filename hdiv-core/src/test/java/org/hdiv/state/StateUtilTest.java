@@ -1,11 +1,11 @@
-/*
- * Copyright 2004-2005 The Apache Software Foundation.
+/**
+ * Copyright 2005-2013 hdiv.org
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * 	http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -15,49 +15,47 @@
  */
 package org.hdiv.state;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.hdiv.AbstractHDIVTestCase;
-import org.hdiv.config.HDIVConfig;
-import org.hdiv.util.EncodingUtil;
+import org.hdiv.dataComposer.DataComposerFactory;
+import org.hdiv.dataComposer.IDataComposer;
+import org.hdiv.util.HDIVUtil;
 
 /**
  * Unit tests for the <code>org.hdiv.state.StateUtil</code> class.
  * 
- * @author Gorka Vicente
  */
 public class StateUtilTest extends AbstractHDIVTestCase {
 
-	private EncodingUtil encodingUtil;
+	private DataComposerFactory dataComposerFactory;
 
-	protected void postCreateHdivConfig(HDIVConfig config) {
-		config.setStrategy("cipher");
-	}
+	private StateUtil stateUtil;
 
 	protected void onSetUp() throws Exception {
 
-		this.encodingUtil = this.getApplicationContext().getBean(EncodingUtil.class);
+		this.dataComposerFactory = this.getApplicationContext().getBean(DataComposerFactory.class);
+		this.stateUtil = this.getApplicationContext().getBean(StateUtil.class);
 	}
 
-	/*
-	 * Test method for 'org.hdiv.state.StateUtil.encode64Cipher(Object)'
-	 */
-	public void testEncode64() {
+	public void testRestore() {
 
-		IState state = new State();
+		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		IDataComposer dataComposer = this.dataComposerFactory.newInstance(request);
+		HDIVUtil.setDataComposer(dataComposer, request);
 
-		state.setAction("action1");
-		Parameter parameter = new Parameter();
-		parameter.setName("parameter1");
-		parameter.addValue("value1");
-		parameter.addValue("value2");
+		dataComposer.startPage();
+		dataComposer.beginRequest("test.do");
+		dataComposer.compose("parameter1", "2", false);
+		String stateId = dataComposer.endRequest();
+		dataComposer.endPage();
 
-		state.addParameter("parameter1", parameter);
-		state.addParameter("parameter12", parameter);
-		state.addParameter("parameter12", parameter);
+		assertNotNull(stateId);
 
-		String data = encodingUtil.encode64Cipher(state);
-		State obj = (State) encodingUtil.decode64Cipher(data);
+		IState restored = this.stateUtil.restoreState(stateId);
 
-		assertEquals(obj.getAction(), state.getAction());
+		assertNotNull(restored);
+		assertEquals(restored.getAction(), "test.do");
+		assertEquals(restored.getParameter("parameter1").getValues().get(0), "2");
 	}
-
 }

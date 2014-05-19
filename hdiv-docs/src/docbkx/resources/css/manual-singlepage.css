@@ -1,0 +1,5 @@
+@IMPORT url("manual.css");
+
+body {
+	background: url("../images/background.png") no-repeat center top;
+}

@@ -1,5 +1,5 @@
 /**
- * Copyright 2005-2011 hdiv.org
+ * Copyright 2005-2013 hdiv.org
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,8 +42,11 @@ import org.hdiv.filter.ValidatorErrorHandler;
 import org.hdiv.filter.ValidatorHelperRequest;
 import org.hdiv.idGenerator.RandomGuidUidGenerator;
 import org.hdiv.idGenerator.SequentialPageIdGenerator;
+import org.hdiv.idGenerator.UidGenerator;
+import org.hdiv.logs.IUserData;
 import org.hdiv.logs.Logger;
 import org.hdiv.logs.UserData;
+import org.hdiv.regex.PatternMatcherFactory;
 import org.hdiv.session.ISession;
 import org.hdiv.session.SessionHDIV;
 import org.hdiv.session.StateCache;
@@ -75,71 +78,88 @@ import org.w3c.dom.NodeList;
  */
 public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 
-	private static final String SESSION_BEAN_NAME = ISession.class.getName();
+	public static final String CONFIG_BEAN_NAME = HDIVConfig.class.getName();
 
-	private static final String VALIDATOR_ERROR_HANDLER_BEAN_NAME = ValidatorErrorHandler.class.getName();
+	public static final String UID_GENERATOR_BEAN_NAME = UidGenerator.class.getName();
 
-	private static final String LOGGER_BEAN_NAME = Logger.class.getName();
+	public static final String SESSION_BEAN_NAME = ISession.class.getName();
 
-	private static final String VALIDATOR_HELPER_NAME = IValidationHelper.class.getName();
+	public static final String VALIDATOR_ERROR_HANDLER_BEAN_NAME = ValidatorErrorHandler.class.getName();
 
-	private static final String REQUEST_INITIALIZER_NAME = RequestInitializer.class.getName();
+	public static final String LOGGER_BEAN_NAME = Logger.class.getName();
+
+	public static final String VALIDATOR_HELPER_NAME = IValidationHelper.class.getName();
+
+	public static final String REQUEST_INITIALIZER_NAME = RequestInitializer.class.getName();
+
+	public static final String PATTERN_MATCHER_FACTORY_NAME = PatternMatcherFactory.class.getName();
+
+	public static final String LINK_URL_PROCESSOR_NAME = LinkUrlProcessor.class.getName();
+
+	public static final String FORM_URL_PROCESSOR_NAME = FormUrlProcessor.class.getName();
+
+	public static final String USER_DATA_NAME = IUserData.class.getName();
 
 	/**
 	 * The name of the bean to use to look up in an implementation of {@link RequestDataValueProcessor} has been
 	 * configured.
 	 */
-	private static final String REQUEST_DATA_VALUE_PROCESSOR_BEAN_NAME = "requestDataValueProcessor";
+	protected static final String REQUEST_DATA_VALUE_PROCESSOR_BEAN_NAME = "requestDataValueProcessor";
 
-	private final boolean springMvcPresent = ClassUtils.isPresent("org.springframework.web.servlet.DispatcherServlet",
+	protected final boolean springMvcPresent = ClassUtils.isPresent("org.springframework.web.servlet.DispatcherServlet",
 			ConfigBeanDefinitionParser.class.getClassLoader());
 
-	private final boolean grailsPresent = ClassUtils.isPresent(
+	protected final boolean grailsPresent = ClassUtils.isPresent(
 			"org.codehaus.groovy.grails.web.servlet.GrailsDispatcherServlet",
 			ConfigBeanDefinitionParser.class.getClassLoader());
 
-	private final boolean jsfPresent = ClassUtils.isPresent("javax.faces.webapp.FacesServlet",
+	protected final boolean jsfPresent = ClassUtils.isPresent("javax.faces.webapp.FacesServlet",
 			ConfigBeanDefinitionParser.class.getClassLoader());
 
-	private final boolean jsfModulePresent = ClassUtils.isPresent("org.hdiv.filter.JsfValidatorHelper",
+	protected final boolean jsfModulePresent = ClassUtils.isPresent("org.hdiv.filter.JsfValidatorHelper",
 			ConfigBeanDefinitionParser.class.getClassLoader());
 
 	/**
 	 * List of StartPage objects
 	 */
-	private List<StartPage> startPages = new ArrayList<StartPage>();
+	protected List<StartPage> startPages = new ArrayList<StartPage>();
 
 	/* Bean references */
+	protected RuntimeBeanReference patternMatcherFactoryRef;
 
-	private RuntimeBeanReference configRef;
+	protected RuntimeBeanReference configRef;
 
-	private RuntimeBeanReference sessionRef;
+	protected RuntimeBeanReference sessionRef;
 
-	private RuntimeBeanReference encodingUtilRef;
+	protected RuntimeBeanReference encodingUtilRef;
 
-	private RuntimeBeanReference uidGeneratorRef;
+	protected RuntimeBeanReference uidGeneratorRef;
 
-	private RuntimeBeanReference stateUtilRef;
+	protected RuntimeBeanReference stateUtilRef;
 
-	private RuntimeBeanReference dataValidatorFactoryRef;
+	protected RuntimeBeanReference dataValidatorFactoryRef;
 
-	private RuntimeBeanReference dataComposerFactoryRef;
+	protected RuntimeBeanReference dataComposerFactoryRef;
 
-	private RuntimeBeanReference linkUrlProcessorRef;
+	protected RuntimeBeanReference linkUrlProcessorRef;
 
-	private RuntimeBeanReference formUrlProcessorRef;
+	protected RuntimeBeanReference formUrlProcessorRef;
 
-	private RuntimeBeanReference loggerRef;
+	protected RuntimeBeanReference loggerRef;
 
-	private RuntimeBeanReference userDataRef;
+	protected RuntimeBeanReference userDataRef;
 
 	public BeanDefinition parse(Element element, ParserContext parserContext) {
 
 		Object source = parserContext.extractSource(element);
 
+		this.patternMatcherFactoryRef = this.createSimpleBean(element, source, parserContext,
+				PatternMatcherFactory.class, PATTERN_MATCHER_FACTORY_NAME);
+
 		this.configRef = this.createConfigBean(element, source, parserContext);
 
-		this.uidGeneratorRef = this.createSimpleBean(element, source, parserContext, RandomGuidUidGenerator.class);
+		this.uidGeneratorRef = this.createSimpleBean(element, source, parserContext, RandomGuidUidGenerator.class,
+				UID_GENERATOR_BEAN_NAME);
 		this.createPageIdGenerator(element, source, parserContext);
 		this.createKeyFactory(element, source, parserContext);
 		this.userDataRef = this.createUserData(element, source, parserContext);
@@ -188,7 +208,7 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 
 	}
 
-	private RuntimeBeanReference createPageIdGenerator(Element element, Object source, ParserContext parserContext) {
+	protected RuntimeBeanReference createPageIdGenerator(Element element, Object source, ParserContext parserContext) {
 		RootBeanDefinition bean = new RootBeanDefinition(SequentialPageIdGenerator.class);
 		bean.setSource(source);
 		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
@@ -198,7 +218,7 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		return new RuntimeBeanReference(name);
 	}
 
-	private RuntimeBeanReference createKeyFactory(Element element, Object source, ParserContext parserContext) {
+	protected RuntimeBeanReference createKeyFactory(Element element, Object source, ParserContext parserContext) {
 		RootBeanDefinition bean = new RootBeanDefinition(KeyFactory.class);
 		bean.setSource(source);
 		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
@@ -211,18 +231,19 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		return new RuntimeBeanReference(name);
 	}
 
-	private RuntimeBeanReference createUserData(Element element, Object source, ParserContext parserContext) {
+	protected RuntimeBeanReference createUserData(Element element, Object source, ParserContext parserContext) {
 		String userData = element.getAttribute("userData");
 		if (userData == null || userData.length() < 1) {
 			// If user don't define userData bean, create default
-			return this.createSimpleBean(element, source, parserContext, UserData.class);
+			return this.createSimpleBean(element, source, parserContext, UserData.class, USER_DATA_NAME);
 		} else {
 			// Use user defined
-			return new RuntimeBeanReference(userData);
+			parserContext.getRegistry().registerAlias(userData, USER_DATA_NAME);
+			return new RuntimeBeanReference(USER_DATA_NAME);
 		}
 	}
 
-	private RuntimeBeanReference createLogger(Element element, Object source, ParserContext parserContext) {
+	protected RuntimeBeanReference createLogger(Element element, Object source, ParserContext parserContext) {
 
 		// Simple bean overriding
 		boolean existBean = parserContext.getRegistry().containsBeanDefinition(LOGGER_BEAN_NAME);
@@ -243,7 +264,7 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 
 	}
 
-	private RuntimeBeanReference createValidatorErrorHandler(Element element, Object source, ParserContext parserContext) {
+	protected RuntimeBeanReference createValidatorErrorHandler(Element element, Object source, ParserContext parserContext) {
 
 		// Simple bean overriding
 		boolean existBean = parserContext.getRegistry().containsBeanDefinition(VALIDATOR_ERROR_HANDLER_BEAN_NAME);
@@ -265,7 +286,7 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 
 	}
 
-	private RuntimeBeanReference createStateCache(Element element, Object source, ParserContext parserContext) {
+	protected RuntimeBeanReference createStateCache(Element element, Object source, ParserContext parserContext) {
 		RootBeanDefinition bean = new RootBeanDefinition(StateCache.class);
 		bean.setSource(source);
 		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
@@ -280,7 +301,7 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		return new RuntimeBeanReference(name);
 	}
 
-	private RuntimeBeanReference createEncodingUtil(Element element, Object source, ParserContext parserContext) {
+	protected RuntimeBeanReference createEncodingUtil(Element element, Object source, ParserContext parserContext) {
 		RootBeanDefinition bean = new RootBeanDefinition(EncodingUtil.class);
 		bean.setSource(source);
 		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
@@ -291,7 +312,7 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		return new RuntimeBeanReference(name);
 	}
 
-	private RuntimeBeanReference createSession(Element element, Object source, ParserContext parserContext) {
+	protected RuntimeBeanReference createSession(Element element, Object source, ParserContext parserContext) {
 
 		// Simple bean overriding
 		boolean existSession = parserContext.getRegistry().containsBeanDefinition(SESSION_BEAN_NAME);
@@ -305,7 +326,7 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		}
 	}
 
-	private RuntimeBeanReference createCipher(Element element, Object source, ParserContext parserContext) {
+	protected RuntimeBeanReference createCipher(Element element, Object source, ParserContext parserContext) {
 		RootBeanDefinition bean = new RootBeanDefinition(CipherHTTP.class);
 		bean.setSource(source);
 		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
@@ -317,19 +338,20 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		return new RuntimeBeanReference(name);
 	}
 
-	private RuntimeBeanReference createStateUtil(Element element, Object source, ParserContext parserContext) {
+	protected RuntimeBeanReference createStateUtil(Element element, Object source, ParserContext parserContext) {
 		RootBeanDefinition bean = new RootBeanDefinition(StateUtil.class);
 		bean.setSource(source);
 		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
 		bean.setInitMethodName("init");
 		bean.getPropertyValues().addPropertyValue("encodingUtil", this.encodingUtilRef);
 		bean.getPropertyValues().addPropertyValue("config", this.configRef);
+		bean.getPropertyValues().addPropertyValue("session", this.sessionRef);
 		String name = parserContext.getReaderContext().generateBeanName(bean);
 		parserContext.getRegistry().registerBeanDefinition(name, bean);
 		return new RuntimeBeanReference(name);
 	}
 
-	private RuntimeBeanReference createDataValidatorFactory(Element element, Object source, ParserContext parserContext) {
+	protected RuntimeBeanReference createDataValidatorFactory(Element element, Object source, ParserContext parserContext) {
 		RootBeanDefinition bean = new RootBeanDefinition(DataValidatorFactory.class);
 		bean.setSource(source);
 		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
@@ -339,7 +361,7 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		return new RuntimeBeanReference(name);
 	}
 
-	private RuntimeBeanReference createDataComposerFactory(Element element, Object source, ParserContext parserContext) {
+	protected RuntimeBeanReference createDataComposerFactory(Element element, Object source, ParserContext parserContext) {
 		RootBeanDefinition bean = new RootBeanDefinition(DataComposerFactory.class);
 		bean.setSource(source);
 		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
@@ -355,12 +377,12 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		return new RuntimeBeanReference(name);
 	}
 
-	private RuntimeBeanReference createValidatorHelper(Element element, Object source, ParserContext parserContext) {
+	protected RuntimeBeanReference createValidatorHelper(Element element, Object source, ParserContext parserContext) {
 
 		// Simple bean overriding
-		boolean existSession = parserContext.getRegistry().containsBeanDefinition(VALIDATOR_HELPER_NAME);
+		boolean exist = parserContext.getRegistry().containsBeanDefinition(VALIDATOR_HELPER_NAME);
 
-		if (!existSession) {
+		if (!exist) {
 			// If user don't define one, create default
 			RootBeanDefinition bean = new RootBeanDefinition(ValidatorHelperRequest.class);
 			bean.setSource(source);
@@ -381,7 +403,7 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 
 	}
 
-	private RuntimeBeanReference createRequestInitializer(Element element, Object source, ParserContext parserContext) {
+	protected RuntimeBeanReference createRequestInitializer(Element element, Object source, ParserContext parserContext) {
 
 		// Simple bean overriding
 		boolean exist = parserContext.getRegistry().containsBeanDefinition(REQUEST_INITIALIZER_NAME);
@@ -401,29 +423,45 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 
 	}
 
-	private RuntimeBeanReference createLinkUrlProcessor(Element element, Object source, ParserContext parserContext) {
-		RootBeanDefinition bean = new RootBeanDefinition(LinkUrlProcessor.class);
-		bean.setSource(source);
-		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
-		bean.getPropertyValues().addPropertyValue("config", this.configRef);
+	protected RuntimeBeanReference createLinkUrlProcessor(Element element, Object source, ParserContext parserContext) {
 
-		String name = parserContext.getReaderContext().generateBeanName(bean);
-		parserContext.getRegistry().registerBeanDefinition(name, bean);
-		return new RuntimeBeanReference(name);
+		// Simple bean overriding
+		boolean exist = parserContext.getRegistry().containsBeanDefinition(LINK_URL_PROCESSOR_NAME);
+
+		if (!exist) {
+			RootBeanDefinition bean = new RootBeanDefinition(LinkUrlProcessor.class);
+			bean.setSource(source);
+			bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
+			bean.getPropertyValues().addPropertyValue("config", this.configRef);
+
+			parserContext.getRegistry().registerBeanDefinition(LINK_URL_PROCESSOR_NAME, bean);
+			return new RuntimeBeanReference(LINK_URL_PROCESSOR_NAME);
+		} else {
+			// Use user defined
+			return new RuntimeBeanReference(LINK_URL_PROCESSOR_NAME);
+		}
 	}
 
-	private RuntimeBeanReference createFormUrlProcessor(Element element, Object source, ParserContext parserContext) {
-		RootBeanDefinition bean = new RootBeanDefinition(FormUrlProcessor.class);
-		bean.setSource(source);
-		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
-		bean.getPropertyValues().addPropertyValue("config", this.configRef);
+	protected RuntimeBeanReference createFormUrlProcessor(Element element, Object source, ParserContext parserContext) {
 
-		String name = parserContext.getReaderContext().generateBeanName(bean);
-		parserContext.getRegistry().registerBeanDefinition(name, bean);
-		return new RuntimeBeanReference(name);
+		// Simple bean overriding
+		boolean exist = parserContext.getRegistry().containsBeanDefinition(FORM_URL_PROCESSOR_NAME);
+
+		if (!exist) {
+			RootBeanDefinition bean = new RootBeanDefinition(FormUrlProcessor.class);
+			bean.setSource(source);
+			bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
+			bean.getPropertyValues().addPropertyValue("config", this.configRef);
+
+			parserContext.getRegistry().registerBeanDefinition(FORM_URL_PROCESSOR_NAME, bean);
+			return new RuntimeBeanReference(FORM_URL_PROCESSOR_NAME);
+		} else {
+			// Use user defined
+			return new RuntimeBeanReference(FORM_URL_PROCESSOR_NAME);
+		}
 	}
 
-	private RuntimeBeanReference createRequestDataValueProcessor(Element element, Object source,
+	protected RuntimeBeanReference createRequestDataValueProcessor(Element element, Object source,
 			ParserContext parserContext) {
 		RootBeanDefinition bean = new RootBeanDefinition(HdivRequestDataValueProcessor.class);
 		bean.setSource(source);
@@ -434,7 +472,7 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		return new RuntimeBeanReference(REQUEST_DATA_VALUE_PROCESSOR_BEAN_NAME);
 	}
 
-	private RuntimeBeanReference createGrailsRequestDataValueProcessor(Element element, Object source,
+	protected RuntimeBeanReference createGrailsRequestDataValueProcessor(Element element, Object source,
 			ParserContext parserContext) {
 		RootBeanDefinition bean = new RootBeanDefinition(GrailsHdivRequestDataValueProcessor.class);
 		bean.setSource(source);
@@ -445,11 +483,22 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		return new RuntimeBeanReference(REQUEST_DATA_VALUE_PROCESSOR_BEAN_NAME);
 	}
 
-	private RuntimeBeanReference createConfigBean(Element element, Object source, ParserContext parserContext) {
+	protected RuntimeBeanReference createConfigBean(Element element, Object source, ParserContext parserContext) {
 
-		RootBeanDefinition bean = new RootBeanDefinition(HDIVConfig.class);
+		BeanDefinition bean = createConfigBean(element, source, parserContext, HDIVConfig.class);
+
+		parserContext.getRegistry().registerBeanDefinition(CONFIG_BEAN_NAME, bean);
+		return new RuntimeBeanReference(CONFIG_BEAN_NAME);
+	}
+
+	protected BeanDefinition createConfigBean(Element element, Object source, ParserContext parserContext,
+			Class<?> configClass) {
+
+		RootBeanDefinition bean = new RootBeanDefinition(configClass);
 		bean.setSource(source);
 		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
+
+		bean.getPropertyValues().addPropertyValue("patternMatcherFactory", this.patternMatcherFactoryRef);
 
 		String confidentiality = element.getAttribute("confidentiality");
 		String avoidCookiesIntegrity = element.getAttribute("avoidCookiesIntegrity");
@@ -520,13 +569,10 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		// Process startPages, startParameters and paramsWithoutValidation elements
 		this.processChilds(element, bean);
 
-		String name = parserContext.getReaderContext().generateBeanName(bean);
-		parserContext.getRegistry().registerBeanDefinition(name, bean);
-		return new RuntimeBeanReference(name);
-
+		return bean;
 	}
 
-	private RuntimeBeanReference createDefaultEditableParametersValidations(Element element, Object source,
+	protected RuntimeBeanReference createDefaultEditableParametersValidations(Element element, Object source,
 			ParserContext parserContext) {
 		RootBeanDefinition bean = new RootBeanDefinition(HDIVValidations.class);
 		bean.setSource(source);
@@ -538,7 +584,7 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		return new RuntimeBeanReference(EditableValidationsBeanDefinitionParser.EDITABLE_VALIDATIONS_BEAN_NAME);
 	}
 
-	private RuntimeBeanReference createFacesEventListener(Element element, Object source, ParserContext parserContext) {
+	protected RuntimeBeanReference createFacesEventListener(Element element, Object source, ParserContext parserContext) {
 
 		// Register ComponentValidator objects
 		RuntimeBeanReference requestParameterValidatorRef = this.createRequestParameterValidator(element, source,
@@ -566,7 +612,7 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 
 	// JSF Beans
 
-	private RuntimeBeanReference createJsfValidatorHelper(Element element, Object source, ParserContext parserContext) {
+	protected RuntimeBeanReference createJsfValidatorHelper(Element element, Object source, ParserContext parserContext) {
 
 		RootBeanDefinition bean = new RootBeanDefinition(JsfValidatorHelper.class);
 		bean.setSource(source);
@@ -584,7 +630,7 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		return new RuntimeBeanReference(name);
 	}
 
-	private RuntimeBeanReference createRequestParameterValidator(Element element, Object source,
+	protected RuntimeBeanReference createRequestParameterValidator(Element element, Object source,
 			ParserContext parserContext) {
 		RootBeanDefinition bean = new RootBeanDefinition(RequestParameterValidator.class);
 		bean.setSource(source);
@@ -595,7 +641,7 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		return new RuntimeBeanReference(name);
 	}
 
-	private RuntimeBeanReference createEditableValidator(Element element, Object source, ParserContext parserContext) {
+	protected RuntimeBeanReference createEditableValidator(Element element, Object source, ParserContext parserContext) {
 		RootBeanDefinition bean = new RootBeanDefinition(EditableValidator.class);
 		bean.setSource(source);
 		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
@@ -605,7 +651,7 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		return new RuntimeBeanReference(name);
 	}
 
-	private RuntimeBeanReference createRedirectHelper(Element element, Object source, ParserContext parserContext) {
+	protected RuntimeBeanReference createRedirectHelper(Element element, Object source, ParserContext parserContext) {
 		RootBeanDefinition bean = new RootBeanDefinition(RedirectHelper.class);
 		bean.setSource(source);
 		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
@@ -615,7 +661,7 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		return new RuntimeBeanReference(name);
 	}
 
-	private RuntimeBeanReference createStringBean(String name, String value, Object source, ParserContext parserContext) {
+	protected RuntimeBeanReference createStringBean(String name, String value, Object source, ParserContext parserContext) {
 		RootBeanDefinition bean = new RootBeanDefinition(java.lang.String.class);
 		bean.setSource(source);
 		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
@@ -624,7 +670,7 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		return new RuntimeBeanReference(name);
 	}
 
-	private RuntimeBeanReference createSimpleBean(Element element, Object source, ParserContext parserContext,
+	protected RuntimeBeanReference createSimpleBean(Element element, Object source, ParserContext parserContext,
 			Class<?> clazz) {
 		RootBeanDefinition bean = new RootBeanDefinition(clazz);
 		bean.setSource(source);
@@ -634,16 +680,26 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		return new RuntimeBeanReference(name);
 	}
 
-	private RuntimeBeanReference createSimpleBean(Element element, Object source, ParserContext parserContext,
+	protected RuntimeBeanReference createSimpleBean(Element element, Object source, ParserContext parserContext,
 			Class<?> clazz, String beanName) {
-		RootBeanDefinition bean = new RootBeanDefinition(clazz);
-		bean.setSource(source);
-		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
-		parserContext.getRegistry().registerBeanDefinition(beanName, bean);
-		return new RuntimeBeanReference(beanName);
+
+		// Simple bean overriding
+		boolean exist = parserContext.getRegistry().containsBeanDefinition(beanName);
+
+		if (!exist) {
+			RootBeanDefinition bean = new RootBeanDefinition(clazz);
+			bean.setSource(source);
+			bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
+			parserContext.getRegistry().registerBeanDefinition(beanName, bean);
+			return new RuntimeBeanReference(beanName);
+		} else {
+			// Use user defined
+			return new RuntimeBeanReference(beanName);
+		}
+
 	}
 
-	private void processChilds(Element element, RootBeanDefinition bean) {
+	protected void processChilds(Element element, RootBeanDefinition bean) {
 		NodeList nodeList = element.getChildNodes();
 
 		for (int i = 0; i < nodeList.getLength(); i++) {
@@ -663,7 +719,7 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		}
 	}
 
-	private void processStartPages(Node node, RootBeanDefinition bean) {
+	protected void processStartPages(Node node, RootBeanDefinition bean) {
 
 		String method = null;
 		if (node.getNodeType() == Node.ELEMENT_NODE) {
@@ -683,12 +739,12 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		bean.getPropertyValues().addPropertyValue("userStartPages", this.startPages);
 	}
 
-	private void processStartParameters(Node node, RootBeanDefinition bean) {
+	protected void processStartParameters(Node node, RootBeanDefinition bean) {
 		String value = node.getTextContent();
 		bean.getPropertyValues().addPropertyValue("userStartParameters", this.convertToList(value));
 	}
 
-	private void processParamsWithoutValidation(Node node, RootBeanDefinition bean) {
+	protected void processParamsWithoutValidation(Node node, RootBeanDefinition bean) {
 		NodeList nodeList = node.getChildNodes();
 
 		Map<String, List<String>> map = new HashMap<String, List<String>>();
@@ -703,7 +759,7 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		}
 	}
 
-	private void processSessionExpired(Node node, RootBeanDefinition bean) {
+	protected void processSessionExpired(Node node, RootBeanDefinition bean) {
 
 		NamedNodeMap attributes = node.getAttributes();
 		Node named = attributes.getNamedItem("loginPage");
@@ -720,7 +776,7 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 
 	}
 
-	private void processMapping(Node node, Map<String, List<String>> map) {
+	protected void processMapping(Node node, Map<String, List<String>> map) {
 		NamedNodeMap attributes = node.getAttributes();
 		Node named = attributes.getNamedItem("url");
 		if (named != null) {
@@ -730,7 +786,7 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		}
 	}
 
-	private List<String> convertToList(String data) {
+	protected List<String> convertToList(String data) {
 		String[] result = data.split(",");
 		List<String> list = new ArrayList<String>();
 		// clean the edges of the item - spaces/returns/tabs etc may be used for readability in the

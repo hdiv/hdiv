@@ -3,13 +3,13 @@
 	<parent>
 		<groupId>org.hdiv</groupId>
 		<artifactId>hdiv</artifactId>
-		<version>2.1.5-SNAPSHOT</version>
+		<version>2.1.7-SNAPSHOT</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>hdiv-jsf</artifactId>
 	<packaging>jar</packaging>
 	<name>HDIV JSF</name>
-	<description>HTTP Data Integrity Validator</description>
+	<description>Java Web Application Security Framework</description>
 	<url>http://www.hdiv.org</url>
 	<dependencies>
 		<dependency>
@@ -79,4 +79,33 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>com.mycila</groupId>
+				<artifactId>license-maven-plugin</artifactId>
+				<version>2.5</version>
+				<configuration>
+					<header>${project.parent.basedir}/LICENSE_HEADER</header>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+	<reporting>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>2.9</version>
+				<configuration>
+					<doctitle>HDIV JSF</doctitle>
+					<header>HDIV API ${project.version}</header>
+					<footer>HDIV ${project.version}</footer>
+					<destDir>../docs/api/${project.artifactId}</destDir>
+				</configuration>
+			</plugin>
+		</plugins>
+	</reporting>
 </project>

@@ -1,0 +1,396 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<chapter xml:id="installation" xmlns="http://docbook.org/ns/docbook"
+	version="5.0" xmlns:xl="http://www.w3.org/1999/xlink" xmlns:xi="http://www.w3.org/2001/XInclude"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+        http://docbook.org/ns/docbook http://www.docbook.org/xml/5.0/xsd/docbook.xsd
+        http://www.w3.org/1999/xlink http://www.docbook.org/xml/5.0/xsd/xlink.xsd">
+	<title>Installation</title>
+
+	<section xml:id="installation-springmvc">
+		<title>Spring MVC</title>
+
+		<para>Thanks to new extensions points included at Spring 3.1
+			, HDIV
+			installation
+			and configuration
+			for Spring MVC its cleaner and
+			easier
+			than previous
+			configurations.
+			Since 3.1.0 is not necessary to
+			use HDIV
+			custom tags
+			and it's enough
+			using Spring MVC original tags.
+		</para>
+
+		<orderedlist numeration="arabic">
+			<listitem>
+				<para>Add HDIV jars</para>
+				<programlisting language="xml">
+ 					<![CDATA[
+<dependency>
+    <groupId>org.hdiv</groupId>
+    <artifactId>hdiv-core</artifactId>
+    <version>2.1.5</version>
+</dependency>
+<dependency>
+    <groupId>org.hdiv</groupId>
+    <artifactId>hdiv-spring-mvc</artifactId>
+    <version>2.1.5</version>
+</dependency>
+]]></programlisting>
+			</listitem>
+
+			<listitem>
+				<para>Add HDIV listener and Filter within web.xml</para>
+
+				<programlisting language="xml">
+ <![CDATA[
+<listener>
+    <listener-class>org.hdiv.listener.InitListener</listener-class>
+</listener>
+<!-- HDIV Validator Filter -->
+<filter>
+    <filter-name>ValidatorFilter</filter-name>
+    <filter-class>org.hdiv.filter.ValidatorFilter</filter-class>
+</filter>
+<filter-mapping>
+    <filter-name>ValidatorFilter</filter-name>
+    <!-- Spring MVC Servlet name-->
+    <servlet-name>SampleMvc</servlet-name>
+</filter-mapping>
+]]></programlisting>
+			</listitem>
+		</orderedlist>
+		<para>
+			If you are using Spring MVC version previous to 3.1, it's necessary to
+			make an additional step, replacing Spring MVC tld by HDIV tld related
+			with the specific version. In the next example
+			is presented the code
+			for Spring MVC 3.0.4:
+		</para>
+		<programlisting language="xml">
+ <![CDATA[
+<jsp-config>
+	<taglib>
+		<taglib-uri>http://www.springframework.org/tags/form</taglib-uri>
+		<taglib-location>/WEB-INF/tlds/hdiv-spring-form-3_0_4.tld</taglib-location>
+	</taglib>
+	<taglib>
+		<taglib-uri>http://www.springframework.org/tags</taglib-uri>
+		<taglib-location>/WEB-INF/tlds/hdiv-spring.tld</taglib-location>
+	</taglib>
+</jsp-config>
+]]></programlisting>
+	</section>
+
+	<section xml:id="installation-grails">
+		<title>Grails</title>
+
+		<para>
+			Thanks to the plugin architecture and
+			<ulink url="http://grails.org/plugin/hdiv">HDIV plugin </ulink>
+			implementation
+			supported by Grails project, HDIV installation is
+			implemented using
+			BuildConfig.groovy configuration file and adding
+			HDIV plugin to that:
+		</para>
+		<programlisting language="xml">
+ <![CDATA[
+compile ':hdiv:1.0-RC2'
+]]></programlisting>
+
+	</section>
+
+	<section xml:id="installation-jstl">
+		<title>JSTL</title>
+
+		<orderedlist numeration="arabic">
+			<listitem>
+				<para>Add HDIV jars</para>
+				<programlisting language="xml">
+ 					<![CDATA[
+<dependency>
+    <groupId>org.hdiv</groupId>
+    <artifactId>hdiv-core</artifactId>
+    <version>2.1.5</version>
+</dependency>
+<dependency>
+    <groupId>org.hdiv</groupId>
+    <artifactId>hdiv-jstl-taglibs-1.2</artifactId>
+    <version>2.1.5</version>
+</dependency>
+]]></programlisting>
+			</listitem>
+			<listitem>
+				<para>Add HDIV listener and Filter within web.xml</para>
+
+				<programlisting language="xml">
+ <![CDATA[
+<listener>
+    <listener-class>org.hdiv.listener.InitListener</listener-class>
+</listener>
+<!-- HDIV Validator Filter -->
+<filter>
+    <filter-name>ValidatorFilter</filter-name>
+    <filter-class>org.hdiv.filter.ValidatorFilter</filter-class>
+</filter>
+<filter-mapping>
+    <filter-name>ValidatorFilter</filter-name>
+    <!-- Spring MVC Servlet name-->
+    <servlet-name>SampleMvc</servlet-name>
+</filter-mapping>
+
+<!-- replace JSTL tld with hdiv tld-->
+<jsp-config>
+	<taglib>
+		<taglib-uri>http://java.sun.com/jsp/jstl/core</taglib-uri>
+        <taglib-location>/WEB-INF/tlds/hdiv-c.tld</taglib-location>
+	</taglib>
+</jsp-config>
+]]></programlisting>
+			</listitem>
+		</orderedlist>
+	</section>
+
+	<section xml:id="installation-struts1">
+		<title>Struts 1</title>
+
+		<orderedlist numeration="arabic">
+			<listitem>
+				<para>Add HDIV jars</para>
+				<programlisting language="xml">
+ 					<![CDATA[
+<dependency>
+    <groupId>org.hdiv</groupId>
+    <artifactId>hdiv-core</artifactId>
+    <version>2.0.4</version>
+</dependency>
+<dependency>
+    <groupId>org.hdiv</groupId>
+    <artifactId>hdiv-struts-1</artifactId>
+    <version>2.0.4</version>
+</dependency>
+]]></programlisting>
+			</listitem>
+			<listitem>
+				<para>Add HDIV listener and Filter within web.xml</para>
+
+				<programlisting language="xml">
+ <![CDATA[
+<!-- HDIV Initialization listener -->
+<listener>
+    <listener-class>org.hdiv.listener.InitListener</listener-class>
+</listener>
+
+<!-- HDIV Validator Filter -->
+
+<filter>
+    <filter-name>ValidatorFilter</filter-name>
+    <filter-class>org.hdiv.filter.ValidatorFilter</filter-class>
+</filter>
+<filter-mapping>
+	<filter-name>ValidatorFilter</filter-name>
+	<url-pattern>*.do</url-pattern>
+</filter-mapping>
+
+<!-- Replace Struts 1 tld with hdiv tlds -->
+
+<jsp-config>
+	<taglib> 
+		<taglib-uri>/WEB-INF/struts-html.tld</taglib-uri> 
+ 		<taglib-location>/WEB-INF/hdiv-html.tld</taglib-location> 
+	</taglib> 
+	<taglib> 
+		<taglib-uri>/WEB-INF/struts-nested.tld</taglib-uri> 
+ 		<taglib-location>/WEB-INF/hdiv-nested.tld</taglib-location> 
+	</taglib> 
+	<taglib> 
+		<taglib-uri>/WEB-INF/struts-logic.tld</taglib-uri> 
+ 		<taglib-location>/WEB-INF/hdiv-logic.tld</taglib-location> 
+	</taglib> 
+</jsp-config>
+]]></programlisting>
+			</listitem>
+		</orderedlist>
+
+	</section>
+
+	<section xml:id="installation-struts2">
+		<title>Struts 2</title>
+
+		<para>
+			The latest Struts 2 version supported by HDIV is Struts 2.0.11. To
+			support higher versiones please vote in the
+			<ulink url="https://issues.apache.org/jira/browse/WW-3718">JIRA issue </ulink>
+			requested to Struts 2 project. Follow the next steps in order
+			to
+			install HDIV in a Struts 2 based web application:
+		</para>
+
+		<orderedlist numeration="arabic">
+			<listitem>
+				<para>Add HDIV jars</para>
+				<programlisting language="xml">
+ 					<![CDATA[
+<dependency>
+    <groupId>org.hdiv</groupId>
+    <artifactId>hdiv-core</artifactId>
+    <version>2.1.5</version>
+</dependency>
+<dependency>
+	<groupId>org.hdiv</groupId>
+	<artifactId>hdiv-struts-2.0.11</artifactId>
+	<version>2.0.4</version>
+</dependency>
+]]></programlisting>
+			</listitem>
+			<listitem>
+				<para>Add HDIV listener and Filter within web.xml</para>
+
+				<programlisting language="xml">
+ <![CDATA[
+<!-- HDIV Initialization listener -->
+<listener>
+    <listener-class>org.hdiv.listener.InitListener</listener-class>
+</listener>
+
+<!-- HDIV Validator Filter -->
+
+<filter-mapping>
+	<filter-name>ValidatorFilter</filter-name>
+	<url-pattern>*.action</url-pattern>
+</filter-mapping>
+
+<filter-mapping>
+	<filter-name>ValidatorFilter</filter-name>
+	<url-pattern>*.jsp</url-pattern>
+</filter-mapping>		
+
+<!-- Replace Struts 2 tld with hdiv tlds -->
+
+<jsp-config>
+	<taglib> 
+		<taglib-uri>/struts-tags</taglib-uri>
+		<taglib-location>/WEB-INF/hdiv-tags.tld</taglib-location>
+	</taglib> 	
+</jsp-config>
+]]></programlisting>
+			</listitem>
+		</orderedlist>
+	</section>
+
+	<section xml:id="installation-jsf">
+		<title>JSF</title>
+
+		<orderedlist numeration="arabic">
+			<listitem>
+				<para>Add HDIV jars</para>
+				<programlisting language="xml">
+ 					<![CDATA[
+<dependency>
+    <groupId>org.hdiv</groupId>
+    <artifactId>hdiv-core</artifactId>
+    <version>2.1.5</version>
+</dependency>
+<dependency>
+	<groupId>org.hdiv</groupId>
+   	<artifactId>hdiv-jsf</artifactId>
+    <version>2.1.5</version>
+</dependency>
+]]></programlisting>
+			</listitem>
+			<listitem>
+				<para>Add HDIV listener, HIDV Filter and define your custom
+					faces-config (with HDIV configuration, see the next point) within
+					web.xml
+				</para>
+
+				<programlisting language="xml">
+ <![CDATA[
+<!-- Define the hdiv-faces-config -->
+<context-param>
+     <param-name>javax.faces.CONFIG_FILES</param-name>
+     <param-value>/WEB-INF/hdiv-faces2-config.xml</param-value>
+</context-param>
+
+<!-- HDIV Initialization listener -->
+<listener>
+    <listener-class>org.hdiv.listener.InitListener</listener-class>
+</listener>
+
+<!-- HDIV Validator Filter -->
+
+<!-- HDIV Validator Filter -->
+<filter>
+	<filter-name>ValidatorFilter</filter-name>
+  	<filter-class>org.hdiv.filter.ValidatorFilter</filter-class>
+</filter>
+<filter-mapping>
+	<filter-name>ValidatorFilter</filter-name>
+    <servlet-name>Faces Servlet</servlet-name>
+</filter-mapping>
+]]></programlisting>
+			</listitem>
+			<listitem>
+				<para>Add HDIV config to your faces-config</para>
+
+				<programlisting language="xml">
+ <![CDATA[
+<?xml version="1.0" encoding="UTF-8"?>
+<faces-config xmlns="http://java.sun.com/xml/ns/javaee"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd"
+        version="2.0">
+        
+        <component>
+                <component-type>javax.faces.HtmlOutcomeTargetLink</component-type>
+                <component-class>org.hdiv.components.HtmlOutcomeTargetLinkExtension</component-class>
+        </component>
+        <component>
+                <component-type>javax.faces.HtmlOutcomeTargetButton</component-type>
+                <component-class>org.hdiv.components.HtmlOutcomeTargetButtonExtension</component-class>
+        </component>
+        
+        <component>
+                <component-type>javax.faces.Parameter</component-type>
+                <component-class>org.hdiv.components.UIParameterExtension</component-class>
+        </component>
+        <component>
+                <component-type>javax.faces.HtmlInputHidden</component-type>
+                <component-class>org.hdiv.components.HtmlInputHiddenExtension</component-class>
+        </component>
+        <component>
+                <component-type>javax.faces.HtmlOutputLink</component-type>
+                <component-class>org.hdiv.components.HtmlOutputLinkExtension</component-class>
+        </component>
+        <component>
+                <component-type>javax.faces.HtmlCommandLink</component-type>
+                <component-class>org.hdiv.components.HtmlCommandLinkExtension</component-class>
+        </component>
+        <component>
+                <component-type>javax.faces.HtmlCommandButton</component-type>
+                <component-class>org.hdiv.components.HtmlCommandButtonExtension</component-class>
+        </component>
+        
+        <lifecycle>
+                <phase-listener>org.hdiv.phaseListeners.ComponentMessagesPhaseListener</phase-listener>
+                <phase-listener>org.hdiv.phaseListeners.ConfigPhaseListener</phase-listener>
+        </lifecycle>
+
+        <factory>
+                <external-context-factory>org.hdiv.context.ExternalContextFactoryWrapper</external-context-factory>
+                <exception-handler-factory>org.hdiv.exceptionHandler.HDIVExceptionHandlerFactory</exception-handler-factory>
+        </factory>
+        
+</faces-config>
+]]></programlisting>
+			</listitem>
+
+		</orderedlist>
+	</section>
+
+</chapter>

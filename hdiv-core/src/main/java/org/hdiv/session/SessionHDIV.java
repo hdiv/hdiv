@@ -1,5 +1,5 @@
 /**
- * Copyright 2005-2011 hdiv.org
+ * Copyright 2005-2013 hdiv.org
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -120,7 +120,7 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 
 		HttpSession session = this.getHttpSession();
 
-		IStateCache cache = this.getStateCache();
+		IStateCache cache = this.getStateCache(session);
 
 		page.setName(pageId);
 		String removedPageId = cache.addPage(pageId);
@@ -134,7 +134,7 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 		}
 
 		// we update page identifier cache in session
-		session.setAttribute(this.cacheName, cache);
+		this.saveStateCache(session, cache);
 
 		// we add a new page in session
 		this.addPageToSession(session, page);
@@ -153,7 +153,7 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 
 		HttpSession session = this.getHttpSession();
 
-		IStateCache cache = this.getStateCache();
+		IStateCache cache = this.getStateCache(session);
 		if (log.isDebugEnabled()) {
 			log.debug("Cache pages before finished pages are deleted:" + cache.toString());
 		}
@@ -162,7 +162,7 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 
 		for (int i = 0; i < pageIds.size(); i++) {
 
-			String pageId = (String) pageIds.get(i);
+			String pageId = pageIds.get(i);
 			IPage currentPage = this.getPageFromSession(session, pageId);
 			if ((currentPage != null) && (currentPage.getFlowId() != null)) {
 
@@ -188,7 +188,7 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 	 * @return State identifier <code>stateId</code> throws HDIVException If the state doesn't exist a new HDIV
 	 *         exception is thrown.
 	 */
-	public IState getState(String pageId, String stateId) {
+	public IState getState(String pageId, int stateId) {
 
 		try {
 			IPage currentPage = this.getPage(pageId);
@@ -206,7 +206,7 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 	 * @throws HDIVException
 	 *             If the state doesn't exist a new HDIV exception is thrown.
 	 */
-	public String getStateHash(String pageId, String stateId) {
+	public String getStateHash(String pageId, int stateId) {
 
 		try {
 			IPage currentPage = this.getPage(pageId);
@@ -286,17 +286,44 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 	/**
 	 * Create new or obtain existing state Cache instance.
 	 * 
+	 * @param session
+	 *            {@link HttpSession} instance
 	 * @return IStateCache instance
 	 */
-	protected IStateCache getStateCache() {
+	protected IStateCache getStateCache(HttpSession session) {
 
-		HttpSession session = this.getHttpSession();
 		IStateCache cache = (IStateCache) session.getAttribute(this.cacheName);
 		if (cache == null) {
-			cache = this.beanFactory.getBean(IStateCache.class);
+			cache = this.createStateCacheInstance();
 			session.setAttribute(this.cacheName, cache);
 		}
 
+		return cache;
+	}
+
+	/**
+	 * Save state Cache instance.
+	 * 
+	 * @param session
+	 *            {@link HttpSession} instance
+	 * @param stateCache
+	 *            {@link IStateCache} instance
+	 * @since HDIV 2.1.6
+	 */
+	protected void saveStateCache(HttpSession session, IStateCache stateCache) {
+
+		session.setAttribute(this.cacheName, stateCache);
+	}
+
+	/**
+	 * Create new {@link IStateCache} instance.
+	 * 
+	 * @return {@link IStateCache} instance
+	 * @since HDIV 2.1.6
+	 */
+	protected IStateCache createStateCacheInstance() {
+
+		IStateCache cache = this.beanFactory.getBean(IStateCache.class);
 		return cache;
 	}
 

@@ -1,5 +1,5 @@
 /**
- * Copyright 2005-2011 hdiv.org
+ * Copyright 2005-2013 hdiv.org
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -205,5 +205,50 @@ public class Validation implements IValidation {
 		return result.toString();
 
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((acceptedPattern == null) ? 0 : acceptedPattern.pattern().hashCode());
+		result = prime * result + ((componentType == null) ? 0 : componentType.hashCode());
+		result = prime * result + ((ignoreParameters == null) ? 0 : ignoreParameters.hashCode());
+		result = prime * result + ((rejectedPattern == null) ? 0 : rejectedPattern.pattern().hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Validation other = (Validation) obj;
+		if (acceptedPattern == null) {
+			if (other.acceptedPattern != null)
+				return false;
+		} else if (!acceptedPattern.pattern().equals(other.acceptedPattern.pattern()))
+			return false;
+		if (componentType == null) {
+			if (other.componentType != null)
+				return false;
+		} else if (!componentType.equals(other.componentType))
+			return false;
+		if (ignoreParameters == null) {
+			if (other.ignoreParameters != null)
+				return false;
+		} else if (!ignoreParameters.equals(other.ignoreParameters))
+			return false;
+		if (rejectedPattern == null) {
+			if (other.rejectedPattern != null)
+				return false;
+		} else if (!rejectedPattern.pattern().equals(other.rejectedPattern.pattern()))
+			return false;
+		return true;
+	}
+	
+	
 
 }

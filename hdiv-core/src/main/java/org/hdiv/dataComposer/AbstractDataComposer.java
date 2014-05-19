@@ -1,5 +1,5 @@
 /**
- * Copyright 2005-2011 hdiv.org
+ * Copyright 2005-2013 hdiv.org
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -57,17 +57,17 @@ public abstract class AbstractDataComposer implements IDataComposer {
 	/**
 	 * Http session wrapper
 	 */
-	private ISession session;
+	protected ISession session;
 
 	/**
 	 * Unique id generator
 	 */
-	private UidGenerator uidGenerator;
+	protected UidGenerator uidGenerator;
 
 	/**
 	 * Page with the possible requests or states
 	 */
-	private IPage page;
+	protected IPage page;
 
 	/**
 	 * States stack to store all states of the page <code>page</code>
@@ -99,13 +99,6 @@ public abstract class AbstractDataComposer implements IDataComposer {
 	 */
 	public boolean isRequestStarted() {
 		return this.statesStack.size() > 0;
-	}
-
-	/**
-	 * @return the session
-	 */
-	public ISession getSession() {
-		return session;
 	}
 
 	/**

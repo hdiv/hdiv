@@ -1,5 +1,5 @@
 /**
- * Copyright 2005-2012 hdiv.org
+ * Copyright 2005-2013 hdiv.org
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -73,8 +73,7 @@ public class JsfValidatorHelper extends ValidatorHelperRequest {
 				log.debug("Request contains view state");
 			}
 
-			if (this.getHdivConfig()
-					.isStartPage(this.getTargetWithoutContextPath(request, target), request.getMethod())) {
+			if (this.getHdivConfig().isStartPage(target, request.getMethod())) {
 				// It is an init page
 				if (log.isDebugEnabled()) {
 					log.debug("Request is start page");
@@ -112,14 +111,11 @@ public class JsfValidatorHelper extends ValidatorHelperRequest {
 			}
 		}
 
-		String targetWithoutContextPath = this.getTargetWithoutContextPath(request, target);
-
 		// In the case of <h:link> component, action may not have context-path and servlet mapping.
 		// e.g. action=/view/viewAccount, target=/hdiv-jsf/view/viewAccount.faces and
 		// targetWithoutContextPath = /view/viewAccount.faces
 
-		String targetWithoutServletAndContextPath = targetWithoutContextPath.substring(0,
-				targetWithoutContextPath.indexOf("."));
+		String targetWithoutServletAndContextPath = target.substring(0, target.indexOf("."));
 		boolean isActionState = state.getAction().equalsIgnoreCase(targetWithoutServletAndContextPath);
 		if (isActionState) {
 			return ValidatorHelperResult.VALID;

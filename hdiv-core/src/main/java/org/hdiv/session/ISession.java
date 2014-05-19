@@ -1,5 +1,5 @@
 /**
- * Copyright 2005-2011 hdiv.org
+ * Copyright 2005-2013 hdiv.org
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -55,7 +55,7 @@ public interface ISession {
 	 * @return State identifier <code>stateId</code> throws HDIVException If the state doesn't exist a new HDIV
 	 *         exception is thrown.
 	 */
-	public IState getState(String pageId, String stateId);
+	public IState getState(String pageId, int stateId);
 
 	/**
 	 * Obtains the hash of the state identifier <code>stateId</code> related to page identifier <code>pageId</code>.
@@ -64,7 +64,7 @@ public interface ISession {
 	 * @throws HDIVException
 	 *             If the state doesn't exist a new HDIV exception is thrown.
 	 */
-	public String getStateHash(String pageId, String stateId);
+	public String getStateHash(String pageId, int stateId);
 
 	/**
 	 * Obtains from the user session the page identifier where the current request or form is

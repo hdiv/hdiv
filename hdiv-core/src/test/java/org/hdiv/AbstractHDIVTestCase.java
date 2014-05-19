@@ -1,11 +1,11 @@
-/*
- * Copyright 2004-2005 The Apache Software Foundation.
+/**
+ * Copyright 2005-2013 hdiv.org
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * 	http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -17,7 +17,6 @@ package org.hdiv;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpSessionEvent;
 
@@ -28,13 +27,13 @@ import org.apache.commons.logging.LogFactory;
 import org.hdiv.config.HDIVConfig;
 import org.hdiv.dataComposer.DataComposerFactory;
 import org.hdiv.dataComposer.IDataComposer;
+import org.hdiv.filter.RequestInitializer;
 import org.hdiv.listener.InitListener;
 import org.hdiv.util.HDIVUtil;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.context.support.StaticWebApplicationContext;
+import org.springframework.web.context.support.XmlWebApplicationContext;
 
 /**
  * HDIV test parent class.
@@ -61,28 +60,28 @@ public abstract class AbstractHDIVTestCase extends TestCase {
 				"/org/hdiv/config/hdiv-core-applicationContext.xml", 
 				"/org/hdiv/config/hdiv-config.xml",
 				"/org/hdiv/config/hdiv-validations.xml", 
-				"/org/hdiv/config/applicationContext-test.xml",
 				"/org/hdiv/config/applicationContext-extra.xml" };
 
-		if (this.applicationContext == null) {
-			this.applicationContext = new ClassPathXmlApplicationContext(files);
-		}
-
 		// Servlet API mock
-		HttpServletRequest request = this.applicationContext.getBean(MockHttpServletRequest.class);
+		MockHttpServletRequest request = new MockHttpServletRequest();
+		request.setRequestURI("/path/testAction.do");
 		HttpSession httpSession = request.getSession();
 		ServletContext servletContext = httpSession.getServletContext();
 		HDIVUtil.setHttpServletRequest(request);
 
-		// Put Spring context on ServletContext
-		StaticWebApplicationContext webApplicationContext = new StaticWebApplicationContext();
+		// Init Spring Context
+		XmlWebApplicationContext webApplicationContext = new XmlWebApplicationContext();
 		webApplicationContext.setServletContext(servletContext);
-		webApplicationContext.setParent(this.applicationContext);
+		webApplicationContext.setConfigLocations(files);
 		servletContext
 				.setAttribute(WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE, webApplicationContext);
+		// Create beans
+		webApplicationContext.refresh();
+
+		this.applicationContext = webApplicationContext;
 
 		// Initialize config
-		this.config = this.applicationContext.getBean(HDIVConfig.class);
+		this.config = (HDIVConfig) this.applicationContext.getBean(HDIVConfig.class);
 		// Configure for testing
 		this.postCreateHdivConfig(this.config);
 
@@ -95,9 +94,10 @@ public abstract class AbstractHDIVTestCase extends TestCase {
 		initListener.sessionCreated(httpSessionEvent);
 
 		// Init Request scoped data
-		HDIVUtil.setRequestURI(request.getRequestURI(), request);
+		RequestInitializer requestInitializer = this.applicationContext.getBean(RequestInitializer.class);
+		requestInitializer.initRequest(request);
 		DataComposerFactory dataComposerFactory = (DataComposerFactory) this.applicationContext
-				.getBean("dataComposerFactory");
+				.getBean(DataComposerFactory.class);
 		IDataComposer dataComposer = dataComposerFactory.newInstance(request);
 		HDIVUtil.setDataComposer(dataComposer, request);
 

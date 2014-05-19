@@ -60,6 +60,7 @@
 	<bean id="stateUtil" class="org.hdiv.state.StateUtil" init-method="init">
 		<property name="encodingUtil" ref="encoding" />
 		<property name="config" ref="config" />
+		<property name="session" ref="sessionHDIV" />
 	</bean>
 	<bean id="dataValidatorFactory" class="org.hdiv.dataValidator.DataValidatorFactory">
 		<property name="hdivConfig" ref="config" />
@@ -116,5 +117,8 @@
 	<bean id="formUrlProcessor" class="org.hdiv.urlProcessor.FormUrlProcessor">
 		<property name="config" ref="config" />
 	</bean>
+
+	<!-- RegExp executor -->
+	<bean id="patternMatcherFactory" class="org.hdiv.regex.PatternMatcherFactory" />
 
 </beans>

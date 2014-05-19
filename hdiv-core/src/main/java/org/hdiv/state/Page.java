@@ -1,5 +1,5 @@
 /**
- * Copyright 2005-2011 hdiv.org
+ * Copyright 2005-2013 hdiv.org
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 package org.hdiv.state;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,37 +28,38 @@ import java.util.Map;
 public class Page implements IPage, Serializable {
 
 	/**
-	 * Universal version identifier. Deserialization uses this number to ensure that
-	 * a loaded class corresponds exactly to a serialized object.
+	 * Universal version identifier. Deserialization uses this number to ensure that a loaded class corresponds exactly
+	 * to a serialized object.
 	 */
 	private static final long serialVersionUID = -5701140762067196143L;
 
 	/**
 	 * Map with the states of the page <code>this</code>.
 	 */
-	protected Map<String, Object> states = new HashMap<String, Object>();
+	protected Map<Integer, Object> states = new HashMap<Integer, Object>();
 
 	/**
 	 * Page <code>this</code> identifier.
 	 */
 	private String name;
-	
+
 	/**
 	 * Unique id of flow
 	 */
 	private String flowId;
-	
+
 	/**
 	 * Unique random token
+	 * 
 	 * @since HDIV 2.0.4
 	 */
-	private String randomToken;	
-	
+	private String randomToken;
+
 	/**
 	 * Adds a new state to the page <code>this</code>.
 	 * 
-	 * @param state State that represents all the data that composes a possible
-	 *            request.
+	 * @param state
+	 *            State that represents all the data that composes a possible request.
 	 */
 	public void addState(IState state) {
 		this.states.put(state.getId(), state);
@@ -66,40 +68,44 @@ public class Page implements IPage, Serializable {
 	/**
 	 * Adds a new state hash to the page <code>this</code>.
 	 * 
-	 * @param id state identifier
-	 * @param stateHash Hash of a state that represents all the data that composes a
-	 *            possible request.
+	 * @param id
+	 *            state identifier
+	 * @param stateHash
+	 *            Hash of a state that represents all the data that composes a possible request.
 	 */
-	public void addState(String id, String stateHash) {
+	public void addState(int id, String stateHash) {
 		this.states.put(id, stateHash);
 	}
 
 	/**
 	 * Checks if exists a state with the given identifier <code>key</code>.
-	 *
-	 * @param key State identifier
+	 * 
+	 * @param id
+	 *            State identifier
 	 */
-	public boolean existState(String key) {
-		return this.states.containsKey(key);
+	public boolean existState(int id) {
+		return this.states.containsKey(id);
 	}
 
 	/**
 	 * Returns the state with the given identifier <code>key</code> from the map of states
-	 *
-	 * @param key State identifier
+	 * 
+	 * @param id
+	 *            State identifier
 	 * @return IState State with the identifier <code>key</code>.
 	 */
-	public IState getState(String key) {
-		return (IState) this.states.get(key);
+	public IState getState(int id) {
+		return (IState) this.states.get(id);
 	}
 
 	/**
 	 * Returns the state hash with the given identifier <code>key</code> from the map of states
-	 *
-	 * @param key State identifier
+	 * 
+	 * @param key
+	 *            State identifier
 	 * @return String hash with the identifier <code>key</code>.
 	 */
-	public String getStateHash(String key) {
+	public String getStateHash(int key) {
 		return (String) this.states.get(key);
 	}
 
@@ -111,7 +117,8 @@ public class Page implements IPage, Serializable {
 	}
 
 	/**
-	 * @param name The page name to set.
+	 * @param name
+	 *            The page name to set.
 	 */
 	public void setName(String name) {
 		this.name = name;
@@ -120,24 +127,33 @@ public class Page implements IPage, Serializable {
 	/**
 	 * @return Returns the page states.
 	 */
-	public Map<String, Object> getStates() {
-		return states;
+	public Collection<Object> getStates() {
+		return states.values();
+	}
+
+	/**
+	 * @return Returns the page states.
+	 */
+	public int getStatesCount() {
+		return states.size();
 	}
 
 	/**
 	 * Returns the unique id of flow.
+	 * 
 	 * @return the flow id
 	 */
 	public String getFlowId() {
 		return flowId;
 	}
-	
+
 	/**
-	 * @param flowId the flowId to set
+	 * @param flowId
+	 *            the flowId to set
 	 */
 	public void setFlowId(String flowId) {
 		this.flowId = flowId;
-	}	
+	}
 
 	/**
 	 * @return the randomToken
@@ -145,16 +161,17 @@ public class Page implements IPage, Serializable {
 	 */
 	public String getRandomToken() {
 		return randomToken;
-	}	
-	
+	}
+
 	/**
-	 * @param randomToken the randomToken to set
+	 * @param randomToken
+	 *            the randomToken to set
 	 * @since HDIV 2.0.4
 	 */
 	public void setRandomToken(String randomToken) {
 		this.randomToken = randomToken;
 	}
-	
+
 	public String toString() {
 
 		StringBuffer result = new StringBuffer();

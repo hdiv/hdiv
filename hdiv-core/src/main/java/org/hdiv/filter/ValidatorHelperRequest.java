@@ -1,5 +1,5 @@
 /**
- * Copyright 2005-2011 hdiv.org
+ * Copyright 2005-2013 hdiv.org
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,8 @@
  */
 package org.hdiv.filter;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -68,12 +70,12 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	/**
 	 * HDIV configuration object.
 	 */
-	private HDIVConfig hdivConfig;
+	protected HDIVConfig hdivConfig;
 
 	/**
 	 * Logger to print the possible attacks detected by HDIV.
 	 */
-	private Logger logger;
+	protected Logger logger;
 
 	/**
 	 * Utility methods for state
@@ -137,7 +139,8 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	public ValidatorHelperResult validate(HttpServletRequest request) {
 
 		String target = this.getTarget(request);
-		String targetWithoutContextPath = this.getTargetWithoutContextPath(request, target);
+		target = this.decodeUrl(target);
+		target = this.getTargetWithoutContextPath(request, target);
 
 		// Hook before the validation
 		ValidatorHelperResult result = this.preValidate(request, target);
@@ -165,7 +168,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 			}
 		}
 
-		if (this.hdivConfig.isStartPage(targetWithoutContextPath, request.getMethod())) {
+		if (this.hdivConfig.isStartPage(target, request.getMethod())) {
 			result = this.validateStartPageParameters(request, target);
 			if (result.isValid()) {
 				return ValidatorHelperResult.VALIDATION_NOT_REQUIRED;
@@ -210,7 +213,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 
 			// Validate parameter
 			result = this.validateParameter(request, state, unauthorizedEditableParameters, hdivParameter, target,
-					targetWithoutContextPath, parameter);
+					parameter);
 			if (!result.isValid()) {
 				return result;
 			}
@@ -223,6 +226,21 @@ public class ValidatorHelperRequest implements IValidationHelper {
 		}
 
 		return ValidatorHelperResult.VALID;
+	}
+
+	/**
+	 * It decodes the url to replace the character represented by percentage with its equivalent.
+	 * 
+	 * @param url
+	 *            url to decode
+	 * @return decoded url
+	 */
+	protected String decodeUrl(String url) {
+		try {
+			return URLDecoder.decode(url, Constants.ENCODING_UTF_8);
+		} catch (UnsupportedEncodingException e) {
+			throw new HDIVException("Error decoding url", e);
+		}
 	}
 
 	/**
@@ -366,7 +384,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 			if (sessionCookies.containsKey(requestCookies[i].getName())) {
 
 				SavedCookie savedCookie = sessionCookies.get(requestCookies[i].getName());
-				if (savedCookie.equals(requestCookies[i], cookiesConfidentiality)) {
+				if (savedCookie.isEqual(requestCookies[i], cookiesConfidentiality)) {
 
 					found = true;
 					if (cookiesConfidentiality) {
@@ -408,10 +426,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	protected void validateEditableParameter(HttpServletRequest request, String target, String parameter,
 			String[] values, String dataType, Map<String, String[]> unauthorizedParameters) {
 
-		String targetWithoutContextPath = this.getTargetWithoutContextPath(request, target);
-
-		boolean isValid = hdivConfig.areEditableParameterValuesValid(targetWithoutContextPath, parameter, values,
-				dataType);
+		boolean isValid = hdivConfig.areEditableParameterValuesValid(target, parameter, values, dataType);
 		if (!isValid) {
 
 			StringBuffer unauthorizedValues = new StringBuffer(values[0]);
@@ -444,14 +459,14 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	 */
 	private ValidatorHelperResult allRequiredParametersReceived(HttpServletRequest request, IState state, String target) {
 
-		Map<String, IParameter> receivedParameters = new HashMap<String, IParameter>(state.getRequiredParams());
+		List<String> receivedParameters = state.getRequiredParams();
 
-		String currentParameter = null;
 		Enumeration<?> requestParameters = request.getParameterNames();
 		while (requestParameters.hasMoreElements()) {
 
-			currentParameter = (String) requestParameters.nextElement();
-			if (receivedParameters.containsKey(currentParameter)) {
+			String currentParameter = (String) requestParameters.nextElement();
+
+			if (receivedParameters.contains(currentParameter)) {
 				receivedParameters.remove(currentParameter);
 			}
 
@@ -463,7 +478,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 		}
 
 		if (receivedParameters.size() > 0) {
-			this.logger.log(HDIVErrorCodes.REQUIRED_PARAMETERS, target, receivedParameters.keySet().toString(), null);
+			this.logger.log(HDIVErrorCodes.REQUIRED_PARAMETERS, target, receivedParameters.toString(), null);
 			return new ValidatorHelperResult(HDIVErrorCodes.REQUIRED_PARAMETERS);
 		}
 
@@ -484,16 +499,13 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	 *            Hdiv state parameter name
 	 * @param target
 	 *            Part of the url that represents the target action
-	 * @param targetWithoutContextPath
-	 *            target with the ContextPath stripped
 	 * @param parameter
 	 *            Parameter name to validate
 	 * @return Valid if parameter has not errors
 	 * @since HDIV 2.1.5
 	 */
 	protected ValidatorHelperResult validateParameter(HttpServletRequest request, IState state,
-			Map<String, String[]> unauthorizedEditableParameters, String hdivParameter, String target,
-			String targetWithoutContextPath, String parameter) {
+			Map<String, String[]> unauthorizedEditableParameters, String hdivParameter, String target, String parameter) {
 
 		// Check if the HDIV validation must be applied to the parameter
 		if (!this.hdivConfig.needValidation(parameter, hdivParameter)) {
@@ -505,7 +517,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 		}
 
 		// If the parameter requires no validation it is considered a valid parameter
-		if (this.isUserDefinedNonValidationParameter(targetWithoutContextPath, parameter)) {
+		if (this.isUserDefinedNonValidationParameter(target, parameter)) {
 			return ValidatorHelperResult.VALIDATION_NOT_REQUIRED;
 		}
 
@@ -529,6 +541,9 @@ public class ValidatorHelperRequest implements IValidationHelper {
 
 		// Check if the parameter is editable
 		if (stateParameter.isEditable()) {
+
+			// Mark parameter as editable
+			this.addEditableParameter(request, parameter);
 
 			if (this.hdivConfig.existValidations() && (stateParameter.getEditableDataType() != null)) {
 				this.validateEditableParameter(request, target, parameter, values,
@@ -781,7 +796,8 @@ public class ValidatorHelperRequest implements IValidationHelper {
 			}
 
 			if (receivedValues.contains(values[i])) {
-				this.logger.log(HDIVErrorCodes.REPEATED_VALUES, target, parameter, values[i]);
+				String originalValue = stateValues.size() > 1 ? stateValues.toString() : stateValues.get(0);
+				this.logger.log(HDIVErrorCodes.REPEATED_VALUES, target, parameter, values[i], originalValue);
 				return new ValidatorHelperResult(HDIVErrorCodes.REPEATED_VALUES);
 			}
 
@@ -824,10 +840,13 @@ public class ValidatorHelperRequest implements IValidationHelper {
 			if (!exists) {
 
 				if (receivedValues.contains(values[i])) {
-					this.logger.log(HDIVErrorCodes.REPEATED_VALUES, target, parameter, values[i]);
+					String originalValue = tempStateValues.size() > 1 ? tempStateValues.toString() : tempStateValues
+							.get(0);
+					this.logger.log(HDIVErrorCodes.REPEATED_VALUES, target, parameter, values[i], originalValue);
 					return new ValidatorHelperResult(HDIVErrorCodes.REPEATED_VALUES);
 				}
-				this.logger.log(HDIVErrorCodes.PARAMETER_VALUE_INCORRECT, target, parameter, values[i]);
+				String originalValue = tempStateValues.size() > 1 ? tempStateValues.toString() : tempStateValues.get(0);
+				this.logger.log(HDIVErrorCodes.PARAMETER_VALUE_INCORRECT, target, parameter, values[i], originalValue);
 				return new ValidatorHelperResult(HDIVErrorCodes.PARAMETER_VALUE_INCORRECT);
 			}
 
@@ -856,8 +875,8 @@ public class ValidatorHelperRequest implements IValidationHelper {
 		Matcher m = this.numberPattern.matcher(value);
 
 		if (!m.matches() || (Integer.valueOf(value).intValue() >= stateValues.size())) {
-			String paramValue = (stateValues.size() > 1 ? stateValues : stateValues.get(0)) + "(" + value + ")";
-			this.logger.log(HDIVErrorCodes.CONFIDENTIAL_VALUE_INCORRECT, target, parameter, paramValue);
+			String originalValue = stateValues.size() > 1 ? stateValues.toString() : stateValues.get(0);
+			this.logger.log(HDIVErrorCodes.CONFIDENTIAL_VALUE_INCORRECT, target, parameter, value, originalValue);
 			return false;
 		}
 		return true;
@@ -886,12 +905,10 @@ public class ValidatorHelperRequest implements IValidationHelper {
 
 		IDataValidator dataValidator = this.dataValidatorFactory.newInstance(state);
 
-		String targetWithoutContextPath = this.getTargetWithoutContextPath(request, target);
-
 		IValidationResult result = null;
 		for (int i = 0; i < size; i++) {
 
-			result = dataValidator.validate(values[i], targetWithoutContextPath, parameter);
+			result = dataValidator.validate(values[i], target, parameter);
 
 			if (!result.getLegal()) {
 				this.logger.log(HDIVErrorCodes.PARAMETER_VALUE_INCORRECT, target, parameter, values[i]);
@@ -938,6 +955,25 @@ public class ValidatorHelperRequest implements IValidationHelper {
 			throw new HDIVException(errorMessage);
 		}
 
+	}
+
+	/**
+	 * Mark parameter as editable.
+	 * 
+	 * @param request
+	 *            HttpServletRequest to validate
+	 * @param name
+	 *            parameter name
+	 */
+	protected void addEditableParameter(HttpServletRequest request, String name) {
+
+		if (request instanceof RequestWrapper) {
+			if (log.isDebugEnabled()) {
+				log.debug("Editable parameter [" + name + "] added.");
+			}
+			RequestWrapper wrapper = (RequestWrapper) request;
+			wrapper.addEditableParameter(name);
+		}
 	}
 
 	protected ServletRequest getNativeRequest(ServletRequest request, Class<?> requiredType) {

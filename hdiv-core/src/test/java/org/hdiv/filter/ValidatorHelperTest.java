@@ -1,11 +1,11 @@
-/*
- * Copyright 2004-2012 The Apache Software Foundation.
+/**
+ * Copyright 2005-2013 hdiv.org
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * 	http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -44,7 +44,7 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 
 	private boolean confidentiality;
 
-	private String targetName = "/path/testAction.do";;
+	private String targetName = "/path/testAction.do";
 
 	protected void onSetUp() throws Exception {
 
@@ -431,5 +431,35 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 		requestWrapper = new RequestWrapper(request);
 		boolean result = helper.validate(requestWrapper).isValid();
 		assertFalse(result);
+	}
+
+	public void testValidateWhitespace() {
+
+		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
+
+		this.dataComposer.beginRequest("/path/test Action.do");
+		String pageState = this.dataComposer.endRequest();
+		this.dataComposer.endPage();
+
+		request.setRequestURI("/path/test%20Action.do");
+		request.addParameter(hdivParameter, pageState);
+
+		RequestWrapper requestWrapper = new RequestWrapper(request);
+		assertTrue(helper.validate(requestWrapper).isValid());
+	}
+
+	public void testValidateEncoded() {
+
+		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
+
+		this.dataComposer.beginRequest("/path/test%20Action.do");
+		String pageState = this.dataComposer.endRequest();
+		this.dataComposer.endPage();
+
+		request.setRequestURI("/path/test%20Action.do");
+		request.addParameter(hdivParameter, pageState);
+
+		RequestWrapper requestWrapper = new RequestWrapper(request);
+		assertTrue(helper.validate(requestWrapper).isValid());
 	}
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright 2005-2011 hdiv.org
+ * Copyright 2005-2013 hdiv.org
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -79,7 +79,7 @@ public class EncodingUtil {
 				log.debug("MessageDigest created: " + messageDigest);
 			}
 		} catch (NoSuchAlgorithmException e) {
-			throw new HDIVException(e.getMessage());
+			throw new HDIVException(e.getMessage(), e);
 		}
 	}
 
@@ -175,7 +175,7 @@ public class EncodingUtil {
 			return obj;
 
 		} catch (Exception e) {
-			throw new HDIVException(HDIVErrorCodes.HDIV_PARAMETER_INCORRECT_VALUE);
+			throw new HDIVException(HDIVErrorCodes.HDIV_PARAMETER_INCORRECT_VALUE, e);
 		}
 	}
 
@@ -252,7 +252,7 @@ public class EncodingUtil {
 			return obj;
 
 		} catch (Exception e) {
-			throw new HDIVException(HDIVErrorCodes.HDIV_PARAMETER_INCORRECT_VALUE);
+			throw new HDIVException(HDIVErrorCodes.HDIV_PARAMETER_INCORRECT_VALUE, e);
 		}
 	}
 
@@ -277,13 +277,6 @@ public class EncodingUtil {
 			String errorMessage = HDIVUtil.getMessage("hash.digest");
 			throw new HDIVException(errorMessage, e);
 		}
-	}
-
-	/**
-	 * @return Returns the session.
-	 */
-	public ISession getSession() {
-		return session;
 	}
 
 	/**

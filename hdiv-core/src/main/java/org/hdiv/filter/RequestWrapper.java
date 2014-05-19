@@ -1,5 +1,5 @@
 /**
- * Copyright 2005-2011 hdiv.org
+ * Copyright 2005-2013 hdiv.org
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,8 +19,10 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
@@ -47,9 +49,14 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 	private static Log log = LogFactory.getLog(RequestWrapper.class);
 
 	/**
-	 * HTTP header to sent cookies
+	 * HTTP header to sent cookies.
 	 */
 	private static final String COOKIE = "cookie";
+
+	/**
+	 * Set with editable parameters.
+	 */
+	private Set<String> editableParameters = new HashSet<String>();
 
 	/**
 	 * Map with request parameters
@@ -168,7 +175,7 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 
 		Collection<String> multipartParams = this.parameters.keySet();
 
-		list.add(multipartParams);
+		list.addAll(multipartParams);
 
 		return Collections.enumeration(list);
 	}
@@ -349,6 +356,26 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 	 */
 	public void addFileItem(String name, List values) {
 		this.elementsFile.put(name, values);
+	}
+
+	/**
+	 * Add editable parameter.
+	 * 
+	 * @param parameter
+	 *            new parameter name
+	 * */
+	public void addEditableParameter(String parameter) {
+		this.editableParameters.add(parameter);
+	}
+
+	/**
+	 * Return true if parameter is editable.
+	 * 
+	 * @param parameter
+	 *            parameter name
+	 * */
+	public boolean isEditableParameter(String parameter) {
+		return this.editableParameters.contains(parameter);
 	}
 
 	/**

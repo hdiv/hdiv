@@ -1,5 +1,5 @@
 /**
- * Copyright 2005-2012 hdiv.org
+ * Copyright 2005-2013 hdiv.org
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -82,7 +82,7 @@ public class FormUrlProcessor extends AbstractUrlProcessor {
 		UrlData urlData = super.createUrlData(url, method, request);
 		if (super.isHdivStateNecessary(urlData)) {
 			// the url needs protection
-			String stateId = dataComposer.beginRequest(urlData.getContextPathRelativeUrl());
+			String stateId = dataComposer.beginRequest(urlData.getUrlWithoutContextPath());
 
 			// Publish the state in request to make it accessible on jsp
 			request.setAttribute(FORM_STATE_ID, stateId);

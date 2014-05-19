@@ -1,5 +1,5 @@
 /**
- * Copyright 2005-2011 hdiv.org
+ * Copyright 2005-2013 hdiv.org
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -70,7 +70,7 @@ public class DataComposerCipher extends DataComposerMemory {
 	 */
 	public String endRequest() {
 
-		IState state = (IState) super.getStatesStack().pop();
+		IState state = super.getStatesStack().pop();
 		state.setPageId(this.getPage().getName());
 
 		String stateData = this.encodingUtil.encode64Cipher(state);

@@ -1,0 +1,620 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<chapter xml:id="advanceConfiguration" xmlns="http://docbook.org/ns/docbook"
+	version="5.0" xmlns:xl="http://www.w3.org/1999/xlink" xmlns:xi="http://www.w3.org/2001/XInclude"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+        http://docbook.org/ns/docbook http://www.docbook.org/xml/5.0/xsd/docbook.xsd
+        http://www.w3.org/1999/xlink http://www.docbook.org/xml/5.0/xsd/xlink.xsd">
+	<title>Advanced Configuration</title>
+	<para>
+		In addition to the configuration options presented in the chapter
+		above HDIV offers more advanced options to cover all the user needs.
+	</para>
+
+	<section xml:id="advancedConfiguration-sessionexpiration">
+		<title>Session expiration</title>
+		<para>
+			When an user makes a request to an expired web session, HDIV
+			adds the
+			possibility to redirect the user to the login pages instead
+			of
+			showing
+			HDIV
+			error pages. For that you can use the code below:
+		</para>
+		<programlisting language="xml">
+<![CDATA[
+<hdiv:sessionExpired loginPage="/login.html" homePage="/"/>
+]]></programlisting>
+
+	</section>
+
+	<section xml:id="advancedConfiguration-executionStrategy">
+		<title>Execution strategy</title>
+
+		<para>
+			Having the same objectives, HDIV has different operation
+			strategies:
+		</para>
+
+		<itemizedlist>
+			<listitem>
+				<para>
+					<emphasis role="bold">Memory</emphasis>
+					: All the states of the page are
+					stored in the user's HttpSession.
+					To be able to
+					associate user requests
+					with the state stored in the
+					session, an extra
+					parameter
+					(_HDIV_STATE_) is added to each request.
+					This parameter contains
+					the identifier
+					that makes possible to get the
+					state from session.
+					In this
+					strategy
+					non editable
+					values are hidden as
+					well guaranteeing
+					confidentiality.
+				</para>
+			</listitem>
+
+			<listitem>
+				<para>
+					<emphasis role="bold">Cipher</emphasis>
+					: For each possible request of each page (link or form) an
+					extra
+					parameter
+					(_HDIV_STATE_) is added which represents the state of the
+					request.
+					To guarantee the integrity of the state itself, which is
+					the base of
+					the validation, it
+					is ciphered using a symmetrical
+					algorithm. Beside adding the extra
+					parameter all
+					the non editable
+					values are replaced by relative values (0,1,2,…) to
+					guarantee data
+					confidentiality.
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+					<emphasis role="bold">Hash</emphasis>
+					: This strategy is very similar to the Cipher strategy but in
+					this
+					case the state
+					sent to the client is coded in Base64.
+					To be able to
+					check this parameter integrity, a hash of the state is
+					generated
+					before being sent to the client and it is stored in the user
+					session.
+					This
+					strategy
+					does not guarantee confidentiality because the
+					state can be decoded if
+					we
+					have a
+					high technical knowledge.
+				</para>
+			</listitem>
+
+		</itemizedlist>
+		<para>
+			In order to overwrite the default strategy configuration
+			(memory) it's
+			necessary to add an extra attribute to HDIV config
+			entity:
+		</para>
+		<programlisting language="xml">
+ 			<![CDATA[
+<hdiv:config errorPage="/error.jsp" strategy="cipher">
+	<hdiv:startPages>/home.html</hdiv:startPages>
+</hdiv:config>
+]]></programlisting>
+		<para>
+			If you are a Grails user, configuration is implemented within
+			plugin
+			configuration:
+		</para>
+		<programlisting language="xml">
+ 					<![CDATA[
+grails {
+	plugin {
+		hdiv {
+			config {
+				strategy='cipher'
+			}
+		}
+	}
+}
+]]></programlisting>
+
+	</section>
+
+	<section xml:id="advancedConfiguration-confidentiality">
+		<title>Confidentiality</title>
+		<para>
+			HDIV guarantees the confidentiality of the data as well. Usually
+			lots
+			of the data sent to the client has key information for the
+			attackers
+			such as database registry identifiers, column or table
+			names, web
+			directories, etc.
+			All these values are hidden by HDIV to
+			avoid a
+			malicious use of them.
+			For example a link of this type,
+			http://www.host.com?data1=34 is replaced
+			by
+			http://www.host.com?data1=0, guaranteeing confidentiality of the
+			values representing database identifiers.
+
+			By default de
+			confidentiality
+			is avtivated (true value) but it's
+			possible to turn off
+			using an
+			attribute within HDIV config entity:
+		</para>
+		<programlisting language="xml">
+ 					<![CDATA[
+<hdiv:config confidentiality="false">
+</hdiv:config> 
+]]></programlisting>
+		<para>
+			If you are a Grails user, configuration is implemented within
+			plugin
+			configuration:
+		</para>
+		<programlisting language="xml">
+ 					<![CDATA[
+grails {
+	plugin {
+		hdiv {
+			config {
+				confidentiality='false'
+			}
+		}
+	}
+}
+]]></programlisting>
+
+	</section>
+
+	<section xml:id="advancedConfiguration-cache">
+		<title>Cache configuration</title>
+		<para>
+			When HDIV is executing with the memory strategy, it's necessary
+			to
+			take into account that the amount of memory stored within
+			HttpSession
+			should be
+			controlled. By default HDIV stores all the data
+			related with
+			the last 20 pages
+			visited by the user. It means that if
+			the user
+			access to a one of the
+			previous 20 pages and use a link or
+			form it's a
+			valid request for
+			HDIV.
+
+			If you need to reduce the memory
+			consumption
+			and improve the app
+			scalability it's a good practice to
+			reduce this
+			default value for
+			other lower.
+			It's possible to overwrite
+			this
+			attribute within HDIV config entity:
+		</para>
+		<programlisting language="xml">
+ 					<![CDATA[
+<hdiv:config maxPagesPerSession="5">
+</hdiv:config> 
+]]></programlisting>
+
+		<para>
+			If you are a Grails user, configuration is implemented within
+			plugin
+			configuration:
+		</para>
+		<programlisting language="xml">
+ 					<![CDATA[
+grails {
+	plugin {
+		hdiv {
+			config {
+				maxPagesPerSession='5'
+			}
+		}
+	}
+}
+]]></programlisting>
+
+	</section>
+
+	<section xml:id="advancedConfiguration-cookies">
+		<title>Cookies</title>
+		<para>
+			By default HDIV doesn't apply any kind of validation to cookies.
+			It's
+			possible to activate integrity validations and confidentiality
+			properties to
+			your application from HDIV config entity. In the code
+			next code we define
+			the required code to activate integrity and
+			confidentiality to
+			cookies:
+		</para>
+		<programlisting language="xml">
+ 					<![CDATA[
+<hdiv:config avoidCookiesIntegrity="false" avoidCookiesConfidentiality="false">
+</hdiv:config> 
+]]></programlisting>
+
+		<para>
+			For Grails users using HDIV plugin:
+		</para>
+		<programlisting language="xml">
+ 					<![CDATA[
+grails {
+	plugin {
+		hdiv {
+			config {
+				avoidCookiesIntegrity='false'
+				avoidCookiesConfidentiality='false'
+			}
+		}
+	}
+}
+]]></programlisting>
+
+	</section>
+
+	<section xml:id="advancedConfiguration-urlextensions">
+		<title>Protected and excluded url extensions</title>
+		<para>
+			In addition to start pages configuration and the url mapping
+			defined by
+			HDIV Filter, HDIV allows the validation exclusion depending
+			on the
+			extension.
+			At the same time is possible the inclusion
+			extensions
+			to protect them.
+		</para>
+		<programlisting language="xml">
+ 					<![CDATA[
+<hdiv:config excludedExtensions="css,png" protectedExtensions=".*,aaa">
+</hdiv:config> 
+]]></programlisting>
+
+		<para>
+			For Grails users using HDIV plugin:
+		</para>
+		<programlisting language="xml">
+ 					<![CDATA[
+grails {
+	plugin {
+		hdiv {
+			config {
+				excludedExtensions='css,png'
+				protectedExtensions='.*,aaa'
+			}
+		}
+	}
+}
+]]></programlisting>
+
+	</section>
+
+	<section xml:id="advancedConfiguration-debugmode">
+		<title>Debug mode</title>
+		<para>
+			HDIV offers a debug execution mode in order to apply HDIV in
+			production
+			environments without any functional or integration
+			problems. In other
+			words HDIV
+			process and validates all the requests
+			but doesn't change original execution
+			of the request, just logging the
+			possible attack but without stopping
+			it.
+		</para>
+		<para>
+			It's possible to configure this option from HDIV config entity:
+		</para>
+		<programlisting language="xml">
+ 					<![CDATA[
+<hdiv:config debugMode="true">
+</hdiv:config> 
+]]></programlisting>
+		<para>
+			If you are a Grails user, configuration is implemented within
+			plugin
+			configuration:
+		</para>
+		<programlisting language="xml">
+ 					<![CDATA[
+grails {
+	plugin {
+		hdiv {
+			config {
+				debugMode='true'
+			}
+		}
+	}
+}
+]]></programlisting>
+
+	</section>
+
+	<section xml:id="advancedConfiguration-logger">
+		<title>Logger</title>
+		<para>
+			HDIV has a logger that will print in a file all the attacks
+			detected,
+			which helps system administrators checking the attacks the
+			web
+			application has suffered.
+
+			HDIV uses the Commons Logging API, which
+			can
+			use Log4j as the
+			underlying log system. If the Log4j library is
+			available for the
+			context library directory, Commoms Logging will use
+			the library and
+			the configuration of the log4j.properties placed in
+			the context
+			classpath.
+
+			With this setting we can log the attacks
+			detected by HDIV in a file:
+		</para>
+
+		<programlisting language="">
+ 			<![CDATA[
+# 
+# Configuration for a rolling log file ("hdiv.log"). 
+# 
+log4j.appender.R=org.apache.log4j.DailyRollingFileAppender 
+log4j.appender.R.DatePattern='.'yyyy-MM-dd 
+# 
+# Edit the next line to point to your logs directory. 
+# The last part of the name is the log file name. 
+# 
+log4j.appender.R.File=C://hdiv.log 
+log4j.appender.R.layout=org.apache.log4j.PatternLayout 
+# 
+# Print the date in ISO 8601 format 
+# 
+log4j.appender.R.layout.ConversionPattern=%d [%t] %-5p - %m%n 
+# 
+# Application logging options 
+# 
+log4j.logger.org.hdiv=INFO,R
+]]></programlisting>
+
+		<para>
+			With this setting attack message logs will be written in the
+			c:/hdiv.log
+			file, following the format defined in the
+			log4j.appender.R.layout.ConversionPattern property:
+		</para>
+		<itemizedlist>
+			<listitem>
+				%d : Date of the log event
+			</listitem>
+			<listitem>
+				[%t]: Name of the thread that generated the log event
+			</listitem>
+			<listitem>
+				%-5p: Priority of the event that generated the logging
+			</listitem>
+			<listitem>
+				%m: Message associated with the logging event
+			</listitem>
+			<listitem>
+				%n: New line character
+			</listitem>
+		</itemizedlist>
+		<para>
+			We can check Log4j documentation for
+			different configurations of
+			the log
+			message.
+
+			Log messages written by HDIV, due to %m conversion
+			character
+			defined in
+			the conversion pattern declared in
+			log4j.properties, have
+			the
+			following format:
+		</para>
+		<programlisting language="">
+		<![CDATA[
+[type of attack];[action];[parameter];[value];[userLocalIP];[IP];[userId]
+]]></programlisting>
+
+		<para>
+			[type of attack]: Type of attack detected by HDIV. Its possible
+			values
+			are:
+		</para>
+		<itemizedlist>
+			<listitem>
+				INVALID_ACTION: The action received in the request does not match
+				the state action.
+			</listitem>
+			<listitem>
+				INVALID_PARAMETER_NAME: The parameter received in the request does
+				not exist in the request state.
+			</listitem>
+			<listitem>
+				NOT_RECEIVED_ALL_REQUIRED_PARAMETERS: All the required parameters
+				for the request have not been received.
+			</listitem>
+			<listitem>
+				INVALID_PARAMETER_VALUE: Incorrect parameter value.
+			</listitem>
+			<listitem>
+				NOT_RECEIVED_ALL_PARAMETER_VALUES: For a certain parameter not the
+				expected number of values has been receiced.
+			</listitem>
+			<listitem>
+				REPEATED_VALUES_FOR_PARAMETER: Repeated values have been received
+				for
+				the same parameter.
+			</listitem>
+			<listitem>
+				INVALID_CONFIDENTIAL_VALUE: Incorrect value. Confidentiality
+				activated.
+			</listitem>
+			<listitem>
+				HDIV_PARAMETER_NOT_EXISTS: The HDIV parameter has not been received
+				in the request.
+			</listitem>
+			<listitem>
+				INVALID_HDIV_PARAMETER_VALUE: The HDIV parameter has incorrect
+				value.
+			</listitem>
+			<listitem>
+				INVALID_PAGE_ID: HDIV parameter has an incorrect page identifier.
+			</listitem>
+			<listitem>
+				INVALID_EDITABLE_VALUE: Error in the editable parameter validation.
+			</listitem>
+			<listitem>
+				INVALID_COOKIE: The cookie received in the request has an incorrect
+				value.
+			</listitem>
+		</itemizedlist>
+
+		<para>
+			[action]: url or action name the HTTP request was directed to.
+		</para>
+		<para>
+			[parameter]: the parameter in the HTTP request.
+		</para>
+
+		<para>
+			[value]: parameter value.
+		</para>
+		<para>
+			[userLocalIP]: IP address if the request has been made through a
+			Proxy.
+		</para>
+		<para>
+			[IP]: IP address the request was made from.
+		</para>
+		<para>
+			[userId]: User identifier. The way each web application gets the
+			user may vary
+			from application to application and that’s why the
+			interface
+			(IUserData) has been defined. This interface makes possible
+			to
+			implement getting the user identity in different ways allowing the
+			use
+			of HDIV to any web application.
+		</para>
+		<para>
+			Let’s see examples of an attacks detected by HDIV:
+		</para>
+		<programlisting language="">
+	<![CDATA[
+2013-09-22 10:56:07,214 [http-80-Processor25] INFO – INVALID_ACTION;action1;param1;value1;188.15.1.25;201.166.24.12;45652146M 
+2013-09-22 10:58:15,500 [http-80-Processor25] INFO – INVALID_CONFIDENTIAL_VALUE;action3;param2;value3;188.15.1.25;201.166.24.12;15235687G 
+2013-09-22 11:01:24,124 [http-80-Processor25] INFO – NOT_RECEIVED_ALL_REQUIRED_PARAMETERS;action5;param1;value1;188.15.1.25;201.166.24.12;15235687G 
+2013-09-22 11:15:00,411 [http-80-Processor25] INFO – INVALID_PARAMETER_NAME;action1;param5;value2;188.15.1.25;201.166.24.12;45652146M
+]]></programlisting>
+		<para>
+			Last but not least, HDIV offers an option to include de user
+			identity
+			within HDIV log files. For that it's neccesary to implement a
+			class
+			that follow IUserData interface.
+
+			It's possible to configure this
+			option
+			from HDIV config entity defining the name of the bean that
+			implements
+			IUserData interface:
+		</para>
+		<programlisting language="xml">
+ 					<![CDATA[
+<hdiv:config userData="testUserData">
+</hdiv:config> 
+]]></programlisting>
+		<para>
+			If you are a Grails user, configuration is implemented within plugin
+			configuration:
+		</para>
+		<programlisting language="xml">
+ 					<![CDATA[
+grails {
+	plugin {
+		hdiv {
+			config {
+				userData='testUserData'
+			}
+		}
+	}
+}
+]]></programlisting>
+
+	</section>
+
+	<section xml:id="advancedConfiguration-avoidValidationInUrlsWithoutParams">
+		<title>Avoid validation in urls without parameters</title>
+		<para>
+			HDIV offers a configuration option to disable url protection
+			that don't contains parameters,
+			delegating this work to Spring
+			Security or another access protection system.
+		</para>
+		<para>
+			It's possible to configure this option from HDIV config entity:
+		</para>
+		<programlisting language="xml">
+ 					<![CDATA[
+<hdiv:config avoidValidationInUrlsWithoutParams="true">
+</hdiv:config> 
+]]></programlisting>
+		<para>
+			If you are a Grails user, configuration is implemented within
+			plugin
+			configuration:
+		</para>
+		<programlisting language="xml">
+ 					<![CDATA[
+grails {
+	plugin {
+		hdiv {
+			config {
+				avoidValidationInUrlsWithoutParams='true'
+			}
+		}
+	}
+}
+]]></programlisting>
+
+	</section>
+
+
+
+</chapter>

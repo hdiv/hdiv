@@ -1,11 +1,11 @@
-/*
- * Copyright 2004-2005 The Apache Software Foundation.
+/**
+ * Copyright 2005-2013 hdiv.org
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * 	http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -135,7 +135,7 @@ public class DataComposerMemoryTest extends AbstractHDIVTestCase {
 
 		assertEquals(stateId, stateId2);
 		IState state2 = this.stateUtil.restoreState(stateId2);
-		assertEquals(state2.getParameter("parameter1").getCount(), 2);
+		assertEquals(state2.getParameter("parameter1").getConfidentialValue(), "1");
 		assertTrue(state2.getParameter("parameter1").existValue("3"));
 	}
 
@@ -232,12 +232,68 @@ public class DataComposerMemoryTest extends AbstractHDIVTestCase {
 
 		// State contains both parameters
 		IParameter param = state.getParameter("parameter1");
-		String val = (String) param.getValues().get(0);
+		String val = param.getValues().get(0);
 		assertEquals("1", val);
 
 		param = state.getParameter("parameter2");
-		val = (String) param.getValues().get(0);
+		val = param.getValues().get(0);
 		assertEquals("2", val);
 	}
 
+	public void testSaveStateInCreation() {
+
+		// Test the validation of a state before processing all page
+
+		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		IDataComposer dataComposer = this.dataComposerFactory.newInstance(request);
+		HDIVUtil.setDataComposer(dataComposer, request);
+
+		dataComposer.startPage();
+
+		dataComposer.beginRequest("test.do");
+		String result = dataComposer.compose("test.do", "parameter1", "2", false);
+		assertEquals("0", result);
+		String stateId = dataComposer.endRequest();
+
+		IState state = this.stateUtil.restoreState(stateId);
+		assertNotNull(state);
+		assertEquals("test.do", state.getAction());
+
+		dataComposer.endPage();
+	}
+
+	public void testEncodeFormAction() {
+
+		// No encoded url
+		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		IDataComposer dataComposer = this.dataComposerFactory.newInstance(request);
+		HDIVUtil.setDataComposer(dataComposer, request);
+
+		dataComposer.startPage();
+		dataComposer.beginRequest("test test.do");
+		String stateId = dataComposer.endRequest();
+		dataComposer.endPage();
+
+		assertNotNull(stateId);
+
+		IState state = this.stateUtil.restoreState(stateId);
+
+		assertEquals("test test.do", state.getAction());
+
+		// Encoded action url
+		dataComposer = this.dataComposerFactory.newInstance(request);
+		HDIVUtil.setDataComposer(dataComposer, request);
+
+		dataComposer.startPage();
+		dataComposer.beginRequest("test%20test.do");
+		stateId = dataComposer.endRequest();
+		dataComposer.endPage();
+
+		assertNotNull(stateId);
+
+		state = this.stateUtil.restoreState(stateId);
+
+		// State action value is decoded because we store decoded values only
+		assertEquals("test test.do", state.getAction());
+	}
 }

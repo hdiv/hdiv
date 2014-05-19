@@ -1,5 +1,5 @@
 /**
- * Copyright 2005-2012 hdiv.org
+ * Copyright 2005-2013 hdiv.org
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 package org.hdiv.config;
 
-import java.util.regex.Pattern;
+import org.hdiv.regex.PatternMatcher;
 
 /**
  * Contains the information of a start page.
@@ -38,12 +38,16 @@ public class StartPage {
 	/**
 	 * Compiled pattern
 	 */
-	private Pattern compiledPattern;
+	private PatternMatcher compiledPattern;
 
 	public StartPage(String method, String pattern) {
 		this.method = method;
 		this.pattern = pattern;
-		this.compiledPattern = Pattern.compile(pattern);
+	}
+
+	public StartPage(String method, PatternMatcher compiledPattern) {
+		this.method = method;
+		this.compiledPattern = compiledPattern;
 	}
 
 	/**
@@ -61,9 +65,17 @@ public class StartPage {
 	}
 
 	/**
+	 * @param compiledPattern
+	 *            the compiledPattern to set
+	 */
+	public void setCompiledPattern(PatternMatcher compiledPattern) {
+		this.compiledPattern = compiledPattern;
+	}
+
+	/**
 	 * @return the compiledPattern
 	 */
-	public Pattern getCompiledPattern() {
+	public PatternMatcher getCompiledPattern() {
 		return compiledPattern;
 	}
 
@@ -76,19 +88,35 @@ public class StartPage {
 		return method == null || method.length() == 0;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#toString()
-	 */
-	public String toString() {
-		StringBuffer sb = new StringBuffer();
-		sb.append("StartPage[");
-		sb.append("method = " + this.method);
-		sb.append(", ");
-		sb.append("pattern = " + this.pattern);
-		sb.append("]");
-		return sb.toString();
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((method == null) ? 0 : method.hashCode());
+		result = prime * result + ((pattern == null) ? 0 : pattern.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		StartPage other = (StartPage) obj;
+		if (method == null) {
+			if (other.method != null)
+				return false;
+		} else if (!method.equals(other.method))
+			return false;
+		if (pattern == null) {
+			if (other.pattern != null)
+				return false;
+		} else if (!pattern.equals(other.pattern))
+			return false;
+		return true;
 	}
 
 }

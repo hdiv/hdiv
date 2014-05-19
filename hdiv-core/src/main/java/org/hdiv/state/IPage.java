@@ -1,5 +1,5 @@
 /**
- * Copyright 2005-2011 hdiv.org
+ * Copyright 2005-2013 hdiv.org
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,51 +15,53 @@
  */
 package org.hdiv.state;
 
-import java.util.Map;
+import java.util.Collection;
 
 public interface IPage {
 
 	/**
 	 * Adds a new state to the page <code>this</code>.
 	 * 
-	 * @param state State that represents all the data that composes a possible
-	 *            request.
+	 * @param state
+	 *            State that represents all the data that composes a possible request.
 	 */
 	public void addState(IState state);
 
 	/**
 	 * Adds a new state hash to the page <code>this</code>.
 	 * 
-	 * @param id state identifier
-	 * @param state Hash of a state that represents all the data that composes a
-	 *            possible request.
+	 * @param id
+	 *            state identifier
+	 * @param state
+	 *            Hash of a state that represents all the data that composes a possible request.
 	 */
-	public void addState(String id, String state);
+	public void addState(int id, String state);
 
 	/**
 	 * Checks if exists a state with the given identifier <code>key</code>.
 	 * 
-	 * @param key State identifier
+	 * @param id
+	 *            State identifier
 	 */
-	public boolean existState(String key);
+	public boolean existState(int id);
 
 	/**
-	 * Returns the state with the given identifier <code>key</code> from the
-	 * map of states
+	 * Returns the state with the given identifier <code>key</code> from the map of states
 	 * 
-	 * @param key State identifier
+	 * @param id
+	 *            State identifier
 	 * @return IState State with the identifier <code>key</code>.
 	 */
-	public IState getState(String key);
+	public IState getState(int id);
 
 	/**
-	 * Returns the state hash with the given identifier <code>key</code> from
-	 * the map of states
+	 * Returns the state hash with the given identifier <code>key</code> from the map of states
 	 * 
-	 * @param key State identifier
+	 * @param id
+	 *            State identifier
 	 * @return String hash with the identifier <code>key</code>.
 	 */
-	public String getStateHash(String key);
+	public String getStateHash(int id);
 
 	/**
 	 * @return Returns the page name.
@@ -67,23 +69,31 @@ public interface IPage {
 	public String getName();
 
 	/**
-	 * @param name The page name to set.
+	 * @param name
+	 *            The page name to set.
 	 */
 	public void setName(String name);
 
 	/**
 	 * @return Returns the page states.
 	 */
-	public Map<String, Object> getStates();
-	
+	public Collection<Object> getStates();
+
+	/**
+	 * @return number of states.
+	 */
+	public int getStatesCount();
+
 	/**
 	 * Returns the unique id of flow.
+	 * 
 	 * @return the flow id
 	 */
 	public String getFlowId();
 
 	/**
-	 * @param flowId the flowId to set
+	 * @param flowId
+	 *            the flowId to set
 	 */
 	public void setFlowId(String flowId);
 
@@ -92,10 +102,11 @@ public interface IPage {
 	 * @since HDIV 2.0.4
 	 */
 	public String getRandomToken();
-	
+
 	/**
-	 * @param randomToken the randomToken to set
+	 * @param randomToken
+	 *            the randomToken to set
 	 * @since HDIV 2.0.4
 	 */
-	public void setRandomToken(String randomToken);	
+	public void setRandomToken(String randomToken);
 }

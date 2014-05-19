@@ -1,11 +1,11 @@
-/*
- * Copyright 2004-2012 The Apache Software Foundation.
+/**
+ * Copyright 2005-2013 hdiv.org
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * 	http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -186,6 +186,23 @@ public class LinkUrlProcessorTest extends AbstractHDIVTestCase {
 		url = "/onlypost.do"; // is a startPage only in POST requests
 		result = this.linkUrlProcessor.processUrl(request, url);
 		assertTrue(result.startsWith("/onlypost.do?_HDIV_STATE_="));
+	}
+
+	public void testProcessActionStartPageWithParams() {
+
+		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+
+		String url = "/testing.do?param=value"; // is a startPage
+		String result = this.linkUrlProcessor.processUrl(request, url);
+		assertEquals(url, result);
+
+		url = "/onlyget.do?param=value"; // is a startPage only in Get requests
+		result = this.linkUrlProcessor.processUrl(request, url);
+		assertEquals(url, result);
+
+		url = "/onlypost.do?param=value"; // is a startPage only in POST requests
+		result = this.linkUrlProcessor.processUrl(request, url);
+		assertTrue(result.startsWith("/onlypost.do?param=0&_HDIV_STATE_="));
 	}
 
 	public void testProcessWithBaseUrl() {

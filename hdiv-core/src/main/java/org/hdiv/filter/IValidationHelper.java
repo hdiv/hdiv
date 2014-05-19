@@ -1,5 +1,5 @@
 /**
- * Copyright 2005-2011 hdiv.org
+ * Copyright 2005-2013 hdiv.org
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,7 +37,7 @@ public interface IValidationHelper {
 
 	/**
 	 * Checks if the values of the parameters received in the request <code>request</code> are valid. These values are
-	 * valid if and only if the noneditable parameters haven�t been modified.<br>
+	 * valid if and only if the noneditable parameters haven't been modified.<br>
 	 * 
 	 * @param request
 	 *            HTTP servlet request

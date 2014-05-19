@@ -1,5 +1,5 @@
 /**
- * Copyright 2005-2011 hdiv.org
+ * Copyright 2005-2013 hdiv.org
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hdiv.config.HDIVConfig;
 import org.hdiv.exception.HDIVException;
+import org.hdiv.session.ISession;
 import org.hdiv.util.EncodingUtil;
 import org.hdiv.util.HDIVErrorCodes;
 
@@ -36,38 +37,31 @@ public class StateUtil {
 	 * Commons Logging instance.
 	 */
 	private Log log = LogFactory.getLog(StateUtil.class);
-	
+
 	/**
-	 * Memory strategy name 
+	 * Memory strategy name
 	 */
 	private static final String MEMORY_STRATEGY = "memory";
-	
+
 	/**
 	 * Cipher strategy name
 	 */
 	private static final String CIPHER_STRATEGY = "cipher";
-	
+
 	/**
 	 * Hash strategy name
 	 */
 	private static final String HASH_STRATEGY = "hash";
-	
+
 	/**
 	 * Pattern to check if the memory strategy is being used
 	 */
 	private static final String MEMORY_PATTERN = "([0-9]+-){2}[A-Za-z0-9]+";
-	
+
 	/**
 	 * Compiled MEMORY_PATTERN
 	 */
 	private Pattern memoryPattern = Pattern.compile(MEMORY_PATTERN);
-	
-	/**
-	 * Parameter name included by HDIV in the requests or forms which will contain
-	 * the state identifier, in the memory strategy, or the state itself, in the
-	 * encoded and hash strategies.
-	 */
-	private String HDIVParameter;
 
 	/**
 	 * Utility methods for encoding
@@ -80,30 +74,36 @@ public class StateUtil {
 	private HDIVConfig config;
 
 	/**
+	 * User session wrapper.
+	 */
+	private ISession session;
+
+	/**
 	 * StateUtil initialization.
 	 */
 	public void init() {
 		if (log.isDebugEnabled()) {
 			log.debug("StateUtil instance created.");
 		}
-	}	
+	}
 
 	/**
-	 * Restore state data from <code>request</code>. State restore from memory can
-	 * be done using an identifier or or using the serialized data received in the
-	 * request.
+	 * Restore state data from <code>request</code>. State restore from memory can be done using an identifier or or
+	 * using the serialized data received in the request.
 	 * 
-	 * @param requestState String that contains HDIV state received in the request
+	 * @param requestState
+	 *            String that contains HDIV state received in the request
 	 * @return State Restore state data from <code>request</code>.
-	 * @throws HDIVException If the state doesn't exist a new HDIV exception is
-	 *             thrown.
-	 */ 
+	 * @throws HDIVException
+	 *             If the state doesn't exist a new HDIV exception is thrown.
+	 */
 	public IState restoreState(String requestState) {
 
 		IState restoredState = null;
-		
+
 		if (this.isMemoryStrategy(requestState)) {
-			restoredState = this.getStateFromSession(requestState);
+
+			restoredState = this.restoreMemoryState(requestState);
 
 		} else if (this.isCipherStrategy()) {
 			restoredState = (IState) encodingUtil.decode64Cipher(requestState);
@@ -120,7 +120,7 @@ public class StateUtil {
 
 	/**
 	 * Checks if the memory strategy is being used
-	 *
+	 * 
 	 * @return True if strategy is memory. False in otherwise.
 	 */
 	public boolean isMemoryStrategy(String value) {
@@ -132,63 +132,86 @@ public class StateUtil {
 
 	/**
 	 * Checks if the cipher (encoded) strategy is being used.
-	 *
+	 * 
 	 * @return True if strategy is cipher. False in otherwise.
 	 */
-	private boolean isCipherStrategy() {
+	protected boolean isCipherStrategy() {
 		return this.config.getStrategy().equalsIgnoreCase(CIPHER_STRATEGY);
 	}
 
 	/**
 	 * Checks if the hash strategy is being used.
-	 *
+	 * 
 	 * @return True if strategy is hash. False in otherwise.
 	 */
-	private boolean isHashStrategy() {
+	protected boolean isHashStrategy() {
 		return this.config.getStrategy().equalsIgnoreCase(HASH_STRATEGY);
 	}
 
 	/**
-	 * Restores the state using the identifier obtained from the
-	 * <code>HDIVParameter</code> of the request.
+	 * Restore a state from Memory Strategy.
 	 * 
-	 * @param value <code>HDIVParameter</code> parameter value.
-	 * @return State with all the page data.
+	 * @param requestState
+	 *            String that contains HDIV state received in the request
+	 * @return State Restore state data from <code>request</code>.
 	 */
-	private IState getStateFromSession(String value) {
+	protected IState restoreMemoryState(String requestState) {
 
-		int firstSeparator = value.indexOf("-");
-		int lastSeparator = value.lastIndexOf("-");
-		if ((firstSeparator == -1) || (lastSeparator == -1)) { 
+		IState restoredState = null;
+
+		// Extract pageId and stateId from the state identifier
+		int firstSeparator = requestState.indexOf("-");
+		int lastSeparator = requestState.lastIndexOf("-");
+		if ((firstSeparator == -1) || (lastSeparator == -1)) {
 			throw new HDIVException(HDIVErrorCodes.HDIV_PARAMETER_INCORRECT_VALUE);
 		}
-		
-		String page = value.substring(0, firstSeparator);
-		String stateId = value.substring(firstSeparator + 1, lastSeparator);
 
-		IState sessionState =  this.encodingUtil.getSession().getState(page, stateId);
-		
+		String pageId = requestState.substring(0, firstSeparator);
+		String sId = requestState.substring(firstSeparator + 1, lastSeparator);
+		int stateId;
+		try {
+			stateId = Integer.parseInt(sId);
+		} catch (NumberFormatException e) {
+			throw new HDIVException(HDIVErrorCodes.HDIV_PARAMETER_INCORRECT_VALUE);
+		}
+		restoredState = this.getStateFromSession(pageId, stateId);
+
+		return restoredState;
+	}
+
+	/**
+	 * Restores the state using the identifier obtained from the <code>HDIVParameter</code> of the request.
+	 * 
+	 * @param pageId
+	 *            current {@link IPage} id
+	 * @param stateId
+	 *            current {@link IState} id
+	 * @return State with all the page data.
+	 */
+	protected IState getStateFromSession(String pageId, int stateId) {
+
+		IState sessionState = this.session.getState(pageId, stateId);
+
 		if (sessionState == null) {
 			throw new HDIVException(HDIVErrorCodes.HDIV_PARAMETER_INCORRECT_VALUE);
 		}
 		return sessionState;
 	}
-	
+
 	/**
-	 * Checks if the state hash received from the client and the hash stored in
-	 * session match. If it is true, an object of type <code>IState</code> is
-	 * returned. Otherwise, a HDIVException is thrown.
+	 * Checks if the state hash received from the client and the hash stored in session match. If it is true, an object
+	 * of type <code>IState</code> is returned. Otherwise, a HDIVException is thrown.
 	 * 
-	 * @param value State received in the request encoded in Base64
-	 * @return Decoded state of type <code>IState</code> obtained from
-	 *         <code>value</code>
+	 * @param value
+	 *            State received in the request encoded in Base64
+	 * @return Decoded state of type <code>IState</code> obtained from <code>value</code>
 	 */
 	protected IState restoreHashState(String value) {
 
 		String restoredStateHash = this.encodingUtil.calculateStateHash(value);
 
 		IState decodedState = (IState) encodingUtil.decode64(value);
-		String sessionStateHash = this.encodingUtil.getSession().getStateHash(decodedState.getPageId(), decodedState.getId());
+		String sessionStateHash = this.session.getStateHash(decodedState.getPageId(), decodedState.getId());
 
 		if (restoredStateHash.equals(sessionStateHash)) {
 			return decodedState;
@@ -197,38 +220,26 @@ public class StateUtil {
 	}
 
 	/**
-	 * @return Returns the HDIV state parameter.
-	 */
-	public String getHDIVParameter() {
-		return HDIVParameter;
-	}
-	
-	/**
-	 * @param parameter The hDIVParameter to set.
-	 */
-	public void setHDIVParameter(String parameter) {
-		HDIVParameter = parameter;
-	}	
-	
-	/**
-	 * @return Returns the encoding util.
-	 */
-	public EncodingUtil getEncodingUtil() {
-		return encodingUtil;
-	}
-
-	/**
-	 * @param encodingUtil The encodingUtil to set.
+	 * @param encodingUtil
+	 *            The encodingUtil to set.
 	 */
 	public void setEncodingUtil(EncodingUtil encodingUtil) {
 		this.encodingUtil = encodingUtil;
 	}
 
 	/**
-	 * @param config the config to set
+	 * @param config
+	 *            the config to set
 	 */
 	public void setConfig(HDIVConfig config) {
 		this.config = config;
 	}
 
+	/**
+	 * @param session
+	 *            the session to set
+	 */
+	public void setSession(ISession session) {
+		this.session = session;
+	}
 }

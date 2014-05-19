@@ -1,5 +1,5 @@
 /**
- * Copyright 2005-2012 hdiv.org
+ * Copyright 2005-2013 hdiv.org
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,14 +21,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 import java.util.StringTokenizer;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hdiv.config.HDIVConfig;
+import org.hdiv.regex.PatternMatcher;
 import org.hdiv.util.Constants;
 import org.hdiv.util.HDIVUtil;
 import org.springframework.util.Assert;
@@ -77,11 +76,12 @@ public abstract class AbstractUrlProcessor {
 		}
 
 		// Remove parameters
-		if (url.indexOf("?") > 0) {
-			String urlParams = url.substring(url.indexOf("?") + 1);
+		int paramInit = url.indexOf("?");
+		if (paramInit > -1) {
+			String urlParams = url.substring(paramInit + 1);
 			Map<String, String[]> ulrParamsMap = this.getUrlParamsAsMap(request, urlParams);
 			urlData.setOriginalUrlParams(ulrParamsMap);
-			url = url.substring(0, url.indexOf("?"));
+			url = url.substring(0, paramInit);
 
 		}
 
@@ -106,8 +106,10 @@ public abstract class AbstractUrlProcessor {
 		urlData.setContextPathRelativeUrl(contextPathRelativeUrl);
 
 		// Calculate url without the context path for later processing
-		if (contextPathRelativeUrl.startsWith(request.getContextPath())) {
-			String urlWithoutContextPath = contextPathRelativeUrl.substring(request.getContextPath().length());
+		String contextPath = request.getContextPath();
+		if (contextPathRelativeUrl.startsWith(contextPath)) {
+			// Remove contextPath
+			String urlWithoutContextPath = contextPathRelativeUrl.substring(contextPath.length());
 			urlData.setUrlWithoutContextPath(urlWithoutContextPath);
 		} else {
 			// If contextPath is not present, the relative url is out of application
@@ -155,12 +157,12 @@ public abstract class AbstractUrlProcessor {
 			// Ignore Hdiv state parameter
 			if (!param.equals(hdivParameter)) {
 				// Add value to array or create it
-				String[] values = (String[]) params.get(param);
+				String[] values = params.get(param);
 				if (values == null) {
 					values = new String[] { val };
 				} else {
 					int l = values.length;
-					values = (String[]) Arrays.copyOf(values, l + 1);
+					values = Arrays.copyOf(values, l + 1);
 					values[l] = val;
 				}
 				params.put(param, values);
@@ -178,12 +180,6 @@ public abstract class AbstractUrlProcessor {
 	protected boolean isStartPage(UrlData urlData) {
 
 		// If this is a start page, don't compose
-		if (this.config.isStartPage(urlData.getContextPathRelativeUrl(), urlData.getMethod())) {
-			return true;
-		}
-
-		// If the url contains the context path and is a start page, don't
-		// compose
 		if (this.config.isStartPage(urlData.getUrlWithoutContextPath(), urlData.getMethod())) {
 			return true;
 		}
@@ -204,8 +200,6 @@ public abstract class AbstractUrlProcessor {
 	 */
 	public String getProcessedUrlWithHdivState(HttpServletRequest request, UrlData urlData, String stateParam) {
 
-		String hdivParameter = (String) request.getSession().getAttribute(Constants.HDIV_PARAMETER);
-
 		// obtain url with parameters
 		String url = this.getParamProcessedUrl(urlData);
 
@@ -214,6 +208,7 @@ public abstract class AbstractUrlProcessor {
 		}
 
 		String separator = (urlData.containsParams()) ? "&" : "?";
+		String hdivParameter = (String) request.getSession().getAttribute(Constants.HDIV_PARAMETER);
 
 		StringBuffer sb = new StringBuffer();
 		sb.append(url).append(separator).append(hdivParameter).append("=").append(stateParam);
@@ -224,13 +219,13 @@ public abstract class AbstractUrlProcessor {
 	}
 
 	/**
-	 * Generate a url with all parameters.
+	 * Generate Query String with all parameters.
 	 * 
 	 * @param urlData
 	 *            url data object
-	 * @return complete url
+	 * @return complete query string
 	 */
-	public String getParamProcessedUrl(UrlData urlData) {
+	protected String getParamsQueryString(UrlData urlData) {
 
 		Map<String, String[]> params = null;
 		if (urlData.getProcessedUrlParams() != null) {
@@ -239,21 +234,11 @@ public abstract class AbstractUrlProcessor {
 			params = urlData.getOriginalUrlParams();
 		}
 
-		StringBuffer sb = new StringBuffer();
-		if (urlData.getServer() != null) {
-			sb.append(urlData.getServer());
-		}
-		sb.append(urlData.getContextPathRelativeUrl());
-
-		// Add jSessionId
-		if (urlData.getjSessionId() != null) {
-			sb.append(";");
-			sb.append(urlData.getjSessionId());
-		}
-
 		if (params == null || params.size() == 0) {
-			return sb.toString();
+			return "";
 		}
+
+		StringBuffer sb = new StringBuffer();
 
 		String separator = "?";
 
@@ -268,6 +253,33 @@ public abstract class AbstractUrlProcessor {
 				}
 			}
 		}
+
+		return sb.toString();
+	}
+
+	/**
+	 * Generate a url with all parameters.
+	 * 
+	 * @param urlData
+	 *            url data object
+	 * @return complete url
+	 */
+	public String getParamProcessedUrl(UrlData urlData) {
+
+		StringBuffer sb = new StringBuffer();
+		if (urlData.getServer() != null) {
+			sb.append(urlData.getServer());
+		}
+		sb.append(urlData.getContextPathRelativeUrl());
+
+		// Add jSessionId
+		if (urlData.getjSessionId() != null) {
+			sb.append(";");
+			sb.append(urlData.getjSessionId());
+		}
+
+		String queryString = this.getParamsQueryString(urlData);
+		sb.append(queryString);
 
 		return sb.toString();
 	}
@@ -364,7 +376,9 @@ public abstract class AbstractUrlProcessor {
 				return false;
 			}
 
-			if (url.startsWith(request.getContextPath() + "/") || url.equals(request.getContextPath())) {
+			String contextPath = request.getContextPath();
+
+			if (url.startsWith(contextPath + "/") || url.equals(contextPath)) {
 				// http://localhost:8080/APP/... or
 				// http://localhost:8080/APP
 				return true;
@@ -373,7 +387,10 @@ public abstract class AbstractUrlProcessor {
 			return false;
 
 		} else {
-			if (url.startsWith(request.getContextPath() + "/") || url.equals(request.getContextPath())) {
+
+			String contextPath = request.getContextPath();
+
+			if (url.startsWith(contextPath + "/") || url.equals(contextPath)) {
 				// url of type /APP/... or /APP
 				return true;
 			} else if (url.startsWith("/")) {
@@ -432,7 +449,7 @@ public abstract class AbstractUrlProcessor {
 			}
 		}
 
-		Map<String, Pattern> protectedExtension = this.config.getProtectedURLPatterns();
+		List<PatternMatcher> protectedExtension = this.config.getProtectedURLPatterns();
 
 		// jsp is always protected
 		if (contextPathRelativeUrl.endsWith(".jsp")) {
@@ -440,10 +457,9 @@ public abstract class AbstractUrlProcessor {
 		}
 
 		if (protectedExtension != null) {
-			for (Pattern extensionPattern : protectedExtension.values()) {
-				Matcher m = extensionPattern.matcher(contextPathRelativeUrl);
+			for (PatternMatcher extensionPattern : protectedExtension) {
 
-				if (m.matches()) {
+				if (extensionPattern.matches(contextPathRelativeUrl)) {
 					return false;
 				}
 			}
@@ -553,7 +569,7 @@ public abstract class AbstractUrlProcessor {
 	 */
 	protected String stripSession(String url, UrlData urlData) {
 
-		if (url.contains(Constants.JSESSIONID) || url.contains(Constants.JSESSIONID.toLowerCase())) {
+		if (url.contains(Constants.JSESSIONID) || url.contains(Constants.JSESSIONID_LC)) {
 
 			int last = url.length();
 			if (url.contains("?")) {

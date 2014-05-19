@@ -1,5 +1,5 @@
 /**
- * Copyright 2005-2011 hdiv.org
+ * Copyright 2005-2013 hdiv.org
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.hdiv.regex.PatternMatcher;
+import org.hdiv.regex.PatternMatcherFactory;
 import org.hdiv.validator.IValidation;
 import org.hdiv.validator.Validation;
 import org.springframework.beans.BeansException;
@@ -35,9 +37,16 @@ import org.springframework.beans.factory.BeanFactoryAware;
 public class HDIVValidations implements BeanFactoryAware {
 
 	/**
+	 * Regular expression executor factory.
+	 * 
+	 * @since 2.1.6
+	 */
+	private PatternMatcherFactory patternMatcherFactory;
+
+	/**
 	 * Map containing the urls to which the user wants to apply validation for the editable parameters.
 	 */
-	protected Map<String, List<IValidation>> urls;
+	protected Map<PatternMatcher, List<IValidation>> urls;
 
 	/**
 	 * Map for configuration purpose.
@@ -55,11 +64,12 @@ public class HDIVValidations implements BeanFactoryAware {
 	 */
 	public void init() {
 
-		this.urls = new HashMap<String, List<IValidation>>();
-		
+		this.urls = new HashMap<PatternMatcher, List<IValidation>>();
+
 		for (String key : this.rawUrls.keySet()) {
 			List<String> ids = rawUrls.get(key);
-			this.urls.put(key, this.createValidationList(ids));
+			PatternMatcher matcher = this.patternMatcherFactory.getPatternMatcher(key);
+			this.urls.put(matcher, this.createValidationList(ids));
 		}
 
 	}
@@ -78,7 +88,7 @@ public class HDIVValidations implements BeanFactoryAware {
 			Validation validation = (Validation) this.beanFactory.getBean(id);
 			newList.add(validation);
 		}
-		
+
 		return newList;
 	}
 
@@ -104,7 +114,7 @@ public class HDIVValidations implements BeanFactoryAware {
 	/**
 	 * @return Returns the urls.
 	 */
-	public Map<String, List<IValidation>> getUrls() {
+	public Map<PatternMatcher, List<IValidation>> getUrls() {
 		return urls;
 	}
 
@@ -112,7 +122,7 @@ public class HDIVValidations implements BeanFactoryAware {
 	 * @param urls
 	 *            The urls to set.
 	 */
-	public void setUrls(Map<String, List<IValidation>> urls) {
+	public void setUrls(Map<PatternMatcher, List<IValidation>> urls) {
 		this.urls = urls;
 	}
 
@@ -129,6 +139,14 @@ public class HDIVValidations implements BeanFactoryAware {
 	 */
 	public void setRawUrls(Map<String, List<String>> rawUrls) {
 		this.rawUrls = rawUrls;
+	}
+
+	/**
+	 * @param patternMatcherFactory
+	 *            the patternMatcherFactory to set
+	 */
+	public void setPatternMatcherFactory(PatternMatcherFactory patternMatcherFactory) {
+		this.patternMatcherFactory = patternMatcherFactory;
 	}
 
 }

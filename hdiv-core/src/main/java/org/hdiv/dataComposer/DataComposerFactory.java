@@ -1,5 +1,5 @@
 /**
- * Copyright 2005-2011 hdiv.org
+ * Copyright 2005-2013 hdiv.org
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,32 +39,32 @@ public class DataComposerFactory {
 	/**
 	 * HDIV configuration object.
 	 */
-	private HDIVConfig hdivConfig;
+	protected HDIVConfig hdivConfig;
 
 	/**
 	 * Http session wrapper
 	 */
-	private ISession session;
+	protected ISession session;
 
 	/**
 	 * Unique Id generator
 	 */
-	private UidGenerator uidGenerator;
+	protected UidGenerator uidGenerator;
 
 	/**
 	 * Maximum size allowed to represent page state
 	 */
-	private int allowedLength;
+	protected int allowedLength;
 
 	/**
 	 * Utility methods for encoding
 	 */
-	private EncodingUtil encodingUtil;
+	protected EncodingUtil encodingUtil;
 
 	/**
 	 * State management utility
 	 */
-	private StateUtil stateUtil;
+	protected StateUtil stateUtil;
 
 	/**
 	 * Creates a new instance of DataComposer based on the defined strategy.

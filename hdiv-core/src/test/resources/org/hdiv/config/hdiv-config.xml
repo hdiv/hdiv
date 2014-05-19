@@ -6,6 +6,8 @@
 	<!-- HDIV Configuration Bean -->
 	<bean id="config" class="org.hdiv.config.HDIVConfig">
 
+		<property name="patternMatcherFactory" ref="patternMatcherFactory" />
+
 		<property name="userStartParameters">
 			<list>
 				<value>clientGeneratedParam</value>
@@ -67,19 +69,14 @@
 		</property>
 
 		<property name="validations">
-			<ref bean="editableParemetersValidations" />
+			<ref bean="editableParametersValidations" />
 		</property>
 
 		<property name="confidentiality" value="true" />
-
 		<property name="avoidCookiesIntegrity" value="false" />
-
 		<property name="avoidCookiesConfidentiality" value="false" />
-
 		<property name="strategy" value="memory" />
-
 		<property name="randomName" value="false" />
-
 		<property name="showErrorPageOnEditableValidation" value="false" />
 	</bean>
 
