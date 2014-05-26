@@ -167,6 +167,22 @@ public class FormUrlProcessorTest extends AbstractHDIVTestCase {
 		String url = "/testing.do;jsessionid=67CFB560B6EC2677D51814A2A2B16B24"; // is a startPage
 		String result = this.formUrlProcessor.processUrl(request, url);
 		assertEquals(url, result);
+	}
 
+	public void testProcessActionWithStateId() {
+
+		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+
+		String url = "/formAction.do?_HDIV_STATE_=11-11-1234567890";
+		String result = this.formUrlProcessor.processUrl(request, url);
+		assertEquals("/formAction.do", result);
+
+		url = "/formAction.do?aaaa=bbbb&_HDIV_STATE_=11-11-1234567890";
+		result = this.formUrlProcessor.processUrl(request, url);
+		assertEquals("/formAction.do?aaaa=0", result);
+
+		url = "/formAction.do?aaaa=bbbb&_HDIV_STATE_=11-11-1234567890#hash";
+		result = this.formUrlProcessor.processUrl(request, url);
+		assertEquals("/formAction.do?aaaa=0#hash", result);
 	}
 }
