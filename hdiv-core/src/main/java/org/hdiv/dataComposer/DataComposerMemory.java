@@ -435,7 +435,11 @@ public class DataComposerMemory extends AbstractDataComposer {
 			String editableDataType, boolean isActionParam, String charEncoding) {
 
 		// we decoded value before store it in state.
-		String decodedValue = this.getDecodedValue(value, charEncoding);
+		String decodedValue = null;
+		if (!editable) {
+			decodedValue = this.getDecodedValue(value, charEncoding);
+		}
+
 		// Get actual IState
 		IState state = this.getStatesStack().peek();
 

@@ -177,8 +177,8 @@ public class DataComposerMemoryTest extends AbstractHDIVTestCase {
 
 		dataComposer.startPage();
 		dataComposer.beginRequest("test.do");
-		dataComposer.compose("parameter1", "è-test", true);// not escaped value
-		dataComposer.compose("parameterEscaped", "&egrave;-test", true);// escaped value
+		dataComposer.compose("parameter1", "è-test", false);// not escaped value
+		dataComposer.compose("parameterEscaped", "&egrave;-test", false);// escaped value
 		String stateId = dataComposer.endRequest();
 		dataComposer.endPage();
 
@@ -198,6 +198,29 @@ public class DataComposerMemoryTest extends AbstractHDIVTestCase {
 		assertEquals(1, values2.size());
 		// State stored value is not escaped value, it is the unescaped value
 		assertEquals("è-test", values2.get(0));
+	}
+	
+	public void testEditableNullValue() {
+
+		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		IDataComposer dataComposer = this.dataComposerFactory.newInstance(request);
+		HDIVUtil.setDataComposer(dataComposer, request);
+
+		dataComposer.startPage();
+		dataComposer.beginRequest("test.do");
+		dataComposer.compose("parameter1", "test", true);
+		String stateId = dataComposer.endRequest();
+		dataComposer.endPage();
+
+		assertNotNull(stateId);
+
+		IState state = this.stateUtil.restoreState(stateId);
+
+		assertEquals("test.do", state.getAction());
+
+		IParameter param = state.getParameter("parameter1");
+		List<String> values = param.getValues();
+		assertEquals(0, values.size());
 	}
 
 	public void testAjax() {

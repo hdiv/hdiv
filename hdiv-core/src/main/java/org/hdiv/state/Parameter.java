@@ -91,6 +91,10 @@ public class Parameter implements IParameter, Serializable {
 	 * Adds the value <code>value</code> to the parameter <code>this</code>.
 	 */
 	public void addValue(String value) {
+		if (editable) {
+			return;
+		}
+		
 		if (this.values == null) {
 			this.values = new ArrayList<String>(VALUES_LIST_SIZE);
 			this.values.add(this.value);
@@ -105,6 +109,10 @@ public class Parameter implements IParameter, Serializable {
 	 * @return True if <code>value</code> exists in the array of values <code>values</code>. False otherwise.
 	 */
 	public boolean existValue(String value) {
+		if (editable) {
+			return false;
+		}
+		
 		if (this.values == null) {
 			return this.value.equalsIgnoreCase(value);
 		}
@@ -147,9 +155,17 @@ public class Parameter implements IParameter, Serializable {
 	 * @return Returns the values of parameter <code>this</code>.
 	 */
 	public List<String> getValues() {
-		return (this.values == null ? Collections.singletonList(value) : this.values);
+		if (editable) {
+			return Collections.emptyList();
+		}
+		
+		if (this.values == null) {
+			return Collections.singletonList(value);
+		}
+		
+		return values;
 	}
-
+	
 	/**
 	 * @return Returns if parameter <code>this</code> is editbale or not.
 	 */
