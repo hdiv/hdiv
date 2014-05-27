@@ -2,6 +2,11 @@ HDIV CHANGELOG
 ==============
 http://www.hdiv.org
 
+Release 2.1.7
+==================================
+
+ * Memory and performance optimizations.
+
 Release 2.1.6
 ==================================
 
