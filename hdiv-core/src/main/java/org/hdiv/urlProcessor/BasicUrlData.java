@@ -20,6 +20,7 @@ import java.util.Map;
 /**
  * Contains the data of an url. Comparing to {@link UrlData}, only contains basic data.
  * 
+ * @since 2.1.7
  * @author Gotzon Illarramendi
  */
 public class BasicUrlData {
