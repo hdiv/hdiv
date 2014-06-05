@@ -896,7 +896,14 @@ public class ValidatorHelperRequest implements IValidationHelper {
 
 		Matcher m = this.numberPattern.matcher(value);
 
-		if (!m.matches() || (Integer.valueOf(value).intValue() >= stateValues.size())) {
+		try {
+			if (!m.matches() || (Integer.valueOf(value).intValue() >= stateValues.size())) {
+				String originalValue = stateValues.size() > 1 ? stateValues.toString() : stateValues.get(0);
+				this.logger.log(HDIVErrorCodes.CONFIDENTIAL_VALUE_INCORRECT, target, parameter, value, originalValue);
+				return false;
+			}
+		} catch (NumberFormatException e) {
+			// value is greater than the length of Integer.MAX_VALUE
 			String originalValue = stateValues.size() > 1 ? stateValues.toString() : stateValues.get(0);
 			this.logger.log(HDIVErrorCodes.CONFIDENTIAL_VALUE_INCORRECT, target, parameter, value, originalValue);
 			return false;

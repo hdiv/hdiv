@@ -462,4 +462,21 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 		RequestWrapper requestWrapper = new RequestWrapper(request);
 		assertTrue(helper.validate(requestWrapper).isValid());
 	}
+
+	public void testValidateLongConfidencialValue() {
+
+		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
+
+		this.dataComposer.beginRequest(this.targetName);
+		this.dataComposer.compose("param", "value", false);
+		String pageState = this.dataComposer.endRequest();
+		this.dataComposer.endPage();
+
+		request.addParameter(hdivParameter, pageState);
+		request.addParameter("param", "99999999999999999999");
+
+		RequestWrapper requestWrapper = new RequestWrapper(request);
+		boolean result = helper.validate(requestWrapper).isValid();
+		assertFalse(result);
+	}
 }
