@@ -20,7 +20,6 @@ import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
@@ -32,7 +31,6 @@ import javax.servlet.http.HttpServletRequestWrapper;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hdiv.util.Constants;
-import org.springframework.web.multipart.MultipartFile;
 
 /**
  * A wrapper for HTTP servlet request.
@@ -291,7 +289,7 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 	}
 
 	/**
-	 * Combines the parameters stored here with those in the underlying request. If paramater values in the underlying
+	 * Combines the parameters stored here with those in the underlying request. If parameter values in the underlying
 	 * request take precedence over those stored here.
 	 * 
 	 * @since HDIV 1.3
@@ -339,22 +337,10 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 	 * 
 	 * @param name
 	 *            file name
-	 * @param value
-	 *            file value
-	 */
-	public void addFileItem(String name, MultipartFile value) {
-		this.elementsFile.put(name, value);
-	}
-
-	/**
-	 * Adds a file parameter to the set of file parameters for this request.
-	 * 
-	 * @param name
-	 *            file name
 	 * @param values
 	 *            file values
 	 */
-	public void addFileItem(String name, List values) {
+	public void addFileItem(String name, Object values) {
 		this.elementsFile.put(name, values);
 	}
 
