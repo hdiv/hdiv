@@ -2,7 +2,7 @@
 <defaultValidations>
 	<!-- SQL Injection attacks detection validation rule -->
 	<validation id="SQLInjection">
- 		<![CDATA[(\s|\S)*((%27)|(')|(%3D)|(=)|(/)|(%2F)|(")|((%22)|(-|%2D){2})|(%23)|(%3B)|(;))+(\s|\S)*]]>
+ 		<![CDATA[(\s|\S)*((%27)|(')|(%3D)|(=)|(%2F)|(")|((%22)|(-|%2D){2})|(%23)|(%3B)|(;))+(\s|\S)*]]>
 	</validation>
 	<!-- Code execution attacks detection validation rule -->
 	<validation id="execCommand">

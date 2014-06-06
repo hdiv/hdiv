@@ -6,6 +6,7 @@ Release 2.1.7
 ==================================
 
  * Memory and performance optimizations.
+ * New 'hdiv-thymeleaf' module for Thymeleaf template engine support.
 
 Release 2.1.6
 ==================================

@@ -36,14 +36,14 @@ import org.springframework.web.servlet.support.RequestDataValueProcessor;
  */
 public class HdivRequestDataValueProcessor implements RequestDataValueProcessor {
 
-	private LinkUrlProcessor linkUrlProcessor;
+	protected LinkUrlProcessor linkUrlProcessor;
 
-	private FormUrlProcessor formUrlProcessor;
+	protected FormUrlProcessor formUrlProcessor;
 
 	/**
 	 * No editable field types.
 	 */
-	private List<String> noEditableTypes = new ArrayList<String>();
+	protected List<String> noEditableTypes = new ArrayList<String>();
 
 	public HdivRequestDataValueProcessor() {
 

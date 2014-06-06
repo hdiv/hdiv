@@ -120,6 +120,9 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 	protected final boolean jsfModulePresent = ClassUtils.isPresent("org.hdiv.filter.JsfValidatorHelper",
 			ConfigBeanDefinitionParser.class.getClassLoader());
 
+	protected final boolean thymeleafPresent = ClassUtils.isPresent("org.thymeleaf.spring3.SpringTemplateEngine",
+			ConfigBeanDefinitionParser.class.getClassLoader());
+
 	/**
 	 * List of StartPage objects
 	 */
@@ -189,7 +192,10 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		if (this.grailsPresent) {
 			this.createGrailsRequestDataValueProcessor(element, source, parserContext);
 			this.createSimpleBean(element, source, parserContext, SpringMVCMultipartConfig.class);
-		} else if (this.springMvcPresent) {
+		} else if (this.springMvcPresent && this.thymeleafPresent) {
+			this.createThymeleafRequestDataValueProcessor(element, source, parserContext);
+			this.createSimpleBean(element, source, parserContext, SpringMVCMultipartConfig.class);
+		} else {
 			this.createRequestDataValueProcessor(element, source, parserContext);
 			this.createSimpleBean(element, source, parserContext, SpringMVCMultipartConfig.class);
 		}
@@ -498,6 +504,18 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 	protected RuntimeBeanReference createGrailsRequestDataValueProcessor(Element element, Object source,
 			ParserContext parserContext) {
 		RootBeanDefinition bean = new RootBeanDefinition(GrailsHdivRequestDataValueProcessor.class);
+		bean.setSource(source);
+		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
+		bean.getPropertyValues().addPropertyValue("linkUrlProcessor", this.linkUrlProcessorRef);
+		bean.getPropertyValues().addPropertyValue("formUrlProcessor", this.formUrlProcessorRef);
+		parserContext.getRegistry().registerBeanDefinition(REQUEST_DATA_VALUE_PROCESSOR_BEAN_NAME, bean);
+		return new RuntimeBeanReference(REQUEST_DATA_VALUE_PROCESSOR_BEAN_NAME);
+	}
+
+	protected RuntimeBeanReference createThymeleafRequestDataValueProcessor(Element element, Object source,
+			ParserContext parserContext) {
+		RootBeanDefinition bean = new RootBeanDefinition(
+				org.hdiv.web.servlet.support.ThymeleafHdivRequestDataValueProcessor.class);
 		bean.setSource(source);
 		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
 		bean.getPropertyValues().addPropertyValue("linkUrlProcessor", this.linkUrlProcessorRef);

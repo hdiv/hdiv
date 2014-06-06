@@ -136,6 +136,7 @@
 		<module>hdiv-spring-mvc</module>
 		<module>hdiv-struts-1</module>
 		<module>hdiv-jsf</module>
+		<module>hdiv-thymeleaf</module>
 		<module>hdiv-docs</module>
 	</modules>
 
