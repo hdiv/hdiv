@@ -121,7 +121,9 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 			ConfigBeanDefinitionParser.class.getClassLoader());
 
 	protected final boolean thymeleafPresent = ClassUtils.isPresent("org.thymeleaf.spring3.SpringTemplateEngine",
-			ConfigBeanDefinitionParser.class.getClassLoader());
+			ConfigBeanDefinitionParser.class.getClassLoader())
+			|| ClassUtils.isPresent("org.thymeleaf.spring4.SpringTemplateEngine",
+					ConfigBeanDefinitionParser.class.getClassLoader());
 
 	/**
 	 * List of StartPage objects
