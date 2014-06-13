@@ -219,8 +219,7 @@
 			</xsd:attribute>
 			<xsd:attribute name="randomName" type="xsd:boolean"
 				default="false" />
-			<xsd:attribute name="errorPage" type="xsd:string"
-				default="error.jsp">
+			<xsd:attribute name="errorPage" type="xsd:string">
 				<xsd:annotation>
 					<xsd:documentation><![CDATA[
 	Url of the error page to which HDIV will redirect the request if it doesn't pass the HDIV validation.

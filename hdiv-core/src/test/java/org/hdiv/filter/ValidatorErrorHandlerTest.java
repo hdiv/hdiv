@@ -15,6 +15,8 @@
  */
 package org.hdiv.filter;
 
+import java.io.UnsupportedEncodingException;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.hdiv.AbstractHDIVTestCase;
@@ -43,7 +45,7 @@ public class ValidatorErrorHandlerTest extends AbstractHDIVTestCase {
 		assertEquals(getConfig().getSessionExpiredLoginPage(), redirectUrl);
 	}
 
-	public void testValidatorErrorHandler() {
+	public void testHandleValidatorError() {
 
 		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
 		MockHttpSession session = (MockHttpSession) request.getSession();
@@ -55,6 +57,32 @@ public class ValidatorErrorHandlerTest extends AbstractHDIVTestCase {
 		String redirectUrl = response.getRedirectedUrl();
 
 		assertEquals(getConfig().getErrorPage(), redirectUrl);
+	}
+
+	public void testDefaultErrorPage() {
+
+		// Remove default errorPage
+		getConfig().setErrorPage(null);
+
+		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		MockHttpServletResponse response = new MockHttpServletResponse();
+
+		this.validatorErrorHandler.handleValidatorError(request, response, HDIVErrorCodes.REQUIRED_PARAMETERS);
+
+		// Default Error page is generated, so no redirect URL exist
+		assertNull(response.getRedirectedUrl());
+
+		assertTrue(response.getBufferSize() > 0);
+
+		String responseContent = null;
+		try {
+			responseContent = response.getContentAsString();
+		} catch (UnsupportedEncodingException e) {
+			responseContent = null;
+		}
+		assertNotNull(responseContent);
+		assertTrue(responseContent.contains("Unauthorized access"));
+
 	}
 
 }

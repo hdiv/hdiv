@@ -16,6 +16,8 @@
 package org.hdiv.filter;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -23,6 +25,7 @@ import javax.servlet.http.HttpSession;
 
 import org.hdiv.config.HDIVConfig;
 import org.hdiv.logs.IUserData;
+import org.hdiv.util.Constants;
 import org.hdiv.util.HDIVErrorCodes;
 
 /**
@@ -36,12 +39,17 @@ public class DefaultValidatorErrorHandler implements ValidatorErrorHandler {
 	/**
 	 * Hdiv general configuration
 	 */
-	private HDIVConfig config;
+	protected HDIVConfig config;
 
 	/**
 	 * Application user data
 	 */
-	private IUserData userData;
+	protected IUserData userData;
+
+	/**
+	 * Helper class to create default error page HTML.
+	 */
+	protected DefaultErrorPageWritter errorPageWritter = new DefaultErrorPageWritter();
 
 	/**
 	 * Process a request with validation errors.
@@ -78,44 +86,60 @@ public class DefaultValidatorErrorHandler implements ValidatorErrorHandler {
 		} else {
 
 			// Redirect to general error page
-			redirect(response, request.getContextPath() + this.config.getErrorPage());
+			redirectToErrorPage(request, response);
 		}
 	}
 
 	/**
-	 * Redirect to login page if it exist
+	 * Redirect to error page if it exists.
 	 * 
 	 * @param request
 	 *            {@link HttpServletRequest} instance
 	 * @param response
 	 *            {@link HttpServletResponse} instance
 	 */
-	private void redirectToLoginPage(HttpServletRequest request, HttpServletResponse response) {
+	protected void redirectToErrorPage(HttpServletRequest request, HttpServletResponse response) {
+		if (this.config.getErrorPage() != null) {
+			redirect(response, request.getContextPath() + this.config.getErrorPage());
+		} else {
+			redirectToDefaultErrorPage(request, response);
+		}
+	}
+
+	/**
+	 * Redirect to login page if it exists.
+	 * 
+	 * @param request
+	 *            {@link HttpServletRequest} instance
+	 * @param response
+	 *            {@link HttpServletResponse} instance
+	 */
+	protected void redirectToLoginPage(HttpServletRequest request, HttpServletResponse response) {
 		if (this.config.getSessionExpiredLoginPage() != null) {
 			redirect(response, request.getContextPath() + this.config.getSessionExpiredLoginPage());
 		} else {
-			redirect(response, request.getContextPath() + this.config.getErrorPage());
+			redirectToErrorPage(request, response);
 		}
 	}
 
 	/**
-	 * Redirect to home page if it exist
+	 * Redirect to home page if it exists.
 	 * 
 	 * @param request
 	 *            {@link HttpServletRequest} instance
 	 * @param response
 	 *            {@link HttpServletResponse} instance
 	 */
-	private void redirectToHomePage(HttpServletRequest request, HttpServletResponse response) {
+	protected void redirectToHomePage(HttpServletRequest request, HttpServletResponse response) {
 		if (this.config.getSessionExpiredHomePage() != null) {
 			redirect(response, request.getContextPath() + this.config.getSessionExpiredHomePage());
 		} else {
-			redirect(response, request.getContextPath() + this.config.getErrorPage());
+			redirectToErrorPage(request, response);
 		}
 	}
 
 	/**
-	 * Redirect to the given url
+	 * Redirect to the given URL.
 	 * 
 	 * @param response
 	 *            {@link HttpServletResponse} instance
@@ -128,6 +152,35 @@ public class DefaultValidatorErrorHandler implements ValidatorErrorHandler {
 			response.sendRedirect(response.encodeRedirectURL(url));
 		} catch (IOException e) {
 			throw new RuntimeException("Cant redirect to: " + url, e);
+		}
+
+	}
+
+	/**
+	 * Redirect to the default error page.
+	 * 
+	 * @param request
+	 *            {@link HttpServletRequest} instance
+	 * @param response
+	 *            {@link HttpServletResponse} instance
+	 */
+	@SuppressWarnings("unchecked")
+	protected void redirectToDefaultErrorPage(HttpServletRequest request, HttpServletResponse response) {
+
+		try {
+
+			response.setContentType("text/html");
+			PrintWriter out = response.getWriter();
+
+			Map<String, String[]> editableErrors = (Map<String, String[]>) request.getSession().getAttribute(
+					Constants.EDITABLE_PARAMETER_ERROR);
+			request.getSession().removeAttribute(Constants.EDITABLE_PARAMETER_ERROR);
+
+			this.errorPageWritter.writetErrorPage(out, editableErrors);
+			response.flushBuffer();
+
+		} catch (IOException e) {
+			throw new RuntimeException("Cant redirect to the default error page", e);
 		}
 
 	}
