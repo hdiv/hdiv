@@ -7,6 +7,7 @@ Release 2.1.7
 
  * Memory and performance optimizations.
  * New 'hdiv-thymeleaf' module for Thymeleaf template engine support.
+ * Create default error page content if no errorPage is configured.
 
 Release 2.1.6
 ==================================
