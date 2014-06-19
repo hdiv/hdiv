@@ -16,84 +16,26 @@
 package org.hdiv.config;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.hdiv.regex.PatternMatcher;
-import org.hdiv.regex.PatternMatcherFactory;
 import org.hdiv.validator.IValidation;
-import org.hdiv.validator.Validation;
-import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.BeanFactory;
-import org.springframework.beans.factory.BeanFactoryAware;
 
 /**
- * Validations for urls defined by the user in the hdiv-validations.xml file of Spring.
+ * Editable field validations.
  * 
  * @author Gorka Vicente
  * @since HDIV 1.1
  */
-public class HDIVValidations implements BeanFactoryAware, Serializable {
+public class HDIVValidations implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-
-	/**
-	 * Regular expression executor factory.
-	 * 
-	 * @since 2.1.6
-	 */
-	private transient PatternMatcherFactory patternMatcherFactory;
 
 	/**
 	 * Map containing the urls to which the user wants to apply validation for the editable parameters.
 	 */
 	protected Map<PatternMatcher, List<IValidation>> urls;
-
-	/**
-	 * Map for configuration purpose.
-	 */
-	protected Map<String, List<String>> rawUrls;
-
-	/**
-	 * Spring bean container factory.
-	 */
-	private transient BeanFactory beanFactory;
-
-	/**
-	 * Using data read from HDIV custom schema and stored within 'rawUrls' attribute, initialize 'urls' attribute.
-	 * 
-	 */
-	public void init() {
-
-		this.urls = new HashMap<PatternMatcher, List<IValidation>>();
-
-		for (String key : this.rawUrls.keySet()) {
-			List<String> ids = rawUrls.get(key);
-			PatternMatcher matcher = this.patternMatcherFactory.getPatternMatcher(key);
-			this.urls.put(matcher, this.createValidationList(ids));
-		}
-
-	}
-
-	/**
-	 * Convert List with bean ids in another List with the bean instances.
-	 * 
-	 * @param ids
-	 *            List with bean ids.
-	 * @return List with bean instances.
-	 */
-	private List<IValidation> createValidationList(List<String> ids) {
-		List<IValidation> newList = new ArrayList<IValidation>();
-
-		for (String id : ids) {
-			Validation validation = (Validation) this.beanFactory.getBean(id);
-			newList.add(validation);
-		}
-
-		return newList;
-	}
 
 	/*
 	 * (non-Javadoc)
@@ -102,16 +44,6 @@ public class HDIVValidations implements BeanFactoryAware, Serializable {
 	 */
 	public String toString() {
 		return urls.toString();
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.springframework.beans.factory.BeanFactoryAware#setBeanFactory(org.springframework.beans.factory.BeanFactory)
-	 */
-	public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
-		this.beanFactory = beanFactory;
 	}
 
 	/**
@@ -127,29 +59,6 @@ public class HDIVValidations implements BeanFactoryAware, Serializable {
 	 */
 	public void setUrls(Map<PatternMatcher, List<IValidation>> urls) {
 		this.urls = urls;
-	}
-
-	/**
-	 * @return the rawUrls
-	 */
-	public Map<String, List<String>> getRawUrls() {
-		return rawUrls;
-	}
-
-	/**
-	 * @param rawUrls
-	 *            the rawUrls to set
-	 */
-	public void setRawUrls(Map<String, List<String>> rawUrls) {
-		this.rawUrls = rawUrls;
-	}
-
-	/**
-	 * @param patternMatcherFactory
-	 *            the patternMatcherFactory to set
-	 */
-	public void setPatternMatcherFactory(PatternMatcherFactory patternMatcherFactory) {
-		this.patternMatcherFactory = patternMatcherFactory;
 	}
 
 }

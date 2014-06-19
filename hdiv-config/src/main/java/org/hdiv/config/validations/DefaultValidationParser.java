@@ -39,6 +39,11 @@ import org.xml.sax.helpers.DefaultHandler;
 public class DefaultValidationParser extends DefaultHandler {
 
 	/**
+	 * Location of the xml file with default editable validations.
+	 */
+	private static final String DEFAULT_VALIDATION_PATH = "org/hdiv/config/validations/defaultEditableValidations.xml";
+
+	/**
 	 * List with processed validations.
 	 */
 	private List<Map<String, String>> validations = new ArrayList<Map<String, String>>();
@@ -49,8 +54,17 @@ public class DefaultValidationParser extends DefaultHandler {
 	private Map<String, String> validation = null;
 
 	/**
+	 * Read xml file from the default path.
+	 */
+	public void readDefaultValidations() {
+		this.readDefaultValidations(DEFAULT_VALIDATION_PATH);
+	}
+
+	/**
 	 * Read xml file from the given path.
-	 * @param filePath xml file path
+	 * 
+	 * @param filePath
+	 *            xml file path
 	 */
 	public void readDefaultValidations(String filePath) {
 

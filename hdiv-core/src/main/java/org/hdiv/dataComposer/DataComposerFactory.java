@@ -39,7 +39,7 @@ public class DataComposerFactory {
 	/**
 	 * HDIV configuration object.
 	 */
-	protected HDIVConfig hdivConfig;
+	protected HDIVConfig config;
 
 	/**
 	 * Http session wrapper
@@ -78,17 +78,17 @@ public class DataComposerFactory {
 
 		IDataComposer dataComposer = null;
 
-		if (this.hdivConfig.getStrategy().equalsIgnoreCase("memory")) {
+		if (this.config.getStrategy().equalsIgnoreCase("memory")) {
 			DataComposerMemory composer = new DataComposerMemory();
-			composer.setHdivConfig(this.hdivConfig);
+			composer.setHdivConfig(this.config);
 			composer.setSession(this.session);
 			composer.setUidGenerator(this.uidGenerator);
 			composer.init();
 			dataComposer = composer;
 
-		} else if (this.hdivConfig.getStrategy().equalsIgnoreCase("cipher")) {
+		} else if (this.config.getStrategy().equalsIgnoreCase("cipher")) {
 			DataComposerCipher composer = new DataComposerCipher();
-			composer.setHdivConfig(this.hdivConfig);
+			composer.setHdivConfig(this.config);
 			composer.setSession(this.session);
 			composer.setUidGenerator(this.uidGenerator);
 			composer.setAllowedLength(this.allowedLength);
@@ -96,9 +96,9 @@ public class DataComposerFactory {
 			composer.init();
 			dataComposer = composer;
 
-		} else if (this.hdivConfig.getStrategy().equalsIgnoreCase("hash")) {
+		} else if (this.config.getStrategy().equalsIgnoreCase("hash")) {
 			DataComposerHash composer = new DataComposerHash();
-			composer.setHdivConfig(this.hdivConfig);
+			composer.setHdivConfig(this.config);
 			composer.setSession(this.session);
 			composer.setUidGenerator(this.uidGenerator);
 			composer.setAllowedLength(this.allowedLength);
@@ -107,7 +107,7 @@ public class DataComposerFactory {
 			dataComposer = composer;
 
 		} else {
-			String errorMessage = HDIVUtil.getMessage("strategy.error", this.hdivConfig.getStrategy());
+			String errorMessage = HDIVUtil.getMessage("strategy.error", this.config.getStrategy());
 			throw new HDIVException(errorMessage);
 		}
 
@@ -147,11 +147,11 @@ public class DataComposerFactory {
 	}
 
 	/**
-	 * @param hdivConfig
+	 * @param config
 	 *            the hdivConfig to set
 	 */
-	public void setHdivConfig(HDIVConfig hdivConfig) {
-		this.hdivConfig = hdivConfig;
+	public void setConfig(HDIVConfig config) {
+		this.config = config;
 	}
 
 	/**

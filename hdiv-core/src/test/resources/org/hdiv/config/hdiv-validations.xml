@@ -4,7 +4,6 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
 	<bean id="editableParametersValidations" class="org.hdiv.config.HDIVValidations">
-		<property name="patternMatcherFactory" ref="patternMatcherFactory" />
 		<property name="urls">
 			<map>
 				<entry>

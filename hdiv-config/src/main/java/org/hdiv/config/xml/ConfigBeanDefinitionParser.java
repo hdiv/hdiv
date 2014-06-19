@@ -384,7 +384,7 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		RootBeanDefinition bean = new RootBeanDefinition(DataComposerFactory.class);
 		bean.setSource(source);
 		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
-		bean.getPropertyValues().addPropertyValue("hdivConfig", this.configRef);
+		bean.getPropertyValues().addPropertyValue("config", this.configRef);
 		bean.getPropertyValues().addPropertyValue("session", this.sessionRef);
 		bean.getPropertyValues().addPropertyValue("encodingUtil", this.encodingUtilRef);
 		bean.getPropertyValues().addPropertyValue("stateUtil", this.stateUtilRef);

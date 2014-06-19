@@ -1,0 +1,92 @@
+package org.hdiv.config.factory;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.hdiv.config.HDIVValidations;
+import org.hdiv.regex.PatternMatcher;
+import org.hdiv.regex.PatternMatcherFactory;
+import org.hdiv.validator.IValidation;
+import org.springframework.beans.factory.FactoryBean;
+import org.springframework.beans.factory.config.AbstractFactoryBean;
+
+/**
+ * {@link FactoryBean} to create {@link HDIVValidations} instances.
+ * 
+ * @since 2.1.7
+ */
+public class ValidationsFactoryBean extends AbstractFactoryBean<HDIVValidations> {
+
+	/**
+	 * Regular expression executor factory.
+	 */
+	private transient PatternMatcherFactory patternMatcherFactory;
+
+	/**
+	 * <p>
+	 * Map for configuration purpose.
+	 * </p>
+	 * <p>
+	 * Url pattern -> List of Validation ids.
+	 * </p>
+	 */
+	protected Map<String, List<String>> validationsData;
+
+	@Override
+	public Class<?> getObjectType() {
+		return HDIVValidations.class;
+	}
+
+	@Override
+	protected HDIVValidations createInstance() throws Exception {
+		// create HDIVvalidations instance for XML config
+
+		HDIVValidations validations = new HDIVValidations();
+
+		Map<PatternMatcher, List<IValidation>> urls = new HashMap<PatternMatcher, List<IValidation>>();
+
+		for (String url : this.validationsData.keySet()) {
+			List<String> ids = validationsData.get(url);
+			PatternMatcher matcher = this.patternMatcherFactory.getPatternMatcher(url);
+			urls.put(matcher, this.createValidationList(ids));
+		}
+		validations.setUrls(urls);
+
+		return validations;
+	}
+
+	/**
+	 * Convert List with bean ids in another List with the bean instances.
+	 * 
+	 * @param ids
+	 *            List with bean ids.
+	 * @return List with bean instances.
+	 */
+	@SuppressWarnings("unchecked")
+	private List<IValidation> createValidationList(List<String> ids) {
+		List<IValidation> newList = new ArrayList<IValidation>();
+
+		for (String id : ids) {
+			Object bean = this.getBeanFactory().getBean(id);
+			if (bean instanceof IValidation) {
+				IValidation validation = (IValidation) bean;
+				newList.add(validation);
+			} else if (bean instanceof List<?>) {
+				List<IValidation> validations = (List<IValidation>) bean;
+				newList.addAll(validations);
+			}
+		}
+		return newList;
+	}
+
+	public void setPatternMatcherFactory(PatternMatcherFactory patternMatcherFactory) {
+		this.patternMatcherFactory = patternMatcherFactory;
+	}
+
+	public void setValidationsData(Map<String, List<String>> validationsData) {
+		this.validationsData = validationsData;
+	}
+
+}

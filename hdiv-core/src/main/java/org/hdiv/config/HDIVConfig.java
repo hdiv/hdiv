@@ -38,6 +38,8 @@ public class HDIVConfig implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
+	private static final String DEFAULT_STRATEGY = "memory";
+
 	/**
 	 * Regular expression executor factory.
 	 * 
@@ -123,19 +125,19 @@ public class HDIVConfig implements Serializable {
 	protected List<String> excludedURLExtensions = new ArrayList<String>();
 
 	/**
-	 * HDIV adds an extra parameter to all links and forms. By default this parameter is _HDIV_STATE. If
+	 * HDIV adds an extra parameter to all links and forms. By default this parameter is _HDIV_STATE_. If
 	 * <code>randomName</code> is true a random name is generated instead of default name (_HDIV_STATE_)
 	 * 
 	 * @since HDIV 2.1.0
 	 */
-	protected boolean randomName;
+	protected boolean randomName = false;
 
 	/**
 	 * HDIV behaviour strategy. There are 3 possible options: memory, cipher, hash
 	 * 
 	 * @since HDIV 2.1.0
 	 */
-	protected String strategy;
+	protected String strategy = DEFAULT_STRATEGY;
 
 	/**
 	 * If debug mode is enabled, the attacks are logged but the requests are not stopped.

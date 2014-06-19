@@ -15,12 +15,18 @@
  */
 package org.hdiv.config.xml;
 
+import java.util.List;
+import java.util.Map;
+
 import junit.framework.TestCase;
 
 import org.hdiv.config.HDIVConfig;
 import org.hdiv.config.HDIVValidations;
 import org.hdiv.logs.IUserData;
+import org.hdiv.regex.DefaultPatternMatcher;
+import org.hdiv.regex.PatternMatcher;
 import org.hdiv.session.StateCache;
+import org.hdiv.validator.IValidation;
 import org.hdiv.validator.Validation;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -103,6 +109,35 @@ public class CustomSchemaTest extends TestCase {
 		assertNotNull(userData);
 		assertTrue(userData instanceof TestUserData);
 
+	}
+
+	public void testEditableValidations() {
+
+		HDIVValidations validations = this.context.getBean(HDIVValidations.class);
+		assertNotNull(validations);
+
+		Map<PatternMatcher, List<IValidation>> urls = validations.getUrls();
+		assertEquals(2, urls.size());
+
+		// First url
+		List<IValidation> vals = urls.get(new DefaultPatternMatcher("a"));
+
+		assertEquals(1, vals.size());
+		// 1 custom rules
+		Validation val = (Validation) vals.get(0);
+		assertEquals("id1", val.getName());
+
+		// Second url
+		vals = urls.get(new DefaultPatternMatcher("b"));
+		assertEquals(8, vals.size());
+		// 2 custom rule + 6 default rules
+
+		val = (Validation) vals.get(0);
+		assertEquals("id2", val.getName());
+		val = (Validation) vals.get(1);
+		assertEquals("id3", val.getName());
+		val = (Validation) vals.get(2);
+		assertEquals("SQLInjection", val.getName());// first default rule
 	}
 
 }
