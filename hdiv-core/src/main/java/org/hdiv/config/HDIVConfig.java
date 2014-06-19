@@ -95,12 +95,12 @@ public class HDIVConfig implements Serializable {
 	/**
 	 * If <code>avoidCookiesIntegrity</code> is true, cookie integrity will not be applied.
 	 */
-	protected boolean avoidCookiesIntegrity;
+	protected boolean avoidCookiesIntegrity = false;
 
 	/**
 	 * If <code>avoidCookiesConfidentiality</code> is true, cookie confidentiality will not be applied.
 	 */
-	protected boolean avoidCookiesConfidentiality;
+	protected boolean avoidCookiesConfidentiality = false;
 
 	/**
 	 * if <code>avoidValidationInUrlsWithoutParams</code> is true, HDIV validation will not be applied in urls without
@@ -108,7 +108,7 @@ public class HDIVConfig implements Serializable {
 	 * 
 	 * @since HDIV 2.1.0
 	 */
-	protected boolean avoidValidationInUrlsWithoutParams;
+	protected boolean avoidValidationInUrlsWithoutParams = false;
 
 	/**
 	 * Extensions that we have to protect with HDIV's state.
@@ -122,7 +122,7 @@ public class HDIVConfig implements Serializable {
 	 * 
 	 * @since HDIV 2.1.0
 	 */
-	protected List<String> excludedURLExtensions = new ArrayList<String>();
+	protected List<String> excludedURLExtensions;
 
 	/**
 	 * HDIV adds an extra parameter to all links and forms. By default this parameter is _HDIV_STATE_. If
@@ -151,7 +151,7 @@ public class HDIVConfig implements Serializable {
 	 * 
 	 * @since 2.1.4
 	 */
-	protected boolean showErrorPageOnEditableValidation;
+	protected boolean showErrorPageOnEditableValidation = false;
 
 	/**
 	 * @param strategy
@@ -537,6 +537,9 @@ public class HDIVConfig implements Serializable {
 	}
 
 	public void setExcludedExtensions(List<String> excludedExtensions) {
+		if (this.excludedURLExtensions == null) {
+			this.excludedURLExtensions = new ArrayList<String>();
+		}
 		this.excludedURLExtensions.addAll(excludedExtensions);
 	}
 

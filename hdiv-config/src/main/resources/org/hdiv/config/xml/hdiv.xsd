@@ -187,7 +187,7 @@
 				default="false">
 				<xsd:annotation>
 					<xsd:documentation><![CDATA[
-	Boolean defining if cookies integrity is activated. 
+	Boolean defining if cookies integrity is activated. Defaults to false.
 					]]></xsd:documentation>
 				</xsd:annotation>
 			</xsd:attribute>
@@ -195,7 +195,7 @@
 				default="false">
 				<xsd:annotation>
 					<xsd:documentation><![CDATA[
-	Boolean defining if cookies confidentiality is activated. 
+	Boolean defining if cookies confidentiality is activated. Defaults to false.
 					]]></xsd:documentation>
 				</xsd:annotation>
 			</xsd:attribute>
@@ -203,7 +203,7 @@
 				type="xsd:boolean" default="false">
 				<xsd:annotation>
 					<xsd:documentation><![CDATA[
-	Boolean defining if parameterless urls are securized.
+	Boolean defining if parameterless urls are securized. Defaults to false.
 					]]></xsd:documentation>
 				</xsd:annotation>
 			</xsd:attribute>
@@ -253,7 +253,7 @@
 				default="false">
 				<xsd:annotation>
 					<xsd:documentation><![CDATA[
-	If debug mode is enabled, the attacks are logged but the requests are not stopped.
+	If debug mode is enabled, the attacks are logged but the requests are not stopped. Defaults to false.
 					]]></xsd:documentation>
 				</xsd:annotation>
 			</xsd:attribute>
@@ -269,7 +269,7 @@
 				default="false">
 				<xsd:annotation>
 					<xsd:documentation><![CDATA[
-	Show error page on Editable Validation errors.
+	Show error page on Editable Validation errors. Defaults to false.
 					]]></xsd:documentation>
 				</xsd:annotation>
 			</xsd:attribute>

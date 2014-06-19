@@ -70,4 +70,15 @@ public class HDIVConfigTest extends AbstractHDIVTestCase {
 		assertFalse(result);
 	}
 
+	public void testExcludedExtensions() {
+
+		HDIVConfig config = getConfig();
+
+		boolean result = config.hasExtensionToExclude("/assets/run.js");
+		assertTrue(result);
+
+		result = config.hasExtensionToExclude("/assets/image.jpg");
+		assertFalse(result);
+	}
+
 }

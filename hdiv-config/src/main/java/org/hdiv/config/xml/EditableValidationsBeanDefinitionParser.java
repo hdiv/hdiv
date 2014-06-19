@@ -52,6 +52,8 @@ public class EditableValidationsBeanDefinitionParser extends AbstractSingleBeanD
 
 	public static final String DEFAULT_EDITABLE_VALIDATIONS_BEAN_NAME = "org.hdiv.defaultEditableValidations";
 
+	public static final String EDITABLE_VALIDATOR_BEAN_NAME = "hdivEditableValidator";
+
 	/**
 	 * Is Spring MVC in classpath?
 	 */
@@ -132,7 +134,7 @@ public class EditableValidationsBeanDefinitionParser extends AbstractSingleBeanD
 		}
 
 		if (this.springMvcPresent) {
-			parserContext.getRegistry().registerBeanDefinition("hdivEditableValidator",
+			parserContext.getRegistry().registerBeanDefinition(EDITABLE_VALIDATOR_BEAN_NAME,
 					this.createValidator(element, source, parserContext));
 		}
 	}

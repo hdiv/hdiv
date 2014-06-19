@@ -68,6 +68,13 @@
 			</list>
 		</property>
 
+		<property name="excludedExtensions">
+			<list>
+				<value>css</value>
+				<value>js</value>
+			</list>
+		</property>
+
 		<property name="validations">
 			<ref bean="editableParametersValidations" />
 		</property>
