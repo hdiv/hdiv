@@ -29,6 +29,8 @@ import org.apache.commons.logging.LogFactory;
  */
 public class StateCache implements IStateCache {
 
+	private static final int DEFAULT_MAX_SIZE = 5;
+	
 	/**
 	 * Commons Logging instance.
 	 */
@@ -43,7 +45,7 @@ public class StateCache implements IStateCache {
 	/**
 	 * Buffer size
 	 */
-	private int maxSize;
+	private int maxSize = DEFAULT_MAX_SIZE;
 
 	/**
 	 * page's ids map
