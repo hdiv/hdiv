@@ -213,9 +213,9 @@ public class EditableValidationsBeanDefinitionParser extends AbstractSingleBeanD
 		for (Map<String, String> validation : validations) {
 			// Map contains validation id and regex extracted from the xml
 			String id = validation.get("id");
-			String regex = (String) validation.get("regex");
+			String regex = validation.get("regex");
 
-			// Create bean for the validation
+			// Create validation instance
 			Validation validationBean = new Validation();
 			validationBean.setName(id);
 			validationBean.setRejectedPattern(regex);
@@ -229,7 +229,7 @@ public class EditableValidationsBeanDefinitionParser extends AbstractSingleBeanD
 		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
 		bean.getPropertyValues().addPropertyValue("sourceList", defaultValidations);
 
-		// Register bean
+		// Register validation list bean
 		parserContext.getRegistry().registerBeanDefinition(DEFAULT_EDITABLE_VALIDATIONS_BEAN_NAME, bean);
 
 	}
