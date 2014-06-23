@@ -26,6 +26,7 @@ import org.hdiv.cipher.KeyFactory;
 import org.hdiv.config.HDIVConfig;
 import org.hdiv.config.HDIVValidations;
 import org.hdiv.config.StartPage;
+import org.hdiv.config.Strategy;
 import org.hdiv.config.multipart.JsfMultipartConfig;
 import org.hdiv.config.multipart.SpringMVCMultipartConfig;
 import org.hdiv.context.RedirectHelper;
@@ -381,7 +382,6 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		bean.getPropertyValues().addPropertyValue("encodingUtil", this.encodingUtilRef);
 		bean.getPropertyValues().addPropertyValue("stateUtil", this.stateUtilRef);
 		bean.getPropertyValues().addPropertyValue("uidGenerator", this.uidGeneratorRef);
-		bean.getPropertyValues().addPropertyValue("allowedLength", "4000");
 
 		String name = parserContext.getReaderContext().generateBeanName(bean);
 		parserContext.getRegistry().registerBeanDefinition(name, bean);
@@ -565,7 +565,7 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		}
 
 		if (StringUtils.hasText(strategy)) {
-			bean.getPropertyValues().addPropertyValue("strategy", strategy);
+			bean.getPropertyValues().addPropertyValue("strategy", Strategy.valueOf(strategy.toUpperCase()));
 		}
 
 		if (StringUtils.hasText(randomName)) {

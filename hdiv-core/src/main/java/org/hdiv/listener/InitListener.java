@@ -28,6 +28,7 @@ import org.hdiv.application.IApplication;
 import org.hdiv.cipher.IKeyFactory;
 import org.hdiv.cipher.Key;
 import org.hdiv.config.HDIVConfig;
+import org.hdiv.config.Strategy;
 import org.hdiv.idGenerator.PageIdGenerator;
 import org.hdiv.urlProcessor.FormUrlProcessor;
 import org.hdiv.urlProcessor.LinkUrlProcessor;
@@ -171,7 +172,7 @@ public class InitListener implements ServletContextListener, HttpSessionListener
 	 */
 	protected void initStrategies(ApplicationContext context, HttpSession httpSession) {
 
-		if (this.config.getStrategy().equalsIgnoreCase("cipher")) {
+		if (this.config.getStrategy().equals(Strategy.CIPHER)) {
 			IKeyFactory keyFactory = context.getBean(IKeyFactory.class);
 			// creating encryption key
 			Key key = keyFactory.generateKey();

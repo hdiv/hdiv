@@ -38,7 +38,7 @@ public class HDIVConfig implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private static final String DEFAULT_STRATEGY = "memory";
+	private static final Strategy DEFAULT_STRATEGY = Strategy.MEMORY;
 
 	private static final String DEFAULT_STATE_PARAMETER_NAME = "_HDIV_STATE_";
 
@@ -151,7 +151,7 @@ public class HDIVConfig implements Serializable {
 	 * 
 	 * @since HDIV 2.1.0
 	 */
-	protected String strategy = DEFAULT_STRATEGY;
+	protected Strategy strategy = DEFAULT_STRATEGY;
 
 	/**
 	 * If debug mode is enabled, the attacks are logged but the requests are not stopped.
@@ -171,7 +171,7 @@ public class HDIVConfig implements Serializable {
 	 * @param strategy
 	 *            the strategy to set
 	 */
-	public void setStrategy(String strategy) {
+	public void setStrategy(Strategy strategy) {
 		this.strategy = strategy;
 	}
 
@@ -591,7 +591,7 @@ public class HDIVConfig implements Serializable {
 	/**
 	 * @return the strategy
 	 */
-	public String getStrategy() {
+	public Strategy getStrategy() {
 		return strategy;
 	}
 

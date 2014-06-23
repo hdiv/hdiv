@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.hdiv.AbstractHDIVTestCase;
 import org.hdiv.config.HDIVConfig;
+import org.hdiv.config.Strategy;
 import org.hdiv.state.IParameter;
 import org.hdiv.state.IState;
 import org.hdiv.state.StateUtil;
@@ -37,7 +38,7 @@ public class DataComposerCipherTest extends AbstractHDIVTestCase {
 	private StateUtil stateUtil;
 
 	protected void postCreateHdivConfig(HDIVConfig config) {
-		config.setStrategy("cipher");
+		config.setStrategy(Strategy.CIPHER);
 	}
 
 	/*

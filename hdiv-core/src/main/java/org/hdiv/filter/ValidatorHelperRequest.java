@@ -36,6 +36,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hdiv.config.HDIVConfig;
+import org.hdiv.config.Strategy;
 import org.hdiv.dataComposer.DataComposerFactory;
 import org.hdiv.dataComposer.IDataComposer;
 import org.hdiv.dataValidator.IDataValidator;
@@ -639,7 +640,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 
 		} catch (HDIVException e) {
 
-			if (!this.hdivConfig.getStrategy().equalsIgnoreCase("memory")) {
+			if (!this.hdivConfig.getStrategy().equals(Strategy.MEMORY)) {
 				requestState = null;
 			}
 

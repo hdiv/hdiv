@@ -18,6 +18,7 @@ package org.hdiv.dataComposer;
 import javax.servlet.http.HttpServletRequest;
 
 import org.hdiv.config.HDIVConfig;
+import org.hdiv.config.Strategy;
 import org.hdiv.exception.HDIVException;
 import org.hdiv.idGenerator.UidGenerator;
 import org.hdiv.session.ISession;
@@ -35,6 +36,8 @@ import org.hdiv.util.HDIVUtil;
  * @since HDIV 2.1.0
  */
 public class DataComposerFactory {
+
+	private static final int DEFAULT_ALLOWED_LENGTH = 4000;
 
 	/**
 	 * HDIV configuration object.
@@ -54,7 +57,7 @@ public class DataComposerFactory {
 	/**
 	 * Maximum size allowed to represent page state
 	 */
-	protected int allowedLength;
+	protected int allowedLength = DEFAULT_ALLOWED_LENGTH;
 
 	/**
 	 * Utility methods for encoding
@@ -78,7 +81,7 @@ public class DataComposerFactory {
 
 		IDataComposer dataComposer = null;
 
-		if (this.config.getStrategy().equalsIgnoreCase("memory")) {
+		if (this.config.getStrategy().equals(Strategy.MEMORY)) {
 			DataComposerMemory composer = new DataComposerMemory();
 			composer.setHdivConfig(this.config);
 			composer.setSession(this.session);
@@ -86,7 +89,7 @@ public class DataComposerFactory {
 			composer.init();
 			dataComposer = composer;
 
-		} else if (this.config.getStrategy().equalsIgnoreCase("cipher")) {
+		} else if (this.config.getStrategy().equals(Strategy.CIPHER)) {
 			DataComposerCipher composer = new DataComposerCipher();
 			composer.setHdivConfig(this.config);
 			composer.setSession(this.session);
@@ -96,7 +99,7 @@ public class DataComposerFactory {
 			composer.init();
 			dataComposer = composer;
 
-		} else if (this.config.getStrategy().equalsIgnoreCase("hash")) {
+		} else if (this.config.getStrategy().equals(Strategy.HASH)) {
 			DataComposerHash composer = new DataComposerHash();
 			composer.setHdivConfig(this.config);
 			composer.setSession(this.session);
@@ -107,7 +110,7 @@ public class DataComposerFactory {
 			dataComposer = composer;
 
 		} else {
-			String errorMessage = HDIVUtil.getMessage("strategy.error", this.config.getStrategy());
+			String errorMessage = HDIVUtil.getMessage("strategy.error", this.config.getStrategy().toString());
 			throw new HDIVException(errorMessage);
 		}
 

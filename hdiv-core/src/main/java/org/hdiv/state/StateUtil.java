@@ -21,6 +21,7 @@ import java.util.regex.Pattern;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hdiv.config.HDIVConfig;
+import org.hdiv.config.Strategy;
 import org.hdiv.exception.HDIVException;
 import org.hdiv.session.ISession;
 import org.hdiv.util.EncodingUtil;
@@ -37,21 +38,6 @@ public class StateUtil {
 	 * Commons Logging instance.
 	 */
 	private Log log = LogFactory.getLog(StateUtil.class);
-
-	/**
-	 * Memory strategy name
-	 */
-	private static final String MEMORY_STRATEGY = "memory";
-
-	/**
-	 * Cipher strategy name
-	 */
-	private static final String CIPHER_STRATEGY = "cipher";
-
-	/**
-	 * Hash strategy name
-	 */
-	private static final String HASH_STRATEGY = "hash";
 
 	/**
 	 * Pattern to check if the memory strategy is being used
@@ -127,7 +113,7 @@ public class StateUtil {
 
 		Matcher m = this.memoryPattern.matcher(value);
 
-		return (m.matches() ? true : this.config.getStrategy().equalsIgnoreCase(MEMORY_STRATEGY));
+		return (m.matches() ? true : this.config.getStrategy().equals(Strategy.MEMORY));
 	}
 
 	/**
@@ -136,7 +122,7 @@ public class StateUtil {
 	 * @return True if strategy is cipher. False in otherwise.
 	 */
 	protected boolean isCipherStrategy() {
-		return this.config.getStrategy().equalsIgnoreCase(CIPHER_STRATEGY);
+		return this.config.getStrategy().equals(Strategy.CIPHER);
 	}
 
 	/**
@@ -145,7 +131,7 @@ public class StateUtil {
 	 * @return True if strategy is hash. False in otherwise.
 	 */
 	protected boolean isHashStrategy() {
-		return this.config.getStrategy().equalsIgnoreCase(HASH_STRATEGY);
+		return this.config.getStrategy().equals(Strategy.HASH);
 	}
 
 	/**

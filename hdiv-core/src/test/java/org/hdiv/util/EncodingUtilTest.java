@@ -21,6 +21,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hdiv.AbstractHDIVTestCase;
 import org.hdiv.config.HDIVConfig;
+import org.hdiv.config.Strategy;
 import org.hdiv.state.IState;
 import org.hdiv.state.Parameter;
 import org.hdiv.state.State;
@@ -38,7 +39,7 @@ public class EncodingUtilTest extends AbstractHDIVTestCase {
 
 	protected void postCreateHdivConfig(HDIVConfig config) {
 
-		config.setStrategy("cipher");
+		config.setStrategy(Strategy.CIPHER);
 	}
 
 	protected void onSetUp() throws Exception {
