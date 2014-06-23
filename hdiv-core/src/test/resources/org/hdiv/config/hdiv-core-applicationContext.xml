@@ -14,14 +14,8 @@
 		<property name="algorithm">
 			<value>AES</value>
 		</property>
-		<property name="keySize">
-			<value>128</value>
-		</property>
 		<property name="prngAlgorithm">
 			<value>SHA1PRNG</value>
-		</property>
-		<property name="provider">
-			<value>SUN</value>
 		</property>
 	</bean>
 

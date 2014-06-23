@@ -28,11 +28,5 @@ public interface IKeyFactory {
 	 * @return Key the encryption key
 	 */
 	public Key generateKey();
-	
-	/**
-	 * This method is called whenever a key needs to be generated.
-	 * 
-	 * @return Key the encryption key
-	 */
-	public Key generateKeyWithDefaultValues();
+
 }

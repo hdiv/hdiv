@@ -240,10 +240,6 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		RootBeanDefinition bean = new RootBeanDefinition(KeyFactory.class);
 		bean.setSource(source);
 		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
-		bean.getPropertyValues().addPropertyValue("algorithm", "AES");
-		bean.getPropertyValues().addPropertyValue("keySize", "128");
-		bean.getPropertyValues().addPropertyValue("prngAlgorithm", "SHA1PRNG");
-		bean.getPropertyValues().addPropertyValue("provider", "SUN");
 		String name = parserContext.getReaderContext().generateBeanName(bean);
 		parserContext.getRegistry().registerBeanDefinition(name, bean);
 		return new RuntimeBeanReference(name);
@@ -351,7 +347,6 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
 		bean.setScope(BeanDefinition.SCOPE_PROTOTYPE);
 		bean.setInitMethodName("init");
-		bean.getPropertyValues().addPropertyValue("transformation", "AES/CBC/PKCS5Padding");
 		String name = parserContext.getReaderContext().generateBeanName(bean);
 		parserContext.getRegistry().registerBeanDefinition(name, bean);
 		return new RuntimeBeanReference(name);

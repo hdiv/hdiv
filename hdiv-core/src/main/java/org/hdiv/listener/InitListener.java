@@ -174,7 +174,7 @@ public class InitListener implements ServletContextListener, HttpSessionListener
 		if (this.config.getStrategy().equalsIgnoreCase("cipher")) {
 			IKeyFactory keyFactory = context.getBean(IKeyFactory.class);
 			// creating encryption key
-			Key key = keyFactory.generateKeyWithDefaultValues();
+			Key key = keyFactory.generateKey();
 			httpSession.setAttribute(Constants.KEY_NAME, key);
 
 		}
