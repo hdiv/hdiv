@@ -36,7 +36,7 @@ public class LifecycleTest extends AbstractJsfHDIVTestCase {
 	@Override
 	protected void innerSetUp() throws Exception {
 
-		this.hdivParameter = (String) this.getApplicationContext().getBean("hdivParameter");
+		this.hdivParameter = this.getConfig().getStateParameterName();
 
 		DataComposerFactory dataComposerFactory = this.getApplicationContext().getBean(DataComposerFactory.class);
 		HttpServletRequest request = HDIVUtil.getHttpServletRequest();

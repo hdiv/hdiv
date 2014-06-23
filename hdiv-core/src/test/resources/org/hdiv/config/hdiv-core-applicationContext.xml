@@ -94,18 +94,6 @@
 		<property name="userData" ref="userData" />
 	</bean>
 
-	<bean id="hdivParameter" class="java.lang.String">
-		<constructor-arg>
-			<value>_HDIV_STATE_</value>
-		</constructor-arg>
-	</bean>
-
-	<bean id="modifyHdivStateParameter" class="java.lang.String">
-		<constructor-arg>
-			<value>_MODIFY_HDIV_STATE_</value>
-		</constructor-arg>
-	</bean>
-
 	<!-- URL PROCESSOR -->
 	<bean id="linkUrlProcessor" class="org.hdiv.urlProcessor.LinkUrlProcessor">
 		<property name="config" ref="config" />

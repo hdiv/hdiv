@@ -40,6 +40,10 @@ public class HDIVConfig implements Serializable {
 
 	private static final String DEFAULT_STRATEGY = "memory";
 
+	private static final String DEFAULT_STATE_PARAMETER_NAME = "_HDIV_STATE_";
+
+	private static final String DEFAULT_MODIFY_STATE_PARAMETER_NAME = "_MODIFY_HDIV_STATE_";
+
 	/**
 	 * Regular expression executor factory.
 	 * 
@@ -131,6 +135,16 @@ public class HDIVConfig implements Serializable {
 	 * @since HDIV 2.1.0
 	 */
 	protected boolean randomName = false;
+
+	/**
+	 * Name of the parameter that contains state identification. Default value is '_HDIV_STATE_'.
+	 */
+	protected String stateParameterName = DEFAULT_STATE_PARAMETER_NAME;
+
+	/**
+	 * Name of the parameter that contains state identification to modify. Used for ajax requests.
+	 */
+	protected String modifyStateParameterName = DEFAULT_MODIFY_STATE_PARAMETER_NAME;
 
 	/**
 	 * HDIV behaviour strategy. There are 3 possible options: memory, cipher, hash
@@ -617,6 +631,36 @@ public class HDIVConfig implements Serializable {
 	 */
 	public void setPatternMatcherFactory(PatternMatcherFactory patternMatcherFactory) {
 		this.patternMatcherFactory = patternMatcherFactory;
+	}
+
+	/**
+	 * @return the stateParameterName
+	 */
+	public String getStateParameterName() {
+		return stateParameterName;
+	}
+
+	/**
+	 * @param stateParameterName
+	 *            the stateParameterName to set
+	 */
+	public void setStateParameterName(String stateParameterName) {
+		this.stateParameterName = stateParameterName;
+	}
+
+	/**
+	 * @return the modifyStateParameterName
+	 */
+	public String getModifyStateParameterName() {
+		return modifyStateParameterName;
+	}
+
+	/**
+	 * @param modifyStateParameterName
+	 *            the modifyStateParameterName to set
+	 */
+	public void setModifyStateParameterName(String modifyStateParameterName) {
+		this.modifyStateParameterName = modifyStateParameterName;
 	}
 
 	public String toString() {

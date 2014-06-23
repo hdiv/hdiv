@@ -121,7 +121,7 @@ public class InitListener implements ServletContextListener, HttpSessionListener
 
 		this.initStrategies(wac, httpSessionEvent.getSession());
 		this.initPageIdGenerator(wac, httpSessionEvent.getSession());
-		this.initHDIVStateParameters(wac, httpSessionEvent.getSession());
+		this.initStateParameterNames(wac, httpSessionEvent.getSession());
 
 		if (log.isInfoEnabled()) {
 			log.info("HDIV's session created:" + httpSessionEvent.getSession().getId());
@@ -196,7 +196,7 @@ public class InitListener implements ServletContextListener, HttpSessionListener
 	}
 
 	/**
-	 * HDIV state parameter initialization.
+	 * State parameter names initialization.
 	 * 
 	 * @param context
 	 *            application context
@@ -204,18 +204,17 @@ public class InitListener implements ServletContextListener, HttpSessionListener
 	 *            http session
 	 * @since HDIV 1.1
 	 */
-	protected void initHDIVStateParameters(ApplicationContext context, HttpSession httpSession) {
+	protected void initStateParameterNames(ApplicationContext context, HttpSession httpSession) {
 
 		String hdivParameterName = null;
 		String modifyHdivStateParameterName = null;
 
-		Boolean isRandomName = Boolean.valueOf(this.config.isRandomName());
-		if (Boolean.TRUE.equals(isRandomName)) {
+		if (this.config.isRandomName()) {
 			hdivParameterName = HDIVUtil.createRandomToken(Integer.MAX_VALUE);
 			modifyHdivStateParameterName = HDIVUtil.createRandomToken(Integer.MAX_VALUE);
 		} else {
-			hdivParameterName = (String) context.getBean("hdivParameter");
-			modifyHdivStateParameterName = (String) context.getBean("modifyHdivStateParameter");
+			hdivParameterName = this.config.getStateParameterName();
+			modifyHdivStateParameterName = this.config.getModifyStateParameterName();
 		}
 
 		httpSession.setAttribute(Constants.HDIV_PARAMETER, hdivParameterName);

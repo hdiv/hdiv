@@ -171,9 +171,6 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		this.createKeyFactory(element, source, parserContext);
 		this.userDataRef = this.createUserData(element, source, parserContext);
 
-		this.createStringBean("hdivParameter", "_HDIV_STATE_", source, parserContext);
-		this.createStringBean("modifyHdivStateParameter", "_MODIFY_HDIV_STATE_", source, parserContext);
-
 		this.createValidatorErrorHandler(element, source, parserContext);
 		this.loggerRef = this.createLogger(element, source, parserContext);
 		this.createStateCache(element, source, parserContext);

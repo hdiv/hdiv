@@ -48,7 +48,7 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 
 	protected void onSetUp() throws Exception {
 
-		this.hdivParameter = (String) this.getApplicationContext().getBean("hdivParameter");
+		this.hdivParameter = this.getConfig().getStateParameterName();
 		this.helper = this.getApplicationContext().getBean(IValidationHelper.class);
 		this.confidentiality = this.getConfig().getConfidentiality();
 

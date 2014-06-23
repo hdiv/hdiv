@@ -16,6 +16,7 @@
 package org.hdiv.application;
 
 import org.hdiv.AbstractHDIVTestCase;
+import org.hdiv.config.HDIVConfig;
 
 public class IApplicationTest extends AbstractHDIVTestCase {
 
@@ -27,8 +28,8 @@ public class IApplicationTest extends AbstractHDIVTestCase {
 	}
 
 	public void testGetBean() throws Exception {
-		String value = (String) this.application.getBean("hdivParameter");
 
+		HDIVConfig value = (HDIVConfig) this.application.getBean("config");
 		assertNotNull(value);
 	}
 

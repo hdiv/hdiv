@@ -45,7 +45,7 @@ public class EditableParameterValidatorTest extends AbstractHDIVTestCase {
 
 	protected void onSetUp() throws Exception {
 
-		this.hdivParameter = (String) this.getApplicationContext().getBean("hdivParameter");
+		this.hdivParameter = this.getConfig().getStateParameterName();
 		this.helper = (IValidationHelper) this.getApplicationContext().getBean(IValidationHelper.class);
 
 		DataComposerFactory dataComposerFactory = (DataComposerFactory) this.getApplicationContext().getBean(
