@@ -45,7 +45,7 @@ public class HDIVErrorCodes {
 
 	/**
 	 * For a certain parameter not the expected number of values has been
-	 * receiced.
+	 * received.
 	 */
 	public static final String VALUE_LENGTH_INCORRECT = "NOT_RECEIVED_ALL_PARAMETER_VALUES";
 
