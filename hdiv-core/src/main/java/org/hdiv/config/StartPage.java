@@ -103,23 +103,30 @@ public class StartPage implements Serializable {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
+		}
 		StartPage other = (StartPage) obj;
 		if (method == null) {
-			if (other.method != null)
+			if (other.method != null) {
 				return false;
-		} else if (!method.equals(other.method))
+			}
+		} else if (!method.equals(other.method)) {
 			return false;
+		}
 		if (pattern == null) {
-			if (other.pattern != null)
+			if (other.pattern != null) {
 				return false;
-		} else if (!pattern.equals(other.pattern))
+			}
+		} else if (!pattern.equals(other.pattern)) {
 			return false;
+		}
 		return true;
 	}
 
