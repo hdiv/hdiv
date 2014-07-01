@@ -62,6 +62,7 @@ import org.hdiv.validators.RequestParameterValidator;
 import org.hdiv.validators.UICommandValidator;
 import org.hdiv.web.servlet.support.GrailsHdivRequestDataValueProcessor;
 import org.hdiv.web.servlet.support.HdivRequestDataValueProcessor;
+import org.hdiv.web.servlet.support.ThymeleafHdivRequestDataValueProcessor;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.RuntimeBeanReference;
 import org.springframework.beans.factory.support.RootBeanDefinition;
@@ -106,7 +107,7 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 	 * The name of the bean to use to look up in an implementation of {@link RequestDataValueProcessor} has been
 	 * configured.
 	 */
-	protected static final String REQUEST_DATA_VALUE_PROCESSOR_BEAN_NAME = "requestDataValueProcessor";
+	public static final String REQUEST_DATA_VALUE_PROCESSOR_BEAN_NAME = "requestDataValueProcessor";
 
 	protected final boolean springMvcPresent = ClassUtils.isPresent(
 			"org.springframework.web.servlet.DispatcherServlet", ConfigBeanDefinitionParser.class.getClassLoader());
@@ -188,19 +189,19 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		this.basicUrlProcessorRef = this.createBasicUrlProcessor(element, source, parserContext);
 		this.createRequestInitializer(element, source, parserContext);
 
-		// register Spring MVC beans if we are using Spring MVC web framework
-		if (this.grailsPresent) {
-			this.createGrailsRequestDataValueProcessor(element, source, parserContext);
-			this.createSimpleBean(element, source, parserContext, SpringMVCMultipartConfig.class);
-		} else if (this.springMvcPresent && this.thymeleafPresent) {
-			this.createThymeleafRequestDataValueProcessor(element, source, parserContext);
-			this.createSimpleBean(element, source, parserContext, SpringMVCMultipartConfig.class);
-		} else {
-			this.createRequestDataValueProcessor(element, source, parserContext);
+		// Register Spring MVC beans if we are using Spring MVC web framework
+		if (this.springMvcPresent) {
+			if (this.grailsPresent) {
+				this.createGrailsRequestDataValueProcessor(element, source, parserContext);
+			} else if (this.thymeleafPresent) {
+				this.createThymeleafRequestDataValueProcessor(element, source, parserContext);
+			} else {
+				this.createRequestDataValueProcessor(element, source, parserContext);
+			}
 			this.createSimpleBean(element, source, parserContext, SpringMVCMultipartConfig.class);
 		}
 
-		// register JSF specific beans if we are using this web framework
+		// Register JSF specific beans if we are using this web framework
 		if (this.jsfPresent && this.jsfModulePresent) {
 			this.createJsfValidatorHelper(element, source, parserContext);
 			this.createSimpleBean(element, source, parserContext, JsfMultipartConfig.class);
@@ -508,8 +509,7 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 
 	protected RuntimeBeanReference createThymeleafRequestDataValueProcessor(Element element, Object source,
 			ParserContext parserContext) {
-		RootBeanDefinition bean = new RootBeanDefinition(
-				org.hdiv.web.servlet.support.ThymeleafHdivRequestDataValueProcessor.class);
+		RootBeanDefinition bean = new RootBeanDefinition(ThymeleafHdivRequestDataValueProcessor.class);
 		bean.setSource(source);
 		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
 		bean.getPropertyValues().addPropertyValue("linkUrlProcessor", this.linkUrlProcessorRef);
