@@ -47,6 +47,7 @@ import org.hdiv.idGenerator.UidGenerator;
 import org.hdiv.logs.IUserData;
 import org.hdiv.logs.Logger;
 import org.hdiv.logs.UserData;
+import org.hdiv.regex.PatternMatcher;
 import org.hdiv.regex.PatternMatcherFactory;
 import org.hdiv.session.ISession;
 import org.hdiv.session.SessionHDIV;
@@ -56,6 +57,7 @@ import org.hdiv.urlProcessor.BasicUrlProcessor;
 import org.hdiv.urlProcessor.FormUrlProcessor;
 import org.hdiv.urlProcessor.LinkUrlProcessor;
 import org.hdiv.util.EncodingUtil;
+import org.hdiv.validator.IValidation;
 import org.hdiv.validators.EditableValidator;
 import org.hdiv.validators.HtmlInputHiddenValidator;
 import org.hdiv.validators.RequestParameterValidator;
@@ -612,8 +614,7 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		RootBeanDefinition bean = new RootBeanDefinition(HDIVValidations.class);
 		bean.setSource(source);
 		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
-		bean.setInitMethodName("init");
-		bean.getPropertyValues().addPropertyValue("rawUrls", new HashMap<String, List<String>>());
+		bean.getPropertyValues().addPropertyValue("urls", new HashMap<PatternMatcher, List<IValidation>>());
 		parserContext.getRegistry().registerBeanDefinition(
 				EditableValidationsBeanDefinitionParser.EDITABLE_VALIDATIONS_BEAN_NAME, bean);
 		return new RuntimeBeanReference(EditableValidationsBeanDefinitionParser.EDITABLE_VALIDATIONS_BEAN_NAME);
