@@ -36,7 +36,7 @@ public class SecurityConfigBuilderTest {
 		assertNotNull(this.builder);
 
 		this.builder
-			.avoidCookiesConfidentiality(true)
+			.cookiesConfidentiality(false)
 			.stateParameterName("state")
 			.maxPagesPerSession(23)
 			.cipher()

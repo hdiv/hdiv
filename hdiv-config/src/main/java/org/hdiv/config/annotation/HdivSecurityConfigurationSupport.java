@@ -67,7 +67,6 @@ import org.hdiv.urlProcessor.LinkUrlProcessor;
 import org.hdiv.util.EncodingUtil;
 import org.hdiv.validator.IValidation;
 import org.hdiv.validator.Validation;
-import org.hdiv.web.servlet.support.GrailsHdivRequestDataValueProcessor;
 import org.hdiv.web.servlet.support.HdivRequestDataValueProcessor;
 import org.hdiv.web.servlet.support.ThymeleafHdivRequestDataValueProcessor;
 import org.hdiv.web.validator.EditableParameterValidator;
@@ -84,30 +83,29 @@ import org.springframework.web.servlet.support.RequestDataValueProcessor;
 /**
  * Main class of {@link Configuration} support. Creates all internal bean instances.
  * 
- * TODO Register JSF specific beans.
- * TODO Some bean are dependent of Spring MVC, create beans only if Spring MVC is present.
+ * TODO Register JSF specific beans. 
+ * TODO Thymeleaf and Grails support. 
+ * TODO Some bean are dependent of Spring MVC,
+ * create beans only if Spring MVC is present.
  */
 public abstract class HdivSecurityConfigurationSupport {
-
-	protected final boolean grailsPresent = ClassUtils.isPresent(
-			"org.codehaus.groovy.grails.web.servlet.GrailsDispatcherServlet",
-			HdivSecurityConfigurationSupport.class.getClassLoader());
 
 	protected final boolean thymeleafPresent = ClassUtils.isPresent("org.thymeleaf.spring3.SpringTemplateEngine",
 			HdivSecurityConfigurationSupport.class.getClassLoader())
 			|| ClassUtils.isPresent("org.thymeleaf.spring4.SpringTemplateEngine",
 					HdivSecurityConfigurationSupport.class.getClassLoader());
+
 	protected static final boolean jsr303Present = ClassUtils.isPresent("javax.validation.Validator",
 			HdivSecurityConfigurationSupport.class.getClassLoader());
 
 	@Bean
-	public HDIVConfig config() {
+	public HDIVConfig securityConfig() {
 
 		SecurityConfigBuilder securityConfigBuilder = this.securityConfigBuilder();
 		this.configure(securityConfigBuilder);
 
 		HDIVConfig config = securityConfigBuilder.build();
-		config.setValidations(validations());
+		config.setValidations(securityValidations());
 
 		// User configured exclusions
 		ExclusionRegistry exclusionRegistry = new ExclusionRegistry(patternMatcherFactory());
@@ -136,7 +134,7 @@ public abstract class HdivSecurityConfigurationSupport {
 	public abstract void addExclusions(ExclusionRegistry registry);
 
 	@Bean
-	public IApplication application() {
+	public IApplication securityApplication() {
 		ApplicationHDIV application = new ApplicationHDIV();
 		return application;
 	}
@@ -190,23 +188,23 @@ public abstract class HdivSecurityConfigurationSupport {
 	}
 
 	@Bean
-	public IUserData userData() {
+	public IUserData securityUserData() {
 		UserData userData = new UserData();
 		return userData;
 	}
 
 	@Bean
-	public Logger logger() {
+	public Logger securityLogger() {
 		Logger logger = new Logger();
-		logger.setUserData(userData());
+		logger.setUserData(securityUserData());
 		return logger;
 	}
 
 	@Bean
 	public ValidatorErrorHandler validatorErrorHandler() {
 		DefaultValidatorErrorHandler validatorErrorHandler = new DefaultValidatorErrorHandler();
-		validatorErrorHandler.setUserData(userData());
-		validatorErrorHandler.setConfig(config());
+		validatorErrorHandler.setUserData(securityUserData());
+		validatorErrorHandler.setConfig(securityConfig());
 		return validatorErrorHandler;
 	}
 
@@ -225,7 +223,7 @@ public abstract class HdivSecurityConfigurationSupport {
 	}
 
 	@Bean
-	public ISession session() {
+	public ISession securitySession() {
 		SessionHDIV session = new SessionHDIV();
 		return session;
 	}
@@ -233,7 +231,7 @@ public abstract class HdivSecurityConfigurationSupport {
 	@Bean
 	public EncodingUtil encodingUtil() {
 		EncodingUtil encodingUtil = new EncodingUtil();
-		encodingUtil.setSession(session());
+		encodingUtil.setSession(securitySession());
 		encodingUtil.init();
 		return encodingUtil;
 	}
@@ -260,8 +258,8 @@ public abstract class HdivSecurityConfigurationSupport {
 	public StateUtil stateUtil() {
 		StateUtil stateUtil = new StateUtil();
 		stateUtil.setEncodingUtil(encodingUtil());
-		stateUtil.setConfig(config());
-		stateUtil.setSession(session());
+		stateUtil.setConfig(securityConfig());
+		stateUtil.setSession(securitySession());
 		stateUtil.init();
 		return stateUtil;
 	}
@@ -269,15 +267,15 @@ public abstract class HdivSecurityConfigurationSupport {
 	@Bean
 	public IDataValidator dataValidator() {
 		DataValidator dataValidator = new DataValidator();
-		dataValidator.setConfig(config());
+		dataValidator.setConfig(securityConfig());
 		return dataValidator;
 	}
 
 	@Bean
 	public DataComposerFactory dataComposerFactory() {
 		DataComposerFactory dataComposerFactory = new DataComposerFactory();
-		dataComposerFactory.setConfig(config());
-		dataComposerFactory.setSession(session());
+		dataComposerFactory.setConfig(securityConfig());
+		dataComposerFactory.setSession(securitySession());
 		dataComposerFactory.setEncodingUtil(encodingUtil());
 		dataComposerFactory.setStateUtil(stateUtil());
 		dataComposerFactory.setUidGenerator(uidGenerator());
@@ -288,10 +286,10 @@ public abstract class HdivSecurityConfigurationSupport {
 	public IValidationHelper validationHelper() {
 
 		ValidatorHelperRequest validatorHelperRequest = new ValidatorHelperRequest();
-		validatorHelperRequest.setLogger(logger());
+		validatorHelperRequest.setLogger(securityLogger());
 		validatorHelperRequest.setStateUtil(stateUtil());
-		validatorHelperRequest.setHdivConfig(config());
-		validatorHelperRequest.setSession(session());
+		validatorHelperRequest.setHdivConfig(securityConfig());
+		validatorHelperRequest.setSession(securitySession());
 		validatorHelperRequest.setDataValidator(dataValidator());
 		validatorHelperRequest.setUrlProcessor(basicUrlProcessor());
 		validatorHelperRequest.setDataComposerFactory(dataComposerFactory());
@@ -300,35 +298,35 @@ public abstract class HdivSecurityConfigurationSupport {
 	}
 
 	@Bean
-	public RequestInitializer requestInitializer() {
+	public RequestInitializer securityRequestInitializer() {
 		DefaultRequestInitializer requestInitializer = new DefaultRequestInitializer();
-		requestInitializer.setConfig(config());
+		requestInitializer.setConfig(securityConfig());
 		return requestInitializer;
 	}
 
 	@Bean
 	public LinkUrlProcessor linkUrlProcessor() {
 		LinkUrlProcessor linkUrlProcessor = new LinkUrlProcessor();
-		linkUrlProcessor.setConfig(config());
+		linkUrlProcessor.setConfig(securityConfig());
 		return linkUrlProcessor;
 	}
 
 	@Bean
 	public FormUrlProcessor formUrlProcessor() {
 		FormUrlProcessor formUrlProcessor = new FormUrlProcessor();
-		formUrlProcessor.setConfig(config());
+		formUrlProcessor.setConfig(securityConfig());
 		return formUrlProcessor;
 	}
 
 	@Bean
 	public BasicUrlProcessor basicUrlProcessor() {
 		BasicUrlProcessor basicUrlProcessor = new BasicUrlProcessor();
-		basicUrlProcessor.setConfig(config());
+		basicUrlProcessor.setConfig(securityConfig());
 		return basicUrlProcessor;
 	}
 
 	@Bean
-	public IMultipartConfig multipartConfig() {
+	public IMultipartConfig securityMultipartConfig() {
 
 		IMultipartConfig multipartConfig = new SpringMVCMultipartConfig();
 		return multipartConfig;
@@ -340,8 +338,6 @@ public abstract class HdivSecurityConfigurationSupport {
 		HdivRequestDataValueProcessor dataValueProcessor;
 		if (thymeleafPresent) {
 			dataValueProcessor = new ThymeleafHdivRequestDataValueProcessor();
-		} else if (grailsPresent) {
-			dataValueProcessor = new GrailsHdivRequestDataValueProcessor();
 		} else {
 			dataValueProcessor = new HdivRequestDataValueProcessor();
 		}
@@ -351,7 +347,7 @@ public abstract class HdivSecurityConfigurationSupport {
 	}
 
 	@Bean
-	public HDIVValidations validations() {
+	public HDIVValidations securityValidations() {
 
 		// Default rules
 		List<IValidation> defaultRules = defaultRules();

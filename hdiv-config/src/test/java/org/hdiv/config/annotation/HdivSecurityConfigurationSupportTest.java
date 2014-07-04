@@ -69,14 +69,14 @@ public class HdivSecurityConfigurationSupportTest {
 					.errorPage("/customErrorPage.html")
 					.randomName(true)
 					.strategy(Strategy.CIPHER)
-					.avoidValidationInUrlsWithoutParams(true);
+					.validateUrlsWithoutParams(false);
 			}
 		};
 	}
 
 	@Test
 	public void config() {
-		HDIVConfig config = configuration.config();
+		HDIVConfig config = configuration.securityConfig();
 		assertNotNull(config);
 		
 		assertEquals(true, config.isDebugMode());
@@ -89,7 +89,7 @@ public class HdivSecurityConfigurationSupportTest {
 	
 	@Test
 	public void exclusions() {
-		HDIVConfig config = configuration.config();
+		HDIVConfig config = configuration.securityConfig();
 		assertNotNull(config);
 		
 		assertEquals(true, config.isStartPage("/attacks/view.html", null));

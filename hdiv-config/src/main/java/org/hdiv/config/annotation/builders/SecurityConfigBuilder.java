@@ -37,18 +37,18 @@ public class SecurityConfigBuilder {
 		this.config.setPatternMatcherFactory(patternMatcherFactory);
 	}
 
-	public SecurityConfigBuilder avoidCookiesConfidentiality(boolean avoidCookiesConfidentiality) {
-		this.config.setAvoidCookiesConfidentiality(avoidCookiesConfidentiality);
+	public SecurityConfigBuilder cookiesConfidentiality(boolean cookiesConfidentiality) {
+		this.config.setAvoidCookiesConfidentiality(!cookiesConfidentiality);
 		return this;
 	}
 
-	public SecurityConfigBuilder avoidCookiesIntegrity(boolean avoidCookiesIntegrity) {
-		this.config.setAvoidCookiesIntegrity(avoidCookiesIntegrity);
+	public SecurityConfigBuilder cookiesIntegrity(boolean cookiesIntegrity) {
+		this.config.setAvoidCookiesIntegrity(!cookiesIntegrity);
 		return this;
 	}
 
-	public SecurityConfigBuilder avoidValidationInUrlsWithoutParams(boolean avoidValidationInUrlsWithoutParams) {
-		this.config.setAvoidValidationInUrlsWithoutParams(avoidValidationInUrlsWithoutParams);
+	public SecurityConfigBuilder validateUrlsWithoutParams(boolean validateUrlsWithoutParams) {
+		this.config.setAvoidValidationInUrlsWithoutParams(!validateUrlsWithoutParams);
 		return this;
 	}
 
