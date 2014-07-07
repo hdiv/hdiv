@@ -99,7 +99,6 @@ public class HDIVUtil {
 		HttpServletRequest request = getHttpServletRequest();
 		IDataComposer newDataComposer = getDataComposer(request);
 		return newDataComposer;
-
 	}
 
 	/**
@@ -126,7 +125,17 @@ public class HDIVUtil {
 	public static void setDataComposer(IDataComposer newDataComposer, HttpServletRequest request) {
 
 		request.setAttribute(DATACOMPOSER_REQUEST_KEY, newDataComposer);
+	}
 
+	/**
+	 * Remove the <code>IDataComposer</code> from the request.
+	 * 
+	 * @param request
+	 *            {@link HttpServletRequest} instance
+	 */
+	public static void removeDataComposer(HttpServletRequest request) {
+
+		request.removeAttribute(DATACOMPOSER_REQUEST_KEY);
 	}
 
 	/* RequestURI */
@@ -158,7 +167,6 @@ public class HDIVUtil {
 	public static void setRequestURI(String requestURI, HttpServletRequest request) {
 
 		request.setAttribute(REQUESTURI_REQUEST_KEY, requestURI);
-
 	}
 
 	/* BaseURL */
@@ -187,7 +195,6 @@ public class HDIVUtil {
 	public static void setBaseURL(String baseURL, HttpServletRequest request) {
 
 		request.setAttribute(BASEURL_REQUEST_KEY, baseURL);
-
 	}
 
 	/* IApplication */
@@ -199,7 +206,6 @@ public class HDIVUtil {
 
 		ServletContext servletContext = getHttpServletRequest().getSession().getServletContext();
 		return getApplication(servletContext);
-
 	}
 
 	/**
@@ -237,7 +243,6 @@ public class HDIVUtil {
 
 		ServletContext servletContext = getHttpServletRequest().getSession().getServletContext();
 		return getHDIVConfig(servletContext);
-
 	}
 
 	/**

@@ -99,7 +99,7 @@ public abstract class HdivSecurityConfigurationSupport {
 			HdivSecurityConfigurationSupport.class.getClassLoader());
 
 	@Bean
-	public HDIVConfig securityConfig() {
+	public HDIVConfig hdivConfig() {
 
 		SecurityConfigBuilder securityConfigBuilder = this.securityConfigBuilder();
 		this.configure(securityConfigBuilder);
@@ -204,7 +204,7 @@ public abstract class HdivSecurityConfigurationSupport {
 	public ValidatorErrorHandler validatorErrorHandler() {
 		DefaultValidatorErrorHandler validatorErrorHandler = new DefaultValidatorErrorHandler();
 		validatorErrorHandler.setUserData(securityUserData());
-		validatorErrorHandler.setConfig(securityConfig());
+		validatorErrorHandler.setConfig(hdivConfig());
 		return validatorErrorHandler;
 	}
 
@@ -258,7 +258,7 @@ public abstract class HdivSecurityConfigurationSupport {
 	public StateUtil stateUtil() {
 		StateUtil stateUtil = new StateUtil();
 		stateUtil.setEncodingUtil(encodingUtil());
-		stateUtil.setConfig(securityConfig());
+		stateUtil.setConfig(hdivConfig());
 		stateUtil.setSession(securitySession());
 		stateUtil.init();
 		return stateUtil;
@@ -267,14 +267,14 @@ public abstract class HdivSecurityConfigurationSupport {
 	@Bean
 	public IDataValidator dataValidator() {
 		DataValidator dataValidator = new DataValidator();
-		dataValidator.setConfig(securityConfig());
+		dataValidator.setConfig(hdivConfig());
 		return dataValidator;
 	}
 
 	@Bean
 	public DataComposerFactory dataComposerFactory() {
 		DataComposerFactory dataComposerFactory = new DataComposerFactory();
-		dataComposerFactory.setConfig(securityConfig());
+		dataComposerFactory.setConfig(hdivConfig());
 		dataComposerFactory.setSession(securitySession());
 		dataComposerFactory.setEncodingUtil(encodingUtil());
 		dataComposerFactory.setStateUtil(stateUtil());
@@ -288,7 +288,7 @@ public abstract class HdivSecurityConfigurationSupport {
 		ValidatorHelperRequest validatorHelperRequest = new ValidatorHelperRequest();
 		validatorHelperRequest.setLogger(securityLogger());
 		validatorHelperRequest.setStateUtil(stateUtil());
-		validatorHelperRequest.setHdivConfig(securityConfig());
+		validatorHelperRequest.setHdivConfig(hdivConfig());
 		validatorHelperRequest.setSession(securitySession());
 		validatorHelperRequest.setDataValidator(dataValidator());
 		validatorHelperRequest.setUrlProcessor(basicUrlProcessor());
@@ -300,28 +300,28 @@ public abstract class HdivSecurityConfigurationSupport {
 	@Bean
 	public RequestInitializer securityRequestInitializer() {
 		DefaultRequestInitializer requestInitializer = new DefaultRequestInitializer();
-		requestInitializer.setConfig(securityConfig());
+		requestInitializer.setConfig(hdivConfig());
 		return requestInitializer;
 	}
 
 	@Bean
 	public LinkUrlProcessor linkUrlProcessor() {
 		LinkUrlProcessor linkUrlProcessor = new LinkUrlProcessor();
-		linkUrlProcessor.setConfig(securityConfig());
+		linkUrlProcessor.setConfig(hdivConfig());
 		return linkUrlProcessor;
 	}
 
 	@Bean
 	public FormUrlProcessor formUrlProcessor() {
 		FormUrlProcessor formUrlProcessor = new FormUrlProcessor();
-		formUrlProcessor.setConfig(securityConfig());
+		formUrlProcessor.setConfig(hdivConfig());
 		return formUrlProcessor;
 	}
 
 	@Bean
 	public BasicUrlProcessor basicUrlProcessor() {
 		BasicUrlProcessor basicUrlProcessor = new BasicUrlProcessor();
-		basicUrlProcessor.setConfig(securityConfig());
+		basicUrlProcessor.setConfig(hdivConfig());
 		return basicUrlProcessor;
 	}
 

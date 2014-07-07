@@ -378,6 +378,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 			return ValidatorHelperResult.VALID;
 		}
 
+		@SuppressWarnings("unchecked")
 		Map<String, SavedCookie> sessionCookies = (Map<String, SavedCookie>) request.getSession().getAttribute(
 				Constants.HDIV_COOKIES_KEY);
 
@@ -1114,6 +1115,8 @@ public class ValidatorHelperRequest implements IValidationHelper {
 		if (exist) {
 			IDataComposer dataComposer = HDIVUtil.getDataComposer(request);
 			dataComposer.endPage();
+
+			HDIVUtil.removeDataComposer(request);
 		}
 
 	}

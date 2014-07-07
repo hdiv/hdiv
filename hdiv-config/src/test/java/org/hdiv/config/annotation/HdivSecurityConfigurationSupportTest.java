@@ -76,7 +76,7 @@ public class HdivSecurityConfigurationSupportTest {
 
 	@Test
 	public void config() {
-		HDIVConfig config = configuration.securityConfig();
+		HDIVConfig config = configuration.hdivConfig();
 		assertNotNull(config);
 		
 		assertEquals(true, config.isDebugMode());
@@ -89,7 +89,7 @@ public class HdivSecurityConfigurationSupportTest {
 	
 	@Test
 	public void exclusions() {
-		HDIVConfig config = configuration.securityConfig();
+		HDIVConfig config = configuration.hdivConfig();
 		assertNotNull(config);
 		
 		assertEquals(true, config.isStartPage("/attacks/view.html", null));
