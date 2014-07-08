@@ -18,21 +18,21 @@ package org.hdiv.config.annotation;
 import java.util.List;
 
 import org.hdiv.config.annotation.builders.SecurityConfigBuilder;
-import org.hdiv.config.annotation.configuration.HdivSecurityConfigurer;
-import org.hdiv.config.annotation.configuration.HdivSecurityConfigurerComposite;
+import org.hdiv.config.annotation.configuration.HdivWebSecurityConfigurer;
+import org.hdiv.config.annotation.configuration.HdivWebSecurityConfigurerComposite;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class DelegatingHdivSecurityConfiguration extends HdivSecurityConfigurationSupport {
+public class DelegatingHdivWebSecurityConfiguration extends HdivWebSecurityConfigurationSupport {
 
 	/**
-	 * Composite with all {@link HdivSecurityConfigurer} instances.
+	 * Composite with all {@link HdivWebSecurityConfigurer} instances.
 	 */
-	private final HdivSecurityConfigurerComposite configurers = new HdivSecurityConfigurerComposite();
+	private final HdivWebSecurityConfigurerComposite configurers = new HdivWebSecurityConfigurerComposite();
 
 	@Autowired(required = false)
-	public void setConfigurers(List<HdivSecurityConfigurer> configurers) {
+	public void setConfigurers(List<HdivWebSecurityConfigurer> configurers) {
 		if (configurers == null || configurers.isEmpty()) {
 			return;
 		}

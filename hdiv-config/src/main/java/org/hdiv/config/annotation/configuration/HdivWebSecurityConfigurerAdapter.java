@@ -20,13 +20,24 @@ import org.hdiv.config.annotation.RuleRegistry;
 import org.hdiv.config.annotation.ValidationConfigurer;
 import org.hdiv.config.annotation.builders.SecurityConfigBuilder;
 
-public interface HdivSecurityConfigurer {
+/**
+ * Utility class to extend {@link HdivWebSecurityConfigurer} interface.
+ */
+public class HdivWebSecurityConfigurerAdapter implements HdivWebSecurityConfigurer {
 
-	void configure(SecurityConfigBuilder securityConfigBuilder);
+	public void configure(SecurityConfigBuilder securityConfigBuilder) {
 
-	void addExclusions(ExclusionRegistry registry);
+	}
 
-	void addRules(RuleRegistry registry);
+	public void addExclusions(ExclusionRegistry registry) {
 
-	void configureEditableValidation(ValidationConfigurer validationConfigurer);
+	}
+
+	public void addRules(RuleRegistry registry) {
+
+	}
+
+	public void configureEditableValidation(ValidationConfigurer validationConfigurer) {
+
+	}
 }

@@ -21,19 +21,19 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.hdiv.config.annotation.configuration.HdivSecurityConfigurer;
-import org.hdiv.config.annotation.configuration.HdivSecurityConfigurerAdapter;
+import org.hdiv.config.annotation.configuration.HdivWebSecurityConfigurer;
+import org.hdiv.config.annotation.configuration.HdivWebSecurityConfigurerAdapter;
 import org.springframework.context.annotation.Import;
 
 /**
  * Add this annotation to an {@code @Configuration} class to have the HDIV Security
- * configuration defined in any {@link HdivSecurityConfigurer} or more likely by extending the
- * {@link HdivSecurityConfigurerAdapter} base class and overriding individual methods:
+ * configuration defined in any {@link HdivWebSecurityConfigurer} or more likely by extending the
+ * {@link HdivWebSecurityConfigurerAdapter} base class and overriding individual methods:
  *
  * <pre class="code">
  * &#064;Configuration
- * &#064;EnableHdivSecurity
- * public class HdivSecurityConfig extends HdivSecurityConfigurerAdapter {
+ * &#064;EnableHdivWebSecurity
+ * public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
  * 
  * 	&#064;Override
  * 	public void configure(SecurityConfigBuilder builder) {
@@ -72,8 +72,8 @@ import org.springframework.context.annotation.Import;
  * }
  * </pre>
  *
- * @see HdivSecurityConfigurer
- * @see HdivSecurityConfigurerAdapter
+ * @see HdivWebSecurityConfigurer
+ * @see HdivWebSecurityConfigurerAdapter
  *
  * @author Gotzon Illarramendi
  * @since 2.1.7
@@ -81,7 +81,7 @@ import org.springframework.context.annotation.Import;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 @Documented
-@Import(DelegatingHdivSecurityConfiguration.class)
-public @interface EnableHdivSecurity {
+@Import(DelegatingHdivWebSecurityConfiguration.class)
+public @interface EnableHdivWebSecurity {
 
 }

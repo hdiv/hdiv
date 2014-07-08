@@ -88,15 +88,15 @@ import org.springframework.web.servlet.support.RequestDataValueProcessor;
  * TODO Some bean are dependent of Spring MVC,
  * create beans only if Spring MVC is present.
  */
-public abstract class HdivSecurityConfigurationSupport {
+public abstract class HdivWebSecurityConfigurationSupport {
 
 	protected final boolean thymeleafPresent = ClassUtils.isPresent("org.thymeleaf.spring3.SpringTemplateEngine",
-			HdivSecurityConfigurationSupport.class.getClassLoader())
+			HdivWebSecurityConfigurationSupport.class.getClassLoader())
 			|| ClassUtils.isPresent("org.thymeleaf.spring4.SpringTemplateEngine",
-					HdivSecurityConfigurationSupport.class.getClassLoader());
+					HdivWebSecurityConfigurationSupport.class.getClassLoader());
 
 	protected static final boolean jsr303Present = ClassUtils.isPresent("javax.validation.Validator",
-			HdivSecurityConfigurationSupport.class.getClassLoader());
+			HdivWebSecurityConfigurationSupport.class.getClassLoader());
 
 	@Bean
 	public HDIVConfig hdivConfig() {

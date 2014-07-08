@@ -24,13 +24,13 @@ import org.hdiv.config.annotation.builders.SecurityConfigBuilder;
 import org.junit.Before;
 import org.junit.Test;
 
-public class HdivSecurityConfigurationSupportTest {
+public class HdivWebSecurityConfigurationSupportTest {
 
-	private HdivSecurityConfigurationSupport configuration;
+	private HdivWebSecurityConfigurationSupport configuration;
 	
 	@Before
 	public void setUp() {
-		configuration = new HdivSecurityConfigurationSupport() {
+		configuration = new HdivWebSecurityConfigurationSupport() {
 			
 			@Override
 			public void addExclusions(ExclusionRegistry registry) {

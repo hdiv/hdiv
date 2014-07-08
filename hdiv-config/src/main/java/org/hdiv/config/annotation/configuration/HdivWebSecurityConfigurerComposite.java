@@ -24,38 +24,38 @@ import org.hdiv.config.annotation.ValidationConfigurer;
 import org.hdiv.config.annotation.builders.SecurityConfigBuilder;
 
 /**
- * Composite multiple {@link HdivSecurityConfigurer} instances.
+ * Composite multiple {@link HdivWebSecurityConfigurer} instances.
  */
-public class HdivSecurityConfigurerComposite implements HdivSecurityConfigurer {
+public class HdivWebSecurityConfigurerComposite implements HdivWebSecurityConfigurer {
 
-	private final List<HdivSecurityConfigurer> delegates = new ArrayList<HdivSecurityConfigurer>();
+	private final List<HdivWebSecurityConfigurer> delegates = new ArrayList<HdivWebSecurityConfigurer>();
 
-	public void addHdivSecurityConfigurers(List<HdivSecurityConfigurer> configurers) {
+	public void addHdivSecurityConfigurers(List<HdivWebSecurityConfigurer> configurers) {
 		if (configurers != null) {
 			this.delegates.addAll(configurers);
 		}
 	}
 
 	public void configure(SecurityConfigBuilder securityConfigBuilder) {
-		for (HdivSecurityConfigurer delegate : this.delegates) {
+		for (HdivWebSecurityConfigurer delegate : this.delegates) {
 			delegate.configure(securityConfigBuilder);
 		}
 	}
 
 	public void addExclusions(ExclusionRegistry registry) {
-		for (HdivSecurityConfigurer delegate : this.delegates) {
+		for (HdivWebSecurityConfigurer delegate : this.delegates) {
 			delegate.addExclusions(registry);
 		}
 	}
 
 	public void addRules(RuleRegistry registry) {
-		for (HdivSecurityConfigurer delegate : this.delegates) {
+		for (HdivWebSecurityConfigurer delegate : this.delegates) {
 			delegate.addRules(registry);
 		}
 	}
 
 	public void configureEditableValidation(ValidationConfigurer validationConfigurer) {
-		for (HdivSecurityConfigurer delegate : this.delegates) {
+		for (HdivWebSecurityConfigurer delegate : this.delegates) {
 			delegate.configureEditableValidation(validationConfigurer);
 		}
 	}

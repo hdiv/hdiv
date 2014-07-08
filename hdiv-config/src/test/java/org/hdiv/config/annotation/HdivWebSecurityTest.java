@@ -23,7 +23,7 @@ import java.util.List;
 import org.hdiv.config.HDIVConfig;
 import org.hdiv.config.HDIVValidations;
 import org.hdiv.config.annotation.builders.SecurityConfigBuilder;
-import org.hdiv.config.annotation.configuration.HdivSecurityConfigurerAdapter;
+import org.hdiv.config.annotation.configuration.HdivWebSecurityConfigurerAdapter;
 import org.hdiv.regex.DefaultPatternMatcher;
 import org.hdiv.validator.IValidation;
 import org.junit.Test;
@@ -37,11 +37,11 @@ import org.springframework.test.context.support.AnnotationConfigContextLoader;
 @RunWith(SpringJUnit4ClassRunner.class)
 // ApplicationContext will be loaded from the static inner ContextConfiguration class
 @ContextConfiguration(loader = AnnotationConfigContextLoader.class)
-public class HdivSecurityTest {
+public class HdivWebSecurityTest {
 
 	@Configuration
-	@EnableHdivSecurity
-	static class ContextConfiguration extends HdivSecurityConfigurerAdapter {
+	@EnableHdivWebSecurity
+	static class ContextConfiguration extends HdivWebSecurityConfigurerAdapter {
 
 		@Override
 		public void addExclusions(ExclusionRegistry registry) {
