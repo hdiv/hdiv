@@ -175,6 +175,9 @@ public abstract class AbstractUrlProcessor {
 	/**
 	 * Determines if the url is a startPage
 	 * 
+	 * @param urlData
+	 *            {@link UrlData} object with url info.
+	 * 
 	 * @return boolean is startPage?
 	 */
 	protected boolean isStartPage(UrlData urlData) {
@@ -493,13 +496,13 @@ public abstract class AbstractUrlProcessor {
 	}
 
 	/**
-	 * Removes from <code>url<code> references to relative paths.
+	 * Removes references to relative paths from the URL.
 	 * 
 	 * @param url
-	 *            url
+	 *            URL value
 	 * @param originalRequestUri
 	 *            originalRequestUri
-	 * @return returns <code>url</code> without relative paths.
+	 * @return returns URL without relative paths.
 	 */
 	protected String removeRelativePaths(String url, String originalRequestUri) {
 

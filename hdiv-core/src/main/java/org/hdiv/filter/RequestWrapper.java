@@ -359,7 +359,8 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 	 * 
 	 * @param parameter
 	 *            parameter name
-	 * */
+	 * @return boolean
+	 */
 	public boolean isEditableParameter(String parameter) {
 		return this.editableParameters.contains(parameter);
 	}
@@ -368,6 +369,7 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 	 * Determines whether this request is multipart.
 	 * 
 	 * @param isMultipart
+	 *            true if it is multipart
 	 */
 	public void setMultipart(boolean isMultipart) {
 		this.isMultipart = isMultipart;

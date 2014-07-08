@@ -227,7 +227,9 @@ public class ValidatorFilter extends OncePerRequestFilter {
 	 *            response wrapper
 	 * @param filterChain
 	 *            filter chain
-	 * @throws Exception
+	 * @throws IOException
+	 *             if there is an error in request process.
+	 * @throws ServletException
 	 *             if there is an error in request process.
 	 */
 	protected void processRequest(HttpServletRequest requestWrapper, ResponseWrapper responseWrapper,

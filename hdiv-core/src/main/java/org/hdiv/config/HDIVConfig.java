@@ -451,11 +451,11 @@ public class HDIVConfig implements Serializable {
 	 * Checks if the values <code>values</code> are valid for the editable parameter <code>parameter</code>, using the
 	 * validations defined in the hdiv-validations.xml configuration file of Spring.
 	 * </p>
-	 * <p>
 	 * There are two types of validations:
+	 * <ul>
 	 * <li>accepted: the value is valid only if it passes the validation</li>
 	 * <li>rejected: the value is rejected if doesn't pass the validation</li>
-	 * </p>
+	 * </ul>
 	 * 
 	 * @param url
 	 *            target url

@@ -32,7 +32,7 @@ public class HDIVFacesEvent extends FacesEvent {
 	/**
 	 * Default constructor
 	 * 
-	 * @param uiComponent
+	 * @param uiComponent base UIComponent
 	 */
 	public HDIVFacesEvent(UIComponent uiComponent) {
 		super(uiComponent);

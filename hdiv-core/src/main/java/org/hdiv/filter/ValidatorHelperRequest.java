@@ -1022,7 +1022,6 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	 * @param request
 	 *            HttpServletRequest to validate
 	 * @return target Part of the url that represents the target action
-	 * @throws HDIVException
 	 */
 	protected String getTarget(HttpServletRequest request) {
 		try {
@@ -1066,7 +1065,6 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	 * <p>
 	 * Method invoked before validation. Designed to change the validation logic beyond the base implementation.
 	 * </p>
-	 * <p>
 	 * The response of the method can have three meanings:
 	 * <ul>
 	 * <li>Valid ValidatorHelperResult: The validation has been completed correctly and is not necessary to run the
@@ -1074,10 +1072,11 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	 * <li>Error ValidatorHelperResult: The validation has encountered an error and terminates the validation process.</li>
 	 * <li>null: It should continue with the validation process (default answer).</li>
 	 * </ul>
-	 * </p>
 	 * 
 	 * @param request
 	 *            HttpServletRequest to validate
+	 * @param target
+	 *            target url
 	 * @return ValidatorHelperResult result
 	 */
 	protected ValidatorHelperResult preValidate(HttpServletRequest request, String target) {

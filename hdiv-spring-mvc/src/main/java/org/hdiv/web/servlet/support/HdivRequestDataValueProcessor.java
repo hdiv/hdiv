@@ -55,7 +55,6 @@ public class HdivRequestDataValueProcessor implements RequestDataValueProcessor 
 	 * <p>
 	 * Initialize no editable input types.
 	 * </p>
-	 * <p>
 	 * Non editable input types:
 	 * <ul>
 	 * <li>checkbox</li>
@@ -64,8 +63,6 @@ public class HdivRequestDataValueProcessor implements RequestDataValueProcessor 
 	 * <li>radio</li>
 	 * <li>select</li>
 	 * </ul>
-	 * </p>
-	 * <p>
 	 * Editable input types:
 	 * <ul>
 	 * <li>text</li>
@@ -73,7 +70,6 @@ public class HdivRequestDataValueProcessor implements RequestDataValueProcessor 
 	 * <li>password</li>
 	 * <li>other input types: (number, tel, email...)</li>
 	 * </ul>
-	 * </p>
 	 */
 	protected void initNoEditableTypes() {
 

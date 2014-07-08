@@ -36,7 +36,7 @@ public class FacesContextFactoryWrapper extends FacesContextFactory {
 	/**
 	 * Default constructor
 	 * 
-	 * @param wrapped
+	 * @param wrapped Wrapped {@link FacesContextFactory}
 	 */
 	public FacesContextFactoryWrapper(FacesContextFactory wrapped) {
 		super();

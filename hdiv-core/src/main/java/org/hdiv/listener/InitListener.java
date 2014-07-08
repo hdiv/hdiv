@@ -85,17 +85,21 @@ public class InitListener implements ServletContextListener, HttpSessionListener
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
+	/**
+	 * Executed at server shutdown.
 	 * 
-	 * @see javax.servlet.ServletContextListener#contextDestroyed(javax.servlet. ServletContextEvent)
+	 * @param servletContextEvent
+	 *            ServletContext destroy event
 	 */
 	public void contextDestroyed(ServletContextEvent servletContextEvent) {
 
 	}
 
 	/**
-	 * @see javax.servlet.http.HttpSessionListener#void (javax.servlet.http.HttpSessionEvent)
+	 * Executed at {@link HttpSession} desytoy.
+	 * 
+	 * @param event
+	 *            HttpSession destroy event
 	 */
 	public void sessionDestroyed(HttpSessionEvent event) {
 
@@ -108,7 +112,8 @@ public class InitListener implements ServletContextListener, HttpSessionListener
 	 * For each user session, a new cipher key is created if the cipher strategy has been chosen, and a new cache is
 	 * created to store the data to be validated.
 	 * 
-	 * @see javax.servlet.http.HttpSessionListener#void (javax.servlet.http.HttpSessionEvent)
+	 * @param httpSessionEvent
+	 *            session created event
 	 */
 	public void sessionCreated(HttpSessionEvent httpSessionEvent) {
 

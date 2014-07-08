@@ -108,6 +108,7 @@ public abstract class UtilsJsf {
 	/**
 	 * Removes row identifier from client id. Converts: PageC:form2:tableid:0:link1 into: PageC:form2:tableid:link1
 	 * 
+	 * @param clientId ClientID
 	 * @return clientId without row id
 	 */
 	public static String removeRowId(String clientId) {

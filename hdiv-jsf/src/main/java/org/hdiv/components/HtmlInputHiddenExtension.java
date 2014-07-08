@@ -42,6 +42,9 @@ public class HtmlInputHiddenExtension extends HtmlInputHidden {
 	/**
 	 * Obtains hidden real value which has been stored in the JSF state
 	 * 
+	 * @param clientId
+	 *            ClientId value
+	 * 
 	 * @return hidden real value
 	 */
 	@SuppressWarnings("unchecked")

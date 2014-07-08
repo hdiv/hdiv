@@ -29,7 +29,7 @@ import org.hdiv.util.HDIVUtil;
  * Tag to cipher data without using Struts.
  * <p>
  * Being "hdiv" the identifier used to reference HDIV tag library, the format of the
- * tag will be as follows:<br />
+ * tag will be as follows:
  * <code>&lt;hdiv:cipher action="a1" parameter="p1" value="v1" /&gt;</code>.
  * </p>
  * <p>
@@ -79,7 +79,6 @@ public class CipherTag extends TagSupport {
 	 * 
 	 * @throws JspException If the attributes passed to the tag are incorrect, an
 	 *             exception will be thrown.
-	 * @see javax.servlet.jsp.tagext.TagSupport.doStartTag#int ()
 	 */
 	public int doStartTag() throws JspException {
 

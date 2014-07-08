@@ -211,7 +211,7 @@ public class HDIVUtil {
 	/**
 	 * Returns the servlet context wrapper object.
 	 * 
-	 * @param servletContext
+	 * @param servletContext {@link ServletContext} instance
 	 * @return IApplication object
 	 */
 	public static IApplication getApplication(ServletContext servletContext) {
@@ -225,8 +225,8 @@ public class HDIVUtil {
 	/**
 	 * Set the <code>IApplication</code> in <code>ServletContext</code>
 	 * 
-	 * @param newApplication
-	 * @param servletContext
+	 * @param newApplication new {@link IApplication} instance
+	 * @param servletContext {@link ServletContext} instance
 	 */
 	public static void setApplication(IApplication newApplication, ServletContext servletContext) {
 		servletContext.setAttribute(APPLICATION_SERVLETCONTEXT_KEY, newApplication);
@@ -248,7 +248,7 @@ public class HDIVUtil {
 	/**
 	 * Return the <code>HDIVConfig</code> object
 	 * 
-	 * @param servletContext
+	 * @param servletContext {@link ServletContext} instance
 	 * @return {@link HDIVConfig} instance
 	 */
 	public static HDIVConfig getHDIVConfig(ServletContext servletContext) {
@@ -264,8 +264,8 @@ public class HDIVUtil {
 	/**
 	 * Set the <code>HDIVConfig</code> object
 	 * 
-	 * @param hdivConfig
-	 * @param servletContext
+	 * @param hdivConfig {@link HDIVConfig} instance
+	 * @param servletContext {@link ServletContext} instance
 	 */
 	public static void setHDIVConfig(HDIVConfig hdivConfig, ServletContext servletContext) {
 		servletContext.setAttribute(HDIVCONFIG_SERVLETCONTEXT_KEY, hdivConfig);
@@ -369,7 +369,7 @@ public class HDIVUtil {
 	/**
 	 * Set the <code>HttpServletRequest</code> instance in {@link ThreadLocal}
 	 * 
-	 * @param httpServletRequest
+	 * @param httpServletRequest {@link HttpServletRequest} instance
 	 */
 	public static void setHttpServletRequest(HttpServletRequest httpServletRequest) {
 		httpRequest.set(httpServletRequest);
@@ -391,7 +391,7 @@ public class HDIVUtil {
 	/**
 	 * Return the {@link MessageSource} instance.
 	 * 
-	 * @param servletContext
+	 * @param servletContext {@link ServletContext} instance
 	 * @return {@link MessageSource} instance
 	 */
 	public static MessageSource getMessageSource(ServletContext servletContext) {
@@ -405,8 +405,8 @@ public class HDIVUtil {
 	/**
 	 * Set the {@link MessageSource} instance.
 	 * 
-	 * @param msgSource
-	 * @param servletContext
+	 * @param msgSource {@link MessageSource} instance
+	 * @param servletContext {@link ServletContext} instance
 	 */
 	public static void setMessageSource(MessageSource msgSource, ServletContext servletContext) {
 		servletContext.setAttribute(MESSAGESOURCE_SERVLETCONTEXT_KEY, msgSource);

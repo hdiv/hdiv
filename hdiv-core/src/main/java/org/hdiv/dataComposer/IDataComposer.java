@@ -120,7 +120,7 @@ public interface IDataComposer {
 			String method, String charEncoding);
 
 	/**
-	 * Compose parameters in request query format. For example: param1=val1&param2=val2
+	 * Compose parameters in request query format. For example: <code>param1=val1&amp;param2=val2</code>
 	 * 
 	 * @param parameters
 	 *            parameters in query format
@@ -132,7 +132,7 @@ public interface IDataComposer {
 	 * @since HDIV 2.1.7
 	 */
 	public String composeParams(String parameters, String method, String charEncoding);
-	
+
 	/**
 	 * Adds a new IParameter object, generated from the values passed as parameters, to the current state
 	 * <code>state</code>. If confidentiality is activated it generates a new encoded value that will be returned by the
@@ -248,6 +248,8 @@ public interface IDataComposer {
 	/**
 	 * Adds the flow identifier to the page of type <code>IPage</code>.
 	 * 
+	 * @param id
+	 *            flow id to add
 	 * @since HDIV 2.0.3
 	 */
 	public void addFlowId(String id);

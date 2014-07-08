@@ -41,7 +41,7 @@ import org.hdiv.util.UtilsJsf;
  * <li>
  * addParameterToRequest(..) method is overwritten because in the JSF version confidentiality is disabled and
  * RequestWrapper is not used. Consequently, no parameter is added to the request.</li>
- * <ul>
+ * </ul>
  * 
  * @author Gotzon Illarramendi
  */

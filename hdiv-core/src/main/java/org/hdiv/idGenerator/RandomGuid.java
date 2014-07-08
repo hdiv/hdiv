@@ -141,6 +141,8 @@ public class RandomGuid {
 	 * number generated to be cryptographically strong. Secure false defaults to
 	 * the standard Random function seeded with a single cryptographically
 	 * strong random number.
+	 * 
+	 * @param secure see method doc
 	 */
 	public RandomGuid(boolean secure) {
 		getRandomGuid(secure);

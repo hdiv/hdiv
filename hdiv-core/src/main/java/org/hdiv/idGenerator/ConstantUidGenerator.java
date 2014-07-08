@@ -18,8 +18,8 @@ package org.hdiv.idGenerator;
 import java.io.Serializable;
 
 /**
- * Implementation of <code>UidGenerator</code> that generates constant tokens.<br/>
- * Only for testing.
+ * Implementation of <code>UidGenerator</code> that generates constant tokens.
+ * <b>Only for testing</b>
  * 
  * @author Gotzon Illarramendi
  * @since HDIV 2.1.0

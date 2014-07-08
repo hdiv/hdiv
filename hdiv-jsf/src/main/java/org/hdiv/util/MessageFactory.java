@@ -39,6 +39,8 @@ public class MessageFactory {
 	/**
 	 * This version of getMessage() is used in the RI for localizing RI
 	 * specific messages.
+	 * @param messageId MessageID
+	 * @param params extra params
 	 */
 	public static FacesMessage getMessage(String messageId, Object params[]) {
 		Locale locale = null;

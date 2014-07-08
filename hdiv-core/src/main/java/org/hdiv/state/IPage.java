@@ -42,6 +42,7 @@ public interface IPage {
 	 * 
 	 * @param id
 	 *            State identifier
+	 * @return true if exist
 	 */
 	public boolean existState(int id);
 

@@ -52,14 +52,14 @@ public class SavedCookie implements Serializable {
 	/**
 	 * Constructs a new SavedCookie.
 	 * 
-	 * @param name
-	 * @param value
-	 * @param comment
-	 * @param domain
-	 * @param maxAge
-	 * @param path
-	 * @param secure
-	 * @param version
+	 * @param name Cookie name
+	 * @param value Cookie value
+	 * @param comment Cookie comment
+	 * @param domain Cookie domain name
+	 * @param maxAge Cookie maximum age
+	 * @param path Cookie path
+	 * @param secure Cookie secure boolean value
+	 * @param version Cookie version number
 	 */
 	public SavedCookie(String name, String value, String comment, String domain, int maxAge, String path,
 			boolean secure, int version) {
@@ -90,7 +90,9 @@ public class SavedCookie implements Serializable {
 	 * Constructs a new SavedCookie.
 	 * 
 	 * @param name
+	 *            Cookie name
 	 * @param value
+	 *            Cookie value
 	 */
 	public SavedCookie(String name, String value) {
 		this.name = name;

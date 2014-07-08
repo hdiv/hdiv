@@ -107,6 +107,9 @@ public class StateUtil {
 	/**
 	 * Checks if the memory strategy is being used
 	 * 
+	 * @param value
+	 *            State id value
+	 * 
 	 * @return True if strategy is memory. False in otherwise.
 	 */
 	public boolean isMemoryStrategy(String value) {

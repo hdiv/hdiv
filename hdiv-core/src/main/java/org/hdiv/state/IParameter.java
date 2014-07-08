@@ -21,29 +21,37 @@ public interface IParameter {
 
 	/**
 	 * Adds the value <code>value</code> to the parameter <code>this</code>.
+	 * 
+	 * @param value
+	 *            New value
 	 */
 	public void addValue(String value);
 
 	/**
 	 * Checks if parameter has <code>value</code>.
 	 * 
-	 * @return True if <code>value</code> exists in the array of values
-	 *         <code>values</code>. False otherwise.
+	 * @param value
+	 *            Value
+	 * 
+	 * @return True if <code>value</code> exists in the array of values <code>values</code>. False otherwise.
 	 */
 	public boolean existValue(String value);
 
 	/**
-	 * Checks if the position <code>position</code> exists in the array of values
-	 * <code>values</code>.
-	 *
-	 * @return True if <code>position</code> is valid position in the array of values
-	 *         <code>values</code>. False otherwise.
+	 * Checks if the position <code>position</code> exists in the array of values <code>values</code>.
+	 * 
+	 * @param position
+	 *            Position
+	 * 
+	 * @return True if <code>position</code> is valid position in the array of values <code>values</code>. False
+	 *         otherwise.
 	 */
 	public boolean existPosition(int position);
 
 	/**
-	 * @return Obtains the value of the position <code>position</code> in the list
-	 *         of values of the parameter.
+	 * @param position
+	 *            Position index
+	 * @return Obtains the value of the position <code>position</code> in the list of values of the parameter.
 	 */
 	public String getValuePosition(int position);
 
@@ -68,11 +76,9 @@ public interface IParameter {
 	public String getConfidentialValue();
 
 	/**
-	 * Indicates if the parameter has been added to the action attribute of a link or
-	 * form.
+	 * Indicates if the parameter has been added to the action attribute of a link or form.
 	 * 
-	 * @return True if the parameter has been added to the action attribute of a link
-	 *         or form. False in otherwise.
+	 * @return True if the parameter has been added to the action attribute of a link or form. False in otherwise.
 	 */
 	public boolean isActionParam();
 

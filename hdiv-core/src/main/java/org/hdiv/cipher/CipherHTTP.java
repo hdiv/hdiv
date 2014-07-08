@@ -107,11 +107,6 @@ public class CipherHTTP implements ICipherHTTP {
 	 * Generates a Cipher object that implements the specified <code>transformation</code>, initializes cipher vector
 	 * and initializes cipher to encryption mode with a key and a set of algorithm parameters.
 	 * </p>
-	 * <p>
-	 * The name of the transformation, e.g., DES/CBC/PKCS5Padding. See Appendix A in the <a
-	 * href="../../../guide/security/jce/JCERefGuide.html#AppA"> Java Cryptography Extension Reference Guide for
-	 * information about standard transformation names.
-	 * </p>
 	 * 
 	 * @param key
 	 *            the encryption key

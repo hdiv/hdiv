@@ -52,6 +52,11 @@ public interface ISession {
 	/**
 	 * Obtains the state identifier <code>stateId</code> related to the page identifier <code>pageId</code>.
 	 * 
+	 * @param pageId
+	 *            Page identifier
+	 * @param stateId
+	 *            State identifier
+	 * 
 	 * @return State identifier <code>stateId</code> throws HDIVException If the state doesn't exist a new HDIV
 	 *         exception is thrown.
 	 */
@@ -60,9 +65,12 @@ public interface ISession {
 	/**
 	 * Obtains the hash of the state identifier <code>stateId</code> related to page identifier <code>pageId</code>.
 	 * 
+	 * @param pageId
+	 *            Page identifier
+	 * @param stateId
+	 *            State identifier
+	 * 
 	 * @return Hash of the state identifier <code>stateId</code>
-	 * @throws HDIVException
-	 *             If the state doesn't exist a new HDIV exception is thrown.
 	 */
 	public String getStateHash(String pageId, int stateId);
 

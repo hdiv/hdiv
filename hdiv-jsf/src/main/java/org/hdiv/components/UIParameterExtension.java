@@ -48,7 +48,7 @@ public class UIParameterExtension extends UIParameter {
 	/**
 	 * Returns the value of the parameter for the requested row in the dataTable
 	 * 
-	 * @param parentClientId
+	 * @param parentClientId Parent ClientId
 	 * @return parameter value
 	 */
 	@SuppressWarnings("unchecked")

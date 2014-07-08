@@ -26,9 +26,11 @@ public interface IStateCache extends Serializable {
 	/**
 	 * Adds a new page identifier to the map <code>pageIds</code>.
 	 * 
-	 * @return If the map <code>pageIds</code> has reached its maximum size
-	 *         <code>maxSize</code>, the oldest page identifier is deleted.
-	 *         Otherwise, null will be returned.
+	 * @param pageId
+	 *            page identifier to add
+	 * 
+	 * @return If the map <code>pageIds</code> has reached its maximum size <code>maxSize</code>, the oldest page
+	 *         identifier is deleted. Otherwise, null will be returned.
 	 */
 	public String addPage(String pageId);
 

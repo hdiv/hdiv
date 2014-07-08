@@ -44,7 +44,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
- * BeanDefinitionParser for <hdiv:editableValidations> element.
+ * BeanDefinitionParser for &lt;hdiv:editableValidations&gt; element.
  */
 public class EditableValidationsBeanDefinitionParser extends AbstractSingleBeanDefinitionParser {
 

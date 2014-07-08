@@ -156,6 +156,7 @@ public class SecurityConfigBuilder {
 		/**
 		 * @param provider
 		 *            the provider to set
+		 * @return the Configure object
 		 */
 		public CipherConfigure provider(String provider) {
 			this.provider = provider;
@@ -172,6 +173,7 @@ public class SecurityConfigBuilder {
 		/**
 		 * @param algorithm
 		 *            the algorithm to set
+		 * @return the Configure object
 		 */
 		public CipherConfigure algorithm(String algorithm) {
 			this.algorithm = algorithm;
@@ -188,6 +190,7 @@ public class SecurityConfigBuilder {
 		/**
 		 * @param prngAlgorithm
 		 *            the prngAlgorithm to set
+		 * @return the Configure object
 		 */
 		public CipherConfigure prngAlgorithm(String prngAlgorithm) {
 			this.prngAlgorithm = prngAlgorithm;
@@ -204,6 +207,7 @@ public class SecurityConfigBuilder {
 		/**
 		 * @param transformation
 		 *            the transformation to set
+		 * @return the Configure object
 		 */
 		public CipherConfigure transformation(String transformation) {
 			this.transformation = transformation;
@@ -220,6 +224,7 @@ public class SecurityConfigBuilder {
 		/**
 		 * @param keySize
 		 *            the keySize to set
+		 * @return the Configure object
 		 */
 		public CipherConfigure keySize(int keySize) {
 			this.keySize = keySize;

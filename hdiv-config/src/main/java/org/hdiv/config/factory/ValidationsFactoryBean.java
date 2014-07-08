@@ -44,7 +44,7 @@ public class ValidationsFactoryBean extends AbstractFactoryBean<HDIVValidations>
 	 * Map for configuration purpose.
 	 * </p>
 	 * <p>
-	 * Url pattern -> List of Validation ids.
+	 * Url pattern :: List of Validation ids.
 	 * </p>
 	 */
 	protected Map<String, List<String>> validationsData;

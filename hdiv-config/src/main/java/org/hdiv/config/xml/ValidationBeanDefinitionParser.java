@@ -24,7 +24,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
- * BeanDefinitionParser for <hdiv:validation> element.
+ * BeanDefinitionParser for &lt;hdiv:validation&gt; element.
  */
 public class ValidationBeanDefinitionParser extends AbstractSingleBeanDefinitionParser {
 

@@ -79,7 +79,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
- * BeanDefinitionParser for <hdiv:config> element.
+ * BeanDefinitionParser for &lt;hdiv:config&gt; element.
  */
 public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 

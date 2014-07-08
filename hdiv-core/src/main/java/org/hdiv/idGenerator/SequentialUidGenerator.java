@@ -18,8 +18,8 @@ package org.hdiv.idGenerator;
 import java.io.Serializable;
 
 /**
- * This implementation uses a sequence number to generate unique ids.<br/>
- * Only for testing.
+ * This implementation uses a sequence number to generate unique ids.
+ * <b>Only for testing</b>
  * 
  * @author Gotzon Illarramendi
  * @since HDIV 2.1.0
