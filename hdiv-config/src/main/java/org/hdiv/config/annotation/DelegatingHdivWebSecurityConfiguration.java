@@ -58,7 +58,7 @@ public class DelegatingHdivWebSecurityConfiguration extends HdivWebSecurityConfi
 	}
 
 	@Override
-	void configure(SecurityConfigBuilder securityConfigBuilder) {
+	public void configure(SecurityConfigBuilder securityConfigBuilder) {
 
 		this.configurers.configure(securityConfigBuilder);
 	}
