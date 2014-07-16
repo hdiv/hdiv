@@ -6,7 +6,7 @@
 	<bean id="HDIVFacesEventListener" class="org.hdiv.events.HDIVFacesEventListener">
 		<property name="config" ref="config" />
 		<property name="logger" ref="logger" />
-		<property name="editabeValidator" ref="editableValidator" />
+		<property name="editableValidator" ref="editableValidator" />
 		<property name="htmlInputHiddenValidator" ref="htmlInputHiddenValidator" />
 		<property name="requestParamValidator" ref="requestParameterValidator" />
 		<property name="uiCommandValidator" ref="uiCommandValidator" />

@@ -639,7 +639,7 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		bean.getPropertyValues().addPropertyValue("htmlInputHiddenValidator", htmlInputHiddenValidatorRef);
 		bean.getPropertyValues().addPropertyValue("requestParamValidator", requestParameterValidatorRef);
 		bean.getPropertyValues().addPropertyValue("uiCommandValidator", uiCommandValidatorRef);
-		bean.getPropertyValues().addPropertyValue("editabeValidator", editableValidatorRef);
+		bean.getPropertyValues().addPropertyValue("editableValidator", editableValidatorRef);
 
 		String name = parserContext.getReaderContext().generateBeanName(bean);
 		parserContext.getRegistry().registerBeanDefinition(name, bean);
