@@ -28,6 +28,7 @@ import org.hdiv.state.StateUtil;
 import org.hdiv.util.Constants;
 import org.hdiv.util.EncodingUtil;
 import org.hdiv.util.HDIVUtil;
+import org.springframework.util.StringUtils;
 
 /**
  * DataComposer object factory, more efficient than to use the Spring factory.
@@ -144,9 +145,28 @@ public class DataComposerFactory {
 			if (state != null) {
 				dataComposer.beginRequest(state);
 			}
+		} else if (isAjaxRequest(request)) {
+			String hdivStateParamName = (String) request.getSession().getAttribute(Constants.HDIV_PARAMETER);
+			String hdivState = request.getParameter(hdivStateParamName);
+			
+			if (StringUtils.hasText(hdivState)) {
+				IState state = this.stateUtil.restoreState(hdivState);
+				IPage page = this.session.getPage(Integer.toString(state.getPageId()));
+				dataComposer.startPage(page);
+			} else {
+				//TODO how to handle this case???
+				throw new IllegalStateException("Is it possible?");
+			}
+			
 		} else {
 			dataComposer.startPage();
 		}
+	}
+	
+	private boolean isAjaxRequest(HttpServletRequest request) {
+		String xRequestedWithValue = request.getHeader("x-requested-with");
+		
+		return (xRequestedWithValue != null) ? "XMLHttpRequest".equalsIgnoreCase(xRequestedWithValue) : false;
 	}
 
 	/**
