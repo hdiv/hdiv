@@ -72,7 +72,7 @@ public class HDIVFacesEventListener implements FacesListener, StateHolder {
 	/**
 	 * Editable data validator
 	 */
-	private EditableValidator editabeValidator;
+	private EditableValidator editableValidator;
 
 	/**
 	 * HDIV config
@@ -124,7 +124,7 @@ public class HDIVFacesEventListener implements FacesListener, StateHolder {
 			this.forwardToErrorPage(context, eventComp);
 		}
 
-		error = this.editabeValidator.validate(context, form);
+		error = this.editableValidator.validate(context, form);
 		if (error != null) {
 			this.log(context, error);
 		}
@@ -275,11 +275,11 @@ public class HDIVFacesEventListener implements FacesListener, StateHolder {
 	}
 
 	/**
-	 * @param editabeValidator
-	 *            the editabeValidator to set
+	 * @param editableValidator
+	 *            the editableValidator to set
 	 */
-	public void setEditabeValidator(EditableValidator editabeValidator) {
-		this.editabeValidator = editabeValidator;
+	public void setEditableValidator(EditableValidator editableValidator) {
+		this.editableValidator = editableValidator;
 	}
 
 	/**

@@ -16,8 +16,7 @@
 package org.hdiv.action;
 
 import java.io.IOException;
-import java.util.Hashtable;
-import java.util.Iterator;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -177,17 +176,17 @@ public class HDIVRequestProcessor extends RequestProcessor {
 	 */
 	public ActionMessages getEditableParametersErrors(HttpServletRequest request) {
 
-		Hashtable unauthorizedEditableParameters = (Hashtable) request
+		@SuppressWarnings("unchecked")
+		Map<String, String[]> unauthorizedEditableParameters = (Map<String, String[]>) request
 				.getAttribute(EDITABLE_PARAMETER_ERROR);
 
 		ActionMessages errors = null;
-		if ((unauthorizedEditableParameters != null) && (unauthorizedEditableParameters.size() > 0)) {
+		if (unauthorizedEditableParameters != null && unauthorizedEditableParameters.size() > 0) {
 
 			errors = new ActionMessages();
 
-			for (Iterator it = unauthorizedEditableParameters.keySet().iterator(); it.hasNext();) {
+			for (String currentParameter: unauthorizedEditableParameters.keySet()) {
 				
-				String currentParameter = (String) it.next();
 				String [] currentUnauthorizedValues = (String []) unauthorizedEditableParameters.get(currentParameter);
 				
 				ActionMessage error = null;

@@ -32,11 +32,11 @@ import org.hdiv.config.StartPage;
 import org.hdiv.config.annotation.ValidationConfigurer.ValidationConfig;
 import org.hdiv.config.annotation.builders.SecurityConfigBuilder;
 import org.hdiv.config.annotation.builders.SecurityConfigBuilder.CipherConfigure;
-import org.hdiv.config.multipart.IMultipartConfig;
-import org.hdiv.config.multipart.SpringMVCMultipartConfig;
+import org.hdiv.config.annotation.grails.GrailsConfigurationSupport;
+import org.hdiv.config.annotation.jsf.JsfConfigurationSupport;
+import org.hdiv.config.annotation.springmvc.SpringMvcConfigurationSupport;
+import org.hdiv.config.annotation.thymeleaf.ThymeleafConfigurationSupport;
 import org.hdiv.config.validations.DefaultValidationParser;
-import org.hdiv.config.xml.ConfigBeanDefinitionParser;
-import org.hdiv.config.xml.EditableValidationsBeanDefinitionParser;
 import org.hdiv.dataComposer.DataComposerFactory;
 import org.hdiv.dataValidator.DataValidator;
 import org.hdiv.dataValidator.IDataValidator;
@@ -67,36 +67,21 @@ import org.hdiv.urlProcessor.LinkUrlProcessor;
 import org.hdiv.util.EncodingUtil;
 import org.hdiv.validator.IValidation;
 import org.hdiv.validator.Validation;
-import org.hdiv.web.servlet.support.HdivRequestDataValueProcessor;
-import org.hdiv.web.servlet.support.ThymeleafHdivRequestDataValueProcessor;
-import org.hdiv.web.validator.EditableParameterValidator;
 import org.springframework.beans.factory.BeanInitializationException;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Scope;
-import org.springframework.util.ClassUtils;
-import org.springframework.validation.Validator;
-import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
-import org.springframework.web.servlet.support.RequestDataValueProcessor;
 
 /**
  * Main class of {@link Configuration} support. Creates all internal bean instances.
  * 
- * TODO Register JSF specific beans. 
- * TODO Thymeleaf and Grails support. 
- * TODO Some bean are dependent of Spring MVC,
- * create beans only if Spring MVC is present.
+ * @since 2.1.7
  */
+@Import({ SpringMvcConfigurationSupport.class, ThymeleafConfigurationSupport.class, GrailsConfigurationSupport.class,
+		JsfConfigurationSupport.class })
 public abstract class HdivWebSecurityConfigurationSupport {
-
-	protected final boolean thymeleafPresent = ClassUtils.isPresent("org.thymeleaf.spring3.SpringTemplateEngine",
-			HdivWebSecurityConfigurationSupport.class.getClassLoader())
-			|| ClassUtils.isPresent("org.thymeleaf.spring4.SpringTemplateEngine",
-					HdivWebSecurityConfigurationSupport.class.getClassLoader());
-
-	protected static final boolean jsr303Present = ClassUtils.isPresent("javax.validation.Validator",
-			HdivWebSecurityConfigurationSupport.class.getClassLoader());
 
 	@Bean
 	public HDIVConfig hdivConfig() {
@@ -283,7 +268,7 @@ public abstract class HdivWebSecurityConfigurationSupport {
 	}
 
 	@Bean
-	public IValidationHelper validationHelper() {
+	public IValidationHelper requestValidationHelper() {
 
 		ValidatorHelperRequest validatorHelperRequest = new ValidatorHelperRequest();
 		validatorHelperRequest.setLogger(securityLogger());
@@ -323,27 +308,6 @@ public abstract class HdivWebSecurityConfigurationSupport {
 		BasicUrlProcessor basicUrlProcessor = new BasicUrlProcessor();
 		basicUrlProcessor.setConfig(hdivConfig());
 		return basicUrlProcessor;
-	}
-
-	@Bean
-	public IMultipartConfig securityMultipartConfig() {
-
-		IMultipartConfig multipartConfig = new SpringMVCMultipartConfig();
-		return multipartConfig;
-	}
-
-	@Bean(name = ConfigBeanDefinitionParser.REQUEST_DATA_VALUE_PROCESSOR_BEAN_NAME)
-	public RequestDataValueProcessor requestDataValueProcessor() {
-
-		HdivRequestDataValueProcessor dataValueProcessor;
-		if (thymeleafPresent) {
-			dataValueProcessor = new ThymeleafHdivRequestDataValueProcessor();
-		} else {
-			dataValueProcessor = new HdivRequestDataValueProcessor();
-		}
-		dataValueProcessor.setFormUrlProcessor(formUrlProcessor());
-		dataValueProcessor.setLinkUrlProcessor(linkUrlProcessor());
-		return dataValueProcessor;
 	}
 
 	@Bean
@@ -421,16 +385,6 @@ public abstract class HdivWebSecurityConfigurationSupport {
 			defaultRules.add(validationBean);
 		}
 		return defaultRules;
-	}
-
-	@Bean(name = EditableValidationsBeanDefinitionParser.EDITABLE_VALIDATOR_BEAN_NAME)
-	public Validator editableParameterValidator() {
-
-		EditableParameterValidator validator = new EditableParameterValidator();
-		if (jsr303Present) {
-			validator.setInnerValidator(new LocalValidatorFactoryBean());
-		}
-		return validator;
 	}
 
 }
