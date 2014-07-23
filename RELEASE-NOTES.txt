@@ -8,7 +8,8 @@ Release 2.1.7
  * Memory and performance optimizations.
  * New 'hdiv-thymeleaf' module for Thymeleaf template engine support.
  * Create default error page content if no errorPage is configured.
- * @Configuration support for JavaConfig as an alternative to XML. Currently, only for Spring MVC framework.
+ * @Configuration support for JavaConfig as an alternative to XML.
+ * Spring >= 4.0.0 is required to use JavaConfig and @EnableHdivWebSecurity feature
 
 Release 2.1.6
 ==================================

@@ -20,6 +20,8 @@ import org.springframework.util.Assert;
 
 /**
  * Contains the data for a editable validation rule.
+ * 
+ * @since 2.1.7
  */
 public class RuleRegistration {
 

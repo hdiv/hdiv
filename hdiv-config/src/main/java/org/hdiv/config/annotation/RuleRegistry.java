@@ -26,6 +26,8 @@ import org.springframework.util.Assert;
 
 /**
  * Registry to add new editable validation rules to the validation phase.
+ * 
+ * @since 2.1.7
  */
 public class RuleRegistry {
 

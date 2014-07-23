@@ -23,7 +23,9 @@ import org.hdiv.config.annotation.ValidationConfigurer.ValidationConfig.RuleConf
 import org.springframework.util.Assert;
 
 /**
- *  Editable validation configurer.
+ * Editable validation configurer.
+ * 
+ * @since 2.1.7
  */
 public class ValidationConfigurer {
 

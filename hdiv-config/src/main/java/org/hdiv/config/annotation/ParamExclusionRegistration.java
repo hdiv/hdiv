@@ -19,6 +19,8 @@ import org.springframework.util.Assert;
 
 /**
  * Contains the data of one parameter exclusion.
+ * 
+ * @since 2.1.7
  */
 public class ParamExclusionRegistration {
 

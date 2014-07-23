@@ -23,6 +23,8 @@ import org.springframework.util.Assert;
 
 /**
  * Contains the data of one URL exclusion.
+ * 
+ * @since 2.1.7
  */
 public class UrlExclusionRegistration {
 
