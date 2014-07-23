@@ -262,6 +262,71 @@ public class DataComposerMemoryTest extends AbstractHDIVTestCase {
 		val = param.getValues().get(0);
 		assertEquals("2", val);
 	}
+	
+	public void testAjaxWithHeaderEnabledAjaxSupport() {
+		this.getConfig().setCreateNewPageInAjaxRequest(false);
+		
+		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
+		IDataComposer dataComposer = this.dataComposerFactory.newInstance(request);
+		HDIVUtil.setDataComposer(dataComposer, request);
+
+		dataComposer.startPage();
+		dataComposer.beginRequest("test.do");
+		dataComposer.compose("parameter1", "1", false);
+		String stateId = dataComposer.endRequest();
+		dataComposer.endPage();
+
+		assertNotNull(stateId);
+
+		// Ajax
+		MockHttpServletRequest ajaxRequest = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
+		ajaxRequest.addHeader("x-requested-with", "XMLHttpRequest");
+		ajaxRequest.addParameter("_HDIV_STATE_", stateId);
+		IDataComposer ajaxDataComposer = this.dataComposerFactory.newInstance(request);
+		HDIVUtil.setDataComposer(ajaxDataComposer, ajaxRequest);
+		
+		// Ajax request to add states
+		ajaxDataComposer.beginRequest("/test/1");
+		String ajaxStateId = ajaxDataComposer.endRequest();
+		
+		// Restore states
+		IState state = this.stateUtil.restoreState(stateId);
+		IState ajaxState = this.stateUtil.restoreState(ajaxStateId);
+		
+		assertEquals(state.getPageId(), ajaxState.getPageId());
+		assertEquals(state.getId() + 1, ajaxState.getId());
+	}
+	
+	public void testAjaxWithHeaderDisabledAjaxSupport() {
+		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
+		IDataComposer dataComposer = this.dataComposerFactory.newInstance(request);
+		HDIVUtil.setDataComposer(dataComposer, request);
+
+		dataComposer.startPage();
+		dataComposer.beginRequest("test.do");
+		dataComposer.compose("parameter1", "1", false);
+		String stateId = dataComposer.endRequest();
+		dataComposer.endPage();
+
+		assertNotNull(stateId);
+
+		// Ajax
+		MockHttpServletRequest ajaxRequest = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
+		ajaxRequest.addHeader("x-requested-with", "XMLHttpRequest");
+		ajaxRequest.addParameter("_HDIV_STATE_", stateId);
+		IDataComposer ajaxDataComposer = this.dataComposerFactory.newInstance(request);
+		HDIVUtil.setDataComposer(ajaxDataComposer, ajaxRequest);
+		
+		// Ajax request to add states
+		ajaxDataComposer.beginRequest("/test/1");
+		String ajaxStateId = ajaxDataComposer.endRequest();
+		
+		// Restore states
+		int pageId = this.stateUtil.restoreState(stateId).getPageId();
+		int ajaxPageId = this.stateUtil.restoreState(ajaxStateId).getPageId();
+		
+		assertEquals(pageId + 1, ajaxPageId);
+	}
 
 	public void testSaveStateInCreation() {
 
