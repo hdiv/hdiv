@@ -139,5 +139,14 @@ public class CustomSchemaTest extends TestCase {
 		val = (Validation) vals.get(2);
 		assertEquals("SQLInjection", val.getName());// first default rule
 	}
+	
+	public void testCreateNewPageInAjaxRequest() {
+
+		HDIVConfig hdivConfig = this.context.getBean(HDIVConfig.class);
+		assertNotNull(hdivConfig);
+
+		assertEquals(false, hdivConfig.isCreateNewPageInAjaxRequest());
+
+	}
 
 }

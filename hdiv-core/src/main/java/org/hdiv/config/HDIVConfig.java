@@ -166,6 +166,13 @@ public class HDIVConfig implements Serializable {
 	 * @since 2.1.4
 	 */
 	protected boolean showErrorPageOnEditableValidation = false;
+	
+	/**
+	 * Creates a new HDIV page when an AJAX request is received
+	 * 
+	 * @since 2.1.7
+	 */
+	protected boolean createNewPageInAjaxRequest = true;
 
 	/**
 	 * @param strategy
@@ -623,6 +630,21 @@ public class HDIVConfig implements Serializable {
 	 */
 	public void setShowErrorPageOnEditableValidation(boolean showErrorPageOnEditableValidation) {
 		this.showErrorPageOnEditableValidation = showErrorPageOnEditableValidation;
+	}
+	
+	/**
+	 * @return the createNewPageInAjaxRequest
+	 */
+	public boolean isCreateNewPageInAjaxRequest() {
+		return createNewPageInAjaxRequest;
+	}
+
+	/**
+	 * @param createNewPageInAjaxRequest
+	 *            the createNewPageInAjaxRequest to set
+	 */
+	public void setCreateNewPageInAjaxRequest(boolean createNewPageInAjaxRequest) {
+		this.createNewPageInAjaxRequest = createNewPageInAjaxRequest;
 	}
 
 	/**
