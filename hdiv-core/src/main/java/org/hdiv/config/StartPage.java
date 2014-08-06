@@ -130,4 +130,17 @@ public class StartPage implements Serializable {
 		return true;
 	}
 
+	@Override
+	public String toString() {
+		String msg = "StartPage [method=" + this.method;
+
+		if (this.pattern != null) {
+			msg = msg + ", pattern=" + this.pattern;
+		}
+		if (this.compiledPattern != null) {
+			msg = msg + ", compiledPattern=" + this.compiledPattern;
+		}
+		return msg + "]";
+	}
+
 }
