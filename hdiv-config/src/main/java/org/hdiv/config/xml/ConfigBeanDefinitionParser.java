@@ -70,6 +70,8 @@ import org.springframework.beans.factory.config.RuntimeBeanReference;
 import org.springframework.beans.factory.support.RootBeanDefinition;
 import org.springframework.beans.factory.xml.BeanDefinitionParser;
 import org.springframework.beans.factory.xml.ParserContext;
+import org.springframework.core.SpringVersion;
+import org.springframework.security.web.servlet.support.csrf.CsrfRequestDataValueProcessor;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.support.RequestDataValueProcessor;
@@ -111,6 +113,13 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 	 */
 	public static final String REQUEST_DATA_VALUE_PROCESSOR_BEAN_NAME = "requestDataValueProcessor";
 
+	/**
+	 * Minimum Spring version to enable Spring Security integration.
+	 */
+	protected static final String MIN_SPRING_VERSION = "4.0.0.RELEASE";
+
+	protected static final boolean springVersionGrEqThan4 = SpringVersion.getVersion().compareTo(MIN_SPRING_VERSION) >= 0;
+
 	protected final boolean springMvcPresent = ClassUtils.isPresent(
 			"org.springframework.web.servlet.DispatcherServlet", ConfigBeanDefinitionParser.class.getClassLoader());
 
@@ -128,6 +137,10 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 			ConfigBeanDefinitionParser.class.getClassLoader())
 			|| ClassUtils.isPresent("org.thymeleaf.spring4.SpringTemplateEngine",
 					ConfigBeanDefinitionParser.class.getClassLoader());
+
+	protected static final boolean springSecurityPresent = ClassUtils.isPresent(
+			"org.springframework.security.web.servlet.support.csrf.CsrfRequestDataValueProcessor",
+			ConfigBeanDefinitionParser.class.getClassLoader());
 
 	/**
 	 * List of StartPage objects
@@ -494,6 +507,14 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
 		bean.getPropertyValues().addPropertyValue("linkUrlProcessor", this.linkUrlProcessorRef);
 		bean.getPropertyValues().addPropertyValue("formUrlProcessor", this.formUrlProcessorRef);
+
+		if (springSecurityPresent && springVersionGrEqThan4) {
+			// Spring Security is present and Spring >= 4.0.0
+			// Enable Spring security integration
+
+			bean.getPropertyValues().addPropertyValue("innerRequestDataValueProcessor",
+					new CsrfRequestDataValueProcessor());
+		}
 		parserContext.getRegistry().registerBeanDefinition(REQUEST_DATA_VALUE_PROCESSOR_BEAN_NAME, bean);
 		return new RuntimeBeanReference(REQUEST_DATA_VALUE_PROCESSOR_BEAN_NAME);
 	}

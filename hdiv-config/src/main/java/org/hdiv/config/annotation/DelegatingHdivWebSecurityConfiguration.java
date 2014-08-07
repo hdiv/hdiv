@@ -17,19 +17,37 @@ package org.hdiv.config.annotation;
 
 import java.util.List;
 
+import javax.annotation.PostConstruct;
+
 import org.hdiv.config.annotation.builders.SecurityConfigBuilder;
 import org.hdiv.config.annotation.configuration.HdivWebSecurityConfigurer;
 import org.hdiv.config.annotation.configuration.HdivWebSecurityConfigurerComposite;
+import org.hdiv.exception.HDIVException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.SpringVersion;
 
 @Configuration
 public class DelegatingHdivWebSecurityConfiguration extends HdivWebSecurityConfigurationSupport {
 
 	/**
+	 * Minimum Spring version to use HDIV JavaConfig feature.
+	 */
+	protected static final String MIN_SPRING_VERSION = "4.0.0.RELEASE";
+
+	/**
 	 * Composite with all {@link HdivWebSecurityConfigurer} instances.
 	 */
 	private final HdivWebSecurityConfigurerComposite configurers = new HdivWebSecurityConfigurerComposite();
+
+	@PostConstruct
+	public void performVersionChecks() {
+		if (SpringVersion.getVersion().compareTo(MIN_SPRING_VERSION) < 0) {
+			// Spring version is lower than '4.0.0.RELEASE'
+			throw new HDIVException("HDIV JavaConfig feature require Spring version equal or greater than "
+					+ MIN_SPRING_VERSION + ". Use XML configuration instead of JavaConfig or update Spring version.");
+		}
+	}
 
 	@Autowired(required = false)
 	public void setConfigurers(List<HdivWebSecurityConfigurer> configurers) {

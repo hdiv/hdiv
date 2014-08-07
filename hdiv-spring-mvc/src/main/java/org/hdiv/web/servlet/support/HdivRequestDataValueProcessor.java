@@ -41,6 +41,11 @@ public class HdivRequestDataValueProcessor implements RequestDataValueProcessor 
 	protected FormUrlProcessor formUrlProcessor;
 
 	/**
+	 * Inner delegate {@link RequestDataValueProcessor} implementation. Only works with Spring >= 4.0.0.
+	 */
+	protected RequestDataValueProcessor innerRequestDataValueProcessor;
+
+	/**
 	 * No editable field types.
 	 */
 	protected List<String> noEditableTypes = new ArrayList<String>();
@@ -81,7 +86,7 @@ public class HdivRequestDataValueProcessor implements RequestDataValueProcessor 
 	}
 
 	/**
-	 * Process the action url of the form tag.
+	 * Process the action url of the form tag, maintained for legacy support Spring 3.1.x.
 	 * 
 	 * @param request
 	 *            request object
@@ -106,9 +111,15 @@ public class HdivRequestDataValueProcessor implements RequestDataValueProcessor 
 	 */
 	public String processAction(HttpServletRequest request, String action, String method) {
 
+		if (this.innerRequestDataValueProcessor != null) {
+			String processedAction = this.innerRequestDataValueProcessor.processAction(request, action, method);
+			if (processedAction != action) {
+				action = processedAction;
+			}
+		}
+
 		String result = this.formUrlProcessor.processUrl(request, action, method);
 		return result;
-
 	}
 
 	/**
@@ -125,6 +136,14 @@ public class HdivRequestDataValueProcessor implements RequestDataValueProcessor 
 	 * @return processed field value
 	 */
 	public String processFormFieldValue(HttpServletRequest request, String name, String value, String type) {
+
+		if (this.innerRequestDataValueProcessor != null) {
+			String processedValue = this.innerRequestDataValueProcessor.processFormFieldValue(request, name, value,
+					type);
+			if (processedValue != value) {
+				value = processedValue;
+			}
+		}
 
 		if (name == null) {
 			return value;
@@ -158,6 +177,13 @@ public class HdivRequestDataValueProcessor implements RequestDataValueProcessor 
 		IDataComposer dataComposer = (IDataComposer) request.getAttribute(HDIVUtil.DATACOMPOSER_REQUEST_KEY);
 		Map<String, String> extraFields = new HashMap<String, String>();
 
+		if (this.innerRequestDataValueProcessor != null) {
+			Map<String, String> innerExtras = this.innerRequestDataValueProcessor.getExtraHiddenFields(request);
+			if (innerExtras != null) {
+				extraFields.putAll(innerExtras);
+			}
+		}
+
 		if (dataComposer == null || dataComposer.isRequestStarted() == false) {
 			return extraFields;
 		}
@@ -184,6 +210,13 @@ public class HdivRequestDataValueProcessor implements RequestDataValueProcessor 
 	 * @return processed url
 	 */
 	public String processUrl(HttpServletRequest request, String url) {
+
+		if (this.innerRequestDataValueProcessor != null) {
+			String processedUrl = this.innerRequestDataValueProcessor.processUrl(request, url);
+			if (processedUrl != null) {
+				url = processedUrl;
+			}
+		}
 
 		String result = this.linkUrlProcessor.processUrl(request, url);
 		return result;
@@ -218,6 +251,21 @@ public class HdivRequestDataValueProcessor implements RequestDataValueProcessor 
 	 */
 	public void setFormUrlProcessor(FormUrlProcessor formUrlProcessor) {
 		this.formUrlProcessor = formUrlProcessor;
+	}
+
+	/**
+	 * @param innerRequestDataValueProcessor
+	 *            the innerRequestDataValueProcessor to set
+	 */
+	public void setInnerRequestDataValueProcessor(RequestDataValueProcessor innerRequestDataValueProcessor) {
+		this.innerRequestDataValueProcessor = innerRequestDataValueProcessor;
+	}
+
+	/**
+	 * @return the innerRequestDataValueProcessor
+	 */
+	public RequestDataValueProcessor getInnerRequestDataValueProcessor() {
+		return innerRequestDataValueProcessor;
 	}
 
 }
