@@ -43,10 +43,7 @@ public class ThymeleafHdivRequestDataValueProcessor extends HdivRequestDataValue
 
 		IDataComposer dataComposer = (IDataComposer) request.getAttribute(HDIVUtil.DATACOMPOSER_REQUEST_KEY);
 
-		if (dataComposer == null) {
-			return action;
-
-		} else if (dataComposer.isRequestStarted()) {
+		if (dataComposer != null && dataComposer.isRequestStarted()) {
 			// End with the last form
 			dataComposer.endRequest();
 		}
@@ -59,6 +56,13 @@ public class ThymeleafHdivRequestDataValueProcessor extends HdivRequestDataValue
 
 		IDataComposer dataComposer = (IDataComposer) request.getAttribute(HDIVUtil.DATACOMPOSER_REQUEST_KEY);
 		Map<String, String> extraFields = new HashMap<String, String>();
+
+		if (this.innerRequestDataValueProcessor != null) {
+			Map<String, String> innerExtras = this.innerRequestDataValueProcessor.getExtraHiddenFields(request);
+			if (innerExtras != null) {
+				extraFields.putAll(innerExtras);
+			}
+		}
 
 		if (dataComposer == null || dataComposer.isRequestStarted() == false) {
 			return extraFields;

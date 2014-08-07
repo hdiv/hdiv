@@ -25,6 +25,8 @@ import org.hdiv.web.servlet.support.ThymeleafHdivRequestDataValueProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.web.servlet.support.csrf.CsrfRequestDataValueProcessor;
+import org.springframework.util.ClassUtils;
 import org.springframework.web.servlet.support.RequestDataValueProcessor;
 
 /**
@@ -35,6 +37,10 @@ import org.springframework.web.servlet.support.RequestDataValueProcessor;
 @Configuration
 @ConditionalOnFramework(SupportedFramework.THYMELEAF)
 public class ThymeleafConfigurationSupport {
+
+	protected static final boolean springSecurityPresent = ClassUtils.isPresent(
+			"org.springframework.security.web.servlet.support.csrf.CsrfRequestDataValueProcessor",
+			ThymeleafConfigurationSupport.class.getClassLoader());
 
 	@Autowired
 	protected FormUrlProcessor formUrlProcessor;
@@ -48,6 +54,10 @@ public class ThymeleafConfigurationSupport {
 		HdivRequestDataValueProcessor dataValueProcessor = new ThymeleafHdivRequestDataValueProcessor();
 		dataValueProcessor.setFormUrlProcessor(this.formUrlProcessor);
 		dataValueProcessor.setLinkUrlProcessor(this.linkUrlProcessor);
+
+		if (springSecurityPresent) {
+			dataValueProcessor.setInnerRequestDataValueProcessor(new CsrfRequestDataValueProcessor());
+		}
 		return dataValueProcessor;
 	}
 
