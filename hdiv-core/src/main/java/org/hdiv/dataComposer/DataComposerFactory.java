@@ -144,10 +144,10 @@ public class DataComposerFactory {
 			if (state != null) {
 				dataComposer.beginRequest(state);
 			}
-		} else if (isAjaxRequest(request) && !this.config.isCreateNewPageInAjaxRequest()) {
+		} else if (!this.config.isCreateNewPageInAjaxRequest() && isAjaxRequest(request)) {
 			String hdivStateParamName = (String) request.getSession().getAttribute(Constants.HDIV_PARAMETER);
 			String hdivState = request.getParameter(hdivStateParamName);
-			
+
 			IState state = this.stateUtil.restoreState(hdivState);
 			IPage page = this.session.getPage(Integer.toString(state.getPageId()));
 			dataComposer.startPage(page);
@@ -155,10 +155,11 @@ public class DataComposerFactory {
 			dataComposer.startPage();
 		}
 	}
-	
+
 	protected boolean isAjaxRequest(HttpServletRequest request) {
+
 		String xRequestedWithValue = request.getHeader("x-requested-with");
-		
+
 		return (xRequestedWithValue != null) ? "XMLHttpRequest".equalsIgnoreCase(xRequestedWithValue) : false;
 	}
 
