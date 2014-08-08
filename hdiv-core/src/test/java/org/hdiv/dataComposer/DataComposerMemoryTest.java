@@ -264,7 +264,7 @@ public class DataComposerMemoryTest extends AbstractHDIVTestCase {
 	}
 	
 	public void testAjaxWithHeaderEnabledAjaxSupport() {
-		this.getConfig().setCreateNewPageInAjaxRequest(false);
+		this.getConfig().setReuseExistingPageInAjaxRequest(true);
 		
 		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
 		IDataComposer dataComposer = this.dataComposerFactory.newInstance(request);

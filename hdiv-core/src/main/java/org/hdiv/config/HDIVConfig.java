@@ -23,6 +23,7 @@ import java.util.Map;
 
 import org.hdiv.regex.PatternMatcher;
 import org.hdiv.regex.PatternMatcherFactory;
+import org.hdiv.state.IPage;
 import org.hdiv.util.Constants;
 import org.hdiv.util.HDIVUtil;
 import org.hdiv.validator.IValidation;
@@ -161,18 +162,18 @@ public class HDIVConfig implements Serializable {
 	protected boolean debugMode = false;
 
 	/**
-	 * Show error page on request with editable validation errors
+	 * Show error page on request with editable validation errors.
 	 * 
 	 * @since 2.1.4
 	 */
 	protected boolean showErrorPageOnEditableValidation = false;
-	
+
 	/**
-	 * Creates a new HDIV page when an AJAX request is received
+	 * Reuse previous {@link IPage} when an AJAX request is received and don't create a new one.
 	 * 
 	 * @since 2.1.7
 	 */
-	protected boolean createNewPageInAjaxRequest = true;
+	protected boolean reuseExistingPageInAjaxRequest = false;
 
 	/**
 	 * @param strategy
@@ -631,20 +632,20 @@ public class HDIVConfig implements Serializable {
 	public void setShowErrorPageOnEditableValidation(boolean showErrorPageOnEditableValidation) {
 		this.showErrorPageOnEditableValidation = showErrorPageOnEditableValidation;
 	}
-	
+
 	/**
-	 * @return the createNewPageInAjaxRequest
+	 * @return the reuseExistingPageInAjaxRequest
 	 */
-	public boolean isCreateNewPageInAjaxRequest() {
-		return createNewPageInAjaxRequest;
+	public boolean isReuseExistingPageInAjaxRequest() {
+		return reuseExistingPageInAjaxRequest;
 	}
 
 	/**
-	 * @param createNewPageInAjaxRequest
-	 *            the createNewPageInAjaxRequest to set
+	 * @param reuseExistingPageInAjaxRequest
+	 *            the reuseExistingPageInAjaxRequest to set
 	 */
-	public void setCreateNewPageInAjaxRequest(boolean createNewPageInAjaxRequest) {
-		this.createNewPageInAjaxRequest = createNewPageInAjaxRequest;
+	public void setReuseExistingPageInAjaxRequest(boolean reuseExistingPageInAjaxRequest) {
+		this.reuseExistingPageInAjaxRequest = reuseExistingPageInAjaxRequest;
 	}
 
 	/**

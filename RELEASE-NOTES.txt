@@ -12,6 +12,7 @@ Release 2.1.7
  * Spring >= 4.0.0 is required to use JavaConfig and @EnableHdivWebSecurity feature
  * Ability to include an inner RequestDataValueProcessor to HdivRequestDataValueProcessor.
  * Spring Security CSRF token integration. Both, HDIV and Spring Security tokens are created.
+ * New 'reuseExistingPageInAjaxRequest' configuration option. If it is activated, Ajax requests don't create a new page and reuse the existing one.
 
 Release 2.1.6
 ==================================

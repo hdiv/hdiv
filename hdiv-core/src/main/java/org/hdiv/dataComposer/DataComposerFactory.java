@@ -144,7 +144,7 @@ public class DataComposerFactory {
 			if (state != null) {
 				dataComposer.beginRequest(state);
 			}
-		} else if (!this.config.isCreateNewPageInAjaxRequest() && isAjaxRequest(request)) {
+		} else if (this.config.isReuseExistingPageInAjaxRequest() && isAjaxRequest(request)) {
 			String hdivStateParamName = (String) request.getSession().getAttribute(Constants.HDIV_PARAMETER);
 			String hdivState = request.getParameter(hdivStateParamName);
 

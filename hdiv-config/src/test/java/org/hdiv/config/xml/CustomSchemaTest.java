@@ -143,12 +143,12 @@ public class CustomSchemaTest extends TestCase {
 		assertEquals("SQLInjection", val.getName());// first default rule
 	}
 	
-	public void testCreateNewPageInAjaxRequest() {
+	public void testReuseExistingPageInAjaxRequest() {
 
 		HDIVConfig hdivConfig = this.context.getBean(HDIVConfig.class);
 		assertNotNull(hdivConfig);
 
-		assertEquals(false, hdivConfig.isCreateNewPageInAjaxRequest());
+		assertEquals(true, hdivConfig.isReuseExistingPageInAjaxRequest());
 
 	}
 

@@ -39,6 +39,7 @@ public class SecurityConfigBuilderTest {
 			.cookiesConfidentiality(false)
 			.stateParameterName("state")
 			.maxPagesPerSession(23)
+			.reuseExistingPageInAjaxRequest(true)
 			.cipher()
 				.algorithm("algorithm").and()
 			.sessionExpired()
@@ -48,6 +49,7 @@ public class SecurityConfigBuilderTest {
 		assertNotNull(config);
 		assertEquals(false, config.isCookiesConfidentialityActivated());
 		assertEquals("state", config.getStateParameterName());
+		assertEquals(true, config.isReuseExistingPageInAjaxRequest());
 		
 		assertEquals(23, this.builder.getMaxPagesPerSession());
 		assertEquals("algorithm", this.builder.getCipherConfigure().getAlgorithm());
