@@ -224,7 +224,7 @@ compile ':hdiv:1.0-RC2'
 
 		<para>
 			The latest Struts 2 version supported by HDIV is Struts 2.0.11. To
-			support higher versiones please vote in the
+			support higher versions please vote in the
 			<ulink url="https://issues.apache.org/jira/browse/WW-3718">JIRA issue </ulink>
 			requested to Struts 2 project. Follow the next steps in order
 			to

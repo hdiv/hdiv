@@ -26,6 +26,32 @@
 ]]></programlisting>
 
 	<para>
+		From HDIV 2.1.7 version, it is possible to configure HDIV in Java
+		instead of XML.
+	</para>
+	<para>
+		Example configuration:
+		<programlisting language="java">
+		
+<![CDATA[@Configuration
+@EnableHdivWebSecurity
+public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
+
+	@Override
+	public void configure(SecurityConfigBuilder builder) {
+
+		// Configuration options
+	}
+	
+}
+]]></programlisting>
+
+		There is an example application showing this feature:
+		<ulink
+			url="https://github.com/hdiv/hdiv-spring-mvc-showcase/tree/javaconfig">https://github.com/hdiv/hdiv-spring-mvc-showcase/tree/javaconfig</ulink>
+	</para>
+
+	<para>
 		In the case of Grails framework the configuration is realized
 		through
 		Config.groovy file updating
@@ -46,20 +72,44 @@
 			by the user. For this case HDIV incorporates the concept of start
 			pages that are urls that HDIV doesn't make any kind of validation. We
 			can see start pages as the home pages
-			of your web site. Note that
-			usually HDIV is applied just to the authenticated parte of the web
+			of your web site.
+		</para>
+		<para>
+			Note that
+			usually HDIV is applied just to the authenticated part
+			of the
+			web
 			page.
-
+		</para>
+		<para>
 			In the code below there is the configuration code to define an
 			start
 			page to access the web site home page.
 			<programlisting language="xml">
- 				<![CDATA[
+<![CDATA[
 <hdiv:config>
 	<hdiv:startPages>/home.html</hdiv:startPages>
 </hdiv:config>
 ]]></programlisting>
 
+		</para>
+
+		<para>
+			In JavaConfig mode:
+			<programlisting language="java">
+		
+<![CDATA[@Configuration
+@EnableHdivWebSecurity
+public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
+
+	@Override
+	public void addExclusions(ExclusionRegistry registry) {
+
+		registry.addUrlExclusions("/home.html").method("GET");
+	}
+
+}
+]]></programlisting>
 		</para>
 
 		<para>For Grails users update Config.groovy file:</para>
@@ -79,59 +129,27 @@
 
 	</section>
 
-	<section xml:id="configuration-errorpage">
-		<title>Error page</title>
-		<para>
-			When HDIV detects a malicious request HDIV redirects the user to the
-			ErrorPage. It's important to note that when the possible attack is
-			related just
-			with editable data, the user is not redirected to the
-			erropage and the
-			error is visualized within the original form.
-
-			In the
-			next code we can see the previous configuration (start pages
-			configuration) and the definition of an error page:
-
-			<programlisting language="xml">
- 				<![CDATA[
-<hdiv:config errorPage="/error.jsp">
-    <hdiv:startPages>/home.html</hdiv:startPages>
-</hdiv:config>
-]]></programlisting>
-		</para>
-		<para>For Grails users update Config.groovy file:</para>
-		<programlisting language="xml">
- 			<![CDATA[
- grails {
-	plugin {
-		hdiv {
-
-			config {
-				errorPage = '/error.jsp'
-			}
-		}
-	}
-}
-]]></programlisting>
-	</section>
-
 	<section xml:id="configuration-editabledata">
 		<title>Editable data validation</title>
 
 		<para>As explained above HDIV offers a generic validation
 			functionality that
-			makes possoble the application of validation rules
+			makes possible the application of validation rules
 			to all editable
 			data (information that comes from web forms fields
 			such as textbox and
-			textarea) sent by the client. HDIV includes a
+			textarea) sent by the client.
+		</para>
+		<para>
+			HDIV includes a
 			default group of
 			validation
-			rules that try to avoid most common risks
+			rules that try to avoid
+			most common risks
 			such as XSS and
-			Sql Injection.
-
+			SQL Injection.
+		</para>
+		<para>
 			In order to activate HDIV editable
 			validation with the
 			default
@@ -142,21 +160,16 @@
 		</para>
 
 		<programlisting language="xml">
- 			<![CDATA[
-<hdiv:editableValidations registerDefaults="true">
+<![CDATA[<hdiv:editableValidations registerDefaults="true">
 </hdiv:editableValidations>
 ]]></programlisting>
 
 		<para>
 			In addition to the default validations it's possible to create
-			your
-			own custom validations. In order to create your custom
-			validations
-			firts of all
+			your own custom validations. In order to create your custom
+			validations first of all
 			it's necessary to create a validation entity.
-			A validation
-			entity could
-			contain two kind of patterns:
+			A validation entity could contain two kind of patterns:
 		</para>
 		<itemizedlist>
 
@@ -181,7 +194,7 @@
 					pattern),
 					HDIV
 					generates an error that is visualized within the
-					original form or withim HDIV generic error page.
+					original form or within HDIV generic error page.
 				</para>
 			</listitem>
 		</itemizedlist>
@@ -192,7 +205,7 @@
 		</para>
 		<programlisting language="xml">
  			<![CDATA[
-<hdiv:validation id="id1" componentType="text">
+<hdiv:validation id="customValidation" componentType="text">
 	<hdiv:acceptedPattern><[a-zA-Z0-9@.\-_]*$></hdiv:acceptedPattern>
 	<hdiv:rejectedPattern><[(\s|\S)*(--)(\s|\S)*></hdiv:rejectedPattern>
 </hdiv:validation>
@@ -211,11 +224,36 @@
 		<programlisting language="xml">
  		<![CDATA[
 <hdiv:editableValidations registerDefaults="true">
-	<hdiv:validationRule url="a" enableDefaults="true">id1</hdiv:validationRule>
+	<hdiv:validationRule url=".*" enableDefaults="true">customValidation</hdiv:validationRule>
 </hdiv:editableValidations>
 ]]></programlisting>
+
 		<para>
-			In the case of Grails framework this configuration must be included
+			In JavaConfig mode:
+			<programlisting language="java">
+<![CDATA[@Configuration
+@EnableHdivWebSecurity
+public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
+
+	@Override
+	public void addRules(RuleRegistry registry) {
+
+		registry.addRule("customValidation").acceptedPattern("^[a-zA-Z0-9@.\\-_]*$");
+	}
+
+	@Override
+	public void configureEditableValidation(ValidationConfigurer validationConfigurer) {
+
+		validationConfigurer.addValidation(".*").rules("customValidation");
+	}
+
+}
+]]></programlisting>
+		</para>
+
+		<para>
+			In the case of Grails framework this configuration must be
+			included
 			within Config.groovy file. In the next code we can see the
 			validations
 			defined within

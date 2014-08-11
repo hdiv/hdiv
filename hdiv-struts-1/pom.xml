@@ -101,6 +101,7 @@
 					<header>HDIV API ${project.version}</header>
 					<footer>HDIV ${project.version}</footer>
 					<destDir>../docs/api/${project.artifactId}</destDir>
+					<additionalparam>-Xdoclint:none</additionalparam>
 				</configuration>
 			</plugin>
 		</plugins>

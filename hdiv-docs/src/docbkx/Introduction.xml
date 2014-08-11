@@ -202,12 +202,12 @@
 					manipulated the id and try to access to a
 					forbidden
 					id. HDIV web
-					information flor control system control all
+					information flow control system control all
 					the data
 					generated at
 					server side ensuring the integrity of the data
 					generated at serve
-					side. In additon to that and optionally is
+					side. In addition to that and optionally is
 					possible to ensure the
 					confidentiality of the data generated at
 					server side avoiding the
@@ -242,7 +242,7 @@
 					(Java EE or Spring
 					Security) HDIV is able to know
 					which resource is
-					accesible by each
+					accessible by each
 					user.
 				</para>
 				<sbr />
@@ -251,7 +251,7 @@
 			<listitem>
 				<para>
 					<emphasis role="bold">A6 (Sensitive data exposure)</emphasis>
-					: HDIV offers a confitentialy
+					: HDIV offers a confidentially
 					property to all data generated at
 					sever side. That is to say, HDIV
 					replace original parameter values
@@ -282,7 +282,7 @@
 					systems or ACL (Java
 					EE or Spring Security) HDIV is able to know
 					which resource is
-					accesible by each user.
+					accessible by each user.
 				</para>
 				<sbr />
 			</listitem>
@@ -290,7 +290,7 @@
 			<listitem>
 				<para>
 					<emphasis role="bold">A8 (CSRF)</emphasis>
-					: HDIV adss aleatory tokens to each link or form
+					: HDIV adds aleatory tokens to each link or form
 					existing within the
 					application. It makes extremely difficult to
 					implement an CSRF

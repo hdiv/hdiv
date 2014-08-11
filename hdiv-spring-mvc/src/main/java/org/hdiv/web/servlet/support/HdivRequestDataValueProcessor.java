@@ -41,7 +41,8 @@ public class HdivRequestDataValueProcessor implements RequestDataValueProcessor 
 	protected FormUrlProcessor formUrlProcessor;
 
 	/**
-	 * Inner delegate {@link RequestDataValueProcessor} implementation. Only works with Spring >= 4.0.0.
+	 * Inner delegate {@link RequestDataValueProcessor} implementation. Only works with Spring greater or equal to
+	 * 4.0.0.
 	 */
 	protected RequestDataValueProcessor innerRequestDataValueProcessor;
 

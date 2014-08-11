@@ -65,13 +65,6 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-		<!-- Spring Security -->
-		<dependency>
-			<groupId>org.springframework.security</groupId>
-			<artifactId>spring-security-web</artifactId>
-			<version>3.2.4.RELEASE</version>
-			<optional>true</optional>
-		</dependency>
 		<!-- testing -->
 		<dependency>
 			<groupId>org.springframework</groupId>
