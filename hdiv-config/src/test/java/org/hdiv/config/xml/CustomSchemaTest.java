@@ -28,8 +28,11 @@ import org.hdiv.regex.PatternMatcher;
 import org.hdiv.session.StateCache;
 import org.hdiv.validator.IValidation;
 import org.hdiv.validator.Validation;
+import org.hdiv.web.servlet.support.HdivRequestDataValueProcessor;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.security.web.servlet.support.csrf.CsrfRequestDataValueProcessor;
+import org.springframework.web.servlet.support.RequestDataValueProcessor;
 
 public class CustomSchemaTest extends TestCase {
 
@@ -138,6 +141,27 @@ public class CustomSchemaTest extends TestCase {
 		assertEquals("id3", val.getName());
 		val = (Validation) vals.get(2);
 		assertEquals("SQLInjection", val.getName());// first default rule
+	}
+	
+	public void testReuseExistingPageInAjaxRequest() {
+
+		HDIVConfig hdivConfig = this.context.getBean(HDIVConfig.class);
+		assertNotNull(hdivConfig);
+
+		assertEquals(true, hdivConfig.isReuseExistingPageInAjaxRequest());
+
+	}
+
+	public void testRequestDataValueProcessor() {
+
+		HdivRequestDataValueProcessor processor = this.context.getBean(HdivRequestDataValueProcessor.class);
+		assertNotNull(processor);
+
+		// Spring security 'CsrfRequestDataValueProcessor' as inner processor.
+		RequestDataValueProcessor inner = processor.getInnerRequestDataValueProcessor();
+		assertNotNull(inner);
+
+		assertEquals(CsrfRequestDataValueProcessor.class, inner.getClass());
 	}
 
 }

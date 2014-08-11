@@ -60,6 +60,7 @@ public class Page implements IPage, Serializable {
 	private String randomToken;
 
 	/**
+	 * TODO Is this propery actually used?
 	 * Page size.
 	 */
 	private long size;

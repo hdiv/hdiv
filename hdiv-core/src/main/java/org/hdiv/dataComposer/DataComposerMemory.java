@@ -579,6 +579,7 @@ public class DataComposerMemory extends AbstractDataComposer {
 		try {
 			action = URLDecoder.decode(action, Constants.ENCODING_UTF_8);
 		} catch (UnsupportedEncodingException e) {
+			//TODO do something here
 		}
 
 		// Create new IState
@@ -650,7 +651,7 @@ public class DataComposerMemory extends AbstractDataComposer {
 	 *            other IPage
 	 */
 	public void startPage(IPage existingPage) {
-
+		this.requestCounter = existingPage.getStatesCount();
 		this.setPage(existingPage);
 	}
 

@@ -47,6 +47,11 @@ public class SecurityConfigBuilder {
 		return this;
 	}
 
+	public SecurityConfigBuilder reuseExistingPageInAjaxRequest(boolean reuseExistingPageInAjaxRequest) {
+		this.config.setReuseExistingPageInAjaxRequest(reuseExistingPageInAjaxRequest);
+		return this;
+	}
+
 	public SecurityConfigBuilder validateUrlsWithoutParams(boolean validateUrlsWithoutParams) {
 		this.config.setAvoidValidationInUrlsWithoutParams(!validateUrlsWithoutParams);
 		return this;

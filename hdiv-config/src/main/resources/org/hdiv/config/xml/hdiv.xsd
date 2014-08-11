@@ -272,6 +272,13 @@
 					]]></xsd:documentation>
 				</xsd:annotation>
 			</xsd:attribute>
+			<xsd:attribute name="reuseExistingPageInAjaxRequest" type="xsd:boolean" default="false">
+				<xsd:annotation>
+					<xsd:documentation><![CDATA[
+	Reuse previous page when an AJAX request is received and don't create a new one. Defaults to false.
+					]]></xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
 		</xsd:complexType>
 	</xsd:element>
 

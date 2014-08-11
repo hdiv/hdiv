@@ -15,17 +15,33 @@
 		<title>Session expiration</title>
 		<para>
 			When an user makes a request to an expired web session, HDIV
-			adds the
-			possibility to redirect the user to the login pages instead
-			of
-			showing
-			HDIV
-			error pages. For that you can use the code below:
+			adds the possibility to redirect the user to the login pages instead
+			of showing HDIV error pages. For that you can use the code below:
 		</para>
 		<programlisting language="xml">
 <![CDATA[
 <hdiv:sessionExpired loginPage="/login.html" homePage="/"/>
 ]]></programlisting>
+
+		<para>
+			In JavaConfig mode:
+			<programlisting language="java">
+		
+<![CDATA[@Configuration
+@EnableHdivWebSecurity
+public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
+
+	@Override
+	public void configure(SecurityConfigBuilder builder) {
+
+		builder
+			.sessionExpired()
+				.homePage("/").loginPage("/login.html");
+	}
+
+}
+]]></programlisting>
+		</para>
 
 	</section>
 
@@ -65,8 +81,7 @@
 			<listitem>
 				<para>
 					<emphasis role="bold">Cipher</emphasis>
-					: For each possible request of each page (link or form) an
-					extra
+					: For each possible request of each page (link or form) an extra
 					parameter
 					(_HDIV_STATE_) is added which represents the state of the
 					request.
@@ -113,10 +128,29 @@
 		</para>
 		<programlisting language="xml">
  			<![CDATA[
-<hdiv:config errorPage="/error.jsp" strategy="cipher">
+<hdiv:config strategy="cipher">
 	<hdiv:startPages>/home.html</hdiv:startPages>
 </hdiv:config>
 ]]></programlisting>
+
+		<para>
+			In JavaConfig mode:
+			<programlisting language="java">
+		
+<![CDATA[@Configuration
+@EnableHdivWebSecurity
+public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
+
+	@Override
+	public void configure(SecurityConfigBuilder builder) {
+
+		builder.strategy(Strategy.CIPHER);
+	}
+
+}
+]]></programlisting>
+		</para>
+
 		<para>
 			If you are a Grails user, configuration is implemented within
 			plugin
@@ -150,15 +184,21 @@ grails {
 			All these values are hidden by HDIV to
 			avoid a
 			malicious use of them.
+		</para>
+		<para>
 			For example a link of this type,
-			http://www.host.com?data1=34 is replaced
+			<code>http://www.host.com?data1=34</code>
+			is replaced
 			by
-			http://www.host.com?data1=0, guaranteeing confidentiality of the
-			values representing database identifiers.
-
-			By default de
+			<code>http://www.host.com?data1=0</code>
+			, guaranteeing confidentiality of the
+			values representing database
+			identifiers.
+		</para>
+		<para>
+			By default the
 			confidentiality
-			is avtivated (true value) but it's
+			is activated (true value) but it's
 			possible to turn off
 			using an
 			attribute within HDIV config entity:
@@ -168,6 +208,25 @@ grails {
 <hdiv:config confidentiality="false">
 </hdiv:config> 
 ]]></programlisting>
+
+		<para>
+			In JavaConfig mode:
+			<programlisting language="java">
+		
+<![CDATA[@Configuration
+@EnableHdivWebSecurity
+public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
+
+	@Override
+	public void configure(SecurityConfigBuilder builder) {
+
+		builder.confidentiality(false);
+	}
+
+}
+]]></programlisting>
+		</para>
+
 		<para>
 			If you are a Grails user, configuration is implemented within
 			plugin
@@ -188,6 +247,74 @@ grails {
 
 	</section>
 
+	<section xml:id="configuration-errorpage">
+		<title>Error page</title>
+		<para>
+			When HDIV detects a malicious request HDIV redirects the user to
+			the
+			ErrorPage.
+		</para>
+		<para>
+			It's important to note that when the possible attack is
+			related
+			just
+			with
+			editable data, the user is not redirected to the
+			error page
+			and the
+			error is visualized within the original form.
+		</para>
+		<para>
+			Since HDIV 2.1.7 custom error page configuration is not
+			mandatory. If it is not configured, a default error page is shown.
+		</para>
+		<para>
+			In the
+			next code we can see the previous configuration (start pages
+			configuration) and the definition of an error page:
+
+			<programlisting language="xml">
+ 				<![CDATA[
+<hdiv:config errorPage="/error.jsp">
+    <hdiv:startPages>/home.html</hdiv:startPages>
+</hdiv:config>
+]]></programlisting>
+		</para>
+
+		<para>
+			In JavaConfig mode:
+			<programlisting language="java">
+		
+<![CDATA[@Configuration
+@EnableHdivWebSecurity
+public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
+
+	@Override
+	public void configure(SecurityConfigBuilder builder) {
+
+		builder.errorPage("/errorPage.html");
+	}
+
+}
+]]></programlisting>
+		</para>
+
+		<para>For Grails users update Config.groovy file:</para>
+		<programlisting language="xml">
+ 			<![CDATA[
+ grails {
+	plugin {
+		hdiv {
+
+			config {
+				errorPage = '/error.jsp'
+			}
+		}
+	}
+}
+]]></programlisting>
+	</section>
+
 	<section xml:id="advancedConfiguration-cache">
 		<title>Cache configuration</title>
 		<para>
@@ -198,31 +325,57 @@ grails {
 			should be
 			controlled. By default HDIV stores all the data
 			related with
-			the last 20 pages
+			the last 5 pages
 			visited by the user. It means that if
-			the user
+			the
+			user
 			access to a one of the
-			previous 20 pages and use a link or
-			form it's a
+			previous 5 pages and use a link or
+			form it's
+			a
 			valid request for
 			HDIV.
-
+		</para>
+		<para>
 			If you need to reduce the memory
 			consumption
 			and improve the app
 			scalability it's a good practice to
 			reduce this
 			default value for
-			other lower.
+			other
+			lower. Otherwise, if you need to increase back button support more
+			than 5 pages, increase its value.
+		</para>
+		<para>
 			It's possible to overwrite
 			this
-			attribute within HDIV config entity:
+			attribute within HDIV config
+			entity:
 		</para>
 		<programlisting language="xml">
  					<![CDATA[
 <hdiv:config maxPagesPerSession="5">
 </hdiv:config> 
 ]]></programlisting>
+
+		<para>
+			In JavaConfig mode:
+			<programlisting language="java">
+		
+<![CDATA[@Configuration
+@EnableHdivWebSecurity
+public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
+
+	@Override
+	public void configure(SecurityConfigBuilder builder) {
+
+		builder.maxPagesPerSession(10);
+	}
+
+}
+]]></programlisting>
+		</para>
 
 		<para>
 			If you are a Grails user, configuration is implemented within
@@ -247,21 +400,43 @@ grails {
 	<section xml:id="advancedConfiguration-cookies">
 		<title>Cookies</title>
 		<para>
-			By default HDIV doesn't apply any kind of validation to cookies.
+			By default HDIV validates cookies integrity and confidentiality.
 			It's
-			possible to activate integrity validations and confidentiality
+			possible to disable integrity validations and confidentiality
 			properties to
-			your application from HDIV config entity. In the code
+			your application from HDIV config entity.
+		</para>
+		<para>
+			In the
 			next code we define
-			the required code to activate integrity and
+			the required code to disable integrity
+			and
 			confidentiality to
 			cookies:
 		</para>
 		<programlisting language="xml">
  					<![CDATA[
-<hdiv:config avoidCookiesIntegrity="false" avoidCookiesConfidentiality="false">
+<hdiv:config avoidCookiesIntegrity="true" avoidCookiesConfidentiality="true">
 </hdiv:config> 
 ]]></programlisting>
+
+		<para>
+			In JavaConfig mode:
+			<programlisting language="java">
+		
+<![CDATA[@Configuration
+@EnableHdivWebSecurity
+public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
+
+	@Override
+	public void configure(SecurityConfigBuilder builder) {
+
+		builder.cookiesConfidentiality(false).cookiesIntegrity(false);
+	}
+
+}
+]]></programlisting>
+		</para>
 
 		<para>
 			For Grails users using HDIV plugin:
@@ -272,8 +447,8 @@ grails {
 	plugin {
 		hdiv {
 			config {
-				avoidCookiesIntegrity='false'
-				avoidCookiesConfidentiality='false'
+				avoidCookiesIntegrity='true'
+				avoidCookiesConfidentiality='true'
 			}
 		}
 	}
@@ -290,7 +465,7 @@ grails {
 			HDIV Filter, HDIV allows the validation exclusion depending
 			on the
 			extension.
-			At the same time is possible the inclusion
+			At the same time is possible the inclusion of
 			extensions
 			to protect them.
 		</para>
@@ -341,6 +516,25 @@ grails {
 <hdiv:config debugMode="true">
 </hdiv:config> 
 ]]></programlisting>
+
+		<para>
+			In JavaConfig mode:
+			<programlisting language="java">
+		
+<![CDATA[@Configuration
+@EnableHdivWebSecurity
+public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
+
+	@Override
+	public void configure(SecurityConfigBuilder builder) {
+
+		builder.debugMode(true);
+	}
+
+}
+]]></programlisting>
+		</para>
+
 		<para>
 			If you are a Grails user, configuration is implemented within
 			plugin
@@ -416,19 +610,34 @@ log4j.logger.org.hdiv=INFO,R
 		</para>
 		<itemizedlist>
 			<listitem>
-				%d : Date of the log event
+				<para>
+					<code>%d</code>
+					: Date of the log event
+				</para>
 			</listitem>
 			<listitem>
-				[%t]: Name of the thread that generated the log event
+				<para>
+					<code>[%t]</code>
+					: Name of the thread that generated the log event
+				</para>
 			</listitem>
 			<listitem>
-				%-5p: Priority of the event that generated the logging
+				<para>
+					<code>%-5p</code>
+					: Priority of the event that generated the logging
+				</para>
 			</listitem>
 			<listitem>
-				%m: Message associated with the logging event
+				<para>
+					<code>%m</code>
+					: Message associated with the logging event
+				</para>
 			</listitem>
 			<listitem>
-				%n: New line character
+				<para>
+					<code>%n</code>
+					: New line character
+				</para>
 			</listitem>
 		</itemizedlist>
 		<para>
@@ -457,50 +666,80 @@ log4j.logger.org.hdiv=INFO,R
 		</para>
 		<itemizedlist>
 			<listitem>
-				INVALID_ACTION: The action received in the request does not match
-				the state action.
+				<para>
+					<code>INVALID_ACTION</code>
+					: The action received in the request does not match the state
+					action.
+				</para>
 			</listitem>
 			<listitem>
-				INVALID_PARAMETER_NAME: The parameter received in the request does
-				not exist in the request state.
+				<para>
+					<code>INVALID_PARAMETER_NAME</code>
+					: The parameter received in the request does not exist in the
+					request state.
+				</para>
 			</listitem>
 			<listitem>
-				NOT_RECEIVED_ALL_REQUIRED_PARAMETERS: All the required parameters
-				for the request have not been received.
+				<para>
+					<code>NOT_RECEIVED_ALL_REQUIRED_PARAMETERS</code>
+					: All the required parameters for the request have not been
+					received.
+				</para>
 			</listitem>
 			<listitem>
-				INVALID_PARAMETER_VALUE: Incorrect parameter value.
+				<para>
+					<code>INVALID_PARAMETER_VALUE</code>
+					: Incorrect parameter value.
+				</para>
 			</listitem>
 			<listitem>
-				NOT_RECEIVED_ALL_PARAMETER_VALUES: For a certain parameter not the
-				expected number of values has been receiced.
+				<para>
+					<code>NOT_RECEIVED_ALL_PARAMETER_VALUES</code>
+					: For a certain parameter not the expected number of values has
+					been received.
+				</para>
 			</listitem>
 			<listitem>
-				REPEATED_VALUES_FOR_PARAMETER: Repeated values have been received
-				for
-				the same parameter.
+				<para>
+					<code>REPEATED_VALUES_FOR_PARAMETER</code>
+					: Repeated values have been received for the same parameter.
+				</para>
 			</listitem>
 			<listitem>
-				INVALID_CONFIDENTIAL_VALUE: Incorrect value. Confidentiality
-				activated.
+				<para>
+					<code>INVALID_CONFIDENTIAL_VALUE</code>
+					: Incorrect value. Confidentiality activated.
+				</para>
 			</listitem>
 			<listitem>
-				HDIV_PARAMETER_NOT_EXISTS: The HDIV parameter has not been received
-				in the request.
+				<para>
+					<code>HDIV_PARAMETER_NOT_EXISTS</code>
+					: The HDIV parameter has not been received in the request.
+				</para>
 			</listitem>
 			<listitem>
-				INVALID_HDIV_PARAMETER_VALUE: The HDIV parameter has incorrect
-				value.
+				<para>
+					<code>INVALID_HDIV_PARAMETER_VALUE</code>
+					: The HDIV parameter has incorrect value.
+				</para>
 			</listitem>
 			<listitem>
-				INVALID_PAGE_ID: HDIV parameter has an incorrect page identifier.
+				<para>
+					<code>INVALID_PAGE_ID</code>
+					: HDIV parameter has an incorrect page identifier.
+				</para>
 			</listitem>
 			<listitem>
-				INVALID_EDITABLE_VALUE: Error in the editable parameter validation.
+				<para>
+					<code>INVALID_EDITABLE_VALUE</code>
+					: Error in the editable parameter validation.
+				</para>
 			</listitem>
 			<listitem>
-				INVALID_COOKIE: The cookie received in the request has an incorrect
-				value.
+				<para>
+					<code>INVALID_COOKIE</code>
+					: The cookie received in the request has an incorrect value.
+				</para>
 			</listitem>
 		</itemizedlist>
 
@@ -545,7 +784,7 @@ log4j.logger.org.hdiv=INFO,R
 		<para>
 			Last but not least, HDIV offers an option to include de user
 			identity
-			within HDIV log files. For that it's neccesary to implement a
+			within HDIV log files. For that it's necessary to implement a
 			class
 			that follow IUserData interface.
 
@@ -561,7 +800,8 @@ log4j.logger.org.hdiv=INFO,R
 </hdiv:config> 
 ]]></programlisting>
 		<para>
-			If you are a Grails user, configuration is implemented within plugin
+			If you are a Grails user, configuration is implemented within
+			plugin
 			configuration:
 		</para>
 		<programlisting language="xml">
@@ -582,10 +822,9 @@ grails {
 	<section xml:id="advancedConfiguration-avoidValidationInUrlsWithoutParams">
 		<title>Avoid validation in urls without parameters</title>
 		<para>
-			HDIV offers a configuration option to disable url protection
-			that don't contains parameters,
-			delegating this work to Spring
-			Security or another access protection system.
+			HDIV provides a configuration option to disable protection to
+			those urls that don't contain parameters, delegating this work to
+			Spring Security or another access protection system.
 		</para>
 		<para>
 			It's possible to configure this option from HDIV config entity:
@@ -595,6 +834,25 @@ grails {
 <hdiv:config avoidValidationInUrlsWithoutParams="true">
 </hdiv:config> 
 ]]></programlisting>
+
+		<para>
+			In JavaConfig mode:
+			<programlisting language="java">
+		
+<![CDATA[@Configuration
+@EnableHdivWebSecurity
+public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
+
+	@Override
+	public void configure(SecurityConfigBuilder builder) {
+
+		builder.validateUrlsWithoutParams(false);
+	}
+
+}
+]]></programlisting>
+		</para>
+
 		<para>
 			If you are a Grails user, configuration is implemented within
 			plugin

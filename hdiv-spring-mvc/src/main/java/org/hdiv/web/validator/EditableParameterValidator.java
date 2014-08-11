@@ -16,6 +16,7 @@
 package org.hdiv.web.validator;
 
 import org.springframework.validation.Errors;
+import org.springframework.validation.SmartValidator;
 import org.springframework.validation.Validator;
 
 /**
@@ -25,7 +26,7 @@ import org.springframework.validation.Validator;
  * @author Gotzon Illarramendi
  * @since HDIV 2.0.6
  */
-public class EditableParameterValidator extends AbstractEditableParameterValidator implements Validator {
+public class EditableParameterValidator extends AbstractEditableParameterValidator implements SmartValidator {
 
 	/**
 	 * Wrapped validator.
@@ -43,6 +44,10 @@ public class EditableParameterValidator extends AbstractEditableParameterValidat
 		if (!errors.hasErrors() && this.innerValidator != null) {
 			this.innerValidator.validate(obj, errors);
 		}
+	}
+	
+	public void validate(Object obj, Errors errors, Object... hints) {
+		validate(obj, errors);
 	}
 
 	/**

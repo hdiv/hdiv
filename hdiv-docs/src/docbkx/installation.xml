@@ -91,7 +91,7 @@
 
 		<para>
 			Thanks to the plugin architecture and
-			<ulink url="http://grails.org/plugin/hdiv">HDIV plugin </ulink>
+			<link xl:href="http://grails.org/plugin/hdiv">HDIV plugin </link>
 			implementation
 			supported by Grails project, HDIV installation is
 			implemented using
@@ -148,7 +148,7 @@ compile ':hdiv:1.0-RC2'
 <jsp-config>
 	<taglib>
 		<taglib-uri>http://java.sun.com/jsp/jstl/core</taglib-uri>
-        <taglib-location>/WEB-INF/tlds/hdiv-c.tld</taglib-location>
+		<taglib-location>/WEB-INF/tlds/hdiv-c.tld</taglib-location>
 	</taglib>
 </jsp-config>
 ]]></programlisting>
@@ -193,8 +193,8 @@ compile ':hdiv:1.0-RC2'
     <filter-class>org.hdiv.filter.ValidatorFilter</filter-class>
 </filter>
 <filter-mapping>
-	<filter-name>ValidatorFilter</filter-name>
-	<url-pattern>*.do</url-pattern>
+    <filter-name>ValidatorFilter</filter-name>
+    <url-pattern>*.do</url-pattern>
 </filter-mapping>
 
 <!-- Replace Struts 1 tld with hdiv tlds -->
@@ -224,8 +224,8 @@ compile ':hdiv:1.0-RC2'
 
 		<para>
 			The latest Struts 2 version supported by HDIV is Struts 2.0.11. To
-			support higher versiones please vote in the
-			<ulink url="https://issues.apache.org/jira/browse/WW-3718">JIRA issue </ulink>
+			support higher versions please vote in the
+			<link xl:href="https://issues.apache.org/jira/browse/WW-3718">JIRA issue </link>
 			requested to Struts 2 project. Follow the next steps in order
 			to
 			install HDIV in a Struts 2 based web application:
@@ -242,9 +242,9 @@ compile ':hdiv:1.0-RC2'
     <version>2.1.5</version>
 </dependency>
 <dependency>
-	<groupId>org.hdiv</groupId>
-	<artifactId>hdiv-struts-2.0.11</artifactId>
-	<version>2.0.4</version>
+    <groupId>org.hdiv</groupId>
+    <artifactId>hdiv-struts-2.0.11</artifactId>
+    <version>2.0.4</version>
 </dependency>
 ]]></programlisting>
 			</listitem>
@@ -261,13 +261,13 @@ compile ':hdiv:1.0-RC2'
 <!-- HDIV Validator Filter -->
 
 <filter-mapping>
-	<filter-name>ValidatorFilter</filter-name>
-	<url-pattern>*.action</url-pattern>
+    <filter-name>ValidatorFilter</filter-name>
+    <url-pattern>*.action</url-pattern>
 </filter-mapping>
 
 <filter-mapping>
-	<filter-name>ValidatorFilter</filter-name>
-	<url-pattern>*.jsp</url-pattern>
+    <filter-name>ValidatorFilter</filter-name>
+    <url-pattern>*.jsp</url-pattern>
 </filter-mapping>		
 
 <!-- Replace Struts 2 tld with hdiv tlds -->
@@ -297,8 +297,8 @@ compile ':hdiv:1.0-RC2'
     <version>2.1.5</version>
 </dependency>
 <dependency>
-	<groupId>org.hdiv</groupId>
-   	<artifactId>hdiv-jsf</artifactId>
+    <groupId>org.hdiv</groupId>
+    <artifactId>hdiv-jsf</artifactId>
     <version>2.1.5</version>
 </dependency>
 ]]></programlisting>
@@ -326,11 +326,11 @@ compile ':hdiv:1.0-RC2'
 
 <!-- HDIV Validator Filter -->
 <filter>
-	<filter-name>ValidatorFilter</filter-name>
-  	<filter-class>org.hdiv.filter.ValidatorFilter</filter-class>
+    <filter-name>ValidatorFilter</filter-name>
+    <filter-class>org.hdiv.filter.ValidatorFilter</filter-class>
 </filter>
 <filter-mapping>
-	<filter-name>ValidatorFilter</filter-name>
+    <filter-name>ValidatorFilter</filter-name>
     <servlet-name>Faces Servlet</servlet-name>
 </filter-mapping>
 ]]></programlisting>

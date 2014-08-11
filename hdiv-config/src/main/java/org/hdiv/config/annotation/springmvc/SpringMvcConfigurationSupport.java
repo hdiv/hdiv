@@ -15,7 +15,6 @@
  */
 package org.hdiv.config.annotation.springmvc;
 
-import org.hdiv.config.annotation.HdivWebSecurityConfigurationSupport;
 import org.hdiv.config.annotation.condition.ConditionalOnFramework;
 import org.hdiv.config.annotation.condition.SupportedFramework;
 import org.hdiv.config.multipart.IMultipartConfig;
@@ -29,6 +28,7 @@ import org.hdiv.web.validator.EditableParameterValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.web.servlet.support.csrf.CsrfRequestDataValueProcessor;
 import org.springframework.util.ClassUtils;
 import org.springframework.validation.Validator;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
@@ -44,7 +44,11 @@ import org.springframework.web.servlet.support.RequestDataValueProcessor;
 public class SpringMvcConfigurationSupport {
 
 	protected static final boolean jsr303Present = ClassUtils.isPresent("javax.validation.Validator",
-			HdivWebSecurityConfigurationSupport.class.getClassLoader());
+			SpringMvcConfigurationSupport.class.getClassLoader());
+
+	protected static final boolean springSecurityPresent = ClassUtils.isPresent(
+			"org.springframework.security.web.servlet.support.csrf.CsrfRequestDataValueProcessor",
+			SpringMvcConfigurationSupport.class.getClassLoader());
 
 	@Autowired
 	protected FormUrlProcessor formUrlProcessor;
@@ -58,6 +62,10 @@ public class SpringMvcConfigurationSupport {
 		HdivRequestDataValueProcessor dataValueProcessor = new HdivRequestDataValueProcessor();
 		dataValueProcessor.setFormUrlProcessor(this.formUrlProcessor);
 		dataValueProcessor.setLinkUrlProcessor(this.linkUrlProcessor);
+
+		if (springSecurityPresent) {
+			dataValueProcessor.setInnerRequestDataValueProcessor(new CsrfRequestDataValueProcessor());
+		}
 		return dataValueProcessor;
 	}
 
