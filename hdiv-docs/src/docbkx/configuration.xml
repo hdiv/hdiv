@@ -47,15 +47,16 @@ public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
 ]]></programlisting>
 
 		There is an example application showing this feature:
-		<ulink
-			url="https://github.com/hdiv/hdiv-spring-mvc-showcase/tree/javaconfig">https://github.com/hdiv/hdiv-spring-mvc-showcase/tree/javaconfig</ulink>
+		<link
+			xl:href="https://github.com/hdiv/hdiv-spring-mvc-showcase/tree/javaconfig">https://github.com/hdiv/hdiv-spring-mvc-showcase/tree/javaconfig
+		</link>
 	</para>
 
 	<para>
 		In the case of Grails framework the configuration is realized
 		through
 		Config.groovy file updating
-		<ulink url="http://grails.org/plugin/hdiv">HDIV plugin</ulink>
+		<link xl:href="http://grails.org/plugin/hdiv">HDIV plugin</link>
 		configuration options.
 	</para>
 
