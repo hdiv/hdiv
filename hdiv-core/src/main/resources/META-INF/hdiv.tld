@@ -12,7 +12,7 @@
 			Prints the encoded value of the 'value' attribute.
 		</description>
 		<name>cipher</name>
-		<tag-class>org.hdiv.web.servlet.tags.form.CipherTag</tag-class>
+		<tag-class>org.hdiv.tags.CipherTag</tag-class>
 		<body-content>JSP</body-content>
 		<attribute>
 			<description>In case of a link or a form, this is the url.</description>
@@ -35,6 +35,20 @@
 			<description>Name of the variable to assign encoded value.</description>
 			<name>var</name>
 			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+	<tag>
+		<description>
+			Define state scope in which store states.
+		</description>
+		<name>scope</name>
+		<tag-class>org.hdiv.tags.ScopeTag</tag-class>
+		<body-content>JSP</body-content>
+		<attribute>
+			<description>The type of the scope.</description>
+			<name>type</name>
+			<required>true</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 	</tag>

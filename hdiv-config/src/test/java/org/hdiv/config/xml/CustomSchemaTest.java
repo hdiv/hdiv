@@ -25,6 +25,8 @@ import org.hdiv.config.HDIVValidations;
 import org.hdiv.logs.IUserData;
 import org.hdiv.regex.DefaultPatternMatcher;
 import org.hdiv.regex.PatternMatcher;
+import org.hdiv.scope.ScopeManager;
+import org.hdiv.scope.StateScope;
 import org.hdiv.session.StateCache;
 import org.hdiv.validator.IValidation;
 import org.hdiv.validator.Validation;
@@ -142,7 +144,7 @@ public class CustomSchemaTest extends TestCase {
 		val = (Validation) vals.get(2);
 		assertEquals("SQLInjection", val.getName());// first default rule
 	}
-	
+
 	public void testReuseExistingPageInAjaxRequest() {
 
 		HDIVConfig hdivConfig = this.context.getBean(HDIVConfig.class);
@@ -162,6 +164,18 @@ public class CustomSchemaTest extends TestCase {
 		assertNotNull(inner);
 
 		assertEquals(CsrfRequestDataValueProcessor.class, inner.getClass());
+	}
+
+	public void testScopeManager() {
+
+		ScopeManager scopeManager = this.context.getBean(ScopeManager.class);
+		assertNotNull(scopeManager);
+
+		StateScope appScope = scopeManager.getStateScopeByName("app");
+		StateScope sessionScope = scopeManager.getStateScopeByName("user");
+
+		assertNotNull(appScope);
+		assertNotNull(sessionScope);
 	}
 
 }

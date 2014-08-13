@@ -21,6 +21,7 @@ import org.hdiv.config.HDIVConfig;
 import org.hdiv.config.Strategy;
 import org.hdiv.exception.HDIVException;
 import org.hdiv.idGenerator.UidGenerator;
+import org.hdiv.scope.ScopeManager;
 import org.hdiv.session.ISession;
 import org.hdiv.state.IPage;
 import org.hdiv.state.IState;
@@ -70,6 +71,11 @@ public class DataComposerFactory {
 	protected StateUtil stateUtil;
 
 	/**
+	 * State scope manager.
+	 */
+	protected ScopeManager scopeManager;
+
+	/**
 	 * Creates a new instance of DataComposer based on the defined strategy.
 	 * 
 	 * @param request
@@ -86,6 +92,7 @@ public class DataComposerFactory {
 			composer.setHdivConfig(this.config);
 			composer.setSession(this.session);
 			composer.setUidGenerator(this.uidGenerator);
+			composer.setScopeManager(this.scopeManager);
 			composer.init();
 			dataComposer = composer;
 
@@ -94,6 +101,7 @@ public class DataComposerFactory {
 			composer.setHdivConfig(this.config);
 			composer.setSession(this.session);
 			composer.setUidGenerator(this.uidGenerator);
+			composer.setScopeManager(this.scopeManager);
 			composer.setAllowedLength(this.allowedLength);
 			composer.setEncodingUtil(this.encodingUtil);
 			composer.init();
@@ -104,6 +112,7 @@ public class DataComposerFactory {
 			composer.setHdivConfig(this.config);
 			composer.setSession(this.session);
 			composer.setUidGenerator(this.uidGenerator);
+			composer.setScopeManager(this.scopeManager);
 			composer.setAllowedLength(this.allowedLength);
 			composer.setEncodingUtil(this.encodingUtil);
 			composer.init();
@@ -209,6 +218,14 @@ public class DataComposerFactory {
 	 */
 	public void setStateUtil(StateUtil stateUtil) {
 		this.stateUtil = stateUtil;
+	}
+
+	/**
+	 * @param scopeManager
+	 *            the scopeManager to set
+	 */
+	public void setScopeManager(ScopeManager scopeManager) {
+		this.scopeManager = scopeManager;
 	}
 
 }

@@ -56,6 +56,9 @@ import org.hdiv.logs.Logger;
 import org.hdiv.logs.UserData;
 import org.hdiv.regex.PatternMatcher;
 import org.hdiv.regex.PatternMatcherFactory;
+import org.hdiv.scope.ScopeManager;
+import org.hdiv.scope.app.AppStateScope;
+import org.hdiv.scope.user.UserStateScope;
 import org.hdiv.session.ISession;
 import org.hdiv.session.IStateCache;
 import org.hdiv.session.SessionHDIV;
@@ -245,6 +248,7 @@ public abstract class HdivWebSecurityConfigurationSupport {
 		stateUtil.setEncodingUtil(encodingUtil());
 		stateUtil.setConfig(hdivConfig());
 		stateUtil.setSession(securitySession());
+		stateUtil.setScopeManager(securityScopeManager());
 		stateUtil.init();
 		return stateUtil;
 	}
@@ -257,6 +261,15 @@ public abstract class HdivWebSecurityConfigurationSupport {
 	}
 
 	@Bean
+	public ScopeManager securityScopeManager() {
+
+		ScopeManager scopeManager = new ScopeManager();
+		scopeManager.setAppStateScope(new AppStateScope());
+		scopeManager.setUserStateScope(new UserStateScope());
+		return scopeManager;
+	}
+
+	@Bean
 	public DataComposerFactory dataComposerFactory() {
 		DataComposerFactory dataComposerFactory = new DataComposerFactory();
 		dataComposerFactory.setConfig(hdivConfig());
@@ -264,6 +277,7 @@ public abstract class HdivWebSecurityConfigurationSupport {
 		dataComposerFactory.setEncodingUtil(encodingUtil());
 		dataComposerFactory.setStateUtil(stateUtil());
 		dataComposerFactory.setUidGenerator(uidGenerator());
+		dataComposerFactory.setScopeManager(securityScopeManager());
 		return dataComposerFactory;
 	}
 
@@ -278,6 +292,7 @@ public abstract class HdivWebSecurityConfigurationSupport {
 		validatorHelperRequest.setDataValidator(dataValidator());
 		validatorHelperRequest.setUrlProcessor(basicUrlProcessor());
 		validatorHelperRequest.setDataComposerFactory(dataComposerFactory());
+		validatorHelperRequest.setScopeManager(securityScopeManager());
 		validatorHelperRequest.init();
 		return validatorHelperRequest;
 	}

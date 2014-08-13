@@ -235,6 +235,22 @@ public interface IDataComposer {
 	public void endPage();
 
 	/**
+	 * Start new Scope area.
+	 * 
+	 * @param scope
+	 *            Scope name
+	 * @since 2.1.7
+	 */
+	public void startScope(String scope);
+
+	/**
+	 * End existing Scope area.
+	 * 
+	 * @since 2.1.7
+	 */
+	public void endScope();
+
+	/**
 	 * Creates a new parameter called <code>newParameter</code> and adds all the values of <code>oldParameter</code>
 	 * stored in the state to it.
 	 * 

@@ -13,7 +13,9 @@ Release 2.1.7
  * Ability to include an inner RequestDataValueProcessor to HdivRequestDataValueProcessor.
  * Spring Security CSRF token integration. Both, HDIV and Spring Security tokens are created.
  * New 'reuseExistingPageInAjaxRequest' configuration option. If it is activated, Ajax requests don't create a new page and reuse the existing one.
-
+ * Move CipherTag to hdiv-core.
+ * User and application scoped states to be able to reuse common link or forms without creating a new state in every request.
+ 
 Release 2.1.6
 ==================================
 

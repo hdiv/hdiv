@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.hdiv.web.servlet.tags.form;
+package org.hdiv.tags;
 
 import java.io.IOException;
 
@@ -25,14 +25,13 @@ import org.hdiv.dataComposer.IDataComposer;
 import org.hdiv.util.HDIVUtil;
 
 /**
- * Tag to cipher data without using Spring MVC.
+ * Tag to cipher data without using a framework tag.
  * <p>
- * Being "hdiv" the identifier used to reference HDIV tag library, the format of
- * the tag will be as follows:
+ * Being "hdiv" the identifier used to reference HDIV tag library, the format of the tag will be as follows:
  * <code>&lt;hdiv:cipher action="a1" parameter="p1" value="v1" /&gt;</code>.
  * </p>
  * <p>
- * The result will be an encoded value that only HDIV can interpretate.
+ * The result will be an encoded value that only HDIV can interpret.
  * </p>
  * 
  * @author Gorka Vicente
@@ -41,8 +40,8 @@ import org.hdiv.util.HDIVUtil;
 public class CipherTag extends TagSupport {
 
 	/**
-	 * Universal version identifier. Deserialization uses this number to ensure
-	 * that a loaded class corresponds exactly to a serialized object.
+	 * Universal version identifier. Deserialization uses this number to ensure that a loaded class corresponds exactly
+	 * to a serialized object.
 	 */
 	private static final long serialVersionUID = -5223047708438702403L;
 
@@ -90,8 +89,7 @@ public class CipherTag extends TagSupport {
 	 * Process the start of this tag.
 	 * 
 	 * @throws JspException
-	 *             If the attributes passed to the tag are incorrect, an
-	 *             exception will be thrown.
+	 *             If the attributes passed to the tag are incorrect, an exception will be thrown.
 	 */
 	@Override
 	public int doStartTag() throws JspException {

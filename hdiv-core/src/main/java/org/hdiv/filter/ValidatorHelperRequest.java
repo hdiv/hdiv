@@ -43,6 +43,8 @@ import org.hdiv.dataValidator.IDataValidator;
 import org.hdiv.dataValidator.IValidationResult;
 import org.hdiv.exception.HDIVException;
 import org.hdiv.logs.Logger;
+import org.hdiv.scope.ScopeManager;
+import org.hdiv.scope.StateScope;
 import org.hdiv.session.ISession;
 import org.hdiv.state.IPage;
 import org.hdiv.state.IParameter;
@@ -109,6 +111,11 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	 * URL String processor.
 	 */
 	protected BasicUrlProcessor urlProcessor;
+
+	/**
+	 * State scope manager.
+	 */
+	protected ScopeManager scopeManager;
 
 	/**
 	 * Initialization of the objects needed for the validation process.
@@ -681,7 +688,22 @@ public class ValidatorHelperRequest implements IValidationHelper {
 
 			// read suffix from page stored in session
 			String pageId = value.substring(0, firstSeparator);
-			IPage currentPage = this.session.getPage(pageId);
+			String sId = value.substring(firstSeparator + 1, lastSeparator);
+			int stateId = 0;
+			try {
+				stateId = Integer.parseInt(sId);
+			} catch (NumberFormatException e) {
+				throw new HDIVException(HDIVErrorCodes.PAGE_ID_INCORRECT);
+			}
+
+			StateScope stateScope = this.scopeManager.getStateScope(value);
+			if (stateScope != null) {
+
+				String token = stateScope.getStateToken(stateId);
+				return requestSuffix.equals(token);
+			}
+
+			IPage currentPage = session.getPage(pageId);
 
 			if (currentPage == null) {
 				if (log.isErrorEnabled()) {
@@ -1182,6 +1204,14 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	 */
 	public void setUrlProcessor(BasicUrlProcessor urlProcessor) {
 		this.urlProcessor = urlProcessor;
+	}
+
+	/**
+	 * @param scopeManager
+	 *            the scopeManager to set
+	 */
+	public void setScopeManager(ScopeManager scopeManager) {
+		this.scopeManager = scopeManager;
 	}
 
 }

@@ -19,10 +19,13 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Stack;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hdiv.config.HDIVConfig;
+import org.hdiv.scope.ScopeManager;
+import org.hdiv.scope.StateScope;
 import org.hdiv.state.IPage;
 import org.hdiv.state.IParameter;
 import org.hdiv.state.IState;
@@ -61,6 +64,56 @@ public class DataComposerMemory extends AbstractDataComposer {
 	 * HDIV configuration object.
 	 */
 	protected HDIVConfig hdivConfig;
+
+	/**
+	 * State scope manager.
+	 */
+	protected ScopeManager scopeManager;
+
+	/**
+	 * Stack to store existing scopes, active and inactive
+	 */
+	protected Stack<String> scopeStack;
+
+	/**
+	 * DataComposer initialization with new stack to store all states of the page <code>page</code>.
+	 */
+	public void init() {
+		super.init();
+		this.scopeStack = new Stack<String>();
+		// Add default scope
+		this.scopeStack.push("page");
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.hdiv.dataComposer.IDataComposer#startScope(java.lang.String)
+	 */
+	public void startScope(String scope) {
+
+		this.scopeStack.push(scope);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.hdiv.dataComposer.IDataComposer#endScope()
+	 */
+	public void endScope() {
+
+		this.scopeStack.pop();
+	}
+
+	/**
+	 * Return current active Scope
+	 * 
+	 * @return Scope name
+	 */
+	protected String getCurrentScope() {
+
+		return this.scopeStack.peek();
+	}
 
 	/**
 	 * It generates a new encoded value for the parameter <code>parameter</code> and the value <code>value</code> passed
@@ -579,7 +632,7 @@ public class DataComposerMemory extends AbstractDataComposer {
 		try {
 			action = URLDecoder.decode(action, Constants.ENCODING_UTF_8);
 		} catch (UnsupportedEncodingException e) {
-			//TODO do something here
+			// TODO do something here
 		}
 
 		// Create new IState
@@ -593,9 +646,20 @@ public class DataComposerMemory extends AbstractDataComposer {
 
 		this.getStatesStack().push(state);
 
+		// Add to scope
+		String currentScope = this.getCurrentScope();
+		StateScope stateScope = this.scopeManager.getStateScopeByName(currentScope);
+		if (stateScope != null) {
+			// Its custom scope Scope
+			// TODO can't return the state id
+			// We can't know the id before compose all parameters
+			return null;
+		}
+
+		// It is Page scope or none
 		this.requestCounter = state.getId() + 1;
 
-		String id = this.getPage().getId() + DASH + state.getId() + DASH + this.getHdivStateSuffix();
+		String id = this.getPage().getName() + DASH + state.getId() + DASH + this.getHdivStateSuffix();
 		return id;
 	}
 
@@ -610,6 +674,16 @@ public class DataComposerMemory extends AbstractDataComposer {
 
 		IState state = this.getStatesStack().pop();
 
+		// Add to scope
+		String currentScope = this.getCurrentScope();
+		StateScope stateScope = this.scopeManager.getStateScopeByName(currentScope);
+		if (stateScope != null) {
+			// Its custom Scope
+			String stateId = stateScope.addState(state, this.getHdivStateSuffix());
+			return stateId;
+		}
+
+		// Add to page scope
 		IPage page = this.getPage();
 		state.setPageId(page.getId());
 		page.addState(state);
@@ -693,6 +767,14 @@ public class DataComposerMemory extends AbstractDataComposer {
 	 */
 	public void addFlowId(String id) {
 		super.getPage().setFlowId(id);
+	}
+
+	/**
+	 * @param scopeManager
+	 *            the scopeManager to set
+	 */
+	public void setScopeManager(ScopeManager scopeManager) {
+		this.scopeManager = scopeManager;
 	}
 
 }

@@ -49,6 +49,9 @@ import org.hdiv.logs.Logger;
 import org.hdiv.logs.UserData;
 import org.hdiv.regex.PatternMatcher;
 import org.hdiv.regex.PatternMatcherFactory;
+import org.hdiv.scope.ScopeManager;
+import org.hdiv.scope.app.AppStateScope;
+import org.hdiv.scope.user.UserStateScope;
 import org.hdiv.session.ISession;
 import org.hdiv.session.SessionHDIV;
 import org.hdiv.session.StateCache;
@@ -174,6 +177,8 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 
 	protected RuntimeBeanReference userDataRef;
 
+	protected RuntimeBeanReference scopeManagerRef;
+
 	public BeanDefinition parse(Element element, ParserContext parserContext) {
 
 		Object source = parserContext.extractSource(element);
@@ -188,6 +193,7 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		this.createKeyFactory(element, source, parserContext);
 		this.userDataRef = this.createUserData(element, source, parserContext);
 
+		this.scopeManagerRef = this.createScopeManager(element, source, parserContext);
 		this.createValidatorErrorHandler(element, source, parserContext);
 		this.loggerRef = this.createLogger(element, source, parserContext);
 		this.createStateCache(element, source, parserContext);
@@ -374,6 +380,7 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		bean.getPropertyValues().addPropertyValue("encodingUtil", this.encodingUtilRef);
 		bean.getPropertyValues().addPropertyValue("config", this.configRef);
 		bean.getPropertyValues().addPropertyValue("session", this.sessionRef);
+		bean.getPropertyValues().addPropertyValue("scopeManager", this.scopeManagerRef);
 		String name = parserContext.getReaderContext().generateBeanName(bean);
 		parserContext.getRegistry().registerBeanDefinition(name, bean);
 		return new RuntimeBeanReference(name);
@@ -389,6 +396,19 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		return new RuntimeBeanReference(name);
 	}
 
+	protected RuntimeBeanReference createScopeManager(Element element, Object source, ParserContext parserContext) {
+		RootBeanDefinition bean = new RootBeanDefinition(ScopeManager.class);
+		bean.setSource(source);
+		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
+		bean.getPropertyValues().addPropertyValue("appStateScope",
+				this.createSimpleBean(element, source, parserContext, AppStateScope.class));
+		bean.getPropertyValues().addPropertyValue("userStateScope",
+				this.createSimpleBean(element, source, parserContext, UserStateScope.class));
+		String name = parserContext.getReaderContext().generateBeanName(bean);
+		parserContext.getRegistry().registerBeanDefinition(name, bean);
+		return new RuntimeBeanReference(name);
+	}
+
 	protected RuntimeBeanReference createDataComposerFactory(Element element, Object source, ParserContext parserContext) {
 		RootBeanDefinition bean = new RootBeanDefinition(DataComposerFactory.class);
 		bean.setSource(source);
@@ -398,6 +418,7 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		bean.getPropertyValues().addPropertyValue("encodingUtil", this.encodingUtilRef);
 		bean.getPropertyValues().addPropertyValue("stateUtil", this.stateUtilRef);
 		bean.getPropertyValues().addPropertyValue("uidGenerator", this.uidGeneratorRef);
+		bean.getPropertyValues().addPropertyValue("scopeManager", this.scopeManagerRef);
 
 		String name = parserContext.getReaderContext().generateBeanName(bean);
 		parserContext.getRegistry().registerBeanDefinition(name, bean);
@@ -422,6 +443,7 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 			bean.getPropertyValues().addPropertyValue("dataValidator", this.dataValidatorRef);
 			bean.getPropertyValues().addPropertyValue("urlProcessor", this.basicUrlProcessorRef);
 			bean.getPropertyValues().addPropertyValue("dataComposerFactory", this.dataComposerFactoryRef);
+			bean.getPropertyValues().addPropertyValue("scopeManager", this.scopeManagerRef);
 			parserContext.getRegistry().registerBeanDefinition(VALIDATOR_HELPER_NAME, bean);
 			return new RuntimeBeanReference(VALIDATOR_HELPER_NAME);
 		} else {
@@ -687,6 +709,7 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		bean.getPropertyValues().addPropertyValue("dataValidator", this.dataValidatorRef);
 		bean.getPropertyValues().addPropertyValue("urlProcessor", this.basicUrlProcessorRef);
 		bean.getPropertyValues().addPropertyValue("dataComposerFactory", this.dataComposerFactoryRef);
+		bean.getPropertyValues().addPropertyValue("scopeManager", this.scopeManagerRef);
 
 		String name = parserContext.getReaderContext().generateBeanName(bean);
 		parserContext.getRegistry().registerBeanDefinition(name, bean);

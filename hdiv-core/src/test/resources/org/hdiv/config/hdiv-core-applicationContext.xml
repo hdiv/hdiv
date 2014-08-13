@@ -53,6 +53,7 @@
 		<property name="encodingUtil" ref="encoding" />
 		<property name="config" ref="config" />
 		<property name="session" ref="sessionHDIV" />
+		<property name="scopeManager" ref="scopeManager" />
 	</bean>
 
 	<!-- DATAVALIDATOR -->
@@ -70,9 +71,7 @@
 		<property name="uidGenerator" ref="uidGenerator" />
 		<property name="encodingUtil" ref="encoding" />
 		<property name="stateUtil" ref="stateUtil" />
-		<property name="allowedLength">
-			<value>4000</value>
-		</property>
+		<property name="scopeManager" ref="scopeManager" />
 	</bean>
 
 	<bean id="requestInitializer" class="org.hdiv.filter.DefaultRequestInitializer">
@@ -86,7 +85,8 @@
 		<property name="session" ref="sessionHDIV" />
 		<property name="dataValidator" ref="dataValidator" />
 		<property name="dataComposerFactory" ref="dataComposerFactory" />
-		<property name="urlProcessor" ref="basicUrlProcessor"/>
+		<property name="urlProcessor" ref="basicUrlProcessor" />
+		<property name="scopeManager" ref="scopeManager" />
 	</bean>
 
 	<bean id="validatorErrorHandler" class="org.hdiv.filter.DefaultValidatorErrorHandler">
@@ -102,12 +102,21 @@
 	<bean id="formUrlProcessor" class="org.hdiv.urlProcessor.FormUrlProcessor">
 		<property name="config" ref="config" />
 	</bean>
-	
+
 	<bean id="basicUrlProcessor" class="org.hdiv.urlProcessor.BasicUrlProcessor">
 		<property name="config" ref="config" />
 	</bean>
 
 	<!-- RegExp executor -->
 	<bean id="patternMatcherFactory" class="org.hdiv.regex.PatternMatcherFactory" />
+
+	<!-- Scope beans -->
+	<bean id="scopeManager" class="org.hdiv.scope.ScopeManager">
+		<property name="userStateScope" ref="userStateScope" />
+		<property name="appStateScope" ref="appStateScope" />
+	</bean>
+
+	<bean id="userStateScope" class="org.hdiv.scope.user.UserStateScope" />
+	<bean id="appStateScope" class="org.hdiv.scope.app.AppStateScope" />
 
 </beans>

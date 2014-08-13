@@ -23,6 +23,8 @@ import org.apache.commons.logging.LogFactory;
 import org.hdiv.config.HDIVConfig;
 import org.hdiv.config.Strategy;
 import org.hdiv.exception.HDIVException;
+import org.hdiv.scope.ScopeManager;
+import org.hdiv.scope.StateScope;
 import org.hdiv.session.ISession;
 import org.hdiv.util.EncodingUtil;
 import org.hdiv.util.HDIVErrorCodes;
@@ -42,27 +44,32 @@ public class StateUtil {
 	/**
 	 * Pattern to check if the memory strategy is being used
 	 */
-	private static final String MEMORY_PATTERN = "([0-9]+-){2}[A-Za-z0-9]+";
+	protected static final String MEMORY_PATTERN = "([0-9]+-){2}[A-Za-z0-9]+";
 
 	/**
 	 * Compiled MEMORY_PATTERN
 	 */
-	private Pattern memoryPattern = Pattern.compile(MEMORY_PATTERN);
+	protected Pattern memoryPattern = Pattern.compile(MEMORY_PATTERN);
 
 	/**
 	 * Utility methods for encoding
 	 */
-	private EncodingUtil encodingUtil;
+	protected EncodingUtil encodingUtil;
 
 	/**
 	 * Hdiv configuration for this app. Access to user defined strategy.
 	 */
-	private HDIVConfig config;
+	protected HDIVConfig config;
 
 	/**
 	 * User session wrapper.
 	 */
-	private ISession session;
+	protected ISession session;
+
+	/**
+	 * State scope manager.
+	 */
+	protected ScopeManager scopeManager;
 
 	/**
 	 * StateUtil initialization.
@@ -163,7 +170,16 @@ public class StateUtil {
 		} catch (NumberFormatException e) {
 			throw new HDIVException(HDIVErrorCodes.HDIV_PARAMETER_INCORRECT_VALUE);
 		}
-		restoredState = this.getStateFromSession(pageId, stateId);
+
+		// Obtain Scopes
+		StateScope stateScope = this.scopeManager.getStateScope(requestState);
+
+		if (stateScope != null) {
+			restoredState = stateScope.restoreState(stateId);
+		} else {
+
+			restoredState = this.getStateFromSession(pageId, stateId);
+		}
 
 		return restoredState;
 	}
@@ -230,5 +246,13 @@ public class StateUtil {
 	 */
 	public void setSession(ISession session) {
 		this.session = session;
+	}
+
+	/**
+	 * @param scopeManager
+	 *            the scopeManager to set
+	 */
+	public void setScopeManager(ScopeManager scopeManager) {
+		this.scopeManager = scopeManager;
 	}
 }
