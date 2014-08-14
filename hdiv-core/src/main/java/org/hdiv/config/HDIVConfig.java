@@ -92,8 +92,7 @@ public class HDIVConfig implements Serializable {
 	protected transient Map<PatternMatcher, List<PatternMatcher>> paramsWithoutValidation;
 
 	/**
-	 * Validations for editable fields (text/textarea) defined by the user in the hdiv-validations.xml configuration
-	 * file of Spring.
+	 * Validations for editable fields (text/textarea) defined by the user.
 	 */
 	protected HDIVValidations validations;
 
