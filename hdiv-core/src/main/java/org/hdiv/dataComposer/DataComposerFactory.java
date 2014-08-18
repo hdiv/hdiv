@@ -21,7 +21,7 @@ import org.hdiv.config.HDIVConfig;
 import org.hdiv.config.Strategy;
 import org.hdiv.exception.HDIVException;
 import org.hdiv.idGenerator.UidGenerator;
-import org.hdiv.scope.ScopeManager;
+import org.hdiv.scope.StateScopeManager;
 import org.hdiv.session.ISession;
 import org.hdiv.state.IPage;
 import org.hdiv.state.IState;
@@ -73,7 +73,7 @@ public class DataComposerFactory {
 	/**
 	 * State scope manager.
 	 */
-	protected ScopeManager scopeManager;
+	protected StateScopeManager stateScopeManager;
 
 	/**
 	 * Creates a new instance of DataComposer based on the defined strategy.
@@ -92,7 +92,7 @@ public class DataComposerFactory {
 			composer.setHdivConfig(this.config);
 			composer.setSession(this.session);
 			composer.setUidGenerator(this.uidGenerator);
-			composer.setScopeManager(this.scopeManager);
+			composer.setStateScopeManager(this.stateScopeManager);
 			composer.init();
 			dataComposer = composer;
 
@@ -101,7 +101,7 @@ public class DataComposerFactory {
 			composer.setHdivConfig(this.config);
 			composer.setSession(this.session);
 			composer.setUidGenerator(this.uidGenerator);
-			composer.setScopeManager(this.scopeManager);
+			composer.setStateScopeManager(this.stateScopeManager);
 			composer.setAllowedLength(this.allowedLength);
 			composer.setEncodingUtil(this.encodingUtil);
 			composer.init();
@@ -112,7 +112,7 @@ public class DataComposerFactory {
 			composer.setHdivConfig(this.config);
 			composer.setSession(this.session);
 			composer.setUidGenerator(this.uidGenerator);
-			composer.setScopeManager(this.scopeManager);
+			composer.setStateScopeManager(this.stateScopeManager);
 			composer.setAllowedLength(this.allowedLength);
 			composer.setEncodingUtil(this.encodingUtil);
 			composer.init();
@@ -221,11 +221,11 @@ public class DataComposerFactory {
 	}
 
 	/**
-	 * @param scopeManager
-	 *            the scopeManager to set
+	 * @param stateScopeManager
+	 *            the stateScopeManager to set
 	 */
-	public void setScopeManager(ScopeManager scopeManager) {
-		this.scopeManager = scopeManager;
+	public void setStateScopeManager(StateScopeManager stateScopeManager) {
+		this.stateScopeManager = stateScopeManager;
 	}
 
 }

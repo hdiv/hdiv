@@ -43,8 +43,8 @@ import org.hdiv.dataValidator.IDataValidator;
 import org.hdiv.dataValidator.IValidationResult;
 import org.hdiv.exception.HDIVException;
 import org.hdiv.logs.Logger;
-import org.hdiv.scope.ScopeManager;
 import org.hdiv.scope.StateScope;
+import org.hdiv.scope.StateScopeManager;
 import org.hdiv.session.ISession;
 import org.hdiv.state.IPage;
 import org.hdiv.state.IParameter;
@@ -115,7 +115,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	/**
 	 * State scope manager.
 	 */
-	protected ScopeManager scopeManager;
+	protected StateScopeManager stateScopeManager;
 
 	/**
 	 * Initialization of the objects needed for the validation process.
@@ -696,7 +696,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 				throw new HDIVException(HDIVErrorCodes.PAGE_ID_INCORRECT);
 			}
 
-			StateScope stateScope = this.scopeManager.getStateScope(value);
+			StateScope stateScope = this.stateScopeManager.getStateScope(value);
 			if (stateScope != null) {
 
 				String token = stateScope.getStateToken(stateId);
@@ -1207,11 +1207,11 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	}
 
 	/**
-	 * @param scopeManager
-	 *            the scopeManager to set
+	 * @param stateScopeManager
+	 *            the stateScopeManager to set
 	 */
-	public void setScopeManager(ScopeManager scopeManager) {
-		this.scopeManager = scopeManager;
+	public void setStateScopeManager(StateScopeManager stateScopeManager) {
+		this.stateScopeManager = stateScopeManager;
 	}
 
 }

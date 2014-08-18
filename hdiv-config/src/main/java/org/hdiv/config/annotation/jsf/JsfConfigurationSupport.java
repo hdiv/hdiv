@@ -27,7 +27,7 @@ import org.hdiv.filter.IValidationHelper;
 import org.hdiv.filter.JsfValidatorHelper;
 import org.hdiv.filter.ValidatorHelperRequest;
 import org.hdiv.logs.Logger;
-import org.hdiv.scope.ScopeManager;
+import org.hdiv.scope.StateScopeManager;
 import org.hdiv.session.ISession;
 import org.hdiv.state.StateUtil;
 import org.hdiv.urlProcessor.BasicUrlProcessor;
@@ -75,7 +75,7 @@ public class JsfConfigurationSupport {
 	private LinkUrlProcessor linkUrlProcessor;
 
 	@Autowired
-	private ScopeManager scopeManager;
+	private StateScopeManager stateScopeManager;
 
 	@Bean
 	@Primary
@@ -89,7 +89,7 @@ public class JsfConfigurationSupport {
 		validatorHelperRequest.setDataValidator(this.dataValidator);
 		validatorHelperRequest.setUrlProcessor(this.basicUrlProcessor);
 		validatorHelperRequest.setDataComposerFactory(this.dataComposerFactory);
-		validatorHelperRequest.setScopeManager(this.scopeManager);
+		validatorHelperRequest.setStateScopeManager(this.stateScopeManager);
 		validatorHelperRequest.init();
 		return validatorHelperRequest;
 	}

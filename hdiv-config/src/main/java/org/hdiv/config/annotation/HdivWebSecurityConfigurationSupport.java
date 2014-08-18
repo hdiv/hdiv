@@ -56,7 +56,8 @@ import org.hdiv.logs.Logger;
 import org.hdiv.logs.UserData;
 import org.hdiv.regex.PatternMatcher;
 import org.hdiv.regex.PatternMatcherFactory;
-import org.hdiv.scope.ScopeManager;
+import org.hdiv.scope.DefaultStateScopeManager;
+import org.hdiv.scope.StateScopeManager;
 import org.hdiv.scope.app.AppStateScope;
 import org.hdiv.scope.user.UserStateScope;
 import org.hdiv.session.ISession;
@@ -248,7 +249,7 @@ public abstract class HdivWebSecurityConfigurationSupport {
 		stateUtil.setEncodingUtil(encodingUtil());
 		stateUtil.setConfig(hdivConfig());
 		stateUtil.setSession(securitySession());
-		stateUtil.setScopeManager(securityScopeManager());
+		stateUtil.setStateScopeManager(stateScopeManager());
 		stateUtil.init();
 		return stateUtil;
 	}
@@ -261,9 +262,9 @@ public abstract class HdivWebSecurityConfigurationSupport {
 	}
 
 	@Bean
-	public ScopeManager securityScopeManager() {
+	public StateScopeManager stateScopeManager() {
 
-		ScopeManager scopeManager = new ScopeManager();
+		DefaultStateScopeManager scopeManager = new DefaultStateScopeManager();
 		scopeManager.setAppStateScope(new AppStateScope());
 		scopeManager.setUserStateScope(new UserStateScope());
 		return scopeManager;
@@ -277,7 +278,7 @@ public abstract class HdivWebSecurityConfigurationSupport {
 		dataComposerFactory.setEncodingUtil(encodingUtil());
 		dataComposerFactory.setStateUtil(stateUtil());
 		dataComposerFactory.setUidGenerator(uidGenerator());
-		dataComposerFactory.setScopeManager(securityScopeManager());
+		dataComposerFactory.setStateScopeManager(stateScopeManager());
 		return dataComposerFactory;
 	}
 
@@ -292,7 +293,7 @@ public abstract class HdivWebSecurityConfigurationSupport {
 		validatorHelperRequest.setDataValidator(dataValidator());
 		validatorHelperRequest.setUrlProcessor(basicUrlProcessor());
 		validatorHelperRequest.setDataComposerFactory(dataComposerFactory());
-		validatorHelperRequest.setScopeManager(securityScopeManager());
+		validatorHelperRequest.setStateScopeManager(stateScopeManager());
 		validatorHelperRequest.init();
 		return validatorHelperRequest;
 	}

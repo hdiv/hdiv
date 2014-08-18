@@ -24,8 +24,8 @@ import java.util.Stack;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hdiv.config.HDIVConfig;
-import org.hdiv.scope.ScopeManager;
 import org.hdiv.scope.StateScope;
+import org.hdiv.scope.StateScopeManager;
 import org.hdiv.state.IPage;
 import org.hdiv.state.IParameter;
 import org.hdiv.state.IState;
@@ -68,7 +68,7 @@ public class DataComposerMemory extends AbstractDataComposer {
 	/**
 	 * State scope manager.
 	 */
-	protected ScopeManager scopeManager;
+	protected StateScopeManager stateScopeManager;
 
 	/**
 	 * Stack to store existing scopes, active and inactive
@@ -648,7 +648,7 @@ public class DataComposerMemory extends AbstractDataComposer {
 
 		// Add to scope
 		String currentScope = this.getCurrentScope();
-		StateScope stateScope = this.scopeManager.getStateScopeByName(currentScope);
+		StateScope stateScope = this.stateScopeManager.getStateScopeByName(currentScope);
 		if (stateScope != null) {
 			// Its custom scope Scope
 			// TODO can't return the state id
@@ -676,7 +676,7 @@ public class DataComposerMemory extends AbstractDataComposer {
 
 		// Add to scope
 		String currentScope = this.getCurrentScope();
-		StateScope stateScope = this.scopeManager.getStateScopeByName(currentScope);
+		StateScope stateScope = this.stateScopeManager.getStateScopeByName(currentScope);
 		if (stateScope != null) {
 			// Its custom Scope
 			String stateId = stateScope.addState(state, this.getHdivStateSuffix());
@@ -770,11 +770,11 @@ public class DataComposerMemory extends AbstractDataComposer {
 	}
 
 	/**
-	 * @param scopeManager
-	 *            the scopeManager to set
+	 * @param stateScopeManager
+	 *            the stateScopeManager to set
 	 */
-	public void setScopeManager(ScopeManager scopeManager) {
-		this.scopeManager = scopeManager;
+	public void setStateScopeManager(StateScopeManager stateScopeManager) {
+		this.stateScopeManager = stateScopeManager;
 	}
 
 }

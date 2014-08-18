@@ -23,8 +23,8 @@ import org.apache.commons.logging.LogFactory;
 import org.hdiv.config.HDIVConfig;
 import org.hdiv.config.Strategy;
 import org.hdiv.exception.HDIVException;
-import org.hdiv.scope.ScopeManager;
 import org.hdiv.scope.StateScope;
+import org.hdiv.scope.StateScopeManager;
 import org.hdiv.session.ISession;
 import org.hdiv.util.EncodingUtil;
 import org.hdiv.util.HDIVErrorCodes;
@@ -69,7 +69,7 @@ public class StateUtil {
 	/**
 	 * State scope manager.
 	 */
-	protected ScopeManager scopeManager;
+	protected StateScopeManager stateScopeManager;
 
 	/**
 	 * StateUtil initialization.
@@ -172,7 +172,7 @@ public class StateUtil {
 		}
 
 		// Obtain Scopes
-		StateScope stateScope = this.scopeManager.getStateScope(requestState);
+		StateScope stateScope = this.stateScopeManager.getStateScope(requestState);
 
 		if (stateScope != null) {
 			restoredState = stateScope.restoreState(stateId);
@@ -249,10 +249,10 @@ public class StateUtil {
 	}
 
 	/**
-	 * @param scopeManager
-	 *            the scopeManager to set
+	 * @param stateScopeManager
+	 *            the stateScopeManager to set
 	 */
-	public void setScopeManager(ScopeManager scopeManager) {
-		this.scopeManager = scopeManager;
+	public void setStateScopeManager(StateScopeManager stateScopeManager) {
+		this.stateScopeManager = stateScopeManager;
 	}
 }

@@ -16,11 +16,11 @@
 package org.hdiv.scope;
 
 /**
- * Main class for scoped states management.
+ * Default implementation of {@link StateScopeManager}.
  * 
  * @since 2.1.7
  */
-public class ScopeManager {
+public class DefaultStateScopeManager implements StateScopeManager {
 
 	/**
 	 * 'user' scoped state manager.

@@ -15,7 +15,8 @@
  */
 package org.hdiv.config.annotation.builders;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import org.hdiv.config.HDIVConfig;
 import org.hdiv.regex.PatternMatcherFactory;

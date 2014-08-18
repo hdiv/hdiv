@@ -25,8 +25,8 @@ import org.hdiv.config.HDIVValidations;
 import org.hdiv.logs.IUserData;
 import org.hdiv.regex.DefaultPatternMatcher;
 import org.hdiv.regex.PatternMatcher;
-import org.hdiv.scope.ScopeManager;
 import org.hdiv.scope.StateScope;
+import org.hdiv.scope.StateScopeManager;
 import org.hdiv.session.StateCache;
 import org.hdiv.validator.IValidation;
 import org.hdiv.validator.Validation;
@@ -166,9 +166,9 @@ public class CustomSchemaTest extends TestCase {
 		assertEquals(CsrfRequestDataValueProcessor.class, inner.getClass());
 	}
 
-	public void testScopeManager() {
+	public void testStateScopeManager() {
 
-		ScopeManager scopeManager = this.context.getBean(ScopeManager.class);
+		StateScopeManager scopeManager = this.context.getBean(StateScopeManager.class);
 		assertNotNull(scopeManager);
 
 		StateScope appScope = scopeManager.getStateScopeByName("app");

@@ -15,27 +15,28 @@
  */
 package org.hdiv.scope;
 
-import org.hdiv.AbstractHDIVTestCase;
+/**
+ * Main interface for scoped states management.
+ * 
+ * @since 2.1.7
+ */
+public interface StateScopeManager {
 
-public class ScopeManagerTest extends AbstractHDIVTestCase {
+	/**
+	 * Obtain the correct {@link StateScope} based on a state identifier.
+	 * 
+	 * @param stateId
+	 *            State identifier
+	 * @return the corresponding {@link StateScope} or null
+	 */
+	StateScope getStateScope(String stateId);
 
-	private ScopeManager scopeManager;
-
-	protected void onSetUp() throws Exception {
-
-		this.scopeManager = this.getApplicationContext().getBean(ScopeManager.class);
-	}
-
-	public void testScope() {
-
-		StateScope scope = this.scopeManager.getStateScopeByName("app");
-		assertEquals("app", scope.getScopeName());
-
-		scope = this.scopeManager.getStateScopeByName("user");
-		assertEquals("user", scope.getScopeName());
-
-		scope = this.scopeManager.getStateScopeByName("");
-		assertNull(scope);
-	}
-
+	/**
+	 * Obtain the correct {@link StateScope} based on a scope name.
+	 * 
+	 * @param scopeName
+	 *            The name of the scope
+	 * @return the corresponding {@link StateScope} or null
+	 */
+	StateScope getStateScopeByName(String scopeName);
 }
