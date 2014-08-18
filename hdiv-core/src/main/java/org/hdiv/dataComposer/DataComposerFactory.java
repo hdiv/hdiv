@@ -139,7 +139,7 @@ public class DataComposerFactory {
 	protected void initDataComposer(IDataComposer dataComposer, HttpServletRequest request) {
 
 		String paramName = (String) request.getSession().getAttribute(Constants.MODIFY_STATE_HDIV_PARAMETER);
-		String preState = request.getParameter(paramName);
+		String preState = paramName != null ? request.getParameter(paramName) : null;
 		if (preState != null && preState.length() > 0) {
 
 			// We are modifying an existing state, preload dataComposer with it
