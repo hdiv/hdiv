@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.hdiv.state.IParameter;
 import org.hdiv.state.IState;
@@ -34,15 +35,11 @@ public class ScopedStateCache implements Serializable {
 
 	private static final long serialVersionUID = 5141785794691242839L;
 
-	// TODO make it configurable
-	private static final int MAX_STATES = 20;
+	private Map<Integer, StateAndToken> states = new HashMap<Integer, StateAndToken>();
 
-	// TODO maybe use LRU map to delete not used states first
-	private Map<Integer, StateAndToken> states = new HashMap<Integer, StateAndToken>(MAX_STATES);
+	private AtomicInteger index = new AtomicInteger();
 
-	private int index = 0;
-
-	public synchronized String addState(IState state, String token) {
+	public String addState(IState state, String token) {
 
 		Integer previousStateId = this.existEqualState(state);
 		if (previousStateId != null) {
@@ -50,13 +47,8 @@ public class ScopedStateCache implements Serializable {
 			return previousStateId + "-" + previousState.getToken();
 		}
 
-		if (index == MAX_STATES) {
-			index = 0;
-		}
-
-		String id = index + "";
-		states.put(index, new StateAndToken(state, token));
-		index++;
+		int id = this.index.getAndIncrement();
+		states.put(id, new StateAndToken(state, token));
 
 		return id + "-" + token;
 	}
