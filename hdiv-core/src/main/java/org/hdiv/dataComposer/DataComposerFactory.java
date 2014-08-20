@@ -21,11 +21,11 @@ import org.hdiv.config.HDIVConfig;
 import org.hdiv.config.Strategy;
 import org.hdiv.exception.HDIVException;
 import org.hdiv.idGenerator.UidGenerator;
-import org.hdiv.scope.StateScopeManager;
 import org.hdiv.session.ISession;
 import org.hdiv.state.IPage;
 import org.hdiv.state.IState;
 import org.hdiv.state.StateUtil;
+import org.hdiv.state.scope.StateScopeManager;
 import org.hdiv.util.Constants;
 import org.hdiv.util.EncodingUtil;
 import org.hdiv.util.HDIVUtil;
@@ -162,6 +162,13 @@ public class DataComposerFactory {
 			dataComposer.startPage(page);
 		} else {
 			dataComposer.startPage();
+		}
+
+		// Detect if request url is configured as a long living page
+		String url = request.getRequestURI().substring(request.getContextPath().length());
+		String scope = this.config.isLongLivingPages(url);
+		if (scope != null) {
+			dataComposer.startScope(scope);
 		}
 	}
 

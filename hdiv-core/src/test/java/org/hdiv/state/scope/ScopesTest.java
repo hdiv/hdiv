@@ -13,22 +13,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.hdiv.scope;
+package org.hdiv.state.scope;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.hdiv.AbstractHDIVTestCase;
+import org.hdiv.dataComposer.DataComposerFactory;
+import org.hdiv.dataComposer.DataComposerMemory;
 import org.hdiv.dataComposer.IDataComposer;
+import org.hdiv.state.IState;
 import org.hdiv.urlProcessor.LinkUrlProcessor;
 import org.hdiv.util.HDIVUtil;
+import org.springframework.mock.web.MockHttpServletRequest;
 
 public class ScopesTest extends AbstractHDIVTestCase {
 
 	private LinkUrlProcessor linkUrlProcessor;
 
+	private DataComposerFactory dataComposerFactory;
+
+	private StateScopeManager stateScopeManager;
+
 	protected void onSetUp() throws Exception {
 
 		this.linkUrlProcessor = this.getApplicationContext().getBean(LinkUrlProcessor.class);
+		this.dataComposerFactory = this.getApplicationContext().getBean(DataComposerFactory.class);
+		this.stateScopeManager = this.getApplicationContext().getBean(StateScopeManager.class);
 	}
 
 	public void testScopeDifferent() {
@@ -95,6 +105,31 @@ public class ScopesTest extends AbstractHDIVTestCase {
 
 		// States are equal
 		assertTrue(getState(result1).equals(getState(result2)));
+	}
+
+	public void testScopedPage() {
+
+		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
+		// Put a uri that is configured as a scoped page
+		request.setRequestURI("/scopedPage/user.html");
+		IDataComposer dataComposer = this.dataComposerFactory.newInstance(request);
+		HDIVUtil.setDataComposer(dataComposer, request);
+		assertTrue(dataComposer instanceof DataComposerMemory);
+
+		dataComposer.startPage();
+		dataComposer.beginRequest("test.do");
+		dataComposer.compose("test.do", "parameter1", "2", false);
+		dataComposer.compose("test.do", "parameter1", "2", false);
+		String stateId = dataComposer.endRequest();
+
+		assertTrue(stateId.startsWith("U-"));
+
+		StateScope scope = this.stateScopeManager.getStateScope(stateId);
+		assertEquals("user-session", scope.getScopeName());
+		int id = Integer.parseInt(stateId.substring(stateId.indexOf("-") + 1, stateId.indexOf("-") + 2));
+		IState state = scope.restoreState(id);
+		assertEquals("test.do", state.getAction());
+
 	}
 
 	private String getState(String url) {

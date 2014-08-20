@@ -23,9 +23,9 @@ import org.apache.commons.logging.LogFactory;
 import org.hdiv.config.HDIVConfig;
 import org.hdiv.config.Strategy;
 import org.hdiv.exception.HDIVException;
-import org.hdiv.scope.StateScope;
-import org.hdiv.scope.StateScopeManager;
 import org.hdiv.session.ISession;
+import org.hdiv.state.scope.StateScope;
+import org.hdiv.state.scope.StateScopeManager;
 import org.hdiv.util.EncodingUtil;
 import org.hdiv.util.HDIVErrorCodes;
 

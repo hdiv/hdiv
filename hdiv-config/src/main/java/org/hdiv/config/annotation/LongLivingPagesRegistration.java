@@ -15,46 +15,52 @@
  */
 package org.hdiv.config.annotation;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
-import org.hdiv.config.StartPage;
+import org.hdiv.state.scope.StateScope;
+import org.hdiv.state.scope.StateScopeType;
 import org.springframework.util.Assert;
 
 /**
- * Contains the data of one URL exclusion.
+ * Contains the data of a new long living page.
  * 
  * @since 2.1.7
  */
-public class UrlExclusionRegistration {
+public class LongLivingPagesRegistration {
 
 	private String[] urlPatterns;
 
-	private String method;// XXX Better create an enum?
+	private StateScopeType scopeType = StateScopeType.USER_SESSION;
 
-	public UrlExclusionRegistration(String[] urlPatterns) {
+	public LongLivingPagesRegistration(String[] urlPatterns) {
 		Assert.notEmpty(urlPatterns, "A URL path is required to create a start page.");
 		this.urlPatterns = urlPatterns;
 	}
 
 	/**
-	 * HTTP method to apply to the url exclusion. If no method is configured, defaults to all methods.
+	 * <p>
+	 * Long living pages store their states in a particular {@link StateScope}.
+	 * </p>
+	 * <p>
+	 * Determine which {@link StateScopeType} to use.
+	 * </p>
 	 * 
-	 * @param method
-	 *            HTTP method
+	 * @param scopeType
+	 *            Scope to use.
 	 */
-	public void method(String method) {
-		Assert.notNull(method, "Method is required");
-		this.method = method;
+	public void scope(StateScopeType scopeType) {
+		Assert.notNull(scopeType, "Scope is required");
+		this.scopeType = scopeType;
 	}
 
-	protected List<StartPage> getExclusions() {
+	protected Map<String, String> getLongLivingPages() {
 
-		List<StartPage> exclusions = new ArrayList<StartPage>();
+		Map<String, String> pages = new HashMap<String, String>();
 		for (String pattern : this.urlPatterns) {
-			StartPage startPage = new StartPage(this.method, pattern);
-			exclusions.add(startPage);
+
+			pages.put(pattern, scopeType.getName());
 		}
-		return exclusions;
+		return pages;
 	}
 }

@@ -46,6 +46,18 @@ public class ExclusionRegistry {
 		this.patternMatcherFactory = patternMatcherFactory;
 	}
 
+	/**
+	 * <p>
+	 * Configure one or more url exclusion.
+	 * </p>
+	 * <p>
+	 * Excluded urls are not validated by HDIV.
+	 * </p>
+	 * 
+	 * @param urlPatterns
+	 *            Url patterns.
+	 * @return more configuration options
+	 */
 	public UrlExclusionRegistration addUrlExclusions(String... urlPatterns) {
 		Assert.notEmpty(urlPatterns, "Url patterns are required");
 		UrlExclusionRegistration registration = new UrlExclusionRegistration(urlPatterns);
@@ -53,6 +65,18 @@ public class ExclusionRegistry {
 		return registration;
 	}
 
+	/**
+	 * <p>
+	 * Configure one or more parameter exclusion.
+	 * </p>
+	 * <p>
+	 * Excluded parameters are not validated by HDIV.
+	 * </p>
+	 * 
+	 * @param parameterPatterns
+	 *            Parameter name patterns.
+	 * @return more configuration options
+	 */
 	public ParamExclusionRegistration addParamExclusions(String... parameterPatterns) {
 		Assert.notEmpty(parameterPatterns, "Parameter patterns are required");
 		ParamExclusionRegistration registration = new ParamExclusionRegistration(parameterPatterns);

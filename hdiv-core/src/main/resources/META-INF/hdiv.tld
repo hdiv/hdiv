@@ -40,15 +40,15 @@
 	</tag>
 	<tag>
 		<description>
-			Define state scope in which store states.
+			The link and forms inside the tag never expire.
 		</description>
-		<name>scope</name>
-		<tag-class>org.hdiv.tags.ScopeTag</tag-class>
+		<name>longLivingStates</name>
+		<tag-class>org.hdiv.tags.LongLivingStatesTag</tag-class>
 		<body-content>JSP</body-content>
 		<attribute>
-			<description>The type of the scope.</description>
-			<name>type</name>
-			<required>true</required>
+			<description>The scope in which to store the states.</description>
+			<name>scope</name>
+			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 	</tag>

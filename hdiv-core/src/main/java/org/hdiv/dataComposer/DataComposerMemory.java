@@ -24,13 +24,13 @@ import java.util.Stack;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hdiv.config.HDIVConfig;
-import org.hdiv.scope.StateScope;
-import org.hdiv.scope.StateScopeManager;
 import org.hdiv.state.IPage;
 import org.hdiv.state.IParameter;
 import org.hdiv.state.IState;
 import org.hdiv.state.Parameter;
 import org.hdiv.state.State;
+import org.hdiv.state.scope.StateScope;
+import org.hdiv.state.scope.StateScopeManager;
 import org.hdiv.util.Constants;
 import org.springframework.web.util.HtmlUtils;
 

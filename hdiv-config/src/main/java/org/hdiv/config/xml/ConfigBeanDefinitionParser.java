@@ -49,13 +49,13 @@ import org.hdiv.logs.Logger;
 import org.hdiv.logs.UserData;
 import org.hdiv.regex.PatternMatcher;
 import org.hdiv.regex.PatternMatcherFactory;
-import org.hdiv.scope.DefaultStateScopeManager;
-import org.hdiv.scope.app.AppStateScope;
-import org.hdiv.scope.user.UserStateScope;
 import org.hdiv.session.ISession;
 import org.hdiv.session.SessionHDIV;
 import org.hdiv.session.StateCache;
 import org.hdiv.state.StateUtil;
+import org.hdiv.state.scope.AppStateScope;
+import org.hdiv.state.scope.DefaultStateScopeManager;
+import org.hdiv.state.scope.UserSessionStateScope;
 import org.hdiv.urlProcessor.BasicUrlProcessor;
 import org.hdiv.urlProcessor.FormUrlProcessor;
 import org.hdiv.urlProcessor.LinkUrlProcessor;
@@ -69,7 +69,9 @@ import org.hdiv.web.servlet.support.GrailsHdivRequestDataValueProcessor;
 import org.hdiv.web.servlet.support.HdivRequestDataValueProcessor;
 import org.hdiv.web.servlet.support.ThymeleafHdivRequestDataValueProcessor;
 import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.beans.factory.config.ListFactoryBean;
 import org.springframework.beans.factory.config.RuntimeBeanReference;
+import org.springframework.beans.factory.support.ManagedList;
 import org.springframework.beans.factory.support.RootBeanDefinition;
 import org.springframework.beans.factory.xml.BeanDefinitionParser;
 import org.springframework.beans.factory.xml.ParserContext;
@@ -149,6 +151,11 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 	 * List of StartPage objects
 	 */
 	protected List<StartPage> startPages = new ArrayList<StartPage>();
+
+	/**
+	 * Long-living pages configured by the user
+	 */
+	protected Map<String, String> longLivingPages = new HashMap<String, String>();
 
 	/* Bean references */
 	protected RuntimeBeanReference patternMatcherFactoryRef;
@@ -400,10 +407,17 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		RootBeanDefinition bean = new RootBeanDefinition(DefaultStateScopeManager.class);
 		bean.setSource(source);
 		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
-		bean.getPropertyValues().addPropertyValue("appStateScope",
-				this.createSimpleBean(element, source, parserContext, AppStateScope.class));
-		bean.getPropertyValues().addPropertyValue("userStateScope",
-				this.createSimpleBean(element, source, parserContext, UserStateScope.class));
+
+		ManagedList<RuntimeBeanReference> defs = new ManagedList<RuntimeBeanReference>();
+		defs.add(this.createSimpleBean(element, source, parserContext, UserSessionStateScope.class));
+		defs.add(this.createSimpleBean(element, source, parserContext, AppStateScope.class));
+
+		RootBeanDefinition listBean = new RootBeanDefinition(ListFactoryBean.class);
+		listBean.setSource(source);
+		listBean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
+		listBean.getPropertyValues().addPropertyValue("sourceList", defs);
+
+		bean.getConstructorArgumentValues().addGenericArgumentValue(listBean);
 		String name = parserContext.getReaderContext().generateBeanName(bean);
 		parserContext.getRegistry().registerBeanDefinition(name, bean);
 		return new RuntimeBeanReference(name);
@@ -801,6 +815,8 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 					this.processParamsWithoutValidation(node, bean);
 				} else if (node.getLocalName().equalsIgnoreCase("sessionExpired")) {
 					this.processSessionExpired(node, bean);
+				} else if (node.getLocalName().equalsIgnoreCase("longLivingPages")) {
+					this.processLongLivingPages(node, bean);
 				}
 			}
 		}
@@ -861,6 +877,22 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 			bean.getPropertyValues().addPropertyValue("sessionExpiredHomePage", homePage);
 		}
 
+	}
+
+	protected void processLongLivingPages(Node node, RootBeanDefinition bean) {
+
+		NamedNodeMap attributes = node.getAttributes();
+		Node named = attributes.getNamedItem("scope");
+		String scope = named.getTextContent();
+
+		String value = node.getTextContent();
+
+		List<String> patterns = this.convertToList(value);
+		for (String pattern : patterns) {
+			this.longLivingPages.put(pattern, scope);
+		}
+
+		bean.getPropertyValues().addPropertyValue("longLivingPages", this.longLivingPages);
 	}
 
 	protected void processMapping(Node node, Map<String, List<String>> map) {

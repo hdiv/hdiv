@@ -56,15 +56,16 @@ import org.hdiv.logs.Logger;
 import org.hdiv.logs.UserData;
 import org.hdiv.regex.PatternMatcher;
 import org.hdiv.regex.PatternMatcherFactory;
-import org.hdiv.scope.DefaultStateScopeManager;
-import org.hdiv.scope.StateScopeManager;
-import org.hdiv.scope.app.AppStateScope;
-import org.hdiv.scope.user.UserStateScope;
 import org.hdiv.session.ISession;
 import org.hdiv.session.IStateCache;
 import org.hdiv.session.SessionHDIV;
 import org.hdiv.session.StateCache;
 import org.hdiv.state.StateUtil;
+import org.hdiv.state.scope.AppStateScope;
+import org.hdiv.state.scope.DefaultStateScopeManager;
+import org.hdiv.state.scope.StateScope;
+import org.hdiv.state.scope.StateScopeManager;
+import org.hdiv.state.scope.UserSessionStateScope;
 import org.hdiv.urlProcessor.BasicUrlProcessor;
 import org.hdiv.urlProcessor.FormUrlProcessor;
 import org.hdiv.urlProcessor.LinkUrlProcessor;
@@ -109,6 +110,12 @@ public abstract class HdivWebSecurityConfigurationSupport {
 		Map<String, List<String>> paramsWithoutValidation = exclusionRegistry.getParamExclusionsForUrl();
 		config.setParamsWithoutValidation(paramsWithoutValidation);
 
+		// Long living pages
+		LongLivingPagesRegistry longLivingPagesRegistry = new LongLivingPagesRegistry();
+		this.addLongLivingPages(longLivingPagesRegistry);
+		Map<String, String> longLivingPages = longLivingPagesRegistry.getLongLivingPages();
+		config.setLongLivingPages(longLivingPages);
+
 		return config;
 	}
 
@@ -121,6 +128,8 @@ public abstract class HdivWebSecurityConfigurationSupport {
 	abstract void configure(SecurityConfigBuilder securityConfigBuilder);
 
 	abstract void addExclusions(ExclusionRegistry registry);
+
+	abstract void addLongLivingPages(LongLivingPagesRegistry registry);
 
 	@Bean
 	public IApplication securityApplication() {
@@ -263,11 +272,21 @@ public abstract class HdivWebSecurityConfigurationSupport {
 
 	@Bean
 	public StateScopeManager stateScopeManager() {
-
-		DefaultStateScopeManager scopeManager = new DefaultStateScopeManager();
-		scopeManager.setAppStateScope(new AppStateScope());
-		scopeManager.setUserStateScope(new UserStateScope());
+		List<StateScope> stateScopes = new ArrayList<StateScope>();
+		stateScopes.add(userSessionStateScope());
+		stateScopes.add(appStateScope());
+		DefaultStateScopeManager scopeManager = new DefaultStateScopeManager(stateScopes);
 		return scopeManager;
+	}
+
+	@Bean
+	public UserSessionStateScope userSessionStateScope() {
+		return new UserSessionStateScope();
+	}
+
+	@Bean
+	public AppStateScope appStateScope() {
+		return new AppStateScope();
 	}
 
 	@Bean

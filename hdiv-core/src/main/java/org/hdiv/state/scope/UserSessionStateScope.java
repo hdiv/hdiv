@@ -13,13 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.hdiv.scope.user;
+package org.hdiv.state.scope;
 
 import javax.servlet.http.HttpSession;
 
-import org.hdiv.scope.AbstractStateScope;
-import org.hdiv.scope.ScopedStateCache;
-import org.hdiv.scope.StateScope;
 import org.hdiv.util.HDIVUtil;
 
 /**
@@ -32,21 +29,18 @@ import org.hdiv.util.HDIVUtil;
  * 
  * @since 2.1.7
  */
-public class UserStateScope extends AbstractStateScope {
+public class UserSessionStateScope extends AbstractStateScope {
 
 	private static final String USER_STATE_CACHE_ATTR = ScopedStateCache.class.getCanonicalName();
 
-	private static final String SCOPE_NAME = "user";
-
-	private static final String SCOPE_PREFIX = "U";
+	protected StateScopeType scopeType = StateScopeType.USER_SESSION;
 
 	public String getScopeName() {
-
-		return SCOPE_NAME;
+		return this.scopeType.getName();
 	}
 
 	public String getScopePrefix() {
-		return SCOPE_PREFIX;
+		return this.scopeType.getPrefix();
 	}
 
 	public ScopedStateCache getStateCache() {
@@ -63,7 +57,7 @@ public class UserStateScope extends AbstractStateScope {
 	 * 
 	 * @return HttpSession instance
 	 */
-	private HttpSession getHttpSession() {
+	protected HttpSession getHttpSession() {
 		return HDIVUtil.getHttpSession();
 	}
 

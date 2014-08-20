@@ -175,6 +175,13 @@ public class HDIVConfig implements Serializable {
 	protected boolean reuseExistingPageInAjaxRequest = false;
 
 	/**
+	 * Pages whose link and forms never expire.
+	 * 
+	 * @since 2.1.7
+	 */
+	protected Map<PatternMatcher, String> longLivingPages = new HashMap<PatternMatcher, String>();
+
+	/**
 	 * @param strategy
 	 *            the strategy to set
 	 */
@@ -313,6 +320,26 @@ public class HDIVConfig implements Serializable {
 			}
 		}
 		return false;
+	}
+
+	/**
+	 * Calculates if the provided url path is configured as a long-living pages.
+	 * 
+	 * @param url
+	 *            url path
+	 * @return Scope name or null if it is not a long-living page
+	 */
+	public String isLongLivingPages(String url) {
+
+		for (Map.Entry<PatternMatcher, String> page : this.longLivingPages.entrySet()) {
+
+			PatternMatcher m = page.getKey();
+
+			if (m.matches(url)) {
+				return page.getValue();
+			}
+		}
+		return null;
 	}
 
 	/**
@@ -685,6 +712,19 @@ public class HDIVConfig implements Serializable {
 		this.modifyStateParameterName = modifyStateParameterName;
 	}
 
+	/**
+	 * @param longLivingPages
+	 *            the longLivingPages to set
+	 */
+	public void setLongLivingPages(Map<String, String> longLivingPages) {
+
+		for (Map.Entry<String, String> page : longLivingPages.entrySet()) {
+			PatternMatcher pattern = this.patternMatcherFactory.getPatternMatcher(page.getKey());
+			String scope = page.getValue();
+			this.longLivingPages.put(pattern, scope);
+		}
+	}
+
 	public String toString() {
 		StringBuffer result = new StringBuffer().append("");
 		result = result.append(" Confidentiality=").append(this.getConfidentiality());
@@ -701,6 +741,7 @@ public class HDIVConfig implements Serializable {
 		result.append(" startPages=").append(this.startPages);
 		result.append(" startParameters=").append(this.startParameters);
 		result.append(" paramsWithoutValidation=").append(this.paramsWithoutValidation);
+		result.append(" longLivingPages=").append(this.longLivingPages);
 		result.append(" debugMode=").append(this.debugMode);
 		result.append(" showErrorPageOnEditableValidation=").append(this.showErrorPageOnEditableValidation);
 

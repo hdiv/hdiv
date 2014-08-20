@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.hdiv.config.annotation.ExclusionRegistry;
+import org.hdiv.config.annotation.LongLivingPagesRegistry;
 import org.hdiv.config.annotation.RuleRegistry;
 import org.hdiv.config.annotation.ValidationConfigurer;
 import org.hdiv.config.annotation.builders.SecurityConfigBuilder;
@@ -45,6 +46,12 @@ public class HdivWebSecurityConfigurerComposite implements HdivWebSecurityConfig
 	public void addExclusions(ExclusionRegistry registry) {
 		for (HdivWebSecurityConfigurer delegate : this.delegates) {
 			delegate.addExclusions(registry);
+		}
+	}
+
+	public void addLongLivingPages(LongLivingPagesRegistry registry) {
+		for (HdivWebSecurityConfigurer delegate : this.delegates) {
+			delegate.addLongLivingPages(registry);
 		}
 	}
 

@@ -25,6 +25,7 @@ import org.hdiv.config.HDIVValidations;
 import org.hdiv.config.annotation.builders.SecurityConfigBuilder;
 import org.hdiv.config.annotation.configuration.HdivWebSecurityConfigurerAdapter;
 import org.hdiv.regex.DefaultPatternMatcher;
+import org.hdiv.state.scope.StateScopeType;
 import org.hdiv.validator.IValidation;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -52,6 +53,13 @@ public class HdivWebSecurityTest {
 			
 			registry.addParamExclusions("param1", "param2").forUrls("/attacks/.*");
 			registry.addParamExclusions("param3", "param4");
+		}
+		
+		@Override
+		public void addLongLivingPages(LongLivingPagesRegistry registry) {
+			
+			registry.addLongLivingPages("/longLivingPage.html", "/longLiving/.*").scope(StateScopeType.APP);
+			registry.addLongLivingPages("/longLivingPageApp.html");
 		}
 
 		@Override
@@ -105,5 +113,13 @@ public class HdivWebSecurityTest {
 
 		urlValidations = validations.getUrls().get(new DefaultPatternMatcher("/safetext/.*"));
 		assertEquals(6, urlValidations.size());// Defaults
+	}
+	
+	@Test
+	public void addLongLivingPages(){
+		
+		assertEquals("app", config.isLongLivingPages("/longLiving/sample.html"));
+		assertEquals("user-session", config.isLongLivingPages("/longLivingPageApp.html"));
+		assertEquals(null, config.isLongLivingPages("/noLongLiving.html"));
 	}
 }

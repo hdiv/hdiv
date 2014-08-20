@@ -16,6 +16,7 @@
 package org.hdiv.config.annotation.configuration;
 
 import org.hdiv.config.annotation.ExclusionRegistry;
+import org.hdiv.config.annotation.LongLivingPagesRegistry;
 import org.hdiv.config.annotation.RuleRegistry;
 import org.hdiv.config.annotation.ValidationConfigurer;
 import org.hdiv.config.annotation.builders.SecurityConfigBuilder;
@@ -33,6 +34,10 @@ public class HdivWebSecurityConfigurerAdapter implements HdivWebSecurityConfigur
 
 	}
 
+	public void addLongLivingPages(LongLivingPagesRegistry registry) {
+
+	}
+
 	public void addRules(RuleRegistry registry) {
 
 	}
@@ -40,4 +45,5 @@ public class HdivWebSecurityConfigurerAdapter implements HdivWebSecurityConfigur
 	public void configureEditableValidation(ValidationConfigurer validationConfigurer) {
 
 	}
+
 }

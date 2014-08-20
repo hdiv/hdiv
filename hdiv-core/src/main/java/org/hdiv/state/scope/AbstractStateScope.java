@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.hdiv.scope;
+package org.hdiv.state.scope;
 
 import org.hdiv.state.IState;
 

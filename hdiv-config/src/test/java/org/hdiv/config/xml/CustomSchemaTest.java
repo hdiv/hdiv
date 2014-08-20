@@ -25,9 +25,9 @@ import org.hdiv.config.HDIVValidations;
 import org.hdiv.logs.IUserData;
 import org.hdiv.regex.DefaultPatternMatcher;
 import org.hdiv.regex.PatternMatcher;
-import org.hdiv.scope.StateScope;
-import org.hdiv.scope.StateScopeManager;
 import org.hdiv.session.StateCache;
+import org.hdiv.state.scope.StateScope;
+import org.hdiv.state.scope.StateScopeManager;
 import org.hdiv.validator.IValidation;
 import org.hdiv.validator.Validation;
 import org.hdiv.web.servlet.support.HdivRequestDataValueProcessor;
@@ -172,10 +172,28 @@ public class CustomSchemaTest extends TestCase {
 		assertNotNull(scopeManager);
 
 		StateScope appScope = scopeManager.getStateScopeByName("app");
-		StateScope sessionScope = scopeManager.getStateScopeByName("user");
+		StateScope sessionScope = scopeManager.getStateScopeByName("user-session");
 
 		assertNotNull(appScope);
 		assertNotNull(sessionScope);
+	}
+
+	public void testIsLongLivingPages() {
+
+		HDIVConfig hdivConfig = this.context.getBean(HDIVConfig.class);
+		assertNotNull(hdivConfig);
+
+		String result = hdivConfig.isLongLivingPages("/default.html");
+		assertEquals("user-session", result);
+
+		result = hdivConfig.isLongLivingPages("/user.html");
+		assertEquals("user-session", result);
+
+		result = hdivConfig.isLongLivingPages("/app.html");
+		assertEquals("app", result);
+
+		result = hdivConfig.isLongLivingPages("/other.html");
+		assertNull(result);
 	}
 
 }

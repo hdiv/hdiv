@@ -13,13 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.hdiv.scope.app;
+package org.hdiv.state.scope;
 
 import javax.servlet.ServletContext;
 
-import org.hdiv.scope.AbstractStateScope;
-import org.hdiv.scope.ScopedStateCache;
-import org.hdiv.scope.StateScope;
 import org.springframework.web.context.ServletContextAware;
 
 /**
@@ -36,18 +33,16 @@ public class AppStateScope extends AbstractStateScope implements ServletContextA
 
 	private static final String APP_STATE_CONTEXT_ATTR = ScopedStateCache.class.getCanonicalName();
 
-	private static final String SCOPE_NAME = "app";
+	protected StateScopeType scopeType = StateScopeType.APP;
 
-	private static final String SCOPE_PREFIX = "A";
-
-	private ServletContext servletContext;
+	protected ServletContext servletContext;
 
 	public String getScopeName() {
-		return SCOPE_NAME;
+		return this.scopeType.getName();
 	}
 
 	public String getScopePrefix() {
-		return SCOPE_PREFIX;
+		return this.scopeType.getPrefix();
 	}
 
 	public ScopedStateCache getStateCache() {

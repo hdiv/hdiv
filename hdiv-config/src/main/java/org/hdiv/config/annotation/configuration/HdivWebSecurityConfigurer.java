@@ -16,6 +16,7 @@
 package org.hdiv.config.annotation.configuration;
 
 import org.hdiv.config.annotation.ExclusionRegistry;
+import org.hdiv.config.annotation.LongLivingPagesRegistry;
 import org.hdiv.config.annotation.RuleRegistry;
 import org.hdiv.config.annotation.ValidationConfigurer;
 import org.hdiv.config.annotation.builders.SecurityConfigBuilder;
@@ -25,6 +26,8 @@ public interface HdivWebSecurityConfigurer {
 	void configure(SecurityConfigBuilder securityConfigBuilder);
 
 	void addExclusions(ExclusionRegistry registry);
+
+	void addLongLivingPages(LongLivingPagesRegistry registry);
 
 	void addRules(RuleRegistry registry);
 

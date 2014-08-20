@@ -90,7 +90,8 @@
 		</xsd:annotation>
 		<xsd:complexType>
 			<xsd:sequence>
-				<xsd:element name="sessionExpired" minOccurs="0" maxOccurs="1">
+				<xsd:element name="sessionExpired" minOccurs="0"
+					maxOccurs="1">
 					<xsd:annotation>
 						<xsd:documentation><![CDATA[
 	Configuration for Session Expiration related cases. 
@@ -165,6 +166,24 @@
 								</xsd:complexType>
 							</xsd:element>
 						</xsd:sequence>
+					</xsd:complexType>
+				</xsd:element>
+				<xsd:element name="longLivingPages" minOccurs="0"
+					maxOccurs="unbounded">
+					<xsd:annotation>
+						<xsd:documentation><![CDATA[
+				Pages whose link and forms never expire. 
+									]]></xsd:documentation>
+					</xsd:annotation>
+					<xsd:complexType mixed="true">
+						<xsd:attribute name="scope" type="stateScopeTypes"
+							default="user-session">
+							<xsd:annotation>
+								<xsd:documentation><![CDATA[
+				Name of the scope to configure for this particular long-living page. Defaults to 'user-session' scope.
+											]]></xsd:documentation>
+							</xsd:annotation>
+						</xsd:attribute>
 					</xsd:complexType>
 				</xsd:element>
 			</xsd:sequence>
@@ -264,15 +283,16 @@
 					]]></xsd:documentation>
 				</xsd:annotation>
 			</xsd:attribute>
-			<xsd:attribute name="showErrorPageOnEditableValidation" type="xsd:boolean"
-				default="false">
+			<xsd:attribute name="showErrorPageOnEditableValidation"
+				type="xsd:boolean" default="false">
 				<xsd:annotation>
 					<xsd:documentation><![CDATA[
 	Show error page on Editable Validation errors. Defaults to false.
 					]]></xsd:documentation>
 				</xsd:annotation>
 			</xsd:attribute>
-			<xsd:attribute name="reuseExistingPageInAjaxRequest" type="xsd:boolean" default="false">
+			<xsd:attribute name="reuseExistingPageInAjaxRequest"
+				type="xsd:boolean" default="false">
 				<xsd:annotation>
 					<xsd:documentation><![CDATA[
 	Reuse previous page when an AJAX request is received and don't create a new one. Defaults to false.
@@ -287,6 +307,13 @@
 			<xsd:enumeration value="memory" />
 			<xsd:enumeration value="cipher" />
 			<xsd:enumeration value="hash" />
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<xsd:simpleType name="stateScopeTypes">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="user-session" />
+			<xsd:enumeration value="app" />
 		</xsd:restriction>
 	</xsd:simpleType>
 

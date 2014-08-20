@@ -64,6 +64,12 @@ public class DelegatingHdivWebSecurityConfiguration extends HdivWebSecurityConfi
 	}
 
 	@Override
+	void addLongLivingPages(LongLivingPagesRegistry registry) {
+
+		this.configurers.addLongLivingPages(registry);
+	}
+
+	@Override
 	public void addRules(RuleRegistry registry) {
 
 		this.configurers.addRules(registry);

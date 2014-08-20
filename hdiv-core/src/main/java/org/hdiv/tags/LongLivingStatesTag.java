@@ -19,14 +19,15 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.TagSupport;
 
 import org.hdiv.dataComposer.IDataComposer;
+import org.hdiv.state.scope.StateScopeType;
 import org.hdiv.util.HDIVUtil;
 
 /**
- * Tag to define the scope to use.
+ * Tag to mark a part of the page as long living page.
  * 
  * @since 2.1.7
  */
-public class ScopeTag extends TagSupport {
+public class LongLivingStatesTag extends TagSupport {
 
 	/**
 	 * Universal version identifier. Deserialization uses this number to ensure that a loaded class corresponds exactly
@@ -35,13 +36,13 @@ public class ScopeTag extends TagSupport {
 	private static final long serialVersionUID = 4998045113101933843L;
 
 	/**
-	 * Sets the type <code>type</code> defined in the tag.
+	 * Sets the type <code>scope</code> defined in the tag.
 	 * 
-	 * @param type
-	 *            Scope type
+	 * @param scope
+	 *            Scope name
 	 */
-	public void setType(String type) {
-		this.setValue("type", type);
+	public void setScope(String scope) {
+		this.setValue("scope", scope);
 	}
 
 	@Override
@@ -50,9 +51,13 @@ public class ScopeTag extends TagSupport {
 		IDataComposer dataComposer = (IDataComposer) this.pageContext.getRequest().getAttribute(
 				HDIVUtil.DATACOMPOSER_REQUEST_KEY);
 
-		String type = (String) this.getValue("type");
+		String scope = (String) this.getValue("scope");
+		if (scope == null) {
+			// Default scope
+			scope = StateScopeType.USER_SESSION.getName();
+		}
 
-		dataComposer.startScope(type);
+		dataComposer.startScope(scope);
 
 		return EVAL_BODY_INCLUDE;
 	}

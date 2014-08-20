@@ -31,6 +31,13 @@ public class ValidationConfigurer {
 
 	private List<ValidationConfig> validationConfigs = new ArrayList<ValidationConfig>();
 
+	/**
+	 * Add an editable validation for a url pattern.
+	 * 
+	 * @param urlPattern
+	 *            Url pattern
+	 * @return More configuration options
+	 */
 	public RuleConfigurer addValidation(String urlPattern) {
 
 		ValidationConfig validationConfig = new ValidationConfig(urlPattern);
@@ -71,12 +78,24 @@ public class ValidationConfigurer {
 			 */
 			private boolean defaultRules = true;
 
+			/**
+			 * Rule names to apply to the editable validation.
+			 * 
+			 * @param ruleNames
+			 *            Rule names
+			 * @return More configuration options
+			 */
 			public RuleConfigurer rules(String... ruleNames) {
 				Assert.notEmpty(ruleNames, "Rule names are required");
 				this.rules.addAll(Arrays.asList(ruleNames));
 				return this;
 			}
 
+			/**
+			 * Disable default editable rules. They are enabled by default.
+			 * 
+			 * @return More configuration options
+			 */
 			public RuleConfigurer disableDefaults() {
 
 				this.defaultRules = false;

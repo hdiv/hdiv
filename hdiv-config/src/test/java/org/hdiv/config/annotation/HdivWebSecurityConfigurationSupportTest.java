@@ -21,6 +21,7 @@ import static org.junit.Assert.assertNotNull;
 import org.hdiv.config.HDIVConfig;
 import org.hdiv.config.Strategy;
 import org.hdiv.config.annotation.builders.SecurityConfigBuilder;
+import org.hdiv.state.scope.StateScopeType;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -41,6 +42,13 @@ public class HdivWebSecurityConfigurationSupportTest {
 				
 				registry.addParamExclusions("param1.*", "param2").forUrls("/attacks/.*");
 				registry.addParamExclusions("param3.*", "param4");
+			}
+			
+			@Override
+			void addLongLivingPages(LongLivingPagesRegistry registry) {
+				
+				registry.addLongLivingPages("/longLivingPage.html", "/longLiving/.*").scope(StateScopeType.APP);
+				registry.addLongLivingPages("/longLivingPageApp.html");
 			}
 
 			@Override
@@ -106,6 +114,16 @@ public class HdivWebSecurityConfigurationSupportTest {
 		assertEquals(true, config.isStartParameter("param34"));
 		assertEquals(true, config.isStartParameter("param4"));
 		assertEquals(false, config.isStartParameter("param456"));
+	}
+	
+	@Test
+	public void longLivingPages(){
+		HDIVConfig config = configuration.hdivConfig();
+		assertNotNull(config);
+		
+		assertEquals("app", config.isLongLivingPages("/longLiving/sample.html"));
+		assertEquals("user-session", config.isLongLivingPages("/longLivingPageApp.html"));
+		assertEquals(null, config.isLongLivingPages("/noLongLiving.html"));
 	}
 	
 }

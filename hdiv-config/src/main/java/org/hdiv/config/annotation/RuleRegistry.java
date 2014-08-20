@@ -36,6 +36,13 @@ public class RuleRegistry {
 	 */
 	private final List<RuleRegistration> registrations = new ArrayList<RuleRegistration>();
 
+	/**
+	 * Register a new rule for the editable validation.
+	 * 
+	 * @param name
+	 *            Name of the rule
+	 * @return More configuration options
+	 */
 	public RuleRegistration addRule(String name) {
 		Assert.notNull(name, "Rule name is required");
 		RuleRegistration registration = new RuleRegistration(name);

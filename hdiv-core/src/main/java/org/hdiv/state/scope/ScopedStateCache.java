@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.hdiv.scope;
+package org.hdiv.state.scope;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -55,12 +55,14 @@ public class ScopedStateCache implements Serializable {
 
 	public IState getState(int stateId) {
 
-		return states.get(stateId).getState();
+		StateAndToken st = states.get(stateId);
+		return st == null ? null : st.getState();
 	}
 
 	public String getStateToken(int stateId) {
 
-		return states.get(stateId).getToken();
+		StateAndToken st = states.get(stateId);
+		return st == null ? null : st.getToken();
 	}
 
 	protected Integer existEqualState(IState state) {

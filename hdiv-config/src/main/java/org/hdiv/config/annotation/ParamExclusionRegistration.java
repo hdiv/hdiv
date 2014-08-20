@@ -33,6 +33,12 @@ public class ParamExclusionRegistration {
 		this.parameterPatterns = parameterPatterns;
 	}
 
+	/**
+	 * Url pattern for which apply the parameter exclusion.
+	 * 
+	 * @param urlPattern
+	 *            Url pattern.
+	 */
 	public void forUrls(String urlPattern) {
 		Assert.notNull(urlPattern, "A URL path is required");
 		this.urlPattern = urlPattern;

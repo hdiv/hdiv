@@ -81,4 +81,18 @@ public class HDIVConfigTest extends AbstractHDIVTestCase {
 		assertFalse(result);
 	}
 
+	public void testIsLongLivingPages() {
+
+		HDIVConfig config = getConfig();
+
+		assertEquals("app", config.isLongLivingPages("/scopedPage/app.html"));
+		assertEquals("app", config.isLongLivingPages("/scopedPage/appScoped/test"));
+		assertEquals("user-session", config.isLongLivingPages("/scopedPage/user.html"));
+		assertEquals("user-session", config.isLongLivingPages("/scopedPage/userScoped/test"));
+
+		assertEquals(null, config.isLongLivingPages("/"));
+		assertEquals(null, config.isLongLivingPages("/scopedPage/appScoped"));
+		assertEquals(null, config.isLongLivingPages("/scopedPage/"));
+	}
+
 }

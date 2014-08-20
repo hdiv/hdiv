@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.hdiv.scope;
+package org.hdiv.state.scope;
 
 import org.hdiv.AbstractHDIVTestCase;
 
@@ -31,8 +31,8 @@ public class StateScopeManagerTest extends AbstractHDIVTestCase {
 		StateScope scope = this.stateScopeManager.getStateScopeByName("app");
 		assertEquals("app", scope.getScopeName());
 
-		scope = this.stateScopeManager.getStateScopeByName("user");
-		assertEquals("user", scope.getScopeName());
+		scope = this.stateScopeManager.getStateScopeByName("user-session");
+		assertEquals("user-session", scope.getScopeName());
 
 		scope = this.stateScopeManager.getStateScopeByName("");
 		assertNull(scope);

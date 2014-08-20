@@ -111,12 +111,15 @@
 	<bean id="patternMatcherFactory" class="org.hdiv.regex.PatternMatcherFactory" />
 
 	<!-- Scope beans -->
-	<bean id="stateScopeManager" class="org.hdiv.scope.DefaultStateScopeManager">
-		<property name="userStateScope" ref="userStateScope" />
-		<property name="appStateScope" ref="appStateScope" />
+	<bean id="stateScopeManager" class="org.hdiv.state.scope.DefaultStateScopeManager">
+		<constructor-arg>
+			<list>
+				<ref bean="userSessionStateScope" />
+				<ref bean="appStateScope" />
+			</list>
+		</constructor-arg>
 	</bean>
-
-	<bean id="userStateScope" class="org.hdiv.scope.user.UserStateScope" />
-	<bean id="appStateScope" class="org.hdiv.scope.app.AppStateScope" />
+	<bean id="userSessionStateScope" class="org.hdiv.state.scope.UserSessionStateScope" />
+	<bean id="appStateScope" class="org.hdiv.state.scope.AppStateScope" />
 
 </beans>

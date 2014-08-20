@@ -61,6 +61,15 @@
 			</map>
 		</property>
 
+		<property name="longLivingPages">
+			<map>
+				<entry key="/scopedPage/app.html" value="app" />
+				<entry key="/scopedPage/appScoped/.*" value="app" />
+				<entry key="/scopedPage/user.html" value="user-session" />
+				<entry key="/scopedPage/userScoped/.*" value="user-session" />
+			</map>
+		</property>
+
 		<property name="protectedExtensions">
 			<list>
 				<value>.*.do</value>

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.hdiv.scope.user;
+package org.hdiv.state.scope;
 
 import org.hdiv.AbstractHDIVTestCase;
 import org.hdiv.state.IParameter;
@@ -21,19 +21,19 @@ import org.hdiv.state.IState;
 import org.hdiv.state.Parameter;
 import org.hdiv.state.State;
 
-public class UserStateScopeTest extends AbstractHDIVTestCase {
+public class UserSessionStateScopeTest extends AbstractHDIVTestCase {
 
-	private UserStateScope stateScope;
+	private UserSessionStateScope stateScope;
 
 	protected void onSetUp() throws Exception {
 
-		this.stateScope = this.getApplicationContext().getBean(UserStateScope.class);
+		this.stateScope = this.getApplicationContext().getBean(UserSessionStateScope.class);
 	}
 
 	public void testConf() {
 
 		String scopeName = stateScope.getScopeName();
-		assertEquals("user", scopeName);
+		assertEquals("user-session", scopeName);
 
 		String scopePrefix = stateScope.getScopePrefix();
 		assertEquals("U", scopePrefix);

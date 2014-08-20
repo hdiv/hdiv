@@ -36,6 +36,9 @@ http://www.hdiv.org/schema/hdiv http://www.hdiv.org/schema/hdiv/hdiv.xsd">
 			<hdiv:mapping url="/page1" parameters="param1,param2" />
 			<hdiv:mapping url="/page2" parameters="param3,param4" />
 		</hdiv:paramsWithoutValidation>
+		<hdiv:longLivingPages>/default.html</hdiv:longLivingPages>
+		<hdiv:longLivingPages scope="app">/app.html</hdiv:longLivingPages>
+		<hdiv:longLivingPages scope="user-session">/user.html</hdiv:longLivingPages>
 	</hdiv:config>
 
 	<bean id="testUserData" class="org.hdiv.config.xml.TestUserData"></bean>
