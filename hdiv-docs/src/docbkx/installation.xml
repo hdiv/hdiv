@@ -33,12 +33,12 @@
 <dependency>
     <groupId>org.hdiv</groupId>
     <artifactId>hdiv-core</artifactId>
-    <version>2.1.5</version>
+    <version>2.1.7</version>
 </dependency>
 <dependency>
     <groupId>org.hdiv</groupId>
     <artifactId>hdiv-spring-mvc</artifactId>
-    <version>2.1.5</version>
+    <version>2.1.7</version>
 </dependency>
 ]]></programlisting>
 			</listitem>
@@ -65,11 +65,10 @@
 			</listitem>
 		</orderedlist>
 		<para>
-			If you are using Spring MVC version previous to 3.1, it's necessary to
-			make an additional step, replacing Spring MVC tld by HDIV tld related
-			with the specific version. In the next example
-			is presented the code
-			for Spring MVC 3.0.4:
+			If you are using Spring MVC version previous to 3.1, it's
+			necessary to make an additional step, replacing Spring MVC tld by
+			HDIV tld related with the specific version. In the next example is
+			presented the code for Spring MVC 3.0.4:
 		</para>
 		<programlisting language="xml">
  <![CDATA[
@@ -116,12 +115,12 @@ compile ':hdiv:1.0-RC2'
 <dependency>
     <groupId>org.hdiv</groupId>
     <artifactId>hdiv-core</artifactId>
-    <version>2.1.5</version>
+    <version>2.1.7</version>
 </dependency>
 <dependency>
     <groupId>org.hdiv</groupId>
     <artifactId>hdiv-jstl-taglibs-1.2</artifactId>
-    <version>2.1.5</version>
+    <version>2.1.7</version>
 </dependency>
 ]]></programlisting>
 			</listitem>
@@ -167,14 +166,13 @@ compile ':hdiv:1.0-RC2'
 <dependency>
     <groupId>org.hdiv</groupId>
     <artifactId>hdiv-core</artifactId>
-    <version>2.0.4</version>
+    <version>2.1.7</version>
 </dependency>
 <dependency>
     <groupId>org.hdiv</groupId>
     <artifactId>hdiv-struts-1</artifactId>
-    <version>2.0.4</version>
-</dependency>
-]]></programlisting>
+    <version>2.1.7</version>
+</dependency>]]></programlisting>
 			</listitem>
 			<listitem>
 				<para>Add HDIV listener and Filter within web.xml</para>
@@ -187,7 +185,6 @@ compile ':hdiv:1.0-RC2'
 </listener>
 
 <!-- HDIV Validator Filter -->
-
 <filter>
     <filter-name>ValidatorFilter</filter-name>
     <filter-class>org.hdiv.filter.ValidatorFilter</filter-class>
@@ -198,22 +195,20 @@ compile ':hdiv:1.0-RC2'
 </filter-mapping>
 
 <!-- Replace Struts 1 tld with hdiv tlds -->
-
 <jsp-config>
-	<taglib> 
-		<taglib-uri>/WEB-INF/struts-html.tld</taglib-uri> 
- 		<taglib-location>/WEB-INF/hdiv-html.tld</taglib-location> 
-	</taglib> 
-	<taglib> 
-		<taglib-uri>/WEB-INF/struts-nested.tld</taglib-uri> 
- 		<taglib-location>/WEB-INF/hdiv-nested.tld</taglib-location> 
-	</taglib> 
-	<taglib> 
-		<taglib-uri>/WEB-INF/struts-logic.tld</taglib-uri> 
- 		<taglib-location>/WEB-INF/hdiv-logic.tld</taglib-location> 
-	</taglib> 
-</jsp-config>
-]]></programlisting>
+    <taglib>
+        <taglib-uri>/WEB-INF/struts-html.tld</taglib-uri>
+        <taglib-location>/WEB-INF/hdiv-html.tld</taglib-location>
+    </taglib>
+    <taglib>
+        <taglib-uri>/WEB-INF/struts-nested.tld</taglib-uri>
+        <taglib-location>/WEB-INF/hdiv-nested.tld</taglib-location>
+    </taglib>
+    <taglib>
+        <taglib-uri>/WEB-INF/struts-logic.tld</taglib-uri>
+        <taglib-location>/WEB-INF/hdiv-logic.tld</taglib-location>
+    </taglib> 
+</jsp-config>]]></programlisting>
 			</listitem>
 		</orderedlist>
 
@@ -239,7 +234,7 @@ compile ':hdiv:1.0-RC2'
 <dependency>
     <groupId>org.hdiv</groupId>
     <artifactId>hdiv-core</artifactId>
-    <version>2.1.5</version>
+    <version>2.0.4</version>
 </dependency>
 <dependency>
     <groupId>org.hdiv</groupId>
@@ -273,10 +268,10 @@ compile ':hdiv:1.0-RC2'
 <!-- Replace Struts 2 tld with hdiv tlds -->
 
 <jsp-config>
-	<taglib> 
-		<taglib-uri>/struts-tags</taglib-uri>
-		<taglib-location>/WEB-INF/hdiv-tags.tld</taglib-location>
-	</taglib> 	
+    <taglib>
+        <taglib-uri>/struts-tags</taglib-uri>
+        <taglib-location>/WEB-INF/hdiv-tags.tld</taglib-location>
+    </taglib> 	
 </jsp-config>
 ]]></programlisting>
 			</listitem>
@@ -294,12 +289,12 @@ compile ':hdiv:1.0-RC2'
 <dependency>
     <groupId>org.hdiv</groupId>
     <artifactId>hdiv-core</artifactId>
-    <version>2.1.5</version>
+    <version>2.1.7</version>
 </dependency>
 <dependency>
     <groupId>org.hdiv</groupId>
     <artifactId>hdiv-jsf</artifactId>
-    <version>2.1.5</version>
+    <version>2.1.7</version>
 </dependency>
 ]]></programlisting>
 			</listitem>
