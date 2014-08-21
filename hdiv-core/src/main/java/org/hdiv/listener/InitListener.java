@@ -96,7 +96,7 @@ public class InitListener implements ServletContextListener, HttpSessionListener
 	}
 
 	/**
-	 * Executed at {@link HttpSession} desytoy.
+	 * Executed at {@link HttpSession} destroy.
 	 * 
 	 * @param event
 	 *            HttpSession destroy event
@@ -109,8 +109,7 @@ public class InitListener implements ServletContextListener, HttpSessionListener
 	}
 
 	/**
-	 * For each user session, a new cipher key is created if the cipher strategy has been chosen, and a new cache is
-	 * created to store the data to be validated.
+	 * Initialize {@link HttpSession} scoped objects.
 	 * 
 	 * @param httpSessionEvent
 	 *            session created event
@@ -168,7 +167,8 @@ public class InitListener implements ServletContextListener, HttpSessionListener
 	}
 
 	/**
-	 * Strategies initialization.
+	 * Strategies initialization. For each user session, a new cipher key is created if the cipher strategy has been
+	 * chosen.
 	 * 
 	 * @param context
 	 *            application context
