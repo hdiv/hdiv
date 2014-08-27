@@ -83,6 +83,13 @@ public class DataComposerHash extends DataComposerMemory {
 			this.getPage().addState(state.getId(), stateHash);
 		}
 
+		// Save Page in session if this is the first state to add
+		boolean firstState = page.getStatesCount() == 1;
+		if (firstState) {
+
+			super.session.addPage(page.getName(), page);
+		}
+
 		return (id != null) ? id : stateWithSuffix;
 	}
 

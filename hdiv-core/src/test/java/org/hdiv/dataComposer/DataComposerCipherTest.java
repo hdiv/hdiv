@@ -15,6 +15,8 @@
  */
 package org.hdiv.dataComposer;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.hdiv.AbstractHDIVTestCase;
@@ -143,6 +145,147 @@ public class DataComposerCipherTest extends AbstractHDIVTestCase {
 		param = state.getParameter("parameter2");
 		val = param.getValues().get(0);
 		assertEquals("2", val);
+	}
+
+	public void testInnerState() {
+
+		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		IDataComposer dataComposer = this.dataComposerFactory.newInstance(request);
+		HDIVUtil.setDataComposer(dataComposer, request);
+
+		dataComposer.startPage();
+		dataComposer.beginRequest("test.do");
+		dataComposer.compose("parameter1", "2", false);
+
+		// Start inner state
+		dataComposer.beginRequest("testinner.do");
+		dataComposer.compose("parameter1", "3", false);
+		String stateIdInner = dataComposer.endRequest();
+
+		String stateId = dataComposer.endRequest();
+		dataComposer.endPage();
+
+		assertNotNull(stateId);
+		assertNotNull(stateIdInner);
+		assertNotSame(stateId, stateIdInner);
+
+		IState state = this.stateUtil.restoreState(stateId);
+		IState stateInner = this.stateUtil.restoreState(stateIdInner);
+		String action = state.getAction();
+		String actionInner = stateInner.getAction();
+		assertEquals("test.do", action);
+		assertEquals("testinner.do", actionInner);
+	}
+
+	public void testEscapeHtml() {
+
+		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		IDataComposer dataComposer = this.dataComposerFactory.newInstance(request);
+		HDIVUtil.setDataComposer(dataComposer, request);
+
+		dataComposer.startPage();
+		dataComposer.beginRequest("test.do");
+		dataComposer.compose("parameter1", "è-test", false);// not escaped value
+		dataComposer.compose("parameterEscaped", "&egrave;-test", false);// escaped value
+		String stateId = dataComposer.endRequest();
+		dataComposer.endPage();
+
+		assertNotNull(stateId);
+
+		IState state = this.stateUtil.restoreState(stateId);
+
+		assertEquals("test.do", state.getAction());
+
+		IParameter param = state.getParameter("parameter1");
+		List<String> values = param.getValues();
+		assertEquals(1, values.size());
+		assertEquals("è-test", values.get(0));// escaped value is the same
+
+		IParameter param2 = state.getParameter("parameterEscaped");
+		List<String> values2 = param2.getValues();
+		assertEquals(1, values2.size());
+		// State stored value is not escaped value, it is the unescaped value
+		assertEquals("è-test", values2.get(0));
+	}
+
+	public void testEditableNullValue() {
+
+		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		IDataComposer dataComposer = this.dataComposerFactory.newInstance(request);
+		HDIVUtil.setDataComposer(dataComposer, request);
+
+		dataComposer.startPage();
+		dataComposer.beginRequest("test.do");
+		dataComposer.compose("parameter1", "test", true);
+		String stateId = dataComposer.endRequest();
+		dataComposer.endPage();
+
+		assertNotNull(stateId);
+
+		IState state = this.stateUtil.restoreState(stateId);
+
+		assertEquals("test.do", state.getAction());
+
+		IParameter param = state.getParameter("parameter1");
+		List<String> values = param.getValues();
+		assertEquals(0, values.size());
+	}
+
+	public void testSaveStateInCreation() {
+
+		// Test the validation of a state before processing all page
+
+		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		IDataComposer dataComposer = this.dataComposerFactory.newInstance(request);
+		HDIVUtil.setDataComposer(dataComposer, request);
+
+		dataComposer.startPage();
+
+		dataComposer.beginRequest("test.do");
+		String result = dataComposer.compose("test.do", "parameter1", "2", false);
+		assertEquals("0", result);
+		String stateId = dataComposer.endRequest();
+
+		IState state = this.stateUtil.restoreState(stateId);
+		assertNotNull(state);
+		assertEquals("test.do", state.getAction());
+
+		dataComposer.endPage();
+	}
+
+	public void testEncodeFormAction() {
+
+		// No encoded url
+		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		IDataComposer dataComposer = this.dataComposerFactory.newInstance(request);
+		HDIVUtil.setDataComposer(dataComposer, request);
+
+		dataComposer.startPage();
+		dataComposer.beginRequest("test test.do");
+		String stateId = dataComposer.endRequest();
+		dataComposer.endPage();
+
+		assertNotNull(stateId);
+
+		IState state = this.stateUtil.restoreState(stateId);
+
+		assertEquals("test test.do", state.getAction());
+
+		// Encoded action url
+		dataComposer = this.dataComposerFactory.newInstance(request);
+		HDIVUtil.setDataComposer(dataComposer, request);
+
+		dataComposer.startPage();
+		dataComposer.beginRequest("test%20test.do");
+		stateId = dataComposer.endRequest();
+		dataComposer.endPage();
+
+		assertNotNull(stateId);
+
+		state = this.stateUtil.restoreState(stateId);
+
+		// State action value is decoded because we store decoded values only
+		assertEquals("test test.do", state.getAction());
 	}
 
 }
