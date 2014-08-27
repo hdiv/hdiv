@@ -24,6 +24,7 @@ import java.util.Stack;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hdiv.config.HDIVConfig;
+import org.hdiv.exception.HDIVException;
 import org.hdiv.state.IPage;
 import org.hdiv.state.IParameter;
 import org.hdiv.state.IState;
@@ -632,7 +633,7 @@ public class DataComposerMemory extends AbstractDataComposer {
 		try {
 			action = URLDecoder.decode(action, Constants.ENCODING_UTF_8);
 		} catch (UnsupportedEncodingException e) {
-			// TODO do something here
+			throw new HDIVException(Constants.ENCODING_UTF_8 + " enconding not supported.", e);
 		}
 
 		// Create new IState
