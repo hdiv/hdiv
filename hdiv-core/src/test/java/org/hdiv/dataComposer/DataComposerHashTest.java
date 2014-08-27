@@ -25,6 +25,7 @@ import org.hdiv.config.Strategy;
 import org.hdiv.state.IParameter;
 import org.hdiv.state.IState;
 import org.hdiv.state.StateUtil;
+import org.hdiv.util.Constants;
 import org.hdiv.util.HDIVUtil;
 import org.springframework.mock.web.MockHttpServletRequest;
 
@@ -104,6 +105,31 @@ public class DataComposerHashTest extends AbstractHDIVTestCase {
 		IState state = this.stateUtil.restoreState(stateId);
 
 		assertEquals("test.do", state.getAction());
+		List<String> values = state.getParameter("parameter1").getValues();
+		assertEquals(1, values.size());
+		assertEquals("2", values.get(0));
+	}
+
+	public void testComposeAndRestoreUrl() {
+
+		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		IDataComposer dataComposer = this.dataComposerFactory.newInstance(request);
+
+		dataComposer.startPage();
+		dataComposer.beginRequest("test.do");
+		String params = "param1=val1&param2=val2";
+		String processedParams = dataComposer.composeParams(params, "GET", Constants.ENCODING_UTF_8);
+		assertEquals("param1=0&param2=0", processedParams);
+		String stateId = dataComposer.endRequest();
+		dataComposer.endPage();
+
+		assertNotNull(stateId);
+
+		IState state = this.stateUtil.restoreState(stateId);
+
+		assertEquals("test.do", state.getAction());
+		String stateParams = state.getParams();
+		assertEquals(params, stateParams);
 	}
 
 	public void testAjax() {

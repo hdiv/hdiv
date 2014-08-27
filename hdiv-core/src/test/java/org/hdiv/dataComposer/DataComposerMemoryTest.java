@@ -25,6 +25,7 @@ import org.hdiv.state.IPage;
 import org.hdiv.state.IParameter;
 import org.hdiv.state.IState;
 import org.hdiv.state.StateUtil;
+import org.hdiv.util.Constants;
 import org.hdiv.util.HDIVUtil;
 import org.springframework.mock.web.MockHttpServletRequest;
 
@@ -104,6 +105,31 @@ public class DataComposerMemoryTest extends AbstractHDIVTestCase {
 		IState state = this.stateUtil.restoreState(stateId);
 
 		assertEquals("test.do", state.getAction());
+		List<String> values = state.getParameter("parameter1").getValues();
+		assertEquals(1, values.size());
+		assertEquals("2", values.get(0));
+	}
+
+	public void testComposeAndRestoreUrl() {
+
+		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		IDataComposer dataComposer = this.dataComposerFactory.newInstance(request);
+
+		dataComposer.startPage();
+		dataComposer.beginRequest("test.do");
+		String params = "param1=val1&param2=val2";
+		String processedParams = dataComposer.composeParams(params, "GET", Constants.ENCODING_UTF_8);
+		assertEquals("param1=0&param2=0", processedParams);
+		String stateId = dataComposer.endRequest();
+		dataComposer.endPage();
+
+		assertNotNull(stateId);
+
+		IState state = this.stateUtil.restoreState(stateId);
+
+		assertEquals("test.do", state.getAction());
+		String stateParams = state.getParams();
+		assertEquals(params, stateParams);
 	}
 
 	public void testComposeExistingState() {
@@ -199,7 +225,7 @@ public class DataComposerMemoryTest extends AbstractHDIVTestCase {
 		// State stored value is not escaped value, it is the unescaped value
 		assertEquals("è-test", values2.get(0));
 	}
-	
+
 	public void testEditableNullValue() {
 
 		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
@@ -262,10 +288,10 @@ public class DataComposerMemoryTest extends AbstractHDIVTestCase {
 		val = param.getValues().get(0);
 		assertEquals("2", val);
 	}
-	
+
 	public void testAjaxWithHeaderEnabledAjaxSupport() {
 		this.getConfig().setReuseExistingPageInAjaxRequest(true);
-		
+
 		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
 		IDataComposer dataComposer = this.dataComposerFactory.newInstance(request);
 		HDIVUtil.setDataComposer(dataComposer, request);
@@ -284,19 +310,19 @@ public class DataComposerMemoryTest extends AbstractHDIVTestCase {
 		ajaxRequest.addParameter("_HDIV_STATE_", stateId);
 		IDataComposer ajaxDataComposer = this.dataComposerFactory.newInstance(request);
 		HDIVUtil.setDataComposer(ajaxDataComposer, ajaxRequest);
-		
+
 		// Ajax request to add states
 		ajaxDataComposer.beginRequest("/test/1");
 		String ajaxStateId = ajaxDataComposer.endRequest();
-		
+
 		// Restore states
 		IState state = this.stateUtil.restoreState(stateId);
 		IState ajaxState = this.stateUtil.restoreState(ajaxStateId);
-		
+
 		assertEquals(state.getPageId(), ajaxState.getPageId());
 		assertEquals(state.getId() + 1, ajaxState.getId());
 	}
-	
+
 	public void testAjaxWithHeaderDisabledAjaxSupport() {
 		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
 		IDataComposer dataComposer = this.dataComposerFactory.newInstance(request);
@@ -316,15 +342,15 @@ public class DataComposerMemoryTest extends AbstractHDIVTestCase {
 		ajaxRequest.addParameter("_HDIV_STATE_", stateId);
 		IDataComposer ajaxDataComposer = this.dataComposerFactory.newInstance(request);
 		HDIVUtil.setDataComposer(ajaxDataComposer, ajaxRequest);
-		
+
 		// Ajax request to add states
 		ajaxDataComposer.beginRequest("/test/1");
 		String ajaxStateId = ajaxDataComposer.endRequest();
-		
+
 		// Restore states
 		int pageId = this.stateUtil.restoreState(stateId).getPageId();
 		int ajaxPageId = this.stateUtil.restoreState(ajaxStateId).getPageId();
-		
+
 		assertEquals(pageId + 1, ajaxPageId);
 	}
 
