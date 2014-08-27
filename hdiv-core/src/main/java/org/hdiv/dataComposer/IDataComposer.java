@@ -27,7 +27,7 @@ public interface IDataComposer {
 
 	/**
 	 * It generates a new encoded value for the parameter <code>parameter</code> and the value <code>value</code> passed
-	 * as parameters. The returned value guarantees the confidentiality in the encoded and memory strategies if
+	 * as parameters. The returned value guarantees the confidentiality in the cipher and memory strategies if
 	 * confidentiality indicator <code>confidentiality</code> is true.
 	 * 
 	 * @param parameter
@@ -42,7 +42,7 @@ public interface IDataComposer {
 
 	/**
 	 * It generates a new encoded value for the parameter <code>parameter</code> and the value <code>value</code> passed
-	 * as parameters. The returned value guarantees the confidentiality in the encoded and memory strategies if
+	 * as parameters. The returned value guarantees the confidentiality in the cipher and memory strategies if
 	 * confidentiality indicator <code>confidentiality</code> is true.
 	 * 
 	 * @param action
@@ -59,7 +59,7 @@ public interface IDataComposer {
 
 	/**
 	 * It generates a new encoded value for the parameter <code>parameter</code> and the value <code>value</code> passed
-	 * as parameters. The returned value guarantees the confidentiality in the encoded and memory strategies if
+	 * as parameters. The returned value guarantees the confidentiality in the cipher and memory strategies if
 	 * confidentiality indicator <code>confidentiality</code> is true.
 	 * 
 	 * @param parameter
@@ -78,7 +78,7 @@ public interface IDataComposer {
 	/**
 	 * Adds a new IParameter object, generated from the values passed as parameters, to the current state
 	 * <code>state</code>. If confidentiality is activated it generates a new encoded value that will be returned by the
-	 * server for the parameter <code>parameter</code> in the encoded and memory strategies.
+	 * server for the parameter <code>parameter</code> in the cipher and memory strategies.
 	 * 
 	 * @param parameter
 	 *            HTTP parameter
@@ -97,7 +97,7 @@ public interface IDataComposer {
 	/**
 	 * Adds a new IParameter object, generated from the values passed as parameters, to the current state
 	 * <code>state</code>. If confidentiality is activated it generates a new encoded value that will be returned by the
-	 * server for the parameter <code>parameter</code> in the encoded and memory strategies.
+	 * server for the parameter <code>parameter</code> in the cipher and memory strategies.
 	 * 
 	 * @param parameter
 	 *            HTTP parameter
@@ -136,7 +136,7 @@ public interface IDataComposer {
 	/**
 	 * Adds a new IParameter object, generated from the values passed as parameters, to the current state
 	 * <code>state</code>. If confidentiality is activated it generates a new encoded value that will be returned by the
-	 * server for the parameter <code>parameter</code> in the encoded and memory strategies.
+	 * server for the parameter <code>parameter</code> in the cipher and memory strategies.
 	 * <p>
 	 * Custom method for form field.
 	 * 
@@ -155,7 +155,7 @@ public interface IDataComposer {
 
 	/**
 	 * It generates a new encoded value for the parameter <code>parameter</code> and the value <code>value</code> passed
-	 * as parameters. The returned value guarantees the confidentiality in the encoded and memory strategies if
+	 * as parameters. The returned value guarantees the confidentiality in the cipher and memory strategies if
 	 * confidentiality indicator <code>confidentiality</code> is true.
 	 * 
 	 * @param action

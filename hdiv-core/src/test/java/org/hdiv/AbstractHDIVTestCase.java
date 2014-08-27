@@ -15,6 +15,8 @@
  */
 package org.hdiv;
 
+import java.util.regex.Pattern;
+
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.http.HttpSession;
@@ -44,6 +46,16 @@ public abstract class AbstractHDIVTestCase extends TestCase {
 
 	private static Log log = LogFactory.getLog(AbstractHDIVTestCase.class);
 
+	/**
+	 * Pattern to check if the memory strategy is being used
+	 */
+	protected static final String MEMORY_PATTERN = "([0-9]+-){2}[A-Za-z0-9]+";
+
+	/**
+	 * Compiled MEMORY_PATTERN
+	 */
+	protected Pattern memoryPattern = Pattern.compile(MEMORY_PATTERN);
+	
 	/**
 	 * Spring Factory
 	 */

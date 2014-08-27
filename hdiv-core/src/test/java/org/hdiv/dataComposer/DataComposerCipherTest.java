@@ -134,6 +134,31 @@ public class DataComposerCipherTest extends AbstractHDIVTestCase {
 		String stateParams = state.getParams();
 		assertEquals(params, stateParams);
 	}
+	
+	public void testMemoryFallback() {
+
+		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		IDataComposer dataComposer = this.dataComposerFactory.newInstance(request);
+
+		// Force change to memory strategy due to long encoded state
+		((DataComposerCipher) dataComposer).setAllowedLength(5);
+
+		dataComposer.startPage();
+		dataComposer.beginRequest("test.do");
+		dataComposer.compose("parameter1", "2", false);
+		String stateId = dataComposer.endRequest();
+		dataComposer.endPage();
+
+		assertTrue(memoryPattern.matcher(stateId).matches());
+		assertNotNull(stateId);
+
+		IState state = this.stateUtil.restoreState(stateId);
+
+		assertEquals("test.do", state.getAction());
+		List<String> values = state.getParameter("parameter1").getValues();
+		assertEquals(1, values.size());
+		assertEquals("2", values.get(0));
+	}
 
 	public void testAjax() {
 

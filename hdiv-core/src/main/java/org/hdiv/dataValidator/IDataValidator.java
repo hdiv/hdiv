@@ -31,7 +31,7 @@ public interface IDataValidator {
 	 * correct or not. The received value is checked with the one stored in the state to decide if it is correct.
 	 * </p>
 	 * <p>
-	 * In the encoded and hash strategies, the state is obtained from the user request. However, in the memory strategy
+	 * In the cipher and hash strategies, the state is obtained from the user request. However, in the memory strategy
 	 * the state is obtained from the user session, using the state identifier received within the request.
 	 * </p>
 	 * 
@@ -53,4 +53,3 @@ public interface IDataValidator {
 	// TODO merge stateParameter and actionParamValues parameters
 
 }
-

@@ -1072,7 +1072,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 
 	/**
 	 * Name of the parameter that HDIV will include in the requests or/and forms which contains the state identifier in
-	 * the memory strategy or the state itself in the Encoded or Hash strategies.
+	 * the memory strategy or the state itself in the cipher or hash strategies.
 	 * 
 	 * @param request
 	 *            request
