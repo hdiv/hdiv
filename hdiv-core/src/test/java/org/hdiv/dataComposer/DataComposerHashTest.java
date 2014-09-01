@@ -64,7 +64,7 @@ public class DataComposerHashTest extends AbstractHDIVTestCase {
 		assertTrue(dataComposer instanceof DataComposerHash);
 
 		dataComposer.startPage();
-		dataComposer.beginRequest("test.do");
+		dataComposer.beginRequest("GET", "test.do");
 
 		boolean confidentiality = this.getConfig().getConfidentiality();
 
@@ -87,6 +87,9 @@ public class DataComposerHashTest extends AbstractHDIVTestCase {
 		result = dataComposer.compose("test.do", "parameter2", "2", false);
 		value = (!confidentiality) ? "2" : "1";
 		assertTrue(value.equals(result));
+
+		String id = dataComposer.endRequest();
+		assertNotNull(id);
 	}
 
 	public void testComposeAndRestore() {
@@ -95,7 +98,7 @@ public class DataComposerHashTest extends AbstractHDIVTestCase {
 		IDataComposer dataComposer = this.dataComposerFactory.newInstance(request);
 
 		dataComposer.startPage();
-		dataComposer.beginRequest("test.do");
+		dataComposer.beginRequest("GET", "test.do");
 		dataComposer.compose("parameter1", "2", false);
 		String stateId = dataComposer.endRequest();
 		dataComposer.endPage();
@@ -116,7 +119,7 @@ public class DataComposerHashTest extends AbstractHDIVTestCase {
 		IDataComposer dataComposer = this.dataComposerFactory.newInstance(request);
 
 		dataComposer.startPage();
-		dataComposer.beginRequest("test.do");
+		dataComposer.beginRequest("GET", "test.do");
 		String params = "param1=val1&param2=val2";
 		String processedParams = dataComposer.composeParams(params, "GET", Constants.ENCODING_UTF_8);
 		assertEquals("param1=0&param2=0", processedParams);
@@ -141,7 +144,7 @@ public class DataComposerHashTest extends AbstractHDIVTestCase {
 		((DataComposerHash) dataComposer).setAllowedLength(5);
 
 		dataComposer.startPage();
-		dataComposer.beginRequest("test.do");
+		dataComposer.beginRequest("GET", "test.do");
 		dataComposer.compose("parameter1", "2", false);
 		String stateId = dataComposer.endRequest();
 		dataComposer.endPage();
@@ -164,7 +167,7 @@ public class DataComposerHashTest extends AbstractHDIVTestCase {
 		HDIVUtil.setDataComposer(dataComposer, request);
 
 		dataComposer.startPage();
-		dataComposer.beginRequest("test.do");
+		dataComposer.beginRequest("POST", "test.do");
 		dataComposer.compose("parameter1", "1", false);
 		String state1 = dataComposer.endRequest();
 		dataComposer.endPage();
@@ -202,11 +205,11 @@ public class DataComposerHashTest extends AbstractHDIVTestCase {
 		HDIVUtil.setDataComposer(dataComposer, request);
 
 		dataComposer.startPage();
-		dataComposer.beginRequest("test.do");
+		dataComposer.beginRequest("POST", "test.do");
 		dataComposer.compose("parameter1", "2", false);
 
 		// Start inner state
-		dataComposer.beginRequest("testinner.do");
+		dataComposer.beginRequest("GET", "testinner.do");
 		dataComposer.compose("parameter1", "3", false);
 		String stateIdInner = dataComposer.endRequest();
 
@@ -232,7 +235,7 @@ public class DataComposerHashTest extends AbstractHDIVTestCase {
 		HDIVUtil.setDataComposer(dataComposer, request);
 
 		dataComposer.startPage();
-		dataComposer.beginRequest("test.do");
+		dataComposer.beginRequest("POST", "test.do");
 		dataComposer.compose("parameter1", "è-test", false);// not escaped value
 		dataComposer.compose("parameterEscaped", "&egrave;-test", false);// escaped value
 		String stateId = dataComposer.endRequest();
@@ -263,7 +266,7 @@ public class DataComposerHashTest extends AbstractHDIVTestCase {
 		HDIVUtil.setDataComposer(dataComposer, request);
 
 		dataComposer.startPage();
-		dataComposer.beginRequest("test.do");
+		dataComposer.beginRequest("POST", "test.do");
 		dataComposer.compose("parameter1", "test", true);
 		String stateId = dataComposer.endRequest();
 		dataComposer.endPage();
@@ -289,7 +292,7 @@ public class DataComposerHashTest extends AbstractHDIVTestCase {
 
 		dataComposer.startPage();
 
-		dataComposer.beginRequest("test.do");
+		dataComposer.beginRequest("POST", "test.do");
 		String result = dataComposer.compose("test.do", "parameter1", "2", false);
 		assertEquals("0", result);
 		String stateId = dataComposer.endRequest();
@@ -309,7 +312,7 @@ public class DataComposerHashTest extends AbstractHDIVTestCase {
 		HDIVUtil.setDataComposer(dataComposer, request);
 
 		dataComposer.startPage();
-		dataComposer.beginRequest("test test.do");
+		dataComposer.beginRequest("POST", "test test.do");
 		String stateId = dataComposer.endRequest();
 		dataComposer.endPage();
 
@@ -324,7 +327,7 @@ public class DataComposerHashTest extends AbstractHDIVTestCase {
 		HDIVUtil.setDataComposer(dataComposer, request);
 
 		dataComposer.startPage();
-		dataComposer.beginRequest("test%20test.do");
+		dataComposer.beginRequest("POST", "test%20test.do");
 		stateId = dataComposer.endRequest();
 		dataComposer.endPage();
 
@@ -335,5 +338,4 @@ public class DataComposerHashTest extends AbstractHDIVTestCase {
 		// State action value is decoded because we store decoded values only
 		assertEquals("test test.do", state.getAction());
 	}
-
 }

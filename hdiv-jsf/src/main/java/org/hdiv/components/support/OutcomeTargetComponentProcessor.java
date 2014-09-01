@@ -61,7 +61,7 @@ public class OutcomeTargetComponentProcessor extends AbstractComponentProcessor 
 				}
 
 				IDataComposer dataComposer = HDIVUtil.getDataComposer(request);
-				dataComposer.beginRequest(urlData.getUrlWithoutContextPath());
+				dataComposer.beginRequest("GET", urlData.getUrlWithoutContextPath());
 
 				String processedParams = dataComposer.composeParams(urlData.getUrlParams(), "GET", Constants.ENCODING_UTF_8);
 				urlData.setUrlParams(processedParams);

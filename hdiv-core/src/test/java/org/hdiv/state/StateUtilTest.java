@@ -45,7 +45,7 @@ public class StateUtilTest extends AbstractHDIVTestCase {
 		HDIVUtil.setDataComposer(dataComposer, request);
 
 		dataComposer.startPage();
-		dataComposer.beginRequest("test.do");
+		dataComposer.beginRequest("GET", "test.do");
 		dataComposer.compose("parameter1", "2", false);
 		String stateId = dataComposer.endRequest();
 		dataComposer.endPage();

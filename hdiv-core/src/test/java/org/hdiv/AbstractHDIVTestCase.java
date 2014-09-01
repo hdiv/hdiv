@@ -75,8 +75,7 @@ public abstract class AbstractHDIVTestCase extends TestCase {
 				"/org/hdiv/config/applicationContext-extra.xml" };
 
 		// Servlet API mock
-		MockHttpServletRequest request = new MockHttpServletRequest();
-		request.setRequestURI("/path/testAction.do");
+		MockHttpServletRequest request = new MockHttpServletRequest("GET", "/path/testAction.do");
 		HttpSession httpSession = request.getSession();
 		ServletContext servletContext = httpSession.getServletContext();
 		HDIVUtil.setHttpServletRequest(request);

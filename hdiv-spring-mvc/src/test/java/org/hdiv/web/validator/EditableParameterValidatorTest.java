@@ -59,8 +59,9 @@ public class EditableParameterValidatorTest extends AbstractHDIVTestCase {
 	public void testEditableValidator() {
 
 		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
+		request.setMethod("POST");
 
-		this.dataComposer.beginRequest(this.targetName);
+		this.dataComposer.beginRequest("POST", this.targetName);
 		this.dataComposer.compose("paramName", "", true, "text");
 
 		String pageState = this.dataComposer.endRequest();

@@ -113,7 +113,7 @@ public class DataComposerMemory extends AbstractDataComposer {
 	 */
 	public String beginRequest() {
 
-		return this.beginRequest("");
+		return this.beginRequest(null, "");
 	}
 
 	/**
@@ -121,13 +121,15 @@ public class DataComposerMemory extends AbstractDataComposer {
 	 * long as the destiny of the request is an action. It creates a new state to store all the parameters and values of
 	 * the request or form.
 	 * 
+	 * @param method
+	 *            HTTP method of the request.
 	 * @param action
 	 *            action name
 	 * @return state id for this request
 	 * 
 	 * @see org.hdiv.dataComposer.DataComposerMemory#beginRequest()
 	 */
-	public String beginRequest(String action) {
+	public String beginRequest(String method, String action) {
 
 		try {
 			action = URLDecoder.decode(action, Constants.ENCODING_UTF_8);
@@ -138,6 +140,7 @@ public class DataComposerMemory extends AbstractDataComposer {
 		// Create new IState
 		IState state = new State(this.requestCounter);
 		state.setAction(action);
+		state.setMethod(method);
 
 		return this.beginRequest(state);
 	}
@@ -159,7 +162,7 @@ public class DataComposerMemory extends AbstractDataComposer {
 		// It is Page scope or none
 		this.requestCounter = state.getId() + 1;
 
-		String id = this.getPage().getName() + DASH + state.getId() + DASH + this.getHdivStateSuffix();
+		String id = this.getPage().getName() + DASH + state.getId() + DASH + this.getStateSuffix(state.getMethod());
 		return id;
 	}
 
@@ -179,7 +182,7 @@ public class DataComposerMemory extends AbstractDataComposer {
 		StateScope stateScope = this.stateScopeManager.getStateScopeByName(currentScope);
 		if (stateScope != null) {
 			// Its custom Scope
-			String stateId = stateScope.addState(state, this.getHdivStateSuffix());
+			String stateId = stateScope.addState(state, this.getStateSuffix(state.getMethod()));
 			return stateId;
 		}
 
@@ -195,18 +198,8 @@ public class DataComposerMemory extends AbstractDataComposer {
 			super.session.addPage(page.getName(), page);
 		}
 
-		String id = this.getPage().getId() + DASH + state.getId() + DASH + this.getHdivStateSuffix();
+		String id = this.getPage().getId() + DASH + state.getId() + DASH + this.getStateSuffix(state.getMethod());
 		return id;
-	}
-
-	/**
-	 * Obtains the suffix to add to the _HDIV_STATE_ parameter in the memory version.
-	 * 
-	 * @return Returns suffix added to the _HDIV_STATE_ parameter in the memory version.
-	 * @since HDIV 1.1
-	 */
-	protected String getHdivStateSuffix() {
-		return this.getPage().getRandomToken();
 	}
 
 	/**

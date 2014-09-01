@@ -68,7 +68,7 @@ public class LifecycleTest extends AbstractJsfHDIVTestCase {
 
 		this.dataComposer.startPage();
 
-		this.dataComposer.beginRequest(this.targetName);
+		this.dataComposer.beginRequest("GET", this.targetName);
 		String pageState = this.dataComposer.endRequest();
 		this.dataComposer.endPage();
 

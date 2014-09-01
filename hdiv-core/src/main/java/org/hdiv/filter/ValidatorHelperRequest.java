@@ -200,7 +200,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 		}
 
 		// Restore state from request or from memory
-		result = this.restoreState(request, target);
+		result = this.restoreState(request, target, request.getMethod());
 		if (!result.isValid()) {
 			return result;
 		}
@@ -616,9 +616,11 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	 *            HTTP request
 	 * @param target
 	 *            Part of the url that represents the target action
+	 * @param method
+	 *            HTTP method
 	 * @return valid result if restored state is valid. False in otherwise.
 	 */
-	private ValidatorHelperResult restoreState(HttpServletRequest request, String target) {
+	private ValidatorHelperResult restoreState(HttpServletRequest request, String target, String method) {
 
 		// Hdiv parameter name
 		String hdivParameter = getHdivParameter(request);
@@ -635,7 +637,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 		try {
 			if (this.stateUtil.isMemoryStrategy(requestState)) {
 
-				if (!this.validateHDIVSuffix(requestState)) {
+				if (!this.validateHDIVSuffix(requestState, method)) {
 					this.logger.log(HDIVErrorCodes.HDIV_PARAMETER_INCORRECT_VALUE, target, hdivParameter, requestState);
 					return new ValidatorHelperResult(HDIVErrorCodes.HDIV_PARAMETER_INCORRECT_VALUE);
 				}
@@ -665,9 +667,11 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	 * 
 	 * @param value
 	 *            value received in the HDIV parameter
+	 * @param method
+	 *            HTTP method
 	 * @return True if the received value of the suffix is valid. False otherwise.
 	 */
-	protected boolean validateHDIVSuffix(String value) {
+	protected boolean validateHDIVSuffix(String value, String method) {
 
 		int firstSeparator = value.indexOf("-");
 		int lastSeparator = value.lastIndexOf("-");
@@ -712,7 +716,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 				throw new HDIVException(HDIVErrorCodes.PAGE_ID_INCORRECT);
 			}
 
-			return currentPage.getRandomToken().equals(requestSuffix);
+			return currentPage.getRandomToken(method).equals(requestSuffix);
 
 		} catch (IndexOutOfBoundsException e) {
 			String errorMessage = HDIVUtil.getMessage("validation.error", e.getMessage());

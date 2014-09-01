@@ -137,7 +137,7 @@ public class FormUrlProcessor extends AbstractUrlProcessor {
 		UrlData urlData = this.createUrlData(url, method, request);
 		if (this.isHdivStateNecessary(urlData)) {
 			// the url needs protection
-			String stateId = dataComposer.beginRequest(urlData.getUrlWithoutContextPath());
+			String stateId = dataComposer.beginRequest(method, urlData.getUrlWithoutContextPath());
 
 			// Publish the state in request to make it accessible on jsp
 			request.setAttribute(FORM_STATE_ID, stateId);

@@ -64,7 +64,7 @@ public class DataComposerCipherTest extends AbstractHDIVTestCase {
 		assertTrue(dataComposer instanceof DataComposerCipher);
 
 		dataComposer.startPage();
-		dataComposer.beginRequest("test.do");
+		dataComposer.beginRequest("GET", "test.do");
 
 		boolean confidentiality = this.getConfig().getConfidentiality();
 
@@ -98,7 +98,7 @@ public class DataComposerCipherTest extends AbstractHDIVTestCase {
 		IDataComposer dataComposer = this.dataComposerFactory.newInstance(request);
 
 		dataComposer.startPage();
-		dataComposer.beginRequest("test.do");
+		dataComposer.beginRequest("GET", "test.do");
 		dataComposer.compose("parameter1", "2", false);
 		String stateId = dataComposer.endRequest();
 		dataComposer.endPage();
@@ -119,7 +119,7 @@ public class DataComposerCipherTest extends AbstractHDIVTestCase {
 		IDataComposer dataComposer = this.dataComposerFactory.newInstance(request);
 
 		dataComposer.startPage();
-		dataComposer.beginRequest("test.do");
+		dataComposer.beginRequest("GET", "test.do");
 		String params = "param1=val1&param2=val2";
 		String processedParams = dataComposer.composeParams(params, "GET", Constants.ENCODING_UTF_8);
 		assertEquals("param1=0&param2=0", processedParams);
@@ -134,7 +134,7 @@ public class DataComposerCipherTest extends AbstractHDIVTestCase {
 		String stateParams = state.getParams();
 		assertEquals(params, stateParams);
 	}
-	
+
 	public void testMemoryFallback() {
 
 		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
@@ -144,7 +144,7 @@ public class DataComposerCipherTest extends AbstractHDIVTestCase {
 		((DataComposerCipher) dataComposer).setAllowedLength(5);
 
 		dataComposer.startPage();
-		dataComposer.beginRequest("test.do");
+		dataComposer.beginRequest("GET", "test.do");
 		dataComposer.compose("parameter1", "2", false);
 		String stateId = dataComposer.endRequest();
 		dataComposer.endPage();
@@ -167,7 +167,7 @@ public class DataComposerCipherTest extends AbstractHDIVTestCase {
 		HDIVUtil.setDataComposer(dataComposer, request);
 
 		dataComposer.startPage();
-		dataComposer.beginRequest("test.do");
+		dataComposer.beginRequest("POST", "test.do");
 		dataComposer.compose("parameter1", "1", false);
 		String state1 = dataComposer.endRequest();
 		dataComposer.endPage();
@@ -205,11 +205,11 @@ public class DataComposerCipherTest extends AbstractHDIVTestCase {
 		HDIVUtil.setDataComposer(dataComposer, request);
 
 		dataComposer.startPage();
-		dataComposer.beginRequest("test.do");
+		dataComposer.beginRequest("POST", "test.do");
 		dataComposer.compose("parameter1", "2", false);
 
 		// Start inner state
-		dataComposer.beginRequest("testinner.do");
+		dataComposer.beginRequest("GET", "testinner.do");
 		dataComposer.compose("parameter1", "3", false);
 		String stateIdInner = dataComposer.endRequest();
 
@@ -235,7 +235,7 @@ public class DataComposerCipherTest extends AbstractHDIVTestCase {
 		HDIVUtil.setDataComposer(dataComposer, request);
 
 		dataComposer.startPage();
-		dataComposer.beginRequest("test.do");
+		dataComposer.beginRequest("POST", "test.do");
 		dataComposer.compose("parameter1", "è-test", false);// not escaped value
 		dataComposer.compose("parameterEscaped", "&egrave;-test", false);// escaped value
 		String stateId = dataComposer.endRequest();
@@ -266,7 +266,7 @@ public class DataComposerCipherTest extends AbstractHDIVTestCase {
 		HDIVUtil.setDataComposer(dataComposer, request);
 
 		dataComposer.startPage();
-		dataComposer.beginRequest("test.do");
+		dataComposer.beginRequest("POST", "test.do");
 		dataComposer.compose("parameter1", "test", true);
 		String stateId = dataComposer.endRequest();
 		dataComposer.endPage();
@@ -292,7 +292,7 @@ public class DataComposerCipherTest extends AbstractHDIVTestCase {
 
 		dataComposer.startPage();
 
-		dataComposer.beginRequest("test.do");
+		dataComposer.beginRequest("POST", "test.do");
 		String result = dataComposer.compose("test.do", "parameter1", "2", false);
 		assertEquals("0", result);
 		String stateId = dataComposer.endRequest();
@@ -312,7 +312,7 @@ public class DataComposerCipherTest extends AbstractHDIVTestCase {
 		HDIVUtil.setDataComposer(dataComposer, request);
 
 		dataComposer.startPage();
-		dataComposer.beginRequest("test test.do");
+		dataComposer.beginRequest("POST", "test test.do");
 		String stateId = dataComposer.endRequest();
 		dataComposer.endPage();
 
@@ -327,7 +327,7 @@ public class DataComposerCipherTest extends AbstractHDIVTestCase {
 		HDIVUtil.setDataComposer(dataComposer, request);
 
 		dataComposer.startPage();
-		dataComposer.beginRequest("test%20test.do");
+		dataComposer.beginRequest("POST", "test%20test.do");
 		stateId = dataComposer.endRequest();
 		dataComposer.endPage();
 

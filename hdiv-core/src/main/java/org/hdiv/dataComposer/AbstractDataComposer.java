@@ -110,7 +110,6 @@ public abstract class AbstractDataComposer implements IDataComposer {
 		this.page = new Page();
 		int pageId = this.session.getPageId();
 		this.page.setId(pageId);
-		this.page.setRandomToken(this.uidGenerator.generateUid().toString());
 	}
 
 	/**
@@ -618,7 +617,26 @@ public abstract class AbstractDataComposer implements IDataComposer {
 	 * @since HDIV 2.0.3
 	 */
 	public void addFlowId(String id) {
-		this.getPage().setFlowId(id);
+		this.page.setFlowId(id);
+	}
+
+	/**
+	 * Obtains the suffix to add to the _HDIV_STATE_ parameter in the memory and hash strategy.
+	 * 
+	 * @param method
+	 *            HTTP method
+	 * 
+	 * @return Returns suffix added to the _HDIV_STATE_ parameter.
+	 * @since 2.1.7
+	 */
+	protected String getStateSuffix(String method) {
+
+		String randomToken = this.page.getRandomToken(method);
+		if (randomToken == null) {
+			randomToken = this.uidGenerator.generateUid().toString();
+			this.page.setRandomToken(randomToken, method);
+		}
+		return randomToken;
 	}
 
 	/**

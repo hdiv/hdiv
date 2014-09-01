@@ -78,6 +78,13 @@ public class State implements IState, Serializable {
 	 */
 	private List<String> requiredParams;
 
+	/**
+	 * HTTP method for this state.
+	 * <p>
+	 * Null value is equivalent to GET.
+	 */
+	private String method;
+
 	public State(int id) {
 		this.id = id;
 	}
@@ -223,6 +230,33 @@ public class State implements IState, Serializable {
 	/*
 	 * (non-Javadoc)
 	 * 
+	 * @see org.hdiv.state.IState#getMethod()
+	 */
+	public String getMethod() {
+		if (this.method == null) {
+			return "GET";
+		}
+		return method;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.hdiv.state.IState#setMethod(java.lang.String)
+	 */
+	public void setMethod(String method) {
+		if (method == null) {
+			this.method = method;
+		}
+		if (method.equalsIgnoreCase("GET")) {
+			this.method = null;
+		}
+		this.method = method.toUpperCase();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.hdiv.state.IState#existParameter(java.lang.String)
 	 */
 	public boolean existParameter(String key) {
@@ -237,6 +271,7 @@ public class State implements IState, Serializable {
 		sb.append("parameters: ").append(this.parameters);
 		sb.append("params: ").append(this.params);
 		sb.append("requiredParams: ").append(this.requiredParams);
+		sb.append("method: ").append(this.method == null ? "GET" : this.method);
 		return super.toString();
 	}
 

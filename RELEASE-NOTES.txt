@@ -15,6 +15,7 @@ Release 2.1.7
  * New 'reuseExistingPageInAjaxRequest' configuration option. If it is activated, Ajax requests don't create a new page and reuse the existing one.
  * Move CipherTag to hdiv-core.
  * New 'longLivingPages' feature to configure pages which link and forms never expire.
+ * CSRF protection improvement. Use different tokens for POST and GET requests.
  
 Release 2.1.6
 ==================================

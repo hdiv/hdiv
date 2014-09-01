@@ -117,7 +117,7 @@ public class ScopesTest extends AbstractHDIVTestCase {
 		assertTrue(dataComposer instanceof DataComposerMemory);
 
 		dataComposer.startPage();
-		dataComposer.beginRequest("test.do");
+		dataComposer.beginRequest("POST", "test.do");
 		dataComposer.compose("test.do", "parameter1", "2", false);
 		dataComposer.compose("test.do", "parameter1", "2", false);
 		String stateId = dataComposer.endRequest();

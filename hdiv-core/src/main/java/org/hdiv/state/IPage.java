@@ -104,15 +104,21 @@ public interface IPage {
 	public void setFlowId(String flowId);
 
 	/**
+	 * Returns the corresponding token for the given HTTP method.
+	 * 
+	 * @param method
+	 *            HTTP method
 	 * @return the randomToken
-	 * @since HDIV 2.0.4
+	 * @since HDIV 2.1.7
 	 */
-	public String getRandomToken();
+	public String getRandomToken(String method);
 
 	/**
 	 * @param randomToken
 	 *            the randomToken to set
-	 * @since HDIV 2.0.4
+	 * @param method
+	 *            HTTP method
+	 * @since HDIV 2.1.7
 	 */
-	public void setRandomToken(String randomToken);
+	public void setRandomToken(String randomToken, String method);
 }

@@ -74,11 +74,11 @@ public class DataComposerHash extends DataComposerMemory {
 			this.getPage().addState(state);
 			state.setPageId(this.getPage().getId());
 
-			id = this.getPage().getId() + DASH + state.getId() + DASH + this.getHdivStateSuffix();
+			id = this.getPage().getId() + DASH + state.getId() + DASH + this.getStateSuffix(state.getMethod());
 
 		} else {
 			// generate hash to add to the page that will be stored in session
-			stateWithSuffix = stateData + DASH + this.getHdivStateSuffix();
+			stateWithSuffix = stateData + DASH + this.getStateSuffix(state.getMethod());
 			String stateHash = this.encodingUtil.calculateStateHash(stateWithSuffix);
 			this.getPage().addState(state.getId(), stateHash);
 		}

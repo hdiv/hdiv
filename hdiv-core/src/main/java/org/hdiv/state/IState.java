@@ -98,4 +98,15 @@ public interface IState {
 	 */
 	public void setParams(String params);
 
+	/**
+	 * @return HTTP method
+	 */
+	public String getMethod();
+
+	/**
+	 * @param method
+	 *            HTTP method for this request
+	 */
+	public void setMethod(String method);
+
 }

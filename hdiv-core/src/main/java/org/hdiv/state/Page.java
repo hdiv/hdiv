@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * DataStructure to store server states
+ * Data structure to store states of a page.
  * 
  * @author Roberto Velasco
  */
@@ -36,12 +36,12 @@ public class Page implements IPage, Serializable {
 	private static final long serialVersionUID = -5701140762067196143L;
 
 	/**
-	 * List with the states of the page. Only used in memory and cipher strategy.
+	 * Contains the states of the page. Only used in memory and cipher strategy.
 	 */
 	protected List<IState> states = new ArrayList<IState>();
 
 	/**
-	 * List with the state hashes of this page. Only used in hash strategy.
+	 * Contains the state hashes of this page. Only used in hash strategy.
 	 */
 	protected Map<Integer, String> hashStates;
 
@@ -61,6 +61,13 @@ public class Page implements IPage, Serializable {
 	 * @since HDIV 2.0.4
 	 */
 	private String randomToken;
+
+	/**
+	 * Unique random token. Used only for forms with PATCH, POST, PUT or DELETE methods.
+	 * 
+	 * @since 2.1.7
+	 */
+	private String formRandomToken;
 
 	/**
 	 * Page size.
@@ -197,20 +204,57 @@ public class Page implements IPage, Serializable {
 	}
 
 	/**
+	 * Returns the corresponding token for the given HTTP method.
+	 * 
+	 * @param method
+	 *            HTTP method
 	 * @return the randomToken
-	 * @since HDIV 2.0.4
+	 * @since HDIV 2.1.7
 	 */
-	public String getRandomToken() {
-		return randomToken;
+	public String getRandomToken(String method) {
+
+		if (this.isFormMethod(method)) {
+			return this.formRandomToken;
+		} else {
+			return randomToken;
+		}
 	}
 
 	/**
 	 * @param randomToken
 	 *            the randomToken to set
-	 * @since HDIV 2.0.4
+	 * @param method
+	 *            HTTP method
+	 * @since HDIV 2.1.7
 	 */
-	public void setRandomToken(String randomToken) {
-		this.randomToken = randomToken;
+	public void setRandomToken(String randomToken, String method) {
+		if (this.isFormMethod(method)) {
+			this.formRandomToken = randomToken;
+		} else {
+			this.randomToken = randomToken;
+		}
+	}
+
+	/**
+	 * @param method
+	 *            HTTP method
+	 * @return true if method is POST, PATCH, PUT or DELETE, false otherwise.
+	 */
+	protected boolean isFormMethod(String method) {
+		if (method == null) {
+			// GET equivalent
+			return false;
+		}
+		method = method.toUpperCase();
+		if (method.equals("GET")) {
+			return false;
+		}
+		if (method.equals("POST") || method.equals("PATCH") || method.equals("PUT") || method.equals("DELETE")) {
+
+			return true;
+		}
+		// Otherwise
+		return false;
 	}
 
 	/**

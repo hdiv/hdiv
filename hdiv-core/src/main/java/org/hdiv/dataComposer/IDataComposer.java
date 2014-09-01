@@ -186,11 +186,13 @@ public interface IDataComposer {
 	 * It is called by each request or form of the html page returned by the server, as long as the destiny of the
 	 * request is an action.
 	 * 
+	 * @param method
+	 *            HTTP method of the request.
 	 * @param action
 	 *            Action target
 	 * @return State id for this request. It can be null if it is impossible to precalculate the id for some strategy.
 	 */
-	public String beginRequest(String action);
+	public String beginRequest(String method, String action);
 
 	/**
 	 * It is called by each request or form of the html page returned by the server, as long as the destiny of the
