@@ -36,10 +36,13 @@ public class Page implements IPage, Serializable {
 	private static final long serialVersionUID = -5701140762067196143L;
 
 	/**
-	 * List with the states of the page <code>this</code>.
+	 * List with the states of the page. Only used in memory and cipher strategy.
 	 */
 	protected List<IState> states = new ArrayList<IState>();
 
+	/**
+	 * List with the state hashes of this page. Only used in hash strategy.
+	 */
 	protected Map<Integer, String> hashStates;
 
 	/**
@@ -53,14 +56,13 @@ public class Page implements IPage, Serializable {
 	private String flowId;
 
 	/**
-	 * Unique random token
+	 * Unique random token. Used only for links.
 	 * 
 	 * @since HDIV 2.0.4
 	 */
 	private String randomToken;
 
 	/**
-	 * TODO Is this propery actually used?
 	 * Page size.
 	 */
 	private long size;

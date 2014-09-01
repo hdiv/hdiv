@@ -37,6 +37,9 @@ public class State implements IState, Serializable {
 	 */
 	private static final long serialVersionUID = -5179573248448214135L;
 
+	/**
+	 * Default size of the parameter list.
+	 */
 	private static final int PARAMETERS_LIST_SIZE = 3;
 
 	/**
@@ -45,12 +48,12 @@ public class State implements IState, Serializable {
 	private String action;
 
 	/**
-	 * State url parameters in UTF-8
+	 * State url parameters in UTF-8. Used for links and action attribute of forms, null otherwise.
 	 */
 	private byte[] params;
 
 	/**
-	 * Map to store all the parameters in a HTTP (GET or POST) request
+	 * Contains all fields of a form if the state contains the data of a form.
 	 */
 	private List<IParameter> parameters;
 
@@ -70,9 +73,8 @@ public class State implements IState, Serializable {
 	private boolean parametersInitialized = false;
 
 	/**
-	 * Map with the required parameters to be able to do a correct request with state <code>this</code>. We consider
-	 * required parameters all of the parameters that can be sent via GET or those that are added to the name of an
-	 * action.
+	 * Required parameters to be able to do a correct request with this state. We consider required parameters all of
+	 * the parameters that can be sent via GET or those that are added to the name of an action.
 	 */
 	private List<String> requiredParams;
 
@@ -80,16 +82,19 @@ public class State implements IState, Serializable {
 		this.id = id;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.hdiv.state.IState#getParameters()
+	 */
 	public List<IParameter> getParameters() {
 		return this.parameters;
 	}
 
-	/**
-	 * Adds a new parameter to the state <code>this</code>. If it is a required parameter <code>parameter</code>, it is
-	 * also added to the required parameters map.
+	/*
+	 * (non-Javadoc)
 	 * 
-	 * @param parameter
-	 *            The parameter
+	 * @see org.hdiv.state.IState#addParameter(org.hdiv.state.IParameter)
 	 */
 	public void addParameter(IParameter parameter) {
 		if (!parametersInitialized) {
@@ -105,13 +110,10 @@ public class State implements IState, Serializable {
 		this.parameters.add(parameter);
 	}
 
-	/**
-	 * Returns the parameter that matches the given identifier <code>key</code>. Null is returned if the parameter name
-	 * is not found.
+	/*
+	 * (non-Javadoc)
 	 * 
-	 * @param key
-	 *            parameter identifier
-	 * @return IParameter object that matches the given identifier <code>key</code>.
+	 * @see org.hdiv.state.IState#getParameter(java.lang.String)
 	 */
 	public IParameter getParameter(String key) {
 		if (parameters != null) {
@@ -125,21 +127,29 @@ public class State implements IState, Serializable {
 		return null;
 	}
 
-	/**
-	 * @return Returns the action asociated to state <code>this</code>.
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.hdiv.state.IState#getAction()
 	 */
 	public String getAction() {
 		return this.action;
 	}
 
-	/**
-	 * @param action
-	 *            The action to set.
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.hdiv.state.IState#setAction(java.lang.String)
 	 */
 	public void setAction(String action) {
 		this.action = action;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.hdiv.state.IState#getParams()
+	 */
 	public String getParams() {
 		if (this.params == null) {
 			return null;
@@ -152,6 +162,11 @@ public class State implements IState, Serializable {
 		}
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.hdiv.state.IState#setParams(java.lang.String)
+	 */
 	public void setParams(String params) {
 		try {
 			if (params != null) {
@@ -164,15 +179,19 @@ public class State implements IState, Serializable {
 		}
 	}
 
-	/**
-	 * @return Returns the <code>this</code> id.
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.hdiv.state.IState#getId()
 	 */
 	public int getId() {
 		return id;
 	}
 
-	/**
-	 * @return Returns required parameters map.
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.hdiv.state.IState#getRequiredParams()
 	 */
 	@SuppressWarnings("unchecked")
 	public List<String> getRequiredParams() {
@@ -183,14 +202,29 @@ public class State implements IState, Serializable {
 		return requiredParams;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.hdiv.state.IState#getPageId()
+	 */
 	public int getPageId() {
 		return this.pageId;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.hdiv.state.IState#setPageId(int)
+	 */
 	public void setPageId(int pageId) {
 		this.pageId = pageId;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.hdiv.state.IState#existParameter(java.lang.String)
+	 */
 	public boolean existParameter(String key) {
 		throw new UnsupportedOperationException();
 	}
