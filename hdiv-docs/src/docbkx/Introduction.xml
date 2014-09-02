@@ -91,17 +91,15 @@
 						token
 					</emphasis>
 					:
-					A Random token is placed in each form and link of
-					the HTML
-					response, ensuring that this value will be submitted with
-					the next
-					request. This random string provides protection because
-					not only
-					does the compromised site need to know the URL of the
-					target site
-					and a valid request format for the target site, it also
-					must know
-					the random string which changes for each visited page.
+					A Random token is placed in each form and link of the HTML
+					response, ensuring that this value will be submitted with the next
+					request.
+					This random string provides protection because the
+					compromised site not only needs to know the URL of the target site
+					and a valid request format for the target site,
+					it also must know
+					the random string which changes for each visited
+					page.
 				</para>
 			</listitem>
 
@@ -290,23 +288,21 @@
 			<listitem>
 				<para>
 					<emphasis role="bold">A8 (CSRF)</emphasis>
-					: HDIV adds aleatory tokens to each link or form
-					existing within the
-					application. It makes extremely difficult to
-					implement an CSRF
-					attack because the attacker doesn’t know with is
-					the value.
+					: HDIV adds aleatory tokens to each link or form existing within
+					the application. It makes extremely difficult to implement an CSRF
+					attack because the attacker doesn’t know which is the value.
 
-					In order
-					to offer an extreme security level HDIV doesn’t
-					use an
-					aleatory token
-					per session and create a new token for each
-					requested page. Even the
-					token used by links and forms within the
-					same page are different
-					avoiding the reuse of link tokens to
-					exploit a web form.
+					In
+					order to offer an extreme security level HDIV doesn’t use an
+					aleatory token per session and create a new token for each
+					requested page.
+					Even the token used by links and forms within the
+					same page are
+					different
+					avoiding the reuse of link tokens to exploit
+					a web form. One token is created for data retrieval requests (GET,
+					HEAD, TRACE and OPTIONS HTTP methods) and another for data
+					modification (POST, PATCH, PUT and DELETE methods).
 				</para>
 				<sbr />
 			</listitem>
