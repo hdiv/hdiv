@@ -85,10 +85,19 @@ public class ScopedStateCache implements Serializable {
 			return false;
 		}
 
+		// Same method
+		if (!(state1.getMethod().equals(state2.getMethod()))) {
+			return false;
+		}
+
 		// Same Parameters
 		Collection<IParameter> params1 = state1.getParameters();
 		Collection<IParameter> params2 = state2.getParameters();
-		if (params1 != null && params2 != null) {
+		if (params1 != null && params2 == null) {
+			return false;
+		} else if (params1 == null && params2 != null) {
+			return false;
+		} else if (params1 != null && params2 != null) {
 			if (params1.size() != params2.size()) {
 				return false;
 			}
@@ -108,7 +117,11 @@ public class ScopedStateCache implements Serializable {
 
 		String parameters1 = state1.getParams();
 		String parameters2 = state2.getParams();
-		if (parameters1 != null && parameters2 != null) {
+		if (parameters1 != null && parameters2 == null) {
+			return false;
+		} else if (parameters1 == null && parameters2 != null) {
+			return false;
+		} else if (parameters1 != null && parameters2 != null) {
 			if (!parameters1.equals(parameters2)) {
 				return false;
 			}
@@ -117,7 +130,11 @@ public class ScopedStateCache implements Serializable {
 		// Same required Parameters
 		List<String> requiredParams1 = state1.getRequiredParams();
 		List<String> requiredParams2 = state2.getRequiredParams();
-		if (requiredParams1 != null && requiredParams2 != null) {
+		if (requiredParams1 != null && requiredParams2 == null) {
+			return false;
+		} else if (requiredParams1 == null && requiredParams2 != null) {
+			return false;
+		} else if (requiredParams1 != null && requiredParams2 != null) {
 			if (requiredParams1.size() != requiredParams2.size()) {
 				return false;
 			}
