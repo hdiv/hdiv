@@ -199,8 +199,8 @@ public class ValidatorHelperRequest implements IValidationHelper {
 			}
 		}
 
-		// Restore state from request or from memory
-		result = this.restoreState(request, target, request.getMethod());
+		// Restore state from request or memory
+		result = this.restoreState(request, target);
 		if (!result.isValid()) {
 			return result;
 		}
@@ -616,11 +616,9 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	 *            HTTP request
 	 * @param target
 	 *            Part of the url that represents the target action
-	 * @param method
-	 *            HTTP method
 	 * @return valid result if restored state is valid. False in otherwise.
 	 */
-	private ValidatorHelperResult restoreState(HttpServletRequest request, String target, String method) {
+	private ValidatorHelperResult restoreState(HttpServletRequest request, String target) {
 
 		// Hdiv parameter name
 		String hdivParameter = getHdivParameter(request);
@@ -635,15 +633,16 @@ public class ValidatorHelperRequest implements IValidationHelper {
 		}
 
 		try {
+
+			IState state = this.stateUtil.restoreState(requestState);
+
 			if (this.stateUtil.isMemoryStrategy(requestState)) {
 
-				if (!this.validateHDIVSuffix(requestState, method)) {
+				if (!this.validateHDIVSuffix(requestState, state)) {
 					this.logger.log(HDIVErrorCodes.HDIV_PARAMETER_INCORRECT_VALUE, target, hdivParameter, requestState);
 					return new ValidatorHelperResult(HDIVErrorCodes.HDIV_PARAMETER_INCORRECT_VALUE);
 				}
 			}
-
-			IState state = this.stateUtil.restoreState(requestState);
 
 			// return validation OK and resultant state
 			return new ValidatorHelperResult(true, state);
@@ -667,11 +666,11 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	 * 
 	 * @param value
 	 *            value received in the HDIV parameter
-	 * @param method
-	 *            HTTP method
+	 * @param restoredState
+	 *            restored state
 	 * @return True if the received value of the suffix is valid. False otherwise.
 	 */
-	protected boolean validateHDIVSuffix(String value, String method) {
+	protected boolean validateHDIVSuffix(String value, IState restoredState) {
 
 		int firstSeparator = value.indexOf("-");
 		int lastSeparator = value.lastIndexOf("-");
@@ -716,7 +715,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 				throw new HDIVException(HDIVErrorCodes.PAGE_ID_INCORRECT);
 			}
 
-			return currentPage.getRandomToken(method).equals(requestSuffix);
+			return currentPage.getRandomToken(restoredState.getMethod()).equals(requestSuffix);
 
 		} catch (IndexOutOfBoundsException e) {
 			String errorMessage = HDIVUtil.getMessage("validation.error", e.getMessage());

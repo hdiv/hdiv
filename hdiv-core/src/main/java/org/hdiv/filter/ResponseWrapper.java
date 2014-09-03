@@ -213,6 +213,7 @@ public class ResponseWrapper extends HttpServletResponseWrapper {
 	/**
 	 * It updates cookies stored in the user's session with the wrapper's cookies.
 	 */
+	@SuppressWarnings("unchecked")
 	private void updateSessionCookies() {
 
 		if (HDIVUtil.getHttpSession() != null) {

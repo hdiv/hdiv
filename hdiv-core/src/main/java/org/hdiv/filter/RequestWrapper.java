@@ -187,6 +187,7 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 	 *         that name
 	 * @since HDIV 1.1.1
 	 */
+	@SuppressWarnings("unchecked")
 	public String getHeader(String name) {
 
 		String cookieHeader = super.getHeader(name);
@@ -212,6 +213,7 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 	 *         return null.
 	 * @since HDIV 1.1.1
 	 */
+	@SuppressWarnings("unchecked")
 	public Enumeration<?> getHeaders(String name) {
 
 		Enumeration<?> headerValues = super.getHeaders(name);
@@ -294,6 +296,7 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 	 * 
 	 * @since HDIV 1.3
 	 */
+	@SuppressWarnings("unchecked")
 	public Map<? extends String, ?> getParameterMap() {
 
 		Map<String, Object> map = new HashMap<String, Object>(super.getRequest().getParameterMap());
