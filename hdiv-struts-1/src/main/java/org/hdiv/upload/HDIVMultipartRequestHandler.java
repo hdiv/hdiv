@@ -20,8 +20,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
-import java.util.Collection;
-import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
@@ -37,6 +35,7 @@ import org.apache.struts.upload.CommonsMultipartRequestHandler;
 import org.apache.struts.upload.FormFile;
 import org.apache.struts.upload.MultipartRequestWrapper;
 import org.hdiv.config.multipart.IMultipartConfig;
+import org.hdiv.config.multipart.exception.HdivMultipartException;
 import org.hdiv.filter.RequestWrapper;
 
 public class HDIVMultipartRequestHandler extends CommonsMultipartRequestHandler {
@@ -49,17 +48,17 @@ public class HDIVMultipartRequestHandler extends CommonsMultipartRequestHandler 
 	/**
 	 * The combined text and file request parameters.
 	 */
-	private Hashtable elementsAll = new Hashtable();
+	private Hashtable elementsAll;
 
 	/**
 	 * The file request parameters.
 	 */ 
-	private Hashtable elementsFile = new Hashtable();
+	private Hashtable elementsFile;
 
 	/**
 	 * The text request parameters.
 	 */
-	private Hashtable elementsText = new Hashtable();
+	private Hashtable elementsText;
 	
 
 	/**
@@ -72,6 +71,11 @@ public class HDIVMultipartRequestHandler extends CommonsMultipartRequestHandler 
 	 * @throws ServletException if an unrecoverable error occurs.
 	 */
 	public void handleRequest(HttpServletRequest request) throws ServletException {
+				
+		// Create the hash tables to be populated.
+		elementsText = new Hashtable();
+		elementsFile = new Hashtable();
+		elementsAll = new Hashtable();
 		
 		if (request instanceof MultipartRequestWrapper) {
 
@@ -83,13 +87,20 @@ public class HDIVMultipartRequestHandler extends CommonsMultipartRequestHandler 
 				return;
 			}
 			
-			Exception multipartException = (Exception) request.getAttribute(IMultipartConfig.FILEUPLOAD_EXCEPTION);
-			if (multipartException != null) {				
-				throw new ServletException(multipartException.getMessage());
+			HdivMultipartException multipartException = (HdivMultipartException) request
+					.getAttribute(IMultipartConfig.FILEUPLOAD_EXCEPTION);
+			if (multipartException != null) {
+				Exception orig = multipartException.getOriginal();
+				log.error("Failed to parse multipart request", orig);
+				if (orig instanceof ServletException) {
+					throw (ServletException) orig;
+				} else {
+					throw new ServletException("Failed to parse multipart request", orig);
+				}
 			}			
 			
 			// file items
-			Map items = requestWrapper.getFileElements();
+			Map<String, Object> items = requestWrapper.getFileElements();
 			
 			for (Object fileItem : items.values()) {
 				if (items != null) {
@@ -98,12 +109,13 @@ public class HDIVMultipartRequestHandler extends CommonsMultipartRequestHandler 
 			}
 			
 			// text items
-			Map<String, Object> textElements = requestWrapper.getTextElements();
+			items = requestWrapper.getTextElements();
 			
-			for (String key : textElements.keySet()) {
-				String [] currentTextValue = (String []) items.get(key);
-				this.addTextParameter(wrapper, key, currentTextValue);	
-			}	
+			for (String currentTextKey: items.keySet()) {
+				
+				String [] currentTextValue = (String []) items.get(currentTextKey);
+				this.addTextParameter(wrapper, currentTextKey, currentTextValue);
+			}		
 		}
 	}
 
@@ -120,11 +132,11 @@ public class HDIVMultipartRequestHandler extends CommonsMultipartRequestHandler 
 	protected void addTextParameter(HttpServletRequest request, String name, String [] value) {
 
 		if (request instanceof MultipartRequestWrapper) {
-			MultipartRequestWrapper wrapper = (MultipartRequestWrapper) request;			
+			MultipartRequestWrapper wrapper = (MultipartRequestWrapper) request;
 			
 			for (int i = 0; i < value.length; i++) {
-				wrapper.setParameter(name, value[i]);	
-			}			
+				wrapper.setParameter(name, value[i]);
+			}
 		}
 
 		elementsText.put(name, value);
@@ -146,8 +158,8 @@ public class HDIVMultipartRequestHandler extends CommonsMultipartRequestHandler 
 			FormFile formFile = new CommonsFormFile(currentItem);
 
 			elementsFile.put(currentItem.getFieldName(), formFile);
-			elementsAll.put(currentItem.getFieldName(), formFile);			
-		}		
+			elementsAll.put(currentItem.getFieldName(), formFile);
+		}
 	}
 
 	/**

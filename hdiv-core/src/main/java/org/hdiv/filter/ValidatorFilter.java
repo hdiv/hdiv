@@ -145,7 +145,7 @@ public class ValidatorFilter extends OncePerRequestFilter {
 
 					if (this.multipartConfig == null) {
 						throw new RuntimeException(
-								"No 'multipartConfig' configured. It is required to multipart requests.");
+								"No 'multipartConfig' configured. It is required for multipart requests.");
 					}
 
 					multipartProcessedRequest = this.multipartConfig.handleMultipartRequest(requestWrapper,
