@@ -304,6 +304,7 @@ public abstract class AbstractDataComposer implements IDataComposer {
 
 		Map<String, Integer> pCount = new HashMap<String, Integer>();
 
+		parameters = parameters.replaceAll("&amp;", "&");
 		String newParameters = parameters;
 
 		// Init indexes
@@ -322,7 +323,7 @@ public abstract class AbstractDataComposer implements IDataComposer {
 				pCount.put(name, num);
 
 				// Replace parameter with confidential values
-				newParameters = newParameters.replaceFirst(param, name + "=" + num);
+				newParameters = newParameters.replace(param, name + "=" + num);
 			}
 
 			// Update indexes
@@ -582,15 +583,15 @@ public abstract class AbstractDataComposer implements IDataComposer {
 	 */
 	private String getDecodedValue(String value, String charEncoding) {
 
+		if (value == null || value.length() == 0) {
+			return "";
+		}
+
 		String decodedValue = null;
 		try {
 			decodedValue = URLDecoder.decode(value, charEncoding);
 		} catch (UnsupportedEncodingException e) {
 			decodedValue = value;
-		}
-
-		if (decodedValue == null) {
-			return "";
 		}
 
 		// Remove escaped Html elements

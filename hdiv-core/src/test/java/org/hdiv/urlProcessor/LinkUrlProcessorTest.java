@@ -274,4 +274,32 @@ public class LinkUrlProcessorTest extends AbstractHDIVTestCase {
 
 	}
 
+	public void testProcessActionWhitespace() {
+
+		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+
+		String url = "/probando.do?param=text for testing";
+		String result = this.linkUrlProcessor.processUrl(request, url);
+		assertTrue(result.startsWith("/probando.do?param=0&_HDIV_STATE_"));
+	}
+
+	public void testProcessActionWhitespaceCharac() {
+
+		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+
+		String url = "/probando.do?param=text+for+testing";
+		String result = this.linkUrlProcessor.processUrl(request, url);
+		assertTrue(result.startsWith("/probando.do?param=0&_HDIV_STATE_"));
+	}
+
+	public void testProcessActionAmpersand() {
+
+		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+
+		String url = "/probando.do?stringArray=Value+1&amp;stringArray=Value+2&amp;stringArray=Value+3&amp;floatProperty=444.0&amp;intProperty=555";
+		String result = this.linkUrlProcessor.processUrl(request, url);
+		assertTrue(result
+				.startsWith("/probando.do?stringArray=0&stringArray=1&stringArray=2&floatProperty=0&intProperty=0&_HDIV_STATE_"));
+	}
+
 }
