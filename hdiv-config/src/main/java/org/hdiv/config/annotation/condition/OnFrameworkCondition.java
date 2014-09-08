@@ -48,6 +48,9 @@ public class OnFrameworkCondition implements ConfigurationCondition {
 	protected final boolean jsfModulePresent = ClassUtils.isPresent("org.hdiv.filter.JsfValidatorHelper",
 			OnFrameworkCondition.class.getClassLoader());
 
+	protected final boolean struts1ModulePresent = ClassUtils.isPresent("org.hdiv.action.HDIVRequestProcessor",
+			OnFrameworkCondition.class.getClassLoader());
+
 	protected final boolean thymeleafModulePresent = ClassUtils.isPresent(
 			"org.hdiv.web.servlet.support.ThymeleafHdivRequestDataValueProcessor",
 			OnFrameworkCondition.class.getClassLoader());
@@ -73,6 +76,8 @@ public class OnFrameworkCondition implements ConfigurationCondition {
 			return grailsPresent && grailsModulePresent;
 		} else if (frwk == SupportedFramework.JSF) {
 			return jsfPresent && jsfModulePresent;
+		} else if (frwk == SupportedFramework.STRUTS1) {
+			return struts1ModulePresent;
 		} else {
 			return false;
 		}

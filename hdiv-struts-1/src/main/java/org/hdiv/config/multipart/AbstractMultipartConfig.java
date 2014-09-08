@@ -73,6 +73,9 @@ public abstract class AbstractMultipartConfig implements IMultipartConfig {
 	 */
 	public long convertSizeToBytes(String sizeString, long defaultSize) {
 
+		if(sizeString == null) {
+			return defaultSize;
+		}
 		int multiplier = 1;
 
 		if (sizeString.endsWith("K")) {

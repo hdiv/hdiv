@@ -35,6 +35,13 @@
 		</dependency>
 		<dependency>
 			<groupId>org.hdiv</groupId>
+			<artifactId>hdiv-struts-1</artifactId>
+			<version>${project.version}</version>
+			<scope>compile</scope>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>org.hdiv</groupId>
 			<artifactId>hdiv-jsf</artifactId>
 			<version>${project.version}</version>
 			<scope>compile</scope>

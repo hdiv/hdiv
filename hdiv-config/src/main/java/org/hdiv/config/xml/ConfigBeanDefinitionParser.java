@@ -29,6 +29,7 @@ import org.hdiv.config.StartPage;
 import org.hdiv.config.Strategy;
 import org.hdiv.config.multipart.JsfMultipartConfig;
 import org.hdiv.config.multipart.SpringMVCMultipartConfig;
+import org.hdiv.config.multipart.StrutsMultipartConfig;
 import org.hdiv.context.RedirectHelper;
 import org.hdiv.dataComposer.DataComposerFactory;
 import org.hdiv.dataValidator.DataValidator;
@@ -127,6 +128,9 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 
 	protected final boolean springMvcPresent = ClassUtils.isPresent(
 			"org.springframework.web.servlet.DispatcherServlet", ConfigBeanDefinitionParser.class.getClassLoader());
+
+	protected final boolean struts1ModulePresent = ClassUtils.isPresent("org.hdiv.action.HDIVRequestProcessor",
+			ConfigBeanDefinitionParser.class.getClassLoader());
 
 	protected final boolean grailsPresent = ClassUtils.isPresent(
 			"org.codehaus.groovy.grails.web.servlet.GrailsDispatcherServlet",
@@ -227,6 +231,11 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 				this.createRequestDataValueProcessor(element, source, parserContext);
 			}
 			this.createSimpleBean(element, source, parserContext, SpringMVCMultipartConfig.class);
+		}
+
+		if (this.struts1ModulePresent) {
+
+			this.createSimpleBean(element, source, parserContext, StrutsMultipartConfig.class);
 		}
 
 		// Register JSF specific beans if we are using this web framework

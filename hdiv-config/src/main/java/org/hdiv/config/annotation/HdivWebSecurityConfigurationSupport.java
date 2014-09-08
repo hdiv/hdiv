@@ -35,6 +35,7 @@ import org.hdiv.config.annotation.builders.SecurityConfigBuilder.CipherConfigure
 import org.hdiv.config.annotation.grails.GrailsConfigurationSupport;
 import org.hdiv.config.annotation.jsf.JsfConfigurationSupport;
 import org.hdiv.config.annotation.springmvc.SpringMvcConfigurationSupport;
+import org.hdiv.config.annotation.struts1.Struts1ConfigurationSupport;
 import org.hdiv.config.annotation.thymeleaf.ThymeleafConfigurationSupport;
 import org.hdiv.config.validations.DefaultValidationParser;
 import org.hdiv.dataComposer.DataComposerFactory;
@@ -85,7 +86,7 @@ import org.springframework.context.annotation.Scope;
  * @since 2.1.7
  */
 @Import({ SpringMvcConfigurationSupport.class, ThymeleafConfigurationSupport.class, GrailsConfigurationSupport.class,
-		JsfConfigurationSupport.class })
+		JsfConfigurationSupport.class , Struts1ConfigurationSupport.class})
 public abstract class HdivWebSecurityConfigurationSupport {
 
 	@Bean

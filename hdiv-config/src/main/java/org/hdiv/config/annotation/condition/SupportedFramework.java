@@ -22,5 +22,5 @@ package org.hdiv.config.annotation.condition;
  */
 public enum SupportedFramework {
 
-	SPRING_MVC, GRAILS, JSF, THYMELEAF
+	SPRING_MVC, GRAILS, JSF, STRUTS1, THYMELEAF
 }
