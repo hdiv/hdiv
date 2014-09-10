@@ -53,8 +53,7 @@ public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
 	</para>
 
 	<para>
-		In the case of Grails framework the configuration is realized
-		through
+		In the case of Grails framework the configuration is realized through
 		Config.groovy file updating
 		<link xl:href="http://grails.org/plugin/hdiv">HDIV plugin</link>
 		configuration options.
@@ -64,23 +63,22 @@ public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
 		<title>Start Pages</title>
 
 		<para>
-			By default HDIV filter doesn't allow any request that is
-			hasn't
-			been
-			registered previously by HDIV. Of course, when an user access
+			By default HDIV filter doesn't allow any request that hasn't
+			been registered previously by HDIV. Of course, when an user access
 			the
-			first time is not possible to register the resource (url) requested
-			by the user. For this case HDIV incorporates the concept of start
-			pages that are urls that HDIV doesn't make any kind of validation. We
+			first time is not possible to register the resource (url)
+			requested
+			by the user. For this case HDIV incorporates the concept of
+			start
+			pages that are urls that HDIV doesn't make any kind of
+			validation. We
 			can see start pages as the home pages
 			of your web site.
 		</para>
 		<para>
 			Note that
 			usually HDIV is applied just to the authenticated part
-			of the
-			web
-			page.
+			of the web page.
 		</para>
 		<para>
 			In the code below there is the configuration code to define an

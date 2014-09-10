@@ -11,12 +11,103 @@
 		above HDIV offers more advanced options to cover all the user needs.
 	</para>
 
+	<section xml:id="advancedConfiguration-startparameters">
+		<title>Start Parameters</title>
+
+		<para>
+			By default HDIV filter doesn't allow any request parameter that
+			hasn't been registered previously by HDIV.
+			In some cases parameters
+			are not created in server side or has a random
+			value. For this case
+			HDIV incorporates the concept of start
+			parameters that are parameter
+			names that HDIV doesn't make any kind
+			of validation.
+		</para>
+		<para>
+			In the code below there is the configuration code to define an
+			start
+			parameter.
+			<programlisting language="xml">
+<![CDATA[
+<hdiv:config>
+	<hdiv:startParameters>paramName</hdiv:startParameters>
+</hdiv:config>
+]]></programlisting>
+
+		</para>
+
+		<para>
+			In JavaConfig mode:
+			<programlisting language="java">
+		
+<![CDATA[@Configuration
+@EnableHdivWebSecurity
+public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
+
+	@Override
+	public void addExclusions(ExclusionRegistry registry) {
+
+		registry.addParamExclusions("paramName");
+	}
+
+}
+]]></programlisting>
+		</para>
+
+		<para>
+			In the examples above, the parameter is not validated in all the
+			application. If we want to restrict that to only one or some pages,
+			there is another configuration option.
+		</para>
+
+		<para>
+			<programlisting language="xml">
+<![CDATA[
+<hdiv:config>
+	<hdiv:paramsWithoutValidation>
+		<hdiv:mapping url="/section/.*" parameters="paramName"/>
+	</hdiv:paramsWithoutValidation>
+</hdiv:config>
+]]></programlisting>
+
+		</para>
+
+		<para>
+			In JavaConfig mode:
+			<programlisting language="java">
+		
+<![CDATA[@Configuration
+@EnableHdivWebSecurity
+public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
+
+	@Override
+	public void addExclusions(ExclusionRegistry registry) {
+
+		registry.addParamExclusions("paramName").forUrls("/section/.*");;
+	}
+
+}
+]]></programlisting>
+		</para>
+
+	</section>
+
 	<section xml:id="advancedConfiguration-sessionexpiration">
 		<title>Session expiration</title>
 		<para>
 			When an user makes a request to an expired web session, HDIV
-			adds the possibility to redirect the user to the login pages instead
-			of showing HDIV error pages. For that you can use the code below:
+			adds the possibility to redirect the user to 'loginPage' instead of
+			showing HDIV error pages.
+		</para>
+		<para>
+			In the case web session has not expired but the page state was
+			removed from session, user is redirected to 'homePage' to continue
+			browsing without showing the error page.
+		</para>
+		<para>
+			For that you can use the code below:
 		</para>
 		<programlisting language="xml">
 <![CDATA[
@@ -247,7 +338,7 @@ grails {
 
 	</section>
 
-	<section xml:id="configuration-errorpage">
+	<section xml:id="advancedConfiguration-errorpage">
 		<title>Error page</title>
 		<para>
 			When HDIV detects a malicious request HDIV redirects the user to
@@ -873,6 +964,239 @@ grails {
 
 	</section>
 
+	<section xml:id="advancedConfiguration-longLivingPages">
+		<title>Long-living pages</title>
+		<para>
+			Pages whose link and forms never expire. When the page is
+			rendered the states created for links and forms are marked to never
+			expire.
+		</para>
+		<para>
+			There is a 'scope' attribute to configure if the states are
+			stored in user session ('user-session' scope) or servlet context
+			('app' scope). In the second case, the states are shared all the
+			users of the application.
+		</para>
+		<para>
+			It's possible to configure this option from HDIV config:
+		</para>
+		<programlisting language="xml">
+ 					<![CDATA[
+<hdiv:config>
+	<hdiv:longLivingPages>/home.html</hdiv:longLivingPages>
+</hdiv:config> 
+]]></programlisting>
 
+		<para>
+			In JavaConfig mode:
+			<programlisting language="java">
+		
+<![CDATA[@Configuration
+@EnableHdivWebSecurity
+public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
+
+	@Override
+	public void addLongLivingPages(LongLivingPagesRegistry registry) {
+	
+		registry.addLongLivingPages("/home.html");
+	}
+
+}
+]]></programlisting>
+		</para>
+
+		<para>
+			If you are a Grails user, configuration is implemented within
+			plugin
+			configuration:
+		</para>
+		<programlisting language="xml">
+ 					<![CDATA[
+grails {
+	plugin {
+		hdiv {
+			config {
+				avoidValidationInUrlsWithoutParams='true'
+			}
+		}
+	}
+}
+]]></programlisting>
+
+	</section>
+
+	<section xml:id="advancedConfiguration-randomName">
+		<title>Random name HDIV parameter</title>
+		<para>
+			_HDIV_STATE_ is the default name of the HDIV parameter.
+		</para>
+		<para>
+			There is a configuration option to enable the subtitution on the
+			constant parameter name with a random name. In this case a per user
+			random string is generated and used as parameter name.
+		</para>
+		<para>
+			It's possible to configure this option from HDIV config:
+		</para>
+		<programlisting language="xml">
+ 					<![CDATA[
+<hdiv:config randomName="true">
+</hdiv:config> 
+]]></programlisting>
+
+		<para>
+			In JavaConfig mode:
+			<programlisting language="java">
+		
+<![CDATA[@Configuration
+@EnableHdivWebSecurity
+public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
+
+	@Override
+	public void configure(SecurityConfigBuilder builder) {
+
+		builder.randomName(true);
+	}
+
+}
+]]></programlisting>
+		</para>
+
+		<para>
+			If you are a Grails user, configuration is implemented within
+			plugin configuration:
+		</para>
+		<programlisting language="xml">
+ 					<![CDATA[
+grails {
+	plugin {
+		hdiv {
+			config {
+				randomName='true'
+			}
+		}
+	}
+}
+]]></programlisting>
+
+	</section>
+
+	<section xml:id="advancedConfiguration-reuseExistingPageInAjaxRequest">
+		<title>Reuse existing page in Ajax request</title>
+		<para>
+			If this option is enabled, ajax requests don't create a new page
+			in session (in Memory strategy). New form and link states are stored
+			in the current page.
+		</para>
+		<para>
+			This option is recomended when Ajax is used to show dialog or
+			tab content and prevent HDIV state expiration.
+		</para>
+		<para>
+			To detect if a request is an Ajax request 'X-Requested-With'
+			header is used. It's submited by all mayor JavaScript libraries.
+		</para>
+		<para>
+			It's possible to configure this option from HDIV config:
+		</para>
+		<programlisting language="xml">
+ 					<![CDATA[
+<hdiv:config reuseExistingPageInAjaxRequest="true">
+</hdiv:config> 
+]]></programlisting>
+
+		<para>
+			In JavaConfig mode:
+			<programlisting language="java">
+		
+<![CDATA[@Configuration
+@EnableHdivWebSecurity
+public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
+
+	@Override
+	public void configure(SecurityConfigBuilder builder) {
+
+		builder.reuseExistingPageInAjaxRequest(true);
+	}
+
+}
+]]></programlisting>
+		</para>
+
+		<para>
+			If you are a Grails user, configuration is implemented within
+			plugin configuration:
+		</para>
+		<programlisting language="xml">
+ 					<![CDATA[
+grails {
+	plugin {
+		hdiv {
+			config {
+				reuseExistingPageInAjaxRequest='true'
+			}
+		}
+	}
+}
+]]></programlisting>
+
+	</section>
+
+	<section xml:id="advancedConfiguration-showErrorPageOnEditableValidation">
+		<title>Show error page on editable validation error</title>
+		<para>
+			By default editable validation error messages are shown as
+			general validation error.
+		</para>
+		<para>
+			If this option is enabled in case of editable validation error
+			the user is redirected to the error page, instead of continue
+			executing the request.
+		</para>
+		<para>
+			It's possible to configure this option from HDIV config:
+		</para>
+		<programlisting language="xml">
+ 					<![CDATA[
+<hdiv:config showErrorPageOnEditableValidation="true">
+</hdiv:config> 
+]]></programlisting>
+
+		<para>
+			In JavaConfig mode:
+			<programlisting language="java">
+		
+<![CDATA[@Configuration
+@EnableHdivWebSecurity
+public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
+
+	@Override
+	public void configure(SecurityConfigBuilder builder) {
+
+		builder.showErrorPageOnEditableValidation(true);
+	}
+
+}
+]]></programlisting>
+		</para>
+
+		<para>
+			If you are a Grails user, configuration is implemented within
+			plugin configuration:
+		</para>
+		<programlisting language="xml">
+ 					<![CDATA[
+grails {
+	plugin {
+		hdiv {
+			config {
+				showErrorPageOnEditableValidation='true'
+			}
+		}
+	}
+}
+]]></programlisting>
+
+	</section>
 
 </chapter>
