@@ -19,6 +19,7 @@ import java.util.Enumeration;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequestWrapper;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -73,11 +74,21 @@ public class SpringMVCMultipartConfig implements IMultipartConfig {
 
 		} catch (MultipartException e) {
 
-			HdivMultipartException exc = new HdivMultipartException(e);
-			throw exc;
+			throw new HdivMultipartException(e);
 		}
 
-		return processedRequest;
+		return new BasicRequestWrapper(processedRequest);
+	}
+
+	/**
+	 * {@link HttpServletRequest} wrapper, with the sole purpose of bypassing checks from
+	 * {@link DispatcherServlet#checkMultipart DispatcherServlet}.
+	 */
+	public class BasicRequestWrapper extends HttpServletRequestWrapper {
+
+		public BasicRequestWrapper(HttpServletRequest request) {
+			super(request);
+		}
 	}
 
 	/**
