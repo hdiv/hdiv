@@ -4,7 +4,8 @@ HDIV extends web application's behaviour by adding Security functionalities, mai
 
 Official Site: [http://hdiv.org](http://hdiv.org)
 
-Documentation: [https://github.com/hdiv/hdiv/wiki](https://github.com/hdiv/hdiv/wiki)
+Documentation: [http://hdiv.org/hdiv-documentation-single/doc.html](http://hdiv.org/hdiv-documentation-single/doc.html)
+Wiki: [https://github.com/hdiv/hdiv/wiki](https://github.com/hdiv/hdiv/wiki)
 
 ## How to build your own Hdiv jar
 Clone this repo and build jar files (you'll need Git and Maven installed):
