@@ -83,11 +83,14 @@ public class Page implements IPage, Serializable {
 	public void addState(IState state) {
 		int id = state.getId();
 		if (this.states.size() < id) {
-			// There are empty positions before id
-			this.states.add(id - 1, null);
+			// There are empty positions before id, fill with null values
+			for (int i = this.states.size(); i < id; i++) {
+				this.states.add(i, null);
+			}
 			this.states.add(id, state);
 
 		} else if (this.states.size() > id) {
+			// overwrite existing position
 			this.states.set(id, state);
 
 		} else {

@@ -496,6 +496,11 @@ public abstract class AbstractDataComposer implements IDataComposer {
 
 		IParameter parameter = state.getParameter(parameterName);
 		if (parameter != null) {
+			if (parameter.isEditable() && !editable) {
+				// A parameter can be created as editable but if a new non editable value is added, the parameter is
+				// changed to non editable. This is required in some frameworks like Struts 2.
+				parameter.setEditable(editable);
+			}
 			parameter.addValue(decodedValue);
 		} else {
 			// create a new parameter and add to the request

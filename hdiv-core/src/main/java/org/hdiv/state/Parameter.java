@@ -94,7 +94,7 @@ public class Parameter implements IParameter, Serializable {
 		if (editable) {
 			return;
 		}
-		
+
 		if (this.values == null) {
 			this.values = new ArrayList<String>(VALUES_LIST_SIZE);
 			this.values.add(this.value);
@@ -112,7 +112,7 @@ public class Parameter implements IParameter, Serializable {
 		if (editable) {
 			return false;
 		}
-		
+
 		if (this.values == null) {
 			return this.value.equalsIgnoreCase(value);
 		}
@@ -158,19 +158,28 @@ public class Parameter implements IParameter, Serializable {
 		if (editable) {
 			return Collections.emptyList();
 		}
-		
+
 		if (this.values == null) {
 			return Collections.singletonList(value);
 		}
-		
+
 		return values;
 	}
-	
+
 	/**
-	 * @return Returns if parameter <code>this</code> is editbale or not.
+	 * @return Returns if parameter <code>this</code> is editable or not.
 	 */
 	public boolean isEditable() {
 		return editable;
+	}
+
+	/**
+	 * @param editable
+	 *            Modify the editable value of the parameter
+	 * @since 2.1.8
+	 */
+	public void setEditable(boolean editable) {
+		this.editable = editable;
 	}
 
 	/**

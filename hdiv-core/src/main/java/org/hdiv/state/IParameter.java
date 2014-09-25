@@ -66,9 +66,16 @@ public interface IParameter {
 	public List<String> getValues();
 
 	/**
-	 * @return Returns if parameter <code>this</code> is editbale or not.
+	 * @return Returns if parameter <code>this</code> is editable or not.
 	 */
 	public boolean isEditable();
+
+	/**
+	 * @param editable
+	 *            Modify the editable value of the parameter
+	 * @since 2.1.8
+	 */
+	public void setEditable(boolean editable);
 
 	/**
 	 * @return Returns confidential value
