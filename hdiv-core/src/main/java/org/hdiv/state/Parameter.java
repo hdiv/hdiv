@@ -95,6 +95,11 @@ public class Parameter implements IParameter, Serializable {
 			return;
 		}
 
+		if (this.value == null) {
+			this.value = value;
+			return;
+		}
+
 		if (this.values == null) {
 			this.values = new ArrayList<String>(VALUES_LIST_SIZE);
 			this.values.add(this.value);
