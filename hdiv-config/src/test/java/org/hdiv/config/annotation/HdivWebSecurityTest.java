@@ -112,7 +112,7 @@ public class HdivWebSecurityTest {
 		assertEquals(1, urlValidations.size()); // Only safetext
 
 		urlValidations = validations.getUrls().get(new DefaultPatternMatcher("/safetext/.*"));
-		assertEquals(36, urlValidations.size());// Defaults
+		assertEquals(147, urlValidations.size());// Defaults
 	}
 	
 	@Test

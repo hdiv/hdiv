@@ -39,7 +39,7 @@ public class DefaultEditableValidationsTest extends TestCase {
 				.areEditableParameterValuesValid("/editableTest.html", "paramName", new String[] { value }, "text");
 	}
 
-	public void testSchema() {
+	public void testSqlInjection() {
 
 		assertFalse(validateValue("OR 1#"));
 		assertFalse(validateValue("DROP sampletable;--"));
@@ -81,6 +81,44 @@ public class DefaultEditableValidationsTest extends TestCase {
 		assertFalse(validateValue("SELECT pg_sleep(10);"));
 		assertFalse(validateValue("IF(SUBSTRING(Password,1,1)='2',BENCHMARK(100000,SHA1(1)),0) User,Password FROM mysql.user WHERE User = ‘root’;"));
 		assertFalse(validateValue("select if( user() like 'root@%', benchmark(100000,sha1('test')), 'false' );"));
+	}
+
+	public void testXSS() {
+
+		assertFalse(validateValue("<a href=javascript:..."));
+		assertFalse(validateValue("<applet src=\"...\" type=text/html>"));
+		assertFalse(validateValue("<applet src=\"data:text/html;base64,PHNjcmlwdD5hbGVydCgvWFNTLyk8L3NjcmlwdD4\" type=text/html>"));
+		assertFalse(validateValue("<base href=javascript:..."));
+		assertFalse(validateValue("<base href=... // change base URL to something else to exploit relative filename inclusion"));
+		assertFalse(validateValue("<bgsound src=javascript:..."));
+		assertFalse(validateValue("<body background=javascript:..."));
+		assertFalse(validateValue("<body onload=..."));
+		assertFalse(validateValue("<embed src=http://www.example.com/flash.swf allowScriptAccess=always"));
+		assertFalse(validateValue("<embed src=\"data:image/svg+xml;"));
+		assertFalse(validateValue("<frameset><frame src=\"javascript:...\"></frameset>"));
+		assertFalse(validateValue("<iframe src=javascript:..."));
+		assertFalse(validateValue("<img src=x onerror=..."));
+		assertFalse(validateValue("<input type=image src=javascript:..."));
+		assertFalse(validateValue("<layer src=..."));
+		assertFalse(validateValue("<link href=\"javascript:...\" rel=\"stylesheet\" type=\"text/css\""));
+		assertFalse(validateValue("<link href=\"http://www.example.com/xss.css\" rel=\"stylesheet\" type=\"text/css\""));
+		assertFalse(validateValue("<meta http-equiv=\"refresh\" content=\"0;url=javascript:...\""));
+		assertFalse(validateValue("<meta http-equiv=\"refresh\" content=\"0;url=http://;javascript:...\" // evasion"));
+		assertFalse(validateValue("<meta http-equiv=\"link\" rel=stylesheet content=\"http://www.example.com/xss.css\">"));
+		assertFalse(validateValue("<meta http-equiv=\"Set-Cookie\" content=\"NEW_COOKIE_VALUE\">"));
+		assertFalse(validateValue("<object data=http://www.example.com"));
+		assertFalse(validateValue("<object type=text/x-scriptlet data=..."));
+		assertFalse(validateValue("<object type=application/x-shockwave-flash data=xss.swf>"));
+		assertFalse(validateValue("<object classid=clsid:ae24fdae-03c6-11d1-8b76-0080c744f389><param name=url value=javascript:...></object> // not verified"));
+		assertFalse(validateValue("<script>...</script>"));
+		assertFalse(validateValue("<script src=http://www.example.com/xss.js></script> - TODO add another rule for this"));
+		assertFalse(validateValue("<script src=\"data:text/javascript,alert(1)\"></script>"));
+		assertFalse(validateValue("<script src=\"data:text/javascript;base64,PHNjcmlwdD5hbGVydChkb2N1bWVudC5jb29raWUpOzwvc2NyaXB0Pg==\"></script>"));
+		assertFalse(validateValue("<style>STYLE</style>"));
+		assertFalse(validateValue("<style type=text/css>STYLE</style>"));
+		assertFalse(validateValue("<style type=text/javascript>alert('xss')</style>"));
+		assertFalse(validateValue("<table background=javascript:..."));
+		assertFalse(validateValue("<td background=javascript:"));
 	}
 
 }

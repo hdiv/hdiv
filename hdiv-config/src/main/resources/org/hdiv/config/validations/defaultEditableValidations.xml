@@ -114,4 +114,339 @@
  		<![CDATA[(?i:(?:["'`´’‘]\s*?\*.+(?:x?or|div|like|between|and|id)\W*?["'`´’‘]\d)|(?:\^["'`´’‘])|(?:^[\w\s"'`´’‘-]+(?<=and\s)(?<=or|xor|div|like|between|and\s)(?<=xor\s)(?<=nand\s)(?<=not\s)(?<=\|\|)(?<=&&)\w+\()|(?:["'`´’‘][\s\d]*?[^\w\s]+\W*?\d\W*?.*?["'`´’‘\d])|(?:["'`´’‘]\s*?[^\w\s?]+\s*?[^\w\s]+\s*?["'`´’‘])|(?:["'`´’‘]\s*?[^\w\s]+\s*?[\W\d].*?(?:#|--))|(?:["'`´’‘].*?\*\s*?\d)|(?:["'`´’‘]\s*?(x?or|div|like|between|and)\s[^\d]+[\w-]+.*?\d)|(?:[()*<>%+-][\w-]+[^\w\s]+["'`´’‘][^,]))]]>
 	</validation>
 	
+	<!-- XSS -->
+	<validation id="XSS Filters - Category 1">
+ 		<![CDATA[(?i)(<script[^>]*>[\s\S]*?</script[^>]*>|<script[^>]*>[\s\S]*?</script[\[\s\S]\]*[\s\S]|<script[^>]*>[\s\S]*?</script[\s]*[\s]|<script[^>]*>[\s\S]*?</script|<script[^>]*>[\s\S]*?)]]>
+	</validation>
+	<validation id="XSS Filters - Category 2">
+ 		<![CDATA[(?i)([\s"'`;/0-9=]+on\w+\s*=)]]>
+	</validation>
+	<validation id="XSS Filters - Category 3">
+ 		<![CDATA[(?i)((?:=|U\s*R\s*L\s*\()\s*[^>]*\s*S\s*C\s*R\s*I\s*P\s*T\s*:|&colon;|[\s\S]allowscriptaccess[\s\S]|[\s\S]src[\s\S]|[\s\S]data:text/html[\s\S]|[\s\S]xlink:href[\s\S]|[\s\S]base64[\s\S]|[\s\S]xmlns[\s\S]|[\s\S]xhtml[\s\S]|[\s\S]style[\s\S]|<style[^>]*>[\s\S]*?|[\s\S]@import[\s\S]|<applet[^>]*>[\s\S]*?|<meta[^>]*>[\s\S]*?|<object[^>]*>[\s\S]*?)]]>
+	</validation>
+	<validation id="XSS1">
+ 		<![CDATA[\bgetparentfolder\b]]>
+	</validation>
+	<validation id="XSS2">
+ 		<![CDATA[\bonmousedown\b\W*?=]]>
+	</validation>
+	<validation id="XSS3">
+ 		<![CDATA[\bsrc\b\W*?\bshell:]]>
+	</validation>
+	<validation id="XSS4">
+ 		<![CDATA[\bmocha:]]>
+	</validation>
+	<validation id="XSS5">
+ 		<![CDATA[\bonabort\b]]>
+	</validation>
+	<validation id="XSS6">
+ 		<![CDATA[\blowsrc\b\W*?\bhttp:]]>
+	</validation>
+	<validation id="XSS7">
+ 		<![CDATA[\bonmouseup\b\W*?=]]>
+	</validation>
+	<validation id="XSS8">
+ 		<![CDATA[\bstyle\b\W*=.*bexpression\b\W*\(]]>
+	</validation>
+	<validation id="XSS9">
+ 		<![CDATA[\bhref\b\W*?\bshell:]]>
+	</validation>
+	<validation id="XSS10">
+ 		<![CDATA[\bcreatetextrange\b]]>
+	</validation>
+	<validation id="XSS11">
+ 		<![CDATA[\bondragdrop\b\W*?=]]>
+	</validation>
+	<validation id="XSS12">
+ 		<![CDATA[\bcopyparentfolder\b]]>
+	</validation>
+	<validation id="XSS13">
+ 		<![CDATA[\bonunload\b\W*?=]]>
+	</validation>
+	<validation id="XSS14">
+ 		<![CDATA[\.execscript\b]]>
+	</validation>
+	<validation id="XSS15">
+ 		<![CDATA[\bgetspecialfolder\b]]>
+	</validation>
+	<validation id="XSS16">
+ 		<![CDATA[<body\b.*?\bonload\b]]>
+	</validation>
+	<validation id="XSS17">
+ 		<![CDATA[\burl\b\W*?\bvbscript:]]>
+	</validation>
+	<validation id="XSS18">
+ 		<![CDATA[\bonkeydown\b\W*?=]]>
+	</validation>
+	<validation id="XSS19">
+ 		<![CDATA[\bonmousemove\b\W*?=]]>
+	</validation>
+	<validation id="XSS20">
+ 		<![CDATA[\blivescript:]]>
+	</validation>
+	<validation id="XSS21">
+ 		<![CDATA[\bonblur\b\W*?=]]>
+	</validation>
+	<validation id="XSS22">
+ 		<![CDATA[\bonmove\b\W*?=]]>
+	</validation>
+	<validation id="XSS23">
+ 		<![CDATA[\bsettimeout\b\W*?\(]]>
+	</validation>
+	<validation id="XSS24">
+ 		<![CDATA[\b(?=\w) ?iframe]]>
+	</validation>
+	<validation id="XSS25">
+ 		<![CDATA[\bsrc\b\W*?\bjavascript:]]>
+	</validation>
+	<validation id="XSS26">
+ 		<![CDATA[<body\b.*?\bbackground\b]]>
+	</validation>
+	<validation id="XSS27">
+ 		<![CDATA[\bsrc\b\W*?\bvbscript:]]>
+	</validation>
+	<validation id="XSS28">
+ 		<![CDATA[\btype\b\W*?\btext\b\W*?\becmascript\b]]>
+	</validation>
+	<validation id="XSS29">
+ 		<![CDATA[\bonfocus\b\W*?=]]>
+	</validation>
+	<validation id="XSS30">
+ 		<![CDATA[\bdocument\b\s*\.\s*\bcookie\b]]>
+	</validation>
+	<validation id="XSS31">
+ 		<![CDATA[\b(?=\w)!\[cdata\[]]>
+	</validation>
+	<validation id="XSS32">
+ 		<![CDATA[\bonerror\b\W*?=]]>
+	</validation>
+	<validation id="XSS33">
+ 		<![CDATA[\blowsrc\b\W*?\bjavascript:]]>
+	</validation>
+	<validation id="XSS34">
+ 		<![CDATA[\bactivexobject\b]]>
+	</validation>
+	<validation id="XSS35">
+ 		<![CDATA[\bonkeypress\b\W*?=]]>
+	</validation>
+	<validation id="XSS36">
+ 		<![CDATA[\bonsubmit\b\W*?=]]>
+	</validation>
+	<validation id="XSS37">
+ 		<![CDATA[\btype\b\W*?\bapplication\b\W*?\bx-javascript\b]]>
+	</validation>
+	<validation id="XSS38">
+ 		<![CDATA[\.addimport\b]]>
+	</validation>
+	<validation id="XSS39">
+ 		<![CDATA[\bhref\b\W*?\bjavascript:]]>
+	</validation>
+	<validation id="XSS40">
+ 		<![CDATA[\bonchange\b\W*?=]]>
+	</validation>
+	<validation id="XSS41">
+ 		<![CDATA[\btype\b\W*?\btext\b\W*?\bjscript\b]]>
+	</validation>
+	<validation id="XSS42">
+ 		<![CDATA[\balert\b\W*?\(]]>
+	</validation>
+	<validation id="XSS43">
+ 		<![CDATA[\btype\b\W*?\bapplication\b\W*?\bx-vbscript\b]]>
+	</validation>
+	<validation id="XSS44">
+ 		<![CDATA[\b(?=\w) ?meta\b]]>
+	</validation>
+	<validation id="XSS45">
+ 		<![CDATA[\bsrc\b\W*?\bhttp:]]>
+	</validation>
+	<validation id="XSS46">
+ 		<![CDATA[\btype\b\W*?\btext\b\W*?\bvbscript\b]]>
+	</validation>
+	<validation id="XSS47">
+ 		<![CDATA[\bonmouseout\b\W*?=]]>
+	</validation>
+	<validation id="XSS48">
+ 		<![CDATA[\blowsrc\b\W*?\bshell:]]>
+	</validation>
+	<validation id="XSS49">
+ 		<![CDATA[\basfunction:]]>
+	</validation>
+	<validation id="XSS50">
+ 		<![CDATA[\bonmouseover\b\W*?=]]>
+	</validation>
+	<validation id="XSS51">
+ 		<![CDATA[\bhref\b\W*?\bvbscript:]]>
+	</validation>
+	<validation id="XSS52">
+ 		<![CDATA[\burl\b\W*?\bjavascript:]]>
+	</validation>
+	<validation id="XSS53">
+ 		<![CDATA[\.innerhtml\b]]>
+	</validation>
+	<validation id="XSS54">
+ 		<![CDATA[\bonselect\b\W*?=]]>
+	</validation>
+	<validation id="XSS55">
+ 		<![CDATA[@import\b]]>
+	</validation>
+	<validation id="XSS56">
+ 		<![CDATA[\blowsrc\b\W*?\bvbscript:]]>
+	</validation>
+	<validation id="XSS57">
+ 		<![CDATA[\bonload\b\W*?=]]>
+	</validation>
+	<validation id="XSS58">
+ 		<![CDATA[\b(?=\w) ?script\b]]>
+	</validation>
+	<validation id="XSS59">
+ 		<![CDATA[\bonresize\b\W*?=]]>
+	</validation>
+	<validation id="XSS60">
+ 		<![CDATA[\bonclick\b\W*?=]]>
+	</validation>
+	<validation id="XSS61">
+ 		<![CDATA[\biframe\b.{0,100}?\bsrc\b]]>
+	</validation>
+	<validation id="XSS62">
+ 		<![CDATA[\bbackground-image:]]>
+	</validation>
+	<validation id="XSS63">
+ 		<![CDATA[\bonkeyup\b\W*?=]]>
+	</validation>
+	<validation id="XSS64">
+ 		<![CDATA[<input\b.*?\btype\b\W*?\bimage\b]]>
+	</validation>
+	<validation id="XSS65">
+ 		<![CDATA[\burl\b\W*?\bshell:]]>
+	</validation>
+	<validation id="XSS66">
+ 		<![CDATA[\btype\b\W*?\btext\b\W*?\bjavascript\b]]>
+	</validation>
+	<validation id="XSS67">
+ 		<![CDATA[\.fromcharcode\b]]>
+	</validation>
+	<validation id="XSS tags">
+ 		<![CDATA[<(a|abbr|acronym|address|applet|area|audioscope|b|base|basefront|bdo|bgsound|big|blackface|blink|blockquote|body|bq|br|button|caption|center|cite|code|col|colgroup|comment|dd|del|dfn|dir|div|dl|dt|em|embed|fieldset|fn|font|form|frame|frameset|h1|head|hr|html|i|iframe|ilayer|img|input|ins|isindex|kdb|keygen|label|layer|legend|li|limittext|link|listing|map|marquee|menu|meta|multicol|nobr|noembed|noframes|noscript|nosmartquotes|object|ol|optgroup|option|p|param|plaintext|pre|q|rt|ruby|s|samp|script|select|server|shadow|sidebar|small|spacer|span|strike|strong|style|sub|sup|table|tbody|td|textarea|tfoot|th|thead|title|tr|tt|u|ul|var|wbr|xml|xmp)\W]]>
+	</validation>
+	<validation id="XSS68">
+ 		<![CDATA[\ballowscriptaccess\b|\brel\b\W*?=]]>
+	</validation>
+	<validation id="XSS69">
+ 		<![CDATA[.+application/x-shockwave-flash|image/svg\+xml|text/(css|html|ecmascript|javascript|vbscript|x-(javascript|scriptlet|vbscript)).+]]>
+	</validation>
+	<validation id="Detect event handler names">
+ 		<![CDATA[\bon(abort|blur|change|click|dblclick|dragdrop|error|focus|keydown|keypress|keyup|load|mousedown|mousemove|mouseout|mouseover|mouseup|move|readystatechange|reset|resize|select|submit|unload)\b\W*?=]]>
+	</validation>
+	<validation id="Detect URI attributes 1">
+ 		<![CDATA[\b(background|dynsrc|href|lowsrc|src)\b\W*?=]]>
+	</validation>
+	<validation id="Detect URI attributes 2">
+ 		<![CDATA[(asfunction|javascript|vbscript|data|mocha|livescript):]]>
+	</validation>
+	<validation id="Style attribute">
+ 		<![CDATA[\bstyle\b\W*?=]]>
+	</validation>
+	<validation id="JavaScript fragments">
+ 		<![CDATA[(fromcharcode|alert|eval)\s*\(]]>
+	</validation>
+	<validation id="CSS attack fragments">
+ 		<![CDATA[background\b\W*?:\W*?url|background-image\b\W*?:|behavior\b\W*?:\W*?url|-moz-binding\b|@import\b|expression\b\W*?\(]]>
+	</validation>
+	<validation id="Cdata evasion">
+ 		<![CDATA[<!\[cdata\[|\]\]>]]>
+	</validation>
+	<validation id="XSS70">
+ 		<![CDATA[[/'"<]xss[/'">]]]>
+	</validation>
+	<validation id="XSS71">
+ 		<![CDATA[(88,83,83)]]>
+	</validation>
+	<validation id="XSS72">
+ 		<![CDATA['';!--"<xss>=&\{()\}]]>
+	</validation>
+	<validation id="XSS73">
+ 		<![CDATA[&\{]]>
+	</validation>
+	<validation id="XSS74">
+ 		<![CDATA[<!(doctype|entity)]]>
+	</validation>
+	<validation id="XSS Filters from IE 1">
+ 		<![CDATA[(?i:<script.*?>)]]>
+	</validation>
+	<validation id="XSS Filters from IE 2">
+ 		<![CDATA[(?i:<style.*?>.*?((@[i\\\\])|(([:=]|(&#x?0*((58)|(3A)|(61)|(3D));?)).*?([(\\\\]|(&#x?0*((40)|(28)|(92)|(5C));?)))))]]>
+	</validation>
+	<validation id="XSS Filters from IE 3">
+ 		<![CDATA[(?i:<script.*?[ /+\t]*?((src)|(xlink:href)|(href))[ /+\t]*=)]]>
+	</validation>
+	<validation id="XSS Filters from IE 4">
+ 		<![CDATA[(?i:<[i]?frame.*?[ /+\t]*?src[ /+\t]*=)]]>
+	</validation>
+	<validation id="XSS Filters from IE 5">
+ 		<![CDATA[(?i:<.*[:]vmlframe.*?[ /+\t]*?src[ /+\t]*=)]]>
+	</validation>
+	<validation id="XSS Filters from IE 6">
+ 		<![CDATA[(?i:(j|(&#x?0*((74)|(4A)|(106)|(6A));?))([\t]|(&((#x?0*(9|(13)|(10)|A|D);?)|(tab;)|(newline;))))*(a|(&#x?0*((65)|(41)|(97)|(61));?))([\t]|(&((#x?0*(9|(13)|(10)|A|D);?)|(tab;)|(newline;))))*(v|(&#x?0*((86)|(56)|(118)|(76));?))([\t]|(&((#x?0*(9|(13)|(10)|A|D);?)|(tab;)|(newline;))))*(a|(&#x?0*((65)|(41)|(97)|(61));?))([\t]|(&((#x?0*(9|(13)|(10)|A|D);?)|(tab;)|(newline;))))*(s|(&#x?0*((83)|(53)|(115)|(73));?))([\t]|(&((#x?0*(9|(13)|(10)|A|D);?)|(tab;)|(newline;))))*(c|(&#x?0*((67)|(43)|(99)|(63));?))([\t]|(&((#x?0*(9|(13)|(10)|A|D);?)|(tab;)|(newline;))))*(r|(&#x?0*((82)|(52)|(114)|(72));?))([\t]|(&((#x?0*(9|(13)|(10)|A|D);?)|(tab;)|(newline;))))*(i|(&#x?0*((73)|(49)|(105)|(69));?))([\t]|(&((#x?0*(9|(13)|(10)|A|D);?)|(tab;)|(newline;))))*(p|(&#x?0*((80)|(50)|(112)|(70));?))([\t]|(&((#x?0*(9|(13)|(10)|A|D);?)|(tab;)|(newline;))))*(t|(&#x?0*((84)|(54)|(116)|(74));?))([\t]|(&((#x?0*(9|(13)|(10)|A|D);?)|(tab;)|(newline;))))*(:|(&((#x?0*((58)|(3A));?)|(colon;)))).)]]>
+	</validation>
+	<validation id="XSS Filters from IE 7">
+ 		<![CDATA[(?i:(v|(&#x?0*((86)|(56)|(118)|(76));?))([\t]|(&((#x?0*(9|(13)|(10)|A|D);?)|(tab;)|(newline;))))*(b|(&#x?0*((66)|(42)|(98)|(62));?))([\t]|(&((#x?0*(9|(13)|(10)|A|D);?)|(tab;)|(newline;))))*(s|(&#x?0*((83)|(53)|(115)|(73));?))([\t]|(&((#x?0*(9|(13)|(10)|A|D);?)|(tab;)|(newline;))))*(c|(&#x?0*((67)|(43)|(99)|(63));?))([\t]|(&((#x?0*(9|(13)|(10)|A|D);?)|(tab;)|(newline;))))*(r|(&#x?0*((82)|(52)|(114)|(72));?))([\t]|(&((#x?0*(9|(13)|(10)|A|D);?)|(tab;)|(newline;))))*(i|(&#x?0*((73)|(49)|(105)|(69));?))([\t]|(&((#x?0*(9|(13)|(10)|A|D);?)|(tab;)|(newline;))))*(p|(&#x?0*((80)|(50)|(112)|(70));?))([\t]|(&((#x?0*(9|(13)|(10)|A|D);?)|(tab;)|(newline;))))*(t|(&#x?0*((84)|(54)|(116)|(74));?))([\t]|(&((#x?0*(9|(13)|(10)|A|D);?)|(tab;)|(newline;))))*(:|(&((#x?0*((58)|(3A));?)|(colon;)))).)]]>
+	</validation>
+	<validation id="XSS Filters from IE 8">
+ 		<![CDATA[(?i:<EMBED[ /+\t].*?((src)|(type)).*?=)]]>
+	</validation>
+	<validation id="XSS Filters from IE 9">
+ 		<![CDATA[(?i:<[?]?import[ /+\t].*?implementation[ /+\t]*=)]]>
+	</validation>
+	<validation id="XSS Filters from IE 10">
+ 		<![CDATA[(?i:<META[ /+\t].*?http-equiv[ /+\t]*=[ /+\t]*["'`]?(((c|(&#x?0*((67)|(43)|(99)|(63));?)))|((r|(&#x?0*((82)|(52)|(114)|(72));?)))|((s|(&#x?0*((83)|(53)|(115)|(73));?)))))]]>
+	</validation>
+	<validation id="XSS Filters from IE 11">
+ 		<![CDATA[(?i:<META[ /+\t].*?charset[ /+\t]*=)]]>
+	</validation>
+	<validation id="XSS Filters from IE 12">
+ 		<![CDATA[(?i:<LINK[ /+\t].*?href[ /+\t]*=)]]>
+	</validation>
+	<validation id="XSS Filters from IE 13">
+ 		<![CDATA[(?i:<BASE[ /+\t].*?href[ /+\t]*=)]]>
+	</validation>
+	<validation id="XSS Filters from IE 14">
+ 		<![CDATA[(?i:<APPLET[ /+\t>])]]>
+	</validation>
+	<validation id="XSS Filters from IE 15">
+ 		<![CDATA[(?i:<OBJECT[ /+\t].*?((type)|(codetype)|(classid)|(code)|(data))[ /+\t]*=)]]>
+	</validation>
+	<validation id="XSS Filters from IE 16">
+ 		<![CDATA[(?i:["'].*?[,].*(((v|(\\\\u0076)|(\\166)|(\\x76))[^a-z0-9]*(a|(\\\\u0061)|(\\141)|(\\x61))[^a-z0-9]*(l|(\\\\u006C)|(\\154)|(\\x6C))[^a-z0-9]*(u|(\\\\u0075)|(\\165)|(\\x75))[^a-z0-9]*(e|(\\\\u0065)|(\\145)|(\\x65))[^a-z0-9]*(O|(\\\\u004F)|(\\117)|(\\x4F))[^a-z0-9]*(f|(\\\\u0066)|(\\146)|(\\x66)))|((t|(\\\\u0074)|(\\164)|(\\x74))[^a-z0-9]*(o|(\\\\u006F)|(\\157)|(\\x6F))[^a-z0-9]*(S|(\\\\u0053)|(\\123)|(\\x53))[^a-z0-9]*(t|(\\\\u0074)|(\\164)|(\\x74))[^a-z0-9]*(r|(\\\\u0072)|(\\162)|(\\x72))[^a-z0-9]*(i|(\\\\u0069)|(\\151)|(\\x69))[^a-z0-9]*(n|(\\\\u006E)|(\\156)|(\\x6E))[^a-z0-9]*(g|(\\\\u0067)|(\\147)|(\\x67)))).*?:)]]>
+	</validation>
+	<validation id="XSS Filters from IE 17">
+ 		<![CDATA[(?i:["'][ ]*(([^a-z0-9~_:' ])|(in)).+?\(.*?\))]]>
+	</validation>
+	<validation id="XSS Filters from IE 18">
+ 		<![CDATA[(?i:["'].*?\)[ ]*(([^a-z0-9~_:' ])|(in)).+?\()]]>
+	</validation>
+	<validation id="XSS Filters from IE 19">
+ 		<![CDATA[(?i:["'][ ]*(([^a-z0-9~_:' ])|(in)).+?[.].+?=)]]>
+	</validation>
+	<validation id="XSS Filters from IE 20">
+ 		<![CDATA[(?i:["'][ ]*(([^a-z0-9~_:' ])|(in)).+?[\[].*?[]].*?=)]]>
+	</validation>
+	<validation id="XSS Filters from IE 21">
+ 		<![CDATA[(?i:["'][ ]*(([^a-z0-9~_:' ])|(in)).*?(((l|(\\\\u006C))(o|(\\\\u006F))(c|(\\\\u0063))(a|(\\\\u0061))(t|(\\\\u0074))(i|(\\\\u0069))(o|(\\\\u006F))(n|(\\\\u006E)))|((n|(\\\\u006E))(a|(\\\\u0061))(m|(\\\\u006D))(e|(\\\\u0065)))|((o|(\\\\u006F))(n|(\\\\u006E))(e|(\\\\u0065))(r|(\\\\u0072))(r|(\\\\u0072))(o|(\\\\u006F))(r|(\\\\u0072)))|((v|(\\\\u0076))(a|(\\\\u0061))(l|(\\\\u006C))(u|(\\\\u0075))(e|(\\\\u0065))(O|(\\\\u004F))(f|(\\\\u0066)))).*?=)]]>
+	</validation>
+	<validation id="XSS Filters from IE 22">
+ 		<![CDATA[(?i:<form.*?>)]]>
+	</validation>
+	<validation id="XSS Filters from IE 23">
+ 		<![CDATA[(?i:<isindex[ /+\t>])]]>
+	</validation>
+	<validation id="XSS Filters from IE 24">
+ 		<![CDATA[(?i:[ /+\t"'`]style[ /+\t]*?=.*([:=]|(&#x?0*((58)|(3A)|(61)|(3D));?)).*?([(\\\\]|(&#x?0*((40)|(28)|(92)|(5C));?)))]]>
+	</validation>
+	<validation id="XSS Filters from IE 25">
+ 		<![CDATA[(?i:[ /+\t"'`]on\[a-z\]\[a-z\]\[a-z\]+?[ +\t]*?=.)]]>
+	</validation>
+	<validation id="XSS Filters from IE 26">
+ 		<![CDATA[(?i:[ /+\t"'`]datasrc[ +\t]*?=.)]]>
+	</validation>
+	
 </defaultValidations>
