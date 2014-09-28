@@ -134,15 +134,15 @@ public class CustomSchemaTest extends TestCase {
 
 		// Second url
 		vals = urls.get(new DefaultPatternMatcher("b"));
-		assertEquals(8, vals.size());
-		// 2 custom rule + 6 default rules
+		assertEquals(38, vals.size());
+		// 2 custom rule + 36 default rules
 
 		val = (Validation) vals.get(0);
 		assertEquals("id2", val.getName());
 		val = (Validation) vals.get(1);
 		assertEquals("id3", val.getName());
 		val = (Validation) vals.get(2);
-		assertEquals("SQLInjection", val.getName());// first default rule
+		assertEquals("Detect SQL Comment Sequences", val.getName());// first default rule
 	}
 
 	public void testReuseExistingPageInAjaxRequest() {

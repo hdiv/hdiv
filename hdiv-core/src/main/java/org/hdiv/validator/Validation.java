@@ -119,7 +119,7 @@ public class Validation implements IValidation, Serializable {
 
 				m = this.rejectedPattern.matcher(values[j]);
 
-				if (m.matches()) {
+				if (m.find()) {
 					return false;
 				}
 			}
@@ -167,7 +167,7 @@ public class Validation implements IValidation, Serializable {
 	 *            The rejected pattern to set.
 	 */
 	public void setRejectedPattern(String rejectedPattern) {
-		this.rejectedPattern = Pattern.compile(rejectedPattern);
+		this.rejectedPattern = Pattern.compile(rejectedPattern, Pattern.DOTALL);
 	}
 
 	public String toString() {
