@@ -479,7 +479,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	 *            Part of the url that represents the target action
 	 * @return valid result if all required parameters are received. False in otherwise.
 	 */
-	private ValidatorHelperResult allRequiredParametersReceived(HttpServletRequest request, IState state, String target) {
+	protected ValidatorHelperResult allRequiredParametersReceived(HttpServletRequest request, IState state, String target) {
 
 		List<String> receivedParameters = state.getRequiredParams();
 
@@ -596,7 +596,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	 *            parameter name
 	 * @return True If it is parameter that needs no validation. False otherwise.
 	 */
-	private boolean isUserDefinedNonValidationParameter(String target, String parameter) {
+	protected boolean isUserDefinedNonValidationParameter(String target, String parameter) {
 
 		if (this.hdivConfig.isParameterWithoutValidation(target, parameter)) {
 
@@ -618,7 +618,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	 *            Part of the url that represents the target action
 	 * @return valid result if restored state is valid. False in otherwise.
 	 */
-	private ValidatorHelperResult restoreState(HttpServletRequest request, String target) {
+	protected ValidatorHelperResult restoreState(HttpServletRequest request, String target) {
 
 		// Hdiv parameter name
 		String hdivParameter = getHdivParameter(request);
@@ -746,7 +746,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	 * @throws HDIVException
 	 *             if there is an error in parameter validation process.
 	 */
-	private ValidatorHelperResult validateParameterValues(HttpServletRequest request, String target,
+	protected ValidatorHelperResult validateParameterValues(HttpServletRequest request, String target,
 			IParameter stateParameter, String[] actionParamValues, String parameter, String[] values) {
 
 		try {
@@ -803,7 +803,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	 *            values stored in state for <code>parameter</code>
 	 * @return True If repeated or no valid values have been received for the parameter <code>parameter</code>.
 	 */
-	private ValidatorHelperResult hasRepeatedOrInvalidValues(String target, String parameter, String[] values,
+	protected ValidatorHelperResult hasRepeatedOrInvalidValues(String target, String parameter, String[] values,
 			List<String> stateValues) {
 
 		List<String> tempStateValues = new ArrayList<String>();
@@ -829,7 +829,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	 *            real values for <code>parameter</code>
 	 * @return True If repeated values have been received for the parameter <code>parameter</code>.
 	 */
-	private ValidatorHelperResult hasConfidentialIncorrectValues(String target, String parameter, String[] values,
+	protected ValidatorHelperResult hasConfidentialIncorrectValues(String target, String parameter, String[] values,
 			List<String> stateValues) {
 
 		Set<String> receivedValues = new HashSet<String>();
@@ -868,7 +868,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	 *            values stored in state for <code>parameter</code>
 	 * @return True If repeated or no valid values have been received for the parameter <code>parameter</code>.
 	 */
-	private ValidatorHelperResult hasNonConfidentialIncorrectValues(String target, String parameter, String[] values,
+	protected ValidatorHelperResult hasNonConfidentialIncorrectValues(String target, String parameter, String[] values,
 			List<String> tempStateValues) {
 
 		Set<String> receivedValues = new HashSet<String>();
@@ -919,7 +919,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	 * @return True if <code>value</code> is correct. False otherwise.
 	 * @since HDIV 2.0
 	 */
-	private boolean isInRange(String target, String parameter, String value, List<String> stateValues) {
+	protected boolean isInRange(String target, String parameter, String value, List<String> stateValues) {
 
 		Matcher m = this.numberPattern.matcher(value);
 
@@ -953,7 +953,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	 *            Parameter <code>parameter</code> values.
 	 * @return True If the <code>values</code> validation is correct. False otherwise.
 	 */
-	private ValidatorHelperResult validateReceivedValuesInState(HttpServletRequest request, String target,
+	protected ValidatorHelperResult validateReceivedValuesInState(HttpServletRequest request, String target,
 			IParameter stateParameter, String[] actionParamValues, String parameter, String[] values) {
 
 		int size = values.length;
