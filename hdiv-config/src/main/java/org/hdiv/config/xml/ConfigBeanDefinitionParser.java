@@ -29,6 +29,7 @@ import org.hdiv.config.HDIVConfig;
 import org.hdiv.config.HDIVValidations;
 import org.hdiv.config.StartPage;
 import org.hdiv.config.Strategy;
+import org.hdiv.config.multipart.IMultipartConfig;
 import org.hdiv.config.multipart.JsfMultipartConfig;
 import org.hdiv.config.multipart.SpringMVCMultipartConfig;
 import org.hdiv.config.multipart.StrutsMultipartConfig;
@@ -220,18 +221,21 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 			} else {
 				this.createRequestDataValueProcessor(element, source, parserContext);
 			}
-			this.createSimpleBean(element, source, parserContext, SpringMVCMultipartConfig.class);
+			this.createSimpleBean(element, source, parserContext, SpringMVCMultipartConfig.class,
+					IMultipartConfig.class.getName());
 		}
 
 		if (this.struts1ModulePresent) {
 
-			this.createSimpleBean(element, source, parserContext, StrutsMultipartConfig.class);
+			this.createSimpleBean(element, source, parserContext, StrutsMultipartConfig.class,
+					IMultipartConfig.class.getName());
 		}
 
 		// Register JSF specific beans if we are using this web framework
 		if (this.jsfPresent && this.jsfModulePresent) {
 			this.createJsfValidatorHelper(element, source, parserContext);
-			this.createSimpleBean(element, source, parserContext, JsfMultipartConfig.class);
+			this.createSimpleBean(element, source, parserContext, JsfMultipartConfig.class,
+					IMultipartConfig.class.getName());
 
 			this.createFacesEventListener(element, source, parserContext);
 
@@ -646,9 +650,7 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		bean.getPropertyValues().addPropertyValue("dataComposerFactory", this.dataComposerFactoryRef);
 		bean.getPropertyValues().addPropertyValue("stateScopeManager", this.stateScopeManagerRef);
 
-		String name = parserContext.getReaderContext().generateBeanName(bean);
-		parserContext.getRegistry().registerBeanDefinition(name, bean);
-		return new RuntimeBeanReference(name);
+		return this.registerBean(bean, IValidationHelper.class.getName(), parserContext);
 	}
 
 	protected RuntimeBeanReference createRequestParameterValidator(Element element, Object source,
