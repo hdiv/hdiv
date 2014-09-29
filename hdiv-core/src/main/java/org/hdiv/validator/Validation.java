@@ -167,7 +167,7 @@ public class Validation implements IValidation, Serializable {
 	 *            The rejected pattern to set.
 	 */
 	public void setRejectedPattern(String rejectedPattern) {
-		this.rejectedPattern = Pattern.compile(rejectedPattern, Pattern.DOTALL);
+		this.rejectedPattern = Pattern.compile(rejectedPattern, Pattern.DOTALL | Pattern.CASE_INSENSITIVE);
 	}
 
 	public String toString() {

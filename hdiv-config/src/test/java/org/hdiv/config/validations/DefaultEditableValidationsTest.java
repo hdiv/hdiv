@@ -41,6 +41,7 @@ public class DefaultEditableValidationsTest extends TestCase {
 
 	public void testSqlInjection() {
 
+		// SQL Comment Sequences
 		assertFalse(validateValue("OR 1#"));
 		assertFalse(validateValue("DROP sampletable;--"));
 		assertFalse(validateValue("admin'--"));
@@ -56,6 +57,7 @@ public class DefaultEditableValidationsTest extends TestCase {
 		assertFalse(validateValue("' /*!or*/1='1"));
 		assertFalse(validateValue("0/**/union/*!50000select*/table_name`foo`/**/"));
 
+		// Payloads
 		assertFalse(validateValue("' or 1=1#"));
 		assertFalse(validateValue("') or ('1'='1--"));
 		assertFalse(validateValue("1 OR \'1\'!=0"));
@@ -85,6 +87,7 @@ public class DefaultEditableValidationsTest extends TestCase {
 
 	public void testXSS() {
 
+		// HTML tags
 		assertFalse(validateValue("<a href=javascript:..."));
 		assertFalse(validateValue("<applet src=\"...\" type=text/html>"));
 		assertFalse(validateValue("<applet src=\"data:text/html;base64,PHNjcmlwdD5hbGVydCgvWFNTLyk8L3NjcmlwdD4\" type=text/html>"));
@@ -119,6 +122,63 @@ public class DefaultEditableValidationsTest extends TestCase {
 		assertFalse(validateValue("<style type=text/javascript>alert('xss')</style>"));
 		assertFalse(validateValue("<table background=javascript:..."));
 		assertFalse(validateValue("<td background=javascript:"));
+
+		// Detect event handler names
+		assertFalse(validateValue("<body onload=...>"));
+		assertFalse(validateValue("<img src=x onerror=...>"));
+
+		// Detect URI attributes
+		assertFalse(validateValue("<a href=\"javascript:...\">Link</a>"));
+		assertFalse(validateValue("<base href=\"javascript:...\">"));
+		assertFalse(validateValue("<bgsound src=\"javascript:...\">"));
+		assertFalse(validateValue("<body background=\"javascript:...\">"));
+		assertFalse(validateValue("<frameset><frame src=\"javascript:...\"></frameset>"));
+		assertFalse(validateValue("<iframe src=javascript:...>"));
+		assertFalse(validateValue("<img dynsrc=javascript:...>"));
+		assertFalse(validateValue("<img lowsrc=javascript:...>"));
+		assertFalse(validateValue("<img src=javascript:...>"));
+		assertFalse(validateValue("<input type=image src=javascript:...>"));
+
+		assertFalse(validateValue("<meta http-equiv=\"refresh\" content=\"0;url=data:text/html;base64,PHNjcmlwdD5hbGVydCgnWFNTJyk8L3NjcmlwdD4K\">"));
+		assertFalse(validateValue("<img src=jaVaScrIpt:...>"));
+		assertFalse(validateValue("<img src=&#6a;avascript:...> (not evasion)"));
+		assertFalse(validateValue("<img src=\"jav	ascript:...\"> (embedded tab; null byte, other whitespace characters work too)"));
+		assertFalse(validateValue("<img src=\"jaa&#09;ascript:...\"> (the combination of the above two)"));
+
+		assertFalse(validateValue("<div style=\"background-image: url(javascript:...)\">"));
+
+		// JavaScript fragments
+		assertFalse(validateValue("alert(String.fromCharCode(88,83,83)"));
+		assertFalse(validateValue("document.cookie"));
+		assertFalse(validateValue("document.styleSheets[0].addImport('yourstylesheet.css', 2);"));
+		assertFalse(validateValue("window.execScript(\"alert('test');\", \"JavaScript\");"));
+		assertFalse(validateValue("document.body.innerHTML = ''"));
+		assertFalse(validateValue("newObj = new ActiveXObject(servername.typename[, location])"));
+		assertFalse(validateValue("setTimeout(\"alert('xss')\", 1000)"));
+		assertFalse(validateValue("xmlHttp.onreadystatechange=function() {}"));
+		assertFalse(validateValue("eval(location.hash.substr(1)) // used to execute JavaScript in fragment identifier"));
+
+		// CSS attack fragments
+		assertFalse(validateValue("<div style=\"background-image: url(javascript:...)\">"));
+		assertFalse(validateValue("<div style=\"background-image: url(&#1;javascript:alert('XSS'))\"> // not used"));
+		assertFalse(validateValue("<div style=\"width: expression(...);\">"));
+		assertFalse(validateValue("<img style=\"x:expression(document.write(1))\">"));
+		assertFalse(validateValue("<xss style=\"behavior: url(http://ha.ckers.org/xss.htc);\">"));
+		assertFalse(validateValue("<style>li {list-style-image: url(\"javascript:alert('XSS')\");}</style><ul><li>xss"));
+		assertFalse(validateValue("<style>@import url(...);</style>"));
+		assertFalse(validateValue("-moz-binding:url(...)"));
+		assertFalse(validateValue("background:url(\"javascript:...\")"));
+		assertFalse(validateValue("</xss/*-*/style=xss:e/**/xpression(alert(1337))> (comment evasion) // TODO Verify"));
+		assertFalse(validateValue("<style type=\"text/css\">@i\\m\\p\\o\\rt url(...);</style> (css escaping evasion)"));
+		assertFalse(validateValue("<li style=\"behavior:url(hilite.htc)\">xss"));
+
+	}
+
+	public void testCaseInsensitive() {
+
+		assertFalse(validateValue("<A "));
+		assertFalse(validateValue("select/*avoid-spaces*/password/**/FROM/**/Members"));
+		assertFalse(validateValue("<FRAMESET><frame src=\"javascript:...\"></FRAMESET>"));
 	}
 
 }
