@@ -158,17 +158,24 @@ public class StateUtil {
 		// Extract pageId and stateId from the state identifier
 		int firstSeparator = requestState.indexOf("-");
 		int lastSeparator = requestState.lastIndexOf("-");
-		if ((firstSeparator == -1) || (lastSeparator == -1)) {
+		if (firstSeparator == -1 || lastSeparator == -1) {
 			throw new HDIVException(HDIVErrorCodes.HDIV_PARAMETER_INCORRECT_VALUE);
 		}
 
-		String pageId = requestState.substring(0, firstSeparator);
-		String sId = requestState.substring(firstSeparator + 1, lastSeparator);
+		String pageId;
+		String sId;
+		try {
+			pageId = requestState.substring(0, firstSeparator);
+			sId = requestState.substring(firstSeparator + 1, lastSeparator);
+		} catch (StringIndexOutOfBoundsException e) {
+			throw new HDIVException(HDIVErrorCodes.HDIV_PARAMETER_INCORRECT_VALUE, e);
+		}
+
 		int stateId;
 		try {
 			stateId = Integer.parseInt(sId);
 		} catch (NumberFormatException e) {
-			throw new HDIVException(HDIVErrorCodes.HDIV_PARAMETER_INCORRECT_VALUE);
+			throw new HDIVException(HDIVErrorCodes.HDIV_PARAMETER_INCORRECT_VALUE, e);
 		}
 
 		// Obtain Scopes

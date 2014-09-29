@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.hdiv.AbstractHDIVTestCase;
 import org.hdiv.dataComposer.DataComposerFactory;
 import org.hdiv.dataComposer.IDataComposer;
+import org.hdiv.exception.HDIVException;
 import org.hdiv.util.HDIVUtil;
 
 /**
@@ -57,5 +58,21 @@ public class StateUtilTest extends AbstractHDIVTestCase {
 		assertNotNull(restored);
 		assertEquals(restored.getAction(), "test.do");
 		assertEquals(restored.getParameter("parameter1").getValues().get(0), "2");
+	}
+
+	public void testRestoreIncorrectStateId() {
+
+		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		IDataComposer dataComposer = this.dataComposerFactory.newInstance(request);
+		HDIVUtil.setDataComposer(dataComposer, request);
+
+		try {
+			IState restored = this.stateUtil.restoreState("1111-");
+			assertNull(restored);
+			fail();
+		} catch (HDIVException e) {
+			assertTrue(true);
+
+		}
 	}
 }
