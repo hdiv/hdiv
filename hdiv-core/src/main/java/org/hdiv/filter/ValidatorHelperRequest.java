@@ -479,7 +479,8 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	 *            Part of the url that represents the target action
 	 * @return valid result if all required parameters are received. False in otherwise.
 	 */
-	protected ValidatorHelperResult allRequiredParametersReceived(HttpServletRequest request, IState state, String target) {
+	protected ValidatorHelperResult allRequiredParametersReceived(HttpServletRequest request, IState state,
+			String target) {
 
 		List<String> receivedParameters = state.getRequiredParams();
 
@@ -734,12 +735,12 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	 *            HttpServletRequest to validate
 	 * @param target
 	 *            Part of the url that represents the target action
-	 * @param state
-	 *            IState The restored state for this url
 	 * @param stateParameter
-	 *            parameter stored in state
+	 *            Parameter stored in state
+	 * @param actionParamValues
+	 *            values of the parameters of the form action
 	 * @param parameter
-	 *            Parameter to validate
+	 *            Url parameters
 	 * @param values
 	 *            parameter <code>parameter</code> values
 	 * @return valid result if the validation is correct. False otherwise.
@@ -945,10 +946,12 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	 *            HttpServletRequest to validate
 	 * @param target
 	 *            Part of the url that represents the target action
-	 * @param state
-	 *            IState The restored state for this url
+	 * @param stateParameter
+	 *            parameters from the state
+	 * @param actionParamValues
+	 *            parameter from the state
 	 * @param parameter
-	 *            Parameter to validate
+	 *            Parameter name
 	 * @param values
 	 *            Parameter <code>parameter</code> values.
 	 * @return True If the <code>values</code> validation is correct. False otherwise.
