@@ -36,7 +36,8 @@
 							<htmlStylesheet>css/manual-multipage.css</htmlStylesheet>
 							<postProcess>
 								<copy todir="${project.build.directory}/docbkx/html">
-									<fileset dir="${basedir}/src/docbkx/resources/" includes="**/*.css" />
+									<fileset dir="${basedir}/src/docbkx/resources/"
+										includes="**/*.css" />
 								</copy>
 							</postProcess>
 						</configuration>
@@ -74,6 +75,28 @@
 					<excludes>
 						<exclude>*.*</exclude>
 					</excludes>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>com.google.code.maven-replacer-plugin</groupId>
+				<artifactId>replacer</artifactId>
+				<version>1.5.3</version>
+				<executions>
+					<execution>
+						<phase>site</phase>
+						<goals>
+							<goal>replace</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<file>target/docbkx/html/index.html</file>
+					<replacements>
+						<replacement>
+							<token>_project_version_</token>
+							<value>${project.version}</value>
+						</replacement>
+					</replacements>
 				</configuration>
 			</plugin>
 

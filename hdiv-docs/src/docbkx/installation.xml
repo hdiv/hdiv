@@ -33,12 +33,12 @@
 <dependency>
     <groupId>org.hdiv</groupId>
     <artifactId>hdiv-core</artifactId>
-    <version>2.1.7</version>
+    <version>_project_version_</version>
 </dependency>
 <dependency>
     <groupId>org.hdiv</groupId>
     <artifactId>hdiv-spring-mvc</artifactId>
-    <version>2.1.7</version>
+    <version>_project_version_</version>
 </dependency>
 ]]></programlisting>
 			</listitem>
@@ -115,12 +115,12 @@ compile ':hdiv:1.0-RC2'
 <dependency>
     <groupId>org.hdiv</groupId>
     <artifactId>hdiv-core</artifactId>
-    <version>2.1.7</version>
+    <version>_project_version_</version>
 </dependency>
 <dependency>
     <groupId>org.hdiv</groupId>
     <artifactId>hdiv-jstl-taglibs-1.2</artifactId>
-    <version>2.1.7</version>
+    <version>_project_version_</version>
 </dependency>
 ]]></programlisting>
 			</listitem>
@@ -166,12 +166,12 @@ compile ':hdiv:1.0-RC2'
 <dependency>
     <groupId>org.hdiv</groupId>
     <artifactId>hdiv-core</artifactId>
-    <version>2.1.7</version>
+    <version>_project_version_</version>
 </dependency>
 <dependency>
     <groupId>org.hdiv</groupId>
     <artifactId>hdiv-struts-1</artifactId>
-    <version>2.1.7</version>
+    <version>_project_version_</version>
 </dependency>]]></programlisting>
 			</listitem>
 			<listitem>
@@ -289,12 +289,12 @@ compile ':hdiv:1.0-RC2'
 <dependency>
     <groupId>org.hdiv</groupId>
     <artifactId>hdiv-core</artifactId>
-    <version>2.1.7</version>
+    <version>_project_version_</version>
 </dependency>
 <dependency>
     <groupId>org.hdiv</groupId>
     <artifactId>hdiv-jsf</artifactId>
-    <version>2.1.7</version>
+    <version>_project_version_</version>
 </dependency>
 ]]></programlisting>
 			</listitem>
