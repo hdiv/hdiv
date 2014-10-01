@@ -7,7 +7,7 @@
 	<artifactId>hdiv</artifactId>
 	<packaging>pom</packaging>
 	<name>HDIV Parent</name>
-	<version>2.1.8-SNAPSHOT</version>
+	<version>2.1.8.RC1</version>
 	<url>http://www.hdiv.org</url>
 	<description>Java Web Application Security Framework</description>
 
