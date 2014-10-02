@@ -28,7 +28,9 @@ import org.apache.commons.logging.LogFactory;
 import org.hdiv.config.HDIVConfig;
 import org.hdiv.config.multipart.IMultipartConfig;
 import org.hdiv.config.multipart.exception.HdivMultipartException;
+import org.hdiv.exception.HDIVException;
 import org.hdiv.util.Constants;
+import org.hdiv.util.HDIVErrorCodes;
 import org.springframework.beans.BeansException;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
@@ -175,13 +177,7 @@ public class ValidatorFilter extends OncePerRequestFilter {
 				this.errorHandler.handleValidatorError(multipartProcessedRequest, response, result.getErrorCode());
 			}
 
-		} catch (IOException e) {
-			// Internal framework exception, rethrow exception
-			throw e;
-		} catch (ServletException e) {
-			// Internal framework exception, rethrow exception
-			throw e;
-		} catch (Exception e) {
+		} catch (HDIVException e) {
 			if (log.isErrorEnabled()) {
 				log.error("Exception in request validation:");
 				log.error("Message: " + e.getMessage());
@@ -195,10 +191,10 @@ public class ValidatorFilter extends OncePerRequestFilter {
 				log.error("Cause: " + e.getCause());
 				log.error("Exception: " + e.toString());
 			}
-			// Redirect to error page
+			// Show error page
 			if (!this.hdivConfig.isDebugMode()) {
-				response.sendRedirect(response.encodeRedirectURL(request.getContextPath()
-						+ this.hdivConfig.getErrorPage()));
+				this.errorHandler.handleValidatorError(multipartProcessedRequest, response,
+						HDIVErrorCodes.INTERNAL_ERROR);
 			}
 		} finally {
 
