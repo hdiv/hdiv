@@ -6,6 +6,7 @@ Release 2.1.8
 ==================================
 
  * Fix multipart issue in Struts1 (https://github.com/hdiv/hdiv/issues/59).
+ * Fix multipart issue in Spring MVC (https://github.com/hdiv/hdiv/issues/62).
  
 Release 2.1.7
 ==================================

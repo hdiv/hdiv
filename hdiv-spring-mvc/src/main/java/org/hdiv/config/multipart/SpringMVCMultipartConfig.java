@@ -19,7 +19,6 @@ import java.util.Enumeration;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletRequestWrapper;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -36,7 +35,7 @@ import org.springframework.web.servlet.DispatcherServlet;
 import org.springframework.web.servlet.FrameworkServlet;
 
 /**
- * Class containing multipart request configuration.
+ * Class containing multipart request configuration for Spring MVC.
  * 
  * @author Gorka Vicente
  * @author Gotzon Illarramendi
@@ -76,25 +75,17 @@ public class SpringMVCMultipartConfig implements IMultipartConfig {
 
 		MultipartHttpServletRequest processedRequest = null;
 		try {
-			processedRequest = multipartResolver.resolveMultipart(request);
+			// Resolve multipart with the original request
+			processedRequest = multipartResolver.resolveMultipart((HttpServletRequest) request.getRequest());
 
 		} catch (MultipartException e) {
 
 			throw new HdivMultipartException(e);
 		}
 
-		return new BasicRequestWrapper(processedRequest);
-	}
-
-	/**
-	 * {@link HttpServletRequest} wrapper, with the sole purpose of bypassing checks from
-	 * {@link DispatcherServlet#checkMultipart DispatcherServlet}.
-	 */
-	public class BasicRequestWrapper extends HttpServletRequestWrapper {
-
-		public BasicRequestWrapper(HttpServletRequest request) {
-			super(request);
-		}
+		// Set MultipartHttpServletRequest as the child request of RequestWrapper
+		request.setRequest(processedRequest);
+		return request;
 	}
 
 	/**

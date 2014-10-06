@@ -19,27 +19,21 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.hdiv.config.multipart.IMultipartConfig;
 import org.hdiv.config.multipart.exception.HdivMultipartException;
-import org.hdiv.filter.RequestWrapper;
 import org.springframework.web.multipart.MultipartException;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.util.WebUtils;
 
 /**
- * MultipartResolver to use instead of CommonsMultipartResolver.
+ * {@link MultipartResolver} to use instead of {@link CommonsMultipartResolver}.
  * 
  * @author Gotzon Illarramendi
  */
 public class HdivCommonsMultipartResolver extends CommonsMultipartResolver {
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.springframework.web.multipart.commons.CommonsMultipartResolver#
-	 * resolveMultipart(javax.servlet.http.HttpServletRequest)
-	 */
 	@Override
-	public MultipartHttpServletRequest resolveMultipart(HttpServletRequest request) throws MultipartException {
+	public boolean isMultipart(HttpServletRequest request) {
 
 		HdivMultipartException multipartException = (HdivMultipartException) request
 				.getAttribute(IMultipartConfig.FILEUPLOAD_EXCEPTION);
@@ -52,14 +46,24 @@ public class HdivCommonsMultipartResolver extends CommonsMultipartResolver {
 			}
 		}
 
-		// If MultipartHttpServletRequest instance is present in request wrappers path, don't call to MultipartResolver
-		MultipartHttpServletRequest original = WebUtils.getNativeRequest(request, MultipartHttpServletRequest.class);
-		if (original != null) {
+		return super.isMultipart(request);
+	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.springframework.web.multipart.commons.CommonsMultipartResolver#
+	 * resolveMultipart(javax.servlet.http.HttpServletRequest)
+	 */
+	@Override
+	public MultipartHttpServletRequest resolveMultipart(HttpServletRequest request) throws MultipartException {
+
+		MultipartHttpServletRequest multipartHttpServletRequest = WebUtils.getNativeRequest(request,
+				MultipartHttpServletRequest.class);
+		if (multipartHttpServletRequest != null) {
 			// Use MultipartHttpServletRequestWrapper to maintain MultipartHttpServletRequest in first place
 			// and obtains parameter values from RequestWrapper, with real values with confidentiality activated
-			RequestWrapper requestWrapper = WebUtils.getNativeRequest(request, RequestWrapper.class);
-			return new MultipartHttpServletRequestWrapper(request, requestWrapper, original);
+			return new MultipartHttpServletRequestWrapper(request, multipartHttpServletRequest);
 		}
 
 		// If MultipartHttpServletRequest instance is not present, parse multipart request
