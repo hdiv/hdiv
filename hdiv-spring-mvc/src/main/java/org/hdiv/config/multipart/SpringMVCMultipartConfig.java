@@ -33,6 +33,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.servlet.DispatcherServlet;
 import org.springframework.web.servlet.FrameworkServlet;
+import org.springframework.web.util.WebUtils;
 
 /**
  * Class containing multipart request configuration for Spring MVC.
@@ -99,9 +100,9 @@ public class SpringMVCMultipartConfig implements IMultipartConfig {
 		MultipartResolver multipartResolver = lookupMultipartResolver(request.getSession().getServletContext());
 
 		if (multipartResolver != null) {
-			if (request instanceof MultipartHttpServletRequest) {
-				MultipartHttpServletRequest multientidadRequest = (MultipartHttpServletRequest) request;
-				multipartResolver.cleanupMultipart(multientidadRequest);
+			MultipartHttpServletRequest req = WebUtils.getNativeRequest(request, MultipartHttpServletRequest.class);
+			if (req != null) {
+				multipartResolver.cleanupMultipart(req);
 			}
 		}
 

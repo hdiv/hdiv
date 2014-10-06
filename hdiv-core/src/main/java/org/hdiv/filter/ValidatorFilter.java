@@ -134,6 +134,8 @@ public class ValidatorFilter extends OncePerRequestFilter {
 
 		HttpServletRequest multipartProcessedRequest = requestWrapper;
 
+		boolean isMultipartProcessed = false;
+
 		try {
 
 			boolean legal = false;
@@ -152,6 +154,7 @@ public class ValidatorFilter extends OncePerRequestFilter {
 
 					multipartProcessedRequest = this.multipartConfig.handleMultipartRequest(requestWrapper,
 							super.getServletContext());
+					isMultipartProcessed = true;
 
 				} catch (HdivMultipartException e) {
 					request.setAttribute(IMultipartConfig.FILEUPLOAD_EXCEPTION, e);
@@ -197,6 +200,11 @@ public class ValidatorFilter extends OncePerRequestFilter {
 						HDIVErrorCodes.INTERNAL_ERROR);
 			}
 		} finally {
+
+			if (isMultipartProcessed) {
+				// Cleanup multipart
+				this.multipartConfig.cleanupMultipart(multipartProcessedRequest);
+			}
 
 			// Destroy request scoped data
 			this.requestInitializer.endRequest(request);
