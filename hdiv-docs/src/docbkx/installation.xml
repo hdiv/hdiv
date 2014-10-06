@@ -10,19 +10,14 @@
 	<section xml:id="installation-springmvc">
 		<title>Spring MVC</title>
 
-		<para>Thanks to new extensions points included at Spring 3.1
-			, HDIV
-			installation
-			and configuration
-			for Spring MVC its cleaner and
-			easier
-			than previous
-			configurations.
-			Since 3.1.0 is not necessary to
-			use HDIV
-			custom tags
-			and it's enough
-			using Spring MVC original tags.
+		<para>
+			Thanks to new
+			<link
+				xl:href="http://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/web/servlet/support/RequestDataValueProcessor.html">extension point</link>
+			included at Spring 3.1, HDIV
+			installation and configuration for Spring
+			MVC is cleaner and easier
+			than previous configurations.
 		</para>
 
 		<orderedlist numeration="arabic">
@@ -32,7 +27,7 @@
  					<![CDATA[
 <dependency>
     <groupId>org.hdiv</groupId>
-    <artifactId>hdiv-core</artifactId>
+    <artifactId>hdiv-config</artifactId>
     <version>_project_version_</version>
 </dependency>
 <dependency>
@@ -42,9 +37,8 @@
 </dependency>
 ]]></programlisting>
 			</listitem>
-
 			<listitem>
-				<para>Add HDIV listener and Filter within web.xml</para>
+				<para>Add HDIV listener and filter within web.xml</para>
 
 				<programlisting language="xml">
  <![CDATA[
@@ -63,6 +57,37 @@
 </filter-mapping>
 ]]></programlisting>
 			</listitem>
+			<listitem>
+				<para>Multipart configuration. Replace Spring MVCs MultipartResolver
+					with HDIVs one.
+				</para>
+				<para>If commons fileupload is used for multipart processing:</para>
+
+				<programlisting language="xml">
+ <![CDATA[
+<bean id="multipartResolver" class="org.hdiv.web.multipart.HdivCommonsMultipartResolver">
+    <property name="maxUploadSize" value="100000" />
+</bean>
+]]></programlisting>
+				<para>If Servlet 3 standard multipart processing is used:</para>
+
+				<programlisting language="xml">
+ <![CDATA[
+<bean id="multipartResolver" class="org.hdiv.web.multipart.HdivStandardServletMultipartResolver">
+</bean>
+]]></programlisting>
+			</listitem>
+			<listitem>
+				<para>Editable data validation. In order to add editable validation
+					errors into Spring MVC binding and validation errors, configure
+					'hdivEditableValidator' as application wide validator.
+				</para>
+
+				<programlisting language="xml">
+ <![CDATA[
+<mvc:annotation-driven validator="hdivEditableValidator"/>
+]]></programlisting>
+			</listitem>
 		</orderedlist>
 		<para>
 			If you are using Spring MVC version previous to 3.1, it's
@@ -73,16 +98,50 @@
 		<programlisting language="xml">
  <![CDATA[
 <jsp-config>
-	<taglib>
-		<taglib-uri>http://www.springframework.org/tags/form</taglib-uri>
-		<taglib-location>/WEB-INF/tlds/hdiv-spring-form-3_0_4.tld</taglib-location>
-	</taglib>
-	<taglib>
-		<taglib-uri>http://www.springframework.org/tags</taglib-uri>
-		<taglib-location>/WEB-INF/tlds/hdiv-spring.tld</taglib-location>
-	</taglib>
+    <taglib>
+        <taglib-uri>http://www.springframework.org/tags/form</taglib-uri>
+        <taglib-location>/WEB-INF/tlds/hdiv-spring-form-3_0_4.tld</taglib-location>
+    </taglib>
+    <taglib>
+        <taglib-uri>http://www.springframework.org/tags</taglib-uri>
+        <taglib-location>/WEB-INF/tlds/hdiv-spring.tld</taglib-location>
+    </taglib>
 </jsp-config>
 ]]></programlisting>
+	</section>
+
+	<section xml:id="installation-springmvc-thymeleaf">
+		<title>Spring MVC and Thymeleaf</title>
+
+		<para>
+			Thanks to the implementation of
+			<link
+				xl:href="http://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/web/servlet/support/RequestDataValueProcessor.html">RequestDataValueProcessor</link>
+			interface in Thymeleaf, HDIV support is straightforward.
+		</para>
+
+		<orderedlist numeration="arabic">
+			<listitem>
+				<para>
+					Follow configuration steps for
+					<link xl:href="#installation-springmvc">Spring MVC</link>
+					installation.
+				</para>
+			</listitem>
+			<listitem>
+				<para>Add HDIV jar for Thymeleaf</para>
+				<programlisting language="xml">
+ 					<![CDATA[
+<dependency>
+    <groupId>org.hdiv</groupId>
+    <artifactId>hdiv-thymeleaf</artifactId>
+    <version>_project_version_</version>
+</dependency>
+]]></programlisting>
+			</listitem>
+
+		</orderedlist>
+
 	</section>
 
 	<section xml:id="installation-grails">
@@ -114,7 +173,7 @@ compile ':hdiv:1.0-RC2'
  					<![CDATA[
 <dependency>
     <groupId>org.hdiv</groupId>
-    <artifactId>hdiv-core</artifactId>
+    <artifactId>hdiv-config</artifactId>
     <version>_project_version_</version>
 </dependency>
 <dependency>
@@ -145,10 +204,10 @@ compile ':hdiv:1.0-RC2'
 
 <!-- replace JSTL tld with hdiv tld-->
 <jsp-config>
-	<taglib>
-		<taglib-uri>http://java.sun.com/jsp/jstl/core</taglib-uri>
-		<taglib-location>/WEB-INF/tlds/hdiv-c.tld</taglib-location>
-	</taglib>
+    <taglib>
+        <taglib-uri>http://java.sun.com/jsp/jstl/core</taglib-uri>
+        <taglib-location>/WEB-INF/tlds/hdiv-c.tld</taglib-location>
+    </taglib>
 </jsp-config>
 ]]></programlisting>
 			</listitem>
@@ -165,7 +224,7 @@ compile ':hdiv:1.0-RC2'
  					<![CDATA[
 <dependency>
     <groupId>org.hdiv</groupId>
-    <artifactId>hdiv-core</artifactId>
+    <artifactId>hdiv-config</artifactId>
     <version>_project_version_</version>
 </dependency>
 <dependency>
@@ -288,7 +347,7 @@ compile ':hdiv:1.0-RC2'
  					<![CDATA[
 <dependency>
     <groupId>org.hdiv</groupId>
-    <artifactId>hdiv-core</artifactId>
+    <artifactId>hdiv-config</artifactId>
     <version>_project_version_</version>
 </dependency>
 <dependency>
@@ -318,8 +377,6 @@ compile ':hdiv:1.0-RC2'
 </listener>
 
 <!-- HDIV Validator Filter -->
-
-<!-- HDIV Validator Filter -->
 <filter>
     <filter-name>ValidatorFilter</filter-name>
     <filter-class>org.hdiv.filter.ValidatorFilter</filter-class>
@@ -337,50 +394,49 @@ compile ':hdiv:1.0-RC2'
  <![CDATA[
 <?xml version="1.0" encoding="UTF-8"?>
 <faces-config xmlns="http://java.sun.com/xml/ns/javaee"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd"
-        version="2.0">
-        
-        <component>
-                <component-type>javax.faces.HtmlOutcomeTargetLink</component-type>
-                <component-class>org.hdiv.components.HtmlOutcomeTargetLinkExtension</component-class>
-        </component>
-        <component>
-                <component-type>javax.faces.HtmlOutcomeTargetButton</component-type>
-                <component-class>org.hdiv.components.HtmlOutcomeTargetButtonExtension</component-class>
-        </component>
-        
-        <component>
-                <component-type>javax.faces.Parameter</component-type>
-                <component-class>org.hdiv.components.UIParameterExtension</component-class>
-        </component>
-        <component>
-                <component-type>javax.faces.HtmlInputHidden</component-type>
-                <component-class>org.hdiv.components.HtmlInputHiddenExtension</component-class>
-        </component>
-        <component>
-                <component-type>javax.faces.HtmlOutputLink</component-type>
-                <component-class>org.hdiv.components.HtmlOutputLinkExtension</component-class>
-        </component>
-        <component>
-                <component-type>javax.faces.HtmlCommandLink</component-type>
-                <component-class>org.hdiv.components.HtmlCommandLinkExtension</component-class>
-        </component>
-        <component>
-                <component-type>javax.faces.HtmlCommandButton</component-type>
-                <component-class>org.hdiv.components.HtmlCommandButtonExtension</component-class>
-        </component>
-        
-        <lifecycle>
-                <phase-listener>org.hdiv.phaseListeners.ComponentMessagesPhaseListener</phase-listener>
-                <phase-listener>org.hdiv.phaseListeners.ConfigPhaseListener</phase-listener>
-        </lifecycle>
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd"
+    version="2.0">
+    
+    <component>
+        <component-type>javax.faces.HtmlOutcomeTargetLink</component-type>
+        <component-class>org.hdiv.components.HtmlOutcomeTargetLinkExtension</component-class>
+    </component>
+    <component>
+        <component-type>javax.faces.HtmlOutcomeTargetButton</component-type>
+        <component-class>org.hdiv.components.HtmlOutcomeTargetButtonExtension</component-class>
+    </component>
+    <component>
+        <component-type>javax.faces.Parameter</component-type>
+        <component-class>org.hdiv.components.UIParameterExtension</component-class>
+    </component>
+    <component>
+        <component-type>javax.faces.HtmlInputHidden</component-type>
+        <component-class>org.hdiv.components.HtmlInputHiddenExtension</component-class>
+    </component>
+    <component>
+        <component-type>javax.faces.HtmlOutputLink</component-type>
+        <component-class>org.hdiv.components.HtmlOutputLinkExtension</component-class>
+    </component>
+    <component>
+        <component-type>javax.faces.HtmlCommandLink</component-type>
+        <component-class>org.hdiv.components.HtmlCommandLinkExtension</component-class>
+    </component>
+    <component>
+        <component-type>javax.faces.HtmlCommandButton</component-type>
+        <component-class>org.hdiv.components.HtmlCommandButtonExtension</component-class>
+    </component>
+    
+    <lifecycle>
+        <phase-listener>org.hdiv.phaseListeners.ComponentMessagesPhaseListener</phase-listener>
+        <phase-listener>org.hdiv.phaseListeners.ConfigPhaseListener</phase-listener>
+    </lifecycle>
 
-        <factory>
-                <external-context-factory>org.hdiv.context.ExternalContextFactoryWrapper</external-context-factory>
-                <exception-handler-factory>org.hdiv.exceptionHandler.HDIVExceptionHandlerFactory</exception-handler-factory>
-        </factory>
-        
+    <factory>
+        <external-context-factory>org.hdiv.context.ExternalContextFactoryWrapper</external-context-factory>
+        <exception-handler-factory>org.hdiv.exceptionHandler.HDIVExceptionHandlerFactory</exception-handler-factory>
+    </factory>
+    
 </faces-config>
 ]]></programlisting>
 			</listitem>

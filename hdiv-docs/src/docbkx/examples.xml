@@ -38,6 +38,28 @@ mvn tomcat:run
 ]]></programlisting>
 
 	</section>
+	<section xml:id="examples-springmvc-thymeleaf">
+		<title>Spring MVC and Thymeleaf</title>
+		<para>
+			<link xl:href="https://github.com/hdiv/thymeleafexamples-petclinic">thymeleafexamples-petclinic </link>
+			is the sample application that show the
+			integration
+			between
+			Spring Mvc, Thymeleaf
+			and Hdiv.
+			Follow the steps below in order
+			to test
+			the application:
+		</para>
+		<programlisting>
+<![CDATA[
+git clone git://github.com/hdiv/thymeleafexamples-petclinic.git
+cd thymeleafexamples-petclinic
+mvn package
+mvn tomcat7:run
+]]></programlisting>
+
+	</section>
 	<section xml:id="examples-grails">
 		<title>Grails</title>
 		<para>
