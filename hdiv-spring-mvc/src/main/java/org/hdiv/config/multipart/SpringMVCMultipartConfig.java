@@ -25,6 +25,7 @@ import org.apache.commons.logging.LogFactory;
 import org.hdiv.config.multipart.exception.HdivMultipartException;
 import org.hdiv.filter.RequestWrapper;
 import org.hdiv.web.multipart.HdivCommonsMultipartResolver;
+import org.hdiv.web.multipart.HdivStandardServletMultipartResolver;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
@@ -68,10 +69,11 @@ public class SpringMVCMultipartConfig implements IMultipartConfig {
 		if (multipartResolver == null) {
 			return request;
 		}
-		if (!(multipartResolver instanceof HdivCommonsMultipartResolver)) {
+		if (!(multipartResolver instanceof HdivCommonsMultipartResolver || multipartResolver instanceof HdivStandardServletMultipartResolver)) {
 			throw new IllegalStateException(
-					"In order to enable HDIV multipart processing, MultipartResolver must be of type "
-							+ HdivCommonsMultipartResolver.class.getName());
+					"In order to enable HDIV multipart processing, MultipartResolver must be of "
+							+ HdivCommonsMultipartResolver.class.getName() + " or "
+							+ HdivStandardServletMultipartResolver.class.getName() + " type.");
 		}
 
 		MultipartHttpServletRequest processedRequest = null;
