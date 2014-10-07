@@ -15,7 +15,6 @@
  */
 package org.hdiv.web.multipart;
 
-import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -23,7 +22,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 
-import org.hdiv.filter.RequestWrapper;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.util.Assert;
@@ -32,21 +30,14 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 /**
- * <p>
  * {@link MultipartHttpServletRequest} wrapper for Multipart requests.
- * </p>
  * <p>
- * Use inner {@link RequestWrapper} in request chain to obtain request parameter real values with confidentiality
- * activated.
- * </p>
+ * Use inner {@link MultipartHttpServletRequest} to obtain Multipart processed files.
  * <p>
- * And inner {@link MultipartHttpServletRequest} to obtain Multipart processed Files.
- * </p>
+ * And original {@link HttpServletRequest} request for parameters and the rest of data.
  */
 public class MultipartHttpServletRequestWrapper extends HttpServletRequestWrapper implements
 		MultipartHttpServletRequest {
-
-	private RequestWrapper innerRequestWrapper;
 
 	private MultipartHttpServletRequest innerMultipartHttpServletRequest;
 
@@ -54,44 +45,12 @@ public class MultipartHttpServletRequestWrapper extends HttpServletRequestWrappe
 		super(request);
 	}
 
-	public MultipartHttpServletRequestWrapper(HttpServletRequest request, RequestWrapper innerRequestWrapper,
+	public MultipartHttpServletRequestWrapper(HttpServletRequest request,
 			MultipartHttpServletRequest innerMultipartHttpServletRequest) {
 		super(request);
 		Assert.notNull(request);
-		Assert.notNull(innerRequestWrapper);
 		Assert.notNull(innerMultipartHttpServletRequest);
-		this.innerRequestWrapper = innerRequestWrapper;
 		this.innerMultipartHttpServletRequest = innerMultipartHttpServletRequest;
-	}
-
-	public String getParameter(String name) {
-		String param = this.innerRequestWrapper.getParameter(name);
-		if (param != null) {
-			return param;
-		}
-		return this.getRequest().getParameter(name);
-	}
-
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public Map getParameterMap() {
-		Map params = this.getRequest().getParameterMap();
-		params.putAll(this.innerRequestWrapper.getParameterMap());
-
-		return params;
-	}
-
-	@SuppressWarnings("rawtypes")
-	public Enumeration getParameterNames() {
-
-		return this.getRequest().getParameterNames();
-	}
-
-	public String[] getParameterValues(String name) {
-		String[] params = this.innerRequestWrapper.getParameterValues(name);
-		if (params != null && params.length > 0) {
-			return params;
-		}
-		return this.getRequest().getParameterValues(name);
 	}
 
 	public Iterator<String> getFileNames() {

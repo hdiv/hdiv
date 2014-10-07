@@ -32,7 +32,7 @@
 			<programlisting language="xml">
 <![CDATA[
 <hdiv:config>
-	<hdiv:startParameters>paramName</hdiv:startParameters>
+    <hdiv:startParameters>paramName</hdiv:startParameters>
 </hdiv:config>
 ]]></programlisting>
 
@@ -46,11 +46,11 @@
 @EnableHdivWebSecurity
 public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
 
-	@Override
-	public void addExclusions(ExclusionRegistry registry) {
+    @Override
+    public void addExclusions(ExclusionRegistry registry) {
 
-		registry.addParamExclusions("paramName");
-	}
+        registry.addParamExclusions("paramName");
+    }
 
 }
 ]]></programlisting>
@@ -66,9 +66,9 @@ public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
 			<programlisting language="xml">
 <![CDATA[
 <hdiv:config>
-	<hdiv:paramsWithoutValidation>
-		<hdiv:mapping url="/section/.*" parameters="paramName"/>
-	</hdiv:paramsWithoutValidation>
+    <hdiv:paramsWithoutValidation>
+        <hdiv:mapping url="/section/.*" parameters="paramName"/>
+    </hdiv:paramsWithoutValidation>
 </hdiv:config>
 ]]></programlisting>
 
@@ -82,11 +82,11 @@ public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
 @EnableHdivWebSecurity
 public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
 
-	@Override
-	public void addExclusions(ExclusionRegistry registry) {
+    @Override
+    public void addExclusions(ExclusionRegistry registry) {
 
-		registry.addParamExclusions("paramName").forUrls("/section/.*");;
-	}
+        registry.addParamExclusions("paramName").forUrls("/section/.*");;
+    }
 
 }
 ]]></programlisting>
@@ -122,13 +122,13 @@ public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
 @EnableHdivWebSecurity
 public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
 
-	@Override
-	public void configure(SecurityConfigBuilder builder) {
+    @Override
+    public void configure(SecurityConfigBuilder builder) {
 
-		builder
-			.sessionExpired()
-				.homePage("/").loginPage("/login.html");
-	}
+        builder
+            .sessionExpired()
+                .homePage("/").loginPage("/login.html");
+    }
 
 }
 ]]></programlisting>
@@ -220,7 +220,7 @@ public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
 		<programlisting language="xml">
  			<![CDATA[
 <hdiv:config strategy="cipher">
-	<hdiv:startPages>/home.html</hdiv:startPages>
+    <hdiv:startPages>/home.html</hdiv:startPages>
 </hdiv:config>
 ]]></programlisting>
 
@@ -232,11 +232,11 @@ public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
 @EnableHdivWebSecurity
 public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
 
-	@Override
-	public void configure(SecurityConfigBuilder builder) {
+    @Override
+    public void configure(SecurityConfigBuilder builder) {
 
-		builder.strategy(Strategy.CIPHER);
-	}
+        builder.strategy(Strategy.CIPHER);
+    }
 
 }
 ]]></programlisting>
@@ -250,13 +250,13 @@ public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
 		<programlisting language="xml">
  					<![CDATA[
 grails {
-	plugin {
-		hdiv {
-			config {
-				strategy='cipher'
-			}
-		}
-	}
+    plugin {
+        hdiv {
+            config {
+                strategy='cipher'
+            }
+        }
+    }
 }
 ]]></programlisting>
 
@@ -308,11 +308,11 @@ grails {
 @EnableHdivWebSecurity
 public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
 
-	@Override
-	public void configure(SecurityConfigBuilder builder) {
+    @Override
+    public void configure(SecurityConfigBuilder builder) {
 
-		builder.confidentiality(false);
-	}
+        builder.confidentiality(false);
+    }
 
 }
 ]]></programlisting>
@@ -326,13 +326,13 @@ public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
 		<programlisting language="xml">
  					<![CDATA[
 grails {
-	plugin {
-		hdiv {
-			config {
-				confidentiality='false'
-			}
-		}
-	}
+    plugin {
+        hdiv {
+            config {
+                confidentiality='false'
+            }
+        }
+    }
 }
 ]]></programlisting>
 
@@ -380,11 +380,11 @@ grails {
 @EnableHdivWebSecurity
 public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
 
-	@Override
-	public void configure(SecurityConfigBuilder builder) {
+    @Override
+    public void configure(SecurityConfigBuilder builder) {
 
-		builder.errorPage("/errorPage.html");
-	}
+        builder.errorPage("/errorPage.html");
+    }
 
 }
 ]]></programlisting>
@@ -394,14 +394,13 @@ public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
 		<programlisting language="xml">
  			<![CDATA[
  grails {
-	plugin {
-		hdiv {
-
-			config {
-				errorPage = '/error.jsp'
-			}
-		}
-	}
+    plugin {
+        hdiv {
+            config {
+                errorPage = '/error.jsp'
+            }
+        }
+    }
 }
 ]]></programlisting>
 	</section>
@@ -458,11 +457,11 @@ public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
 @EnableHdivWebSecurity
 public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
 
-	@Override
-	public void configure(SecurityConfigBuilder builder) {
+    @Override
+    public void configure(SecurityConfigBuilder builder) {
 
-		builder.maxPagesPerSession(10);
-	}
+        builder.maxPagesPerSession(10);
+    }
 
 }
 ]]></programlisting>
@@ -476,13 +475,13 @@ public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
 		<programlisting language="xml">
  					<![CDATA[
 grails {
-	plugin {
-		hdiv {
-			config {
-				maxPagesPerSession='5'
-			}
-		}
-	}
+    plugin {
+        hdiv {
+            config {
+                maxPagesPerSession='5'
+            }
+        }
+    }
 }
 ]]></programlisting>
 
@@ -519,11 +518,11 @@ grails {
 @EnableHdivWebSecurity
 public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
 
-	@Override
-	public void configure(SecurityConfigBuilder builder) {
+    @Override
+    public void configure(SecurityConfigBuilder builder) {
 
-		builder.cookiesConfidentiality(false).cookiesIntegrity(false);
-	}
+        builder.cookiesConfidentiality(false).cookiesIntegrity(false);
+    }
 
 }
 ]]></programlisting>
@@ -535,14 +534,14 @@ public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
 		<programlisting language="xml">
  					<![CDATA[
 grails {
-	plugin {
-		hdiv {
-			config {
-				avoidCookiesIntegrity='true'
-				avoidCookiesConfidentiality='true'
-			}
-		}
-	}
+    plugin {
+        hdiv {
+            config {
+                avoidCookiesIntegrity='true'
+                avoidCookiesConfidentiality='true'
+            }
+        }
+    }
 }
 ]]></programlisting>
 
@@ -572,14 +571,14 @@ grails {
 		<programlisting language="xml">
  					<![CDATA[
 grails {
-	plugin {
-		hdiv {
-			config {
-				excludedExtensions='css,png'
-				protectedExtensions='.*,aaa'
-			}
-		}
-	}
+    plugin {
+        hdiv {
+            config {
+                excludedExtensions='css,png'
+                protectedExtensions='.*,aaa'
+            }
+        }
+    }
 }
 ]]></programlisting>
 
@@ -616,11 +615,11 @@ grails {
 @EnableHdivWebSecurity
 public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
 
-	@Override
-	public void configure(SecurityConfigBuilder builder) {
+    @Override
+    public void configure(SecurityConfigBuilder builder) {
 
-		builder.debugMode(true);
-	}
+        builder.debugMode(true);
+    }
 
 }
 ]]></programlisting>
@@ -634,13 +633,13 @@ public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
 		<programlisting language="xml">
  					<![CDATA[
 grails {
-	plugin {
-		hdiv {
-			config {
-				debugMode='true'
-			}
-		}
-	}
+    plugin {
+        hdiv {
+            config {
+                debugMode='true'
+            }
+        }
+    }
 }
 ]]></programlisting>
 
@@ -898,13 +897,13 @@ log4j.logger.org.hdiv=INFO,R
 		<programlisting language="xml">
  					<![CDATA[
 grails {
-	plugin {
-		hdiv {
-			config {
-				userData='testUserData'
-			}
-		}
-	}
+    plugin {
+        hdiv {
+            config {
+                userData='testUserData'
+            }
+        }
+    }
 }
 ]]></programlisting>
 
@@ -934,11 +933,11 @@ grails {
 @EnableHdivWebSecurity
 public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
 
-	@Override
-	public void configure(SecurityConfigBuilder builder) {
+    @Override
+    public void configure(SecurityConfigBuilder builder) {
 
-		builder.validateUrlsWithoutParams(false);
-	}
+        builder.validateUrlsWithoutParams(false);
+    }
 
 }
 ]]></programlisting>
@@ -952,13 +951,13 @@ public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
 		<programlisting language="xml">
  					<![CDATA[
 grails {
-	plugin {
-		hdiv {
-			config {
-				avoidValidationInUrlsWithoutParams='true'
-			}
-		}
-	}
+    plugin {
+        hdiv {
+            config {
+                avoidValidationInUrlsWithoutParams='true'
+            }
+        }
+    }
 }
 ]]></programlisting>
 
@@ -983,7 +982,7 @@ grails {
 		<programlisting language="xml">
  					<![CDATA[
 <hdiv:config>
-	<hdiv:longLivingPages>/home.html</hdiv:longLivingPages>
+    <hdiv:longLivingPages>/home.html</hdiv:longLivingPages>
 </hdiv:config> 
 ]]></programlisting>
 
@@ -995,11 +994,11 @@ grails {
 @EnableHdivWebSecurity
 public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
 
-	@Override
-	public void addLongLivingPages(LongLivingPagesRegistry registry) {
-	
-		registry.addLongLivingPages("/home.html");
-	}
+    @Override
+    public void addLongLivingPages(LongLivingPagesRegistry registry) {
+    
+        registry.addLongLivingPages("/home.html");
+    }
 
 }
 ]]></programlisting>
@@ -1013,13 +1012,13 @@ public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
 		<programlisting language="xml">
  					<![CDATA[
 grails {
-	plugin {
-		hdiv {
-			config {
-				avoidValidationInUrlsWithoutParams='true'
-			}
-		}
-	}
+    plugin {
+        hdiv {
+            config {
+                avoidValidationInUrlsWithoutParams='true'
+            }
+        }
+    }
 }
 ]]></programlisting>
 
@@ -1052,11 +1051,11 @@ grails {
 @EnableHdivWebSecurity
 public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
 
-	@Override
-	public void configure(SecurityConfigBuilder builder) {
+    @Override
+    public void configure(SecurityConfigBuilder builder) {
 
-		builder.randomName(true);
-	}
+        builder.randomName(true);
+    }
 
 }
 ]]></programlisting>
@@ -1069,13 +1068,13 @@ public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
 		<programlisting language="xml">
  					<![CDATA[
 grails {
-	plugin {
-		hdiv {
-			config {
-				randomName='true'
-			}
-		}
-	}
+    plugin {
+        hdiv {
+            config {
+                randomName='true'
+            }
+        }
+    }
 }
 ]]></programlisting>
 
@@ -1113,11 +1112,11 @@ grails {
 @EnableHdivWebSecurity
 public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
 
-	@Override
-	public void configure(SecurityConfigBuilder builder) {
+    @Override
+    public void configure(SecurityConfigBuilder builder) {
 
-		builder.reuseExistingPageInAjaxRequest(true);
-	}
+        builder.reuseExistingPageInAjaxRequest(true);
+    }
 
 }
 ]]></programlisting>
@@ -1130,13 +1129,13 @@ public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
 		<programlisting language="xml">
  					<![CDATA[
 grails {
-	plugin {
-		hdiv {
-			config {
-				reuseExistingPageInAjaxRequest='true'
-			}
-		}
-	}
+    plugin {
+        hdiv {
+            config {
+                reuseExistingPageInAjaxRequest='true'
+            }
+        }
+    }
 }
 ]]></programlisting>
 
@@ -1170,11 +1169,11 @@ grails {
 @EnableHdivWebSecurity
 public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
 
-	@Override
-	public void configure(SecurityConfigBuilder builder) {
+    @Override
+    public void configure(SecurityConfigBuilder builder) {
 
-		builder.showErrorPageOnEditableValidation(true);
-	}
+        builder.showErrorPageOnEditableValidation(true);
+    }
 
 }
 ]]></programlisting>
@@ -1187,13 +1186,13 @@ public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
 		<programlisting language="xml">
  					<![CDATA[
 grails {
-	plugin {
-		hdiv {
-			config {
-				showErrorPageOnEditableValidation='true'
-			}
-		}
-	}
+    plugin {
+        hdiv {
+            config {
+                showErrorPageOnEditableValidation='true'
+            }
+        }
+    }
 }
 ]]></programlisting>
 

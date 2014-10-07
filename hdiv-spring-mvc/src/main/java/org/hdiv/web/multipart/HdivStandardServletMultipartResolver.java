@@ -22,15 +22,15 @@ import org.hdiv.config.multipart.exception.HdivMultipartException;
 import org.springframework.web.multipart.MultipartException;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.MultipartResolver;
-import org.springframework.web.multipart.commons.CommonsMultipartResolver;
+import org.springframework.web.multipart.support.StandardServletMultipartResolver;
 import org.springframework.web.util.WebUtils;
 
 /**
- * {@link MultipartResolver} to use instead of {@link CommonsMultipartResolver}.
+ * {@link MultipartResolver} to use instead of {@link StandardServletMultipartResolver}.
  * 
  * @author Gotzon Illarramendi
  */
-public class HdivCommonsMultipartResolver extends CommonsMultipartResolver {
+public class HdivStandardServletMultipartResolver extends StandardServletMultipartResolver {
 
 	@Override
 	public boolean isMultipart(HttpServletRequest request) {

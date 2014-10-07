@@ -19,12 +19,13 @@ import java.util.Enumeration;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletRequestWrapper;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hdiv.config.multipart.exception.HdivMultipartException;
 import org.hdiv.filter.RequestWrapper;
+import org.hdiv.web.multipart.HdivCommonsMultipartResolver;
+import org.hdiv.web.multipart.HdivStandardServletMultipartResolver;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
@@ -33,9 +34,10 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.servlet.DispatcherServlet;
 import org.springframework.web.servlet.FrameworkServlet;
+import org.springframework.web.util.WebUtils;
 
 /**
- * Class containing multipart request configuration.
+ * Class containing multipart request configuration for Spring MVC.
  * 
  * @author Gorka Vicente
  * @author Gotzon Illarramendi
@@ -67,28 +69,26 @@ public class SpringMVCMultipartConfig implements IMultipartConfig {
 		if (multipartResolver == null) {
 			return request;
 		}
+		if (!(multipartResolver instanceof HdivCommonsMultipartResolver || multipartResolver instanceof HdivStandardServletMultipartResolver)) {
+			throw new IllegalStateException(
+					"In order to enable HDIV multipart processing, MultipartResolver must be of "
+							+ HdivCommonsMultipartResolver.class.getName() + " or "
+							+ HdivStandardServletMultipartResolver.class.getName() + " type.");
+		}
 
 		MultipartHttpServletRequest processedRequest = null;
 		try {
-			processedRequest = multipartResolver.resolveMultipart(request);
+			// Resolve multipart with the original request
+			processedRequest = multipartResolver.resolveMultipart((HttpServletRequest) request.getRequest());
 
 		} catch (MultipartException e) {
 
 			throw new HdivMultipartException(e);
 		}
 
-		return new BasicRequestWrapper(processedRequest);
-	}
-
-	/**
-	 * {@link HttpServletRequest} wrapper, with the sole purpose of bypassing checks from
-	 * {@link DispatcherServlet#checkMultipart DispatcherServlet}.
-	 */
-	public class BasicRequestWrapper extends HttpServletRequestWrapper {
-
-		public BasicRequestWrapper(HttpServletRequest request) {
-			super(request);
-		}
+		// Set MultipartHttpServletRequest as the child request of RequestWrapper
+		request.setRequest(processedRequest);
+		return request;
 	}
 
 	/**
@@ -102,9 +102,9 @@ public class SpringMVCMultipartConfig implements IMultipartConfig {
 		MultipartResolver multipartResolver = lookupMultipartResolver(request.getSession().getServletContext());
 
 		if (multipartResolver != null) {
-			if (request instanceof MultipartHttpServletRequest) {
-				MultipartHttpServletRequest multientidadRequest = (MultipartHttpServletRequest) request;
-				multipartResolver.cleanupMultipart(multientidadRequest);
+			MultipartHttpServletRequest req = WebUtils.getNativeRequest(request, MultipartHttpServletRequest.class);
+			if (req != null) {
+				multipartResolver.cleanupMultipart(req);
 			}
 		}
 

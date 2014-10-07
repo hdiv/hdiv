@@ -28,8 +28,7 @@ public class HDIVErrorCodes {
 	public static final String ACTION_ERROR = "INVALID_ACTION";
 
 	/**
-	 * The parameter received in the request does not exist in the request
-	 * state.
+	 * The parameter received in the request does not exist in the request state.
 	 */
 	public static final String PARAMETER_NOT_EXISTS = "INVALID_PARAMETER_NAME";
 
@@ -44,8 +43,7 @@ public class HDIVErrorCodes {
 	public static final String PARAMETER_VALUE_INCORRECT = "INVALID_PARAMETER_VALUE";
 
 	/**
-	 * For a certain parameter not the expected number of values has been
-	 * received.
+	 * For a certain parameter not the expected number of values has been received.
 	 */
 	public static final String VALUE_LENGTH_INCORRECT = "NOT_RECEIVED_ALL_PARAMETER_VALUES";
 
@@ -88,4 +86,10 @@ public class HDIVErrorCodes {
 	 */
 	public static final String COOKIE_INCORRECT = "INVALID_COOKIE";
 
+	/**
+	 * Internal error created in HDIV during request processing.
+	 * 
+	 * @since HDIV 2.1.8
+	 */
+	public static final String INTERNAL_ERROR = "INTERNAL_ERROR";
 }

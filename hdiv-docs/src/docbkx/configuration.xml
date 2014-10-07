@@ -21,7 +21,7 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
        xmlns:hdiv="http://www.hdiv.org/schema/hdiv" 
        xsi:schemaLocation="http://www.springframework.org/schema/beans 
-                           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd 
+                           http://www.springframework.org/schema/beans/spring-beans.xsd 
                            http://www.hdiv.org/schema/hdiv http://www.hdiv.org/schema/hdiv/hdiv.xsd">
 ]]></programlisting>
 
@@ -37,12 +37,12 @@
 @EnableHdivWebSecurity
 public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
 
-	@Override
-	public void configure(SecurityConfigBuilder builder) {
+    @Override
+    public void configure(SecurityConfigBuilder builder) {
 
-		// Configuration options
-	}
-	
+        // Configuration options
+    }
+
 }
 ]]></programlisting>
 
@@ -87,7 +87,7 @@ public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
 			<programlisting language="xml">
 <![CDATA[
 <hdiv:config>
-	<hdiv:startPages>/home.html</hdiv:startPages>
+    <hdiv:startPages>/home.html</hdiv:startPages>
 </hdiv:config>
 ]]></programlisting>
 
@@ -101,11 +101,11 @@ public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
 @EnableHdivWebSecurity
 public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
 
-	@Override
-	public void addExclusions(ExclusionRegistry registry) {
+    @Override
+    public void addExclusions(ExclusionRegistry registry) {
 
-		registry.addUrlExclusions("/home.html").method("GET");
-	}
+        registry.addUrlExclusions("/home.html").method("GET");
+    }
 
 }
 ]]></programlisting>
@@ -115,14 +115,13 @@ public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
 		<programlisting language="xml">
  					<![CDATA[
  grails {
-	plugin {
-		hdiv {
-
-			config {
-				startPages = [GET: '/home.html']
-			}
-		}
-	}
+    plugin {
+        hdiv {
+            config {
+                startPages = [GET: '/home.html']
+            }
+        }
+    }
 }
 ]]></programlisting>
 
@@ -205,8 +204,8 @@ public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
 		<programlisting language="xml">
  			<![CDATA[
 <hdiv:validation id="customValidation" componentType="text">
-	<hdiv:acceptedPattern><[a-zA-Z0-9@.\-_]*$></hdiv:acceptedPattern>
-	<hdiv:rejectedPattern><[(\s|\S)*(--)(\s|\S)*></hdiv:rejectedPattern>
+    <hdiv:acceptedPattern><[a-zA-Z0-9@.\-_]*$></hdiv:acceptedPattern>
+    <hdiv:rejectedPattern><[(\s|\S)*(--)(\s|\S)*></hdiv:rejectedPattern>
 </hdiv:validation>
 ]]></programlisting>
 
@@ -234,17 +233,17 @@ public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
 @EnableHdivWebSecurity
 public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
 
-	@Override
-	public void addRules(RuleRegistry registry) {
+    @Override
+    public void addRules(RuleRegistry registry) {
 
-		registry.addRule("customValidation").acceptedPattern("^[a-zA-Z0-9@.\\-_]*$");
-	}
+        registry.addRule("customValidation").acceptedPattern("^[a-zA-Z0-9@.\\-_]*$");
+    }
 
-	@Override
-	public void configureEditableValidation(ValidationConfigurer validationConfigurer) {
+    @Override
+    public void configureEditableValidation(ValidationConfigurer validationConfigurer) {
 
-		validationConfigurer.addValidation(".*").rules("customValidation");
-	}
+        validationConfigurer.addValidation(".*").rules("customValidation");
+    }
 
 }
 ]]></programlisting>
@@ -261,22 +260,22 @@ public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
 		<programlisting language="xml">
  		<![CDATA[
 grails {
-	plugin {
-		hdiv {
+    plugin {
+        hdiv {
 
-			config { ...
-			}
+            config { ...
+            }
 
-			validations = [[id: 'safeText', acceptedPattern: '^[a-zA-Z0-9@.\\-_]*$']]
+            validations = [[id: 'safeText', acceptedPattern: '^[a-zA-Z0-9@.\\-_]*$']]
 
-			editableValidations = [
-				[id: 'editableParametersValidations', registerDefaults: true,
-				 validationRules: [[url: '/secure/.*', enableDefaults: true,  validationIds: 'safeText'],
-				                   [url: '/safetext/.*', enableDefaults: false, validationIds: 'safeText']]
-				]
-			]
-		}
-	}
+            editableValidations = [
+                [id: 'editableParametersValidations', registerDefaults: true,
+                 validationRules: [[url: '/secure/.*', enableDefaults: true,  validationIds: 'safeText'],
+                                   [url: '/safetext/.*', enableDefaults: false, validationIds: 'safeText']]
+                ]
+            ]
+        }
+    }
 }]]></programlisting>
 
 	</section>
