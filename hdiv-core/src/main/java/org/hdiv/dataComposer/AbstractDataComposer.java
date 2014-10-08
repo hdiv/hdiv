@@ -278,10 +278,11 @@ public abstract class AbstractDataComposer implements IDataComposer {
 			return null;
 		}
 
+		String decodedParams = this.getDecodedValue(parameters, charEncoding);
+
 		// Get actual IState
 		IState state = this.getStatesStack().peek();
-
-		state.setParams(parameters);
+		state.setParams(decodedParams);
 
 		if (this.hdivConfig.getConfidentiality()) {
 			// replace real values with confidential ones
