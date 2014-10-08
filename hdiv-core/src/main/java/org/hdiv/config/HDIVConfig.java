@@ -89,7 +89,7 @@ public class HDIVConfig implements Serializable {
 	/**
 	 * Parameters which HDIV validation will not be applied to.
 	 */
-	protected transient Map<PatternMatcher, List<PatternMatcher>> paramsWithoutValidation;
+	protected Map<PatternMatcher, List<PatternMatcher>> paramsWithoutValidation;
 
 	/**
 	 * Validations for editable fields (text/textarea) defined by the user.
