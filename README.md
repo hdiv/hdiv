@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/hdiv/hdiv.svg)](https://travis-ci.org/hdiv/hdiv)
+
 ## HTTP DATA INTEGRITY VALIDATOR
 We can briefly define HDIV as a Java Web Application Security Framework.
 HDIV extends web application's behaviour by adding Security functionalities, maintaining the API and the framework specification.
