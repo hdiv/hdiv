@@ -19,11 +19,14 @@ http://www.hdiv.org/schema/hdiv http://www.hdiv.org/schema/hdiv/hdiv.xsd">
 
 	<hdiv:editableValidations registerDefaults="true">
 		<hdiv:validationRule url="a" enableDefaults="false">id1</hdiv:validationRule>
-		<hdiv:validationRule url="b">id2,id3</hdiv:validationRule>
+		<hdiv:validationRule url="b"> 
+			id2,
+			id3
+		 </hdiv:validationRule>
 	</hdiv:editableValidations>
 
 	<hdiv:config confidentiality="true" avoidCookiesIntegrity="true"
-		protectedExtensions=".*,aaa" excludedExtensions="css,png" errorPage="proba.jsp"
+		protectedExtensions=".*,aaa" excludedExtensions="css, png" errorPage="proba.jsp"
 		randomName="true" strategy="memory" maxPagesPerSession="20"
 		avoidCookiesConfidentiality="true" avoidValidationInUrlsWithoutParams="true"
 		debugMode="true" userData="testUserData"

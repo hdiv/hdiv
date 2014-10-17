@@ -16,7 +16,6 @@
 package org.hdiv.config.xml;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -185,14 +184,15 @@ public class EditableValidationsBeanDefinitionParser extends AbstractSingleBeanD
 	 * @return List with bean id's
 	 */
 	private List<String> convertToList(String data) {
-		data = data.trim();
 		if (data == null || data.length() == 0) {
 			return new ArrayList<String>();
 		}
 		String[] result = data.split(",");
-		List<String> list = Arrays.asList(result);
-		return new ArrayList<String>(list);
-
+		List<String> list = new ArrayList<String>();
+		for (String val : result) {
+			list.add(val.trim());
+		}
+		return list;
 	}
 
 	/**
