@@ -311,7 +311,7 @@ public abstract class AbstractUrlProcessor {
 	 */
 	public boolean isHdivStateNecessary(UrlData urlData) {
 
-		if (urlData.getOriginalUrl().startsWith("javascript:")) {
+		if (urlData.getOriginalUrl().toLowerCase().startsWith("javascript:")) {
 			return false;
 		}
 

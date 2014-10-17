@@ -302,4 +302,20 @@ public class LinkUrlProcessorTest extends AbstractHDIVTestCase {
 				.startsWith("/probando.do?stringArray=0&stringArray=1&stringArray=2&floatProperty=0&intProperty=0&_HDIV_STATE_"));
 	}
 
+	public void testJavaScriptLinks() {
+
+		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		String url = "javascript:performAction(this);";
+		String result = this.linkUrlProcessor.processUrl(request, url);
+		assertEquals(url, result);
+
+		url = "JavaScript:performAction(this);";
+		result = this.linkUrlProcessor.processUrl(request, url);
+		assertEquals(url, result);
+
+		url = "javaScript:performAction(this);";
+		result = this.linkUrlProcessor.processUrl(request, url);
+		assertEquals(url, result);
+	}
+
 }
