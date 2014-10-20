@@ -50,6 +50,11 @@ public class Validation implements IValidation, Serializable {
 	protected String componentType;
 
 	/**
+	 * True if the validation is part of the default validations.
+	 */
+	protected boolean defaultValidation = false;
+
+	/**
 	 * Checks if a component type has been defined to which apply the validation <code>this</code>.
 	 * 
 	 * @return True if the component type to which apply de validation has been defined. False otherwise.
@@ -170,6 +175,14 @@ public class Validation implements IValidation, Serializable {
 		this.rejectedPattern = Pattern.compile(rejectedPattern);
 	}
 
+	public boolean isDefaultValidation() {
+		return defaultValidation;
+	}
+
+	public void setDefaultValidation(boolean defaultValidation) {
+		this.defaultValidation = defaultValidation;
+	}
+
 	public String toString() {
 		StringBuffer result = new StringBuffer().append("");
 		result = result.append(" name=").append(this.getName());
@@ -178,6 +191,7 @@ public class Validation implements IValidation, Serializable {
 				this.acceptedPattern == null ? "" : this.acceptedPattern.toString());
 		result = result.append(" rejectedPattern=").append(
 				this.rejectedPattern == null ? "" : this.rejectedPattern.toString());
+		result = result.append(" defaultValidation=").append(this.defaultValidation);
 		return result.toString();
 
 	}

@@ -99,7 +99,7 @@ public class StateUtil {
 			restoredState = this.restoreMemoryState(requestState);
 
 		} else if (this.isCipherStrategy()) {
-			restoredState = (IState) encodingUtil.decode64Cipher(requestState);
+			restoredState = (IState) this.encodingUtil.decode64Cipher(requestState);
 
 		} else if (this.isHashStrategy()) {
 			restoredState = this.restoreHashState(requestState);

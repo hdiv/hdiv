@@ -220,6 +220,7 @@ public class EditableValidationsBeanDefinitionParser extends AbstractSingleBeanD
 			// Create validation instance
 			Validation validationBean = new Validation();
 			validationBean.setName(id);
+			validationBean.setDefaultValidation(true);
 			validationBean.setRejectedPattern(regex);
 
 			defaultValidations.add(validationBean);

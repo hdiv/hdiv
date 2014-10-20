@@ -416,6 +416,7 @@ public abstract class HdivWebSecurityConfigurationSupport {
 			// Create bean for the validation
 			Validation validationBean = new Validation();
 			validationBean.setName(id);
+			validationBean.setDefaultValidation(true);
 			validationBean.setRejectedPattern(regex);
 
 			defaultRules.add(validationBean);

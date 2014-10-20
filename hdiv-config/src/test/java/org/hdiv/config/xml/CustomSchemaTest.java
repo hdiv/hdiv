@@ -131,6 +131,7 @@ public class CustomSchemaTest extends TestCase {
 		// 1 custom rules
 		Validation val = (Validation) vals.get(0);
 		assertEquals("id1", val.getName());
+		assertFalse(val.isDefaultValidation());
 
 		// Second url
 		vals = urls.get(new DefaultPatternMatcher("b"));
@@ -143,6 +144,7 @@ public class CustomSchemaTest extends TestCase {
 		assertEquals("id3", val.getName());
 		val = (Validation) vals.get(2);
 		assertEquals("SQLInjection", val.getName());// first default rule
+		assertTrue(val.isDefaultValidation());
 	}
 
 	public void testReuseExistingPageInAjaxRequest() {
