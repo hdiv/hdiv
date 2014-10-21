@@ -59,7 +59,7 @@ public class EncodingUtil {
 	private ISession session;
 
 	/**
-	 * Provides the funtionallity of a message digest algorithm.
+	 * Provides the functionality of a message digest algorithm.
 	 */
 	private MessageDigest messageDigest;
 
@@ -88,7 +88,7 @@ public class EncodingUtil {
 	 * 
 	 * @param obj
 	 *            Object to encrypt
-	 * @return Objet <code>obj</code> compressed, encrypted and coded in Base64
+	 * @return Object <code>obj</code> compressed, encrypted and coded in Base64
 	 * @throws HDIVException
 	 *             if there is an error encoding object <code>data</code>
 	 * @see java.util.zip.GZIPOutputStream#GZIPOutputStream(java.io.OutputStream)

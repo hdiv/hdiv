@@ -30,7 +30,7 @@ import org.hdiv.util.HDIVUtil;
 import org.springframework.mock.web.MockHttpServletRequest;
 
 /**
- * Unit tests for the <code>org.hdiv.composer.DataComposerMemory</code> class.
+ * Unit tests for the {@link DataComposerHash} class.
  * 
  * @author Gorka Vicente
  */

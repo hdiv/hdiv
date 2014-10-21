@@ -99,7 +99,7 @@ public class StateUtil {
 			restoredState = this.restoreMemoryState(requestState);
 
 		} else if (this.isCipherStrategy()) {
-			restoredState = (IState) this.encodingUtil.decode64Cipher(requestState);
+			restoredState = this.restoreCipherState(requestState);
 
 		} else if (this.isHashStrategy()) {
 			restoredState = this.restoreHashState(requestState);
@@ -208,6 +208,20 @@ public class StateUtil {
 			throw new HDIVException(HDIVErrorCodes.HDIV_PARAMETER_INCORRECT_VALUE);
 		}
 		return sessionState;
+	}
+
+	/**
+	 * Restore state in cipher strategy.
+	 * 
+	 * @param requestState
+	 *            State received in the request
+	 * @return Decoded state of type <code>IState</code> obtained from <code>value</code>
+	 */
+	protected IState restoreCipherState(String requestState) {
+
+		Object[] cipherData = (Object[]) this.encodingUtil.decode64Cipher(requestState);
+		IState restoredState = (IState) cipherData[0];
+		return restoredState;
 	}
 
 	/**
