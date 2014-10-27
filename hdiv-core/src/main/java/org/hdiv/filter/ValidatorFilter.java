@@ -127,7 +127,7 @@ public class ValidatorFilter extends OncePerRequestFilter {
 		this.initDependencies();
 
 		// Initialize request scoped data
-		this.requestInitializer.initRequest(request);
+		this.requestInitializer.initRequest(request, response);
 
 		RequestWrapper requestWrapper = this.requestInitializer.createRequestWrapper(request);
 		ResponseWrapper responseWrapper = this.requestInitializer.createResponseWrapper(response);
@@ -207,7 +207,7 @@ public class ValidatorFilter extends OncePerRequestFilter {
 			}
 
 			// Destroy request scoped data
-			this.requestInitializer.endRequest(request);
+			this.requestInitializer.endRequest(request, response);
 		}
 	}
 

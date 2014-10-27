@@ -34,7 +34,7 @@ public class DefaultRequestInitializer implements RequestInitializer {
 	 */
 	protected HDIVConfig config;
 
-	public void initRequest(HttpServletRequest request) {
+	public void initRequest(HttpServletRequest request, HttpServletResponse response) {
 
 		// Put the request in threadlocal
 		HDIVUtil.setHttpServletRequest(request);
@@ -44,7 +44,7 @@ public class DefaultRequestInitializer implements RequestInitializer {
 
 	}
 
-	public void endRequest(HttpServletRequest request) {
+	public void endRequest(HttpServletRequest request, HttpServletResponse response) {
 
 		// Erase request from threadlocal
 		HDIVUtil.resetLocalData();

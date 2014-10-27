@@ -31,16 +31,20 @@ public interface RequestInitializer {
 	 * 
 	 * @param request
 	 *            request object
+	 * @param response
+	 *            response object
 	 */
-	void initRequest(HttpServletRequest request);
+	void initRequest(HttpServletRequest request, HttpServletResponse response);
 
 	/**
 	 * Destroy request scoped data
 	 * 
 	 * @param request
 	 *            request object
+	 * @param response
+	 *            response object
 	 */
-	void endRequest(HttpServletRequest request);
+	void endRequest(HttpServletRequest request, HttpServletResponse response);
 
 	/**
 	 * Create request wrapper.

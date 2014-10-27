@@ -19,6 +19,7 @@ import java.util.regex.Pattern;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpSessionEvent;
 
@@ -34,6 +35,7 @@ import org.hdiv.listener.InitListener;
 import org.hdiv.util.HDIVUtil;
 import org.springframework.context.ApplicationContext;
 import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.XmlWebApplicationContext;
 
@@ -76,6 +78,7 @@ public abstract class AbstractHDIVTestCase extends TestCase {
 
 		// Servlet API mock
 		MockHttpServletRequest request = new MockHttpServletRequest("GET", "/path/testAction.do");
+		HttpServletResponse response = new MockHttpServletResponse();
 		HttpSession httpSession = request.getSession();
 		ServletContext servletContext = httpSession.getServletContext();
 		HDIVUtil.setHttpServletRequest(request);
@@ -106,7 +109,7 @@ public abstract class AbstractHDIVTestCase extends TestCase {
 
 		// Init Request scoped data
 		RequestInitializer requestInitializer = this.applicationContext.getBean(RequestInitializer.class);
-		requestInitializer.initRequest(request);
+		requestInitializer.initRequest(request, response);
 		DataComposerFactory dataComposerFactory = (DataComposerFactory) this.applicationContext
 				.getBean(DataComposerFactory.class);
 		IDataComposer dataComposer = dataComposerFactory.newInstance(request);

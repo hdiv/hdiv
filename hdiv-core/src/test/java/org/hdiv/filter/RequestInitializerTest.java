@@ -16,6 +16,7 @@
 package org.hdiv.filter;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.hdiv.AbstractHDIVTestCase;
 import org.hdiv.exception.HDIVException;
@@ -51,8 +52,9 @@ public class RequestInitializerTest extends AbstractHDIVTestCase {
 	public void testInitRequest() {
 
 		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		HttpServletResponse response = new MockHttpServletResponse();
 
-		this.requestInitializer.initRequest(request);
+		this.requestInitializer.initRequest(request, response);
 
 		assertNotNull(HDIVUtil.getHttpServletRequest());
 	}
@@ -60,8 +62,9 @@ public class RequestInitializerTest extends AbstractHDIVTestCase {
 	public void testEndRequest() {
 
 		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		HttpServletResponse response = new MockHttpServletResponse();
 		try {
-			this.requestInitializer.endRequest(request);
+			this.requestInitializer.endRequest(request, response);
 		} catch (HDIVException e) {
 			assertTrue(true);
 		}
