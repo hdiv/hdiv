@@ -52,22 +52,22 @@ public class ValidatorFilter extends OncePerRequestFilter {
 	private static Log log = LogFactory.getLog(ValidatorFilter.class);
 
 	/**
-	 * HDIV configuration object
+	 * HDIV configuration object.
 	 */
 	private HDIVConfig hdivConfig;
 
 	/**
-	 * IValidationHelper object
+	 * IValidationHelper object.
 	 */
 	private IValidationHelper validationHelper;
 
 	/**
-	 * The multipart config
+	 * The multipart configuration.
 	 */
 	private IMultipartConfig multipartConfig;
 
 	/**
-	 * Validation error handler
+	 * Validation error handler.
 	 */
 	private ValidatorErrorHandler errorHandler;
 
@@ -207,7 +207,7 @@ public class ValidatorFilter extends OncePerRequestFilter {
 			}
 
 			// Destroy request scoped data
-			this.requestInitializer.endRequest(request, response);
+			this.requestInitializer.endRequest(multipartProcessedRequest, responseWrapper);
 		}
 	}
 
