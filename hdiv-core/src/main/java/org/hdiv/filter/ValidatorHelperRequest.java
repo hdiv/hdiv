@@ -259,6 +259,8 @@ public class ValidatorHelperRequest implements IValidationHelper {
 			return URLDecoder.decode(url, Constants.ENCODING_UTF_8);
 		} catch (UnsupportedEncodingException e) {
 			throw new HDIVException("Error decoding url", e);
+		} catch (IllegalArgumentException e) {
+			throw new HDIVException("Error decoding url", e);
 		}
 	}
 

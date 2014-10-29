@@ -135,6 +135,7 @@ public class DataComposerMemory extends AbstractDataComposer {
 			action = URLDecoder.decode(action, Constants.ENCODING_UTF_8);
 		} catch (UnsupportedEncodingException e) {
 			throw new HDIVException(Constants.ENCODING_UTF_8 + " enconding not supported.", e);
+		} catch (IllegalArgumentException e) {
 		}
 
 		// Create new IState

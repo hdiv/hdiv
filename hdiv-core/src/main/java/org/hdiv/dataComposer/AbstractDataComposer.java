@@ -598,6 +598,8 @@ public abstract class AbstractDataComposer implements IDataComposer {
 			decodedValue = URLDecoder.decode(value, charEncoding);
 		} catch (UnsupportedEncodingException e) {
 			decodedValue = value;
+		} catch (IllegalArgumentException e) {
+			decodedValue = value;
 		}
 
 		// Remove escaped Html elements
