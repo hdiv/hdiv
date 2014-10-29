@@ -153,13 +153,22 @@ public class DataComposerFactory {
 			if (state != null) {
 				dataComposer.beginRequest(state);
 			}
+
 		} else if (this.config.isReuseExistingPageInAjaxRequest() && isAjaxRequest(request)) {
 			String hdivStateParamName = (String) request.getSession().getAttribute(Constants.HDIV_PARAMETER);
 			String hdivState = request.getParameter(hdivStateParamName);
 
-			IState state = this.stateUtil.restoreState(hdivState);
-			IPage page = this.session.getPage(Integer.toString(state.getPageId()));
-			dataComposer.startPage(page);
+			if (hdivState != null) {
+				IState state = this.stateUtil.restoreState(hdivState);
+				if (state.getPageId() > 0) {
+					IPage page = this.session.getPage(Integer.toString(state.getPageId()));
+					dataComposer.startPage(page);
+				} else {
+					dataComposer.startPage();
+				}
+			} else {
+				dataComposer.startPage();
+			}
 		} else {
 			dataComposer.startPage();
 		}
