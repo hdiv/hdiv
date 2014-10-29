@@ -183,7 +183,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 			}
 		}
 
-		if (this.hdivConfig.isStartPage(target, request.getMethod())) {
+		if (this.isStartPage(request, target)) {
 			result = this.validateStartPageParameters(request, target);
 			if (result.isValid()) {
 				return ValidatorHelperResult.VALIDATION_NOT_REQUIRED;
@@ -248,6 +248,20 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	}
 
 	/**
+	 * Check if the current request is a start page.
+	 * 
+	 * @param request
+	 *            HttpServletRequest to validate
+	 * @param target
+	 *            Part of the url that represents the target action
+	 * @return true if it is a start page
+	 */
+	protected boolean isStartPage(HttpServletRequest request, String target) {
+
+		return this.hdivConfig.isStartPage(target, request.getMethod());
+	}
+
+	/**
 	 * It decodes the url to replace the character represented by percentage with its equivalent.
 	 * 
 	 * @param url
@@ -298,10 +312,9 @@ public class ValidatorHelperRequest implements IValidationHelper {
 		this.logger.log(HDIVErrorCodes.ACTION_ERROR, target, null, null);
 
 		if (log.isDebugEnabled()) {
-			log.debug("Detected validation error in the action: action in state:" + state.getAction()
-					+ ", action in the request:" + target);
+			log.debug("Validation error in the action. Action in state [" + state.getAction()
+					+ "], action in the request [" + target + "]");
 		}
-
 		return new ValidatorHelperResult(HDIVErrorCodes.ACTION_ERROR);
 	}
 
@@ -535,17 +548,8 @@ public class ValidatorHelperRequest implements IValidationHelper {
 			String[] actionParamValues, Map<String, String[]> unauthorizedEditableParameters, String hdivParameter,
 			String target, String parameter) {
 
-		// Check if the HDIV validation must be applied to the parameter
-		if (!this.hdivConfig.needValidation(parameter, hdivParameter)) {
-
-			if (log.isDebugEnabled() && !parameter.equals(hdivParameter)) {
-				log.debug("parameter " + parameter + " doesn't need validation");
-			}
-			return ValidatorHelperResult.VALIDATION_NOT_REQUIRED;
-		}
-
 		// If the parameter requires no validation it is considered a valid parameter
-		if (this.isUserDefinedNonValidationParameter(target, parameter)) {
+		if (this.isUserDefinedNonValidationParameter(target, parameter, hdivParameter)) {
 			return ValidatorHelperResult.VALIDATION_NOT_REQUIRED;
 		}
 
@@ -597,14 +601,26 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	 *            target
 	 * @param parameter
 	 *            parameter name
-	 * @return True If it is parameter that needs no validation. False otherwise.
+	 * @param hdivParameter
+	 *            Hdiv state parameter name
+	 * @return True if the parameter doesn't need validation. False otherwise.
 	 */
-	protected boolean isUserDefinedNonValidationParameter(String target, String parameter) {
+	protected boolean isUserDefinedNonValidationParameter(String target, String parameter, String hdivParameter) {
+
+		// Check if the HDIV validation must be applied to the parameter
+		if (!this.hdivConfig.needValidation(parameter, hdivParameter)) {
+
+			if (log.isDebugEnabled() && !parameter.equals(hdivParameter)) {
+				log.debug("Parameter [" + parameter + "] doesn't need validation. It is configured as 'StartParameter'");
+			}
+			return true;
+		}
 
 		if (this.hdivConfig.isParameterWithoutValidation(target, parameter)) {
 
 			if (log.isDebugEnabled()) {
-				log.debug("parameter " + parameter + " doesn't need validation. It is user defined parameter.");
+				log.debug("Parameter [" + parameter
+						+ "] doesn't need validation. It is configured as 'ParameterWithoutValidation'.");
 			}
 			return true;
 		}
