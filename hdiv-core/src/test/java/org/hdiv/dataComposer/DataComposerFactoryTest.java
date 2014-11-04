@@ -85,6 +85,32 @@ public class DataComposerFactoryTest extends AbstractHDIVTestCase {
 		assertFalse(getPageId(stateId) == getPageId(stateId2));
 	}
 
+	public void testNewInstancePjax() {
+
+		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
+
+		IDataComposer dataComposer = this.dataComposerFactory.newInstance(request);
+
+		dataComposer.beginRequest("GET", "/ajax");
+		String stateId = dataComposer.endRequest();
+		dataComposer.endPage();
+
+		// Create other instance
+		request.addParameter("_HDIV_STATE_", stateId);
+		request.addHeader("x-requested-with", "XMLHttpRequest");
+		request.addHeader("X-PJAX", "");
+		this.getConfig().setReuseExistingPageInAjaxRequest(true);
+
+		dataComposer = this.dataComposerFactory.newInstance(request);
+
+		dataComposer.beginRequest("GET", "/ajax");
+		String stateId2 = dataComposer.endRequest();
+		dataComposer.endPage();
+
+		// Next page id is expected
+		assertEquals(getPageId(stateId), Integer.parseInt(getPageId(stateId2)) - 1 + "");
+	}
+
 	protected String getPageId(String stateId) {
 
 		return stateId.substring(0, stateId.indexOf("-"));

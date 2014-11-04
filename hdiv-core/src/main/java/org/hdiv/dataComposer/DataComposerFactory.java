@@ -154,7 +154,7 @@ public class DataComposerFactory {
 				dataComposer.beginRequest(state);
 			}
 
-		} else if (this.config.isReuseExistingPageInAjaxRequest() && isAjaxRequest(request)) {
+		} else if (this.reuseExistingPage(request)) {
 			String hdivStateParamName = (String) request.getSession().getAttribute(Constants.HDIV_PARAMETER);
 			String hdivState = request.getParameter(hdivStateParamName);
 
@@ -181,11 +181,38 @@ public class DataComposerFactory {
 		}
 	}
 
+	/**
+	 * Is it necessary to create a new Page or reuse existing Page adding the created states to it?
+	 * 
+	 * @param request
+	 *            actual HttpServletRequest instance
+	 * @return reuse or not
+	 */
+	protected boolean reuseExistingPage(HttpServletRequest request) {
+
+		if (isAjaxRequest(request)) {
+
+			if (excludePageReuseInAjax(request)) {
+				return false;
+			}
+			// Decides based on user settings
+			return this.config.isReuseExistingPageInAjaxRequest();
+		}
+		return false;
+	}
+
 	protected boolean isAjaxRequest(HttpServletRequest request) {
 
 		String xRequestedWithValue = request.getHeader("x-requested-with");
 
 		return (xRequestedWithValue != null) ? "XMLHttpRequest".equalsIgnoreCase(xRequestedWithValue) : false;
+	}
+
+	protected boolean excludePageReuseInAjax(HttpServletRequest request) {
+
+		// If it is a request from jquery-pjax plugin, never reuse the page
+		String pjaxHeader = request.getHeader("X-PJAX");
+		return pjaxHeader != null;
 	}
 
 	/**
