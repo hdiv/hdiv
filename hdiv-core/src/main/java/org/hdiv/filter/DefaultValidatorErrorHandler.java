@@ -177,8 +177,7 @@ public class DefaultValidatorErrorHandler implements ValidatorErrorHandler {
 			request.getSession().removeAttribute(Constants.EDITABLE_PARAMETER_ERROR);
 
 			this.errorPageWritter.writetErrorPage(out, editableErrors);
-			response.flushBuffer();
-
+			out.flush();
 		} catch (IOException e) {
 			throw new RuntimeException("Cant redirect to the default error page", e);
 		}

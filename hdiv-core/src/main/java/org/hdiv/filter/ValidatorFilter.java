@@ -177,7 +177,7 @@ public class ValidatorFilter extends OncePerRequestFilter {
 			} else {
 
 				// Call to ValidatorErrorHandler
-				this.errorHandler.handleValidatorError(multipartProcessedRequest, response, result.getErrorCode());
+				this.errorHandler.handleValidatorError(multipartProcessedRequest, responseWrapper, result.getErrorCode());
 			}
 
 		} catch (HDIVException e) {
@@ -196,7 +196,7 @@ public class ValidatorFilter extends OncePerRequestFilter {
 			}
 			// Show error page
 			if (!this.hdivConfig.isDebugMode()) {
-				this.errorHandler.handleValidatorError(multipartProcessedRequest, response,
+				this.errorHandler.handleValidatorError(multipartProcessedRequest, responseWrapper,
 						HDIVErrorCodes.INTERNAL_ERROR);
 			}
 		} finally {
