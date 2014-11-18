@@ -8,7 +8,16 @@
 			<map>
 				<entry>
 					<key>
-						<bean id="editableParametersUrlKey" class="org.hdiv.regex.DefaultPatternMatcher">
+						<bean class="org.hdiv.regex.DefaultPatternMatcher">
+							<constructor-arg value="/insecure/.*" />
+						</bean>
+					</key>
+					<list>
+					</list>
+				</entry>
+				<entry>
+					<key>
+						<bean class="org.hdiv.regex.DefaultPatternMatcher">
 							<constructor-arg value=".*" />
 						</bean>
 					</key>

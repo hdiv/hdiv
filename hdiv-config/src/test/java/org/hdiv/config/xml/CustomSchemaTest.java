@@ -122,10 +122,14 @@ public class CustomSchemaTest extends TestCase {
 		assertNotNull(validations);
 
 		Map<PatternMatcher, List<IValidation>> urls = validations.getUrls();
-		assertEquals(2, urls.size());
+		assertEquals(3, urls.size());
 
 		// First url
 		List<IValidation> vals = urls.get(new DefaultPatternMatcher("a"));
+		assertEquals(0, vals.size());
+
+		// Second url
+		vals = urls.get(new DefaultPatternMatcher("b"));
 
 		assertEquals(1, vals.size());
 		// 1 custom rules
@@ -133,8 +137,8 @@ public class CustomSchemaTest extends TestCase {
 		assertEquals("id1", val.getName());
 		assertFalse(val.isDefaultValidation());
 
-		// Second url
-		vals = urls.get(new DefaultPatternMatcher("b"));
+		// Third url
+		vals = urls.get(new DefaultPatternMatcher("c"));
 		assertEquals(8, vals.size());
 		// 2 custom rule + 6 default rules
 
@@ -145,6 +149,21 @@ public class CustomSchemaTest extends TestCase {
 		val = (Validation) vals.get(2);
 		assertEquals("SQLInjection", val.getName());// first default rule
 		assertTrue(val.isDefaultValidation());
+	}
+
+	public void testEditableValidationsOrder() {
+
+		HDIVValidations validations = this.context.getBean(HDIVValidations.class);
+		assertNotNull(validations);
+
+		Map<PatternMatcher, List<IValidation>> urls = validations.getUrls();
+		assertEquals(3, urls.size());
+
+		Object[] ptrs = urls.keySet().toArray();
+
+		assertEquals(new DefaultPatternMatcher("a"), ptrs[0]);
+		assertEquals(new DefaultPatternMatcher("b"), ptrs[1]);
+		assertEquals(new DefaultPatternMatcher("c"), ptrs[2]);
 	}
 
 	public void testReuseExistingPageInAjaxRequest() {

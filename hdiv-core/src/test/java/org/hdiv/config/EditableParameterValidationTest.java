@@ -15,11 +15,21 @@
  */
 package org.hdiv.config;
 
+import java.util.List;
+import java.util.Map;
+
 import org.hdiv.AbstractHDIVTestCase;
+import org.hdiv.regex.DefaultPatternMatcher;
+import org.hdiv.regex.PatternMatcher;
+import org.hdiv.validator.IValidation;
 
 public class EditableParameterValidationTest extends AbstractHDIVTestCase {
 
+	private HDIVValidations editableValidations;
+
 	protected void onSetUp() throws Exception {
+
+		this.editableValidations = this.getApplicationContext().getBean(HDIVValidations.class);
 	}
 
 	public void testEditableParamValidator() {
@@ -39,6 +49,31 @@ public class EditableParameterValidationTest extends AbstractHDIVTestCase {
 		result = getConfig().areEditableParameterValuesValid(url, parameter, values, dataType);
 
 		assertFalse(result);
+	}
+
+	public void testEditableParamValidatorOrder() {
+
+		Map<PatternMatcher, List<IValidation>> urls = this.editableValidations.getUrls();
+		assertEquals(2, urls.size());
+
+		Object[] ptrs = urls.keySet().toArray();
+
+		assertEquals(new DefaultPatternMatcher("/insecure/.*"), ptrs[0]);
+		assertEquals(new DefaultPatternMatcher(".*"), ptrs[1]);
+	}
+
+	public void testEditableParamValidatorPatternOrder() {
+
+		boolean exist = getConfig().existValidations();
+		assertTrue(exist);
+
+		String url = "/insecure/action";
+		String parameter = "param";
+		String[] values = { "<script>" };
+		String dataType = "text";
+		boolean result = getConfig().areEditableParameterValuesValid(url, parameter, values, dataType);
+
+		assertTrue(result);
 	}
 
 }

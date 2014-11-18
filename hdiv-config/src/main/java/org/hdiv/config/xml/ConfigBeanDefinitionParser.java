@@ -17,6 +17,7 @@ package org.hdiv.config.xml;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -601,7 +602,7 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		RootBeanDefinition bean = new RootBeanDefinition(HDIVValidations.class);
 		bean.setSource(source);
 		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
-		bean.getPropertyValues().addPropertyValue("urls", new HashMap<PatternMatcher, List<IValidation>>());
+		bean.getPropertyValues().addPropertyValue("urls", new LinkedHashMap<PatternMatcher, List<IValidation>>());
 		parserContext.getRegistry().registerBeanDefinition(
 				EditableValidationsBeanDefinitionParser.EDITABLE_VALIDATIONS_BEAN_NAME, bean);
 		return new RuntimeBeanReference(EditableValidationsBeanDefinitionParser.EDITABLE_VALIDATIONS_BEAN_NAME);

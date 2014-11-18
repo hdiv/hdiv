@@ -16,7 +16,7 @@
 package org.hdiv.config.factory;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -60,7 +60,7 @@ public class ValidationsFactoryBean extends AbstractFactoryBean<HDIVValidations>
 
 		HDIVValidations validations = new HDIVValidations();
 
-		Map<PatternMatcher, List<IValidation>> urls = new HashMap<PatternMatcher, List<IValidation>>();
+		Map<PatternMatcher, List<IValidation>> urls = new LinkedHashMap<PatternMatcher, List<IValidation>>();
 
 		for (String url : this.validationsData.keySet()) {
 			List<String> ids = validationsData.get(url);

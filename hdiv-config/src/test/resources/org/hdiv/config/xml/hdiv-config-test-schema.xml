@@ -18,8 +18,9 @@ http://www.hdiv.org/schema/hdiv http://www.hdiv.org/schema/hdiv/hdiv.xsd">
 	</hdiv:validation>
 
 	<hdiv:editableValidations registerDefaults="true">
-		<hdiv:validationRule url="a" enableDefaults="false">id1</hdiv:validationRule>
-		<hdiv:validationRule url="b"> 
+		<hdiv:validationRule url="a" enableDefaults="false"></hdiv:validationRule>
+		<hdiv:validationRule url="b" enableDefaults="false">id1</hdiv:validationRule>
+		<hdiv:validationRule url="c"> 
 			id2,
 			id3
 		 </hdiv:validationRule>

@@ -16,7 +16,7 @@
 package org.hdiv.config.annotation;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -363,7 +363,7 @@ public abstract class HdivWebSecurityConfigurationSupport {
 		this.configureEditableValidation(validationConfigurer);
 		List<ValidationConfig> validationConfigs = validationConfigurer.getValidationConfigs();
 
-		Map<PatternMatcher, List<IValidation>> validationsData = new HashMap<PatternMatcher, List<IValidation>>();
+		Map<PatternMatcher, List<IValidation>> validationsData = new LinkedHashMap<PatternMatcher, List<IValidation>>();
 
 		for (ValidationConfig validationConfig : validationConfigs) {
 

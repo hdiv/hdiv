@@ -2,6 +2,11 @@ HDIV CHANGELOG
 ==============
 http://www.hdiv.org
 
+Release 2.1.10
+==================================
+
+ * Take into account <hdiv:validationRule> tag order looking for a matching url.
+
 Release 2.1.9
 ==================================
 

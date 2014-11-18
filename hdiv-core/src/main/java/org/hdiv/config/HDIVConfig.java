@@ -519,6 +519,7 @@ public class HDIVConfig implements Serializable {
 						return false;
 					}
 				}
+				return true;
 			}
 		}
 

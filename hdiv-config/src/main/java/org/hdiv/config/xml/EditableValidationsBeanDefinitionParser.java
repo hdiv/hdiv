@@ -16,7 +16,7 @@
 package org.hdiv.config.xml;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -102,7 +102,7 @@ public class EditableValidationsBeanDefinitionParser extends AbstractSingleBeanD
 		RuntimeBeanReference beanRef = new RuntimeBeanReference(ConfigBeanDefinitionParser.PATTERN_MATCHER_FACTORY_NAME);
 		bean.getBeanDefinition().getPropertyValues().addPropertyValue("patternMatcherFactory", beanRef);
 
-		Map<String, List<String>> map = new HashMap<String, List<String>>();
+		Map<String, List<String>> map = new LinkedHashMap<String, List<String>>();
 		bean.addPropertyValue("validationsData", map);
 
 		// Register default editable validation
