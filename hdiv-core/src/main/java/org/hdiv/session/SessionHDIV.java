@@ -78,16 +78,19 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 
 		PageIdGenerator pageIdGenerator = (PageIdGenerator) session.getAttribute(this.pageIdGeneratorName);
 		if (pageIdGenerator == null) {
+			pageIdGenerator = this.beanFactory.getBean(PageIdGenerator.class);
+		}
+		if (pageIdGenerator == null) {
 			throw new HDIVException("session.nopageidgenerator");
 		}
 
 		int id = pageIdGenerator.getNextPageId();
-		
+
 		// PageId must be greater than 0
-		if(id <= 0){
+		if (id <= 0) {
 			throw new HDIVException("Incorrect PageId generated [" + id + "]. PageId must be greater than 0.");
 		}
-		
+
 		session.setAttribute(this.pageIdGeneratorName, pageIdGenerator);
 
 		return id;
