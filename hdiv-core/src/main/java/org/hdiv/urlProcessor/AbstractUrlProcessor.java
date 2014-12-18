@@ -94,7 +94,7 @@ public abstract class AbstractUrlProcessor {
 			url = url.replaceFirst(serverUrl, "");
 		}
 
-		// Detect if the url points to actual app
+		// Detect if the url points to current app
 		boolean internal = this.isInternalUrl(request, url, urlData);
 		urlData.setInternal(internal);
 
@@ -548,7 +548,7 @@ public abstract class AbstractUrlProcessor {
 	 * @param url
 	 *            url
 	 * @param urlData
-	 *            actual url data
+	 *            current url data
 	 * @return url without sessionId
 	 */
 	protected String stripSession(String url, UrlData urlData) {

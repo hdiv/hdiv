@@ -53,7 +53,7 @@ public class DataComposerMemoryTest extends AbstractHDIVTestCase {
 	}
 
 	/**
-	 * @see DataComposerMamory#compose(String, String, String, boolean)
+	 * @see DataComposerMemory#compose(String, String, String, boolean)
 	 */
 	public void testComposeSimple() {
 

@@ -134,7 +134,7 @@ public class DataComposerFactory {
 	 * @param dataComposer
 	 *            IDataComposer instance
 	 * @param request
-	 *            actual HttpServletRequest instance
+	 *            current HttpServletRequest instance
 	 */
 	protected void initDataComposer(IDataComposer dataComposer, HttpServletRequest request) {
 
@@ -185,7 +185,7 @@ public class DataComposerFactory {
 	 * Is it necessary to create a new Page or reuse existing Page adding the created states to it?
 	 * 
 	 * @param request
-	 *            actual HttpServletRequest instance
+	 *            current HttpServletRequest instance
 	 * @return reuse or not
 	 */
 	protected boolean reuseExistingPage(HttpServletRequest request) {

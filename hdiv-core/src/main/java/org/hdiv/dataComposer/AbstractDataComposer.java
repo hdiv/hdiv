@@ -212,7 +212,7 @@ public abstract class AbstractDataComposer implements IDataComposer {
 	public String compose(String action, String parameter, String value, boolean editable, boolean isActionParam,
 			String charEncoding) {
 
-		// Get actual IState
+		// Get current IState
 		IState state = this.getStatesStack().peek();
 		if (state.getAction() != null && state.getAction().trim().length() == 0) {
 			state.setAction(action);
@@ -280,7 +280,7 @@ public abstract class AbstractDataComposer implements IDataComposer {
 
 		String decodedParams = this.getDecodedValue(parameters, charEncoding);
 
-		// Get actual IState
+		// Get current IState
 		IState state = this.getStatesStack().peek();
 		state.setParams(decodedParams);
 
@@ -450,7 +450,7 @@ public abstract class AbstractDataComposer implements IDataComposer {
 	 */
 	protected boolean isUserDefinedNonValidationParameter(String parameter) {
 
-		// Get actual IState
+		// Get current IState
 		IState state = this.getStatesStack().peek();
 		String action = state.getAction();
 
@@ -492,7 +492,7 @@ public abstract class AbstractDataComposer implements IDataComposer {
 			decodedValue = this.getDecodedValue(value, charEncoding);
 		}
 
-		// Get actual IState
+		// Get current IState
 		IState state = this.getStatesStack().peek();
 
 		IParameter parameter = state.getParameter(parameterName);
@@ -546,7 +546,7 @@ public abstract class AbstractDataComposer implements IDataComposer {
 	 */
 	public void mergeParameters(String oldParameter, String newParameter) {
 
-		// Get actual IState
+		// Get current IState
 		IState state = this.getStatesStack().peek();
 		IParameter storedParameter = state.getParameter(oldParameter);
 

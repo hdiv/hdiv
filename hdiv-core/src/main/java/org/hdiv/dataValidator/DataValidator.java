@@ -36,12 +36,12 @@ public class DataValidator implements IDataValidator {
 	/**
 	 * Commons Logging instance.
 	 */
-	private Log log = LogFactory.getLog(DataValidator.class);
+	protected Log log = LogFactory.getLog(DataValidator.class);
 
 	/**
 	 * HDIV general configuration.
 	 */
-	private HDIVConfig config;
+	protected HDIVConfig config;
 
 	/*
 	 * (non-Javadoc)
@@ -132,7 +132,7 @@ public class DataValidator implements IDataValidator {
 	 *            Data to check
 	 * @return Returns true if <code>data</code> is a number. False in otherwise.
 	 */
-	private boolean isInt(String data) {
+	protected boolean isInt(String data) {
 		Pattern p = HDIVUtil.intPattern;
 		Matcher m = p.matcher(data);
 		return m.matches();
