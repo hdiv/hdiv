@@ -25,9 +25,9 @@ import java.util.Map;
 
 import org.hdiv.config.HDIVConfig;
 import org.hdiv.config.HDIVValidations;
+import org.hdiv.config.HDIVValidations.ValidationTarget;
 import org.hdiv.config.annotation.configuration.HdivWebSecurityConfigurerAdapter;
 import org.hdiv.regex.DefaultPatternMatcher;
-import org.hdiv.regex.PatternMatcher;
 import org.hdiv.validator.IValidation;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -56,6 +56,7 @@ public class EditableValidationsTest {
 		public void configureEditableValidation(ValidationConfigurer validationConfigurer) {
 
 			validationConfigurer.addValidation("/insecure/.*").disableDefaults();
+			validationConfigurer.addValidation("/secureParam/.*").forParameters("param1");
 			validationConfigurer.addValidation("/secure/.*").rules("safeText").disableDefaults();
 			validationConfigurer.addValidation("/.*");
 		}
@@ -76,6 +77,10 @@ public class EditableValidationsTest {
 				new String[] { "<script>" }, "text");
 		assertTrue(result);
 
+		result = config.areEditableParameterValuesValid("/secureParam/action", "param1", new String[] { "<script>" },
+				"text");
+		assertFalse(result);
+		
 		result = config.areEditableParameterValuesValid("/secure/action", "parameter", new String[] { "<script>" },
 				"text");
 		assertFalse(result);
@@ -85,18 +90,20 @@ public class EditableValidationsTest {
 	public void editableValidationsOrder() {
 		assertNotNull(validations);
 
-		assertEquals(3, validations.getUrls().size());
+		Map<ValidationTarget, List<IValidation>> vals = validations.getValidations();
+		assertEquals(4, vals.size());
 
-		assertNotNull(validations);
+		Object[] ptrs = vals.keySet().toArray();
+		
+		ValidationTarget vt0 = (ValidationTarget) ptrs[0];
+		ValidationTarget vt1 = (ValidationTarget) ptrs[1];
+		ValidationTarget vt2 = (ValidationTarget) ptrs[2];
+		ValidationTarget vt3 = (ValidationTarget) ptrs[3];
 
-		Map<PatternMatcher, List<IValidation>> urls = validations.getUrls();
-		assertEquals(3, urls.size());
-
-		Object[] ptrs = urls.keySet().toArray();
-
-		assertEquals(new DefaultPatternMatcher("/insecure/.*"), ptrs[0]);
-		assertEquals(new DefaultPatternMatcher("/secure/.*"), ptrs[1]);
-		assertEquals(new DefaultPatternMatcher("/.*"), ptrs[2]);
+		assertEquals(new DefaultPatternMatcher("/insecure/.*"), vt0.getUrl());
+		assertEquals(new DefaultPatternMatcher("/secureParam/.*"), vt1.getUrl());
+		assertEquals(new DefaultPatternMatcher("/secure/.*"), vt2.getUrl());
+		assertEquals(new DefaultPatternMatcher("/.*"), vt3.getUrl());
 	}
 
 }

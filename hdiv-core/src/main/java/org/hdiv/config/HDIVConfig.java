@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.hdiv.config.HDIVValidations.ValidationTarget;
 import org.hdiv.regex.PatternMatcher;
 import org.hdiv.regex.PatternMatcherFactory;
 import org.hdiv.state.IPage;
@@ -476,8 +477,8 @@ public class HDIVConfig implements Serializable {
 	 */
 	public boolean existValidations() {
 
-		return ((this.validations != null) && (this.validations.getUrls() != null) && (this.validations.getUrls()
-				.size() > 0));
+		return ((this.validations != null) && (this.validations.getValidations() != null) && (this.validations
+				.getValidations().size() > 0));
 	}
 
 	/**
@@ -504,22 +505,41 @@ public class HDIVConfig implements Serializable {
 	 */
 	public boolean areEditableParameterValuesValid(String url, String parameter, String[] values, String dataType) {
 
-		Map<PatternMatcher, List<IValidation>> urls = this.validations.getUrls();
+		Map<ValidationTarget, List<IValidation>> validations = this.validations.getValidations();
 
-		for (PatternMatcher matcher : urls.keySet()) {
+		for (ValidationTarget target : validations.keySet()) {
 
-			if (matcher.matches(url)) {
+			PatternMatcher urlMatcher = target.getUrl();
 
-				List<IValidation> userDefinedValidations = urls.get(matcher);
-				for (int i = 0; i < userDefinedValidations.size(); i++) {
+			if (urlMatcher.matches(url)) {
 
-					IValidation currentValidation = (IValidation) userDefinedValidations.get(i);
+				List<PatternMatcher> paramMatchers = target.getParams();
+				boolean paramMatch = false;
 
-					if (!currentValidation.validate(parameter, values, dataType)) {
-						return false;
+				if (paramMatchers != null && paramMatchers.size() > 0) {
+					for (PatternMatcher paramMatcher : paramMatchers) {
+						if (paramMatcher.matches(parameter)) {
+							paramMatch = true;
+							break;
+						}
 					}
+				} else {
+					paramMatch = true;
 				}
-				return true;
+
+				if (paramMatch) {
+
+					List<IValidation> userDefinedValidations = validations.get(target);
+					for (int i = 0; i < userDefinedValidations.size(); i++) {
+
+						IValidation currentValidation = (IValidation) userDefinedValidations.get(i);
+
+						if (!currentValidation.validate(parameter, values, dataType)) {
+							return false;
+						}
+					}
+					return true;
+				}
 			}
 		}
 

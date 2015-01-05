@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.hdiv.config.factory.ValidationsFactoryBean;
+import org.hdiv.config.factory.ValidationsFactoryBean.ValidationTargetData;
 import org.hdiv.config.validations.DefaultValidationParser;
 import org.hdiv.validator.IValidation;
 import org.hdiv.validator.Validation;
@@ -102,7 +103,7 @@ public class EditableValidationsBeanDefinitionParser extends AbstractSingleBeanD
 		RuntimeBeanReference beanRef = new RuntimeBeanReference(ConfigBeanDefinitionParser.PATTERN_MATCHER_FACTORY_NAME);
 		bean.getBeanDefinition().getPropertyValues().addPropertyValue("patternMatcherFactory", beanRef);
 
-		Map<String, List<String>> map = new LinkedHashMap<String, List<String>>();
+		Map<ValidationTargetData, List<String>> map = new LinkedHashMap<ValidationTargetData, List<String>>();
 		bean.addPropertyValue("validationsData", map);
 
 		// Register default editable validation
@@ -139,27 +140,39 @@ public class EditableValidationsBeanDefinitionParser extends AbstractSingleBeanD
 	}
 
 	/**
-	 * Initialize Map with url and ValidationRule data.
+	 * Initialize Map with url, parameter and ValidationRule data.
 	 * 
 	 * @param node
 	 *            processing xml node
 	 * @param bean
 	 *            bean configuration
 	 * @param map
-	 *            Map with url and ValidationRule data
+	 *            Map with url, parameter and ValidationRule data
 	 */
-	private void processValidationRule(Node node, BeanDefinitionBuilder bean, Map<String, List<String>> map) {
+	private void processValidationRule(Node node, BeanDefinitionBuilder bean,
+			Map<ValidationTargetData, List<String>> map) {
 
 		String value = node.getTextContent();
 		List<String> ids = this.convertToList(value);
 
 		NamedNodeMap attributes = node.getAttributes();
-		Node named = attributes.getNamedItem("url");
-		if (named != null) {
-			String url = named.getTextContent();
+		Node urlNode = attributes.getNamedItem("url");
+		Node paramsNode = attributes.getNamedItem("parameters");
+
+		if (urlNode != null || paramsNode != null) {
+			ValidationTargetData data = new ValidationTargetData();
+			if (urlNode != null) {
+				String url = urlNode.getTextContent();
+				data.setUrl(url);
+			}
+			if (paramsNode != null) {
+				String params = paramsNode.getTextContent();
+				List<String> paramsList = convertToList(params);
+				data.setParams(paramsList);
+			}
 
 			boolean enableDefaults = true;
-			named = attributes.getNamedItem("enableDefaults");
+			Node named = attributes.getNamedItem("enableDefaults");
 			if (named != null) {
 				String enableDefaultsVal = named.getTextContent();
 				if (enableDefaultsVal != null) {
@@ -172,7 +185,7 @@ public class EditableValidationsBeanDefinitionParser extends AbstractSingleBeanD
 				ids.add(DEFAULT_EDITABLE_VALIDATIONS_BEAN_NAME);
 			}
 
-			map.put(url, ids);
+			map.put(data, ids);
 		}
 	}
 

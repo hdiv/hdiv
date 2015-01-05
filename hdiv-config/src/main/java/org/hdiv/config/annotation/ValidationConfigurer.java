@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.hdiv.config.annotation.ValidationConfigurer.ValidationConfig.RuleConfigurer;
+import org.hdiv.config.annotation.ValidationConfigurer.ValidationConfig.EditableValidationConfigurer;
 import org.springframework.util.Assert;
 
 /**
@@ -38,12 +38,12 @@ public class ValidationConfigurer {
 	 *            Url pattern
 	 * @return More configuration options
 	 */
-	public RuleConfigurer addValidation(String urlPattern) {
+	public EditableValidationConfigurer addValidation(String urlPattern) {
 
 		ValidationConfig validationConfig = new ValidationConfig(urlPattern);
 		this.validationConfigs.add(validationConfig);
-		RuleConfigurer ruleConfigurer = validationConfig.getRuleConfigurer();
-		return ruleConfigurer;
+		EditableValidationConfigurer editableValidationConfigurer = validationConfig.getEditableValidationConfigurer();
+		return editableValidationConfigurer;
 	}
 
 	protected List<ValidationConfig> getValidationConfigs() {
@@ -55,7 +55,7 @@ public class ValidationConfigurer {
 
 		private String urlPattern;
 
-		private RuleConfigurer ruleConfigurer = new RuleConfigurer();
+		private EditableValidationConfigurer editableValidationConfigurer = new EditableValidationConfigurer();
 
 		public ValidationConfig(String urlPattern) {
 			this.urlPattern = urlPattern;
@@ -65,8 +65,30 @@ public class ValidationConfigurer {
 			return urlPattern;
 		}
 
-		protected RuleConfigurer getRuleConfigurer() {
-			return ruleConfigurer;
+		protected EditableValidationConfigurer getEditableValidationConfigurer() {
+			return editableValidationConfigurer;
+		}
+
+		public class EditableValidationConfigurer extends RuleConfigurer {
+
+			private List<String> parameters = new ArrayList<String>();
+
+			/**
+			 * Configure editable validation only for some parameters.
+			 * 
+			 * @param parameterNames
+			 *            parameter name patterns
+			 * @return More configuration options
+			 */
+			public RuleConfigurer forParameters(String... parameterNames) {
+				Assert.notEmpty(parameterNames, "Parameter names are required");
+				this.parameters.addAll(Arrays.asList(parameterNames));
+				return this;
+			}
+
+			protected List<String> getParameters() {
+				return this.parameters;
+			}
 		}
 
 		public class RuleConfigurer {

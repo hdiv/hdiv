@@ -4,12 +4,26 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
 	<bean id="editableParametersValidations" class="org.hdiv.config.HDIVValidations">
-		<property name="urls">
+		<property name="validations">
 			<map>
 				<entry>
 					<key>
-						<bean class="org.hdiv.regex.DefaultPatternMatcher">
-							<constructor-arg value="/insecure/.*" />
+						<bean class="org.hdiv.config.HDIVValidations$ValidationTarget">
+							<property name="url">
+								<bean class="org.hdiv.regex.DefaultPatternMatcher">
+									<constructor-arg value="/insecureParams/.*" />
+								</bean>
+							</property>
+							<property name="params">
+								<list>
+									<bean class="org.hdiv.regex.DefaultPatternMatcher">
+										<constructor-arg value="param1" />
+									</bean>
+									<bean class="org.hdiv.regex.DefaultPatternMatcher">
+										<constructor-arg value="param2" />
+									</bean>
+								</list>
+							</property>
 						</bean>
 					</key>
 					<list>
@@ -17,8 +31,25 @@
 				</entry>
 				<entry>
 					<key>
-						<bean class="org.hdiv.regex.DefaultPatternMatcher">
-							<constructor-arg value=".*" />
+						<bean class="org.hdiv.config.HDIVValidations$ValidationTarget">
+							<property name="url">
+								<bean class="org.hdiv.regex.DefaultPatternMatcher">
+									<constructor-arg value="/insecure/.*" />
+								</bean>
+							</property>
+						</bean>
+					</key>
+					<list>
+					</list>
+				</entry>
+				<entry>
+					<key>
+						<bean class="org.hdiv.config.HDIVValidations$ValidationTarget">
+							<property name="url">
+								<bean class="org.hdiv.regex.DefaultPatternMatcher">
+									<constructor-arg value=".*" />
+								</bean>
+							</property>
 						</bean>
 					</key>
 					<list>

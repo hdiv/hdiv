@@ -22,6 +22,7 @@ import junit.framework.TestCase;
 
 import org.hdiv.config.HDIVConfig;
 import org.hdiv.config.HDIVValidations;
+import org.hdiv.config.HDIVValidations.ValidationTarget;
 import org.hdiv.logs.IUserData;
 import org.hdiv.regex.DefaultPatternMatcher;
 import org.hdiv.regex.PatternMatcher;
@@ -118,18 +119,26 @@ public class CustomSchemaTest extends TestCase {
 
 	public void testEditableValidations() {
 
-		HDIVValidations validations = this.context.getBean(HDIVValidations.class);
-		assertNotNull(validations);
+		HDIVValidations editableValidations = this.context.getBean(HDIVValidations.class);
+		assertNotNull(editableValidations);
 
-		Map<PatternMatcher, List<IValidation>> urls = validations.getUrls();
-		assertEquals(3, urls.size());
+		Map<ValidationTarget, List<IValidation>> validations = editableValidations.getValidations();
+		assertEquals(3, validations.size());
 
 		// First url
-		List<IValidation> vals = urls.get(new DefaultPatternMatcher("a"));
+		List<IValidation> vals = this.getValidations(validations, "a");
+		ValidationTarget target = this.getTarget(validations, "a");
 		assertEquals(0, vals.size());
+		assertNull(target.getParams());
 
 		// Second url
-		vals = urls.get(new DefaultPatternMatcher("b"));
+		vals = this.getValidations(validations, "b");
+		target = this.getTarget(validations, "b");
+		List<PatternMatcher> params = target.getParams();
+		assertEquals(3, params.size());
+		assertEquals(new DefaultPatternMatcher("param1"), params.get(0));
+		assertEquals(new DefaultPatternMatcher("param2"), params.get(1));
+		assertEquals(new DefaultPatternMatcher("param3"), params.get(2));
 
 		assertEquals(1, vals.size());
 		// 1 custom rules
@@ -138,7 +147,9 @@ public class CustomSchemaTest extends TestCase {
 		assertFalse(val.isDefaultValidation());
 
 		// Third url
-		vals = urls.get(new DefaultPatternMatcher("c"));
+		vals = this.getValidations(validations, "c");
+		target = this.getTarget(validations, "c");
+		assertNull(target.getParams());
 		assertEquals(8, vals.size());
 		// 2 custom rule + 6 default rules
 
@@ -153,17 +164,50 @@ public class CustomSchemaTest extends TestCase {
 
 	public void testEditableValidationsOrder() {
 
-		HDIVValidations validations = this.context.getBean(HDIVValidations.class);
-		assertNotNull(validations);
+		HDIVValidations editableValidations = this.context.getBean(HDIVValidations.class);
+		assertNotNull(editableValidations);
 
-		Map<PatternMatcher, List<IValidation>> urls = validations.getUrls();
-		assertEquals(3, urls.size());
+		Map<ValidationTarget, List<IValidation>> validations = editableValidations.getValidations();
+		assertEquals(3, validations.size());
 
-		Object[] ptrs = urls.keySet().toArray();
+		Object[] ptrs = validations.keySet().toArray();
 
-		assertEquals(new DefaultPatternMatcher("a"), ptrs[0]);
-		assertEquals(new DefaultPatternMatcher("b"), ptrs[1]);
-		assertEquals(new DefaultPatternMatcher("c"), ptrs[2]);
+		ValidationTarget vt0 = (ValidationTarget) ptrs[0];
+		ValidationTarget vt1 = (ValidationTarget) ptrs[1];
+		ValidationTarget vt2 = (ValidationTarget) ptrs[2];
+
+		assertEquals(new DefaultPatternMatcher("a"), vt0.getUrl());
+		assertEquals(new DefaultPatternMatcher("b"), vt1.getUrl());
+		assertEquals(new DefaultPatternMatcher("c"), vt2.getUrl());
+	}
+
+	public void testEditableValidationsParams() {
+
+		HDIVConfig config = this.context.getBean(HDIVConfig.class);
+
+		boolean exist = config.existValidations();
+		assertTrue(exist);
+
+		// param1
+		String url = "b";
+		String parameter = "param1";
+		String[] values = { "<script>" };
+		String dataType = "text";
+		boolean result = config.areEditableParameterValuesValid(url, parameter, values, dataType);
+
+		assertFalse(result);
+
+		// param2
+		parameter = "param2";
+		result = config.areEditableParameterValuesValid(url, parameter, values, dataType);
+
+		assertFalse(result);
+
+		// otherParam
+		parameter = "otherParam";
+		result = config.areEditableParameterValuesValid(url, parameter, values, dataType);
+
+		assertTrue(result);
 	}
 
 	public void testReuseExistingPageInAjaxRequest() {
@@ -215,6 +259,26 @@ public class CustomSchemaTest extends TestCase {
 
 		result = hdivConfig.isLongLivingPages("/other.html");
 		assertNull(result);
+	}
+
+	protected List<IValidation> getValidations(Map<ValidationTarget, List<IValidation>> validations, String pattern) {
+
+		for (ValidationTarget target : validations.keySet()) {
+			if (target.getUrl().matches(pattern)) {
+				return validations.get(target);
+			}
+		}
+		return null;
+	}
+
+	protected ValidationTarget getTarget(Map<ValidationTarget, List<IValidation>> validations, String pattern) {
+
+		for (ValidationTarget target : validations.keySet()) {
+			if (target.getUrl().matches(pattern)) {
+				return target;
+			}
+		}
+		return null;
 	}
 
 }

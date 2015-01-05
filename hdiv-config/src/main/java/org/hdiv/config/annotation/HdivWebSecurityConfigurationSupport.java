@@ -28,8 +28,10 @@ import org.hdiv.cipher.IKeyFactory;
 import org.hdiv.cipher.KeyFactory;
 import org.hdiv.config.HDIVConfig;
 import org.hdiv.config.HDIVValidations;
+import org.hdiv.config.HDIVValidations.ValidationTarget;
 import org.hdiv.config.StartPage;
 import org.hdiv.config.annotation.ValidationConfigurer.ValidationConfig;
+import org.hdiv.config.annotation.ValidationConfigurer.ValidationConfig.EditableValidationConfigurer;
 import org.hdiv.config.annotation.builders.SecurityConfigBuilder;
 import org.hdiv.config.annotation.builders.SecurityConfigBuilder.CipherConfigure;
 import org.hdiv.config.annotation.grails.GrailsConfigurationSupport;
@@ -86,7 +88,7 @@ import org.springframework.context.annotation.Scope;
  * @since 2.1.7
  */
 @Import({ SpringMvcConfigurationSupport.class, ThymeleafConfigurationSupport.class, GrailsConfigurationSupport.class,
-		JsfConfigurationSupport.class , Struts1ConfigurationSupport.class})
+		JsfConfigurationSupport.class, Struts1ConfigurationSupport.class })
 public abstract class HdivWebSecurityConfigurationSupport {
 
 	@Bean
@@ -363,13 +365,16 @@ public abstract class HdivWebSecurityConfigurationSupport {
 		this.configureEditableValidation(validationConfigurer);
 		List<ValidationConfig> validationConfigs = validationConfigurer.getValidationConfigs();
 
-		Map<PatternMatcher, List<IValidation>> validationsData = new LinkedHashMap<PatternMatcher, List<IValidation>>();
+		Map<ValidationTarget, List<IValidation>> validationsData = new LinkedHashMap<ValidationTarget, List<IValidation>>();
 
 		for (ValidationConfig validationConfig : validationConfigs) {
 
 			String urlPattern = validationConfig.getUrlPattern();
-			boolean useDefaultRules = validationConfig.getRuleConfigurer().isDefaultRules();
-			List<String> selectedRules = validationConfig.getRuleConfigurer().getRules();
+			EditableValidationConfigurer editableValidationConfigurer = validationConfig
+					.getEditableValidationConfigurer();
+			boolean useDefaultRules = editableValidationConfigurer.isDefaultRules();
+			List<String> selectedRules = editableValidationConfigurer.getRules();
+			List<String> selectedParams = editableValidationConfigurer.getParameters();
 
 			// Add selected rules
 			List<IValidation> activeRules = new ArrayList<IValidation>();
@@ -386,12 +391,23 @@ public abstract class HdivWebSecurityConfigurationSupport {
 			if (useDefaultRules) {
 				activeRules.addAll(defaultRules);
 			}
-			PatternMatcher patternMatcher = patternMatcherFactory.getPatternMatcher(urlPattern);
-			validationsData.put(patternMatcher, activeRules);
+
+			// Create ValidationTarget object
+			ValidationTarget target = new ValidationTarget();
+			PatternMatcher urlMatcher = patternMatcherFactory.getPatternMatcher(urlPattern);
+			List<PatternMatcher> paramMatchers = new ArrayList<PatternMatcher>();
+			for (String param : selectedParams) {
+				PatternMatcher matcher = patternMatcherFactory.getPatternMatcher(param);
+				paramMatchers.add(matcher);
+			}
+			target.setUrl(urlMatcher);
+			target.setParams(paramMatchers);
+
+			validationsData.put(target, activeRules);
 		}
 
 		HDIVValidations validations = new HDIVValidations();
-		validations.setUrls(validationsData);
+		validations.setValidations(validationsData);
 		return validations;
 	}
 

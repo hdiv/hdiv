@@ -28,6 +28,7 @@ import org.hdiv.cipher.IKeyFactory;
 import org.hdiv.cipher.KeyFactory;
 import org.hdiv.config.HDIVConfig;
 import org.hdiv.config.HDIVValidations;
+import org.hdiv.config.HDIVValidations.ValidationTarget;
 import org.hdiv.config.StartPage;
 import org.hdiv.config.Strategy;
 import org.hdiv.config.multipart.IMultipartConfig;
@@ -54,7 +55,6 @@ import org.hdiv.idGenerator.UidGenerator;
 import org.hdiv.logs.IUserData;
 import org.hdiv.logs.Logger;
 import org.hdiv.logs.UserData;
-import org.hdiv.regex.PatternMatcher;
 import org.hdiv.regex.PatternMatcherFactory;
 import org.hdiv.session.ISession;
 import org.hdiv.session.IStateCache;
@@ -602,7 +602,7 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		RootBeanDefinition bean = new RootBeanDefinition(HDIVValidations.class);
 		bean.setSource(source);
 		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
-		bean.getPropertyValues().addPropertyValue("urls", new LinkedHashMap<PatternMatcher, List<IValidation>>());
+		bean.getPropertyValues().addPropertyValue("validations", new LinkedHashMap<ValidationTarget, List<IValidation>>());
 		parserContext.getRegistry().registerBeanDefinition(
 				EditableValidationsBeanDefinitionParser.EDITABLE_VALIDATIONS_BEAN_NAME, bean);
 		return new RuntimeBeanReference(EditableValidationsBeanDefinitionParser.EDITABLE_VALIDATIONS_BEAN_NAME);

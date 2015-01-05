@@ -33,9 +33,9 @@ public class HDIVValidations implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * Map containing the urls to which the user wants to apply validation for the editable parameters.
+	 * Map containing the urls and parameters to which the user wants to apply validation for the editable parameters.
 	 */
-	protected Map<PatternMatcher, List<IValidation>> urls;
+	protected Map<ValidationTarget, List<IValidation>> validations;
 
 	/*
 	 * (non-Javadoc)
@@ -43,22 +43,54 @@ public class HDIVValidations implements Serializable {
 	 * @see java.lang.Object#toString()
 	 */
 	public String toString() {
-		return urls.toString();
+		return validations.toString();
 	}
 
 	/**
-	 * @return Returns the urls.
+	 * @return Returns the validations.
 	 */
-	public Map<PatternMatcher, List<IValidation>> getUrls() {
-		return urls;
+	public Map<ValidationTarget, List<IValidation>> getValidations() {
+		return validations;
 	}
 
 	/**
 	 * @param urls
-	 *            The urls to set.
+	 *            The validations to set.
 	 */
-	public void setUrls(Map<PatternMatcher, List<IValidation>> urls) {
-		this.urls = urls;
+	public void setValidations(Map<ValidationTarget, List<IValidation>> validations) {
+		this.validations = validations;
+	}
+
+	/**
+	 * Identifier for an unique editable validation target.
+	 */
+	public static class ValidationTarget implements Serializable {
+
+		private static final long serialVersionUID = 9173925337196238781L;
+
+		private PatternMatcher url;
+
+		private List<PatternMatcher> params;
+
+		public ValidationTarget() {
+		}
+
+		public PatternMatcher getUrl() {
+			return url;
+		}
+
+		public void setUrl(PatternMatcher url) {
+			this.url = url;
+		}
+
+		public List<PatternMatcher> getParams() {
+			return params;
+		}
+
+		public void setParams(List<PatternMatcher> params) {
+			this.params = params;
+		}
+
 	}
 
 }

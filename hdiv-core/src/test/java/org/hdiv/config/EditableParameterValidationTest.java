@@ -19,8 +19,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.hdiv.AbstractHDIVTestCase;
+import org.hdiv.config.HDIVValidations.ValidationTarget;
 import org.hdiv.regex.DefaultPatternMatcher;
-import org.hdiv.regex.PatternMatcher;
 import org.hdiv.validator.IValidation;
 
 public class EditableParameterValidationTest extends AbstractHDIVTestCase {
@@ -53,13 +53,18 @@ public class EditableParameterValidationTest extends AbstractHDIVTestCase {
 
 	public void testEditableParamValidatorOrder() {
 
-		Map<PatternMatcher, List<IValidation>> urls = this.editableValidations.getUrls();
-		assertEquals(2, urls.size());
+		Map<ValidationTarget, List<IValidation>> validations = this.editableValidations.getValidations();
+		assertEquals(3, validations.size());
 
-		Object[] ptrs = urls.keySet().toArray();
+		Object[] ptrs = validations.keySet().toArray();
 
-		assertEquals(new DefaultPatternMatcher("/insecure/.*"), ptrs[0]);
-		assertEquals(new DefaultPatternMatcher(".*"), ptrs[1]);
+		ValidationTarget vt0 = (ValidationTarget) ptrs[0];
+		ValidationTarget vt1 = (ValidationTarget) ptrs[1];
+		ValidationTarget vt2 = (ValidationTarget) ptrs[2];
+
+		assertEquals(new DefaultPatternMatcher("/insecureParams/.*"), vt0.getUrl());
+		assertEquals(new DefaultPatternMatcher("/insecure/.*"), vt1.getUrl());
+		assertEquals(new DefaultPatternMatcher(".*"), vt2.getUrl());
 	}
 
 	public void testEditableParamValidatorPatternOrder() {
@@ -74,6 +79,60 @@ public class EditableParameterValidationTest extends AbstractHDIVTestCase {
 		boolean result = getConfig().areEditableParameterValuesValid(url, parameter, values, dataType);
 
 		assertTrue(result);
+	}
+
+	public void testEditableParamValidatorPatternParams() {
+
+		boolean exist = getConfig().existValidations();
+		assertTrue(exist);
+
+		// param1
+		String url = "/insecureParams/action";
+		String parameter = "param1";
+		String[] values = { "<script>" };
+		String dataType = "text";
+		boolean result = getConfig().areEditableParameterValuesValid(url, parameter, values, dataType);
+
+		assertTrue(result);
+
+		// param2
+		parameter = "param2";
+		result = getConfig().areEditableParameterValuesValid(url, parameter, values, dataType);
+
+		assertTrue(result);
+
+		// otherParam
+		parameter = "otherParam";
+		result = getConfig().areEditableParameterValuesValid(url, parameter, values, dataType);
+
+		assertFalse(result);
+	}
+
+	public void testEditableParamValidatorPatternParams2() {
+
+		boolean exist = getConfig().existValidations();
+		assertTrue(exist);
+
+		// param1
+		String url = "/secureParams/action";
+		String parameter = "param1";
+		String[] values = { "<script>" };
+		String dataType = "text";
+		boolean result = getConfig().areEditableParameterValuesValid(url, parameter, values, dataType);
+
+		assertFalse(result);
+
+		// param2
+		parameter = "param2";
+		result = getConfig().areEditableParameterValuesValid(url, parameter, values, dataType);
+
+		assertFalse(result);
+
+		// otherParam
+		parameter = "otherParam";
+		result = getConfig().areEditableParameterValuesValid(url, parameter, values, dataType);
+
+		assertFalse(result);
 	}
 
 }

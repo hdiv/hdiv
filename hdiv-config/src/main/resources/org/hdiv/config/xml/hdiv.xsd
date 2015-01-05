@@ -57,6 +57,13 @@
 								]]></xsd:documentation>
 							</xsd:annotation>
 						</xsd:attribute>
+						<xsd:attribute name="parameters" type="xsd:string">
+							<xsd:annotation>
+								<xsd:documentation><![CDATA[
+	List or unique regular expression that defines the parameters for which validation is applied. By default all parameters are validated.
+								]]></xsd:documentation>
+							</xsd:annotation>
+						</xsd:attribute>
 						<xsd:attribute name="enableDefaults" type="xsd:boolean"
 							default="true">
 							<xsd:annotation>

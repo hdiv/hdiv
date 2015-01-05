@@ -15,12 +15,14 @@
  */
 package org.hdiv.config.factory;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.hdiv.config.HDIVValidations;
+import org.hdiv.config.HDIVValidations.ValidationTarget;
 import org.hdiv.regex.PatternMatcher;
 import org.hdiv.regex.PatternMatcherFactory;
 import org.hdiv.validator.IValidation;
@@ -44,10 +46,10 @@ public class ValidationsFactoryBean extends AbstractFactoryBean<HDIVValidations>
 	 * Map for configuration purpose.
 	 * </p>
 	 * <p>
-	 * Url pattern :: List of Validation ids.
+	 * ValidationTargetData :: List of Validation ids.
 	 * </p>
 	 */
-	protected Map<String, List<String>> validationsData;
+	protected Map<ValidationTargetData, List<String>> validationsData;
 
 	@Override
 	public Class<?> getObjectType() {
@@ -56,18 +58,33 @@ public class ValidationsFactoryBean extends AbstractFactoryBean<HDIVValidations>
 
 	@Override
 	protected HDIVValidations createInstance() throws Exception {
-		// create HDIVvalidations instance for XML config
+		// create HDIVvalidations instance from XML config
 
 		HDIVValidations validations = new HDIVValidations();
 
-		Map<PatternMatcher, List<IValidation>> urls = new LinkedHashMap<PatternMatcher, List<IValidation>>();
+		Map<ValidationTarget, List<IValidation>> vals = new LinkedHashMap<ValidationTarget, List<IValidation>>();
 
-		for (String url : this.validationsData.keySet()) {
-			List<String> ids = validationsData.get(url);
-			PatternMatcher matcher = this.patternMatcherFactory.getPatternMatcher(url);
-			urls.put(matcher, this.createValidationList(ids));
+		for (ValidationTargetData data : this.validationsData.keySet()) {
+
+			ValidationTarget target = new ValidationTarget();
+			List<String> ids = validationsData.get(data);
+
+			if (data.getUrl() != null) {
+				PatternMatcher matcher = this.patternMatcherFactory.getPatternMatcher(data.getUrl());
+				target.setUrl(matcher);
+			}
+			if (data.getParams() != null && data.getParams().size() > 0) {
+				List<String> params = data.getParams();
+				List<PatternMatcher> matchers = new ArrayList<PatternMatcher>();
+				for (String param : params) {
+					PatternMatcher matcher = this.patternMatcherFactory.getPatternMatcher(param);
+					matchers.add(matcher);
+				}
+				target.setParams(matchers);
+			}
+			vals.put(target, this.createValidationList(ids));
 		}
-		validations.setUrls(urls);
+		validations.setValidations(vals);
 
 		return validations;
 	}
@@ -100,8 +117,34 @@ public class ValidationsFactoryBean extends AbstractFactoryBean<HDIVValidations>
 		this.patternMatcherFactory = patternMatcherFactory;
 	}
 
-	public void setValidationsData(Map<String, List<String>> validationsData) {
+	public void setValidationsData(Map<ValidationTargetData, List<String>> validationsData) {
 		this.validationsData = validationsData;
+	}
+
+	public static class ValidationTargetData implements Serializable {
+
+		private static final long serialVersionUID = 4991119416021943596L;
+
+		private String url;
+
+		private List<String> params;
+
+		public String getUrl() {
+			return url;
+		}
+
+		public List<String> getParams() {
+			return params;
+		}
+
+		public void setUrl(String url) {
+			this.url = url;
+		}
+
+		public void setParams(List<String> params) {
+			this.params = params;
+		}
+
 	}
 
 }
