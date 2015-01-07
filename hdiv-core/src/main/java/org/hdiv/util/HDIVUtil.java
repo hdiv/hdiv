@@ -58,6 +58,7 @@ public class HDIVUtil {
 	public static final String BASEURL_REQUEST_KEY = "BASEURL_REQUEST_KEY";
 	public static final String LINKURLPROCESSOR_SERVLETCONTEXT_KEY = "LINKURLPROCESSOR_SERVLETCONTEXT_KEY";
 	public static final String FORMURLPROCESSOR_SERVLETCONTEXT_KEY = "FORMURLPROCESSOR_SERVLETCONTEXT_KEY";
+	public static final String CURRENT_PAGE_KEY = "CURRENT_PAGE_KEY";
 
 	public static Pattern intPattern = Pattern.compile("[0-9]+");
 
@@ -211,7 +212,8 @@ public class HDIVUtil {
 	/**
 	 * Returns the servlet context wrapper object.
 	 * 
-	 * @param servletContext {@link ServletContext} instance
+	 * @param servletContext
+	 *            {@link ServletContext} instance
 	 * @return IApplication object
 	 */
 	public static IApplication getApplication(ServletContext servletContext) {
@@ -225,8 +227,10 @@ public class HDIVUtil {
 	/**
 	 * Set the <code>IApplication</code> in <code>ServletContext</code>
 	 * 
-	 * @param newApplication new {@link IApplication} instance
-	 * @param servletContext {@link ServletContext} instance
+	 * @param newApplication
+	 *            new {@link IApplication} instance
+	 * @param servletContext
+	 *            {@link ServletContext} instance
 	 */
 	public static void setApplication(IApplication newApplication, ServletContext servletContext) {
 		servletContext.setAttribute(APPLICATION_SERVLETCONTEXT_KEY, newApplication);
@@ -248,7 +252,8 @@ public class HDIVUtil {
 	/**
 	 * Return the <code>HDIVConfig</code> object
 	 * 
-	 * @param servletContext {@link ServletContext} instance
+	 * @param servletContext
+	 *            {@link ServletContext} instance
 	 * @return {@link HDIVConfig} instance
 	 */
 	public static HDIVConfig getHDIVConfig(ServletContext servletContext) {
@@ -264,8 +269,10 @@ public class HDIVUtil {
 	/**
 	 * Set the <code>HDIVConfig</code> object
 	 * 
-	 * @param hdivConfig {@link HDIVConfig} instance
-	 * @param servletContext {@link ServletContext} instance
+	 * @param hdivConfig
+	 *            {@link HDIVConfig} instance
+	 * @param servletContext
+	 *            {@link ServletContext} instance
 	 */
 	public static void setHDIVConfig(HDIVConfig hdivConfig, ServletContext servletContext) {
 		servletContext.setAttribute(HDIVCONFIG_SERVLETCONTEXT_KEY, hdivConfig);
@@ -329,6 +336,31 @@ public class HDIVUtil {
 		servletContext.setAttribute(FORMURLPROCESSOR_SERVLETCONTEXT_KEY, urlProcessor);
 	}
 
+	/* CurrentPageId */
+
+	/**
+	 * Returns CurrentPageId value from <code>HttpServletRequest</code>
+	 * 
+	 * @return pageId
+	 */
+	public static Integer getCurrentPageId() {
+		HttpServletRequest request = getHttpServletRequest();
+		return (Integer) request.getAttribute(CURRENT_PAGE_KEY);
+	}
+
+	/**
+	 * Set the CurrentPageId
+	 * 
+	 * @param pageId
+	 *            Current page id
+	 * @param request
+	 *            {@link HttpServletRequest} object
+	 */
+	public static void setCurrentPageId(Integer pageId, HttpServletRequest request) {
+
+		request.setAttribute(CURRENT_PAGE_KEY, pageId);
+	}
+
 	/* HttpSession */
 
 	/**
@@ -369,7 +401,8 @@ public class HDIVUtil {
 	/**
 	 * Set the <code>HttpServletRequest</code> instance in {@link ThreadLocal}
 	 * 
-	 * @param httpServletRequest {@link HttpServletRequest} instance
+	 * @param httpServletRequest
+	 *            {@link HttpServletRequest} instance
 	 */
 	public static void setHttpServletRequest(HttpServletRequest httpServletRequest) {
 		httpRequest.set(httpServletRequest);
@@ -391,7 +424,8 @@ public class HDIVUtil {
 	/**
 	 * Return the {@link MessageSource} instance.
 	 * 
-	 * @param servletContext {@link ServletContext} instance
+	 * @param servletContext
+	 *            {@link ServletContext} instance
 	 * @return {@link MessageSource} instance
 	 */
 	public static MessageSource getMessageSource(ServletContext servletContext) {
@@ -405,8 +439,10 @@ public class HDIVUtil {
 	/**
 	 * Set the {@link MessageSource} instance.
 	 * 
-	 * @param msgSource {@link MessageSource} instance
-	 * @param servletContext {@link ServletContext} instance
+	 * @param msgSource
+	 *            {@link MessageSource} instance
+	 * @param servletContext
+	 *            {@link ServletContext} instance
 	 */
 	public static void setMessageSource(MessageSource msgSource, ServletContext servletContext) {
 		servletContext.setAttribute(MESSAGESOURCE_SERVLETCONTEXT_KEY, msgSource);

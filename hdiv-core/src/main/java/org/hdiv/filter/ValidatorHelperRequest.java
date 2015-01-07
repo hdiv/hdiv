@@ -655,6 +655,9 @@ public class ValidatorHelperRequest implements IValidationHelper {
 
 			IState state = this.stateUtil.restoreState(requestState);
 
+			// Save current page id in request
+			HDIVUtil.setCurrentPageId(state.getPageId(), request);
+
 			if (this.stateUtil.isMemoryStrategy(requestState)) {
 
 				if (!this.validateHDIVSuffix(requestState, state)) {
@@ -709,10 +712,12 @@ public class ValidatorHelperRequest implements IValidationHelper {
 			String requestSuffix = value.substring(lastSeparator + 1);
 
 			// read suffix from page stored in session
-			String pageId = value.substring(0, firstSeparator);
+			String pId = value.substring(0, firstSeparator);
 			String sId = value.substring(firstSeparator + 1, lastSeparator);
+			int pageId = 0;
 			int stateId = 0;
 			try {
+				pageId = Integer.parseInt(pId);
 				stateId = Integer.parseInt(sId);
 			} catch (NumberFormatException e) {
 				throw new HDIVException(HDIVErrorCodes.PAGE_ID_INCORRECT);

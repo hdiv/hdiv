@@ -196,7 +196,7 @@ public class DataComposerMemory extends AbstractDataComposer {
 		boolean firstState = page.getStatesCount() == 1;
 		if (firstState) {
 
-			super.session.addPage(page.getName(), page);
+			super.session.addPage(page.getId(), page);
 		}
 
 		String id = this.getPage().getId() + DASH + state.getId() + DASH + this.getStateSuffix(state.getMethod());
@@ -237,10 +237,10 @@ public class DataComposerMemory extends AbstractDataComposer {
 		IPage page = this.getPage();
 		if (page.getStatesCount() > 0) {
 			// The page has states, update them in session
-			super.session.addPage(page.getName(), page);
+			super.session.addPage(page.getId(), page);
 		} else {
 			if (log.isDebugEnabled()) {
-				log.debug("The page [" + page.getName() + "] has no states, is not stored in session");
+				log.debug("The page [" + page.getId() + "] has no states, is not stored in session");
 			}
 		}
 

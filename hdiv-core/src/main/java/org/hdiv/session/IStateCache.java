@@ -24,18 +24,19 @@ import java.util.List;
 public interface IStateCache extends Serializable {
 
 	/**
-	 * Adds a new page identifier to the map <code>pageIds</code>.
+	 * Adds a new page identifier to the cache.
 	 * 
 	 * @param pageId
 	 *            page identifier to add
-	 * 
-	 * @return If the map <code>pageIds</code> has reached its maximum size <code>maxSize</code>, the oldest page
-	 *         identifier is deleted. Otherwise, null will be returned.
+	 * @param currentPageId
+	 *            page identifier of the current request. It can be null if no state id is present.
+	 * @return If the cache has reached its maximum size, less important identifier is returned in order to delete it
+	 *         from session. Otherwise, null will be returned.
 	 */
-	public String addPage(String pageId);
+	public Integer addPage(int pageId, Integer currentPageId);
 
 	/**
 	 * @return the pageIds
 	 */
-	public List<String> getPageIds();
+	public List<Integer> getPageIds();
 }

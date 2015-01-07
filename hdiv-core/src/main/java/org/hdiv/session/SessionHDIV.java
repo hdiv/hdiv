@@ -68,7 +68,7 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 	private String keyName = Constants.KEY_NAME;
 
 	/**
-	 * Obtains from the user session the page identifier where the current request or form is
+	 * Obtains from the user session the page identifier for the current request.
 	 * 
 	 * @return Returns the pageId.
 	 */
@@ -105,7 +105,7 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 	 * @return Returns the page with id <code>pageId</code>.
 	 * @since HDIV 2.0.4
 	 */
-	public IPage getPage(String pageId) {
+	public IPage getPage(int pageId) {
 		try {
 
 			HttpSession session = getHttpSession();
@@ -125,13 +125,16 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 	 * @param page
 	 *            Page with all the information about states
 	 */
-	public void addPage(String pageId, IPage page) {
+	public void addPage(int pageId, IPage page) {
 
 		HttpSession session = this.getHttpSession();
 
 		IStateCache cache = this.getStateCache(session);
 
-		String removedPageId = cache.addPage(pageId);
+		// Get current request page identifier. Null if no state
+		Integer currentPage = HDIVUtil.getCurrentPageId();
+
+		Integer removedPageId = cache.addPage(pageId, currentPage);
 
 		// if it returns a page identifier it is because the cache has reached
 		// the maximum size and therefore we must delete the page which has been
@@ -166,11 +169,11 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 			log.debug("Cache pages before finished pages are deleted:" + cache.toString());
 		}
 
-		List<String> pageIds = cache.getPageIds();
+		List<Integer> pageIds = cache.getPageIds();
 
 		for (int i = 0; i < pageIds.size(); i++) {
 
-			String pageId = pageIds.get(i);
+			Integer pageId = pageIds.get(i);
 			IPage currentPage = this.getPageFromSession(session, pageId);
 			if ((currentPage != null) && (currentPage.getFlowId() != null)) {
 
@@ -196,7 +199,7 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 	 * @return State identifier <code>stateId</code> throws HDIVException If the state doesn't exist a new HDIV
 	 *         exception is thrown.
 	 */
-	public IState getState(String pageId, int stateId) {
+	public IState getState(int pageId, int stateId) {
 
 		try {
 			IPage currentPage = this.getPage(pageId);
@@ -214,7 +217,7 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 	 * @throws HDIVException
 	 *             If the state doesn't exist a new HDIV exception is thrown.
 	 */
-	public String getStateHash(String pageId, int stateId) {
+	public String getStateHash(int pageId, int stateId) {
 
 		try {
 			IPage currentPage = this.getPage(pageId);
@@ -235,13 +238,13 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 	 * @return IPage instance
 	 * @since HDIV 2.1.5
 	 */
-	protected IPage getPageFromSession(HttpSession session, String pageId) {
+	protected IPage getPageFromSession(HttpSession session, int pageId) {
 
 		if (log.isDebugEnabled()) {
 			log.debug("Getting page with id:" + pageId);
 		}
 
-		return (IPage) session.getAttribute(pageId);
+		return (IPage) session.getAttribute(pageId + "");
 	}
 
 	/**
@@ -271,9 +274,9 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 	 *            page id to remove from session
 	 * @since HDIV 2.1.5
 	 */
-	protected void removePageFromSession(HttpSession session, String pageId) {
+	protected void removePageFromSession(HttpSession session, int pageId) {
 
-		session.removeAttribute(pageId);
+		session.removeAttribute(pageId + "");
 
 		if (log.isDebugEnabled()) {
 			log.debug("Deleted page with id:" + pageId);

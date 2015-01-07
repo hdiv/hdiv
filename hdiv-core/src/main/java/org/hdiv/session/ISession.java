@@ -37,7 +37,7 @@ public interface ISession {
 	 * @param page
 	 *            Page with all the information about states
 	 */
-	public void addPage(String pageId, IPage page);
+	public void addPage(int pageId, IPage page);
 
 	/**
 	 * Deletes from session the data related to the finished flows. This means a memory consumption optimization because
@@ -60,7 +60,7 @@ public interface ISession {
 	 * @return State identifier <code>stateId</code> throws HDIVException If the state doesn't exist a new HDIV
 	 *         exception is thrown.
 	 */
-	public IState getState(String pageId, int stateId);
+	public IState getState(int pageId, int stateId);
 
 	/**
 	 * Obtains the hash of the state identifier <code>stateId</code> related to page identifier <code>pageId</code>.
@@ -72,10 +72,10 @@ public interface ISession {
 	 * 
 	 * @return Hash of the state identifier <code>stateId</code>
 	 */
-	public String getStateHash(String pageId, int stateId);
+	public String getStateHash(int pageId, int stateId);
 
 	/**
-	 * Obtains from the user session the page identifier where the current request or form is
+	 * Obtains from the user session the page identifier for the current request.
 	 * 
 	 * @return Returns the pageId.
 	 */
@@ -89,7 +89,7 @@ public interface ISession {
 	 * @return Returns the page with id <code>pageId</code>.
 	 * @since HDIV 2.0.4
 	 */
-	public IPage getPage(String pageId);
+	public IPage getPage(int pageId);
 
 	/**
 	 * Creates the data cipher.
