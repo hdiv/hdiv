@@ -118,20 +118,16 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 
 	protected static final boolean springVersionGrEqThan4 = SpringVersion.getVersion().compareTo(MIN_SPRING_VERSION) >= 0;
 
+	/* Framework present flags */
+
 	protected final boolean springMvcPresent = ClassUtils.isPresent(
 			"org.springframework.web.servlet.DispatcherServlet", ConfigBeanDefinitionParser.class.getClassLoader());
-
-	protected final boolean struts1ModulePresent = ClassUtils.isPresent("org.hdiv.action.HDIVRequestProcessor",
-			ConfigBeanDefinitionParser.class.getClassLoader());
 
 	protected final boolean grailsPresent = ClassUtils.isPresent(
 			"org.codehaus.groovy.grails.web.servlet.GrailsDispatcherServlet",
 			ConfigBeanDefinitionParser.class.getClassLoader());
 
 	protected final boolean jsfPresent = ClassUtils.isPresent("javax.faces.webapp.FacesServlet",
-			ConfigBeanDefinitionParser.class.getClassLoader());
-
-	protected final boolean jsfModulePresent = ClassUtils.isPresent("org.hdiv.filter.JsfValidatorHelper",
 			ConfigBeanDefinitionParser.class.getClassLoader());
 
 	protected final boolean thymeleafPresent = ClassUtils.isPresent("org.thymeleaf.spring3.SpringTemplateEngine",
@@ -141,6 +137,18 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 
 	protected static final boolean springSecurityPresent = ClassUtils.isPresent(
 			"org.springframework.security.web.servlet.support.csrf.CsrfRequestDataValueProcessor",
+			ConfigBeanDefinitionParser.class.getClassLoader());
+
+	/* HDIV module present flags */
+
+	protected final boolean springMvcModulePresent = ClassUtils.isPresent(
+			"org.hdiv.web.servlet.support.HdivRequestDataValueProcessor",
+			ConfigBeanDefinitionParser.class.getClassLoader());
+
+	protected final boolean struts1ModulePresent = ClassUtils.isPresent("org.hdiv.action.HDIVRequestProcessor",
+			ConfigBeanDefinitionParser.class.getClassLoader());
+
+	protected final boolean jsfModulePresent = ClassUtils.isPresent("org.hdiv.filter.JsfValidatorHelper",
 			ConfigBeanDefinitionParser.class.getClassLoader());
 
 	/**
@@ -214,7 +222,7 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		this.createRequestInitializer(element, source, parserContext);
 
 		// Register Spring MVC beans if we are using Spring MVC web framework
-		if (this.springMvcPresent) {
+		if (this.springMvcPresent && this.springMvcModulePresent) {
 			if (this.grailsPresent) {
 				this.createGrailsRequestDataValueProcessor(element, source, parserContext);
 			} else if (this.thymeleafPresent) {
@@ -602,7 +610,8 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		RootBeanDefinition bean = new RootBeanDefinition(HDIVValidations.class);
 		bean.setSource(source);
 		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
-		bean.getPropertyValues().addPropertyValue("validations", new LinkedHashMap<ValidationTarget, List<IValidation>>());
+		bean.getPropertyValues().addPropertyValue("validations",
+				new LinkedHashMap<ValidationTarget, List<IValidation>>());
 		parserContext.getRegistry().registerBeanDefinition(
 				EditableValidationsBeanDefinitionParser.EDITABLE_VALIDATIONS_BEAN_NAME, bean);
 		return new RuntimeBeanReference(EditableValidationsBeanDefinitionParser.EDITABLE_VALIDATIONS_BEAN_NAME);
