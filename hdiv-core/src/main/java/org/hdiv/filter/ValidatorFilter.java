@@ -53,27 +53,27 @@ public class ValidatorFilter extends OncePerRequestFilter {
 	/**
 	 * HDIV configuration object.
 	 */
-	private HDIVConfig hdivConfig;
+	protected HDIVConfig hdivConfig;
 
 	/**
 	 * IValidationHelper object.
 	 */
-	private IValidationHelper validationHelper;
+	protected IValidationHelper validationHelper;
 
 	/**
 	 * The multipart configuration.
 	 */
-	private IMultipartConfig multipartConfig;
+	protected IMultipartConfig multipartConfig;
 
 	/**
 	 * Validation error handler.
 	 */
-	private ValidatorErrorHandler errorHandler;
+	protected ValidatorErrorHandler errorHandler;
 
 	/**
 	 * Request data and wrappers initializer.
 	 */
-	private RequestInitializer requestInitializer;
+	protected RequestInitializer requestInitializer;
 
 	/**
 	 * Creates a new ValidatorFilter object.
