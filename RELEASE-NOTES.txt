@@ -8,7 +8,8 @@ Release 2.1.10
  * Take into account <hdiv:validationRule> tag order looking for a matching url.
  * New 'parameters' attribute in <hdiv:validationRule> tag. Contains a list or unique regular expression that defines the parameters for which editable validation is applied (https://github.com/hdiv/hdiv/issues/66).
  * F5 key support. Reloading the same page never expire session states (https://github.com/hdiv/hdiv/issues/67).
- * Fix @Validation and grouping issue (https://github.com/hdiv/hdiv/issues/70)
+ * Fix @Validation and grouping issue (https://github.com/hdiv/hdiv/issues/70).
+ * In case of detecting an attack in editable data validation, add validation name to the log.
 
 Release 2.1.9
 ==================================

@@ -477,7 +477,8 @@ public class ValidatorHelperRequest implements IValidationHelper {
 				unauthorizedParameters.put(parameter, values);
 			}
 
-			this.logger.log(HDIVErrorCodes.EDITABLE_VALIDATION_ERROR, target, parameter, unauthorizedValues.toString());
+			this.logger.log(HDIVErrorCodes.EDITABLE_VALIDATION_ERROR, target, parameter, unauthorizedValues.toString(),
+					null, result.getValidationId());
 		}
 	}
 
