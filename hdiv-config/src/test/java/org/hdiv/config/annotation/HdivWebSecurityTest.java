@@ -22,11 +22,12 @@ import java.util.List;
 import java.util.Map;
 
 import org.hdiv.config.HDIVConfig;
-import org.hdiv.config.HDIVValidations;
-import org.hdiv.config.HDIVValidations.ValidationTarget;
 import org.hdiv.config.annotation.builders.SecurityConfigBuilder;
 import org.hdiv.config.annotation.configuration.HdivWebSecurityConfigurerAdapter;
 import org.hdiv.state.scope.StateScopeType;
+import org.hdiv.validator.DefaultEditableDataValidationProvider;
+import org.hdiv.validator.DefaultEditableDataValidationProvider.ValidationTarget;
+import org.hdiv.validator.EditableDataValidationProvider;
 import org.hdiv.validator.IValidation;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -51,14 +52,14 @@ public class HdivWebSecurityTest {
 			registry.addUrlExclusions("/", "/login.html", "/logout.html").method("GET");
 			registry.addUrlExclusions("/j_spring_security_check").method("POST");
 			registry.addUrlExclusions("/attacks/.*");
-			
+
 			registry.addParamExclusions("param1", "param2").forUrls("/attacks/.*");
 			registry.addParamExclusions("param3", "param4");
 		}
-		
+
 		@Override
 		public void addLongLivingPages(LongLivingPagesRegistry registry) {
-			
+
 			registry.addLongLivingPages("/longLivingPage.html", "/longLiving/.*").scope(StateScopeType.APP);
 			registry.addLongLivingPages("/longLivingPageApp.html");
 		}
@@ -72,19 +73,16 @@ public class HdivWebSecurityTest {
 		@Override
 		public void configureEditableValidation(ValidationConfigurer validationConfigurer) {
 
-			validationConfigurer.addValidation("/secure/.*").forParameters("param1", "params2").rules("safeText").disableDefaults();
+			validationConfigurer.addValidation("/secure/.*").forParameters("param1", "params2").rules("safeText")
+					.disableDefaults();
 			validationConfigurer.addValidation("/safetext/.*");
 		}
 
 		@Override
 		public void configure(SecurityConfigBuilder builder) {
 
-			builder
-				.sessionExpired()
-					.homePage("/").loginPage("/login.html").and()
-				.cipher()
-					.keySize(128).and()
-				.debugMode(true);
+			builder.sessionExpired().homePage("/").loginPage("/login.html").and().cipher().keySize(128).and()
+					.debugMode(true);
 		}
 	}
 
@@ -92,41 +90,44 @@ public class HdivWebSecurityTest {
 	private HDIVConfig config;
 
 	@Autowired
-	private HDIVValidations validations;
+	private EditableDataValidationProvider validationProvider;
 
 	@Test
 	public void config() {
 		assertNotNull(config);
-		
+
 		assertEquals("/", config.getSessionExpiredHomePage());
 		assertEquals("/login.html", config.getSessionExpiredLoginPage());
 	}
 
 	@Test
 	public void validations() {
-		assertNotNull(validations);
+		assertNotNull(validationProvider);
 
-		assertEquals(2, validations.getValidations().size());
+		Map<ValidationTarget, List<IValidation>> validations = ((DefaultEditableDataValidationProvider) validationProvider)
+				.getValidations();
 
-		List<IValidation> urlValidations = this.getValidations(validations.getValidations(), "/secure/.*");
+		assertEquals(2, validations.size());
+
+		List<IValidation> urlValidations = this.getValidations(validations, "/secure/.*");
 		assertEquals(1, urlValidations.size()); // Only safetext
-		ValidationTarget target = this.getTarget(validations.getValidations(), "/secure/.*");
+		ValidationTarget target = this.getTarget(validations, "/secure/.*");
 		assertEquals(2, target.getParams().size());
-		
-		urlValidations = this.getValidations(validations.getValidations(),"/safetext/.*");
+
+		urlValidations = this.getValidations(validations, "/safetext/.*");
 		assertEquals(6, urlValidations.size());// Defaults
-		target = this.getTarget(validations.getValidations(), "/safetext/.*");
+		target = this.getTarget(validations, "/safetext/.*");
 		assertEquals(0, target.getParams().size());
 	}
-	
+
 	@Test
-	public void addLongLivingPages(){
-		
+	public void addLongLivingPages() {
+
 		assertEquals("app", config.isLongLivingPages("/longLiving/sample.html"));
 		assertEquals("user-session", config.isLongLivingPages("/longLivingPageApp.html"));
 		assertEquals(null, config.isLongLivingPages("/noLongLiving.html"));
 	}
-	
+
 	protected List<IValidation> getValidations(Map<ValidationTarget, List<IValidation>> validations, String pattern) {
 
 		for (ValidationTarget target : validations.keySet()) {

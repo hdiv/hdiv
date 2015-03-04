@@ -13,47 +13,44 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.hdiv.config;
+package org.hdiv.validator;
 
 import java.util.List;
 import java.util.Map;
 
 import org.hdiv.AbstractHDIVTestCase;
-import org.hdiv.config.HDIVValidations.ValidationTarget;
 import org.hdiv.regex.DefaultPatternMatcher;
-import org.hdiv.validator.IValidation;
+import org.hdiv.validator.DefaultEditableDataValidationProvider.ValidationTarget;
 
-public class EditableParameterValidationTest extends AbstractHDIVTestCase {
+public class EditableDataValidationProviderTest extends AbstractHDIVTestCase {
 
-	private HDIVValidations editableValidations;
+	private EditableDataValidationProvider validationProvider;
 
 	protected void onSetUp() throws Exception {
 
-		this.editableValidations = this.getApplicationContext().getBean(HDIVValidations.class);
+		this.validationProvider = this.getApplicationContext().getBean(EditableDataValidationProvider.class);
 	}
 
 	public void testEditableParamValidator() {
-
-		boolean exist = getConfig().existValidations();
-		assertTrue(exist);
 
 		String url = "/home";
 		String parameter = "param";
 		String[] values = { "<script>" };
 		String dataType = "text";
-		boolean result = getConfig().areEditableParameterValuesValid(url, parameter, values, dataType);
+		EditableDataValidationResult result = this.validationProvider.validate(url, parameter, values, dataType);
 
-		assertFalse(result);
+		assertFalse(result.isValid());
 
 		dataType = "textarea";
-		result = getConfig().areEditableParameterValuesValid(url, parameter, values, dataType);
+		result = this.validationProvider.validate(url, parameter, values, dataType);
 
-		assertFalse(result);
+		assertFalse(result.isValid());
 	}
 
 	public void testEditableParamValidatorOrder() {
 
-		Map<ValidationTarget, List<IValidation>> validations = this.editableValidations.getValidations();
+		Map<ValidationTarget, List<IValidation>> validations = ((DefaultEditableDataValidationProvider) this.validationProvider)
+				.getValidations();
 		assertEquals(3, validations.size());
 
 		Object[] ptrs = validations.keySet().toArray();
@@ -69,70 +66,61 @@ public class EditableParameterValidationTest extends AbstractHDIVTestCase {
 
 	public void testEditableParamValidatorPatternOrder() {
 
-		boolean exist = getConfig().existValidations();
-		assertTrue(exist);
-
 		String url = "/insecure/action";
 		String parameter = "param";
 		String[] values = { "<script>" };
 		String dataType = "text";
-		boolean result = getConfig().areEditableParameterValuesValid(url, parameter, values, dataType);
+		EditableDataValidationResult result = this.validationProvider.validate(url, parameter, values, dataType);
 
-		assertTrue(result);
+		assertTrue(result.isValid());
 	}
 
 	public void testEditableParamValidatorPatternParams() {
-
-		boolean exist = getConfig().existValidations();
-		assertTrue(exist);
 
 		// param1
 		String url = "/insecureParams/action";
 		String parameter = "param1";
 		String[] values = { "<script>" };
 		String dataType = "text";
-		boolean result = getConfig().areEditableParameterValuesValid(url, parameter, values, dataType);
+		EditableDataValidationResult result = this.validationProvider.validate(url, parameter, values, dataType);
 
-		assertTrue(result);
+		assertTrue(result.isValid());
 
 		// param2
 		parameter = "param2";
-		result = getConfig().areEditableParameterValuesValid(url, parameter, values, dataType);
+		result = this.validationProvider.validate(url, parameter, values, dataType);
 
-		assertTrue(result);
+		assertTrue(result.isValid());
 
 		// otherParam
 		parameter = "otherParam";
-		result = getConfig().areEditableParameterValuesValid(url, parameter, values, dataType);
+		result = this.validationProvider.validate(url, parameter, values, dataType);
 
-		assertFalse(result);
+		assertFalse(result.isValid());
 	}
 
 	public void testEditableParamValidatorPatternParams2() {
-
-		boolean exist = getConfig().existValidations();
-		assertTrue(exist);
 
 		// param1
 		String url = "/secureParams/action";
 		String parameter = "param1";
 		String[] values = { "<script>" };
 		String dataType = "text";
-		boolean result = getConfig().areEditableParameterValuesValid(url, parameter, values, dataType);
+		EditableDataValidationResult result = this.validationProvider.validate(url, parameter, values, dataType);
 
-		assertFalse(result);
+		assertFalse(result.isValid());
 
 		// param2
 		parameter = "param2";
-		result = getConfig().areEditableParameterValuesValid(url, parameter, values, dataType);
+		result = this.validationProvider.validate(url, parameter, values, dataType);
 
-		assertFalse(result);
+		assertFalse(result.isValid());
 
 		// otherParam
 		parameter = "otherParam";
-		result = getConfig().areEditableParameterValuesValid(url, parameter, values, dataType);
+		result = this.validationProvider.validate(url, parameter, values, dataType);
 
-		assertFalse(result);
+		assertFalse(result.isValid());
 	}
 
 }

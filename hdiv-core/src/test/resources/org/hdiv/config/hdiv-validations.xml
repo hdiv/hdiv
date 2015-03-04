@@ -3,12 +3,12 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-	<bean id="editableParametersValidations" class="org.hdiv.config.HDIVValidations">
+	<bean id="editableDataValidationProvider" class="org.hdiv.validator.DefaultEditableDataValidationProvider">
 		<property name="validations">
 			<map>
 				<entry>
 					<key>
-						<bean class="org.hdiv.config.HDIVValidations$ValidationTarget">
+						<bean class="org.hdiv.validator.DefaultEditableDataValidationProvider$ValidationTarget">
 							<property name="url">
 								<bean class="org.hdiv.regex.DefaultPatternMatcher">
 									<constructor-arg value="/insecureParams/.*" />
@@ -31,7 +31,7 @@
 				</entry>
 				<entry>
 					<key>
-						<bean class="org.hdiv.config.HDIVValidations$ValidationTarget">
+						<bean class="org.hdiv.validator.DefaultEditableDataValidationProvider$ValidationTarget">
 							<property name="url">
 								<bean class="org.hdiv.regex.DefaultPatternMatcher">
 									<constructor-arg value="/insecure/.*" />
@@ -44,7 +44,7 @@
 				</entry>
 				<entry>
 					<key>
-						<bean class="org.hdiv.config.HDIVValidations$ValidationTarget">
+						<bean class="org.hdiv.validator.DefaultEditableDataValidationProvider$ValidationTarget">
 							<property name="url">
 								<bean class="org.hdiv.regex.DefaultPatternMatcher">
 									<constructor-arg value=".*" />

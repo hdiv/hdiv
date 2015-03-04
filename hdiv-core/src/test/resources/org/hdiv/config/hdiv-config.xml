@@ -84,9 +84,7 @@
 			</list>
 		</property>
 
-		<property name="validations">
-			<ref bean="editableParametersValidations" />
-		</property>
+		<property name="editableDataValidationProvider" ref="editableDataValidationProvider" />
 
 		<property name="confidentiality" value="true" />
 		<property name="avoidCookiesIntegrity" value="false" />

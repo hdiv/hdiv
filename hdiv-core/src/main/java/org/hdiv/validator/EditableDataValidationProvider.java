@@ -16,31 +16,19 @@
 package org.hdiv.validator;
 
 /**
- * Interface for editable data validations.
+ * Executes validations against editable fields (text and textarea).
  * 
- * @author Gorka Vicente
- * @since HDIV 1.1
+ * @since HDIV 2.1.10
  */
-public interface IValidation {
-
-	/**
-	 * Returns the name of the validation rule.
-	 * 
-	 * @return Rules name.
-	 * @since HDIV 2.1.10
-	 */
-	String getName();
+public interface EditableDataValidationProvider {
 
 	/**
 	 * <p>
 	 * Checks if the values <code>values</code> are valid for the editable parameter <code>parameter</code>.
 	 * </p>
-	 * There are two types of validations:
-	 * <ul>
-	 * <li>accepted: the value is valid only if it passes the validation</li>
-	 * <li>rejected: the value is rejected if doesn't pass the validation</li>
-	 * </ul>
 	 * 
+	 * @param url
+	 *            request url
 	 * @param parameter
 	 *            parameter name
 	 * @param values
@@ -48,7 +36,6 @@ public interface IValidation {
 	 * @param dataType
 	 *            editable data type
 	 * @return True if the values <code>values</code> are valid for the parameter <code>parameter</code>.
-	 * @since HDIV 1.1.1
 	 */
-	boolean validate(String parameter, String[] values, String dataType);
+	EditableDataValidationResult validate(String url, String parameter, String[] values, String dataType);
 }

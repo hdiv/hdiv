@@ -27,8 +27,6 @@ import org.hdiv.cipher.ICipherHTTP;
 import org.hdiv.cipher.IKeyFactory;
 import org.hdiv.cipher.KeyFactory;
 import org.hdiv.config.HDIVConfig;
-import org.hdiv.config.HDIVValidations;
-import org.hdiv.config.HDIVValidations.ValidationTarget;
 import org.hdiv.config.StartPage;
 import org.hdiv.config.annotation.ValidationConfigurer.ValidationConfig;
 import org.hdiv.config.annotation.ValidationConfigurer.ValidationConfig.EditableValidationConfigurer;
@@ -73,6 +71,9 @@ import org.hdiv.urlProcessor.BasicUrlProcessor;
 import org.hdiv.urlProcessor.FormUrlProcessor;
 import org.hdiv.urlProcessor.LinkUrlProcessor;
 import org.hdiv.util.EncodingUtil;
+import org.hdiv.validator.DefaultEditableDataValidationProvider;
+import org.hdiv.validator.DefaultEditableDataValidationProvider.ValidationTarget;
+import org.hdiv.validator.EditableDataValidationProvider;
 import org.hdiv.validator.IValidation;
 import org.hdiv.validator.Validation;
 import org.springframework.beans.factory.BeanInitializationException;
@@ -98,7 +99,7 @@ public abstract class HdivWebSecurityConfigurationSupport {
 		this.configure(securityConfigBuilder);
 
 		HDIVConfig config = securityConfigBuilder.build();
-		config.setValidations(securityValidations());
+		config.setEditableDataValidationProvider(editableDataValidationProvider());
 
 		// User configured exclusions
 		ExclusionRegistry exclusionRegistry = new ExclusionRegistry(patternMatcherFactory());
@@ -349,7 +350,7 @@ public abstract class HdivWebSecurityConfigurationSupport {
 	}
 
 	@Bean
-	public HDIVValidations securityValidations() {
+	public EditableDataValidationProvider editableDataValidationProvider() {
 
 		// Default rules
 		List<IValidation> defaultRules = defaultRules();
@@ -406,9 +407,9 @@ public abstract class HdivWebSecurityConfigurationSupport {
 			validationsData.put(target, activeRules);
 		}
 
-		HDIVValidations validations = new HDIVValidations();
-		validations.setValidations(validationsData);
-		return validations;
+		DefaultEditableDataValidationProvider provider = new DefaultEditableDataValidationProvider();
+		provider.setValidations(validationsData);
+		return provider;
 	}
 
 	abstract void addRules(RuleRegistry registry);
