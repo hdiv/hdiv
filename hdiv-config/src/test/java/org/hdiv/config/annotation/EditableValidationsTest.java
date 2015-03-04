@@ -24,10 +24,12 @@ import java.util.List;
 import java.util.Map;
 
 import org.hdiv.config.HDIVConfig;
-import org.hdiv.config.HDIVValidations;
-import org.hdiv.config.HDIVValidations.ValidationTarget;
 import org.hdiv.config.annotation.configuration.HdivWebSecurityConfigurerAdapter;
 import org.hdiv.regex.DefaultPatternMatcher;
+import org.hdiv.validator.DefaultEditableDataValidationProvider;
+import org.hdiv.validator.DefaultEditableDataValidationProvider.ValidationTarget;
+import org.hdiv.validator.EditableDataValidationProvider;
+import org.hdiv.validator.EditableDataValidationResult;
 import org.hdiv.validator.IValidation;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -67,34 +69,36 @@ public class EditableValidationsTest {
 	private HDIVConfig config;
 
 	@Autowired
-	private HDIVValidations validations;
+	private EditableDataValidationProvider validationProvider;
 
 	@Test
 	public void editableValidations() {
 		assertNotNull(config);
 
-		boolean result = config.areEditableParameterValuesValid("/insecure/action", "parameter",
+		EditableDataValidationResult result = config.areEditableParameterValuesValid("/insecure/action", "parameter",
 				new String[] { "<script>" }, "text");
-		assertTrue(result);
+		assertTrue(result.isValid());
 
 		result = config.areEditableParameterValuesValid("/secureParam/action", "param1", new String[] { "<script>" },
 				"text");
-		assertFalse(result);
-		
+		assertFalse(result.isValid());
+
 		result = config.areEditableParameterValuesValid("/secure/action", "parameter", new String[] { "<script>" },
 				"text");
-		assertFalse(result);
+		assertFalse(result.isValid());
 	}
 
 	@Test
 	public void editableValidationsOrder() {
-		assertNotNull(validations);
+		assertNotNull(validationProvider);
 
-		Map<ValidationTarget, List<IValidation>> vals = validations.getValidations();
+		Map<ValidationTarget, List<IValidation>> vals = ((DefaultEditableDataValidationProvider) validationProvider)
+				.getValidations();
+
 		assertEquals(4, vals.size());
 
 		Object[] ptrs = vals.keySet().toArray();
-		
+
 		ValidationTarget vt0 = (ValidationTarget) ptrs[0];
 		ValidationTarget vt1 = (ValidationTarget) ptrs[1];
 		ValidationTarget vt2 = (ValidationTarget) ptrs[2];

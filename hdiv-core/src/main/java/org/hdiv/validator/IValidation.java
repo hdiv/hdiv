@@ -24,9 +24,16 @@ package org.hdiv.validator;
 public interface IValidation {
 
 	/**
+	 * Returns the name of the validation rule.
+	 * 
+	 * @return Rules name.
+	 * @since HDIV 2.1.10
+	 */
+	String getName();
+
+	/**
 	 * <p>
-	 * Checks if the values <code>values</code> are valid for the editable
-	 * parameter <code>parameter</code>.
+	 * Checks if the values <code>values</code> are valid for the editable parameter <code>parameter</code>.
 	 * </p>
 	 * There are two types of validations:
 	 * <ul>
@@ -34,12 +41,14 @@ public interface IValidation {
 	 * <li>rejected: the value is rejected if doesn't pass the validation</li>
 	 * </ul>
 	 * 
-	 * @param parameter parameter name
-	 * @param values parameter's values
-	 * @param dataType editable data type
-	 * @return True if the values <code>values</code> are valid for the parameter
-	 *         <code>parameter</code>.
+	 * @param parameter
+	 *            parameter name
+	 * @param values
+	 *            parameter's values
+	 * @param dataType
+	 *            editable data type
+	 * @return True if the values <code>values</code> are valid for the parameter <code>parameter</code>.
 	 * @since HDIV 1.1.1
-	 */	
-	public boolean validate(String parameter, String[] values, String dataType);
+	 */
+	boolean validate(String parameter, String[] values, String dataType);
 }

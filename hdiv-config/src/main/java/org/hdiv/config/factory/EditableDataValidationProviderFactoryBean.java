@@ -21,20 +21,21 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.hdiv.config.HDIVValidations;
-import org.hdiv.config.HDIVValidations.ValidationTarget;
 import org.hdiv.regex.PatternMatcher;
 import org.hdiv.regex.PatternMatcherFactory;
+import org.hdiv.validator.DefaultEditableDataValidationProvider;
+import org.hdiv.validator.DefaultEditableDataValidationProvider.ValidationTarget;
+import org.hdiv.validator.EditableDataValidationProvider;
 import org.hdiv.validator.IValidation;
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.config.AbstractFactoryBean;
 
 /**
- * {@link FactoryBean} to create {@link HDIVValidations} instances.
+ * {@link FactoryBean} to create {@link EditableDataValidationProvider} instances.
  * 
- * @since 2.1.7
+ * @since 2.1.10
  */
-public class ValidationsFactoryBean extends AbstractFactoryBean<HDIVValidations> {
+public class EditableDataValidationProviderFactoryBean extends AbstractFactoryBean<EditableDataValidationProvider> {
 
 	/**
 	 * Regular expression executor factory.
@@ -53,14 +54,14 @@ public class ValidationsFactoryBean extends AbstractFactoryBean<HDIVValidations>
 
 	@Override
 	public Class<?> getObjectType() {
-		return HDIVValidations.class;
+		return EditableDataValidationProvider.class;
 	}
 
 	@Override
-	protected HDIVValidations createInstance() throws Exception {
-		// create HDIVvalidations instance from XML config
+	protected EditableDataValidationProvider createInstance() throws Exception {
+		// create EditableDataValidationProvider instance from XML config
 
-		HDIVValidations validations = new HDIVValidations();
+		DefaultEditableDataValidationProvider provider = new DefaultEditableDataValidationProvider();
 
 		Map<ValidationTarget, List<IValidation>> vals = new LinkedHashMap<ValidationTarget, List<IValidation>>();
 
@@ -84,9 +85,9 @@ public class ValidationsFactoryBean extends AbstractFactoryBean<HDIVValidations>
 			}
 			vals.put(target, this.createValidationList(ids));
 		}
-		validations.setValidations(vals);
+		provider.setValidations(vals);
 
-		return validations;
+		return provider;
 	}
 
 	/**

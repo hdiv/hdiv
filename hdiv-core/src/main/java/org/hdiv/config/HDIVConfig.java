@@ -21,13 +21,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.hdiv.config.HDIVValidations.ValidationTarget;
+import javax.servlet.http.HttpSession;
+
 import org.hdiv.regex.PatternMatcher;
 import org.hdiv.regex.PatternMatcherFactory;
 import org.hdiv.state.IPage;
 import org.hdiv.util.Constants;
 import org.hdiv.util.HDIVUtil;
-import org.hdiv.validator.IValidation;
+import org.hdiv.validator.EditableDataValidationProvider;
+import org.hdiv.validator.EditableDataValidationResult;
 
 /**
  * Class containing HDIV configuration initialized from Spring Factory.
@@ -93,9 +95,9 @@ public class HDIVConfig implements Serializable {
 	protected Map<PatternMatcher, List<PatternMatcher>> paramsWithoutValidation;
 
 	/**
-	 * Validations for editable fields (text/textarea) defined by the user.
+	 * Validation provider for editable fields (text/textarea).
 	 */
-	protected HDIVValidations validations;
+	protected EditableDataValidationProvider editableDataValidationProvider;
 
 	/**
 	 * If <code>avoidCookiesIntegrity</code> is true, cookie integrity will not be applied.
@@ -278,9 +280,9 @@ public class HDIVConfig implements Serializable {
 	 */
 	public boolean isParameterWithoutConfidentiality(String paramName) {
 
-		if (HDIVUtil.getHttpSession() != null) {
-			String modifyHdivStateParameterName = (String) HDIVUtil.getHttpSession().getAttribute(
-					Constants.MODIFY_STATE_HDIV_PARAMETER);
+		HttpSession session = HDIVUtil.getHttpSession();
+		if (session != null) {
+			String modifyHdivStateParameterName = (String) session.getAttribute(Constants.MODIFY_STATE_HDIV_PARAMETER);
 			if (modifyHdivStateParameterName != null && modifyHdivStateParameterName.equals(paramName)) {
 				return true;
 			}
@@ -355,10 +357,31 @@ public class HDIVConfig implements Serializable {
 	 */
 	public boolean needValidation(String parameter, String hdivParameter) {
 
-		if (this.isStartParameter(parameter) || (parameter.equals(hdivParameter))) {
+		if (this.isStartParameter(parameter) || parameter.equals(hdivParameter)) {
 			return false;
 		}
 		return true;
+	}
+
+	/**
+	 * <p>
+	 * Checks if the values <code>values</code> are valid for the editable parameter <code>parameter</code>.
+	 * 
+	 * @param url
+	 *            target url
+	 * @param parameter
+	 *            parameter name
+	 * @param values
+	 *            parameter's values
+	 * @param dataType
+	 *            editable data type
+	 * @return True if the values <code>values</code> are valid for the parameter <code>parameter</code>.
+	 * @since HDIV 1.1
+	 */
+	public EditableDataValidationResult areEditableParameterValuesValid(String url, String parameter, String[] values,
+			String dataType) {
+
+		return this.editableDataValidationProvider.validate(url, parameter, values, dataType);
 	}
 
 	public String getErrorPage() {
@@ -458,92 +481,6 @@ public class HDIVConfig implements Serializable {
 		for (String useStartParameter : userStartParameters) {
 			this.startParameters.add(this.patternMatcherFactory.getPatternMatcher(useStartParameter));
 		}
-	}
-
-	/**
-	 * @param validations
-	 *            The validations to set.
-	 * @since HDIV 1.1
-	 */
-	public void setValidations(HDIVValidations validations) {
-		this.validations = validations;
-	}
-
-	/**
-	 * Checks if there are validations defined for editable fields
-	 * 
-	 * @return True if validations for editable fields have been defined. False otherwise.
-	 * @since HDIV 1.1
-	 */
-	public boolean existValidations() {
-
-		return ((this.validations != null) && (this.validations.getValidations() != null) && (this.validations
-				.getValidations().size() > 0));
-	}
-
-	/**
-	 * <p>
-	 * Checks if the values <code>values</code> are valid for the editable parameter <code>parameter</code>, using the
-	 * validations defined in the hdiv-validations.xml configuration file of Spring.
-	 * </p>
-	 * There are two types of validations:
-	 * <ul>
-	 * <li>accepted: the value is valid only if it passes the validation</li>
-	 * <li>rejected: the value is rejected if doesn't pass the validation</li>
-	 * </ul>
-	 * 
-	 * @param url
-	 *            target url
-	 * @param parameter
-	 *            parameter name
-	 * @param values
-	 *            parameter's values
-	 * @param dataType
-	 *            editable data type
-	 * @return True if the values <code>values</code> are valid for the parameter <code>parameter</code>.
-	 * @since HDIV 1.1
-	 */
-	public boolean areEditableParameterValuesValid(String url, String parameter, String[] values, String dataType) {
-
-		Map<ValidationTarget, List<IValidation>> validations = this.validations.getValidations();
-
-		for (ValidationTarget target : validations.keySet()) {
-
-			PatternMatcher urlMatcher = target.getUrl();
-
-			if (urlMatcher.matches(url)) {
-
-				List<PatternMatcher> paramMatchers = target.getParams();
-				boolean paramMatch = false;
-
-				if (paramMatchers != null && paramMatchers.size() > 0) {
-					for (PatternMatcher paramMatcher : paramMatchers) {
-						if (paramMatcher.matches(parameter)) {
-							paramMatch = true;
-							break;
-						}
-					}
-				} else {
-					paramMatch = true;
-				}
-
-				if (paramMatch) {
-
-					List<IValidation> userDefinedValidations = validations.get(target);
-					for (int i = 0; i < userDefinedValidations.size(); i++) {
-
-						IValidation currentValidation = (IValidation) userDefinedValidations.get(i);
-
-						if (!currentValidation.validate(parameter, values, dataType)) {
-							return false;
-						}
-					}
-					return true;
-				}
-			}
-		}
-
-		return true;
 	}
 
 	/**
@@ -744,6 +681,14 @@ public class HDIVConfig implements Serializable {
 			String scope = page.getValue();
 			this.longLivingPages.put(pattern, scope);
 		}
+	}
+
+	/**
+	 * @param editableDataValidationProvider
+	 *            the editableDataValidationProvider to set
+	 */
+	public void setEditableDataValidationProvider(EditableDataValidationProvider editableDataValidationProvider) {
+		this.editableDataValidationProvider = editableDataValidationProvider;
 	}
 
 	public String toString() {

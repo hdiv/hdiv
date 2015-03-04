@@ -1,5 +1,5 @@
 /**
- * Copyright 2005-2015 hdiv.org
+ * Copyright 2005-2013 hdiv.org
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,11 @@
  */
 package org.hdiv.validator;
 
+/**
+ * Executes validations against editable fields (text and textarea).
+ * 
+ * @since HDIV 2.1.10
+ */
 public interface EditableDataValidationProvider {
 
 	/**
@@ -22,6 +27,8 @@ public interface EditableDataValidationProvider {
 	 * Checks if the values <code>values</code> are valid for the editable parameter <code>parameter</code>.
 	 * </p>
 	 * 
+	 * @param url
+	 *            request url
 	 * @param parameter
 	 *            parameter name
 	 * @param values
@@ -30,5 +37,5 @@ public interface EditableDataValidationProvider {
 	 *            editable data type
 	 * @return True if the values <code>values</code> are valid for the parameter <code>parameter</code>.
 	 */
-	EditableDataValidationResult validate(String parameter, String[] values, String dataType);
+	EditableDataValidationResult validate(String url, String parameter, String[] values, String dataType);
 }

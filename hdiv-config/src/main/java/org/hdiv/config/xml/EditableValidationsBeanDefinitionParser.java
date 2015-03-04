@@ -20,8 +20,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.hdiv.config.factory.ValidationsFactoryBean;
-import org.hdiv.config.factory.ValidationsFactoryBean.ValidationTargetData;
+import org.hdiv.config.factory.EditableDataValidationProviderFactoryBean;
+import org.hdiv.config.factory.EditableDataValidationProviderFactoryBean.ValidationTargetData;
 import org.hdiv.config.validations.DefaultValidationParser;
 import org.hdiv.validator.IValidation;
 import org.hdiv.validator.Validation;
@@ -48,7 +48,7 @@ import org.w3c.dom.NodeList;
  */
 public class EditableValidationsBeanDefinitionParser extends AbstractSingleBeanDefinitionParser {
 
-	public static final String EDITABLE_VALIDATIONS_BEAN_NAME = "org.hdiv.editableValidations";
+	public static final String EDITABLE_VALIDATION_PROVIDER_BEAN_NAME = "org.hdiv.validator.EditableDataValidationProvider";
 
 	public static final String DEFAULT_EDITABLE_VALIDATIONS_BEAN_NAME = "org.hdiv.defaultEditableValidations";
 
@@ -77,7 +77,7 @@ public class EditableValidationsBeanDefinitionParser extends AbstractSingleBeanD
 	protected String resolveId(Element element, AbstractBeanDefinition definition, ParserContext parserContext)
 			throws BeanDefinitionStoreException {
 
-		return EDITABLE_VALIDATIONS_BEAN_NAME;
+		return EDITABLE_VALIDATION_PROVIDER_BEAN_NAME;
 	}
 
 	/*
@@ -86,7 +86,7 @@ public class EditableValidationsBeanDefinitionParser extends AbstractSingleBeanD
 	 * @see org.springframework.beans.factory.xml.AbstractSingleBeanDefinitionParser#getBeanClass(org.w3c.dom.Element)
 	 */
 	protected Class<?> getBeanClass(Element element) {
-		return ValidationsFactoryBean.class;
+		return EditableDataValidationProviderFactoryBean.class;
 	}
 
 	/*

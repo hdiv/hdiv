@@ -55,6 +55,7 @@ import org.hdiv.urlProcessor.BasicUrlProcessor;
 import org.hdiv.util.Constants;
 import org.hdiv.util.HDIVErrorCodes;
 import org.hdiv.util.HDIVUtil;
+import org.hdiv.validator.EditableDataValidationResult;
 
 /**
  * It validates client requests by consuming an object of type IState and validating all the entry data, besides
@@ -332,26 +333,23 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	 */
 	protected ValidatorHelperResult validateStartPageParameters(HttpServletRequest request, String target) {
 
-		if (this.hdivConfig.existValidations()) {
+		Map<String, String[]> unauthorizedEditableParameters = new HashMap<String, String[]>();
 
-			Map<String, String[]> unauthorizedEditableParameters = new HashMap<String, String[]>();
+		Enumeration<?> parameters = request.getParameterNames();
+		while (parameters.hasMoreElements()) {
 
-			Enumeration<?> parameters = request.getParameterNames();
-			while (parameters.hasMoreElements()) {
+			String parameter = (String) parameters.nextElement();
+			String[] values = request.getParameterValues(parameter);
 
-				String parameter = (String) parameters.nextElement();
-				String[] values = request.getParameterValues(parameter);
+			this.validateEditableParameter(request, target, parameter, values, "text", unauthorizedEditableParameters);
 
-				this.validateEditableParameter(request, target, parameter, values, "text",
-						unauthorizedEditableParameters);
-
-			}
-
-			if (unauthorizedEditableParameters.size() > 0) {
-				return this.processValidateParameterErrors(request, unauthorizedEditableParameters);
-			}
 		}
-		return ValidatorHelperResult.VALID;
+
+		if (unauthorizedEditableParameters.size() > 0) {
+			return this.processValidateParameterErrors(request, unauthorizedEditableParameters);
+		} else {
+			return ValidatorHelperResult.VALID;
+		}
 	}
 
 	/**
@@ -442,9 +440,8 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	}
 
 	/**
-	 * Checks if the values <code>values</code> are valid for the editable parameter <code>parameter</code>. This
-	 * validation is defined by the user in the hdiv-validations.xml file of Spring. If the values are not valid, an
-	 * error message with the parameter and the received values will be log.
+	 * Checks if the values <code>values</code> are valid for the editable parameter <code>parameter</code>. If the
+	 * values are not valid, an error message with the parameter and the received values will be log.
 	 * 
 	 * @param request
 	 *            HttpServletRequest to validate
@@ -463,8 +460,9 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	protected void validateEditableParameter(HttpServletRequest request, String target, String parameter,
 			String[] values, String dataType, Map<String, String[]> unauthorizedParameters) {
 
-		boolean isValid = hdivConfig.areEditableParameterValuesValid(target, parameter, values, dataType);
-		if (!isValid) {
+		EditableDataValidationResult result = hdivConfig.areEditableParameterValuesValid(target, parameter, values,
+				dataType);
+		if (!result.isValid()) {
 
 			StringBuffer unauthorizedValues = new StringBuffer(values[0]);
 
@@ -576,7 +574,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 			// Mark parameter as editable
 			this.addEditableParameter(request, parameter);
 
-			if (this.hdivConfig.existValidations() && (stateParameter.getEditableDataType() != null)) {
+			if (stateParameter.getEditableDataType() != null) {
 				this.validateEditableParameter(request, target, parameter, values,
 						stateParameter.getEditableDataType(), unauthorizedEditableParameters);
 			}

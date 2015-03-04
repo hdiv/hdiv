@@ -21,14 +21,16 @@ import java.util.Map;
 import junit.framework.TestCase;
 
 import org.hdiv.config.HDIVConfig;
-import org.hdiv.config.HDIVValidations;
-import org.hdiv.config.HDIVValidations.ValidationTarget;
 import org.hdiv.logs.IUserData;
 import org.hdiv.regex.DefaultPatternMatcher;
 import org.hdiv.regex.PatternMatcher;
 import org.hdiv.session.StateCache;
 import org.hdiv.state.scope.StateScope;
 import org.hdiv.state.scope.StateScopeManager;
+import org.hdiv.validator.DefaultEditableDataValidationProvider;
+import org.hdiv.validator.DefaultEditableDataValidationProvider.ValidationTarget;
+import org.hdiv.validator.EditableDataValidationProvider;
+import org.hdiv.validator.EditableDataValidationResult;
 import org.hdiv.validator.IValidation;
 import org.hdiv.validator.Validation;
 import org.hdiv.web.servlet.support.HdivRequestDataValueProcessor;
@@ -61,9 +63,9 @@ public class CustomSchemaTest extends TestCase {
 		System.out.println("-----------------------");
 		assertTrue(hdivConfig.isShowErrorPageOnEditableValidation());
 
-		HDIVValidations validations = this.context.getBean(HDIVValidations.class);
-		assertNotNull(validations);
-		System.out.println(validations.toString());
+		EditableDataValidationProvider validationProvider = this.context.getBean(EditableDataValidationProvider.class);
+		assertNotNull(validationProvider);
+		System.out.println(validationProvider.toString());
 
 	}
 
@@ -119,10 +121,11 @@ public class CustomSchemaTest extends TestCase {
 
 	public void testEditableValidations() {
 
-		HDIVValidations editableValidations = this.context.getBean(HDIVValidations.class);
-		assertNotNull(editableValidations);
+		EditableDataValidationProvider validationProvider = this.context.getBean(EditableDataValidationProvider.class);
+		assertNotNull(validationProvider);
 
-		Map<ValidationTarget, List<IValidation>> validations = editableValidations.getValidations();
+		Map<ValidationTarget, List<IValidation>> validations = ((DefaultEditableDataValidationProvider) validationProvider)
+				.getValidations();
 		assertEquals(3, validations.size());
 
 		// First url
@@ -164,10 +167,11 @@ public class CustomSchemaTest extends TestCase {
 
 	public void testEditableValidationsOrder() {
 
-		HDIVValidations editableValidations = this.context.getBean(HDIVValidations.class);
-		assertNotNull(editableValidations);
+		EditableDataValidationProvider validationProvider = this.context.getBean(EditableDataValidationProvider.class);
+		assertNotNull(validationProvider);
 
-		Map<ValidationTarget, List<IValidation>> validations = editableValidations.getValidations();
+		Map<ValidationTarget, List<IValidation>> validations = ((DefaultEditableDataValidationProvider) validationProvider)
+				.getValidations();
 		assertEquals(3, validations.size());
 
 		Object[] ptrs = validations.keySet().toArray();
@@ -185,29 +189,26 @@ public class CustomSchemaTest extends TestCase {
 
 		HDIVConfig config = this.context.getBean(HDIVConfig.class);
 
-		boolean exist = config.existValidations();
-		assertTrue(exist);
-
 		// param1
 		String url = "b";
 		String parameter = "param1";
 		String[] values = { "<script>" };
 		String dataType = "text";
-		boolean result = config.areEditableParameterValuesValid(url, parameter, values, dataType);
+		EditableDataValidationResult result = config.areEditableParameterValuesValid(url, parameter, values, dataType);
 
-		assertFalse(result);
+		assertFalse(result.isValid());
 
 		// param2
 		parameter = "param2";
 		result = config.areEditableParameterValuesValid(url, parameter, values, dataType);
 
-		assertFalse(result);
+		assertFalse(result.isValid());
 
 		// otherParam
 		parameter = "otherParam";
 		result = config.areEditableParameterValuesValid(url, parameter, values, dataType);
 
-		assertTrue(result);
+		assertTrue(result.isValid());
 	}
 
 	public void testReuseExistingPageInAjaxRequest() {

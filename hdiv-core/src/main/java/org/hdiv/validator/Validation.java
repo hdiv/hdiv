@@ -59,7 +59,7 @@ public class Validation implements IValidation, Serializable {
 	 * 
 	 * @return True if the component type to which apply de validation has been defined. False otherwise.
 	 */
-	public boolean existComponentType() {
+	protected boolean existComponentType() {
 
 		return (this.componentType != null);
 	}
@@ -71,7 +71,7 @@ public class Validation implements IValidation, Serializable {
 	 *            Component type
 	 * @return True if the validation <code>this</code> is the same as <code>parameterType</code>.
 	 */
-	public boolean isTheSameComponentType(String parameterType) {
+	protected boolean isTheSameComponentType(String parameterType) {
 
 		if (parameterType.equals("password")) {
 			return this.componentType.equalsIgnoreCase("text");
@@ -100,30 +100,25 @@ public class Validation implements IValidation, Serializable {
 	 */
 	public boolean validate(String parameter, String[] values, String dataType) {
 
-		Matcher m = null;
-
 		// we check if the component type we apply the validation to is
 		// the same as the parameter's component type.
-		if (this.existComponentType() && (!this.isTheSameComponentType(dataType))) {
+		if (this.existComponentType() && !this.isTheSameComponentType(dataType)) {
 			return true;
 		}
 
 		// we validate all the values for the parameter
-		for (int j = 0; j < values.length; j++) {
+		for (String value : values) {
 
 			if (this.acceptedPattern != null) {
 
-				m = this.acceptedPattern.matcher(values[j]);
-
+				Matcher m = this.acceptedPattern.matcher(value);
 				if (!m.matches()) {
 					return false;
 				}
 			}
-
 			if (this.rejectedPattern != null) {
 
-				m = this.rejectedPattern.matcher(values[j]);
-
+				Matcher m = this.rejectedPattern.matcher(value);
 				if (m.matches()) {
 					return false;
 				}

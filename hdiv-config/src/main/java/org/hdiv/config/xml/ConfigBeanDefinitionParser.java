@@ -27,8 +27,6 @@ import org.hdiv.cipher.ICipherHTTP;
 import org.hdiv.cipher.IKeyFactory;
 import org.hdiv.cipher.KeyFactory;
 import org.hdiv.config.HDIVConfig;
-import org.hdiv.config.HDIVValidations;
-import org.hdiv.config.HDIVValidations.ValidationTarget;
 import org.hdiv.config.StartPage;
 import org.hdiv.config.Strategy;
 import org.hdiv.config.multipart.IMultipartConfig;
@@ -69,6 +67,8 @@ import org.hdiv.urlProcessor.BasicUrlProcessor;
 import org.hdiv.urlProcessor.FormUrlProcessor;
 import org.hdiv.urlProcessor.LinkUrlProcessor;
 import org.hdiv.util.EncodingUtil;
+import org.hdiv.validator.DefaultEditableDataValidationProvider;
+import org.hdiv.validator.DefaultEditableDataValidationProvider.ValidationTarget;
 import org.hdiv.validator.IValidation;
 import org.hdiv.validators.EditableValidator;
 import org.hdiv.validators.HtmlInputHiddenValidator;
@@ -591,12 +591,12 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 			bean.getPropertyValues().addPropertyValue("reuseExistingPageInAjaxRequest", reuseExistingPageInAjaxRequest);
 		}
 
-		bean.getPropertyValues().addPropertyValue("validations",
-				new RuntimeBeanReference(EditableValidationsBeanDefinitionParser.EDITABLE_VALIDATIONS_BEAN_NAME));
+		bean.getPropertyValues().addPropertyValue("editableDataValidationProvider",
+				new RuntimeBeanReference(EditableValidationsBeanDefinitionParser.EDITABLE_VALIDATION_PROVIDER_BEAN_NAME));
 
 		if (!parserContext.getRegistry().containsBeanDefinition(
-				EditableValidationsBeanDefinitionParser.EDITABLE_VALIDATIONS_BEAN_NAME)) {
-			this.createDefaultEditableParametersValidations(element, source, parserContext);
+				EditableValidationsBeanDefinitionParser.EDITABLE_VALIDATION_PROVIDER_BEAN_NAME)) {
+			this.createDefaultEditableDataValidationProvider(element, source, parserContext);
 		}
 
 		// Process startPages, startParameters and paramsWithoutValidation elements
@@ -605,16 +605,16 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		return bean;
 	}
 
-	protected RuntimeBeanReference createDefaultEditableParametersValidations(Element element, Object source,
+	protected RuntimeBeanReference createDefaultEditableDataValidationProvider(Element element, Object source,
 			ParserContext parserContext) {
-		RootBeanDefinition bean = new RootBeanDefinition(HDIVValidations.class);
+		RootBeanDefinition bean = new RootBeanDefinition(DefaultEditableDataValidationProvider.class);
 		bean.setSource(source);
 		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
 		bean.getPropertyValues().addPropertyValue("validations",
 				new LinkedHashMap<ValidationTarget, List<IValidation>>());
 		parserContext.getRegistry().registerBeanDefinition(
-				EditableValidationsBeanDefinitionParser.EDITABLE_VALIDATIONS_BEAN_NAME, bean);
-		return new RuntimeBeanReference(EditableValidationsBeanDefinitionParser.EDITABLE_VALIDATIONS_BEAN_NAME);
+				EditableValidationsBeanDefinitionParser.EDITABLE_VALIDATION_PROVIDER_BEAN_NAME, bean);
+		return new RuntimeBeanReference(EditableValidationsBeanDefinitionParser.EDITABLE_VALIDATION_PROVIDER_BEAN_NAME);
 	}
 
 	protected RuntimeBeanReference createFacesEventListener(Element element, Object source, ParserContext parserContext) {

@@ -1,5 +1,5 @@
 /**
- * Copyright 2005-2015 hdiv.org
+ * Copyright 2005-2013 hdiv.org
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,26 +17,37 @@ package org.hdiv.validator;
 
 /**
  * Contains the result of a {@link EditableDataValidationProvider} invoke.
+ * 
+ * @since HDIV 2.1.10
  */
 public class EditableDataValidationResult {
 
 	/**
+	 * Constant valid result.
+	 */
+	public static final EditableDataValidationResult VALID = new EditableDataValidationResult(true);
+
+	/**
 	 * Validation result. True if validation is success.
 	 */
-	protected boolean result;
+	protected boolean valid;
 
 	/**
 	 * If the validation isn't success, contains the identifier of the validation that rejects the value.
 	 */
 	protected String validationId;
 
-	public EditableDataValidationResult(boolean result, String validationId) {
-		this.result = result;
+	protected EditableDataValidationResult(boolean valid) {
+		this.valid = valid;
+	}
+
+	public EditableDataValidationResult(boolean valid, String validationId) {
+		this.valid = valid;
 		this.validationId = validationId;
 	}
 
-	public boolean isResult() {
-		return result;
+	public boolean isValid() {
+		return valid;
 	}
 
 	public String getValidationId() {

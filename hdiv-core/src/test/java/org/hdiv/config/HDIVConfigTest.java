@@ -16,6 +16,7 @@
 package org.hdiv.config;
 
 import org.hdiv.AbstractHDIVTestCase;
+import org.hdiv.validator.EditableDataValidationResult;
 
 public class HDIVConfigTest extends AbstractHDIVTestCase {
 
@@ -62,12 +63,12 @@ public class HDIVConfigTest extends AbstractHDIVTestCase {
 	public void testAreEditableParameterValuesValid() {
 
 		HDIVConfig config = getConfig();
-		boolean result = config.areEditableParameterValuesValid("inicio.html", "one", new String[] { "noProblem" },
+		EditableDataValidationResult result = config.areEditableParameterValuesValid("inicio.html", "one", new String[] { "noProblem" },
 				"text");
-		assertTrue(result);
+		assertTrue(result.isValid());
 
 		result = config.areEditableParameterValuesValid("inicio.html", "one", new String[] { "XSS <script>" }, "text");
-		assertFalse(result);
+		assertFalse(result.isValid());
 	}
 
 	public void testExcludedExtensions() {

@@ -34,6 +34,7 @@ import org.hdiv.util.HDIVErrorCodes;
 import org.hdiv.util.HDIVUtil;
 import org.hdiv.util.MessageFactory;
 import org.hdiv.validation.ValidationError;
+import org.hdiv.validator.EditableDataValidationResult;
 
 /**
  * Responsible for validating that the parameters coming from an editable component (InputText, Textarea, Secret) are
@@ -159,20 +160,17 @@ public class EditableValidator implements ComponentValidator {
 	 * @return is the content valid?
 	 */
 	protected boolean validateContent(FacesContext context, String clientId, Object contentObj, String contentType) {
-		boolean result = true;
 		if (!(contentObj instanceof String)) {
-			return result;
+			return true;
 		}
 		HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
 		String target = HDIVUtil.getRequestURI(request);
 		String targetWithoutContextPath = getTargetWithoutContextPath(request, target);
 
 		String[] content = { (String) contentObj };
-		if (this.hdivConfig.existValidations()) {
-			result = this.hdivConfig.areEditableParameterValuesValid(targetWithoutContextPath, clientId, content,
-					contentType);
-		}
-		return result;
+		EditableDataValidationResult result = this.hdivConfig.areEditableParameterValuesValid(targetWithoutContextPath,
+				clientId, content, contentType);
+		return result.isValid();
 	}
 
 	/**
