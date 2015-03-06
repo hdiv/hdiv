@@ -23,19 +23,18 @@ import java.util.Map;
 
 import org.hdiv.regex.PatternMatcher;
 import org.hdiv.regex.PatternMatcherFactory;
-import org.hdiv.validator.DefaultEditableDataValidationProvider;
-import org.hdiv.validator.DefaultEditableDataValidationProvider.ValidationTarget;
-import org.hdiv.validator.EditableDataValidationProvider;
+import org.hdiv.validator.DefaultValidationRepository;
 import org.hdiv.validator.IValidation;
+import org.hdiv.validator.ValidationTarget;
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.config.AbstractFactoryBean;
 
 /**
- * {@link FactoryBean} to create {@link EditableDataValidationProvider} instances.
+ * {@link FactoryBean} to create {@link DefaultValidationRepository} instances.
  * 
  * @since 2.1.10
  */
-public class EditableDataValidationProviderFactoryBean extends AbstractFactoryBean<EditableDataValidationProvider> {
+public class ValidationRepositoryFactoryBean extends AbstractFactoryBean<DefaultValidationRepository> {
 
 	/**
 	 * Regular expression executor factory.
@@ -54,14 +53,14 @@ public class EditableDataValidationProviderFactoryBean extends AbstractFactoryBe
 
 	@Override
 	public Class<?> getObjectType() {
-		return EditableDataValidationProvider.class;
+		return DefaultValidationRepository.class;
 	}
 
 	@Override
-	protected EditableDataValidationProvider createInstance() throws Exception {
-		// create EditableDataValidationProvider instance from XML config
+	protected DefaultValidationRepository createInstance() throws Exception {
+		// create DefaultValidationRepository instance from XML config
 
-		DefaultEditableDataValidationProvider provider = new DefaultEditableDataValidationProvider();
+		DefaultValidationRepository repository = new DefaultValidationRepository();
 
 		Map<ValidationTarget, List<IValidation>> vals = new LinkedHashMap<ValidationTarget, List<IValidation>>();
 
@@ -85,9 +84,9 @@ public class EditableDataValidationProviderFactoryBean extends AbstractFactoryBe
 			}
 			vals.put(target, this.createValidationList(ids));
 		}
-		provider.setValidations(vals);
+		repository.setValidations(vals);
 
-		return provider;
+		return repository;
 	}
 
 	/**
@@ -112,14 +111,6 @@ public class EditableDataValidationProviderFactoryBean extends AbstractFactoryBe
 			}
 		}
 		return newList;
-	}
-
-	public void setPatternMatcherFactory(PatternMatcherFactory patternMatcherFactory) {
-		this.patternMatcherFactory = patternMatcherFactory;
-	}
-
-	public void setValidationsData(Map<ValidationTargetData, List<String>> validationsData) {
-		this.validationsData = validationsData;
 	}
 
 	public static class ValidationTargetData implements Serializable {
@@ -148,4 +139,11 @@ public class EditableDataValidationProviderFactoryBean extends AbstractFactoryBe
 
 	}
 
+	public void setPatternMatcherFactory(PatternMatcherFactory patternMatcherFactory) {
+		this.patternMatcherFactory = patternMatcherFactory;
+	}
+
+	public void setValidationsData(Map<ValidationTargetData, List<String>> validationsData) {
+		this.validationsData = validationsData;
+	}
 }

@@ -158,7 +158,7 @@ public class DataComposerFactory {
 			String hdivStateParamName = (String) request.getSession().getAttribute(Constants.HDIV_PARAMETER);
 			String hdivState = request.getParameter(hdivStateParamName);
 
-			if (hdivState != null) {
+			if (hdivState != null && hdivState.length() > 0) {
 				IState state = this.stateUtil.restoreState(hdivState);
 				if (state.getPageId() > 0) {
 					IPage page = this.session.getPage(state.getPageId());

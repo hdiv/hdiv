@@ -25,10 +25,10 @@ import org.hdiv.config.HDIVConfig;
 import org.hdiv.config.annotation.builders.SecurityConfigBuilder;
 import org.hdiv.config.annotation.configuration.HdivWebSecurityConfigurerAdapter;
 import org.hdiv.state.scope.StateScopeType;
-import org.hdiv.validator.DefaultEditableDataValidationProvider;
-import org.hdiv.validator.DefaultEditableDataValidationProvider.ValidationTarget;
-import org.hdiv.validator.EditableDataValidationProvider;
+import org.hdiv.validator.DefaultValidationRepository;
 import org.hdiv.validator.IValidation;
+import org.hdiv.validator.ValidationRepository;
+import org.hdiv.validator.ValidationTarget;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -90,7 +90,7 @@ public class HdivWebSecurityTest {
 	private HDIVConfig config;
 
 	@Autowired
-	private EditableDataValidationProvider validationProvider;
+	private ValidationRepository validationRepository;
 
 	@Test
 	public void config() {
@@ -102,9 +102,9 @@ public class HdivWebSecurityTest {
 
 	@Test
 	public void validations() {
-		assertNotNull(validationProvider);
+		assertNotNull(validationRepository);
 
-		Map<ValidationTarget, List<IValidation>> validations = ((DefaultEditableDataValidationProvider) validationProvider)
+		Map<ValidationTarget, List<IValidation>> validations = ((DefaultValidationRepository) validationRepository)
 				.getValidations();
 
 		assertEquals(2, validations.size());

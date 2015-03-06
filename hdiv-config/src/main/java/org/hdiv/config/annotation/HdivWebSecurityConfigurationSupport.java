@@ -72,10 +72,12 @@ import org.hdiv.urlProcessor.FormUrlProcessor;
 import org.hdiv.urlProcessor.LinkUrlProcessor;
 import org.hdiv.util.EncodingUtil;
 import org.hdiv.validator.DefaultEditableDataValidationProvider;
-import org.hdiv.validator.DefaultEditableDataValidationProvider.ValidationTarget;
+import org.hdiv.validator.DefaultValidationRepository;
 import org.hdiv.validator.EditableDataValidationProvider;
 import org.hdiv.validator.IValidation;
 import org.hdiv.validator.Validation;
+import org.hdiv.validator.ValidationRepository;
+import org.hdiv.validator.ValidationTarget;
 import org.springframework.beans.factory.BeanInitializationException;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Bean;
@@ -352,6 +354,14 @@ public abstract class HdivWebSecurityConfigurationSupport {
 	@Bean
 	public EditableDataValidationProvider editableDataValidationProvider() {
 
+		DefaultEditableDataValidationProvider provider = new DefaultEditableDataValidationProvider();
+		provider.setValidationRepository(editableValidationRepository());
+		return provider;
+	}
+
+	@Bean
+	public ValidationRepository editableValidationRepository() {
+
 		// Default rules
 		List<IValidation> defaultRules = defaultRules();
 		// Custom rules
@@ -407,9 +417,9 @@ public abstract class HdivWebSecurityConfigurationSupport {
 			validationsData.put(target, activeRules);
 		}
 
-		DefaultEditableDataValidationProvider provider = new DefaultEditableDataValidationProvider();
-		provider.setValidations(validationsData);
-		return provider;
+		DefaultValidationRepository repository = new DefaultValidationRepository();
+		repository.setValidations(validationsData);
+		return repository;
 	}
 
 	abstract void addRules(RuleRegistry registry);

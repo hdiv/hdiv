@@ -20,15 +20,17 @@ import java.util.Map;
 
 import org.hdiv.AbstractHDIVTestCase;
 import org.hdiv.regex.DefaultPatternMatcher;
-import org.hdiv.validator.DefaultEditableDataValidationProvider.ValidationTarget;
 
 public class EditableDataValidationProviderTest extends AbstractHDIVTestCase {
 
 	private EditableDataValidationProvider validationProvider;
+	
+	private ValidationRepository validationRepository;
 
 	protected void onSetUp() throws Exception {
 
 		this.validationProvider = this.getApplicationContext().getBean(EditableDataValidationProvider.class);
+		this.validationRepository = this.getApplicationContext().getBean(ValidationRepository.class);
 	}
 
 	public void testEditableParamValidator() {
@@ -49,7 +51,7 @@ public class EditableDataValidationProviderTest extends AbstractHDIVTestCase {
 
 	public void testEditableParamValidatorOrder() {
 
-		Map<ValidationTarget, List<IValidation>> validations = ((DefaultEditableDataValidationProvider) this.validationProvider)
+		Map<ValidationTarget, List<IValidation>> validations = ((DefaultValidationRepository) this.validationRepository)
 				.getValidations();
 		assertEquals(3, validations.size());
 

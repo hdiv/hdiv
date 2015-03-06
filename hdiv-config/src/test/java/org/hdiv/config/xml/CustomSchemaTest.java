@@ -27,12 +27,12 @@ import org.hdiv.regex.PatternMatcher;
 import org.hdiv.session.StateCache;
 import org.hdiv.state.scope.StateScope;
 import org.hdiv.state.scope.StateScopeManager;
-import org.hdiv.validator.DefaultEditableDataValidationProvider;
-import org.hdiv.validator.DefaultEditableDataValidationProvider.ValidationTarget;
+import org.hdiv.validator.DefaultValidationRepository;
 import org.hdiv.validator.EditableDataValidationProvider;
 import org.hdiv.validator.EditableDataValidationResult;
 import org.hdiv.validator.IValidation;
 import org.hdiv.validator.Validation;
+import org.hdiv.validator.ValidationTarget;
 import org.hdiv.web.servlet.support.HdivRequestDataValueProcessor;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -47,7 +47,6 @@ public class CustomSchemaTest extends TestCase {
 	protected void setUp() throws Exception {
 
 		this.context = new ClassPathXmlApplicationContext("org/hdiv/config/xml/hdiv-config-test-schema.xml");
-
 	}
 
 	public void testSchema() {
@@ -121,11 +120,10 @@ public class CustomSchemaTest extends TestCase {
 
 	public void testEditableValidations() {
 
-		EditableDataValidationProvider validationProvider = this.context.getBean(EditableDataValidationProvider.class);
-		assertNotNull(validationProvider);
+		DefaultValidationRepository validationRepository = this.context.getBean(DefaultValidationRepository.class);
+		assertNotNull(validationRepository);
 
-		Map<ValidationTarget, List<IValidation>> validations = ((DefaultEditableDataValidationProvider) validationProvider)
-				.getValidations();
+		Map<ValidationTarget, List<IValidation>> validations = validationRepository.getValidations();
 		assertEquals(3, validations.size());
 
 		// First url
@@ -167,11 +165,10 @@ public class CustomSchemaTest extends TestCase {
 
 	public void testEditableValidationsOrder() {
 
-		EditableDataValidationProvider validationProvider = this.context.getBean(EditableDataValidationProvider.class);
-		assertNotNull(validationProvider);
+		DefaultValidationRepository validationRepository = this.context.getBean(DefaultValidationRepository.class);
+		assertNotNull(validationRepository);
 
-		Map<ValidationTarget, List<IValidation>> validations = ((DefaultEditableDataValidationProvider) validationProvider)
-				.getValidations();
+		Map<ValidationTarget, List<IValidation>> validations = validationRepository.getValidations();
 		assertEquals(3, validations.size());
 
 		Object[] ptrs = validations.keySet().toArray();

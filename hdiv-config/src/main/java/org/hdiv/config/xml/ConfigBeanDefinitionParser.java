@@ -17,7 +17,6 @@ package org.hdiv.config.xml;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -68,8 +67,6 @@ import org.hdiv.urlProcessor.FormUrlProcessor;
 import org.hdiv.urlProcessor.LinkUrlProcessor;
 import org.hdiv.util.EncodingUtil;
 import org.hdiv.validator.DefaultEditableDataValidationProvider;
-import org.hdiv.validator.DefaultEditableDataValidationProvider.ValidationTarget;
-import org.hdiv.validator.IValidation;
 import org.hdiv.validators.EditableValidator;
 import org.hdiv.validators.HtmlInputHiddenValidator;
 import org.hdiv.validators.RequestParameterValidator;
@@ -591,8 +588,11 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 			bean.getPropertyValues().addPropertyValue("reuseExistingPageInAjaxRequest", reuseExistingPageInAjaxRequest);
 		}
 
-		bean.getPropertyValues().addPropertyValue("editableDataValidationProvider",
-				new RuntimeBeanReference(EditableValidationsBeanDefinitionParser.EDITABLE_VALIDATION_PROVIDER_BEAN_NAME));
+		bean.getPropertyValues()
+				.addPropertyValue(
+						"editableDataValidationProvider",
+						new RuntimeBeanReference(
+								EditableValidationsBeanDefinitionParser.EDITABLE_VALIDATION_PROVIDER_BEAN_NAME));
 
 		if (!parserContext.getRegistry().containsBeanDefinition(
 				EditableValidationsBeanDefinitionParser.EDITABLE_VALIDATION_PROVIDER_BEAN_NAME)) {
@@ -610,8 +610,6 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		RootBeanDefinition bean = new RootBeanDefinition(DefaultEditableDataValidationProvider.class);
 		bean.setSource(source);
 		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
-		bean.getPropertyValues().addPropertyValue("validations",
-				new LinkedHashMap<ValidationTarget, List<IValidation>>());
 		parserContext.getRegistry().registerBeanDefinition(
 				EditableValidationsBeanDefinitionParser.EDITABLE_VALIDATION_PROVIDER_BEAN_NAME, bean);
 		return new RuntimeBeanReference(EditableValidationsBeanDefinitionParser.EDITABLE_VALIDATION_PROVIDER_BEAN_NAME);
