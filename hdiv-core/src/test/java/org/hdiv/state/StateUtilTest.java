@@ -18,6 +18,7 @@ package org.hdiv.state;
 import javax.servlet.http.HttpServletRequest;
 
 import org.hdiv.AbstractHDIVTestCase;
+import org.hdiv.config.Strategy;
 import org.hdiv.dataComposer.DataComposerFactory;
 import org.hdiv.dataComposer.IDataComposer;
 import org.hdiv.exception.HDIVException;
@@ -74,5 +75,27 @@ public class StateUtilTest extends AbstractHDIVTestCase {
 			assertTrue(true);
 
 		}
+	}
+
+	public void testIsMemoryStrategy() {
+
+		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		IDataComposer dataComposer = this.dataComposerFactory.newInstance(request);
+
+		HDIVUtil.setDataComposer(dataComposer, request);
+
+		// memory strategy in conf and bad formatted stateId
+		boolean result = this.stateUtil.isMemoryStrategy("1111");
+		assertTrue(result);
+
+		// change strategy to Hash
+		getConfig().setStrategy(Strategy.HASH);
+		result = this.stateUtil.isMemoryStrategy("1111");
+		assertFalse(result);
+
+		// Hash strategy in conf but stateId hash memory stategy pattern
+		result = this.stateUtil.isMemoryStrategy("1-1-11111");
+		assertTrue(result);
+
 	}
 }
