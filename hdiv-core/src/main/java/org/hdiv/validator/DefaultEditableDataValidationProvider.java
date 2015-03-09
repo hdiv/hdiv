@@ -73,4 +73,11 @@ public class DefaultEditableDataValidationProvider implements EditableDataValida
 		this.validationRepository = validationRepository;
 	}
 
+	/**
+	 * @return the validationRepository
+	 */
+	public ValidationRepository getValidationRepository() {
+		return validationRepository;
+	}
+
 }
