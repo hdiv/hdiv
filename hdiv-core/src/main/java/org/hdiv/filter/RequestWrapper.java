@@ -49,44 +49,44 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 	/**
 	 * HTTP header to sent cookies.
 	 */
-	private static final String COOKIE = "cookie";
+	protected static final String COOKIE = "cookie";
 
 	/**
 	 * Set with editable parameters.
 	 */
-	private Set<String> editableParameters = new HashSet<String>();
+	protected Set<String> editableParameters = new HashSet<String>();
 
 	/**
 	 * Map with request parameters
 	 */
-	private Map<String, Object> parameters = new HashMap<String, Object>();
+	protected Map<String, Object> parameters = new HashMap<String, Object>();
 
 	/**
 	 * The file request parameters.
 	 */
-	private Map<String, Object> elementsFile = new HashMap<String, Object>();
+	protected Map<String, Object> elementsFile = new HashMap<String, Object>();
 
 	/**
 	 * The text request parameters.
 	 */
-	private Map<String, Object> elementsText = new HashMap<String, Object>();
+	protected Map<String, Object> elementsText = new HashMap<String, Object>();
 
 	/**
 	 * Determines whether this request is multipart.
 	 */
-	private boolean isMultipart = false;
+	protected boolean isMultipart = false;
 
 	/**
 	 * Confidentiality indicator to know if information is accessible only for those who are authorized.
 	 */
-	private boolean confidentiality = true;
+	protected boolean confidentiality = true;
 
 	/**
 	 * Indicates if cookie confidentiality is applied or not. If the value is <code>true</code> cookie values must not
 	 * be replaced by relative values. If it is <code>false</code> they must be replaced by relative values to provide
 	 * confidentiality.
 	 */
-	private boolean cookiesConfidentiality;
+	protected boolean cookiesConfidentiality;
 
 	/**
 	 * Constructs a request object wrapping the given request.
@@ -110,6 +110,7 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 	 * @param parameter
 	 *            the name of the parameter whose value is requested
 	 */
+	@Override
 	public String[] getParameterValues(String parameter) {
 
 		// non validated parameters are obtained from the original request
@@ -136,6 +137,7 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 	 * @param parameter
 	 *            name of the parameter
 	 */
+	@Override
 	public String getParameter(String parameter) {
 
 		// non validated parameters are obtained from the original request
@@ -158,6 +160,7 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 	 * Returns the names of the parameters for this request. The enumeration consists of the normal request parameter
 	 * names plus the parameters read from the multipart request.
 	 */
+	@Override
 	public Enumeration<?> getParameterNames() {
 
 		Enumeration<?> baseParams = super.getParameterNames();
@@ -187,6 +190,7 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 	 *         that name
 	 * @since HDIV 1.1.1
 	 */
+	@Override
 	@SuppressWarnings("unchecked")
 	public String getHeader(String name) {
 
@@ -213,6 +217,7 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 	 *         return null.
 	 * @since HDIV 1.1.1
 	 */
+	@Override
 	@SuppressWarnings("unchecked")
 	public Enumeration<?> getHeaders(String name) {
 
@@ -246,7 +251,7 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 	 * @return cookie request header with replaced values
 	 * @since HDIV 1.1.1
 	 */
-	private String replaceCookieString(String cookieHeader, Map<String, SavedCookie> sessionCookies) {
+	protected String replaceCookieString(String cookieHeader, Map<String, SavedCookie> sessionCookies) {
 
 		String header = cookieHeader.trim();
 
@@ -296,6 +301,7 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 	 * 
 	 * @since HDIV 1.3
 	 */
+	@Override
 	@SuppressWarnings("unchecked")
 	public Map<? extends String, ?> getParameterMap() {
 
