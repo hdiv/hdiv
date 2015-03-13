@@ -5,10 +5,13 @@
 	xsi:schemaLocation="
         http://docbook.org/ns/docbook http://www.docbook.org/xml/5.0/xsd/docbook.xsd
         http://www.w3.org/1999/xlink http://www.docbook.org/xml/5.0/xsd/xlink.xsd">
-
 	<info>
-		<title>HDIV reference</title>
-
+		<title>HDIV Reference Documentation</title>
+		<abstract>
+			<para>HDIV Reference Documentation. Avoid OWASP Top 10 risks in your
+				application: XSS, CSRF, Parameter Tampering, among others.
+			</para>
+		</abstract>
 		<productname>HDIV</productname>
 
 		<releaseinfo>_project_version_</releaseinfo>
@@ -53,7 +56,7 @@
 		</authorgroup>
 
 		<copyright>
-			<year>2005-2014</year>
+			<year>2005-2015</year>
 		</copyright>
 
 		<legalnotice>
