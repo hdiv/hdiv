@@ -66,7 +66,7 @@ public class LinkUrlProcessor extends AbstractUrlProcessor {
 		if (dataComposer == null) {
 			// IDataComposer not initialized on request, request is out of filter
 			if (log.isDebugEnabled()) {
-				log.debug("IDataComposer not initialized on request, request is out of filter");
+				log.debug("IDataComposer not initialized on request. Request doesn't pass through ValidatorFilter, review it's mapping");
 			}
 			return url;
 		}
