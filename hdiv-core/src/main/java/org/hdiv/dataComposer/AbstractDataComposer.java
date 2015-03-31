@@ -278,11 +278,9 @@ public abstract class AbstractDataComposer implements IDataComposer {
 			return null;
 		}
 
-		String decodedParams = this.getDecodedValue(parameters, charEncoding);
-
 		// Get current IState
 		IState state = this.getStatesStack().peek();
-		state.setParams(decodedParams);
+		state.setParams(parameters);
 
 		if (this.hdivConfig.getConfidentiality()) {
 			// replace real values with confidential ones
@@ -301,7 +299,7 @@ public abstract class AbstractDataComposer implements IDataComposer {
 	 *            HTTP method
 	 * @return parameters in query format with confidential values
 	 */
-	private String applyConfidentialityToParams(String parameters, String method) {
+	protected String applyConfidentialityToParams(String parameters, String method) {
 
 		Map<String, Integer> pCount = new HashMap<String, Integer>();
 
@@ -587,7 +585,7 @@ public abstract class AbstractDataComposer implements IDataComposer {
 	 *            character encoding
 	 * @return value decoded
 	 */
-	private String getDecodedValue(String value, String charEncoding) {
+	protected String getDecodedValue(String value, String charEncoding) {
 
 		if (value == null || value.length() == 0) {
 			return "";

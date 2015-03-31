@@ -483,4 +483,29 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 		boolean result = helper.validate(requestWrapper).isValid();
 		assertFalse(result);
 	}
+
+	public void testParamWithAmpersand() {
+
+		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
+
+		this.dataComposer.beginRequest("GET", this.targetName);
+		this.dataComposer.composeParams("param1=111&amp;param2=Me+%26+You", "GET", "utf-8");
+		String pageState = this.dataComposer.endRequest();
+		this.dataComposer.endPage();
+
+		request.addParameter(hdivParameter, pageState);
+		request.addParameter("param1", "0");
+		request.addParameter("param2", "0");
+
+		RequestWrapper requestWrapper = new RequestWrapper(request);
+		boolean result = helper.validate(requestWrapper).isValid();
+		assertTrue(result);
+
+		String param1Value = requestWrapper.getParameter("param1");
+		assertEquals("111", param1Value);
+
+		String param2Value = requestWrapper.getParameter("param2");
+		assertEquals("Me & You", param2Value);
+
+	}
 }
