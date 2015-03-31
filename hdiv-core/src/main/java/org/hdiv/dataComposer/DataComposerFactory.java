@@ -15,6 +15,9 @@
  */
 package org.hdiv.dataComposer;
 
+import java.util.Collections;
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.hdiv.config.HDIVConfig;
@@ -74,6 +77,11 @@ public class DataComposerFactory {
 	 * State scope manager.
 	 */
 	protected StateScopeManager stateScopeManager;
+
+	/**
+	 * HTTP headers to exclude page reuse in Ajax requests.
+	 */
+	protected List<String> excludePageReuseHeaders = Collections.singletonList("X-PJAX");
 
 	/**
 	 * Creates a new instance of DataComposer based on the defined strategy.
@@ -210,9 +218,13 @@ public class DataComposerFactory {
 
 	protected boolean excludePageReuseInAjax(HttpServletRequest request) {
 
-		// If it is a request from jquery-pjax plugin, never reuse the page
-		String pjaxHeader = request.getHeader("X-PJAX");
-		return pjaxHeader != null;
+		for (String header : this.excludePageReuseHeaders) {
+			String headerValue = request.getHeader(header);
+			if (headerValue != null) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/**
@@ -269,6 +281,14 @@ public class DataComposerFactory {
 	 */
 	public void setStateScopeManager(StateScopeManager stateScopeManager) {
 		this.stateScopeManager = stateScopeManager;
+	}
+
+	/**
+	 * @param excludePageReuseHeaders
+	 *            the excludePageReuseHeaders to set
+	 */
+	public void setExcludePageReuseHeaders(List<String> excludePageReuseHeaders) {
+		this.excludePageReuseHeaders = excludePageReuseHeaders;
 	}
 
 }
