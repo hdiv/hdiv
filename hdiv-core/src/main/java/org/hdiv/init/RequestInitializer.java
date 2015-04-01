@@ -13,10 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.hdiv.filter;
+package org.hdiv.init;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.hdiv.filter.RequestWrapper;
+import org.hdiv.filter.ResponseWrapper;
+import org.hdiv.filter.ValidatorFilter;
 
 /**
  * Methods for request scope data and wrapper initialization. Used in {@link ValidatorFilter}.

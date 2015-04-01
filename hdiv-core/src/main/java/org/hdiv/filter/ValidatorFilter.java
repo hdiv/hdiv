@@ -29,6 +29,7 @@ import org.hdiv.config.HDIVConfig;
 import org.hdiv.config.multipart.IMultipartConfig;
 import org.hdiv.config.multipart.exception.HdivMultipartException;
 import org.hdiv.exception.HDIVException;
+import org.hdiv.init.RequestInitializer;
 import org.hdiv.util.Constants;
 import org.hdiv.util.HDIVErrorCodes;
 import org.springframework.web.context.WebApplicationContext;

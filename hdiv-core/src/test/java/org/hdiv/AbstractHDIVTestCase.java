@@ -30,7 +30,7 @@ import org.apache.commons.logging.LogFactory;
 import org.hdiv.config.HDIVConfig;
 import org.hdiv.dataComposer.DataComposerFactory;
 import org.hdiv.dataComposer.IDataComposer;
-import org.hdiv.filter.RequestInitializer;
+import org.hdiv.init.RequestInitializer;
 import org.hdiv.listener.InitListener;
 import org.hdiv.util.HDIVUtil;
 import org.springframework.context.ApplicationContext;

@@ -38,17 +38,21 @@ import org.hdiv.dataValidator.DataValidator;
 import org.hdiv.dataValidator.IDataValidator;
 import org.hdiv.dataValidator.ValidationResult;
 import org.hdiv.events.HDIVFacesEventListener;
-import org.hdiv.filter.DefaultRequestInitializer;
 import org.hdiv.filter.DefaultValidatorErrorHandler;
 import org.hdiv.filter.IValidationHelper;
 import org.hdiv.filter.JsfValidatorHelper;
-import org.hdiv.filter.RequestInitializer;
 import org.hdiv.filter.ValidatorErrorHandler;
 import org.hdiv.filter.ValidatorHelperRequest;
 import org.hdiv.idGenerator.PageIdGenerator;
 import org.hdiv.idGenerator.RandomGuidUidGenerator;
 import org.hdiv.idGenerator.SequentialPageIdGenerator;
 import org.hdiv.idGenerator.UidGenerator;
+import org.hdiv.init.DefaultRequestInitializer;
+import org.hdiv.init.DefaultServletContextInitializer;
+import org.hdiv.init.DefaultSessionInitializer;
+import org.hdiv.init.RequestInitializer;
+import org.hdiv.init.ServletContextInitializer;
+import org.hdiv.init.SessionInitializer;
 import org.hdiv.logs.IUserData;
 import org.hdiv.logs.Logger;
 import org.hdiv.logs.UserData;
@@ -167,6 +171,8 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 
 	protected RuntimeBeanReference encodingUtilRef;
 
+	protected RuntimeBeanReference applicationRef;
+
 	protected RuntimeBeanReference uidGeneratorRef;
 
 	protected RuntimeBeanReference stateUtilRef;
@@ -207,7 +213,7 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		this.createStateCache(element, source, parserContext);
 		this.sessionRef = this.createSession(element, source, parserContext);
 		this.encodingUtilRef = this.createEncodingUtil(element, source, parserContext);
-		this.createSimpleBean(element, source, parserContext, ApplicationHDIV.class);
+		this.applicationRef = this.createSimpleBean(element, source, parserContext, ApplicationHDIV.class);
 		this.createCipher(element, source, parserContext);
 		this.createSimpleBean(element, source, parserContext, ValidationResult.class);
 		this.stateUtilRef = this.createStateUtil(element, source, parserContext);
@@ -217,6 +223,8 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		this.formUrlProcessorRef = this.createFormUrlProcessor(element, source, parserContext);
 		this.basicUrlProcessorRef = this.createBasicUrlProcessor(element, source, parserContext);
 		this.createRequestInitializer(element, source, parserContext);
+		this.createServletContextInitializer(element, source, parserContext);
+		this.createSessionInitializer(element, source, parserContext);
 
 		// Register Spring MVC beans if we are using Spring MVC web framework
 		if (this.springMvcPresent && this.springMvcModulePresent) {
@@ -436,6 +444,30 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		bean.getPropertyValues().addPropertyValue("config", this.configRef);
 
 		return this.registerBean(bean, RequestInitializer.class.getName(), parserContext);
+	}
+
+	protected RuntimeBeanReference createServletContextInitializer(Element element, Object source,
+			ParserContext parserContext) {
+
+		RootBeanDefinition bean = new RootBeanDefinition(DefaultServletContextInitializer.class);
+		bean.setSource(source);
+		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
+		bean.getPropertyValues().addPropertyValue("config", this.configRef);
+		bean.getPropertyValues().addPropertyValue("application", this.applicationRef);
+		bean.getPropertyValues().addPropertyValue("linkUrlProcessor", this.linkUrlProcessorRef);
+		bean.getPropertyValues().addPropertyValue("formUrlProcessor", this.formUrlProcessorRef);
+
+		return this.registerBean(bean, ServletContextInitializer.class.getName(), parserContext);
+	}
+
+	protected RuntimeBeanReference createSessionInitializer(Element element, Object source, ParserContext parserContext) {
+
+		RootBeanDefinition bean = new RootBeanDefinition(DefaultSessionInitializer.class);
+		bean.setSource(source);
+		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
+		bean.getPropertyValues().addPropertyValue("config", this.configRef);
+
+		return this.registerBean(bean, SessionInitializer.class.getName(), parserContext);
 	}
 
 	protected RuntimeBeanReference createLinkUrlProcessor(Element element, Object source, ParserContext parserContext) {

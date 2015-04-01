@@ -13,13 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.hdiv.filter;
+package org.hdiv.init;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.hdiv.AbstractHDIVTestCase;
 import org.hdiv.exception.HDIVException;
+import org.hdiv.filter.RequestWrapper;
+import org.hdiv.filter.ResponseWrapper;
+import org.hdiv.init.RequestInitializer;
 import org.hdiv.util.HDIVUtil;
 import org.springframework.mock.web.MockHttpServletResponse;
 

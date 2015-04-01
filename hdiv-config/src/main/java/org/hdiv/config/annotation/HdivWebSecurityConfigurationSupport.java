@@ -42,16 +42,20 @@ import org.hdiv.dataComposer.DataComposerFactory;
 import org.hdiv.dataValidator.DataValidator;
 import org.hdiv.dataValidator.IDataValidator;
 import org.hdiv.dataValidator.ValidationResult;
-import org.hdiv.filter.DefaultRequestInitializer;
 import org.hdiv.filter.DefaultValidatorErrorHandler;
 import org.hdiv.filter.IValidationHelper;
-import org.hdiv.filter.RequestInitializer;
 import org.hdiv.filter.ValidatorErrorHandler;
 import org.hdiv.filter.ValidatorHelperRequest;
 import org.hdiv.idGenerator.PageIdGenerator;
 import org.hdiv.idGenerator.RandomGuidUidGenerator;
 import org.hdiv.idGenerator.SequentialPageIdGenerator;
 import org.hdiv.idGenerator.UidGenerator;
+import org.hdiv.init.DefaultRequestInitializer;
+import org.hdiv.init.DefaultServletContextInitializer;
+import org.hdiv.init.DefaultSessionInitializer;
+import org.hdiv.init.RequestInitializer;
+import org.hdiv.init.ServletContextInitializer;
+import org.hdiv.init.SessionInitializer;
 import org.hdiv.logs.IUserData;
 import org.hdiv.logs.Logger;
 import org.hdiv.logs.UserData;
@@ -328,6 +332,23 @@ public abstract class HdivWebSecurityConfigurationSupport {
 		DefaultRequestInitializer requestInitializer = new DefaultRequestInitializer();
 		requestInitializer.setConfig(hdivConfig());
 		return requestInitializer;
+	}
+
+	@Bean
+	public ServletContextInitializer securityServletContextInitializer() {
+		DefaultServletContextInitializer servletContextInitializer = new DefaultServletContextInitializer();
+		servletContextInitializer.setConfig(hdivConfig());
+		servletContextInitializer.setApplication(securityApplication());
+		servletContextInitializer.setFormUrlProcessor(formUrlProcessor());
+		servletContextInitializer.setLinkUrlProcessor(linkUrlProcessor());
+		return servletContextInitializer;
+	}
+
+	@Bean
+	public SessionInitializer securitySessionInitializer() {
+		DefaultSessionInitializer sessionInitializer = new DefaultSessionInitializer();
+		sessionInitializer.setConfig(hdivConfig());
+		return sessionInitializer;
 	}
 
 	@Bean

@@ -24,18 +24,8 @@ import javax.servlet.http.HttpSessionListener;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.hdiv.application.IApplication;
-import org.hdiv.cipher.IKeyFactory;
-import org.hdiv.cipher.Key;
-import org.hdiv.config.HDIVConfig;
-import org.hdiv.config.Strategy;
-import org.hdiv.idGenerator.PageIdGenerator;
-import org.hdiv.urlProcessor.FormUrlProcessor;
-import org.hdiv.urlProcessor.LinkUrlProcessor;
-import org.hdiv.util.Constants;
-import org.hdiv.util.HDIVUtil;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ResourceBundleMessageSource;
+import org.hdiv.init.ServletContextInitializer;
+import org.hdiv.init.SessionInitializer;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
@@ -55,20 +45,25 @@ public class InitListener implements ServletContextListener, HttpSessionListener
 	private static Log log = LogFactory.getLog(InitListener.class);
 
 	/**
-	 * Hdiv configuration for this app.
+	 * Has servlet context been initialized?
 	 */
-	private HDIVConfig config;
+	protected boolean servletContextInitialized = false;
 
 	/**
-	 * Is servlet context Hdiv objects initialized?
+	 * Initializer for the {@link ServletContext}
 	 */
-	private boolean servletContextInitialized = false;
+	protected ServletContextInitializer servletContextInitializer;
 
 	/**
-	 * Initialize servlet context objects.
+	 * Initializer for the {@link HttpSession}
+	 */
+	protected SessionInitializer sessionInitializer;
+
+	/**
+	 * Initialize {@link ServletContext} scoped objects.
 	 * 
 	 * @param servletContextEvent
-	 *            servlet context created event
+	 *            ServletContext creation event
 	 * @since HDIV 2.1.0
 	 */
 	public void contextInitialized(ServletContextEvent servletContextEvent) {
@@ -80,32 +75,40 @@ public class InitListener implements ServletContextListener, HttpSessionListener
 			this.initServletContext(servletContext);
 		} else {
 			if (log.isWarnEnabled()) {
-				log.warn("Hdiv's InitListener is registered before Spring's ContextLoaderListener.");
+				log.warn("Hdiv's InitListener is registered before Spring's ContextLoaderListener. It must be after ContextLoaderListener.");
 			}
 		}
 	}
 
 	/**
-	 * Executed at server shutdown.
+	 * Executed at {@link ServletContext} destroy.
 	 * 
 	 * @param servletContextEvent
 	 *            ServletContext destroy event
+	 * @since HDIV 2.1.0
 	 */
 	public void contextDestroyed(ServletContextEvent servletContextEvent) {
 
+		this.servletContextInitializer.destroyServletContext(servletContextEvent.getServletContext());
 	}
 
 	/**
-	 * Executed at {@link HttpSession} destroy.
+	 * Initialize {@link ServletContext} scoped objects.
 	 * 
-	 * @param event
-	 *            HttpSession destroy event
+	 * @param servletContext
+	 *            ServletContext instance
 	 */
-	public void sessionDestroyed(HttpSessionEvent event) {
+	protected void initServletContext(ServletContext servletContext) {
 
-		if (log.isInfoEnabled()) {
-			log.info("HDIV's session destroyed:" + event.getSession().getId());
-		}
+		WebApplicationContext wac = WebApplicationContextUtils.getRequiredWebApplicationContext(servletContext);
+
+		// Get initializer instances
+		this.servletContextInitializer = wac.getBean(ServletContextInitializer.class);
+		this.sessionInitializer = wac.getBean(SessionInitializer.class);
+
+		this.servletContextInitializer.initializeServletContext(servletContext);
+
+		this.servletContextInitialized = true;
 	}
 
 	/**
@@ -122,109 +125,19 @@ public class InitListener implements ServletContextListener, HttpSessionListener
 			this.initServletContext(servletContext);
 		}
 
-		WebApplicationContext wac = WebApplicationContextUtils.getRequiredWebApplicationContext(servletContext);
-
-		this.initStrategies(wac, httpSessionEvent.getSession());
-		this.initPageIdGenerator(wac, httpSessionEvent.getSession());
-		this.initStateParameterNames(wac, httpSessionEvent.getSession());
-
-		if (log.isInfoEnabled()) {
-			log.info("HDIV's session created:" + httpSessionEvent.getSession().getId());
-		}
+		this.sessionInitializer.initializeSession(httpSessionEvent.getSession());
 
 	}
 
 	/**
-	 * Initialize ServletContext scoped objects.
+	 * Executed at {@link HttpSession} destroy.
 	 * 
-	 * @param servletContext
-	 *            ServletContext instance
+	 * @param event
+	 *            HttpSession destroy event
 	 */
-	protected void initServletContext(ServletContext servletContext) {
+	public void sessionDestroyed(HttpSessionEvent httpSessionEvent) {
 
-		WebApplicationContext wac = WebApplicationContextUtils.getRequiredWebApplicationContext(servletContext);
-
-		this.config = wac.getBean(HDIVConfig.class);
-
-		// Init servlet context scoped objects
-		HDIVUtil.setHDIVConfig(this.config, servletContext);
-
-		IApplication application = wac.getBean(IApplication.class);
-		HDIVUtil.setApplication(application, servletContext);
-
-		ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
-		messageSource.setBeanClassLoader(wac.getClassLoader());
-		messageSource.setBasename(Constants.MESSAGE_SOURCE_PATH);
-		HDIVUtil.setMessageSource(messageSource, servletContext);
-
-		LinkUrlProcessor linkUrlProcessor = wac.getBean(LinkUrlProcessor.class);
-		HDIVUtil.setLinkUrlProcessor(linkUrlProcessor, servletContext);
-
-		FormUrlProcessor formUrlProcessor = wac.getBean(FormUrlProcessor.class);
-		HDIVUtil.setFormUrlProcessor(formUrlProcessor, servletContext);
-
-		this.servletContextInitialized = true;
-	}
-
-	/**
-	 * Strategies initialization. For each user session, a new cipher key is created if the cipher strategy has been
-	 * chosen.
-	 * 
-	 * @param context
-	 *            application context
-	 * @param httpSession
-	 *            http session
-	 */
-	protected void initStrategies(ApplicationContext context, HttpSession httpSession) {
-
-		if (this.config.getStrategy().equals(Strategy.CIPHER)) {
-			IKeyFactory keyFactory = context.getBean(IKeyFactory.class);
-			// creating encryption key
-			Key key = keyFactory.generateKey();
-			httpSession.setAttribute(Constants.KEY_NAME, key);
-
-		}
-	}
-
-	/**
-	 * PageIdGenerator initialization.
-	 * 
-	 * @param context
-	 *            application context
-	 * @param httpSession
-	 *            http session
-	 */
-	protected void initPageIdGenerator(ApplicationContext context, HttpSession httpSession) {
-
-		// Obtain new instance of PageIdGenerator
-		PageIdGenerator pageIdGenerator = context.getBean(PageIdGenerator.class);
-		httpSession.setAttribute(Constants.PAGE_ID_GENERATOR_NAME, pageIdGenerator);
-	}
-
-	/**
-	 * State parameter names initialization.
-	 * 
-	 * @param context
-	 *            application context
-	 * @param httpSession
-	 *            http session
-	 * @since HDIV 1.1
-	 */
-	protected void initStateParameterNames(ApplicationContext context, HttpSession httpSession) {
-
-		String hdivParameterName = null;
-		String modifyHdivStateParameterName = null;
-
-		if (this.config.isRandomName()) {
-			hdivParameterName = HDIVUtil.createRandomToken(Integer.MAX_VALUE);
-			modifyHdivStateParameterName = HDIVUtil.createRandomToken(Integer.MAX_VALUE);
-		} else {
-			hdivParameterName = this.config.getStateParameterName();
-			modifyHdivStateParameterName = this.config.getModifyStateParameterName();
-		}
-
-		httpSession.setAttribute(Constants.HDIV_PARAMETER, hdivParameterName);
-		httpSession.setAttribute(Constants.MODIFY_STATE_HDIV_PARAMETER, modifyHdivStateParameterName);
+		this.sessionInitializer.destroySession(httpSessionEvent.getSession());
 	}
 
 }

@@ -13,16 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.hdiv.filter;
+package org.hdiv.init;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.hdiv.config.HDIVConfig;
+import org.hdiv.filter.RequestWrapper;
+import org.hdiv.filter.ResponseWrapper;
 import org.hdiv.util.HDIVUtil;
 
 /**
- * {@link RequestInitializer} implementation with default behavior.
+ * {@link RequestInitializer} implementation with the default behavior.
  * 
  * @author Gotzon Illarramendi
  * @since 2.1.5
