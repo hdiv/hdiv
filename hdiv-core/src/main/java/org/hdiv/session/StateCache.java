@@ -62,18 +62,18 @@ public class StateCache implements IStateCache {
 	 * @return If the cache has reached its maximum size, less important identifier is returned in order to delete it
 	 *         from session. Otherwise, null will be returned.
 	 */
-	public synchronized Integer addPage(int key, Integer currentPageId) {
+	public synchronized Integer addPage(int pageId, Integer currentPageId) {
 
-		if (this.pageIds.contains(key)) {
+		if (this.pageIds.contains(pageId)) {
 			// Page id already exist in session
 			return null;
 
 		} else {
 			Integer removedKey = this.cleanBuffer(currentPageId);
-			this.pageIds.add(key);
+			this.pageIds.add(pageId);
 
 			if (log.isDebugEnabled()) {
-				log.debug("Page with [" + key + "] added to the cache. Cache contains [" + pageIds + "]");
+				log.debug("Page with [" + pageId + "] added to the cache. Cache contains [" + pageIds + "]");
 			}
 
 			return removedKey;

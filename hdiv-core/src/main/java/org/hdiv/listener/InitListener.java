@@ -134,7 +134,7 @@ public class InitListener implements ServletContextListener, HttpSessionListener
 	/**
 	 * Executed at {@link HttpSession} destroy.
 	 * 
-	 * @param event
+	 * @param httpSessionEvent
 	 *            HttpSession destroy event
 	 */
 	public void sessionDestroyed(HttpSessionEvent httpSessionEvent) {

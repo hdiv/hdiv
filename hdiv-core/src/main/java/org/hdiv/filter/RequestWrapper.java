@@ -244,7 +244,7 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 	/**
 	 * Parses an http cookie request header and replace values if confidentiality is activated.
 	 * 
-	 * @param cookieHader
+	 * @param cookieHeader
 	 *            value assigned to cookie header
 	 * @param sessionCookies
 	 *            cookies stored in user session

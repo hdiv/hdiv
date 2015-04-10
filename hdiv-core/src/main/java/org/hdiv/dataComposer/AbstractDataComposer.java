@@ -576,7 +576,7 @@ public abstract class AbstractDataComposer implements IDataComposer {
 	 * &amp;#x<i>Hex</i>; - <i>(Example: &amp;#xE5;) case insensitive</i><br>
 	 * </blockquote>
 	 * <p>
-	 * Based on {@link HtmlUtils.htmlUnescape}.
+	 * Based on {@link HtmlUtils#htmlUnescape}.
 	 * </p>
 	 * 
 	 * @param value

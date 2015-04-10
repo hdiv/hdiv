@@ -170,6 +170,7 @@ public class ResponseWrapper extends HttpServletResponseWrapper {
 	 * 
 	 * @param cookieString
 	 *            value assigned to Set-Cookie attribute
+	 * @return Cookie list
 	 */
 	protected List<String> parseCookieString(String cookieString) {
 
