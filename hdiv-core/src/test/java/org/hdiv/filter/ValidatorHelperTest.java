@@ -508,4 +508,23 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 		assertEquals("Me & You", param2Value);
 
 	}
+
+	public void testValidateLongLiving() {
+
+		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
+
+		this.dataComposer.startScope("app");
+		this.dataComposer.beginRequest("GET", this.targetName);
+		String pageState = this.dataComposer.endRequest();
+		this.dataComposer.endScope();
+		this.dataComposer.endPage();
+
+		assertTrue(pageState.startsWith("A-"));
+
+		request.addParameter(hdivParameter, pageState);
+
+		RequestWrapper requestWrapper = new RequestWrapper(request);
+		boolean result = helper.validate(requestWrapper).isValid();
+		assertTrue(result);
+	}
 }

@@ -716,10 +716,9 @@ public class ValidatorHelperRequest implements IValidationHelper {
 			int pageId = 0;
 			int stateId = 0;
 			try {
-				pageId = Integer.parseInt(pId);
 				stateId = Integer.parseInt(sId);
 			} catch (NumberFormatException e) {
-				throw new HDIVException(HDIVErrorCodes.PAGE_ID_INCORRECT);
+				throw new HDIVException(HDIVErrorCodes.PAGE_ID_INCORRECT, e);
 			}
 
 			StateScope stateScope = this.stateScopeManager.getStateScope(value);
@@ -727,6 +726,12 @@ public class ValidatorHelperRequest implements IValidationHelper {
 
 				String token = stateScope.getStateToken(stateId);
 				return requestSuffix.equals(token);
+			}
+
+			try {
+				pageId = Integer.parseInt(pId);
+			} catch (NumberFormatException e) {
+				throw new HDIVException(HDIVErrorCodes.PAGE_ID_INCORRECT, e);
 			}
 
 			IPage currentPage = session.getPage(pageId);

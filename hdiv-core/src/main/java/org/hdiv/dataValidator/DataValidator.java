@@ -46,7 +46,7 @@ public class DataValidator implements IDataValidator {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.hdiv.ee.dataValidator.IDataValidator#validate(java.lang.String, java.lang.String, java.lang.String,
+	 * @see org.hdiv.dataValidator.IDataValidator#validate(java.lang.String, java.lang.String, java.lang.String,
 	 * org.hdiv.state.IParameter, java.lang.String[])
 	 */
 	public IValidationResult validate(String value, String target, String parameter, IParameter stateParameter,

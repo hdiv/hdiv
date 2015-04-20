@@ -2,6 +2,11 @@ HDIV CHANGELOG
 ==============
 http://www.hdiv.org
 
+Release 2.1.11
+==================================
+
+ * Fix issue in longLiving request validation.
+
 Release 2.1.10
 ==================================
 

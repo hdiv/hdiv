@@ -98,4 +98,52 @@ public class StateUtilTest extends AbstractHDIVTestCase {
 		assertTrue(result);
 
 	}
+
+	public void testLongLivingApp() {
+
+		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		IDataComposer dataComposer = this.dataComposerFactory.newInstance(request);
+		HDIVUtil.setDataComposer(dataComposer, request);
+
+		dataComposer.startPage();
+		dataComposer.startScope("app");
+		dataComposer.beginRequest("GET", "test.do");
+		dataComposer.compose("parameter1", "2", false);
+		String stateId = dataComposer.endRequest();
+		dataComposer.endScope();
+		dataComposer.endPage();
+
+		assertNotNull(stateId);
+		assertTrue(stateId.startsWith("A-"));
+
+		IState restored = this.stateUtil.restoreState(stateId);
+
+		assertNotNull(restored);
+		assertEquals(restored.getAction(), "test.do");
+		assertEquals(restored.getParameter("parameter1").getValues().get(0), "2");
+	}
+
+	public void testLongLivingUser() {
+
+		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		IDataComposer dataComposer = this.dataComposerFactory.newInstance(request);
+		HDIVUtil.setDataComposer(dataComposer, request);
+
+		dataComposer.startPage();
+		dataComposer.startScope("user-session");
+		dataComposer.beginRequest("GET", "test.do");
+		dataComposer.compose("parameter1", "2", false);
+		String stateId = dataComposer.endRequest();
+		dataComposer.endScope();
+		dataComposer.endPage();
+
+		assertNotNull(stateId);
+		assertTrue(stateId.startsWith("U-"));
+
+		IState restored = this.stateUtil.restoreState(stateId);
+
+		assertNotNull(restored);
+		assertEquals(restored.getAction(), "test.do");
+		assertEquals(restored.getParameter("parameter1").getValues().get(0), "2");
+	}
 }

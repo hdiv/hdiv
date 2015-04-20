@@ -171,25 +171,30 @@ public class StateUtil {
 			throw new HDIVException(HDIVErrorCodes.HDIV_PARAMETER_INCORRECT_VALUE, e);
 		}
 
-		int pageId;
 		int stateId;
 		try {
-			pageId = Integer.parseInt(pId);
 			stateId = Integer.parseInt(sId);
 		} catch (NumberFormatException e) {
 			throw new HDIVException(HDIVErrorCodes.HDIV_PARAMETER_INCORRECT_VALUE, e);
 		}
 
-		// Obtain Scopes
+		// Obtain State from a StateScopes
 		StateScope stateScope = this.stateScopeManager.getStateScope(requestState);
 
 		if (stateScope != null) {
 			restoredState = stateScope.restoreState(stateId);
-		} else {
-
-			restoredState = this.getStateFromSession(pageId, stateId);
+			return restoredState;
 		}
 
+		// Obtain State from a HttpSession
+		int pageId;
+		try {
+			pageId = Integer.parseInt(pId);
+		} catch (NumberFormatException e) {
+			throw new HDIVException(HDIVErrorCodes.HDIV_PARAMETER_INCORRECT_VALUE, e);
+		}
+
+		restoredState = this.getStateFromSession(pageId, stateId);
 		return restoredState;
 	}
 
