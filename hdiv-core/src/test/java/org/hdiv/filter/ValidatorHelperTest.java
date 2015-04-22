@@ -52,8 +52,7 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 		this.helper = this.getApplicationContext().getBean(IValidationHelper.class);
 		this.confidentiality = this.getConfig().getConfidentiality();
 
-		DataComposerFactory dataComposerFactory = (DataComposerFactory) this.getApplicationContext().getBean(
-				"dataComposerFactory");
+		DataComposerFactory dataComposerFactory = this.getApplicationContext().getBean(DataComposerFactory.class);
 		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
 		this.dataComposer = dataComposerFactory.newInstance(request);
 		HDIVUtil.setDataComposer(dataComposer, request);

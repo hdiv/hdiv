@@ -91,6 +91,18 @@ public interface IPage {
 	public int getStatesCount();
 
 	/**
+	 * Obtain next valid state id.
+	 * 
+	 * @return State Id to use.
+	 */
+	public int getNextStateId();
+
+	/**
+	 * Mark this page as reused in more than one request. Most common case is in Ajax requests.
+	 */
+	public void markAsReused();
+
+	/**
 	 * Returns the unique id of flow.
 	 * 
 	 * @return the flow id

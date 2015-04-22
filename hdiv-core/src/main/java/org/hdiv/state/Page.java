@@ -48,31 +48,45 @@ public class Page implements IPage, Serializable {
 	/**
 	 * Page <code>this</code> identifier.
 	 */
-	private int id;
+	protected int id;
 
 	/**
 	 * Unique id of flow
 	 */
-	private String flowId;
+	protected String flowId;
 
 	/**
 	 * Unique random token. Used only for links.
 	 * 
 	 * @since HDIV 2.0.4
 	 */
-	private String randomToken;
+	protected String randomToken;
 
 	/**
 	 * Unique random token. Used only for forms with PATCH, POST, PUT or DELETE methods.
 	 * 
 	 * @since 2.1.7
 	 */
-	private String formRandomToken;
+	protected String formRandomToken;
 
 	/**
 	 * Page size.
 	 */
-	private long size;
+	protected long size;
+
+	/**
+	 * Sequential counter to generate state ids.
+	 * 
+	 * @since 2.1.11
+	 */
+	protected int stateIdCounter;
+
+	/**
+	 * True if this page is reused. The most common case is in an Ajax request.
+	 * 
+	 * @since 2.1.11
+	 */
+	protected Boolean isReused;
 
 	/**
 	 * Adds a new state to the page <code>this</code>.
@@ -176,6 +190,21 @@ public class Page implements IPage, Serializable {
 	 */
 	public Collection<? extends Object> getStates() {
 		return states;
+	}
+
+	public int getNextStateId() {
+
+		if (isReused != null && isReused) {
+			// We have to synchronize reused Pages due to concurrency problems
+			synchronized (this) {
+				return this.stateIdCounter++;
+			}
+		}
+		return this.stateIdCounter++;
+	}
+
+	public void markAsReused() {
+		this.isReused = true;
 	}
 
 	/**

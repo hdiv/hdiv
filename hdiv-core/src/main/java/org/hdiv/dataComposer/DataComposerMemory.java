@@ -51,11 +51,6 @@ public class DataComposerMemory extends AbstractDataComposer {
 	private static Log log = LogFactory.getLog(DataComposerMemory.class);
 
 	/**
-	 * Represents the identifier of each possible state stored in the page <code>page</code>.
-	 */
-	protected int requestCounter = 0;
-
-	/**
 	 * State scope manager.
 	 */
 	protected StateScopeManager stateScopeManager;
@@ -136,14 +131,33 @@ public class DataComposerMemory extends AbstractDataComposer {
 		} catch (UnsupportedEncodingException e) {
 			throw new HDIVException(Constants.ENCODING_UTF_8 + " enconding not supported.", e);
 		} catch (IllegalArgumentException e) {
+			// Some decoding errors throw IllegalArgumentException
 		}
 
 		// Create new IState
-		IState state = new State(this.requestCounter);
-		state.setAction(action);
-		state.setMethod(method);
+		int stateId = this.getPage().getNextStateId();
+		IState state = this.createNewState(stateId, method, action);
 
 		return this.beginRequest(state);
+	}
+
+	/**
+	 * Create new {@link IState} instance.
+	 * 
+	 * @param stateId
+	 *            Identifier for the new {@link IState}
+	 * @param method
+	 *            HTTP method of the request.
+	 * @param action
+	 *            action name
+	 * @return new {@link IState} instance.
+	 */
+	protected IState createNewState(int stateId, String method, String action) {
+
+		IState state = new State(stateId);
+		state.setAction(action);
+		state.setMethod(method);
+		return state;
 	}
 
 	public String beginRequest(IState state) {
@@ -159,9 +173,6 @@ public class DataComposerMemory extends AbstractDataComposer {
 			// We can't know the id before compose all parameters
 			return null;
 		}
-
-		// It is Page scope or none
-		this.requestCounter = state.getId() + 1;
 
 		String id = this.getPage().getName() + DASH + state.getId() + DASH + this.getStateSuffix(state.getMethod());
 		return id;
@@ -219,7 +230,6 @@ public class DataComposerMemory extends AbstractDataComposer {
 	 *            other IPage
 	 */
 	public void startPage(IPage existingPage) {
-		this.requestCounter = existingPage.getStatesCount();
 		this.setPage(existingPage);
 	}
 

@@ -6,6 +6,7 @@ Release 2.1.11
 ==================================
 
  * Fix issue in longLiving request validation.
+ * Fix issue in concurrent Ajax requests with 'reuseExistingPageInAjaxRequest' option enabled.
 
 Release 2.1.10
 ==================================

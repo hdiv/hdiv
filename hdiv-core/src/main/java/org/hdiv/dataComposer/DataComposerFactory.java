@@ -155,6 +155,7 @@ public class DataComposerFactory {
 			if (state.getPageId() > 0) {
 				IPage page = this.session.getPage(state.getPageId());
 				if (page != null) {
+					page.markAsReused();
 					dataComposer.startPage(page);
 				}
 			}
@@ -170,6 +171,7 @@ public class DataComposerFactory {
 				IState state = this.stateUtil.restoreState(hdivState);
 				if (state.getPageId() > 0) {
 					IPage page = this.session.getPage(state.getPageId());
+					page.markAsReused();
 					dataComposer.startPage(page);
 				} else {
 					dataComposer.startPage();
