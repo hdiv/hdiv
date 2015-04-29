@@ -280,7 +280,7 @@ public class HDIVConfig implements Serializable {
 	 */
 	public boolean isParameterWithoutConfidentiality(String paramName) {
 
-		HttpSession session = HDIVUtil.getHttpSession();
+		HttpSession session = HDIVUtil.getNonRequiredHttpSession();
 		if (session != null) {
 			String modifyHdivStateParameterName = (String) session.getAttribute(Constants.MODIFY_STATE_HDIV_PARAMETER);
 			if (modifyHdivStateParameterName != null && modifyHdivStateParameterName.equals(paramName)) {

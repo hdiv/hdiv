@@ -373,6 +373,19 @@ public class HDIVUtil {
 		return request.getSession();
 	}
 
+	/**
+	 * Return the <code>HttpSession</code> object.
+	 * 
+	 * @return {@link HttpSession} instance. It can have null value.
+	 */
+	public static HttpSession getNonRequiredHttpSession() {
+		HttpServletRequest request = getNonRequiredHttpServletRequest();
+		if (request == null) {
+			return null;
+		}
+		return request.getSession();
+	}
+
 	/* HttpServletRequest */
 
 	/**
@@ -383,7 +396,8 @@ public class HDIVUtil {
 	public static HttpServletRequest getHttpServletRequest() {
 		HttpServletRequest request = (HttpServletRequest) httpRequest.get();
 		if (request == null) {
-			throw new HDIVException("Request has not been initialized in threadlocal");
+			throw new HDIVException(
+					"The request has not been initialized in threadlocal. The request has not been intercepted by ValidatorFilter, review it's mapping.");
 		}
 		return request;
 	}

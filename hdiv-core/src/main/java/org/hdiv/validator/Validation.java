@@ -142,6 +142,9 @@ public class Validation implements IValidation, Serializable {
 		this.name = name;
 	}
 
+	/**
+	 * @return componentType
+	 */
 	public String getComponentType() {
 		return componentType;
 	}
@@ -163,6 +166,13 @@ public class Validation implements IValidation, Serializable {
 	}
 
 	/**
+	 * @return acceptedPattern
+	 */
+	public String getAcceptedPattern() {
+		return this.acceptedPattern == null ? null : this.acceptedPattern.pattern();
+	}
+
+	/**
 	 * @param rejectedPattern
 	 *            The rejected pattern to set.
 	 */
@@ -170,6 +180,16 @@ public class Validation implements IValidation, Serializable {
 		this.rejectedPattern = Pattern.compile(rejectedPattern);
 	}
 
+	/**
+	 * @return rejectedPattern
+	 */
+	public String getRejectedPattern() {
+		return this.rejectedPattern == null ? null : this.rejectedPattern.pattern();
+	}
+
+	/**
+	 * @return defaultValidation
+	 */
 	public boolean isDefaultValidation() {
 		return defaultValidation;
 	}
