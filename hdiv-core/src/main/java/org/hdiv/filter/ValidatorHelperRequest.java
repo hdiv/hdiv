@@ -56,6 +56,7 @@ import org.hdiv.util.Constants;
 import org.hdiv.util.HDIVErrorCodes;
 import org.hdiv.util.HDIVUtil;
 import org.hdiv.validator.EditableDataValidationResult;
+import org.springframework.web.util.HtmlUtils;
 
 /**
  * It validates client requests by consuming an object of type IState and validating all the entry data, besides
@@ -292,20 +293,18 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	 */
 	protected ValidatorHelperResult isTheSameAction(HttpServletRequest request, String target, IState state) {
 
-		if (state.getAction().equalsIgnoreCase(target)) {
+		String stateAction = state.getAction();
+
+		// Remove HTML escaped content from the action, for example, HTML entities like &Ntilde;
+		stateAction = HtmlUtils.htmlUnescape(stateAction);
+
+		if (stateAction.equalsIgnoreCase(target)) {
 			return ValidatorHelperResult.VALID;
 		}
 
 		if (target.endsWith("/")) {
-			String actionSlash = state.getAction() + "/";
+			String actionSlash = stateAction + "/";
 			if (actionSlash.equalsIgnoreCase(target)) {
-				return ValidatorHelperResult.VALID;
-			}
-		}
-
-		if (state.getAction().contains(" ")) {
-			String action = state.getAction().replace(" ", "%20");
-			if (action.equalsIgnoreCase(target)) {
 				return ValidatorHelperResult.VALID;
 			}
 		}

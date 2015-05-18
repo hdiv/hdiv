@@ -15,6 +15,8 @@
  */
 package org.hdiv.filter;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.Map;
 
 import javax.servlet.http.Cookie;
@@ -27,6 +29,7 @@ import org.hdiv.util.Constants;
 import org.hdiv.util.HDIVUtil;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.web.util.HtmlUtils;
 
 /**
  * Unit tests for the <code>org.hdiv.filter.ValidatorHelper</code> class.
@@ -521,6 +524,56 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 		assertTrue(pageState.startsWith("A-"));
 
 		request.addParameter(hdivParameter, pageState);
+
+		RequestWrapper requestWrapper = new RequestWrapper(request);
+		boolean result = helper.validate(requestWrapper).isValid();
+		assertTrue(result);
+	}
+
+	public void testEncodeFormAction() throws UnsupportedEncodingException {
+
+		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
+
+		String url = "/sample/TESTÑ/edit";
+
+		// Escaped value is passed by Spring MVC for example
+		String escaped = HtmlUtils.htmlEscape(url);
+		// Encoded value is what browser sends
+		String encoded = URLEncoder.encode(url, "utf-8");
+
+		dataComposer.startPage();
+		dataComposer.beginRequest("POST", escaped);
+		String stateId = dataComposer.endRequest();
+		dataComposer.endPage();
+
+		request.setRequestURI(encoded);
+
+		assertNotNull(stateId);
+
+		request.addParameter(hdivParameter, stateId);
+
+		RequestWrapper requestWrapper = new RequestWrapper(request);
+		boolean result = helper.validate(requestWrapper).isValid();
+		assertTrue(result);
+	}
+
+	public void testFormActionWithWhitespace() throws UnsupportedEncodingException {
+
+		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
+
+		String url = "/sample/TEST TEST/edit";
+		String urlRequest = "/sample/TEST%20TEST/edit";
+
+		dataComposer.startPage();
+		dataComposer.beginRequest("POST", url);
+		String stateId = dataComposer.endRequest();
+		dataComposer.endPage();
+
+		request.setRequestURI(urlRequest);
+
+		assertNotNull(stateId);
+
+		request.addParameter(hdivParameter, stateId);
 
 		RequestWrapper requestWrapper = new RequestWrapper(request);
 		boolean result = helper.validate(requestWrapper).isValid();
