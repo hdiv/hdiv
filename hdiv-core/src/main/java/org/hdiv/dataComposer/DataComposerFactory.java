@@ -15,7 +15,7 @@
  */
 package org.hdiv.dataComposer;
 
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -81,7 +81,7 @@ public class DataComposerFactory {
 	/**
 	 * HTTP headers to exclude page reuse in Ajax requests.
 	 */
-	protected List<String> excludePageReuseHeaders = Collections.singletonList("X-PJAX");
+	protected List<String> excludePageReuseHeaders = Arrays.asList("X-PJAX", "X-HDIV-EXCLUDE-PAGE-REUSE");
 
 	/**
 	 * Creates a new instance of DataComposer based on the defined strategy.

@@ -1096,6 +1096,11 @@ grails {
 			header is used. It's submited by all mayor JavaScript libraries.
 		</para>
 		<para>
+			If you want to avoid existing page reusing in a especific
+			request, you can sent 'X-HDIV-EXCLUDE-PAGE-REUSE' header in the
+			Ajax request and it will disable page reusing for that request.
+		</para>
+		<para>
 			It's possible to configure this option from HDIV config:
 		</para>
 		<programlisting language="xml">

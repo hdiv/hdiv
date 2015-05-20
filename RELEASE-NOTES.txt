@@ -7,6 +7,7 @@ Release 2.1.11
 
  * Fix issue in longLiving request validation.
  * Fix issue in concurrent Ajax requests with 'reuseExistingPageInAjaxRequest' option enabled.
+ * New 'X-HDIV-EXCLUDE-PAGE-REUSE' header to avoid page reusing in Ajax calls.
 
 Release 2.1.10
 ==================================
