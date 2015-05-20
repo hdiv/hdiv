@@ -246,8 +246,11 @@ public class ValidatorFilter extends OncePerRequestFilter {
 			FilterChain filterChain) throws IOException, ServletException {
 
 		this.validationHelper.startPage(requestWrapper);
-		filterChain.doFilter(requestWrapper, responseWrapper);
-		this.validationHelper.endPage(requestWrapper);
+		try {
+			filterChain.doFilter(requestWrapper, responseWrapper);
+		} finally {
+			this.validationHelper.endPage(requestWrapper);
+		}
 	}
 
 }
