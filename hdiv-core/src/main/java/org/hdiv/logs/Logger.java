@@ -198,7 +198,9 @@ public class Logger {
 		buffer.append(";");
 		buffer.append(parameterName);
 		buffer.append(";");
-		buffer.append(parameterValue);
+		if (parameterValue != null) {
+			buffer.append(parameterValue);
+		}
 		buffer.append(";");
 		if (originalParameterValue != null) {
 			buffer.append(originalParameterValue);
