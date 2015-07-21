@@ -39,7 +39,7 @@ public class RandomUidGenerator implements UidGenerator, ServletContextAware{
     private ServletContext servletContext;
 	
     /**
-     * Initializaiton method
+     * Initialization method
      */
     public void init() {
     	this.random = new Random(System.currentTimeMillis() + this.servletContext.hashCode());
