@@ -145,7 +145,6 @@ public class DataComposerMemoryTest extends AbstractHDIVTestCase {
 		dataComposer.endPage();
 
 		assertNotNull(stateId);
-		request.addParameter("_PREVIOUS_HDIV_STATE_", stateId);
 
 		// New request
 		IState state = this.stateUtil.restoreState(stateId);
@@ -162,6 +161,7 @@ public class DataComposerMemoryTest extends AbstractHDIVTestCase {
 		assertEquals(stateId, stateId2);
 		IState state2 = this.stateUtil.restoreState(stateId2);
 		assertEquals(state2.getParameter("parameter1").getConfidentialValue(), "1");
+		assertTrue(state2.getParameter("parameter1").existValue("2"));
 		assertTrue(state2.getParameter("parameter1").existValue("3"));
 	}
 

@@ -230,6 +230,7 @@ public class DataComposerMemory extends AbstractDataComposer {
 	 *            other IPage
 	 */
 	public void startPage(IPage existingPage) {
+		existingPage.markAsReused();
 		this.setPage(existingPage);
 	}
 

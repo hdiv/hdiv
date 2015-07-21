@@ -34,6 +34,7 @@ import org.hdiv.init.RequestInitializer;
 import org.hdiv.listener.InitListener;
 import org.hdiv.util.HDIVUtil;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.web.context.WebApplicationContext;
@@ -122,7 +123,18 @@ public abstract class AbstractHDIVTestCase extends TestCase {
 		onSetUp();
 	}
 
+	/**
+	 * Hook method for test initialization
+	 * 
+	 * @throws Exception
+	 */
 	protected abstract void onSetUp() throws Exception;
+
+	@Override
+	protected void tearDown() throws Exception {
+
+		((ConfigurableApplicationContext) this.applicationContext).close();
+	}
 
 	/**
 	 * Hook method for {@link HDIVConfig} customization
