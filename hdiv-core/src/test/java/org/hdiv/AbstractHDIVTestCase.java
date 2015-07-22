@@ -69,6 +69,10 @@ public abstract class AbstractHDIVTestCase extends TestCase {
 	 */
 	private HDIVConfig config;
 
+	private InitListener initListener;
+	private MockHttpServletRequest mockRequest;
+	private MockHttpServletResponse mockResponse;
+	
 	protected final void setUp() throws Exception {
 
 		String[] files = { 
@@ -83,6 +87,9 @@ public abstract class AbstractHDIVTestCase extends TestCase {
 		HttpSession httpSession = request.getSession();
 		ServletContext servletContext = httpSession.getServletContext();
 		HDIVUtil.setHttpServletRequest(request);
+		// Store objects for teardown cleanup
+		this.mockRequest = request;
+		this.mockResponse = (MockHttpServletResponse)response;
 
 		// Init Spring Context
 		XmlWebApplicationContext webApplicationContext = new XmlWebApplicationContext();
@@ -100,7 +107,7 @@ public abstract class AbstractHDIVTestCase extends TestCase {
 		// Configure for testing
 		this.postCreateHdivConfig(this.config);
 
-		InitListener initListener = new InitListener();
+		this.initListener = new InitListener();
 		// Initialize ServletContext
 		ServletContextEvent servletContextEvent = new ServletContextEvent(servletContext);
 		initListener.contextInitialized(servletContextEvent);
@@ -133,6 +140,16 @@ public abstract class AbstractHDIVTestCase extends TestCase {
 	@Override
 	protected void tearDown() throws Exception {
 
+		RequestInitializer requestInitializer = this.applicationContext.getBean(RequestInitializer.class);
+		requestInitializer.endRequest(mockRequest, mockResponse);
+		
+		// Destroy HttpSession
+		HttpSessionEvent httpSessionEvent = new HttpSessionEvent(mockRequest.getSession());
+		initListener.sessionDestroyed(httpSessionEvent);
+		// Destroy ServletContext
+		ServletContextEvent servletContextEvent = new ServletContextEvent(mockRequest.getSession().getServletContext());
+		initListener.contextDestroyed(servletContextEvent);
+		
 		((ConfigurableApplicationContext) this.applicationContext).close();
 	}
 
