@@ -207,6 +207,10 @@ public class Page implements IPage, Serializable {
 		this.isReused = true;
 	}
 
+	public boolean isReused() {
+		return this.isReused == null ? false : this.isReused;
+	}
+
 	/**
 	 * @return Returns number of states.
 	 */

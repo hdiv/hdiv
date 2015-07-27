@@ -117,8 +117,6 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 	 */
 	protected static final String MIN_SPRING_VERSION = "4.0.0.RELEASE";
 
-	protected static final boolean springVersionGrEqThan4 = SpringVersion.getVersion().compareTo(MIN_SPRING_VERSION) >= 0;
-
 	/* Framework present flags */
 
 	protected final boolean springMvcPresent = ClassUtils.isPresent(
@@ -192,6 +190,14 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 	protected RuntimeBeanReference userDataRef;
 
 	protected RuntimeBeanReference stateScopeManagerRef;
+
+	protected boolean springVersionGrEqThan4() {
+		String springVersion = SpringVersion.getVersion();
+		if (springVersion == null || springVersion.compareTo(MIN_SPRING_VERSION) >= 0) {
+			return true;
+		}
+		return false;
+	}
 
 	public BeanDefinition parse(Element element, ParserContext parserContext) {
 
@@ -507,7 +513,7 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		bean.getPropertyValues().addPropertyValue("linkUrlProcessor", this.linkUrlProcessorRef);
 		bean.getPropertyValues().addPropertyValue("formUrlProcessor", this.formUrlProcessorRef);
 
-		if (springSecurityPresent && springVersionGrEqThan4) {
+		if (springSecurityPresent && springVersionGrEqThan4()) {
 			// Spring Security is present and Spring >= 4.0.0
 			// Enable Spring security integration
 

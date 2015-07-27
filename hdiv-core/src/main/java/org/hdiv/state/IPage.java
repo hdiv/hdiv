@@ -103,6 +103,13 @@ public interface IPage {
 	public void markAsReused();
 
 	/**
+	 * Is this request reused in more than one request?
+	 * 
+	 * @return isReused
+	 */
+	public boolean isReused();
+
+	/**
 	 * Returns the unique id of flow.
 	 * 
 	 * @return the flow id

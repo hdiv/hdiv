@@ -42,7 +42,8 @@ public class DelegatingHdivWebSecurityConfiguration extends HdivWebSecurityConfi
 
 	@PostConstruct
 	public void performVersionChecks() {
-		if (SpringVersion.getVersion().compareTo(MIN_SPRING_VERSION) < 0) {
+		String springVersion = SpringVersion.getVersion();
+		if (springVersion != null && springVersion.compareTo(MIN_SPRING_VERSION) < 0) {
 			// Spring version is lower than '4.0.0.RELEASE'
 			throw new HDIVException("HDIV JavaConfig feature require Spring version equal or greater than "
 					+ MIN_SPRING_VERSION + ". Use XML configuration instead of JavaConfig or update Spring version.");
