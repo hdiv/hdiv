@@ -113,6 +113,18 @@ public class LinkUrlProcessorTest extends AbstractHDIVTestCase {
 		assertTrue(result.equals("../testAction.do"));
 	}
 
+	public void testProcessAbsoluteExternalUrlToAnotherApp() {
+
+		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
+		request.setContextPath("/path");
+
+		String url = "/path-app/index.html";
+
+		String result = this.linkUrlProcessor.processUrl(request, url);
+
+		assertEquals(url, result);
+	}
+
 	public void testProcessAbsoluteExternalUrlWithContextPath() {
 
 		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
@@ -122,7 +134,7 @@ public class LinkUrlProcessorTest extends AbstractHDIVTestCase {
 
 		String result = this.linkUrlProcessor.processUrl(request, url);
 
-		assertEquals("http://www.google.com", result);
+		assertEquals(url, result);
 	}
 
 	public void testProcessAbsoluteExternalUrl() {
@@ -133,7 +145,7 @@ public class LinkUrlProcessorTest extends AbstractHDIVTestCase {
 
 		String result = this.linkUrlProcessor.processUrl(request, url);
 
-		assertEquals("http://www.google.com", result);
+		assertEquals(url, result);
 	}
 
 	public void testProcessAbsoluteInternalUrlWithContextPath() {

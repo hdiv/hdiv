@@ -97,10 +97,6 @@ public abstract class AbstractUrlProcessor {
 			url = url.replaceFirst(serverUrl, "");
 		}
 
-		// Detect if the url points to current app
-		boolean internal = this.isInternalUrl(request, url, urlData);
-		urlData.setInternal(internal);
-
 		// Remove jsessionid
 		url = this.stripSession(url, urlData);
 
@@ -108,15 +104,16 @@ public abstract class AbstractUrlProcessor {
 		String contextPathRelativeUrl = this.getContextPathRelative(request, url);
 		urlData.setContextPathRelativeUrl(contextPathRelativeUrl);
 
+		// Detect if the url points to current app
+		boolean internal = this.isInternalUrl(request, contextPathRelativeUrl, urlData);
+		urlData.setInternal(internal);
+
 		// Calculate url without the context path for later processing
 		String contextPath = request.getContextPath();
-		if (contextPathRelativeUrl.startsWith(contextPath)) {
+		if (internal) {
 			// Remove contextPath
 			String urlWithoutContextPath = contextPathRelativeUrl.substring(contextPath.length());
 			urlData.setUrlWithoutContextPath(urlWithoutContextPath);
-		} else {
-			// If contextPath is not present, the relative url is out of application
-			urlData.setInternal(false);
 		}
 
 		return urlData;
