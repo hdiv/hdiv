@@ -51,8 +51,9 @@ public abstract class AbstractStateScope implements StateScope {
 	}
 
 	public boolean isScopeState(String stateId) {
-
-		return stateId.startsWith(this.getScopePrefix());
+		
+		int stateIndex = stateId.indexOf("-");
+		return stateIndex > 0 && stateId.substring(0,stateIndex).equals(this.getScopePrefix());
 	}
 
 	protected abstract String getScopePrefix();
