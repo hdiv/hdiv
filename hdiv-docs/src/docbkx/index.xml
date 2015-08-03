@@ -55,17 +55,9 @@
 			</author>
 		</authorgroup>
 
-		<copyright>
-			<year>2005-2015</year>
-		</copyright>
-
 		<legalnotice>
-			<para>Copies of this document may be made for your own use and for
-				distribution to others, provided that you do not charge any fee for
-				such
-				copies and further provided that each copy contains this
-				Copyright
-				Notice, whether distributed in print or electronically.
+			<para>			
+			The HDIV Framework is released under version 2.0 of the <link xl:href="http://www.apache.org/licenses/LICENSE-2.0">Apache License</link>.
 			</para>
 		</legalnotice>
 	</info>
