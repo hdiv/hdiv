@@ -18,7 +18,9 @@ package org.hdiv.tiles;
 import java.io.IOException;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.Map;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -32,7 +34,10 @@ import org.apache.struts.action.InvalidCancelException;
 import org.apache.struts.config.ForwardConfig;
 import org.apache.struts.taglib.TagUtils;
 import org.apache.struts.tiles.TilesRequestProcessor;
+import org.apache.struts.util.RequestUtils;
+import org.hdiv.urlProcessor.LinkUrlProcessor;
 import org.hdiv.util.Constants;
+import org.hdiv.util.HDIVUtil;
 
 /**
  * <p><strong>RequestProcessor</strong> contains the processing logic that
@@ -184,15 +189,14 @@ public class HDIVTilesRequestProcessor extends TilesRequestProcessor {
 	 *         parameters.
 	 */
 	public ActionMessages getEditableParametersErrors(HttpServletRequest request) {
-
-		Hashtable unauthorizedEditableParameters = (Hashtable) request
-				.getAttribute(EDITABLE_PARAMETER_ERROR);
+		
+	    	@SuppressWarnings("unchecked")
+		Map<String, String[]> unauthorizedEditableParameters = 
+			(Map<String, String[]>) request.getAttribute(EDITABLE_PARAMETER_ERROR);
 
 		ActionMessages errors = null;
 		if ((unauthorizedEditableParameters != null) && (unauthorizedEditableParameters.size() > 0)) {
-
 			errors = new ActionMessages();
-
 			for (Iterator it = unauthorizedEditableParameters.keySet().iterator(); it.hasNext();) {
 				
 				String currentParameter = (String) it.next();
@@ -241,4 +245,77 @@ public class HDIVTilesRequestProcessor extends TilesRequestProcessor {
 		return printedValue.toString();
 	}	
 	
+	/**
+	 * Overloaded method from Struts' RequestProcessor.
+	 * Forward or redirect to the specified destination by the specified mechanism.
+	 * This method catches the Struts' actionForward call. It checks if the
+	 * actionForward is done on a Tiles definition name. If true, process the
+	 * definition and insert it. If false, call the original parent's method.
+	 * @param request The servlet request we are processing.
+	 * @param response The servlet response we are creating.
+	 * @param forward The ActionForward controlling where we go next.
+	 *
+	 * @throws IOException if an input/output error occurs.
+	 * @throws ServletException if a servlet exception occurs.
+	  * @since HDIV 2.1.12
+	 */
+	protected void processForwardConfig(HttpServletRequest request, HttpServletResponse response, ForwardConfig forward)
+	        throws IOException, ServletException {
+
+	        // Required by struts contract
+	        if (forward == null) {
+	            return;
+	        }
+
+	        String forwardPath = forward.getPath();
+	        if (log.isDebugEnabled()) {
+	            log.debug("processForwardConfig(" + forwardPath + ")");
+	        }
+
+	        // Try to process the definition.
+	        if (processTilesDefinition(forwardPath, request, response)) {
+	            if (log.isDebugEnabled()) {
+	                log.debug("  '" + forwardPath + "' - processed as definition");
+	            }
+	            return;
+	        }
+
+	        if (log.isDebugEnabled()) {
+	            log.debug("  '" + forwardPath + "' - processed as uri");
+	        }
+
+	        // forward doesn't contain a definition, let parent do processing
+	        // If the forward can be unaliased into an action, then use the path of the action
+	        String actionIdPath = RequestUtils.actionIdURL(forward, request, servlet);
+	        if (actionIdPath != null) {
+	            forwardPath = actionIdPath;
+	            ForwardConfig actionIdForward = new ForwardConfig(forward);
+	            actionIdForward.setPath(actionIdPath);
+	            forward = actionIdForward;
+	        }
+
+	        // paths not starting with / should be passed through without any processing (i.e. they're absolute)
+	        String uri = forwardPath.startsWith("/") ? RequestUtils.forwardURL(request, forward, null) : forwardPath;
+
+	        if (forward.getRedirect()) {
+	            // only prepend context path for relative uri
+	            if (uri.startsWith("/")) {
+	                uri = request.getContextPath() + uri;
+	            }
+
+	            // Call to HDIV LinkUrlProcessor
+	            LinkUrlProcessor linkUrlProcessor = HDIVUtil.getLinkUrlProcessor(request.getSession().getServletContext());
+	            uri = linkUrlProcessor.processUrl(request, uri);
+	            
+	            response.sendRedirect(response.encodeRedirectURL(uri));
+	        } else {
+	            RequestDispatcher rd = getServletContext().getRequestDispatcher(uri);
+	            if (rd == null) {
+	                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, getInternal().getMessage("requestDispatcher", uri));
+	                return;
+	            }
+
+	            rd.forward(request, response);
+	        }
+	}
 }
