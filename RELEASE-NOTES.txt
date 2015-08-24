@@ -4,8 +4,8 @@ http://www.hdiv.org
 
 Release 2.1.12
 ==================================
- * Package org.hdiv.tiles
-  - Fix issue in Struts1: HDIVTilesRequestProcessor class
+ * Fix issue in Struts1: HDIVTilesRequestProcessor class
+ * Fix issue in Spring version check.
 
 Release 2.1.11
 ==================================
