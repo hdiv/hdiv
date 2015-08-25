@@ -18,19 +18,33 @@ package org.hdiv.components;
 import java.io.IOException;
 
 import javax.faces.component.html.HtmlOutputLink;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.servlet.ServletContext;
 
 import org.hdiv.components.support.OutputLinkComponentProcessor;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 /**
  * HtmlOutputLink component extension
  * 
  * @author Gotzon Illarramendi
- * 
  */
 public class HtmlOutputLinkExtension extends HtmlOutputLink {
 
-	private OutputLinkComponentProcessor componentProcessor = new OutputLinkComponentProcessor();
+	private OutputLinkComponentProcessor componentProcessor;
+
+	protected void init(FacesContext context) {
+
+		if (this.componentProcessor == null) {
+			ExternalContext externalContext = context.getExternalContext();
+			ServletContext servletContext = (ServletContext) externalContext.getContext();
+			WebApplicationContext wac = WebApplicationContextUtils.getRequiredWebApplicationContext(servletContext);
+
+			this.componentProcessor = wac.getBean(OutputLinkComponentProcessor.class);
+		}
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -38,6 +52,9 @@ public class HtmlOutputLinkExtension extends HtmlOutputLink {
 	 * @see javax.faces.component.UIComponent#encodeBegin(javax.faces.context. FacesContext)
 	 */
 	public void encodeBegin(FacesContext context) throws IOException {
+
+		// Init dependencies
+		this.init(context);
 
 		this.componentProcessor.processOutputLink(context, this);
 

@@ -37,22 +37,19 @@ public class OutputLinkComponentProcessor extends AbstractComponentProcessor {
 
 	public void processOutputLink(FacesContext context, HtmlOutputLink component) {
 
-		// Init dependencies
-		super.init(context);
-
 		try {
 			ExternalContext externalContext = context.getExternalContext();
 			HttpServletRequest request = (HttpServletRequest) externalContext.getRequest();
 
 			String url = component.getValue().toString();
 
-			UrlData urlData = this.urlProcessor.createUrlData(url, "GET", request);
-			if (this.urlProcessor.isHdivStateNecessary(urlData)) {
+			UrlData urlData = this.linkUrlProcessor.createUrlData(url, "GET", request);
+			if (this.linkUrlProcessor.isHdivStateNecessary(urlData)) {
 
 				boolean hasUIParams = UtilsJsf.hasUIParameterChild(component);
 
 				// if url hasn't got parameters, we do not have to include HDIV's state
-				if (!this.hdivConfig.isValidationInUrlsWithoutParamsActivated() && !urlData.containsParams()
+				if (!this.config.isValidationInUrlsWithoutParamsActivated() && !urlData.containsParams()
 						&& !hasUIParams) {
 
 					// Do nothing
@@ -79,7 +76,7 @@ public class OutputLinkComponentProcessor extends AbstractComponentProcessor {
 
 					String stateParam = dataComposer.endRequest();
 
-					url = this.urlProcessor.getProcessedUrl(urlData);
+					url = this.linkUrlProcessor.getProcessedUrl(urlData);
 
 					component.setValue(url);
 
@@ -97,12 +94,12 @@ public class OutputLinkComponentProcessor extends AbstractComponentProcessor {
 					String stateParam = dataComposer.endRequest();
 
 					// Add state directly in the outputLink's value
-					url = this.urlProcessor.getProcessedUrlWithHdivState(request, urlData, stateParam);
+					url = this.linkUrlProcessor.getProcessedUrlWithHdivState(request, urlData, stateParam);
 					component.setValue(url);
 				}
 			}
 		} catch (FacesException e) {
-			log.error("Error in HtmlOutputLinkExtension: " + e.getMessage());
+			log.error("Error in OutputLinkComponentProcessor.processOutputLink: " + e.getMessage());
 			throw e;
 		}
 

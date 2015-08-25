@@ -25,6 +25,8 @@ import org.hdiv.cipher.CipherHTTP;
 import org.hdiv.cipher.ICipherHTTP;
 import org.hdiv.cipher.IKeyFactory;
 import org.hdiv.cipher.KeyFactory;
+import org.hdiv.components.support.OutcomeTargetComponentProcessor;
+import org.hdiv.components.support.OutputLinkComponentProcessor;
 import org.hdiv.config.HDIVConfig;
 import org.hdiv.config.StartPage;
 import org.hdiv.config.Strategy;
@@ -260,6 +262,9 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 			this.createFacesEventListener(element, source, parserContext);
 
 			this.createRedirectHelper(element, source, parserContext);
+
+			this.createOutcomeTargetComponentProcessor(element, source, parserContext);
+			this.createOutputLinkComponentProcessor(element, source, parserContext);
 
 		} else {
 			this.createValidatorHelper(element, source, parserContext);
@@ -653,6 +658,8 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		return new RuntimeBeanReference(EditableValidationsBeanDefinitionParser.EDITABLE_VALIDATION_PROVIDER_BEAN_NAME);
 	}
 
+	// JSF Beans
+
 	protected RuntimeBeanReference createFacesEventListener(Element element, Object source, ParserContext parserContext) {
 
 		// Register ComponentValidator objects
@@ -674,12 +681,8 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		bean.getPropertyValues().addPropertyValue("uiCommandValidator", uiCommandValidatorRef);
 		bean.getPropertyValues().addPropertyValue("editableValidator", editableValidatorRef);
 
-		String name = parserContext.getReaderContext().generateBeanName(bean);
-		parserContext.getRegistry().registerBeanDefinition(name, bean);
-		return new RuntimeBeanReference(name);
+		return this.registerBean(bean, HDIVFacesEventListener.class.getName(), parserContext);
 	}
-
-	// JSF Beans
 
 	protected RuntimeBeanReference createJsfValidatorHelper(Element element, Object source, ParserContext parserContext) {
 
@@ -705,9 +708,8 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		bean.setSource(source);
 		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
 		bean.getPropertyValues().addPropertyValue("hdivConfig", this.configRef);
-		String name = parserContext.getReaderContext().generateBeanName(bean);
-		parserContext.getRegistry().registerBeanDefinition(name, bean);
-		return new RuntimeBeanReference(name);
+
+		return this.registerBean(bean, RequestParameterValidator.class.getName(), parserContext);
 	}
 
 	protected RuntimeBeanReference createEditableValidator(Element element, Object source, ParserContext parserContext) {
@@ -715,9 +717,8 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		bean.setSource(source);
 		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
 		bean.getPropertyValues().addPropertyValue("hdivConfig", this.configRef);
-		String name = parserContext.getReaderContext().generateBeanName(bean);
-		parserContext.getRegistry().registerBeanDefinition(name, bean);
-		return new RuntimeBeanReference(name);
+
+		return this.registerBean(bean, EditableValidator.class.getName(), parserContext);
 	}
 
 	protected RuntimeBeanReference createRedirectHelper(Element element, Object source, ParserContext parserContext) {
@@ -725,11 +726,45 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		bean.setSource(source);
 		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
 		bean.getPropertyValues().addPropertyValue("linkUrlProcessor", this.linkUrlProcessorRef);
-		String name = parserContext.getReaderContext().generateBeanName(bean);
-		parserContext.getRegistry().registerBeanDefinition(name, bean);
-		return new RuntimeBeanReference(name);
+
+		return this.registerBean(bean, RedirectHelper.class.getName(), parserContext);
 	}
 
+	protected RuntimeBeanReference createOutcomeTargetComponentProcessor(Element element, Object source,
+			ParserContext parserContext) {
+		RootBeanDefinition bean = new RootBeanDefinition(OutcomeTargetComponentProcessor.class);
+		bean.setSource(source);
+		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
+		bean.getPropertyValues().addPropertyValue("config", this.configRef);
+		bean.getPropertyValues().addPropertyValue("linkUrlProcessor", this.linkUrlProcessorRef);
+
+		return this.registerBean(bean, OutcomeTargetComponentProcessor.class.getName(), parserContext);
+	}
+
+	protected RuntimeBeanReference createOutputLinkComponentProcessor(Element element, Object source,
+			ParserContext parserContext) {
+		RootBeanDefinition bean = new RootBeanDefinition(OutputLinkComponentProcessor.class);
+		bean.setSource(source);
+		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
+		bean.getPropertyValues().addPropertyValue("config", this.configRef);
+		bean.getPropertyValues().addPropertyValue("linkUrlProcessor", this.linkUrlProcessorRef);
+
+		return this.registerBean(bean, OutputLinkComponentProcessor.class.getName(), parserContext);
+	}
+
+	/**
+	 * Utility method to register a bean of type String.
+	 * 
+	 * @param name
+	 *            bean name
+	 * @param value
+	 *            String value
+	 * @param source
+	 *            source object
+	 * @param parserContext
+	 *            context to obtain the registry
+	 * @return bean reference
+	 */
 	protected RuntimeBeanReference createStringBean(String name, String value, Object source,
 			ParserContext parserContext) {
 		RootBeanDefinition bean = new RootBeanDefinition(java.lang.String.class);

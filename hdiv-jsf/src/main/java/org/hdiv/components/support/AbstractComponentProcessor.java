@@ -20,37 +20,17 @@ import java.util.List;
 
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIParameter;
-import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
 
 import org.hdiv.config.HDIVConfig;
 import org.hdiv.urlProcessor.LinkUrlProcessor;
 import org.hdiv.util.Constants;
-import org.hdiv.util.HDIVUtil;
 
 public abstract class AbstractComponentProcessor {
 
-	protected HDIVConfig hdivConfig;
+	protected HDIVConfig config;
 
-	protected LinkUrlProcessor urlProcessor;
-
-	protected void init(FacesContext context) {
-
-		if (this.hdivConfig == null) {
-			ExternalContext externalContext = context.getExternalContext();
-			HttpServletRequest request = (HttpServletRequest) externalContext.getRequest();
-			ServletContext servletContext = request.getSession().getServletContext();
-
-			this.hdivConfig = HDIVUtil.getHDIVConfig(servletContext);
-
-			if (this.urlProcessor == null) {
-				this.urlProcessor = HDIVUtil.getLinkUrlProcessor(servletContext);
-			}
-		}
-
-	}
+	protected LinkUrlProcessor linkUrlProcessor;
 
 	public void removeHdivStateUIParameter(FacesContext context, UIComponent component) {
 
@@ -74,6 +54,22 @@ public abstract class AbstractComponentProcessor {
 		for (Integer index : toRemoveList) {
 			component.getChildren().remove(index.intValue());
 		}
+	}
+
+	/**
+	 * @param config
+	 *            the config to set
+	 */
+	public void setConfig(HDIVConfig config) {
+		this.config = config;
+	}
+
+	/**
+	 * @param linkUrlProcessor
+	 *            the linkUrlProcessor to set
+	 */
+	public void setLinkUrlProcessor(LinkUrlProcessor linkUrlProcessor) {
+		this.linkUrlProcessor = linkUrlProcessor;
 	}
 
 }
