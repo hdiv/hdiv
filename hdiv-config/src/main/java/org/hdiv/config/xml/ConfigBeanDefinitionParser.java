@@ -131,6 +131,9 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 	protected final boolean jsfPresent = ClassUtils.isPresent("javax.faces.webapp.FacesServlet",
 			ConfigBeanDefinitionParser.class.getClassLoader());
 
+	protected final boolean jsf1Present = !ClassUtils.isPresent("javax.faces.component.UIOutcomeTarget",
+			ConfigBeanDefinitionParser.class.getClassLoader());
+
 	protected final boolean thymeleafPresent = ClassUtils.isPresent("org.thymeleaf.spring3.SpringTemplateEngine",
 			ConfigBeanDefinitionParser.class.getClassLoader())
 			|| ClassUtils.isPresent("org.thymeleaf.spring4.SpringTemplateEngine",
@@ -263,7 +266,9 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 
 			this.createRedirectHelper(element, source, parserContext);
 
-			this.createOutcomeTargetComponentProcessor(element, source, parserContext);
+			if (!jsf1Present) {
+				this.createOutcomeTargetComponentProcessor(element, source, parserContext);
+			}
 			this.createOutputLinkComponentProcessor(element, source, parserContext);
 
 		} else {
