@@ -58,14 +58,15 @@ public class DefaultValidatorErrorHandler implements ValidatorErrorHandler {
 	 *            {@link HttpServletRequest} instance
 	 * @param response
 	 *            {@link HttpServletResponse} instance
-	 * @param errorCode
-	 *            Error code from {@link HDIVErrorCodes}
+	 * @param error
+	 *            Validation error
+	 * @since 2.1.13
 	 */
-	public void handleValidatorError(HttpServletRequest request, HttpServletResponse response, String errorCode) {
+	public void handleValidatorError(HttpServletRequest request, HttpServletResponse response, ValidatorError error) {
 
 		HttpSession session = request.getSession(false);
 
-		if (HDIVErrorCodes.PAGE_ID_INCORRECT.equals(errorCode)) {
+		if (HDIVErrorCodes.PAGE_ID_INCORRECT.equals(error.getType())) {
 			// Page not found in session
 
 			if (session == null || session.isNew()) {

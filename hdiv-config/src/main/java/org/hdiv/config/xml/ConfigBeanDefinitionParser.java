@@ -440,7 +440,6 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		bean.setSource(source);
 		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
 		bean.setInitMethodName("init");
-		bean.getPropertyValues().addPropertyValue("logger", this.loggerRef);
 		bean.getPropertyValues().addPropertyValue("stateUtil", this.stateUtilRef);
 		bean.getPropertyValues().addPropertyValue("hdivConfig", this.configRef);
 		bean.getPropertyValues().addPropertyValue("session", this.sessionRef);

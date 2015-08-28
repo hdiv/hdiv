@@ -315,7 +315,6 @@ public abstract class HdivWebSecurityConfigurationSupport {
 	public IValidationHelper requestValidationHelper() {
 
 		ValidatorHelperRequest validatorHelperRequest = new ValidatorHelperRequest();
-		validatorHelperRequest.setLogger(securityLogger());
 		validatorHelperRequest.setStateUtil(stateUtil());
 		validatorHelperRequest.setHdivConfig(hdivConfig());
 		validatorHelperRequest.setSession(securitySession());

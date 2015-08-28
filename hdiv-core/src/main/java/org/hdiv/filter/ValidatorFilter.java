@@ -16,6 +16,7 @@
 package org.hdiv.filter;
 
 import java.io.IOException;
+import java.util.Map;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletContext;
@@ -30,6 +31,8 @@ import org.hdiv.config.multipart.IMultipartConfig;
 import org.hdiv.config.multipart.exception.HdivMultipartException;
 import org.hdiv.exception.HDIVException;
 import org.hdiv.init.RequestInitializer;
+import org.hdiv.logs.IUserData;
+import org.hdiv.logs.Logger;
 import org.hdiv.util.Constants;
 import org.hdiv.util.HDIVErrorCodes;
 import org.springframework.web.context.WebApplicationContext;
@@ -67,6 +70,11 @@ public class ValidatorFilter extends OncePerRequestFilter {
 	protected IMultipartConfig multipartConfig;
 
 	/**
+	 * Logger to print the possible attacks detected by HDIV.
+	 */
+	protected Logger logger;
+
+	/**
 	 * Validation error handler.
 	 */
 	protected ValidatorErrorHandler errorHandler;
@@ -75,6 +83,11 @@ public class ValidatorFilter extends OncePerRequestFilter {
 	 * Request data and wrappers initializer.
 	 */
 	protected RequestInitializer requestInitializer;
+
+	/**
+	 * Obtains user data from the request
+	 */
+	protected IUserData userData;
 
 	/**
 	 * Creates a new ValidatorFilter object.
@@ -106,6 +119,7 @@ public class ValidatorFilter extends OncePerRequestFilter {
 				this.multipartConfig = null;
 			}
 
+			this.logger = context.getBean(Logger.class);
 			this.errorHandler = context.getBean(ValidatorErrorHandler.class);
 			this.requestInitializer = context.getBean(RequestInitializer.class);
 		}
@@ -177,13 +191,15 @@ public class ValidatorFilter extends OncePerRequestFilter {
 				request.setAttribute(Constants.VALIDATOR_HELPER_RESULT_NAME, result);
 			}
 
+			// Log the errors
+			this.logValidationErrors(multipartProcessedRequest, result);
+
 			if (legal || this.hdivConfig.isDebugMode()) {
 				processRequest(multipartProcessedRequest, responseWrapper, filterChain);
 			} else {
 
 				// Call to ValidatorErrorHandler
-				this.errorHandler.handleValidatorError(multipartProcessedRequest, responseWrapper,
-						result.getErrorCode());
+				this.errorHandler.handleValidatorError(multipartProcessedRequest, responseWrapper, result.getError());
 			}
 
 		} catch (HDIVException e) {
@@ -202,8 +218,8 @@ public class ValidatorFilter extends OncePerRequestFilter {
 			}
 			// Show error page
 			if (!this.hdivConfig.isDebugMode()) {
-				this.errorHandler.handleValidatorError(multipartProcessedRequest, responseWrapper,
-						HDIVErrorCodes.INTERNAL_ERROR);
+				this.errorHandler.handleValidatorError(multipartProcessedRequest, responseWrapper, new ValidatorError(
+						HDIVErrorCodes.INTERNAL_ERROR));
 			}
 		} finally {
 
@@ -250,6 +266,77 @@ public class ValidatorFilter extends OncePerRequestFilter {
 			filterChain.doFilter(requestWrapper, responseWrapper);
 		} finally {
 			this.validationHelper.endPage(requestWrapper);
+		}
+	}
+
+	/**
+	 * Complete {@link ValidatorError} containing data including user related info.
+	 * 
+	 * @param request
+	 *            request object
+	 * @param error
+	 *            validation error
+	 */
+	protected void completeErrorData(HttpServletRequest request, ValidatorError error) {
+
+		String localIp = this.getUserLocalIP(request);
+		error.setLocalIp(localIp);
+		String remoteIp = request.getRemoteAddr();
+		error.setRemoteIp(remoteIp);
+		String userName = this.userData.getUsername(request);
+		error.setUserName(userName);
+
+		// Include context path in the target
+		String target = error.getTarget();
+		String contextPath = request.getContextPath();
+		if (!target.startsWith(contextPath)) {
+			target = request.getContextPath() + target;
+		}
+		error.setTarget(target);
+	}
+
+	/**
+	 * Obtain user local IP.
+	 * 
+	 * @param request
+	 *            the HttpServletRequest of the request
+	 * @return Returns the remote user IP address if behind the proxy.
+	 */
+	protected String getUserLocalIP(HttpServletRequest request) {
+
+		String ipAddress = null;
+
+		if (request.getHeader("X-Forwarded-For") == null) {
+			ipAddress = request.getRemoteAddr();
+		} else {
+			ipAddress = request.getHeader("X-Forwarded-For");
+		}
+		return ipAddress;
+	}
+	
+	/**
+	 * Log the validation errors
+	 * 
+	 * @param request
+	 *            request object
+	 * @param result
+	 *            validation result
+	 */
+	protected void logValidationErrors(HttpServletRequest request, ValidatorHelperResult result) {
+
+		if (!result.isValid()) {
+			// Log the error
+			this.logger.log(result.getError());
+		}
+
+		// Log editable validation errors
+		@SuppressWarnings("unchecked")
+		Map<String, ValidatorError> validationErrorData = (Map<String, ValidatorError>) request
+				.getAttribute(Constants.EDITABLE_PARAMETER_ERROR);
+		if (validationErrorData != null && !validationErrorData.isEmpty()) {
+			for (ValidatorError error : validationErrorData.values()) {
+				this.logger.log(error);
+			}
 		}
 	}
 

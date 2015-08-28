@@ -15,7 +15,6 @@
  */
 package org.hdiv.filter;
 
-import org.hdiv.util.HDIVErrorCodes;
 
 /**
  * Result of the invocation of the validation of a request with {@link IValidationHelper}
@@ -46,17 +45,17 @@ public class ValidatorHelperResult {
 	private Object value;
 
 	/**
-	 * Validation error code from {@link HDIVErrorCodes}
+	 * Validation error data
 	 */
-	private String errorCode;
+	private ValidatorError error;
 
 	public ValidatorHelperResult(boolean valid) {
 		this.valid = valid;
 	}
 
-	public ValidatorHelperResult(String errorCode) {
+	public ValidatorHelperResult(ValidatorError error) {
 		this.valid = false;
-		this.errorCode = errorCode;
+		this.error = error;
 	}
 
 	public ValidatorHelperResult(boolean valid, Object value) {
@@ -64,17 +63,17 @@ public class ValidatorHelperResult {
 		this.value = value;
 	}
 
-	public ValidatorHelperResult(boolean valid, String errorCode) {
+	public ValidatorHelperResult(boolean valid, ValidatorError error) {
 		this.valid = valid;
-		this.errorCode = errorCode;
+		this.error = error;
 	}
 
 	public boolean isValid() {
 		return valid;
 	}
 
-	public String getErrorCode() {
-		return errorCode;
+	public ValidatorError getError() {
+		return error;
 	}
 
 	public Object getValue() {
@@ -84,8 +83,8 @@ public class ValidatorHelperResult {
 	public String toString() {
 		StringBuffer b = new StringBuffer();
 		b.append("Valid: ").append(this.valid);
-		if (this.errorCode != null) {
-			b.append(" Errorcode: ").append(this.errorCode);
+		if (this.error != null) {
+			b.append(" Errorcode: ").append(this.error.toString());
 		}
 		if (this.value != null) {
 			b.append(" Value:").append(this.value);

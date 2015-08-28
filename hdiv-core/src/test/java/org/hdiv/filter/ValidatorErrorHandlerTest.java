@@ -38,7 +38,8 @@ public class ValidatorErrorHandlerTest extends AbstractHDIVTestCase {
 		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
 		MockHttpServletResponse response = new MockHttpServletResponse();
 
-		this.validatorErrorHandler.handleValidatorError(request, response, HDIVErrorCodes.PAGE_ID_INCORRECT);
+		ValidatorError error = new ValidatorError(HDIVErrorCodes.PAGE_ID_INCORRECT);
+		this.validatorErrorHandler.handleValidatorError(request, response, error);
 
 		String redirectUrl = response.getRedirectedUrl();
 
@@ -52,7 +53,8 @@ public class ValidatorErrorHandlerTest extends AbstractHDIVTestCase {
 		session.setNew(false); // mark as not new sesssion
 		MockHttpServletResponse response = new MockHttpServletResponse();
 
-		this.validatorErrorHandler.handleValidatorError(request, response, HDIVErrorCodes.REQUIRED_PARAMETERS);
+		ValidatorError error = new ValidatorError(HDIVErrorCodes.REQUIRED_PARAMETERS);
+		this.validatorErrorHandler.handleValidatorError(request, response, error);
 
 		String redirectUrl = response.getRedirectedUrl();
 
@@ -67,7 +69,8 @@ public class ValidatorErrorHandlerTest extends AbstractHDIVTestCase {
 		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
 		MockHttpServletResponse response = new MockHttpServletResponse();
 
-		this.validatorErrorHandler.handleValidatorError(request, response, HDIVErrorCodes.REQUIRED_PARAMETERS);
+		ValidatorError error = new ValidatorError(HDIVErrorCodes.REQUIRED_PARAMETERS);
+		this.validatorErrorHandler.handleValidatorError(request, response, error);
 
 		// Default Error page is generated, so no redirect URL exist
 		assertNull(response.getRedirectedUrl());

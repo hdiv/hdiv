@@ -19,6 +19,7 @@ import org.apache.log4j.AppenderSkeleton;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.spi.LoggingEvent;
 import org.hdiv.AbstractHDIVTestCase;
+import org.hdiv.filter.ValidatorError;
 
 public class LoggerTest extends AbstractHDIVTestCase {
 
@@ -35,7 +36,8 @@ public class LoggerTest extends AbstractHDIVTestCase {
 
 	public void testLogSimple() {
 
-		logger.log("type", "target", "parameterName", "parameterValue");
+		ValidatorError error = new ValidatorError("type", "target", "parameterName", "parameterValue");
+		logger.log(error);
 
 		String msg = mockAppender.getMessage();
 		assertEquals("type;target;parameterName;parameterValue;;127.0.0.1;127.0.0.1;anonymous;", msg);
@@ -44,7 +46,9 @@ public class LoggerTest extends AbstractHDIVTestCase {
 
 	public void testLog() {
 
-		logger.log("type", "target", "parameterName", "parameterValue", "originalValue", "ruleName");
+		ValidatorError error = new ValidatorError("type", "target", "parameterName", "parameterValue", "originalValue",
+				"ruleName");
+		logger.log(error);
 
 		String msg = mockAppender.getMessage();
 		assertEquals("type;target;parameterName;parameterValue;originalValue;127.0.0.1;127.0.0.1;anonymous;ruleName",
