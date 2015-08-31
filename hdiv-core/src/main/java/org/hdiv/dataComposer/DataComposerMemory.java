@@ -207,7 +207,7 @@ public class DataComposerMemory extends AbstractDataComposer {
 		boolean firstState = page.getStatesCount() == 1;
 		if (firstState) {
 
-			super.session.addPage(page.getId(), page);
+			super.session.addPartialPage(page.getId(), page);
 		}
 
 		String id = this.getPage().getId() + DASH + state.getId() + DASH + this.getStateSuffix(state.getMethod());

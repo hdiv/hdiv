@@ -87,7 +87,7 @@ public class DataComposerHash extends DataComposerMemory {
 		boolean firstState = page.getStatesCount() == 1;
 		if (firstState) {
 
-			super.session.addPage(page.getId(), page);
+			super.session.addPartialPage(page.getId(), page);
 		}
 
 		return (id != null) ? id : stateWithSuffix;

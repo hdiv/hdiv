@@ -124,8 +124,10 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 	 *            Page identifier
 	 * @param page
 	 *            Page with all the information about states
+	 * @param isPartial
+	 * 			  If is a partial page
 	 */
-	public void addPage(int pageId, IPage page) {
+	protected void addPage(int pageId, IPage page, boolean isPartial) {
 
 		HttpSession session = this.getHttpSession();
 
@@ -148,10 +150,34 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 		this.saveStateCache(session, cache);
 
 		// we add a new page in session
-		this.addPageToSession(session, page);
+		this.addPageToSession(session, page, isPartial);
 
 	}
+	
+	/**
+	 * It adds a new page to the user session. 
+	 * 
+	 * @param pageId
+	 *            Page identifier
+	 * @param page
+	 *            Page with all the information about states
+	 */
+	public void addPage(int pageId, IPage page) {
+		this.addPage(pageId, page, false);
+	}
 
+	/**
+	 * It adds a partial page to the user session.
+	 * 
+	 * @param pageId
+	 *            Page identifier
+	 * @param page
+	 *            Page with all the information about states
+	 */
+	public void addPartialPage(int pageId, IPage page) {
+		this.addPage(pageId, page, true);
+	}
+	
 	/**
 	 * Deletes from session the data related to the finished flows. This means a memory consumption optimization because
 	 * useless objects of type <code>IPage</code> are deleted.
@@ -256,7 +282,7 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 	 *            IPage instance
 	 * @since HDIV 2.1.5
 	 */
-	protected void addPageToSession(HttpSession session, IPage page) {
+	protected void addPageToSession(HttpSession session, IPage page, boolean isPartial) {
 
 		session.setAttribute(page.getName(), page);
 
