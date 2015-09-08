@@ -17,6 +17,7 @@ package org.hdiv.filter;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -42,11 +43,6 @@ public class DefaultValidatorErrorHandler implements ValidatorErrorHandler {
 	protected HDIVConfig config;
 
 	/**
-	 * Application user data
-	 */
-	protected IUserData userData;
-
-	/**
 	 * Helper class to create default error page HTML.
 	 */
 	protected DefaultErrorPageWritter errorPageWritter = new DefaultErrorPageWritter();
@@ -58,15 +54,16 @@ public class DefaultValidatorErrorHandler implements ValidatorErrorHandler {
 	 *            {@link HttpServletRequest} instance
 	 * @param response
 	 *            {@link HttpServletResponse} instance
-	 * @param error
-	 *            Validation error
+	 * @param errors
+	 *            Validation errors
 	 * @since 2.1.13
 	 */
-	public void handleValidatorError(HttpServletRequest request, HttpServletResponse response, ValidatorError error) {
+	public void handleValidatorError(HttpServletRequest request, HttpServletResponse response,
+			List<ValidatorError> errors) {
 
 		HttpSession session = request.getSession(false);
 
-		if (HDIVErrorCodes.PAGE_ID_INCORRECT.equals(error.getType())) {
+		if (this.isPageNotFoundError(errors)) {
 			// Page not found in session
 
 			if (session == null || session.isNew()) {
@@ -74,7 +71,8 @@ public class DefaultValidatorErrorHandler implements ValidatorErrorHandler {
 				// Redirect to login page instead of error page
 				this.redirectToLoginPage(request, response);
 			} else {
-				String username = this.userData.getUsername(request);
+				ValidatorError error = errors.get(0);
+				String username = error.getUserName();
 				if (username == null || username == IUserData.ANONYMOUS) {
 					// Not logged, so send to login page
 					this.redirectToLoginPage(request, response);
@@ -89,6 +87,23 @@ public class DefaultValidatorErrorHandler implements ValidatorErrorHandler {
 			// Redirect to general error page
 			redirectToErrorPage(request, response);
 		}
+	}
+
+	/**
+	 * Is the error type HDIVErrorCodes.PAGE_ID_INCORRECT?
+	 * 
+	 * @param errors
+	 *            Validation errors
+	 * @return true if there is any PAGE_ID_INCORRECT error in the list
+	 */
+	protected boolean isPageNotFoundError(List<ValidatorError> errors) {
+
+		for (ValidatorError error : errors) {
+			if (HDIVErrorCodes.PAGE_ID_INCORRECT.equals(error.getType())) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/**
@@ -187,10 +202,6 @@ public class DefaultValidatorErrorHandler implements ValidatorErrorHandler {
 
 	public void setConfig(HDIVConfig config) {
 		this.config = config;
-	}
-
-	public void setUserData(IUserData userData) {
-		this.userData = userData;
 	}
 
 }

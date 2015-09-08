@@ -320,7 +320,6 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		RootBeanDefinition bean = new RootBeanDefinition(Logger.class);
 		bean.setSource(source);
 		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
-		bean.getPropertyValues().addPropertyValue("userData", this.userDataRef);
 
 		return this.registerBean(bean, Logger.class.getName(), parserContext);
 	}
@@ -331,7 +330,6 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		RootBeanDefinition bean = new RootBeanDefinition(DefaultValidatorErrorHandler.class);
 		bean.setSource(source);
 		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
-		bean.getPropertyValues().addPropertyValue("userData", this.userDataRef);
 		bean.getPropertyValues().addPropertyValue("config", this.configRef);
 
 		return this.registerBean(bean, ValidatorErrorHandler.class.getName(), parserContext);

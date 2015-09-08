@@ -16,6 +16,9 @@
 package org.hdiv.filter;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.FilterChain;
@@ -119,6 +122,7 @@ public class ValidatorFilter extends OncePerRequestFilter {
 				this.multipartConfig = null;
 			}
 
+			this.userData = context.getBean(IUserData.class);
 			this.logger = context.getBean(Logger.class);
 			this.errorHandler = context.getBean(ValidatorErrorHandler.class);
 			this.requestInitializer = context.getBean(RequestInitializer.class);
@@ -191,15 +195,22 @@ public class ValidatorFilter extends OncePerRequestFilter {
 				request.setAttribute(Constants.VALIDATOR_HELPER_RESULT_NAME, result);
 			}
 
-			// Log the errors
-			this.logValidationErrors(multipartProcessedRequest, result);
+			List<ValidatorError> errors = getAllErrors(multipartProcessedRequest, result);
+
+			if (!errors.isEmpty()) {
+				// Complete error data
+				this.completeErrorData(multipartProcessedRequest, errors);
+
+				// Log the errors
+				this.logValidationErrors(multipartProcessedRequest, errors);
+			}
 
 			if (legal || this.hdivConfig.isDebugMode()) {
 				processRequest(multipartProcessedRequest, responseWrapper, filterChain);
 			} else {
 
 				// Call to ValidatorErrorHandler
-				this.errorHandler.handleValidatorError(multipartProcessedRequest, responseWrapper, result.getError());
+				this.errorHandler.handleValidatorError(multipartProcessedRequest, responseWrapper, errors);
 			}
 
 		} catch (HDIVException e) {
@@ -218,8 +229,9 @@ public class ValidatorFilter extends OncePerRequestFilter {
 			}
 			// Show error page
 			if (!this.hdivConfig.isDebugMode()) {
-				this.errorHandler.handleValidatorError(multipartProcessedRequest, responseWrapper, new ValidatorError(
+				List<ValidatorError> errors = Collections.singletonList(new ValidatorError(
 						HDIVErrorCodes.INTERNAL_ERROR));
+				this.errorHandler.handleValidatorError(multipartProcessedRequest, responseWrapper, errors);
 			}
 		} finally {
 
@@ -270,29 +282,61 @@ public class ValidatorFilter extends OncePerRequestFilter {
 	}
 
 	/**
+	 * Get all validation errors, including integrity and editable validation errors.
+	 * 
+	 * @param request
+	 *            request object
+	 * @param result
+	 *            validation result
+	 * @return list of errors
+	 */
+	protected List<ValidatorError> getAllErrors(HttpServletRequest request, ValidatorHelperResult result) {
+
+		List<ValidatorError> errors = new ArrayList<ValidatorError>();
+
+		if (!result.isValid()) {
+			errors.add(result.getError());
+		}
+
+		// Editable validation errors
+		@SuppressWarnings("unchecked")
+		Map<String, ValidatorError> validationErrorData = (Map<String, ValidatorError>) request
+				.getAttribute(Constants.EDITABLE_PARAMETER_ERROR);
+		if (validationErrorData != null && !validationErrorData.isEmpty()) {
+			errors.addAll(validationErrorData.values());
+		}
+
+		return errors;
+	}
+
+	/**
 	 * Complete {@link ValidatorError} containing data including user related info.
 	 * 
 	 * @param request
 	 *            request object
-	 * @param error
-	 *            validation error
+	 * @param errors
+	 *            all validation errors
 	 */
-	protected void completeErrorData(HttpServletRequest request, ValidatorError error) {
+	protected void completeErrorData(HttpServletRequest request, List<ValidatorError> errors) {
 
 		String localIp = this.getUserLocalIP(request);
-		error.setLocalIp(localIp);
 		String remoteIp = request.getRemoteAddr();
-		error.setRemoteIp(remoteIp);
 		String userName = this.userData.getUsername(request);
-		error.setUserName(userName);
 
-		// Include context path in the target
-		String target = error.getTarget();
 		String contextPath = request.getContextPath();
-		if (!target.startsWith(contextPath)) {
-			target = request.getContextPath() + target;
+		for (ValidatorError error : errors) {
+
+			error.setLocalIp(localIp);
+			error.setRemoteIp(remoteIp);
+			error.setUserName(userName);
+
+			// Include context path in the target
+			String target = error.getTarget();
+			if (!target.startsWith(contextPath)) {
+				target = request.getContextPath() + target;
+			}
+			error.setTarget(target);
 		}
-		error.setTarget(target);
 	}
 
 	/**
@@ -313,31 +357,22 @@ public class ValidatorFilter extends OncePerRequestFilter {
 		}
 		return ipAddress;
 	}
-	
+
 	/**
-	 * Log the validation errors
+	 * Log validation errors
 	 * 
 	 * @param request
 	 *            request object
-	 * @param result
-	 *            validation result
+	 * @param errors
+	 *            all validation errors
 	 */
-	protected void logValidationErrors(HttpServletRequest request, ValidatorHelperResult result) {
+	protected void logValidationErrors(HttpServletRequest request, List<ValidatorError> errors) {
 
-		if (!result.isValid()) {
+		for (ValidatorError error : errors) {
 			// Log the error
-			this.logger.log(result.getError());
+			this.logger.log(error);
 		}
 
-		// Log editable validation errors
-		@SuppressWarnings("unchecked")
-		Map<String, ValidatorError> validationErrorData = (Map<String, ValidatorError>) request
-				.getAttribute(Constants.EDITABLE_PARAMETER_ERROR);
-		if (validationErrorData != null && !validationErrorData.isEmpty()) {
-			for (ValidatorError error : validationErrorData.values()) {
-				this.logger.log(error);
-			}
-		}
 	}
 
 }

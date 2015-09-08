@@ -15,6 +15,8 @@
  */
 package org.hdiv.filter;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -33,9 +35,9 @@ public interface ValidatorErrorHandler {
 	 *            {@link HttpServletRequest} instance
 	 * @param response
 	 *            {@link HttpServletResponse} instance
-	 * @param error
-	 *            Validation error
+	 * @param errors
+	 *            Validation errors
 	 * @since 2.1.13
 	 */
-	void handleValidatorError(HttpServletRequest request, HttpServletResponse response, ValidatorError error);
+	void handleValidatorError(HttpServletRequest request, HttpServletResponse response, List<ValidatorError> errors);
 }
