@@ -16,7 +16,7 @@
 package org.hdiv.filter;
 
 import java.io.PrintWriter;
-import java.util.Map;
+import java.util.List;
 
 import org.springframework.web.util.HtmlUtils;
 
@@ -35,7 +35,7 @@ public class DefaultErrorPageWritter {
 	 * @param editableErrors
 	 *            existing editable errors to show in error page.
 	 */
-	public void writetErrorPage(PrintWriter out, Map<String, String[]> editableErrors) {
+	public void writetErrorPage(PrintWriter out, List<ValidatorError> editableErrors) {
 
 		out.println("<!DOCTYPE html>");
 		out.println("<html>");
@@ -135,18 +135,12 @@ public class DefaultErrorPageWritter {
 		if (editableErrors != null) {
 			out.println("			<ul>");
 
-			for (Map.Entry<String, String[]> error : editableErrors.entrySet()) {
-				String key = error.getKey();
-
-				out.print("				<li>Values for field '" + key + "' are not correct:");
-				String[] values = error.getValue();
-
-				for (int i = 0; i < values.length; i++) {
-					String val = values[i];
-					// Escape HTML characters
-					val = HtmlUtils.htmlEscape(val);
-					out.print(val + " ");
-				}
+			for (ValidatorError error : editableErrors) {
+				out.print("				<li>Values for field '" + error.getParameterName() + "' are not correct: ");
+				String values = error.getParameterValue();
+				// Escape HTML characters
+				values = HtmlUtils.htmlEscape(values);
+				out.print(values);
 				out.println("				</li>");
 			}
 			out.println("			</ul>");

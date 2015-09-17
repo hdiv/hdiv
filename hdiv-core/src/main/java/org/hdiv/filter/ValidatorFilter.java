@@ -19,7 +19,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletContext;
@@ -195,17 +194,23 @@ public class ValidatorFilter extends OncePerRequestFilter {
 				request.setAttribute(Constants.VALIDATOR_HELPER_RESULT_NAME, result);
 			}
 
-			List<ValidatorError> errors = getAllErrors(multipartProcessedRequest, result);
+			// All errors, integrity and editable validation
+			List<ValidatorError> errors = result.getErrors();
 
-			if (!errors.isEmpty()) {
+			boolean hasEditableError = false;
+			if (errors != null && !errors.isEmpty()) {
 				// Complete error data
 				this.completeErrorData(multipartProcessedRequest, errors);
 
 				// Log the errors
 				this.logValidationErrors(multipartProcessedRequest, errors);
+
+				hasEditableError = this.processEditableValidationErrors(multipartProcessedRequest, errors);
 			}
 
-			if (legal || this.hdivConfig.isDebugMode()) {
+			if (legal || this.hdivConfig.isDebugMode()
+					|| (hasEditableError && !this.hdivConfig.isShowErrorPageOnEditableValidation())) {
+
 				processRequest(multipartProcessedRequest, responseWrapper, filterChain);
 			} else {
 
@@ -282,34 +287,6 @@ public class ValidatorFilter extends OncePerRequestFilter {
 	}
 
 	/**
-	 * Get all validation errors, including integrity and editable validation errors.
-	 * 
-	 * @param request
-	 *            request object
-	 * @param result
-	 *            validation result
-	 * @return list of errors
-	 */
-	protected List<ValidatorError> getAllErrors(HttpServletRequest request, ValidatorHelperResult result) {
-
-		List<ValidatorError> errors = new ArrayList<ValidatorError>();
-
-		if (!result.isValid()) {
-			errors.add(result.getError());
-		}
-
-		// Editable validation errors
-		@SuppressWarnings("unchecked")
-		Map<String, ValidatorError> validationErrorData = (Map<String, ValidatorError>) request
-				.getAttribute(Constants.EDITABLE_PARAMETER_ERROR);
-		if (validationErrorData != null && !validationErrorData.isEmpty()) {
-			errors.addAll(validationErrorData.values());
-		}
-
-		return errors;
-	}
-
-	/**
 	 * Complete {@link ValidatorError} containing data including user related info.
 	 * 
 	 * @param request
@@ -373,6 +350,37 @@ public class ValidatorFilter extends OncePerRequestFilter {
 			this.logger.log(error);
 		}
 
+	}
+
+	/**
+	 * Process editable validation errors. Add them to the request scope to read later from the web framework.
+	 * 
+	 * @param request
+	 *            request object
+	 * @param errors
+	 *            all validation errors
+	 * @return true if there is a editable validation error
+	 */
+	protected boolean processEditableValidationErrors(HttpServletRequest request, List<ValidatorError> errors) {
+
+		List<ValidatorError> editableErrors = new ArrayList<ValidatorError>();
+		for (ValidatorError error : errors) {
+			if (HDIVErrorCodes.EDITABLE_VALIDATION_ERROR.equals(error.getType())) {
+				editableErrors.add(error);
+			}
+		}
+		if (!editableErrors.isEmpty() && !this.hdivConfig.isDebugMode()) {
+
+			// Put the errors on request to be accessible from the Web framework
+			request.setAttribute(Constants.EDITABLE_PARAMETER_ERROR, editableErrors);
+
+			if (this.hdivConfig.isShowErrorPageOnEditableValidation()) {
+				// Redirect to error page
+				// Put errors in session to be accessible from error page
+				request.getSession().setAttribute(Constants.EDITABLE_PARAMETER_ERROR, editableErrors);
+			}
+		}
+		return !editableErrors.isEmpty();
 	}
 
 }

@@ -15,6 +15,8 @@
  */
 package org.hdiv.filter;
 
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Result of the invocation of the validation of a request with {@link IValidationHelper}
@@ -47,15 +49,19 @@ public class ValidatorHelperResult {
 	/**
 	 * Validation error data
 	 */
-	private ValidatorError error;
+	private List<ValidatorError> errors;
 
 	public ValidatorHelperResult(boolean valid) {
 		this.valid = valid;
 	}
 
 	public ValidatorHelperResult(ValidatorError error) {
+		this(false, error);
+	}
+
+	public ValidatorHelperResult(List<ValidatorError> errors) {
 		this.valid = false;
-		this.error = error;
+		this.errors = errors;
 	}
 
 	public ValidatorHelperResult(boolean valid, Object value) {
@@ -65,15 +71,16 @@ public class ValidatorHelperResult {
 
 	public ValidatorHelperResult(boolean valid, ValidatorError error) {
 		this.valid = valid;
-		this.error = error;
+		this.errors = new ArrayList<ValidatorError>();
+		this.errors.add(error);
 	}
 
 	public boolean isValid() {
 		return valid;
 	}
 
-	public ValidatorError getError() {
-		return error;
+	public List<ValidatorError> getErrors() {
+		return errors;
 	}
 
 	public Object getValue() {
@@ -83,8 +90,10 @@ public class ValidatorHelperResult {
 	public String toString() {
 		StringBuffer b = new StringBuffer();
 		b.append("Valid: ").append(this.valid);
-		if (this.error != null) {
-			b.append(" Errorcode: ").append(this.error.toString());
+		if (this.errors != null) {
+			for (ValidatorError error : errors) {
+				b.append(" Errorcode: ").append(error.toString());
+			}
 		}
 		if (this.value != null) {
 			b.append(" Value:").append(this.value);

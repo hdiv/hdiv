@@ -18,7 +18,6 @@ package org.hdiv.filter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -188,7 +187,7 @@ public class DefaultValidatorErrorHandler implements ValidatorErrorHandler {
 			response.setContentType("text/html");
 			PrintWriter out = response.getWriter();
 
-			Map<String, String[]> editableErrors = (Map<String, String[]>) request.getSession().getAttribute(
+			List<ValidatorError> editableErrors = (List<ValidatorError>) request.getSession().getAttribute(
 					Constants.EDITABLE_PARAMETER_ERROR);
 			request.getSession().removeAttribute(Constants.EDITABLE_PARAMETER_ERROR);
 

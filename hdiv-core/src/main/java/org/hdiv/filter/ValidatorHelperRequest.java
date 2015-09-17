@@ -20,7 +20,6 @@ import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Enumeration;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -220,7 +219,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 		BasicUrlData urlData = this.urlProcessor.processUrl(request, "?" + state.getParams());
 		Map<String, String[]> stateParams = urlData.getUrlParams();
 
-		Map<String, ValidatorError> unauthorizedEditableParameters = new HashMap<String, ValidatorError>();
+		List<ValidatorError> unauthorizedEditableParameters = new ArrayList<ValidatorError>();
 		Enumeration<?> parameters = request.getParameterNames();
 		while (parameters.hasMoreElements()) {
 
@@ -236,10 +235,8 @@ public class ValidatorHelperRequest implements IValidationHelper {
 		}
 
 		if (unauthorizedEditableParameters.size() > 0) {
-
-			return this.processValidateParameterErrors(request, unauthorizedEditableParameters);
+			return new ValidatorHelperResult(unauthorizedEditableParameters);
 		}
-
 		return ValidatorHelperResult.VALID;
 	}
 
@@ -325,7 +322,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	 */
 	protected ValidatorHelperResult validateStartPageParameters(HttpServletRequest request, String target) {
 
-		Map<String, ValidatorError> unauthorizedEditableParameters = new HashMap<String, ValidatorError>();
+		List<ValidatorError> unauthorizedEditableParameters = new ArrayList<ValidatorError>();
 
 		Enumeration<?> parameters = request.getParameterNames();
 		while (parameters.hasMoreElements()) {
@@ -337,37 +334,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 		}
 
 		if (unauthorizedEditableParameters.size() > 0) {
-			return this.processValidateParameterErrors(request, unauthorizedEditableParameters);
-		} else {
-			return ValidatorHelperResult.VALID;
-		}
-	}
-
-	/**
-	 * Called if there are editable validation errors. Process these errors.
-	 * 
-	 * @param request
-	 *            HttpServletRequest instance
-	 * @param unauthorizedEditableParameters
-	 *            Request parameters with errors
-	 * @return continue with the request processing if valid value
-	 * @since 2.1.4
-	 */
-	protected ValidatorHelperResult processValidateParameterErrors(HttpServletRequest request,
-			Map<String, ValidatorError> unauthorizedEditableParameters) {
-
-		if (!this.hdivConfig.isDebugMode()) {
-			// Put the errors on request to be accessible from the Web framework
-			request.setAttribute(Constants.EDITABLE_PARAMETER_ERROR, unauthorizedEditableParameters);
-
-			if (this.hdivConfig.isShowErrorPageOnEditableValidation()) {
-				// Redirect to error page
-				// Put errors in session to be accessible from error page
-				request.getSession().setAttribute(Constants.EDITABLE_PARAMETER_ERROR, unauthorizedEditableParameters);
-
-				ValidatorError error = new ValidatorError(HDIVErrorCodes.EDITABLE_VALIDATION_ERROR);
-				return new ValidatorHelperResult(error);
-			}
+			return new ValidatorHelperResult(unauthorizedEditableParameters);
 		}
 		return ValidatorHelperResult.VALID;
 	}
@@ -451,7 +418,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	 * @since HDIV 1.1
 	 */
 	protected void validateEditableParameter(HttpServletRequest request, String target, String parameter,
-			String[] values, String dataType, Map<String, ValidatorError> unauthorizedParameters) {
+			String[] values, String dataType, List<ValidatorError> unauthorizedParameters) {
 
 		EditableDataValidationResult result = hdivConfig.areEditableParameterValuesValid(target, parameter, values,
 				dataType);
@@ -472,7 +439,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 
 			ValidatorError error = new ValidatorError(HDIVErrorCodes.EDITABLE_VALIDATION_ERROR, target, parameter,
 					value, null, result.getValidationId());
-			unauthorizedParameters.put(parameter, error);
+			unauthorizedParameters.add(error);
 		}
 	}
 
@@ -538,8 +505,8 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	 * @since HDIV 2.1.5
 	 */
 	protected ValidatorHelperResult validateParameter(HttpServletRequest request, IParameter stateParameter,
-			String[] actionParamValues, Map<String, ValidatorError> unauthorizedEditableParameters,
-			String hdivParameter, String target, String parameter) {
+			String[] actionParamValues, List<ValidatorError> unauthorizedEditableParameters, String hdivParameter,
+			String target, String parameter) {
 
 		// If the parameter requires no validation it is considered a valid parameter
 		if (this.isUserDefinedNonValidationParameter(target, parameter, hdivParameter)) {

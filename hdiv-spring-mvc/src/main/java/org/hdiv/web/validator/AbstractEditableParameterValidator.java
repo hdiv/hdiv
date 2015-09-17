@@ -15,7 +15,7 @@
  */
 package org.hdiv.web.validator;
 
-import java.util.Map;
+import java.util.List;
 
 import org.hdiv.filter.ValidatorError;
 import org.hdiv.util.Constants;
@@ -46,15 +46,13 @@ public abstract class AbstractEditableParameterValidator {
 			return;
 		}
 
-		Map<String, ValidatorError> parameters = (Map<String, ValidatorError>) attr.getAttribute(
+		List<ValidatorError> validationErrors = (List<ValidatorError>) attr.getAttribute(
 				Constants.EDITABLE_PARAMETER_ERROR, 0);
-		if (parameters != null && parameters.size() > 0) {
+		if (validationErrors != null && validationErrors.size() > 0) {
 
-			for (String param : parameters.keySet()) {
+			for (ValidatorError error : validationErrors) {
 
-				ValidatorError paramError = parameters.get(param);
-
-				this.rejectParamValues(param, paramError.getParameterValue(), errors);
+				this.rejectParamValues(error.getParameterName(), error.getParameterValue(), errors);
 			}
 		}
 	}
@@ -68,14 +66,19 @@ public abstract class AbstractEditableParameterValidator {
 			return;
 		}
 
-		Map<String, ValidatorError> parameters = (Map<String, ValidatorError>) attr.getAttribute(
+		List<ValidatorError> validationErrors = (List<ValidatorError>) attr.getAttribute(
 				Constants.EDITABLE_PARAMETER_ERROR, 0);
-		if (parameters != null && parameters.size() > 0) {
+		if (validationErrors != null && validationErrors.size() > 0) {
 
-			ValidatorError paramError = parameters.get(param);
-			if (paramError.getParameterValue() != null) {
+			ValidatorError paramError = null;
+			for (ValidatorError error : validationErrors) {
+				if (error.getParameterName().equals(param)) {
+					paramError = error;
+				}
+			}
+			if (paramError != null) {
 
-				this.rejectParamValues(param, paramError.getParameterValue(), errors);
+				this.rejectParamValues(paramError.getParameterName(), paramError.getParameterValue(), errors);
 			}
 		}
 	}
