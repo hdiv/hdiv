@@ -40,20 +40,18 @@ public class LoggerTest extends AbstractHDIVTestCase {
 		logger.log(error);
 
 		String msg = mockAppender.getMessage();
-		assertEquals("type;target;parameterName;parameterValue;;127.0.0.1;127.0.0.1;anonymous;", msg);
-
+		assertEquals("type;target;parameterName;parameterValue;;;;;", msg);
 	}
 
 	public void testLog() {
 
 		ValidatorError error = new ValidatorError("type", "target", "parameterName", "parameterValue", "originalValue",
-				"ruleName");
+				"127.0.0.1", "127.0.0.1", "anonymous", "ruleName");
 		logger.log(error);
 
 		String msg = mockAppender.getMessage();
 		assertEquals("type;target;parameterName;parameterValue;originalValue;127.0.0.1;127.0.0.1;anonymous;ruleName",
 				msg);
-
 	}
 
 	/**

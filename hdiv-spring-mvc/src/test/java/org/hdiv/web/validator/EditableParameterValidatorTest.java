@@ -16,7 +16,7 @@
 package org.hdiv.web.validator;
 
 import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -25,6 +25,8 @@ import org.hdiv.dataComposer.DataComposerFactory;
 import org.hdiv.dataComposer.IDataComposer;
 import org.hdiv.filter.IValidationHelper;
 import org.hdiv.filter.RequestWrapper;
+import org.hdiv.filter.ValidatorError;
+import org.hdiv.filter.ValidatorHelperResult;
 import org.hdiv.util.Constants;
 import org.hdiv.util.HDIVUtil;
 import org.springframework.mock.web.MockHttpServletRequest;
@@ -55,7 +57,6 @@ public class EditableParameterValidatorTest extends AbstractHDIVTestCase {
 		this.dataComposer.startPage();
 	}
 
-	@SuppressWarnings("unchecked")
 	public void testEditableValidator() {
 
 		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
@@ -71,13 +72,13 @@ public class EditableParameterValidatorTest extends AbstractHDIVTestCase {
 		request.addParameter("paramName", "<script>storeCookie()</script>");
 
 		RequestWrapper requestWrapper = new RequestWrapper(request);
-		boolean result = helper.validate(requestWrapper).isValid();
-		assertTrue(result);
+		ValidatorHelperResult result = helper.validate(requestWrapper);
+		assertFalse(result.isValid());
 
 		// Editable errors in request?
-		Map<String, String[]> parameters = (Map<String, String[]>) requestWrapper
-				.getAttribute(Constants.EDITABLE_PARAMETER_ERROR);
-		assertEquals(1, parameters.size());
+		List<ValidatorError> validationErrors = result.getErrors();
+		requestWrapper.setAttribute(Constants.EDITABLE_PARAMETER_ERROR, validationErrors);
+		assertEquals(1, validationErrors.size());
 
 		// Set request attributes on threadlocal
 		RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(requestWrapper));
@@ -90,7 +91,6 @@ public class EditableParameterValidatorTest extends AbstractHDIVTestCase {
 		// move errors to Errors instance
 		validator.validate("anyObject", errors);
 		assertTrue(errors.hasErrors());
-
 	}
 
 }

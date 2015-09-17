@@ -16,7 +16,7 @@
 package org.hdiv.action;
 
 import java.io.IOException;
-import java.util.Map;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -32,6 +32,7 @@ import org.apache.struts.action.RequestProcessor;
 import org.apache.struts.config.ForwardConfig;
 import org.apache.struts.taglib.TagUtils;
 import org.apache.struts.util.RequestUtils;
+import org.hdiv.filter.ValidatorError;
 import org.hdiv.urlProcessor.LinkUrlProcessor;
 import org.hdiv.util.Constants;
 import org.hdiv.util.HDIVUtil;
@@ -177,27 +178,26 @@ public class HDIVRequestProcessor extends RequestProcessor {
 	public ActionMessages getEditableParametersErrors(HttpServletRequest request) {
 
 		@SuppressWarnings("unchecked")
-		Map<String, String[]> unauthorizedEditableParameters = (Map<String, String[]>) request
+		List<ValidatorError> validationErrors = (List<ValidatorError>)  request
 				.getAttribute(EDITABLE_PARAMETER_ERROR);
 
 		ActionMessages errors = null;
-		if (unauthorizedEditableParameters != null && unauthorizedEditableParameters.size() > 0) {
+		if (validationErrors != null && validationErrors.size() > 0) {
 
 			errors = new ActionMessages();
 
-			for (String currentParameter: unauthorizedEditableParameters.keySet()) {
+			for (ValidatorError validationError: validationErrors) {
 				
-				String [] currentUnauthorizedValues = (String []) unauthorizedEditableParameters.get(currentParameter);
+				String errorValues = validationError.getParameterValue();
 				
 				ActionMessage error = null;
-				if ((currentUnauthorizedValues.length == 1) && (currentUnauthorizedValues[0].equals(HDIV_EDITABLE_PASSWORD_ERROR))) {					
+				if (errorValues.contains(HDIV_EDITABLE_PASSWORD_ERROR)) {					
 					error = new ActionMessage(HDIV_EDITABLE_PASSWORD_ERROR);															
-					
 				} else {			
-					String printedValue = this.createMessageError(currentUnauthorizedValues);	
+					String printedValue = this.createMessageError(errorValues);	
 					error = new ActionMessage(HDIV_EDITABLE_ERROR, printedValue);
 				}	
-				errors.add("hdiv.editable." + currentParameter, error);				
+				errors.add("hdiv.editable." + validationError.getParameterName(), error);				
 			}
 		}
 		return errors;
@@ -206,11 +206,12 @@ public class HDIVRequestProcessor extends RequestProcessor {
 	/**
 	 * It creates the message error from the values <code>values</code>.
 	 * 
-	 * @param values values with not allowed characters
+	 * @param paramValues values with not allowed characters
 	 * @return message error to show
 	 */
-	public String createMessageError(String[] values) {
+	public String createMessageError(String paramValues) {
 
+		String[] values = paramValues.split(",");
 		StringBuffer printedValue = new StringBuffer();
 
 		for (int i = 0; i < values.length; i++) {

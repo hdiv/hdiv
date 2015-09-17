@@ -138,11 +138,17 @@ public class Logger {
 			buffer.append(originalParameterValue);
 		}
 		buffer.append(";");
-		buffer.append(localIp);
+		if (localIp != null) {
+			buffer.append(localIp);
+		}
 		buffer.append(";");
-		buffer.append(remoteIp);
+		if (remoteIp != null) {
+			buffer.append(remoteIp);
+		}
 		buffer.append(";");
-		buffer.append(userName);
+		if (userName != null) {
+			buffer.append(userName);
+		}
 		buffer.append(";");
 		if (validationRuleName != null) {
 			buffer.append(validationRuleName);

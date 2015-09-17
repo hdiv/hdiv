@@ -21,9 +21,7 @@
 
 	<!--LOGGER -->
 	<bean id="userData" class="org.hdiv.logs.UserData" />
-	<bean id="logger" class="org.hdiv.logs.Logger">
-		<property name="userData" ref="userData" />
-	</bean>
+	<bean id="logger" class="org.hdiv.logs.Logger"/>
 
 	<bean id="cache" class="org.hdiv.session.StateCache" singleton="false">
 		<property name="maxSize">
@@ -90,7 +88,6 @@
 	
 	<bean id="validatorHelper" class="org.hdiv.filter.ValidatorHelperRequest"
 		init-method="init">
-		<property name="logger" ref="logger" />
 		<property name="stateUtil" ref="stateUtil" />
 		<property name="hdivConfig" ref="config" />
 		<property name="session" ref="sessionHDIV" />
@@ -102,7 +99,6 @@
 
 	<bean id="validatorErrorHandler" class="org.hdiv.filter.DefaultValidatorErrorHandler">
 		<property name="config" ref="config" />
-		<property name="userData" ref="userData" />
 	</bean>
 
 	<!-- URL PROCESSOR -->

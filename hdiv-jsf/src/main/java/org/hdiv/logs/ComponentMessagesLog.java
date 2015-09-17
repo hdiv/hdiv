@@ -29,7 +29,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.hdiv.logs.Logger;
+import org.hdiv.filter.ValidatorError;
 import org.hdiv.util.HDIVErrorCodes;
 import org.hdiv.util.HDIVUtil;
 import org.hdiv.util.UtilsJsf;
@@ -122,9 +122,9 @@ public class ComponentMessagesLog {
 						value = requestValue;
 					}
 
-					this.logger.log(HDIVErrorCodes.PARAMETER_VALUE_INCORRECT, requestUri,
+					ValidatorError error = new ValidatorError(HDIVErrorCodes.PARAMETER_VALUE_INCORRECT, requestUri,
 							clientComponent.getClientId(facesContext), value);
-
+					this.logger.log(error);
 				}
 			}
 		}

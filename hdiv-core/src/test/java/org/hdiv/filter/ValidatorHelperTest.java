@@ -17,7 +17,7 @@ package org.hdiv.filter;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.util.Map;
+import java.util.List;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -25,7 +25,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.hdiv.AbstractHDIVTestCase;
 import org.hdiv.dataComposer.DataComposerFactory;
 import org.hdiv.dataComposer.IDataComposer;
-import org.hdiv.util.Constants;
 import org.hdiv.util.HDIVUtil;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
@@ -376,14 +375,12 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 		request.addParameter("paramName", "<script>storeCookie()</script>");
 
 		RequestWrapper requestWrapper = new RequestWrapper(request);
-		boolean result = helper.validate(requestWrapper).isValid();
-		assertTrue(result);
+		ValidatorHelperResult result = helper.validate(requestWrapper);
+		assertFalse(result.isValid());
 
-		// Editable errors in request?
-		Map<String, String[]> parameters = (Map<String, String[]>) requestWrapper
-				.getAttribute(Constants.EDITABLE_PARAMETER_ERROR);
-		assertEquals(1, parameters.size());
-
+		// Editable errors
+		List<ValidatorError> errors = result.getErrors();
+		assertEquals(1, errors.size());
 	}
 
 	public void testEditableParameterValidationRedirect() {
