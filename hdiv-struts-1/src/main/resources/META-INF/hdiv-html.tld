@@ -22,7 +22,7 @@
     <tlib-version>1.3</tlib-version>
     <jsp-version>1.2</jsp-version>
     <short-name>html</short-name>
-    <uri>http://struts.apache.org/tags-html</uri>
+    <uri>http://hdiv.org/tags-html</uri>
     <description>
         <![CDATA[
   <p>

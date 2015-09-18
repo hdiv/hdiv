@@ -22,7 +22,7 @@
     <tlib-version>1.3</tlib-version>
     <jsp-version>1.2</jsp-version>
     <short-name>logic</short-name>
-    <uri>http://struts.apache.org/tags-logic</uri>
+    <uri>http://hdiv.org/tags-logic</uri>
     <description>
         <![CDATA[
   <p><strong>Note:  Some of the features in this taglib are also

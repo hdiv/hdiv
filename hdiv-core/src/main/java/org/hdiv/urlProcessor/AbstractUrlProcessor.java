@@ -129,7 +129,7 @@ public abstract class AbstractUrlProcessor {
 	 *            urls query string
 	 * @return Map
 	 */
-	protected Map<String, String[]> getUrlParamsAsMap(HttpServletRequest request, String urlParams) {
+	public Map<String, String[]> getUrlParamsAsMap(HttpServletRequest request, String urlParams) {
 
 		Map<String, String[]> params = new LinkedHashMap<String, String[]>();
 
