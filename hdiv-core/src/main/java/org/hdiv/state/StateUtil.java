@@ -183,6 +183,9 @@ public class StateUtil {
 
 		if (stateScope != null) {
 			restoredState = stateScope.restoreState(stateId);
+			if (restoredState == null) {
+				throw new HDIVException(HDIVErrorCodes.PAGE_ID_INCORRECT);
+			}
 			return restoredState;
 		}
 
