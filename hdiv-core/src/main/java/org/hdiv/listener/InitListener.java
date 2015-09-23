@@ -139,7 +139,10 @@ public class InitListener implements ServletContextListener, HttpSessionListener
 	 */
 	public void sessionDestroyed(HttpSessionEvent httpSessionEvent) {
 
-		this.sessionInitializer.destroySession(httpSessionEvent.getSession());
+		if (this.sessionInitializer != null) {
+			// Prevent error in development environment
+			this.sessionInitializer.destroySession(httpSessionEvent.getSession());
+		}
 	}
 
 }
