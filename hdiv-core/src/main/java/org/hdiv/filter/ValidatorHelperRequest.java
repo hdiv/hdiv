@@ -872,8 +872,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 			}
 
 			if (receivedValues.contains(values[i])) {
-				String originalValue = stateValues.size() > 1 ? stateValues.toString() : stateValues.get(0);
-				this.logger.log(HDIVErrorCodes.REPEATED_VALUES, target, parameter, values[i], originalValue);
+				this.logger.log(HDIVErrorCodes.REPEATED_VALUES, target, parameter, values[i]);
 				return new ValidatorHelperResult(HDIVErrorCodes.REPEATED_VALUES);
 			}
 
@@ -914,15 +913,12 @@ public class ValidatorHelperRequest implements IValidationHelper {
 			}
 
 			if (!exists) {
-
 				if (receivedValues.contains(values[i])) {
-					String originalValue = tempStateValues.size() > 1 ? tempStateValues.toString() : tempStateValues
-							.get(0);
-					this.logger.log(HDIVErrorCodes.REPEATED_VALUES, target, parameter, values[i], originalValue);
+					this.logger.log(HDIVErrorCodes.REPEATED_VALUES, target, parameter, values[i]);
 					return new ValidatorHelperResult(HDIVErrorCodes.REPEATED_VALUES);
 				}
-				String originalValue = tempStateValues.size() > 1 ? tempStateValues.toString() : tempStateValues.get(0);
-				this.logger.log(HDIVErrorCodes.PARAMETER_VALUE_INCORRECT, target, parameter, values[i], originalValue);
+
+				this.logger.log(HDIVErrorCodes.PARAMETER_VALUE_INCORRECT, target, parameter, values[i]);
 				return new ValidatorHelperResult(HDIVErrorCodes.PARAMETER_VALUE_INCORRECT);
 			}
 
@@ -990,9 +986,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 
 		for (int i = 0; i < size; i++) {
 
-			IValidationResult result = this.dataValidator.validate(values[i], target, parameter, stateParameter,
-					actionParamValues);
-
+			IValidationResult result = this.dataValidator.validate(values[i], target, parameter, stateParameter, actionParamValues);
 			if (!result.getLegal()) {
 				this.logger.log(HDIVErrorCodes.PARAMETER_VALUE_INCORRECT, target, parameter, values[i]);
 				return new ValidatorHelperResult(HDIVErrorCodes.PARAMETER_VALUE_INCORRECT);
