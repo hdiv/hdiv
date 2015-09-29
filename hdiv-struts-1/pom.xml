@@ -9,6 +9,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>hdiv-struts-1</artifactId>
 	<name>HDIV Struts 1</name>
+	<version>2.1.13.RC2</version>
 	<packaging>jar</packaging>
 	<url>http://www.hdiv.org</url>
 	<description>Java Web Application Security Framework</description>
@@ -43,7 +44,7 @@
 		<dependency>
 			<groupId>org.hdiv</groupId>
 			<artifactId>hdiv-core</artifactId>
-			<version>${project.version}</version>
+			<version>${parent.version}</version>
 		</dependency>
 
 		<!-- Struts-EL -->

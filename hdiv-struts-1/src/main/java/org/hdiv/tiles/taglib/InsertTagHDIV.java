@@ -29,9 +29,9 @@ import org.hdiv.urlProcessor.UrlData;
 import org.hdiv.util.HDIVUtil;
 
 /**
- * This is the tag handler for &lt;tiles:insert&gt;, which includes
- * a template. The tag's body content consists of &lt;tiles:put&gt;
- * tags, which are accessed by &lt;tiles:get&gt; in the template.
+ * This is the tag handler for &lt;tiles:insert&gt;, which includes a template.
+ * The tag's body content consists of &lt;tiles:put&gt; tags, which are accessed
+ * by &lt;tiles:get&gt; in the template.
  *
  * @author Gorka Vicente
  * @see org.apache.struts.tiles.taglib.InsertTag
@@ -40,14 +40,51 @@ import org.hdiv.util.HDIVUtil;
 public class InsertTagHDIV extends InsertTag {
 
     private static final long serialVersionUID = -7501549724315338219L;
-    
+
+    /**
+     * End of Process tag attribute "definition". Overload definition with tag
+     * attributes "template" and "role". Then, create appropriate tag handler.
+     * 
+     * @param definition Definition to process.
+     * @return Appropriate TagHandler.
+     * @throws JspException InstantiationException Can't create requested controller
+     */
+    protected TagHandler processDefinition(ComponentDefinition definition) throws JspException {
+
+	String currentPage = this.page;
+
+	if (currentPage == null) {
+	    currentPage = definition.getTemplate();
+	}
+
+	if (log.isDebugEnabled())
+	    log.debug("Processing definition: " + currentPage);
+
+	this.addParametersToRequestWrapper((HttpServletRequest) pageContext.getRequest(), currentPage);
+	return super.processDefinition(definition);
+    }
+
     /**
      * Process the url.
+     * 
      * @throws JspException If failed to create controller
      */
     public TagHandler processUrl(String url) throws JspException {
-	
-	HttpServletRequest request = (HttpServletRequest)pageContext.getRequest();
+
+	if (log.isDebugEnabled())
+	    log.debug("Processing url: " + url);
+
+	this.addParametersToRequestWrapper((HttpServletRequest) pageContext.getRequest(), url);
+	return new InsertHandler(url, role, getController());
+    }
+
+    /**
+     * Adds parameters of <code>url</code> to <code>request</code>.
+     * @param request HTTP Servlet Request
+     * @param url Url to process
+     */
+    private void addParametersToRequestWrapper(HttpServletRequest request, String url)
+    {
 	if (request instanceof RequestWrapper) {
 	    RequestWrapper requestWrapper = (RequestWrapper) request;
 	    LinkUrlProcessor linkUrlProcessorForForward = HDIVUtil.getLinkUrlProcessor(pageContext.getSession().getServletContext());
@@ -57,28 +94,25 @@ public class InsertTagHDIV extends InsertTag {
 		requestWrapper.addParameter(entry.getKey(), entry.getValue());
 	    }
 	}
-	
-        return new InsertHandler(url, role, getController());
     }
     
     /**
-     * Get instantiated Controller.
-     * Return controller denoted by controllerType, or <code>null</code> if controllerType
-     * is null.
+     * Get instantiated Controller. Return controller denoted by controllerType,
+     * or <code>null</code> if controllerType is null.
+     * 
      * @throws JspException If controller can't be created.
      */
     private Controller getController() throws JspException {
-        if (controllerType == null) {
-            return null;
-        }
+	
+	if (controllerType == null) {
+	    return null;
+	}
 
-        try {
-            return ComponentDefinition.createController(
-                controllerName,
-                controllerType);
+	try {
+	    return ComponentDefinition.createController(controllerName, controllerType);
 
-        } catch (InstantiationException ex) {
-            throw new JspException(ex);
-        }
+	} catch (InstantiationException ex) {
+	    throw new JspException(ex);
+	}
     }
 }
