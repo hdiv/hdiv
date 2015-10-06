@@ -221,6 +221,14 @@ public class DataComposerMemory extends AbstractDataComposer {
 
 		this.initPage();
 	}
+	
+	/**
+	 * It is called in the pre-processing stage of each user request assigning a new page identifier to the page with its parent state id.
+	 */
+	public void startPage(String parentStateId) {
+
+		this.initPage(parentStateId);
+	}
 
 	/**
 	 * It is called in the pre-processing stage of each user request. Create a new {@link IPage} based on an existing

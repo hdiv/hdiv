@@ -54,15 +54,15 @@ public class StateCacheTest extends AbstractHDIVTestCase {
 
 		page1.addState(state1);
 		page1.setId(1);
-		cache.addPage(1, currentPageid);
+		cache.addPage(1, currentPageid, false, false);
 
 		page2.addState(state2);
 		page2.setId(2);
-		cache.addPage(2, currentPageid);
+		cache.addPage(2, currentPageid, false, false);
 
 		page3.addState(state3);
 		page3.setId(3);
-		cache.addPage(3, currentPageid);
+		cache.addPage(3, currentPageid, false, false);
 
 		log.info("cache:" + cache.toString());
 
@@ -90,12 +90,12 @@ public class StateCacheTest extends AbstractHDIVTestCase {
 
 		page1.addState(state1);
 		page1.setId(1);
-		cache.addPage(1, currentPageid);
+		cache.addPage(1, currentPageid, false, false);
 		assertEquals(1, cache.getPageIds().size());
 
 		page2.addState(state2);
 		page2.setId(2);
-		cache.addPage(2, currentPageid);
+		cache.addPage(2, currentPageid, false, false);
 		assertEquals(2, cache.getPageIds().size());
 
 		// Simulate a page refresh or F5
@@ -103,7 +103,7 @@ public class StateCacheTest extends AbstractHDIVTestCase {
 
 		page3.addState(state3);
 		page3.setId(3);
-		cache.addPage(3, currentPageid);
+		cache.addPage(3, currentPageid, true, false);
 		assertEquals(2, cache.getPageIds().size());// Size is 2 instead of 3
 
 		List<Integer> ids = cache.getPageIds();

@@ -17,6 +17,7 @@ package org.hdiv.session;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.logging.Log;
@@ -127,16 +128,35 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 	 * @param isPartial
 	 * 			  If is a partial page
 	 */
-	protected void addPage(int pageId, IPage page, boolean isPartial) {
+	protected void addPage(int pageId, IPage newPageObject, boolean isPartial) {
 
-		HttpSession session = this.getHttpSession();
+		HttpServletRequest request = this.getHttpServletRequest();
+		HttpSession session = request.getSession();
 
+		boolean isRefreshRequest = false;
+		boolean isAjaxRequest = false;
+		
 		IStateCache cache = this.getStateCache(session);
 
 		// Get current request page identifier. Null if no state
 		Integer currentPage = HDIVUtil.getCurrentPageId();
+		
+		IPage lastPageObject = getPage(newPageObject.getId() - 1);
+		
+		//Check if is an refresh request. For example, to check if an user has performed a F5 request  
+		if (newPageObject != null && lastPageObject != null && newPageObject.getParentStateId() != null && lastPageObject.getParentStateId() != null  
+				&& newPageObject.getParentStateId().equals(lastPageObject.getParentStateId())) {
+			isRefreshRequest = true;
+		}
+		
+		//Check if is an Ajax request. 
+		Object isAjaxRequestObject = request.getAttribute(Constants.AJAX_REQUEST);
 
-		Integer removedPageId = cache.addPage(pageId, currentPage);
+		if (isAjaxRequestObject != null) {
+			 isAjaxRequest = (Boolean) isAjaxRequest;
+		}
+		
+		Integer removedPageId = cache.addPage(pageId, currentPage, isRefreshRequest, isAjaxRequest);
 
 		// if it returns a page identifier it is because the cache has reached
 		// the maximum size and therefore we must delete the page which has been
@@ -150,7 +170,7 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 		this.saveStateCache(session, cache);
 
 		// we add a new page in session
-		this.addPageToSession(session, page, isPartial);
+		this.addPageToSession(session, newPageObject, isPartial);
 
 	}
 	
@@ -417,6 +437,17 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 		return HDIVUtil.getHttpSession();
 	}
 
+
+	/**
+	 * Obtains {@link HttpServletRequest} instance from ThreadLocal
+	 * 
+	 * @return HttpServletRequest instance
+	 */
+	protected HttpServletRequest getHttpServletRequest() {
+		return HDIVUtil.getHttpServletRequest();
+	}
+
+	
 	/**
 	 * @param cacheName
 	 *            The cacheName to set.

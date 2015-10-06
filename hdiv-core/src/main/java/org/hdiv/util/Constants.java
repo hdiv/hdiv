@@ -94,5 +94,12 @@ public class Constants {
 	 * Location of the internal resources files
 	 */
 	public static final String MESSAGE_SOURCE_PATH = "org.hdiv.msg.MessageResources";
+	
+	/**
+	 * Request attribute name that contains if request is an ajax request
+	 * 
+	 * @since 2.1.13
+	 */
+	public static final String AJAX_REQUEST = "org.hdiv.ajaxrequest";
 
 }

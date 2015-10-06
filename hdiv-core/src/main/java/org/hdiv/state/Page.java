@@ -89,6 +89,15 @@ public class Page implements IPage, Serializable {
 	protected Boolean isReused;
 
 	/**
+	 *  Parent's state id
+	 * 
+	 * @since 2.1.13
+	 */
+	protected String parentStateId;
+	
+	
+
+	/**
 	 * Adds a new state to the page <code>this</code>.
 	 * 
 	 * @param state
@@ -308,6 +317,22 @@ public class Page implements IPage, Serializable {
 		this.size = size;
 	}
 
+
+	/**
+	 * @param parentStateId
+	 *            the parentStateId to set
+	 */
+	public void setParentStateId(String parentStateId) {
+		this.parentStateId = parentStateId;
+	}
+
+	/**
+	 * @return the parentStateId
+	 */
+	public String getParentStateId() {
+		return this.parentStateId;
+	}
+	
 	public String toString() {
 
 		StringBuffer result = new StringBuffer();

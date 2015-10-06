@@ -36,6 +36,70 @@ public class AjaxTest extends AbstractHDIVTestCase {
 		this.stateUtil = this.getApplicationContext().getBean(StateUtil.class);
 	}
 
+	public void testAjaxWithoutReusingExistingPage() {
+
+		this.getConfig().setReuseExistingPageInAjaxRequest(false);
+
+		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
+		IDataComposer dataComposer = this.dataComposerFactory.newInstance(request);
+		HDIVUtil.setDataComposer(dataComposer, request);
+
+		dataComposer.startPage();
+		dataComposer.beginRequest("GET", "test.do");
+		dataComposer.compose("parameter1", "1", false);
+		String stateId = dataComposer.endRequest();
+		dataComposer.endPage();
+
+		assertNotNull(stateId);
+		request.addParameter(getConfig().getStateParameterName(), stateId);
+
+		request.addHeader("x-requested-with", "XMLHttpRequest");
+
+		// DataComposer1
+		IDataComposer dataComposer1 = this.dataComposerFactory.newInstance(request);
+		HDIVUtil.setDataComposer(dataComposer1, request);
+
+		dataComposer1.beginRequest("GET", "test.do");
+		// Add new parameter
+		dataComposer1.compose("parameter2", "2", false);
+		String stateId1 = dataComposer1.endRequest();
+		dataComposer1.endPage();
+
+		assertEquals(Integer.parseInt(getPageId(stateId)), Integer.parseInt(getPageId(stateId1)) - 1);
+
+		// DataComposer2
+		IDataComposer dataComposer2 = this.dataComposerFactory.newInstance(request);
+		HDIVUtil.setDataComposer(dataComposer2, request);
+
+		dataComposer2.beginRequest("GET", "test.do");
+		// Add new parameter
+		dataComposer2.compose("parameter3", "3", false);
+		String stateId2 = dataComposer2.endRequest();
+		dataComposer2.endPage();
+
+		assertEquals(Integer.parseInt(getPageId(stateId)), Integer.parseInt(getPageId(stateId2)) - 2);
+
+		int sId1 = getStateId(stateId1);
+		int sId2 = getStateId(stateId2);
+
+		assertEquals(sId1, sId2);
+		// Restore state
+		IState state = this.stateUtil.restoreState(stateId);
+		IParameter param = state.getParameter("parameter1");
+		String val = param.getValues().get(0);
+		assertEquals("1", val);
+
+		state = this.stateUtil.restoreState(stateId1);
+		param = state.getParameter("parameter2");
+		val = param.getValues().get(0);
+		assertEquals("2", val);
+
+		state = this.stateUtil.restoreState(stateId2);
+		param = state.getParameter("parameter3");
+		val = param.getValues().get(0);
+		assertEquals("3", val);
+	}
+	
 	public void testAjax() {
 
 		this.getConfig().setReuseExistingPageInAjaxRequest(true);

@@ -106,12 +106,20 @@ public abstract class AbstractDataComposer implements IDataComposer {
 	/**
 	 * Obtains a new unique identifier for the page.
 	 */
-	public void initPage() {
+	public void initPage(String parentStateId) {
 		this.page = new Page();
 		int pageId = this.session.getPageId();
 		this.page.setId(pageId);
+		this.page.setParentStateId(parentStateId);
 	}
-
+	
+	/**
+	 * Obtains a new unique identifier for the page.
+	 */
+	public void initPage() {
+		initPage(null);
+	}
+	
 	/**
 	 * It generates a new encoded value for the parameter <code>parameter</code> and the value <code>value</code> passed
 	 * as parameters. The returned value guarantees the confidentiality in the cipher and memory strategies if

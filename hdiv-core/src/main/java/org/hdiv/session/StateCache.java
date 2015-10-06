@@ -59,17 +59,24 @@ public class StateCache implements IStateCache {
 	 *            page identifier to add
 	 * @param currentPageId
 	 *            page identifier of the current request. It can be null if no state id is present.
+	 *            
+	 * @param isRefreshRequest
+	 * 			  if request is a refresh request
+	 * 
+	 * @param isAjaxRequest
+	 * 			  if request is an ajax request
+	 * 
 	 * @return If the cache has reached its maximum size, less important identifier is returned in order to delete it
 	 *         from session. Otherwise, null will be returned.
 	 */
-	public synchronized Integer addPage(int pageId, Integer currentPageId) {
+	public synchronized Integer addPage(int pageId, Integer currentPageId, boolean isRefreshRequest, boolean isAjaxRequest) {
 
 		if (this.pageIds.contains(pageId)) {
 			// Page id already exist in session
 			return null;
 
 		} else {
-			Integer removedKey = this.cleanBuffer(currentPageId);
+			Integer removedKey = this.cleanBuffer(currentPageId, isRefreshRequest, isAjaxRequest);
 			this.pageIds.add(pageId);
 
 			if (log.isDebugEnabled()) {
@@ -86,16 +93,23 @@ public class StateCache implements IStateCache {
 	 * 
 	 * @param currentPageId
 	 *            page identifier of the current request. It can be null if no state id is present.
+	 * 
+	 * @param isRefreshRequest
+	 * 			  if request is a refresh request
+	 *
+	 * @param isAjaxRequest
+	 * 			  if request is an ajax request
+	 *            
 	 * @return Oldest page identifier in the map <code>pageIds</code>. Null in otherwise.
 	 */
-	public Integer cleanBuffer(Integer currentPageId) {
+	public Integer cleanBuffer(Integer currentPageId, boolean isRefreshRequest, boolean isAjaxRequest) {
 
 		Integer removed = null;
 
 		int totalPages = this.pageIds.size();
-
+		
 		// Remove last page when we know that browser's forward history is empty (See issue #67)
-		if (currentPageId != null && totalPages > 1 && currentPageId == pageIds.get(totalPages - 2)) {
+		if (currentPageId != null && totalPages > 1 && currentPageId == pageIds.get(totalPages - 2) && isRefreshRequest && !isAjaxRequest) {
 			removed = this.pageIds.remove(totalPages - 1);
 		}
 

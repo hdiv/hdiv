@@ -2,6 +2,10 @@ HDIV CHANGELOG
 ==============
 http://www.hdiv.org
 
+Release 2.1.13
+==================================
+ * Multiple iframe support in the same page 
+ 
 Release 2.1.12
 ==================================
  * Fix issue in Struts1: HDIVTilesRequestProcessor class

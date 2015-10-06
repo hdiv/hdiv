@@ -148,6 +148,10 @@ public class DataComposerFactory {
 
 		String paramName = (String) request.getSession().getAttribute(Constants.MODIFY_STATE_HDIV_PARAMETER);
 		String preState = paramName != null ? request.getParameter(paramName) : null;
+		String hdivStateParamName = (String) request.getSession().getAttribute(Constants.HDIV_PARAMETER);
+		String hdivState = request.getParameter(hdivStateParamName);
+		
+		
 		if (preState != null && preState.length() > 0) {
 
 			// We are modifying an existing state, preload dataComposer with it
@@ -163,8 +167,7 @@ public class DataComposerFactory {
 			}
 
 		} else if (this.reuseExistingPage(request)) {
-			String hdivStateParamName = (String) request.getSession().getAttribute(Constants.HDIV_PARAMETER);
-			String hdivState = request.getParameter(hdivStateParamName);
+		
 
 			if (hdivState != null && hdivState.length() > 0) {
 				IState state = this.stateUtil.restoreState(hdivState);
@@ -172,13 +175,13 @@ public class DataComposerFactory {
 					IPage page = this.session.getPage(state.getPageId());
 					dataComposer.startPage(page);
 				} else {
-					dataComposer.startPage();
+					dataComposer.startPage(hdivState);
 				}
 			} else {
-				dataComposer.startPage();
+				dataComposer.startPage(hdivState);
 			}
 		} else {
-			dataComposer.startPage();
+			dataComposer.startPage(hdivState);
 		}
 
 		// Detect if request url is configured as a long living page
@@ -209,11 +212,20 @@ public class DataComposerFactory {
 		return false;
 	}
 
+	/**
+	 * Checks if request is an ajax request and store the result in a request's attribute
+	 * @param request
+	 * @return isAjaxRquest
+	 */
 	protected boolean isAjaxRequest(HttpServletRequest request) {
 
 		String xRequestedWithValue = request.getHeader("x-requested-with");
 
-		return (xRequestedWithValue != null) ? "XMLHttpRequest".equalsIgnoreCase(xRequestedWithValue) : false;
+		boolean isAjaxRequest = (xRequestedWithValue != null) ? "XMLHttpRequest".equalsIgnoreCase(xRequestedWithValue) : false;
+		
+		request.setAttribute(Constants.AJAX_REQUEST, isAjaxRequest);
+		
+		return isAjaxRequest;
 	}
 
 	protected boolean excludePageReuseInAjax(HttpServletRequest request) {

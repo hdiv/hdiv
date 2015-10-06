@@ -140,4 +140,20 @@ public interface IPage {
 	 * @since HDIV 2.1.7
 	 */
 	public void setRandomToken(String randomToken, String method);
+
+	/**
+	 * @param parentStateId
+	 * 			  the parentStateId to set
+	 * 
+	 * @since HDIV 2.1.13
+	 */
+	public void setParentStateId(String parentStateId);
+	
+	/**
+	 * @param Returns the state id of the parent page
+	 * 	  
+	 * @since HDIV 2.1.13
+	 */
+	public String getParentStateId();
+	
 }

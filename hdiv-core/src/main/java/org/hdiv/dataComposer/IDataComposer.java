@@ -218,10 +218,15 @@ public interface IDataComposer {
 	public void init();
 
 	/**
+	 * It is called in the pre-processing stage of each user request with the parent state id.
+	 */
+	public void startPage(String parentStateId);
+
+	/**
 	 * It is called in the pre-processing stage of each user request.
 	 */
 	public void startPage();
-
+	
 	/**
 	 * It is called in the pre-processing stage of each user request. Create a new {@link IPage} based on an existing
 	 * page.

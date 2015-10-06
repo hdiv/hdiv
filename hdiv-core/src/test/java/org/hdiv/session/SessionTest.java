@@ -122,6 +122,7 @@ public class SessionTest extends AbstractHDIVTestCase {
 		state = new State(0);
 		state.setAction("/action");
 		page.addState(state);
+		page.setParentStateId("14-0-E3E5BA9F9AC0DEA35BBE14189510600E"); 
 
 		session.addPage(21, page);
 
@@ -135,6 +136,9 @@ public class SessionTest extends AbstractHDIVTestCase {
 		// Third page
 		page = new Page();
 		page.setId(22);
+		
+		// Same parent state id because a refresh has been performed
+		page.setParentStateId("14-0-E3E5BA9F9AC0DEA35BBE14189510600E"); 
 
 		state = new State(0);
 		state.setAction("/action");
