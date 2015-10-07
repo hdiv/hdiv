@@ -150,7 +150,7 @@ public interface IPage {
 	public void setParentStateId(String parentStateId);
 	
 	/**
-	 * @param Returns the state id of the parent page
+	 * Returns the state id of the parent page
 	 * 	  
 	 * @since HDIV 2.1.13
 	 */

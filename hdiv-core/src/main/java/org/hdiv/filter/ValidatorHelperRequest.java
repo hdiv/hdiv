@@ -643,10 +643,15 @@ public class ValidatorHelperRequest implements IValidationHelper {
 		// checks if the parameter HDIV parameter exists in the parameters of
 		// the request
 		String requestState = request.getParameter(hdivParameter);
-
+		
 		if (requestState == null) {
 			this.logger.log(HDIVErrorCodes.HDIV_PARAMETER_NOT_EXISTS, target, hdivParameter, null);
 			return new ValidatorHelperResult(HDIVErrorCodes.HDIV_PARAMETER_NOT_EXISTS);
+		}
+		
+		// In some browsers (eg: IE 6), fragment identifier is sent with the request, it has to be removed from the requestState 
+		if (requestState.contains("#")) {
+			requestState = requestState.split("#")[0]; 
 		}
 
 		try {

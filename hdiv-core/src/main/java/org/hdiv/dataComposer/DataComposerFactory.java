@@ -214,7 +214,10 @@ public class DataComposerFactory {
 
 	/**
 	 * Checks if request is an ajax request and store the result in a request's attribute
+	 * 
 	 * @param request
+	 *            the HttpServletRequest
+	 *            
 	 * @return isAjaxRquest
 	 */
 	protected boolean isAjaxRequest(HttpServletRequest request) {

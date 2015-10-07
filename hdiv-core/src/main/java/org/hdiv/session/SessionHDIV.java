@@ -123,7 +123,7 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 	 * 
 	 * @param pageId
 	 *            Page identifier
-	 * @param page
+	 * @param newPageObject
 	 *            Page with all the information about states
 	 * @param isPartial
 	 * 			  If is a partial page
@@ -300,6 +300,9 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 	 *            {@link HttpSession} instance
 	 * @param page
 	 *            IPage instance
+	 * @param isPartial
+	 *            If is partial page
+	 *            
 	 * @since HDIV 2.1.5
 	 */
 	protected void addPageToSession(HttpSession session, IPage page, boolean isPartial) {

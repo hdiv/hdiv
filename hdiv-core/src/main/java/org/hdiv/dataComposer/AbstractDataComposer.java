@@ -105,6 +105,9 @@ public abstract class AbstractDataComposer implements IDataComposer {
 
 	/**
 	 * Obtains a new unique identifier for the page.
+	 * 
+	 * @param parentStateId
+	 *            Parent state id
 	 */
 	public void initPage(String parentStateId) {
 		this.page = new Page();

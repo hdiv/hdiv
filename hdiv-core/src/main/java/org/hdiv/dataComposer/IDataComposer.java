@@ -219,6 +219,9 @@ public interface IDataComposer {
 
 	/**
 	 * It is called in the pre-processing stage of each user request with the parent state id.
+	 * 
+	 * @param parentStateId
+	 *            Parent state id
 	 */
 	public void startPage(String parentStateId);
 
