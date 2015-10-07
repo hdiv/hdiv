@@ -5,6 +5,7 @@ http://www.hdiv.org
 Release 2.1.13
 ==================================
  * Multiple iframe support in the same page 
+ * Fix issue with IE 6 when redirects to a URL with a fragment identifier.
  
 Release 2.1.12
 ==================================
