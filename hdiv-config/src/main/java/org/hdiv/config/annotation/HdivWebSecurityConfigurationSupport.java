@@ -204,14 +204,12 @@ public abstract class HdivWebSecurityConfigurationSupport {
 	@Bean
 	public Logger securityLogger() {
 		Logger logger = new Logger();
-		logger.setUserData(securityUserData());
 		return logger;
 	}
 
 	@Bean
 	public ValidatorErrorHandler validatorErrorHandler() {
 		DefaultValidatorErrorHandler validatorErrorHandler = new DefaultValidatorErrorHandler();
-		validatorErrorHandler.setUserData(securityUserData());
 		validatorErrorHandler.setConfig(hdivConfig());
 		return validatorErrorHandler;
 	}
@@ -315,7 +313,6 @@ public abstract class HdivWebSecurityConfigurationSupport {
 	public IValidationHelper requestValidationHelper() {
 
 		ValidatorHelperRequest validatorHelperRequest = new ValidatorHelperRequest();
-		validatorHelperRequest.setLogger(securityLogger());
 		validatorHelperRequest.setStateUtil(stateUtil());
 		validatorHelperRequest.setHdivConfig(hdivConfig());
 		validatorHelperRequest.setSession(securitySession());

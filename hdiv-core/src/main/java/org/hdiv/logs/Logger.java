@@ -15,11 +15,9 @@
  */
 package org.hdiv.logs;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.hdiv.util.HDIVUtil;
+import org.hdiv.filter.ValidatorError;
 
 /**
  * Log that shows the attacks detected by HDIV. It includes type of attack and the identity (application user) of the
@@ -27,10 +25,11 @@ import org.hdiv.util.HDIVUtil;
  * defined to be implemented by each application.
  * <p>
  * Log format =
- * type;target;parameterName;parameterValue;[originalParameterValue];userLocalIP;ip;userId;[validationRuleName]
+ * type;target;parameterName;parameterValue;[originalParameterValue];userLocalIP;IP;userId;[validationRuleName]
  * </p>
  * 
  * @author Roberto Velasco
+ * @author Gotzon Illarramendi
  * @see org.hdiv.logs.IUserData
  */
 public class Logger {
@@ -39,11 +38,6 @@ public class Logger {
 	 * Commons Logging instance.
 	 */
 	private static Log log = LogFactory.getLog(Logger.class);
-
-	/**
-	 * Obtains user data from the request
-	 */
-	protected IUserData userData;
 
 	/**
 	 * Logger is initialized.
@@ -55,76 +49,14 @@ public class Logger {
 	 * Prints formatted attack produced by the user if the logging level defined in the Web application rate should be
 	 * at least INFO.
 	 * 
-	 * @param type
-	 *            Error type
-	 * @param target
-	 *            target name
-	 * @param parameterName
-	 *            parameter name
-	 * @param parameterValue
-	 *            parameter value
+	 * @param error
+	 *            Validator error data
 	 */
-	public void log(String type, String target, String parameterName, String parameterValue) {
+	public void log(ValidatorError error) {
 
-		this.log(type, target, parameterName, parameterValue, null);
-	}
-
-	/**
-	 * Prints formatted attack produced by the user if the logging level defined in the Web application rate should be
-	 * at least INFO.
-	 * 
-	 * @param type
-	 *            Error type
-	 * @param target
-	 *            target name
-	 * @param parameterName
-	 *            parameter name
-	 * @param parameterValue
-	 *            parameter value
-	 * @param originalParameterValue
-	 *            original parameter value
-	 * 
-	 */
-	public void log(String type, String target, String parameterName, String parameterValue,
-			String originalParameterValue) {
-
-		this.log(type, target, parameterName, parameterValue, originalParameterValue, null);
-	}
-
-	/**
-	 * Prints formatted attack produced by the user if the logging level defined in the Web application rate should be
-	 * at least INFO.
-	 * 
-	 * @param type
-	 *            Error type
-	 * @param target
-	 *            target name
-	 * @param parameterName
-	 *            parameter name
-	 * @param parameterValue
-	 *            parameter value
-	 * @param originalParameterValue
-	 *            original parameter value
-	 * @param validationRuleName
-	 *            In an attack of type 'EDITABLE_VALIDATION_ERROR', contains the name of the rule that rejected the
-	 *            value
-	 */
-	public void log(String type, String target, String parameterName, String parameterValue,
-			String originalParameterValue, String validationRuleName) {
-
-		HttpServletRequest request = this.getHttpServletRequest();
-
-		String localIp = this.getUserLocalIP(request);
-		String remoteIp = request.getRemoteAddr();
-		String userName = this.userData.getUsername(request);
-
-		String contextPath = request.getContextPath();
-		if (!target.startsWith(contextPath)) {
-			target = request.getContextPath() + target;
-		}
-
-		this.log(type, target, parameterName, parameterValue, originalParameterValue, localIp, remoteIp, userName,
-				validationRuleName);
+		this.log(error.getType(), error.getTarget(), error.getParameterName(), error.getParameterValue(),
+				error.getOriginalParameterValue(), error.getLocalIp(), error.getRemoteIp(), error.getUserName(),
+				error.getValidationRuleName());
 	}
 
 	/**
@@ -141,9 +73,9 @@ public class Logger {
 	 * @param originalParameterValue
 	 *            original parameter value
 	 * @param localIp
-	 *            user local ip
+	 *            user local IP
 	 * @param remoteIp
-	 *            user remote ip
+	 *            user remote IP
 	 * @param userName
 	 *            user name in application
 	 * @param validationRuleName
@@ -177,9 +109,9 @@ public class Logger {
 	 * @param originalParameterValue
 	 *            original parameter value
 	 * @param localIp
-	 *            user local ip
+	 *            user local IP
 	 * @param remoteIp
-	 *            user remote ip
+	 *            user remote IP
 	 * @param userName
 	 *            user name in application
 	 * @param validationRuleName
@@ -206,11 +138,17 @@ public class Logger {
 			buffer.append(originalParameterValue);
 		}
 		buffer.append(";");
-		buffer.append(localIp);
+		if (localIp != null) {
+			buffer.append(localIp);
+		}
 		buffer.append(";");
-		buffer.append(remoteIp);
+		if (remoteIp != null) {
+			buffer.append(remoteIp);
+		}
 		buffer.append(";");
-		buffer.append(userName);
+		if (userName != null) {
+			buffer.append(userName);
+		}
 		buffer.append(";");
 		if (validationRuleName != null) {
 			buffer.append(validationRuleName);
@@ -219,37 +157,4 @@ public class Logger {
 		return buffer.toString();
 	}
 
-	/**
-	 * Obtain user local ip.
-	 * 
-	 * @param request
-	 *            the HttpServletRequest of the request
-	 * @return Returns the remote user IP address if behind the proxy.
-	 */
-	protected String getUserLocalIP(HttpServletRequest request) {
-
-		String ipAddress = null;
-
-		if (request.getHeader("X-Forwarded-For") == null) {
-			ipAddress = request.getRemoteAddr();
-		} else {
-			ipAddress = request.getHeader("X-Forwarded-For");
-		}
-		return ipAddress;
-	}
-
-	/**
-	 * Obtains the request instance
-	 * 
-	 * @return request
-	 */
-	protected HttpServletRequest getHttpServletRequest() {
-
-		return HDIVUtil.getHttpServletRequest();
-
-	}
-
-	public void setUserData(IUserData userData) {
-		this.userData = userData;
-	}
 }

@@ -32,7 +32,6 @@
 
 	<bean id="validatorHelper" class="org.hdiv.filter.JsfValidatorHelper"
 		init-method="init">
-		<property name="logger" ref="logger" />
 		<property name="stateUtil" ref="stateUtil" />
 		<property name="hdivConfig" ref="config" />
 		<property name="session" ref="sessionHDIV" />

@@ -30,6 +30,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hdiv.config.HDIVConfig;
 import org.hdiv.exception.StateValidationException;
+import org.hdiv.filter.ValidatorError;
 import org.hdiv.logs.Logger;
 import org.hdiv.util.HDIVUtil;
 import org.hdiv.validation.ValidationError;
@@ -216,8 +217,9 @@ public class HDIVFacesEventListener implements FacesListener, StateHolder {
 
 		HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
 
-		this.logger.log(error.getErrorKey(), HDIVUtil.getRequestURI(request), error.getErrorParam(),
-				error.getErrorValue());
+		ValidatorError errorData = new ValidatorError(error.getErrorKey(), HDIVUtil.getRequestURI(request),
+				error.getErrorParam(), error.getErrorValue());
+		this.logger.log(errorData);
 	}
 
 	/**
@@ -239,7 +241,7 @@ public class HDIVFacesEventListener implements FacesListener, StateHolder {
 	 * As the listener is transient this method isn't called
 	 */
 	public Object saveState(FacesContext context) {
-		
+
 		return null;
 	}
 

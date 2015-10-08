@@ -84,7 +84,6 @@ public class JsfConfigurationSupport {
 	public IValidationHelper jsfValidatorHelper() {
 
 		ValidatorHelperRequest validatorHelperRequest = new JsfValidatorHelper();
-		validatorHelperRequest.setLogger(this.logger);
 		validatorHelperRequest.setStateUtil(this.stateUtil);
 		validatorHelperRequest.setHdivConfig(this.config);
 		validatorHelperRequest.setSession(this.session);

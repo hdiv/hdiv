@@ -36,6 +36,11 @@ public class Constants {
 	public static final String EDITABLE_PARAMETER_ERROR = "org.hdiv.action.EDITABLE_PARAMETER_ERROR";
 
 	/**
+	 * The request attributes key under HDIV should store data about errors produced in the editable fields.
+	 */
+	public static final String EDITABLE_PARAMETER_ERROR_DATA = "org.hdiv.action.EDITABLE_PARAMETER_ERROR_DATA";
+
+	/**
 	 * Name of the attribute which is used for storing cookies in session.
 	 */
 	public static final String HDIV_COOKIES_KEY = "org.hdiv.HdivCookies";

@@ -15,10 +15,10 @@
  */
 package org.hdiv.filter;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.hdiv.util.HDIVErrorCodes;
 
 /**
  * Process a request with validation errors.
@@ -35,8 +35,9 @@ public interface ValidatorErrorHandler {
 	 *            {@link HttpServletRequest} instance
 	 * @param response
 	 *            {@link HttpServletResponse} instance
-	 * @param errorCode
-	 *            Error code from {@link HDIVErrorCodes}
+	 * @param errors
+	 *            Validation errors
+	 * @since 2.1.13
 	 */
-	void handleValidatorError(HttpServletRequest request, HttpServletResponse response, String errorCode);
+	void handleValidatorError(HttpServletRequest request, HttpServletResponse response, List<ValidatorError> errors);
 }

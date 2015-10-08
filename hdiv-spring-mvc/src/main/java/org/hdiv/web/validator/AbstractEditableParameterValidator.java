@@ -15,8 +15,9 @@
  */
 package org.hdiv.web.validator;
 
-import java.util.Map;
+import java.util.List;
 
+import org.hdiv.filter.ValidatorError;
 import org.hdiv.util.Constants;
 import org.springframework.validation.Errors;
 import org.springframework.web.context.request.RequestAttributes;
@@ -45,15 +46,13 @@ public abstract class AbstractEditableParameterValidator {
 			return;
 		}
 
-		Map<String, String[]> parameters = (Map<String, String[]>) attr.getAttribute(
+		List<ValidatorError> validationErrors = (List<ValidatorError>) attr.getAttribute(
 				Constants.EDITABLE_PARAMETER_ERROR, 0);
-		if (parameters != null && parameters.size() > 0) {
+		if (validationErrors != null && validationErrors.size() > 0) {
 
-			for (String param : parameters.keySet()) {
+			for (ValidatorError error : validationErrors) {
 
-				String[] unauthorizedValues = parameters.get(param);
-
-				this.rejectParamValues(param, unauthorizedValues, errors);
+				this.rejectParamValues(error.getParameterName(), error.getParameterValue(), errors);
 			}
 		}
 	}
@@ -67,21 +66,26 @@ public abstract class AbstractEditableParameterValidator {
 			return;
 		}
 
-		Map<String, String[]> parameters = (Map<String, String[]>) attr.getAttribute(
+		List<ValidatorError> validationErrors = (List<ValidatorError>) attr.getAttribute(
 				Constants.EDITABLE_PARAMETER_ERROR, 0);
-		if (parameters != null && parameters.size() > 0) {
+		if (validationErrors != null && validationErrors.size() > 0) {
 
-			String[] unauthorizedValues = parameters.get(param);
-			if (unauthorizedValues != null && unauthorizedValues.length > 0) {
+			ValidatorError paramError = null;
+			for (ValidatorError error : validationErrors) {
+				if (error.getParameterName().equals(param)) {
+					paramError = error;
+				}
+			}
+			if (paramError != null) {
 
-				this.rejectParamValues(param, unauthorizedValues, errors);
+				this.rejectParamValues(paramError.getParameterName(), paramError.getParameterValue(), errors);
 			}
 		}
 	}
 
-	protected void rejectParamValues(String param, String[] paramValues, Errors errors) {
+	protected void rejectParamValues(String param, String paramValues, Errors errors) {
 
-		if ((paramValues.length == 1) && (paramValues[0].equals(Constants.HDIV_EDITABLE_PASSWORD_ERROR_KEY))) {
+		if ((paramValues.contains(Constants.HDIV_EDITABLE_PASSWORD_ERROR_KEY))) {
 
 			errors.rejectValue(param, Constants.HDIV_EDITABLE_PASSWORD_ERROR_KEY);
 
@@ -95,12 +99,13 @@ public abstract class AbstractEditableParameterValidator {
 	/**
 	 * It creates the message error from the values <code>values</code>.
 	 * 
-	 * @param values
+	 * @param paramValues
 	 *            values with not allowed characters
 	 * @return message error to show
 	 */
-	protected String createMessageError(String[] values) {
+	protected String createMessageError(String paramValues) {
 
+		String[] values = paramValues.split(",");
 		StringBuffer printedValue = new StringBuffer();
 
 		for (int i = 0; i < values.length; i++) {
