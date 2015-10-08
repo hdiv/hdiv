@@ -135,11 +135,11 @@ public abstract class HdivWebSecurityConfigurationSupport {
 		return builder;
 	}
 
-	abstract void configure(SecurityConfigBuilder securityConfigBuilder);
+	public abstract void configure(SecurityConfigBuilder securityConfigBuilder);
 
-	abstract void addExclusions(ExclusionRegistry registry);
+	public abstract void addExclusions(ExclusionRegistry registry);
 
-	abstract void addLongLivingPages(LongLivingPagesRegistry registry);
+	public abstract void addLongLivingPages(LongLivingPagesRegistry registry);
 
 	@Bean
 	public IApplication securityApplication() {
@@ -443,9 +443,9 @@ public abstract class HdivWebSecurityConfigurationSupport {
 		return repository;
 	}
 
-	abstract void addRules(RuleRegistry registry);
+	public abstract void addRules(RuleRegistry registry);
 
-	abstract void configureEditableValidation(ValidationConfigurer validationConfigurer);
+	public abstract void configureEditableValidation(ValidationConfigurer validationConfigurer);
 
 	private List<IValidation> defaultRules() {
 

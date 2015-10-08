@@ -45,7 +45,7 @@ public class HdivWebSecurityConfigurationSupportTest {
 			}
 			
 			@Override
-			void addLongLivingPages(LongLivingPagesRegistry registry) {
+			public void addLongLivingPages(LongLivingPagesRegistry registry) {
 				
 				registry.addLongLivingPages("/longLivingPage.html", "/longLiving/.*").scope(StateScopeType.APP);
 				registry.addLongLivingPages("/longLivingPageApp.html");
