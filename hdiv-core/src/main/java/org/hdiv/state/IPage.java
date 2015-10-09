@@ -133,6 +133,8 @@ public interface IPage {
 	/**
 	 * Returns the state id of the parent page
 	 * 	  
+	 * @return the parent state id
+	 * 
 	 * @since HDIV 2.1.13
 	 */
 	public String getParentStateId();

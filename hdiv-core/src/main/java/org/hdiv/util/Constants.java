@@ -62,11 +62,6 @@ public class Constants {
 	public static final String JSESSIONID_LC = JSESSIONID.toLowerCase();
 
 	/**
-	 * Session attribute name for {@link Key} instance
-	 */
-	public static final String KEY_NAME = "org.hdiv.Key";
-
-	/**
 	 * Session attribute name for {@link PageIdGenerator} instance
 	 */
 	public static final String PAGE_ID_GENERATOR_NAME = "org.hdiv.PageIdGenerator";
