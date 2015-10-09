@@ -48,12 +48,7 @@ import org.springframework.web.util.HtmlUtils;
  * by calling endRequest method.
  * </p>
  * <p>
- * Depending on the strategy defined in HDIV configuration (memory, cipher or hash), the IState object is stored in the
- * user session or is sent to the client in the html code by adding an extra parameter called _HDIV_STATE_.
- * </p>
- * <p>
- * In the memory strategy IState objects are stored in the user session (HttpSession) while in the cipher and hash
- * strategies these objects are stored in the client.
+ * In the memory strategy IState objects are stored in the user session (HttpSession)
  * </p>
  * 
  * @author Roberto Velasco
@@ -125,7 +120,7 @@ public abstract class AbstractDataComposer implements IDataComposer {
 	
 	/**
 	 * It generates a new encoded value for the parameter <code>parameter</code> and the value <code>value</code> passed
-	 * as parameters. The returned value guarantees the confidentiality in the cipher and memory strategies if
+	 * as parameters. The returned value guarantees the confidentiality in the memory strategy if
 	 * confidentiality indicator <code>confidentiality</code> is true.
 	 * 
 	 * @param parameter
@@ -142,7 +137,7 @@ public abstract class AbstractDataComposer implements IDataComposer {
 
 	/**
 	 * It generates a new encoded value for the parameter <code>parameter</code> and the value <code>value</code> passed
-	 * as parameters. The returned value guarantees the confidentiality in the cipher and memory strategies if
+	 * as parameters. The returned value guarantees the confidentiality in the memory strategy if
 	 * confidentiality indicator <code>confidentiality</code> is true.
 	 * 
 	 * @param action
@@ -163,7 +158,7 @@ public abstract class AbstractDataComposer implements IDataComposer {
 	/**
 	 * Adds a new IParameter object, generated from the values passed as parameters, to the current state
 	 * <code>state</code>. If confidentiality is activated it generates a new encoded value that will be returned by the
-	 * server for the parameter <code>parameter</code> in the cipher and memory strategies.
+	 * server for the parameter <code>parameter</code> in the memory strategy.
 	 * 
 	 * @param parameter
 	 *            HTTP parameter
@@ -182,7 +177,7 @@ public abstract class AbstractDataComposer implements IDataComposer {
 
 	/**
 	 * It generates a new encoded value for the parameter <code>parameter</code> and the value <code>value</code> passed
-	 * as parameters. The returned value guarantees the confidentiality in the cipher and memory strategies if
+	 * as parameters. The returned value guarantees the confidentiality in the memory strategy if
 	 * confidentiality indicator <code>confidentiality</code> is true.
 	 * 
 	 * @param parameter
@@ -203,7 +198,7 @@ public abstract class AbstractDataComposer implements IDataComposer {
 
 	/**
 	 * It generates a new encoded value for the parameter <code>parameter</code> and the value <code>value</code> passed
-	 * as parameters. The returned value guarantees the confidentiality in the cipher and memory strategies if
+	 * as parameters. The returned value guarantees the confidentiality in the memory strategy if
 	 * confidentiality indicator <code>confidentiality</code> is true.
 	 * 
 	 * @param action
@@ -234,7 +229,7 @@ public abstract class AbstractDataComposer implements IDataComposer {
 	/**
 	 * Adds a new IParameter object, generated from the values passed as parameters, to the current state
 	 * <code>state</code>. If confidentiality is activated it generates a new encoded value that will be returned by the
-	 * server for the parameter <code>parameter</code> in the cipher and memory strategies.
+	 * server for the parameter <code>parameter</code> in the memory strategy.
 	 * 
 	 * @param parameter
 	 *            HTTP parameter
@@ -256,7 +251,7 @@ public abstract class AbstractDataComposer implements IDataComposer {
 	/**
 	 * Adds a new IParameter object, generated from the values passed as parameters, to the current state
 	 * <code>state</code>. If confidentiality is activated it generates a new encoded value that will be returned by the
-	 * server for the parameter <code>parameter</code> in the cipher and memory strategies.
+	 * server for the parameter <code>parameter</code> in the memory strategy.
 	 * 
 	 * @param parameter
 	 *            HTTP parameter
@@ -351,7 +346,7 @@ public abstract class AbstractDataComposer implements IDataComposer {
 	/**
 	 * Adds a new IParameter object, generated from the values passed as parameters, to the current state
 	 * <code>state</code>. If confidentiality is activated it generates a new encoded value that will be returned by the
-	 * server for the parameter <code>parameter</code> in the cipher and memory strategies.
+	 * server for the parameter <code>parameter</code> in the memory strategy.
 	 * <p>
 	 * Custom method for form field.
 	 * 
@@ -374,7 +369,7 @@ public abstract class AbstractDataComposer implements IDataComposer {
 	/**
 	 * Adds a new IParameter object, generated from the values passed as parameters, to the current state
 	 * <code>state</code>. If confidentiality is activated it generates a new encoded value that will be returned by the
-	 * server for the parameter <code>parameter</code> in the cipher and memory strategies.
+	 * server for the parameter <code>parameter</code> in the memory strategy.
 	 * 
 	 * @param parameterName
 	 *            HTTP parameter
@@ -639,7 +634,7 @@ public abstract class AbstractDataComposer implements IDataComposer {
 	}
 
 	/**
-	 * Obtains the suffix to add to the _HDIV_STATE_ parameter in the memory and hash strategy.
+	 * Obtains the suffix to add to the _HDIV_STATE_ parameter in the memory strategy.
 	 * 
 	 * @param method
 	 *            HTTP method

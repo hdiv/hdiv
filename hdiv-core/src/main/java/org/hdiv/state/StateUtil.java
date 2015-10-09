@@ -26,7 +26,6 @@ import org.hdiv.exception.HDIVException;
 import org.hdiv.session.ISession;
 import org.hdiv.state.scope.StateScope;
 import org.hdiv.state.scope.StateScopeManager;
-import org.hdiv.util.EncodingUtil;
 import org.hdiv.util.HDIVErrorCodes;
 
 /**
@@ -50,11 +49,6 @@ public class StateUtil {
 	 * Compiled MEMORY_PATTERN
 	 */
 	protected Pattern memoryPattern = Pattern.compile(MEMORY_PATTERN);
-
-	/**
-	 * Utility methods for encoding
-	 */
-	protected EncodingUtil encodingUtil;
 
 	/**
 	 * Hdiv configuration for this app. Access to user defined strategy.
@@ -98,11 +92,6 @@ public class StateUtil {
 
 			restoredState = this.restoreMemoryState(requestState);
 
-		} else if (this.isCipherStrategy()) {
-			restoredState = this.restoreCipherState(requestState);
-
-		} else if (this.isHashStrategy()) {
-			restoredState = this.restoreHashState(requestState);
 		}
 
 		if (restoredState == null) {
@@ -124,24 +113,6 @@ public class StateUtil {
 		Matcher m = this.memoryPattern.matcher(value);
 
 		return (m.matches() ? true : this.config.getStrategy().equals(Strategy.MEMORY));
-	}
-
-	/**
-	 * Checks if the cipher (encoded) strategy is being used.
-	 * 
-	 * @return True if strategy is cipher. False in otherwise.
-	 */
-	protected boolean isCipherStrategy() {
-		return this.config.getStrategy().equals(Strategy.CIPHER);
-	}
-
-	/**
-	 * Checks if the hash strategy is being used.
-	 * 
-	 * @return True if strategy is hash. False in otherwise.
-	 */
-	protected boolean isHashStrategy() {
-		return this.config.getStrategy().equals(Strategy.HASH);
 	}
 
 	/**
@@ -219,50 +190,7 @@ public class StateUtil {
 		}
 		return sessionState;
 	}
-
-	/**
-	 * Restore state in cipher strategy.
-	 * 
-	 * @param requestState
-	 *            State received in the request
-	 * @return Decoded state of type <code>IState</code> obtained from <code>value</code>
-	 */
-	protected IState restoreCipherState(String requestState) {
-
-		Object[] cipherData = (Object[]) this.encodingUtil.decode64Cipher(requestState);
-		IState restoredState = (IState) cipherData[0];
-		return restoredState;
-	}
-
-	/**
-	 * Checks if the state hash received from the client and the hash stored in session match. If it is true, an object
-	 * of type <code>IState</code> is returned. Otherwise, a HDIVException is thrown.
-	 * 
-	 * @param value
-	 *            State received in the request encoded in Base64
-	 * @return Decoded state of type <code>IState</code> obtained from <code>value</code>
-	 */
-	protected IState restoreHashState(String value) {
-
-		String restoredStateHash = this.encodingUtil.calculateStateHash(value);
-
-		IState decodedState = (IState) encodingUtil.decode64(value);
-		String sessionStateHash = this.session.getStateHash(decodedState.getPageId(), decodedState.getId());
-
-		if (restoredStateHash.equals(sessionStateHash)) {
-			return decodedState;
-		}
-		return null;
-	}
-
-	/**
-	 * @param encodingUtil
-	 *            The encodingUtil to set.
-	 */
-	public void setEncodingUtil(EncodingUtil encodingUtil) {
-		this.encodingUtil = encodingUtil;
-	}
-
+	
 	/**
 	 * @param config
 	 *            the config to set

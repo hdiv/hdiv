@@ -150,7 +150,7 @@ public class HDIVConfig implements Serializable {
 	protected String modifyStateParameterName = DEFAULT_MODIFY_STATE_PARAMETER_NAME;
 
 	/**
-	 * HDIV behaviour strategy. There are 3 possible options: memory, cipher, hash
+	 * HDIV behaviour strategy. There are 1 possible option: memory
 	 * 
 	 * @since HDIV 2.1.0
 	 */

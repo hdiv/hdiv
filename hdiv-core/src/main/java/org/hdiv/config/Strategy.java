@@ -25,21 +25,6 @@ public enum Strategy {
 	/**
 	 * All the states of the page are stored in the user's HttpSession.
 	 */
-	MEMORY,
-
-	/**
-	 * For each possible request of each page (link or form) an extra parameter (_HDIV_STATE_ by default) is added which
-	 * represents the state of the request. To guarantee the integrity of the state itself, which is the base of the
-	 * validation, it is ciphered using a symmetrical algorithm. No HttpSession is used in this strategy.
-	 */
-	CIPHER,
-
-	/**
-	 * This strategy is very similar to the Cipher strategy but in this case the state sent to the client is coded in
-	 * Base64. To be able to check this parameter integrity, a hash of the state is generated before being sent to the
-	 * client and it is stored in the user session. This strategy does not guarantee confidentiality because the state
-	 * can be decoded if we have a high technical knowledge.
-	 */
-	HASH;
+	MEMORY
 
 }

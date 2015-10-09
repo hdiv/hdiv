@@ -87,16 +87,6 @@ public class StateUtilTest extends AbstractHDIVTestCase {
 		// memory strategy in conf and bad formatted stateId
 		boolean result = this.stateUtil.isMemoryStrategy("1111");
 		assertTrue(result);
-
-		// change strategy to Hash
-		getConfig().setStrategy(Strategy.HASH);
-		result = this.stateUtil.isMemoryStrategy("1111");
-		assertFalse(result);
-
-		// Hash strategy in conf but stateId hash memory stategy pattern
-		result = this.stateUtil.isMemoryStrategy("1-1-11111");
-		assertTrue(result);
-
 	}
 
 	public void testLongLivingApp() {

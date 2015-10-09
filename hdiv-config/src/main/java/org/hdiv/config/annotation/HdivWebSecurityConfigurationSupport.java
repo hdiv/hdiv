@@ -22,16 +22,12 @@ import java.util.Map;
 
 import org.hdiv.application.ApplicationHDIV;
 import org.hdiv.application.IApplication;
-import org.hdiv.cipher.CipherHTTP;
-import org.hdiv.cipher.ICipherHTTP;
-import org.hdiv.cipher.IKeyFactory;
-import org.hdiv.cipher.KeyFactory;
+
 import org.hdiv.config.HDIVConfig;
 import org.hdiv.config.StartPage;
 import org.hdiv.config.annotation.ValidationConfigurer.ValidationConfig;
 import org.hdiv.config.annotation.ValidationConfigurer.ValidationConfig.EditableValidationConfigurer;
 import org.hdiv.config.annotation.builders.SecurityConfigBuilder;
-import org.hdiv.config.annotation.builders.SecurityConfigBuilder.CipherConfigure;
 import org.hdiv.config.annotation.grails.GrailsConfigurationSupport;
 import org.hdiv.config.annotation.jsf.JsfConfigurationSupport;
 import org.hdiv.config.annotation.springmvc.SpringMvcConfigurationSupport;
@@ -74,7 +70,6 @@ import org.hdiv.state.scope.UserSessionStateScope;
 import org.hdiv.urlProcessor.BasicUrlProcessor;
 import org.hdiv.urlProcessor.FormUrlProcessor;
 import org.hdiv.urlProcessor.LinkUrlProcessor;
-import org.hdiv.util.EncodingUtil;
 import org.hdiv.validator.DefaultEditableDataValidationProvider;
 import org.hdiv.validator.DefaultValidationRepository;
 import org.hdiv.validator.EditableDataValidationProvider;
@@ -173,28 +168,6 @@ public abstract class HdivWebSecurityConfigurationSupport {
 		SequentialPageIdGenerator pageIdGenerator = new SequentialPageIdGenerator();
 		return pageIdGenerator;
 	}
-
-	@Bean
-	public IKeyFactory keyFactory() {
-		KeyFactory keyFactory = new KeyFactory();
-
-		SecurityConfigBuilder builder = this.securityConfigBuilder();
-		CipherConfigure config = builder.getCipherConfigure();
-		if (config.getAlgorithm() != null) {
-			keyFactory.setAlgorithm(config.getAlgorithm());
-		}
-		if (config.getKeySize() > 0) {
-			keyFactory.setKeySize(config.getKeySize());
-		}
-		if (config.getPrngAlgorithm() != null) {
-			keyFactory.setPrngAlgorithm(config.getPrngAlgorithm());
-		}
-		if (config.getProvider() != null) {
-			keyFactory.setProvider(config.getProvider());
-		}
-		return keyFactory;
-	}
-
 	@Bean
 	public IUserData securityUserData() {
 		UserData userData = new UserData();
@@ -235,35 +208,8 @@ public abstract class HdivWebSecurityConfigurationSupport {
 	}
 
 	@Bean
-	public EncodingUtil encodingUtil() {
-		EncodingUtil encodingUtil = new EncodingUtil();
-		encodingUtil.setSession(securitySession());
-		encodingUtil.init();
-		return encodingUtil;
-	}
-
-	@Bean
-	@Scope(BeanDefinition.SCOPE_PROTOTYPE)
-	public ICipherHTTP cipherHTTP() {
-
-		SecurityConfigBuilder builder = this.securityConfigBuilder();
-		CipherConfigure config = builder.getCipherConfigure();
-
-		CipherHTTP cipherHTTP = new CipherHTTP();
-		if (config.getProvider() != null) {
-			cipherHTTP.setProvider(config.getProvider());
-		}
-		if (config.getTransformation() != null) {
-			cipherHTTP.setTransformation(config.getTransformation());
-		}
-		cipherHTTP.init();
-		return cipherHTTP;
-	}
-
-	@Bean
 	public StateUtil stateUtil() {
 		StateUtil stateUtil = new StateUtil();
-		stateUtil.setEncodingUtil(encodingUtil());
 		stateUtil.setConfig(hdivConfig());
 		stateUtil.setSession(securitySession());
 		stateUtil.setStateScopeManager(stateScopeManager());
@@ -302,7 +248,6 @@ public abstract class HdivWebSecurityConfigurationSupport {
 		DataComposerFactory dataComposerFactory = new DataComposerFactory();
 		dataComposerFactory.setConfig(hdivConfig());
 		dataComposerFactory.setSession(securitySession());
-		dataComposerFactory.setEncodingUtil(encodingUtil());
 		dataComposerFactory.setStateUtil(stateUtil());
 		dataComposerFactory.setUidGenerator(uidGenerator());
 		dataComposerFactory.setStateScopeManager(stateScopeManager());

@@ -30,7 +30,6 @@ public class SecurityConfigBuilder {
 
 	private SessionExpiredConfigure sessionExpiredConfigure = new SessionExpiredConfigure();
 
-	private CipherConfigure cipherConfigure = new CipherConfigure();
 
 	public SecurityConfigBuilder(PatternMatcherFactory patternMatcherFactory) {
 		this.config = new HDIVConfig();
@@ -106,14 +105,6 @@ public class SecurityConfigBuilder {
 		return this.sessionExpiredConfigure;
 	}
 
-	public CipherConfigure cipher() {
-		return this.cipherConfigure;
-	}
-
-	public CipherConfigure getCipherConfigure() {
-		return this.cipherConfigure;
-	}
-
 	public HDIVConfig build() {
 		return this.config;
 	}
@@ -138,108 +129,4 @@ public class SecurityConfigBuilder {
 			return SecurityConfigBuilder.this;
 		}
 	}
-
-	public class CipherConfigure {
-
-		private String provider;
-
-		private String algorithm;
-
-		private String prngAlgorithm;
-
-		private String transformation;
-
-		private int keySize;
-
-		/**
-		 * @return the provider
-		 */
-		public String getProvider() {
-			return provider;
-		}
-
-		/**
-		 * @param provider
-		 *            the provider to set
-		 * @return the Configure object
-		 */
-		public CipherConfigure provider(String provider) {
-			this.provider = provider;
-			return this;
-		}
-
-		/**
-		 * @return the algorithm
-		 */
-		public String getAlgorithm() {
-			return algorithm;
-		}
-
-		/**
-		 * @param algorithm
-		 *            the algorithm to set
-		 * @return the Configure object
-		 */
-		public CipherConfigure algorithm(String algorithm) {
-			this.algorithm = algorithm;
-			return this;
-		}
-
-		/**
-		 * @return the prngAlgorithm
-		 */
-		public String getPrngAlgorithm() {
-			return prngAlgorithm;
-		}
-
-		/**
-		 * @param prngAlgorithm
-		 *            the prngAlgorithm to set
-		 * @return the Configure object
-		 */
-		public CipherConfigure prngAlgorithm(String prngAlgorithm) {
-			this.prngAlgorithm = prngAlgorithm;
-			return this;
-		}
-
-		/**
-		 * @return the transformation
-		 */
-		public String getTransformation() {
-			return transformation;
-		}
-
-		/**
-		 * @param transformation
-		 *            the transformation to set
-		 * @return the Configure object
-		 */
-		public CipherConfigure transformation(String transformation) {
-			this.transformation = transformation;
-			return this;
-		}
-
-		/**
-		 * @return the keySize
-		 */
-		public int getKeySize() {
-			return keySize;
-		}
-
-		/**
-		 * @param keySize
-		 *            the keySize to set
-		 * @return the Configure object
-		 */
-		public CipherConfigure keySize(int keySize) {
-			this.keySize = keySize;
-			return this;
-		}
-
-		public SecurityConfigBuilder and() {
-			return SecurityConfigBuilder.this;
-		}
-
-	}
-
 }

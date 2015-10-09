@@ -2,6 +2,10 @@ HDIV CHANGELOG
 ==============
 http://www.hdiv.org
 
+Release 2.2.0
+==================================
+ * Remove Cipher and Hash strategies.
+ 
 Release 2.1.13
 ==================================
  * Multiple iframe support in the same page 

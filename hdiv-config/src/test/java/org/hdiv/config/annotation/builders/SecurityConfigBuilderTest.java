@@ -41,8 +41,6 @@ public class SecurityConfigBuilderTest {
 			.stateParameterName("state")
 			.maxPagesPerSession(23)
 			.reuseExistingPageInAjaxRequest(true)
-			.cipher()
-				.algorithm("algorithm").and()
 			.sessionExpired()
 				.loginPage("/login.html");
 
@@ -53,6 +51,5 @@ public class SecurityConfigBuilderTest {
 		assertEquals(true, config.isReuseExistingPageInAjaxRequest());
 		
 		assertEquals(23, this.builder.getMaxPagesPerSession());
-		assertEquals("algorithm", this.builder.getCipherConfigure().getAlgorithm());
 	}
 }

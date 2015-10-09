@@ -15,9 +15,6 @@
  */
 package org.hdiv.session;
 
-import org.hdiv.cipher.ICipherHTTP;
-import org.hdiv.cipher.Key;
-import org.hdiv.exception.HDIVException;
 import org.hdiv.state.IPage;
 import org.hdiv.state.IState;
 
@@ -73,17 +70,6 @@ public interface ISession {
 	 */
 	public IState getState(int pageId, int stateId);
 
-	/**
-	 * Obtains the hash of the state identifier <code>stateId</code> related to page identifier <code>pageId</code>.
-	 * 
-	 * @param pageId
-	 *            Page identifier
-	 * @param stateId
-	 *            State identifier
-	 * 
-	 * @return Hash of the state identifier <code>stateId</code>
-	 */
-	public String getStateHash(int pageId, int stateId);
 
 	/**
 	 * Obtains from the user session the page identifier for the current request.
@@ -101,33 +87,5 @@ public interface ISession {
 	 * @since HDIV 2.0.4
 	 */
 	public IPage getPage(int pageId);
-
-	/**
-	 * Creates the data cipher.
-	 * 
-	 * @return Returns the data cipher.
-	 * @throws HDIVException
-	 *             If the state doesn't exist a new HDIV exception is thrown.
-	 */
-	public ICipherHTTP getEncryptCipher();
-
-	/**
-	 * Creates the data decrypter.
-	 * 
-	 * @return Returns the data decrypter.
-	 * @throws HDIVException
-	 *             if there is an error in cipher initialization.
-	 */
-	public ICipherHTTP getDecryptCipher();
-
-	/**
-	 * Returns the symmetric key used to encrypt and decrypt data.
-	 * 
-	 * @return The symmetric key
-	 * @throws HDIVException
-	 *             If the key doesn't exist a new HDIV exception is thrown.
-	 * @since HDIV 2.1.4
-	 */
-	public Key getCipherKey();
 
 }

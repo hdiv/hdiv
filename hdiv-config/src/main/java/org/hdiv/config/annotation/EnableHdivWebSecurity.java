@@ -40,9 +40,7 @@ import org.springframework.context.annotation.Import;
  * 
  * 		builder
  * 			.sessionExpired()
- * 				.homePage("/").loginPage("/login.html").and()
- * 			.cipher()
- * 				.keySize(128).and()
+ * 			.homePage("/").loginPage("/login.html").and()
  * 			.debugMode(false);
  * 	}
  * 	

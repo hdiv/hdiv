@@ -15,7 +15,6 @@
  */
 package org.hdiv.util;
 
-import org.hdiv.cipher.Key;
 import org.hdiv.filter.ValidatorHelperResult;
 import org.hdiv.idGenerator.PageIdGenerator;
 import org.hdiv.session.IStateCache;

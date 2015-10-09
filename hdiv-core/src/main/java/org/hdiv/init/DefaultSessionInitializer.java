@@ -17,10 +17,7 @@ package org.hdiv.init;
 
 import javax.servlet.http.HttpSession;
 
-import org.hdiv.cipher.IKeyFactory;
-import org.hdiv.cipher.Key;
 import org.hdiv.config.HDIVConfig;
-import org.hdiv.config.Strategy;
 import org.hdiv.idGenerator.PageIdGenerator;
 import org.hdiv.util.Constants;
 import org.hdiv.util.HDIVUtil;
@@ -48,7 +45,6 @@ public class DefaultSessionInitializer implements SessionInitializer, Applicatio
 	 */
 	public void initializeSession(HttpSession session) {
 
-		this.initStrategies(session);
 		this.initPageIdGenerator(session);
 		this.initStateParameterNames(session);
 	}
@@ -60,24 +56,6 @@ public class DefaultSessionInitializer implements SessionInitializer, Applicatio
 	 */
 	public void destroySession(HttpSession session) {
 
-	}
-
-	/**
-	 * Strategies initialization. For each user session, a new cipher key is created if the cipher strategy has been
-	 * chosen.
-	 * 
-	 * @param httpSession
-	 *            http session
-	 */
-	protected void initStrategies(HttpSession httpSession) {
-
-		if (this.config.getStrategy().equals(Strategy.CIPHER)) {
-			IKeyFactory keyFactory = this.applicationContext.getBean(IKeyFactory.class);
-			// creating encryption key
-			Key key = keyFactory.generateKey();
-			httpSession.setAttribute(Constants.KEY_NAME, key);
-
-		}
 	}
 
 	/**

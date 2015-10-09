@@ -28,16 +28,6 @@ public interface IPage {
 	public void addState(IState state);
 
 	/**
-	 * Adds a new state hash to the page <code>this</code>.
-	 * 
-	 * @param id
-	 *            state identifier
-	 * @param state
-	 *            Hash of a state that represents all the data that composes a possible request.
-	 */
-	public void addState(int id, String state);
-
-	/**
 	 * Checks if exists a state with the given identifier <code>key</code>.
 	 * 
 	 * @param id
@@ -54,15 +44,6 @@ public interface IPage {
 	 * @return IState State with the identifier <code>key</code>.
 	 */
 	public IState getState(int id);
-
-	/**
-	 * Returns the state hash with the given identifier <code>key</code> from the map of states
-	 * 
-	 * @param id
-	 *            State identifier
-	 * @return String hash with the identifier <code>key</code>.
-	 */
-	public String getStateHash(int id);
 
 	/**
 	 * @return Returns the page name.

@@ -140,8 +140,7 @@ public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
 		<title>Execution strategy</title>
 
 		<para>
-			Having the same objectives, HDIV has different operation
-			strategies:
+			Having the same objectives, HDIV has only one strategy:
 		</para>
 
 		<itemizedlist>
@@ -169,96 +168,7 @@ public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
 				</para>
 			</listitem>
 
-			<listitem>
-				<para>
-					<emphasis role="bold">Cipher</emphasis>
-					: For each possible request of each page (link or form) an extra
-					parameter
-					(_HDIV_STATE_) is added which represents the state of the
-					request.
-					To guarantee the integrity of the state itself, which is
-					the base of
-					the validation, it
-					is ciphered using a symmetrical
-					algorithm. Beside adding the extra
-					parameter all
-					the non editable
-					values are replaced by relative values (0,1,2,…) to
-					guarantee data
-					confidentiality.
-				</para>
-			</listitem>
-			<listitem>
-				<para>
-					<emphasis role="bold">Hash</emphasis>
-					: This strategy is very similar to the Cipher strategy but in
-					this
-					case the state
-					sent to the client is coded in Base64.
-					To be able to
-					check this parameter integrity, a hash of the state is
-					generated
-					before being sent to the client and it is stored in the user
-					session.
-					This
-					strategy
-					does not guarantee confidentiality because the
-					state can be decoded if
-					we
-					have a
-					high technical knowledge.
-				</para>
-			</listitem>
-
 		</itemizedlist>
-		<para>
-			In order to overwrite the default strategy configuration
-			(memory) it's
-			necessary to add an extra attribute to HDIV config
-			entity:
-		</para>
-		<programlisting language="xml">
- 			<![CDATA[
-<hdiv:config strategy="cipher">
-    <hdiv:startPages>/home.html</hdiv:startPages>
-</hdiv:config>
-]]></programlisting>
-
-		<para>
-			In JavaConfig mode:
-			<programlisting language="java">
-		
-<![CDATA[@Configuration
-@EnableHdivWebSecurity
-public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
-
-    @Override
-    public void configure(SecurityConfigBuilder builder) {
-
-        builder.strategy(Strategy.CIPHER);
-    }
-
-}
-]]></programlisting>
-		</para>
-
-		<para>
-			If you are a Grails user, configuration is implemented within
-			plugin
-			configuration:
-		</para>
-		<programlisting language="xml">
- 					<![CDATA[
-grails {
-    plugin {
-        hdiv {
-            config {
-                strategy='cipher'
-            }
-        }
-    }
-}
-]]></programlisting>
 
 	</section>
 

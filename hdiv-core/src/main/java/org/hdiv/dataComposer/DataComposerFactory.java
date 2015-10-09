@@ -30,7 +30,6 @@ import org.hdiv.state.IState;
 import org.hdiv.state.StateUtil;
 import org.hdiv.state.scope.StateScopeManager;
 import org.hdiv.util.Constants;
-import org.hdiv.util.EncodingUtil;
 import org.hdiv.util.HDIVUtil;
 
 /**
@@ -62,11 +61,6 @@ public class DataComposerFactory {
 	 * Maximum size allowed to represent page state
 	 */
 	protected int allowedLength = DEFAULT_ALLOWED_LENGTH;
-
-	/**
-	 * Utility methods for encoding
-	 */
-	protected EncodingUtil encodingUtil;
 
 	/**
 	 * State management utility
@@ -101,28 +95,6 @@ public class DataComposerFactory {
 			composer.setSession(this.session);
 			composer.setUidGenerator(this.uidGenerator);
 			composer.setStateScopeManager(this.stateScopeManager);
-			composer.init();
-			dataComposer = composer;
-
-		} else if (this.config.getStrategy().equals(Strategy.CIPHER)) {
-			DataComposerCipher composer = new DataComposerCipher();
-			composer.setHdivConfig(this.config);
-			composer.setSession(this.session);
-			composer.setUidGenerator(this.uidGenerator);
-			composer.setStateScopeManager(this.stateScopeManager);
-			composer.setAllowedLength(this.allowedLength);
-			composer.setEncodingUtil(this.encodingUtil);
-			composer.init();
-			dataComposer = composer;
-
-		} else if (this.config.getStrategy().equals(Strategy.HASH)) {
-			DataComposerHash composer = new DataComposerHash();
-			composer.setHdivConfig(this.config);
-			composer.setSession(this.session);
-			composer.setUidGenerator(this.uidGenerator);
-			composer.setStateScopeManager(this.stateScopeManager);
-			composer.setAllowedLength(this.allowedLength);
-			composer.setEncodingUtil(this.encodingUtil);
 			composer.init();
 			dataComposer = composer;
 
@@ -272,14 +244,6 @@ public class DataComposerFactory {
 	 */
 	public void setAllowedLength(int allowedLength) {
 		this.allowedLength = allowedLength;
-	}
-
-	/**
-	 * @param encodingUtil
-	 *            the encodingUtil to set
-	 */
-	public void setEncodingUtil(EncodingUtil encodingUtil) {
-		this.encodingUtil = encodingUtil;
 	}
 
 	/**

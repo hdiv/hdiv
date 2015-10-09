@@ -312,8 +312,6 @@
 	<xsd:simpleType name="strategy">
 		<xsd:restriction base="xsd:string">
 			<xsd:enumeration value="memory" />
-			<xsd:enumeration value="cipher" />
-			<xsd:enumeration value="hash" />
 		</xsd:restriction>
 	</xsd:simpleType>
 

@@ -21,10 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.hdiv.application.ApplicationHDIV;
-import org.hdiv.cipher.CipherHTTP;
-import org.hdiv.cipher.ICipherHTTP;
-import org.hdiv.cipher.IKeyFactory;
-import org.hdiv.cipher.KeyFactory;
+
 import org.hdiv.components.support.OutcomeTargetComponentProcessor;
 import org.hdiv.components.support.OutputLinkComponentProcessor;
 import org.hdiv.config.HDIVConfig;
@@ -71,7 +68,6 @@ import org.hdiv.state.scope.UserSessionStateScope;
 import org.hdiv.urlProcessor.BasicUrlProcessor;
 import org.hdiv.urlProcessor.FormUrlProcessor;
 import org.hdiv.urlProcessor.LinkUrlProcessor;
-import org.hdiv.util.EncodingUtil;
 import org.hdiv.validator.DefaultEditableDataValidationProvider;
 import org.hdiv.validators.EditableValidator;
 import org.hdiv.validators.HtmlInputHiddenValidator;
@@ -172,8 +168,6 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 
 	protected RuntimeBeanReference sessionRef;
 
-	protected RuntimeBeanReference encodingUtilRef;
-
 	protected RuntimeBeanReference applicationRef;
 
 	protected RuntimeBeanReference uidGeneratorRef;
@@ -215,7 +209,6 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		this.uidGeneratorRef = this.createSimpleBean(element, source, parserContext, RandomGuidUidGenerator.class,
 				UidGenerator.class.getName());
 		this.createPageIdGenerator(element, source, parserContext);
-		this.createKeyFactory(element, source, parserContext);
 		this.userDataRef = this.createUserData(element, source, parserContext);
 
 		this.stateScopeManagerRef = this.createStateScopeManager(element, source, parserContext);
@@ -223,9 +216,7 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		this.loggerRef = this.createLogger(element, source, parserContext);
 		this.createStateCache(element, source, parserContext);
 		this.sessionRef = this.createSession(element, source, parserContext);
-		this.encodingUtilRef = this.createEncodingUtil(element, source, parserContext);
 		this.applicationRef = this.createSimpleBean(element, source, parserContext, ApplicationHDIV.class);
-		this.createCipher(element, source, parserContext);
 		this.createSimpleBean(element, source, parserContext, ValidationResult.class);
 		this.stateUtilRef = this.createStateUtil(element, source, parserContext);
 		this.dataValidatorRef = this.createDataValidator(element, source, parserContext);
@@ -295,14 +286,6 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		return this.registerBean(bean, PageIdGenerator.class.getName(), parserContext);
 	}
 
-	protected RuntimeBeanReference createKeyFactory(Element element, Object source, ParserContext parserContext) {
-		RootBeanDefinition bean = new RootBeanDefinition(KeyFactory.class);
-		bean.setSource(source);
-		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
-
-		return this.registerBean(bean, IKeyFactory.class.getName(), parserContext);
-	}
-
 	protected RuntimeBeanReference createUserData(Element element, Object source, ParserContext parserContext) {
 		String userData = element.getAttribute("userData");
 		if (userData == null || userData.length() < 1) {
@@ -350,38 +333,16 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		return this.registerBean(bean, IStateCache.class.getName(), parserContext);
 	}
 
-	protected RuntimeBeanReference createEncodingUtil(Element element, Object source, ParserContext parserContext) {
-
-		RootBeanDefinition bean = new RootBeanDefinition(EncodingUtil.class);
-		bean.setSource(source);
-		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
-		bean.setInitMethodName("init");
-		bean.getPropertyValues().addPropertyValue("session", this.sessionRef);
-
-		return this.registerBean(bean, EncodingUtil.class.getName(), parserContext);
-	}
-
 	protected RuntimeBeanReference createSession(Element element, Object source, ParserContext parserContext) {
 
 		return this.createSimpleBean(element, source, parserContext, SessionHDIV.class, ISession.class.getName());
 	}
-
-	protected RuntimeBeanReference createCipher(Element element, Object source, ParserContext parserContext) {
-		RootBeanDefinition bean = new RootBeanDefinition(CipherHTTP.class);
-		bean.setSource(source);
-		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
-		bean.setScope(BeanDefinition.SCOPE_PROTOTYPE);
-		bean.setInitMethodName("init");
-
-		return this.registerBean(bean, ICipherHTTP.class.getName(), parserContext);
-	}
-
+	
 	protected RuntimeBeanReference createStateUtil(Element element, Object source, ParserContext parserContext) {
 		RootBeanDefinition bean = new RootBeanDefinition(StateUtil.class);
 		bean.setSource(source);
 		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
 		bean.setInitMethodName("init");
-		bean.getPropertyValues().addPropertyValue("encodingUtil", this.encodingUtilRef);
 		bean.getPropertyValues().addPropertyValue("config", this.configRef);
 		bean.getPropertyValues().addPropertyValue("session", this.sessionRef);
 		bean.getPropertyValues().addPropertyValue("stateScopeManager", this.stateScopeManagerRef);
@@ -424,7 +385,6 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
 		bean.getPropertyValues().addPropertyValue("config", this.configRef);
 		bean.getPropertyValues().addPropertyValue("session", this.sessionRef);
-		bean.getPropertyValues().addPropertyValue("encodingUtil", this.encodingUtilRef);
 		bean.getPropertyValues().addPropertyValue("stateUtil", this.stateUtilRef);
 		bean.getPropertyValues().addPropertyValue("uidGenerator", this.uidGeneratorRef);
 		bean.getPropertyValues().addPropertyValue("stateScopeManager", this.stateScopeManagerRef);

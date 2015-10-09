@@ -22,8 +22,6 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.hdiv.cipher.ICipherHTTP;
-import org.hdiv.cipher.Key;
 import org.hdiv.exception.HDIVException;
 import org.hdiv.idGenerator.PageIdGenerator;
 import org.hdiv.state.IPage;
@@ -62,11 +60,6 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 	 * The pageIdGeneratorName
 	 */
 	private String pageIdGeneratorName = Constants.PAGE_ID_GENERATOR_NAME;
-
-	/**
-	 * The keyName
-	 */
-	private String keyName = Constants.KEY_NAME;
 
 	/**
 	 * Obtains from the user session the page identifier for the current request.
@@ -257,24 +250,6 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 	}
 
 	/**
-	 * Obtains the hash of the state identifier <code>stateId</code> related to page identifier <code>pageId</code>.
-	 * 
-	 * @return Hash of the state identifier <code>stateId</code>
-	 * @throws HDIVException
-	 *             If the state doesn't exist a new HDIV exception is thrown.
-	 */
-	public String getStateHash(int pageId, int stateId) {
-
-		try {
-			IPage currentPage = this.getPage(pageId);
-			return currentPage.getStateHash(stateId);
-
-		} catch (Exception e) {
-			throw new HDIVException(HDIVErrorCodes.PAGE_ID_INCORRECT, e);
-		}
-	}
-
-	/**
 	 * Internal method to retrieve a IPage instance from {@link HttpSession}
 	 * 
 	 * @param session
@@ -387,50 +362,6 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 		return cache;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.hdiv.session.ISession#getEncryptCipher()
-	 */
-	public ICipherHTTP getEncryptCipher() {
-		ICipherHTTP cipher = this.beanFactory.getBean(ICipherHTTP.class);
-		if (cipher == null) {
-			String errorMessage = HDIVUtil.getMessage("encrypt.message");
-			throw new HDIVException(errorMessage);
-		}
-		return cipher;
-
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.hdiv.session.ISession#getDecryptCipher()
-	 */
-	public ICipherHTTP getDecryptCipher() {
-		ICipherHTTP cipher = this.beanFactory.getBean(ICipherHTTP.class);
-		if (cipher == null) {
-			String errorMessage = HDIVUtil.getMessage("decrypt.message");
-			throw new HDIVException(errorMessage);
-		}
-		return cipher;
-
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.hdiv.session.ISession#getCipherKey()
-	 */
-	public Key getCipherKey() {
-
-		Key key = (Key) getHttpSession().getAttribute(this.keyName);
-		if (key == null) {
-			throw new HDIVException("Key not initialized on session");
-		}
-		return key;
-	}
-
 	/**
 	 * Obtain {@link HttpSession} instance for ThreadLocal
 	 * 
@@ -465,14 +396,6 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 	 */
 	public void setPageIdGeneratorName(String pageIdGeneratorName) {
 		this.pageIdGeneratorName = pageIdGeneratorName;
-	}
-
-	/**
-	 * @param keyName
-	 *            The keyName to set.
-	 */
-	public void setKeyName(String keyName) {
-		this.keyName = keyName;
 	}
 
 }

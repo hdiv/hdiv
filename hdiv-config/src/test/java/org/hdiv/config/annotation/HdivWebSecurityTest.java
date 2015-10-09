@@ -81,7 +81,7 @@ public class HdivWebSecurityTest {
 		@Override
 		public void configure(SecurityConfigBuilder builder) {
 
-			builder.sessionExpired().homePage("/").loginPage("/login.html").and().cipher().keySize(128).and()
+			builder.sessionExpired().homePage("/").loginPage("/login.html").and()
 					.debugMode(true);
 		}
 	}

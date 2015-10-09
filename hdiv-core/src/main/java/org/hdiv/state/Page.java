@@ -18,9 +18,7 @@ package org.hdiv.state;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Data structure to store states of a page.
@@ -36,14 +34,9 @@ public class Page implements IPage, Serializable {
 	private static final long serialVersionUID = -5701140762067196143L;
 
 	/**
-	 * Contains the states of the page. Only used in memory and cipher strategy.
+	 * Contains the states of the page. Only used in memory strategy.
 	 */
 	protected List<IState> states = new ArrayList<IState>();
-
-	/**
-	 * Contains the state hashes of this page. Only used in hash strategy.
-	 */
-	protected Map<Integer, String> hashStates;
 
 	/**
 	 * Page <code>this</code> identifier.
@@ -123,21 +116,6 @@ public class Page implements IPage, Serializable {
 	}
 
 	/**
-	 * Adds a new state hash to the page <code>this</code>.
-	 * 
-	 * @param id
-	 *            state identifier
-	 * @param stateHash
-	 *            Hash of a state that represents all the data that composes a possible request.
-	 */
-	public void addState(int id, String stateHash) {
-		if (this.hashStates == null) {
-			this.hashStates = new HashMap<Integer, String>();
-		}
-		this.hashStates.put(id, stateHash);
-	}
-
-	/**
 	 * Checks if exists a state with the given identifier <code>id</code>.
 	 * 
 	 * @param id
@@ -156,20 +134,6 @@ public class Page implements IPage, Serializable {
 	 */
 	public IState getState(int id) {
 		return this.states.get(id);
-	}
-
-	/**
-	 * Returns the state hash with the given identifier <code>key</code> from the map of states
-	 * 
-	 * @param key
-	 *            State identifier
-	 * @return String hash with the identifier <code>key</code>.
-	 */
-	public String getStateHash(int key) {
-		if (this.hashStates == null) {
-			return null;
-		}
-		return this.hashStates.get(key);
 	}
 
 	/**
@@ -224,11 +188,7 @@ public class Page implements IPage, Serializable {
 	 * @return Returns number of states.
 	 */
 	public int getStatesCount() {
-		int count = states.size();
-		if (hashStates != null) {
-			count = count + hashStates.size();
-		}
-		return count;
+		return states.size();
 	}
 
 	/**

@@ -70,13 +70,11 @@ public class HdivWebSecurityConfigurationSupportTest {
 				builder
 					.sessionExpired()
 						.homePage("/").loginPage("/login.html").and()
-					.cipher()
-						.keySize(128).and()
 					.debugMode(true)
 					.confidentiality(false)
 					.errorPage("/customErrorPage.html")
 					.randomName(true)
-					.strategy(Strategy.CIPHER)
+					.strategy(Strategy.MEMORY)
 					.validateUrlsWithoutParams(false);
 			}
 		};
@@ -91,7 +89,7 @@ public class HdivWebSecurityConfigurationSupportTest {
 		assertEquals(false, config.getConfidentiality());
 		assertEquals("/customErrorPage.html", config.getErrorPage());
 		assertEquals(true, config.isRandomName());
-		assertEquals(Strategy.CIPHER, config.getStrategy());
+		assertEquals(Strategy.MEMORY, config.getStrategy());
 		assertEquals(false, config.isValidationInUrlsWithoutParamsActivated());
 	}
 	
