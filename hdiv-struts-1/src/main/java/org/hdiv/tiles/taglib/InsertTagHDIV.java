@@ -85,8 +85,9 @@ public class InsertTagHDIV extends InsertTag {
      */
     private void addParametersToRequestWrapper(HttpServletRequest request, String url)
     {
-	if (request instanceof RequestWrapper) {
-	    RequestWrapper requestWrapper = (RequestWrapper) request;
+	RequestWrapper requestWrapper = HDIVUtil.getNativeRequest(request, RequestWrapper.class);
+	if (requestWrapper != null) {
+	    
 	    LinkUrlProcessor linkUrlProcessorForForward = HDIVUtil.getLinkUrlProcessor(pageContext.getSession().getServletContext());
 	    UrlData urlData = linkUrlProcessorForForward.createUrlData(url, "GET", request);
 	    Map<String, String[]> urlParamsAsMap = linkUrlProcessorForForward.getUrlParamsAsMap(request, urlData.getUrlParams());

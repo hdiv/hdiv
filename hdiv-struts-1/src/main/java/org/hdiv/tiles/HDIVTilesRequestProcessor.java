@@ -352,8 +352,9 @@ public class HDIVTilesRequestProcessor extends TilesRequestProcessor {
     protected void doForward(String uri, HttpServletRequest request, HttpServletResponse response)
 	    throws IOException, ServletException {
 	
-	if (request instanceof RequestWrapper) {
-	    RequestWrapper requestWrapper = (RequestWrapper) request;
+	RequestWrapper requestWrapper = HDIVUtil.getNativeRequest(request, RequestWrapper.class);
+	if (requestWrapper != null) {
+	
 	    LinkUrlProcessor linkUrlProcessorForForward = HDIVUtil.getLinkUrlProcessor(request.getSession().getServletContext());
 	    UrlData urlData = linkUrlProcessorForForward.createUrlData(uri, "GET", request);
 	    Map<String, String[]> urlParamsAsMap = linkUrlProcessorForForward.getUrlParamsAsMap(request, urlData.getUrlParams());

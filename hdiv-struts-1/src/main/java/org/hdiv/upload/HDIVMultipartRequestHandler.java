@@ -39,6 +39,7 @@ import org.apache.struts.upload.MultipartRequestWrapper;
 import org.hdiv.config.multipart.IMultipartConfig;
 import org.hdiv.config.multipart.exception.HdivMultipartException;
 import org.hdiv.filter.RequestWrapper;
+import org.hdiv.util.HDIVUtil;
 
 public class HDIVMultipartRequestHandler extends CommonsMultipartRequestHandler {
 
@@ -86,7 +87,7 @@ public class HDIVMultipartRequestHandler extends CommonsMultipartRequestHandler 
 			if (origRequest == null)
 			    return;
 			
-			RequestWrapper requestWrapper = this.getNativeRequest(origRequest, RequestWrapper.class);
+			RequestWrapper requestWrapper = HDIVUtil.getNativeRequest(origRequest, RequestWrapper.class);
 			if (requestWrapper == null)
 			    return;
 			
@@ -167,26 +168,6 @@ public class HDIVMultipartRequestHandler extends CommonsMultipartRequestHandler 
 			elementsFile.put(currentItem.getFieldName(), formFile);
 			elementsAll.put(currentItem.getFieldName(), formFile);
 		}
-	}
-	
-	/**
-	 * Return an appropriate request object of the specified type, if available,
-	 * unwrapping the given request as far as necessary.
-	 * @param request the servlet request to introspect
-	 * @param requiredType the desired type of request object
-	 * @return the matching request object, or {@code null} if none of that type is available
-	 */
-	@SuppressWarnings("unchecked")
-	protected <T> T getNativeRequest(ServletRequest request, Class<T> requiredType) {
-		if (requiredType != null) {
-			if (requiredType.isInstance(request)) {
-				return (T) request;
-			}
-			else if (request instanceof ServletRequestWrapper) {
-				return getNativeRequest(((ServletRequestWrapper) request).getRequest(), requiredType);
-			}
-		}
-		return null;
 	}
 
 	/**
