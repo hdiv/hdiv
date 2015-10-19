@@ -91,7 +91,47 @@ import org.springframework.context.annotation.Scope;
  */
 @Import({ SpringMvcConfigurationSupport.class, ThymeleafConfigurationSupport.class, GrailsConfigurationSupport.class,
 		JsfConfigurationSupport.class, Struts1ConfigurationSupport.class })
-public abstract class HdivWebSecurityConfigurationSupport {
+public class HdivWebSecurityConfigurationSupport {
+
+	/**
+	 * Override this method to configure HDIV
+	 * 
+	 * @see SecurityConfigBuilder
+	 */
+	protected void configure(SecurityConfigBuilder securityConfigBuilder) {
+	}
+
+	/**
+	 * Override this method to add exclusions to the validation process.
+	 * 
+	 * @see ExclusionRegistry
+	 */
+	protected void addExclusions(ExclusionRegistry registry) {
+	}
+
+	/**
+	 * Override this method to add long living pages to the application.
+	 * 
+	 * @see LongLivingPagesRegistry
+	 */
+	protected void addLongLivingPages(LongLivingPagesRegistry registry) {
+	}
+
+	/**
+	 * Override this method to add editable validation rules.
+	 * 
+	 * @see RuleRegistry
+	 */
+	protected void addRules(RuleRegistry registry) {
+	}
+
+	/**
+	 * Override this method to add editable validations to the application.
+	 * 
+	 * @see ValidationConfigurer
+	 */
+	protected void configureEditableValidation(ValidationConfigurer validationConfigurer) {
+	}
 
 	@Bean
 	public HDIVConfig hdivConfig() {
@@ -129,12 +169,6 @@ public abstract class HdivWebSecurityConfigurationSupport {
 		SecurityConfigBuilder builder = new SecurityConfigBuilder(patternMatcherFactory());
 		return builder;
 	}
-
-	public abstract void configure(SecurityConfigBuilder securityConfigBuilder);
-
-	public abstract void addExclusions(ExclusionRegistry registry);
-
-	public abstract void addLongLivingPages(LongLivingPagesRegistry registry);
 
 	@Bean
 	public IApplication securityApplication() {
@@ -326,7 +360,7 @@ public abstract class HdivWebSecurityConfigurationSupport {
 	public ValidationRepository editableValidationRepository() {
 
 		// Default rules
-		List<IValidation> defaultRules = defaultRules();
+		List<IValidation> defaultRules = getDefaultRules();
 		// Custom rules
 		RuleRegistry registry = new RuleRegistry();
 		this.addRules(registry);
@@ -385,11 +419,7 @@ public abstract class HdivWebSecurityConfigurationSupport {
 		return repository;
 	}
 
-	public abstract void addRules(RuleRegistry registry);
-
-	public abstract void configureEditableValidation(ValidationConfigurer validationConfigurer);
-
-	private List<IValidation> defaultRules() {
+	protected List<IValidation> getDefaultRules() {
 
 		// Load validations from xml
 		DefaultValidationParser parser = new DefaultValidationParser();
