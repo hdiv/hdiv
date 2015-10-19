@@ -27,6 +27,7 @@ import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
+import javax.servlet.ServletRequestWrapper;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.fileupload.FileItem;
@@ -82,44 +83,44 @@ public class HDIVMultipartRequestHandler extends CommonsMultipartRequestHandler 
 
 			MultipartRequestWrapper wrapper = (MultipartRequestWrapper) request;
 			ServletRequest origRequest = wrapper.getRequest();
-			if (origRequest != null && origRequest instanceof RequestWrapper) {
+			if (origRequest == null)
+			    return;
+			
+			RequestWrapper requestWrapper = this.getNativeRequest(origRequest, RequestWrapper.class);
+			if (requestWrapper == null)
+			    return;
+			
+			Boolean maxLengthExceeded = (Boolean) request.getAttribute(ATTRIBUTE_MAX_LENGTH_EXCEEDED);
+			if ((maxLengthExceeded != null) && (maxLengthExceeded.booleanValue())) {
+			    return;
+			}
 
-				RequestWrapper requestWrapper = (RequestWrapper) origRequest;
+			HdivMultipartException multipartException = (HdivMultipartException) request.getAttribute(IMultipartConfig.FILEUPLOAD_EXCEPTION);
+			if (multipartException != null) {
+			    Exception orig = multipartException.getOriginal();
+			    log.error("Failed to parse multipart request", orig);
+			    if (orig instanceof ServletException) {
+				throw (ServletException) orig;
+			    } else {
+				throw new ServletException("Failed to parse multipart request", orig);
+			    }
+			}
 
-				Boolean maxLengthExceeded = (Boolean) request.getAttribute(ATTRIBUTE_MAX_LENGTH_EXCEEDED);
-				if ((maxLengthExceeded != null) && (maxLengthExceeded.booleanValue())) {
-					return;
-				}
+			// file items
+			Map<String, Object> items = requestWrapper.getFileElements();
+			for (Object fileItem : items.values()) {
+			    if (items != null) {
+				addFileParameter((List) fileItem);
+			    }
+			}
 
-				HdivMultipartException multipartException = (HdivMultipartException) request
-						.getAttribute(IMultipartConfig.FILEUPLOAD_EXCEPTION);
-				if (multipartException != null) {
-					Exception orig = multipartException.getOriginal();
-					log.error("Failed to parse multipart request", orig);
-					if (orig instanceof ServletException) {
-						throw (ServletException) orig;
-					} else {
-						throw new ServletException("Failed to parse multipart request", orig);
-					}
-				}
+			// text items
+			items = requestWrapper.getTextElements();
 
-				// file items
-				Map<String, Object> items = requestWrapper.getFileElements();
+			for (String currentTextKey : items.keySet()) {
 
-				for (Object fileItem : items.values()) {
-					if (items != null) {
-						addFileParameter((List) fileItem);
-					}
-				}
-
-				// text items
-				items = requestWrapper.getTextElements();
-
-				for (String currentTextKey : items.keySet()) {
-
-					String[] currentTextValue = (String[]) items.get(currentTextKey);
-					this.addTextParameter(wrapper, currentTextKey, currentTextValue);
-				}
+			    String[] currentTextValue = (String[]) items.get(currentTextKey);
+				this.addTextParameter(wrapper, currentTextKey, currentTextValue);
 			}
 		}
 	}
@@ -166,6 +167,26 @@ public class HDIVMultipartRequestHandler extends CommonsMultipartRequestHandler 
 			elementsFile.put(currentItem.getFieldName(), formFile);
 			elementsAll.put(currentItem.getFieldName(), formFile);
 		}
+	}
+	
+	/**
+	 * Return an appropriate request object of the specified type, if available,
+	 * unwrapping the given request as far as necessary.
+	 * @param request the servlet request to introspect
+	 * @param requiredType the desired type of request object
+	 * @return the matching request object, or {@code null} if none of that type is available
+	 */
+	@SuppressWarnings("unchecked")
+	protected <T> T getNativeRequest(ServletRequest request, Class<T> requiredType) {
+		if (requiredType != null) {
+			if (requiredType.isInstance(request)) {
+				return (T) request;
+			}
+			else if (request instanceof ServletRequestWrapper) {
+				return getNativeRequest(((ServletRequestWrapper) request).getRequest(), requiredType);
+			}
+		}
+		return null;
 	}
 
 	/**
