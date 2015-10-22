@@ -2,6 +2,12 @@ HDIV CHANGELOG
 ==============
 http://www.hdiv.org
 
+Release 2.1.13
+==================================
+ * Extension of Struts 1 Tiles InsertTag class for actions with parameters (queryString) support.
+ * Fix issue in HDIV Core library. It was caused when repeated values were received in last positions of array named "values".
+ * Multipart request handler modified to return appropriate RequestWrapper object, if available, unwrapping the given request as far as necessary.
+ 
 Release 2.1.12
 ==================================
  * Fix issue in Struts1: HDIVTilesRequestProcessor class

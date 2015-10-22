@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.org/hdiv/hdiv.svg)](https://travis-ci.org/hdiv/hdiv)
 
-## WEB APPLICATION SECURITY FRAMEWROK
+## WEB APPLICATION SECURITY FRAMEWORK
 HDIV extends web application's behavior by adding Security functionalities, maintaining the API and the framework specification.
 
 Official Site: [http://hdiv.org](http://hdiv.org)
