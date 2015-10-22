@@ -20,6 +20,8 @@ import java.util.Random;
 import java.util.regex.Pattern;
 
 import javax.servlet.ServletContext;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletRequestWrapper;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -558,6 +560,26 @@ public class HDIVUtil {
 			u.delete(sessionStart, sessionEnd);
 		}
 		return u.toString();
+	}
+	
+	/**
+	 * Return an appropriate request object of the specified type, if available,
+	 * unwrapping the given request as far as necessary.
+	 * @param request the servlet request to introspect
+	 * @param requiredType the desired type of request object
+	 * @return the matching request object, or {@code null} if none of that type is available
+	 */
+	@SuppressWarnings("unchecked")
+	public static <T> T getNativeRequest(ServletRequest request, Class<T> requiredType) {
+		if (requiredType != null) {
+			if (requiredType.isInstance(request)) {
+				return (T) request;
+			}
+			else if (request instanceof ServletRequestWrapper) {
+				return getNativeRequest(((ServletRequestWrapper) request).getRequest(), requiredType);
+			}
+		}
+		return null;
 	}
 
 }

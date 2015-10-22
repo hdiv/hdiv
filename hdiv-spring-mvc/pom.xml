@@ -4,14 +4,14 @@
 	<parent>
 		<artifactId>hdiv</artifactId>
 		<groupId>org.hdiv</groupId>
-		<version>2.1.13-SNAPSHOT</version>
+		<version>2.1.13.RC5</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>hdiv-spring-mvc</artifactId>
 	<packaging>jar</packaging>
-	<name>HDIV Spring Mvc</name>
+	<name>HDIV Spring MVC</name>
 	<url>http://www.hdiv.org</url>
-	<description>Java Web Application Security Framework</description>
+	<description>Web Application Security Framework</description>
 
 	<properties>
 		<org.grails.version>2.2.0</org.grails.version>
