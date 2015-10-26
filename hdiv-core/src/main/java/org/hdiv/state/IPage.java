@@ -143,17 +143,18 @@ public interface IPage {
 
 	/**
 	 * @param parentStateId
-	 * 			  the parentStateId to set
+	 *            the parentStateId to set
 	 * 
 	 * @since HDIV 2.1.13
 	 */
 	public void setParentStateId(String parentStateId);
-	
+
 	/**
 	 * Returns the state id of the parent page
-	 * 	  
+	 * 
+	 * @return the parent state id
 	 * @since HDIV 2.1.13
 	 */
 	public String getParentStateId();
-	
+
 }
