@@ -103,9 +103,10 @@ public class EditableValidationsBeanDefinitionParser extends AbstractSingleBeanD
 		Object source = parserContext.extractSource(element);
 
 		Map<ValidationTargetData, List<String>> validationsData = new LinkedHashMap<ValidationTargetData, List<String>>();
+		List<IValidation> defaultValidations = new ArrayList<IValidation>();
 
 		RuntimeBeanReference repositoryRef = this.createValidationRepository(element, source, parserContext,
-				validationsData);
+				validationsData, defaultValidations);
 		bean.getBeanDefinition().getPropertyValues().addPropertyValue("validationRepository", repositoryRef);
 
 		// Register default editable validation
@@ -120,7 +121,8 @@ public class EditableValidationsBeanDefinitionParser extends AbstractSingleBeanD
 
 		if (registerDefaults) {
 			// Create beans for default validations
-			createDefaultEditableValidations(element, parserContext);
+			List<IValidation> defaultVals = createDefaultEditableValidations(element, parserContext);
+			defaultValidations.addAll(defaultVals);
 		}
 
 		NodeList list = element.getChildNodes();
@@ -142,7 +144,8 @@ public class EditableValidationsBeanDefinitionParser extends AbstractSingleBeanD
 	}
 
 	protected RuntimeBeanReference createValidationRepository(Element element, Object source,
-			ParserContext parserContext, Map<ValidationTargetData, List<String>> validationsData) {
+			ParserContext parserContext, Map<ValidationTargetData, List<String>> validationsData,
+			List<IValidation> defaultValidations) {
 
 		RootBeanDefinition bean = new RootBeanDefinition(ValidationRepositoryFactoryBean.class);
 		bean.setSource(source);
@@ -150,7 +153,7 @@ public class EditableValidationsBeanDefinitionParser extends AbstractSingleBeanD
 
 		RuntimeBeanReference beanRef = new RuntimeBeanReference(ConfigBeanDefinitionParser.PATTERN_MATCHER_FACTORY_NAME);
 		bean.getPropertyValues().addPropertyValue("patternMatcherFactory", beanRef);
-
+		bean.getPropertyValues().addPropertyValue("defaultValidations", defaultValidations);
 		bean.getPropertyValues().addPropertyValue("validationsData", validationsData);
 
 		String name = ValidationRepository.class.getName();
@@ -234,8 +237,9 @@ public class EditableValidationsBeanDefinitionParser extends AbstractSingleBeanD
 	 *            xml element
 	 * @param parserContext
 	 *            xml parser context
+	 * @return default validations
 	 */
-	protected void createDefaultEditableValidations(Element element, ParserContext parserContext) {
+	protected List<IValidation> createDefaultEditableValidations(Element element, ParserContext parserContext) {
 
 		// Load validations from xml
 		DefaultValidationParser parser = new DefaultValidationParser();
@@ -267,6 +271,7 @@ public class EditableValidationsBeanDefinitionParser extends AbstractSingleBeanD
 		// Register validation list bean
 		parserContext.getRegistry().registerBeanDefinition(DEFAULT_EDITABLE_VALIDATIONS_BEAN_NAME, bean);
 
+		return defaultValidations;
 	}
 
 	protected RootBeanDefinition createValidator(Element element, Object source, ParserContext parserContext) {

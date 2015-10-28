@@ -484,6 +484,7 @@ public class HdivWebSecurityConfigurationSupport {
 
 		DefaultValidationRepository repository = new DefaultValidationRepository();
 		repository.setValidations(validationsData);
+		repository.setDefaultValidations(defaultRules);
 		return repository;
 	}
 

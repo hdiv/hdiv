@@ -35,4 +35,10 @@ public interface ValidationRepository {
 	 */
 	List<IValidation> findValidations(String url, String parameter);
 
+	/**
+	 * Returns default validation rules.
+	 * 
+	 * @return Default validations
+	 */
+	List<IValidation> findDefaultValidations();
 }
