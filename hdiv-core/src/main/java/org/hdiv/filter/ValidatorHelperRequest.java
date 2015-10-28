@@ -459,8 +459,8 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	protected void validateEditableParameter(HttpServletRequest request, String target, String parameter,
 			String[] values, String dataType, Map<String, String[]> unauthorizedParameters) {
 
-		EditableDataValidationResult result = hdivConfig.areEditableParameterValuesValid(target, parameter, values,
-				dataType);
+		EditableDataValidationResult result = this.hdivConfig.getEditableDataValidationProvider().validate(target,
+				parameter, values, dataType);
 		if (!result.isValid()) {
 
 			StringBuffer unauthorizedValues = new StringBuffer(values[0]);
@@ -643,15 +643,16 @@ public class ValidatorHelperRequest implements IValidationHelper {
 		// checks if the parameter HDIV parameter exists in the parameters of
 		// the request
 		String requestState = request.getParameter(hdivParameter);
-		
+
 		if (requestState == null) {
 			this.logger.log(HDIVErrorCodes.HDIV_PARAMETER_NOT_EXISTS, target, hdivParameter, null);
 			return new ValidatorHelperResult(HDIVErrorCodes.HDIV_PARAMETER_NOT_EXISTS);
 		}
-		
-		// In some browsers (eg: IE 6), fragment identifier is sent with the request, it has to be removed from the requestState 
+
+		// In some browsers (eg: IE 6), fragment identifier is sent with the request, it has to be removed from the
+		// requestState
 		if (requestState.contains("#")) {
-			requestState = requestState.split("#")[0]; 
+			requestState = requestState.split("#")[0];
 		}
 
 		try {
@@ -991,7 +992,8 @@ public class ValidatorHelperRequest implements IValidationHelper {
 
 		for (int i = 0; i < size; i++) {
 
-			IValidationResult result = this.dataValidator.validate(values[i], target, parameter, stateParameter, actionParamValues);
+			IValidationResult result = this.dataValidator.validate(values[i], target, parameter, stateParameter,
+					actionParamValues);
 			if (!result.getLegal()) {
 				this.logger.log(HDIVErrorCodes.PARAMETER_VALUE_INCORRECT, target, parameter, values[i]);
 				return new ValidatorHelperResult(HDIVErrorCodes.PARAMETER_VALUE_INCORRECT);

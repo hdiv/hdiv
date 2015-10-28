@@ -29,7 +29,6 @@ import org.hdiv.state.IPage;
 import org.hdiv.util.Constants;
 import org.hdiv.util.HDIVUtil;
 import org.hdiv.validator.EditableDataValidationProvider;
-import org.hdiv.validator.EditableDataValidationResult;
 
 /**
  * Class containing HDIV configuration initialized from Spring Factory.
@@ -363,27 +362,6 @@ public class HDIVConfig implements Serializable {
 		return true;
 	}
 
-	/**
-	 * <p>
-	 * Checks if the values <code>values</code> are valid for the editable parameter <code>parameter</code>.
-	 * 
-	 * @param url
-	 *            target url
-	 * @param parameter
-	 *            parameter name
-	 * @param values
-	 *            parameter's values
-	 * @param dataType
-	 *            editable data type
-	 * @return True if the values <code>values</code> are valid for the parameter <code>parameter</code>.
-	 * @since HDIV 1.1
-	 */
-	public EditableDataValidationResult areEditableParameterValuesValid(String url, String parameter, String[] values,
-			String dataType) {
-
-		return this.editableDataValidationProvider.validate(url, parameter, values, dataType);
-	}
-
 	public String getErrorPage() {
 		return errorPage;
 	}
@@ -689,6 +667,13 @@ public class HDIVConfig implements Serializable {
 	 */
 	public void setEditableDataValidationProvider(EditableDataValidationProvider editableDataValidationProvider) {
 		this.editableDataValidationProvider = editableDataValidationProvider;
+	}
+
+	/**
+	 * @return the editableDataValidationProvider
+	 */
+	public EditableDataValidationProvider getEditableDataValidationProvider() {
+		return editableDataValidationProvider;
 	}
 
 	public String toString() {

@@ -191,19 +191,21 @@ public class CustomSchemaTest extends TestCase {
 		String parameter = "param1";
 		String[] values = { "<script>" };
 		String dataType = "text";
-		EditableDataValidationResult result = config.areEditableParameterValuesValid(url, parameter, values, dataType);
+
+		EditableDataValidationProvider provider = config.getEditableDataValidationProvider();
+		EditableDataValidationResult result = provider.validate(url, parameter, values, dataType);
 
 		assertFalse(result.isValid());
 
 		// param2
 		parameter = "param2";
-		result = config.areEditableParameterValuesValid(url, parameter, values, dataType);
+		result = provider.validate(url, parameter, values, dataType);
 
 		assertFalse(result.isValid());
 
 		// otherParam
 		parameter = "otherParam";
-		result = config.areEditableParameterValuesValid(url, parameter, values, dataType);
+		result = provider.validate(url, parameter, values, dataType);
 
 		assertTrue(result.isValid());
 	}

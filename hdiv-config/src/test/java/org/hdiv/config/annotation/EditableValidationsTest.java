@@ -27,6 +27,7 @@ import org.hdiv.config.HDIVConfig;
 import org.hdiv.config.annotation.configuration.HdivWebSecurityConfigurerAdapter;
 import org.hdiv.regex.DefaultPatternMatcher;
 import org.hdiv.validator.DefaultValidationRepository;
+import org.hdiv.validator.EditableDataValidationProvider;
 import org.hdiv.validator.EditableDataValidationResult;
 import org.hdiv.validator.IValidation;
 import org.hdiv.validator.ValidationRepository;
@@ -75,16 +76,15 @@ public class EditableValidationsTest {
 	public void editableValidations() {
 		assertNotNull(config);
 
-		EditableDataValidationResult result = config.areEditableParameterValuesValid("/insecure/action", "parameter",
+		EditableDataValidationProvider provider = config.getEditableDataValidationProvider();
+		EditableDataValidationResult result = provider.validate("/insecure/action", "parameter",
 				new String[] { "<script>" }, "text");
 		assertTrue(result.isValid());
 
-		result = config.areEditableParameterValuesValid("/secureParam/action", "param1", new String[] { "<script>" },
-				"text");
+		result = provider.validate("/secureParam/action", "param1", new String[] { "<script>" }, "text");
 		assertFalse(result.isValid());
 
-		result = config.areEditableParameterValuesValid("/secure/action", "parameter", new String[] { "<script>" },
-				"text");
+		result = provider.validate("/secure/action", "parameter", new String[] { "<script>" }, "text");
 		assertFalse(result.isValid());
 	}
 
