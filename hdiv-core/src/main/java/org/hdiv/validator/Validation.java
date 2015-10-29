@@ -102,7 +102,7 @@ public class Validation implements IValidation, Serializable {
 
 		// we check if the component type we apply the validation to is
 		// the same as the parameter's component type.
-		if (this.existComponentType() && !this.isTheSameComponentType(dataType)) {
+		if (dataType != null && this.existComponentType() && !this.isTheSameComponentType(dataType)) {
 			return true;
 		}
 

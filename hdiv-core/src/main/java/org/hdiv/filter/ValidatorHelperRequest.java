@@ -1141,7 +1141,11 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	 */
 	protected String getHdivParameter(HttpServletRequest request) {
 
-		return (String) request.getSession().getAttribute(Constants.HDIV_PARAMETER);
+		String paramName = (String) request.getSession().getAttribute(Constants.HDIV_PARAMETER);
+		if (paramName == null) {
+			throw new HDIVException("HDIV parameter name missing in session. Deleted by the app?");
+		}
+		return paramName;
 	}
 
 	/**
