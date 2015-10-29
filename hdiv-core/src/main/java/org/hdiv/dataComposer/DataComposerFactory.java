@@ -146,12 +146,11 @@ public class DataComposerFactory {
 	 */
 	protected void initDataComposer(IDataComposer dataComposer, HttpServletRequest request) {
 
-		String paramName = (String) request.getSession().getAttribute(Constants.MODIFY_STATE_HDIV_PARAMETER);
-		String preState = paramName != null ? request.getParameter(paramName) : null;
 		String hdivStateParamName = (String) request.getSession().getAttribute(Constants.HDIV_PARAMETER);
 		String hdivState = request.getParameter(hdivStateParamName);
-		
-		
+
+		String preState = this.getModifyStateParameterValue(request);
+
 		if (preState != null && preState.length() > 0) {
 
 			// We are modifying an existing state, preload dataComposer with it
@@ -167,7 +166,6 @@ public class DataComposerFactory {
 			}
 
 		} else if (this.reuseExistingPage(request)) {
-		
 
 			if (hdivState != null && hdivState.length() > 0) {
 				IState state = this.stateUtil.restoreState(hdivState);
@@ -190,6 +188,20 @@ public class DataComposerFactory {
 		if (scope != null) {
 			dataComposer.startScope(scope);
 		}
+	}
+
+	/**
+	 * Get _MODIFY_HDIV_STATE_ parameter value.
+	 * 
+	 * @param request
+	 *            current HttpServletRequest instance
+	 * @return parameter value.
+	 */
+	protected String getModifyStateParameterValue(HttpServletRequest request) {
+
+		String paramName = (String) request.getSession().getAttribute(Constants.MODIFY_STATE_HDIV_PARAMETER);
+		String preState = paramName != null ? request.getParameter(paramName) : null;
+		return preState;
 	}
 
 	/**
@@ -217,17 +229,18 @@ public class DataComposerFactory {
 	 * 
 	 * @param request
 	 *            the HttpServletRequest
-	 *            
+	 * 
 	 * @return isAjaxRquest
 	 */
 	protected boolean isAjaxRequest(HttpServletRequest request) {
 
 		String xRequestedWithValue = request.getHeader("x-requested-with");
 
-		boolean isAjaxRequest = (xRequestedWithValue != null) ? "XMLHttpRequest".equalsIgnoreCase(xRequestedWithValue) : false;
-		
+		boolean isAjaxRequest = (xRequestedWithValue != null) ? "XMLHttpRequest".equalsIgnoreCase(xRequestedWithValue)
+				: false;
+
 		request.setAttribute(Constants.AJAX_REQUEST, isAjaxRequest);
-		
+
 		return isAjaxRequest;
 	}
 
