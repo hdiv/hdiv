@@ -74,11 +74,18 @@ public class SpringMvcConfigurationSupport {
 
 		EditableParameterValidator validator = new EditableParameterValidator();
 		if (jsr303Present) {
-			validator.setInnerValidator(new LocalValidatorFactoryBean());
+			validator.setInnerValidator(editableLocalValidatorFactoryBean());
 		}
 		return validator;
 	}
 
+	@Bean
+	public LocalValidatorFactoryBean editableLocalValidatorFactoryBean() {
+		
+		LocalValidatorFactoryBean localValidatorFactoryBean = new LocalValidatorFactoryBean();
+		return localValidatorFactoryBean;
+	}
+	
 	@Bean
 	public IMultipartConfig securityMultipartConfig() {
 
