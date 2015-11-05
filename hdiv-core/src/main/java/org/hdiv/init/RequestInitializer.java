@@ -1,5 +1,5 @@
 /**
- * Copyright 2005-2013 hdiv.org
+ * Copyright 2005-2015 hdiv.org
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,10 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.hdiv.filter;
+package org.hdiv.init;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.hdiv.filter.RequestWrapper;
+import org.hdiv.filter.ResponseWrapper;
+import org.hdiv.filter.ValidatorFilter;
 
 /**
  * Methods for request scope data and wrapper initialization. Used in {@link ValidatorFilter}.
@@ -31,16 +35,20 @@ public interface RequestInitializer {
 	 * 
 	 * @param request
 	 *            request object
+	 * @param response
+	 *            response object
 	 */
-	void initRequest(HttpServletRequest request);
+	void initRequest(HttpServletRequest request, HttpServletResponse response);
 
 	/**
 	 * Destroy request scoped data
 	 * 
 	 * @param request
 	 *            request object
+	 * @param response
+	 *            response object
 	 */
-	void endRequest(HttpServletRequest request);
+	void endRequest(HttpServletRequest request, HttpServletResponse response);
 
 	/**
 	 * Create request wrapper.

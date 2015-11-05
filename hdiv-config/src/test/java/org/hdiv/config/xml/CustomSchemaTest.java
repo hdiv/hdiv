@@ -1,5 +1,5 @@
 /**
- * Copyright 2005-2013 hdiv.org
+ * Copyright 2005-2015 hdiv.org
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,15 +21,18 @@ import java.util.Map;
 import junit.framework.TestCase;
 
 import org.hdiv.config.HDIVConfig;
-import org.hdiv.config.HDIVValidations;
 import org.hdiv.logs.IUserData;
 import org.hdiv.regex.DefaultPatternMatcher;
 import org.hdiv.regex.PatternMatcher;
 import org.hdiv.session.StateCache;
 import org.hdiv.state.scope.StateScope;
 import org.hdiv.state.scope.StateScopeManager;
+import org.hdiv.validator.DefaultValidationRepository;
+import org.hdiv.validator.EditableDataValidationProvider;
+import org.hdiv.validator.EditableDataValidationResult;
 import org.hdiv.validator.IValidation;
 import org.hdiv.validator.Validation;
+import org.hdiv.validator.ValidationTarget;
 import org.hdiv.web.servlet.support.HdivRequestDataValueProcessor;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -44,7 +47,6 @@ public class CustomSchemaTest extends TestCase {
 	protected void setUp() throws Exception {
 
 		this.context = new ClassPathXmlApplicationContext("org/hdiv/config/xml/hdiv-config-test-schema.xml");
-
 	}
 
 	public void testSchema() {
@@ -60,9 +62,9 @@ public class CustomSchemaTest extends TestCase {
 		System.out.println("-----------------------");
 		assertTrue(hdivConfig.isShowErrorPageOnEditableValidation());
 
-		HDIVValidations validations = this.context.getBean(HDIVValidations.class);
-		assertNotNull(validations);
-		System.out.println(validations.toString());
+		EditableDataValidationProvider validationProvider = this.context.getBean(EditableDataValidationProvider.class);
+		assertNotNull(validationProvider);
+		System.out.println(validationProvider.toString());
 
 	}
 
@@ -118,24 +120,39 @@ public class CustomSchemaTest extends TestCase {
 
 	public void testEditableValidations() {
 
-		HDIVValidations validations = this.context.getBean(HDIVValidations.class);
-		assertNotNull(validations);
+		DefaultValidationRepository validationRepository = this.context.getBean(DefaultValidationRepository.class);
+		assertNotNull(validationRepository);
 
-		Map<PatternMatcher, List<IValidation>> urls = validations.getUrls();
-		assertEquals(2, urls.size());
+		Map<ValidationTarget, List<IValidation>> validations = validationRepository.getValidations();
+		assertEquals(3, validations.size());
 
 		// First url
-		List<IValidation> vals = urls.get(new DefaultPatternMatcher("a"));
+		List<IValidation> vals = this.getValidations(validations, "a");
+		ValidationTarget target = this.getTarget(validations, "a");
+		assertEquals(0, vals.size());
+		assertNull(target.getParams());
+
+		// Second url
+		vals = this.getValidations(validations, "b");
+		target = this.getTarget(validations, "b");
+		List<PatternMatcher> params = target.getParams();
+		assertEquals(3, params.size());
+		assertEquals(new DefaultPatternMatcher("param1"), params.get(0));
+		assertEquals(new DefaultPatternMatcher("param2"), params.get(1));
+		assertEquals(new DefaultPatternMatcher("param3"), params.get(2));
 
 		assertEquals(1, vals.size());
 		// 1 custom rules
 		Validation val = (Validation) vals.get(0);
 		assertEquals("id1", val.getName());
+		assertFalse(val.isDefaultValidation());
 
-		// Second url
-		vals = urls.get(new DefaultPatternMatcher("b"));
+		// Third url
+		vals = this.getValidations(validations, "c");
+		target = this.getTarget(validations, "c");
+		assertNull(target.getParams());
 		assertEquals(149, vals.size());
-		// 2 custom rule + 147 default rules
+		// 2 custom rule + 6 default rules
 
 		val = (Validation) vals.get(0);
 		assertEquals("id2", val.getName());
@@ -143,6 +160,54 @@ public class CustomSchemaTest extends TestCase {
 		assertEquals("id3", val.getName());
 		val = (Validation) vals.get(2);
 		assertEquals("Detect SQL Comment Sequences", val.getName());// first default rule
+		assertTrue(val.isDefaultValidation());
+	}
+
+	public void testEditableValidationsOrder() {
+
+		DefaultValidationRepository validationRepository = this.context.getBean(DefaultValidationRepository.class);
+		assertNotNull(validationRepository);
+
+		Map<ValidationTarget, List<IValidation>> validations = validationRepository.getValidations();
+		assertEquals(3, validations.size());
+
+		Object[] ptrs = validations.keySet().toArray();
+
+		ValidationTarget vt0 = (ValidationTarget) ptrs[0];
+		ValidationTarget vt1 = (ValidationTarget) ptrs[1];
+		ValidationTarget vt2 = (ValidationTarget) ptrs[2];
+
+		assertEquals(new DefaultPatternMatcher("a"), vt0.getUrl());
+		assertEquals(new DefaultPatternMatcher("b"), vt1.getUrl());
+		assertEquals(new DefaultPatternMatcher("c"), vt2.getUrl());
+	}
+
+	public void testEditableValidationsParams() {
+
+		HDIVConfig config = this.context.getBean(HDIVConfig.class);
+
+		// param1
+		String url = "b";
+		String parameter = "param1";
+		String[] values = { "<script>" };
+		String dataType = "text";
+
+		EditableDataValidationProvider provider = config.getEditableDataValidationProvider();
+		EditableDataValidationResult result = provider.validate(url, parameter, values, dataType);
+
+		assertFalse(result.isValid());
+
+		// param2
+		parameter = "param2";
+		result = provider.validate(url, parameter, values, dataType);
+
+		assertFalse(result.isValid());
+
+		// otherParam
+		parameter = "otherParam";
+		result = provider.validate(url, parameter, values, dataType);
+
+		assertTrue(result.isValid());
 	}
 
 	public void testReuseExistingPageInAjaxRequest() {
@@ -194,6 +259,26 @@ public class CustomSchemaTest extends TestCase {
 
 		result = hdivConfig.isLongLivingPages("/other.html");
 		assertNull(result);
+	}
+
+	protected List<IValidation> getValidations(Map<ValidationTarget, List<IValidation>> validations, String pattern) {
+
+		for (ValidationTarget target : validations.keySet()) {
+			if (target.getUrl().matches(pattern)) {
+				return validations.get(target);
+			}
+		}
+		return null;
+	}
+
+	protected ValidationTarget getTarget(Map<ValidationTarget, List<IValidation>> validations, String pattern) {
+
+		for (ValidationTarget target : validations.keySet()) {
+			if (target.getUrl().matches(pattern)) {
+				return target;
+			}
+		}
+		return null;
 	}
 
 }

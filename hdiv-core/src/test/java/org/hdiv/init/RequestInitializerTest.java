@@ -1,5 +1,5 @@
 /**
- * Copyright 2005-2013 hdiv.org
+ * Copyright 2005-2015 hdiv.org
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,12 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.hdiv.filter;
+package org.hdiv.init;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.hdiv.AbstractHDIVTestCase;
 import org.hdiv.exception.HDIVException;
+import org.hdiv.filter.RequestWrapper;
+import org.hdiv.filter.ResponseWrapper;
+import org.hdiv.init.RequestInitializer;
 import org.hdiv.util.HDIVUtil;
 import org.springframework.mock.web.MockHttpServletResponse;
 
@@ -51,8 +55,9 @@ public class RequestInitializerTest extends AbstractHDIVTestCase {
 	public void testInitRequest() {
 
 		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		HttpServletResponse response = new MockHttpServletResponse();
 
-		this.requestInitializer.initRequest(request);
+		this.requestInitializer.initRequest(request, response);
 
 		assertNotNull(HDIVUtil.getHttpServletRequest());
 	}
@@ -60,8 +65,9 @@ public class RequestInitializerTest extends AbstractHDIVTestCase {
 	public void testEndRequest() {
 
 		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		HttpServletResponse response = new MockHttpServletResponse();
 		try {
-			this.requestInitializer.endRequest(request);
+			this.requestInitializer.endRequest(request, response);
 		} catch (HDIVException e) {
 			assertTrue(true);
 		}

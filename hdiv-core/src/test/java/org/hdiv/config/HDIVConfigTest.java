@@ -1,5 +1,5 @@
 /**
- * Copyright 2005-2013 hdiv.org
+ * Copyright 2005-2015 hdiv.org
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,8 @@
 package org.hdiv.config;
 
 import org.hdiv.AbstractHDIVTestCase;
+import org.hdiv.validator.EditableDataValidationProvider;
+import org.hdiv.validator.EditableDataValidationResult;
 
 public class HDIVConfigTest extends AbstractHDIVTestCase {
 
@@ -62,12 +64,13 @@ public class HDIVConfigTest extends AbstractHDIVTestCase {
 	public void testAreEditableParameterValuesValid() {
 
 		HDIVConfig config = getConfig();
-		boolean result = config.areEditableParameterValuesValid("inicio.html", "one", new String[] { "noProblem" },
+		EditableDataValidationProvider provider = config.getEditableDataValidationProvider();
+		EditableDataValidationResult result = provider.validate("inicio.html", "one", new String[] { "noProblem" },
 				"text");
-		assertTrue(result);
+		assertTrue(result.isValid());
 
-		result = config.areEditableParameterValuesValid("inicio.html", "one", new String[] { "XSS <script>" }, "text");
-		assertFalse(result);
+		result = provider.validate("inicio.html", "one", new String[] { "XSS <script>" }, "text");
+		assertFalse(result.isValid());
 	}
 
 	public void testExcludedExtensions() {

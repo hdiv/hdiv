@@ -1,5 +1,5 @@
 /**
- * Copyright 2005-2013 hdiv.org
+ * Copyright 2005-2015 hdiv.org
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,8 @@ import java.util.Random;
 import java.util.regex.Pattern;
 
 import javax.servlet.ServletContext;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletRequestWrapper;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -58,6 +60,7 @@ public class HDIVUtil {
 	public static final String BASEURL_REQUEST_KEY = "BASEURL_REQUEST_KEY";
 	public static final String LINKURLPROCESSOR_SERVLETCONTEXT_KEY = "LINKURLPROCESSOR_SERVLETCONTEXT_KEY";
 	public static final String FORMURLPROCESSOR_SERVLETCONTEXT_KEY = "FORMURLPROCESSOR_SERVLETCONTEXT_KEY";
+	public static final String CURRENT_PAGE_KEY = "CURRENT_PAGE_KEY";
 
 	public static Pattern intPattern = Pattern.compile("[0-9]+");
 
@@ -211,7 +214,8 @@ public class HDIVUtil {
 	/**
 	 * Returns the servlet context wrapper object.
 	 * 
-	 * @param servletContext {@link ServletContext} instance
+	 * @param servletContext
+	 *            {@link ServletContext} instance
 	 * @return IApplication object
 	 */
 	public static IApplication getApplication(ServletContext servletContext) {
@@ -225,8 +229,10 @@ public class HDIVUtil {
 	/**
 	 * Set the <code>IApplication</code> in <code>ServletContext</code>
 	 * 
-	 * @param newApplication new {@link IApplication} instance
-	 * @param servletContext {@link ServletContext} instance
+	 * @param newApplication
+	 *            new {@link IApplication} instance
+	 * @param servletContext
+	 *            {@link ServletContext} instance
 	 */
 	public static void setApplication(IApplication newApplication, ServletContext servletContext) {
 		servletContext.setAttribute(APPLICATION_SERVLETCONTEXT_KEY, newApplication);
@@ -248,7 +254,8 @@ public class HDIVUtil {
 	/**
 	 * Return the <code>HDIVConfig</code> object
 	 * 
-	 * @param servletContext {@link ServletContext} instance
+	 * @param servletContext
+	 *            {@link ServletContext} instance
 	 * @return {@link HDIVConfig} instance
 	 */
 	public static HDIVConfig getHDIVConfig(ServletContext servletContext) {
@@ -264,8 +271,10 @@ public class HDIVUtil {
 	/**
 	 * Set the <code>HDIVConfig</code> object
 	 * 
-	 * @param hdivConfig {@link HDIVConfig} instance
-	 * @param servletContext {@link ServletContext} instance
+	 * @param hdivConfig
+	 *            {@link HDIVConfig} instance
+	 * @param servletContext
+	 *            {@link ServletContext} instance
 	 */
 	public static void setHDIVConfig(HDIVConfig hdivConfig, ServletContext servletContext) {
 		servletContext.setAttribute(HDIVCONFIG_SERVLETCONTEXT_KEY, hdivConfig);
@@ -329,6 +338,31 @@ public class HDIVUtil {
 		servletContext.setAttribute(FORMURLPROCESSOR_SERVLETCONTEXT_KEY, urlProcessor);
 	}
 
+	/* CurrentPageId */
+
+	/**
+	 * Returns CurrentPageId value from <code>HttpServletRequest</code>
+	 * 
+	 * @return pageId
+	 */
+	public static Integer getCurrentPageId() {
+		HttpServletRequest request = getHttpServletRequest();
+		return (Integer) request.getAttribute(CURRENT_PAGE_KEY);
+	}
+
+	/**
+	 * Set the CurrentPageId
+	 * 
+	 * @param pageId
+	 *            Current page id
+	 * @param request
+	 *            {@link HttpServletRequest} object
+	 */
+	public static void setCurrentPageId(Integer pageId, HttpServletRequest request) {
+
+		request.setAttribute(CURRENT_PAGE_KEY, pageId);
+	}
+
 	/* HttpSession */
 
 	/**
@@ -338,6 +372,19 @@ public class HDIVUtil {
 	 */
 	public static HttpSession getHttpSession() {
 		HttpServletRequest request = getHttpServletRequest();
+		return request.getSession();
+	}
+
+	/**
+	 * Return the <code>HttpSession</code> object.
+	 * 
+	 * @return {@link HttpSession} instance. It can have null value.
+	 */
+	public static HttpSession getNonRequiredHttpSession() {
+		HttpServletRequest request = getNonRequiredHttpServletRequest();
+		if (request == null) {
+			return null;
+		}
 		return request.getSession();
 	}
 
@@ -351,7 +398,8 @@ public class HDIVUtil {
 	public static HttpServletRequest getHttpServletRequest() {
 		HttpServletRequest request = (HttpServletRequest) httpRequest.get();
 		if (request == null) {
-			throw new HDIVException("Request has not been initialized in threadlocal");
+			throw new HDIVException(
+					"The request has not been initialized in threadlocal. The request has not been intercepted by ValidatorFilter, review it's mapping.");
 		}
 		return request;
 	}
@@ -369,7 +417,8 @@ public class HDIVUtil {
 	/**
 	 * Set the <code>HttpServletRequest</code> instance in {@link ThreadLocal}
 	 * 
-	 * @param httpServletRequest {@link HttpServletRequest} instance
+	 * @param httpServletRequest
+	 *            {@link HttpServletRequest} instance
 	 */
 	public static void setHttpServletRequest(HttpServletRequest httpServletRequest) {
 		httpRequest.set(httpServletRequest);
@@ -391,7 +440,8 @@ public class HDIVUtil {
 	/**
 	 * Return the {@link MessageSource} instance.
 	 * 
-	 * @param servletContext {@link ServletContext} instance
+	 * @param servletContext
+	 *            {@link ServletContext} instance
 	 * @return {@link MessageSource} instance
 	 */
 	public static MessageSource getMessageSource(ServletContext servletContext) {
@@ -405,8 +455,10 @@ public class HDIVUtil {
 	/**
 	 * Set the {@link MessageSource} instance.
 	 * 
-	 * @param msgSource {@link MessageSource} instance
-	 * @param servletContext {@link ServletContext} instance
+	 * @param msgSource
+	 *            {@link MessageSource} instance
+	 * @param servletContext
+	 *            {@link ServletContext} instance
 	 */
 	public static void setMessageSource(MessageSource msgSource, ServletContext servletContext) {
 		servletContext.setAttribute(MESSAGESOURCE_SERVLETCONTEXT_KEY, msgSource);
@@ -508,6 +560,26 @@ public class HDIVUtil {
 			u.delete(sessionStart, sessionEnd);
 		}
 		return u.toString();
+	}
+	
+	/**
+	 * Return an appropriate request object of the specified type, if available,
+	 * unwrapping the given request as far as necessary.
+	 * @param request the servlet request to introspect
+	 * @param requiredType the desired type of request object
+	 * @return the matching request object, or {@code null} if none of that type is available
+	 */
+	@SuppressWarnings("unchecked")
+	public static <T> T getNativeRequest(ServletRequest request, Class<T> requiredType) {
+		if (requiredType != null) {
+			if (requiredType.isInstance(request)) {
+				return (T) request;
+			}
+			else if (request instanceof ServletRequestWrapper) {
+				return getNativeRequest(((ServletRequestWrapper) request).getRequest(), requiredType);
+			}
+		}
+		return null;
 	}
 
 }

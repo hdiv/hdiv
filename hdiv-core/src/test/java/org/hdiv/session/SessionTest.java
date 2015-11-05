@@ -1,5 +1,5 @@
 /**
- * Copyright 2005-2013 hdiv.org
+ * Copyright 2005-2015 hdiv.org
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,8 @@
  */
 package org.hdiv.session;
 
+import java.util.List;
+
 import org.hdiv.AbstractHDIVTestCase;
 import org.hdiv.state.IPage;
 import org.hdiv.state.IParameter;
@@ -22,6 +24,8 @@ import org.hdiv.state.IState;
 import org.hdiv.state.Page;
 import org.hdiv.state.Parameter;
 import org.hdiv.state.State;
+import org.hdiv.util.Constants;
+import org.hdiv.util.HDIVUtil;
 
 public class SessionTest extends AbstractHDIVTestCase {
 
@@ -50,7 +54,7 @@ public class SessionTest extends AbstractHDIVTestCase {
 		state.addParameter(param);
 		page.addState(state);
 
-		session.addPage("20", page);
+		session.addPage(20, page);
 
 	}
 
@@ -65,10 +69,10 @@ public class SessionTest extends AbstractHDIVTestCase {
 		state.addParameter(param);
 		page.addState(state);
 
-		session.addPage("20", page);
+		session.addPage(20, page);
 
 		// Restore state
-		IState restored = session.getState("20", 0);
+		IState restored = session.getState(20, 0);
 
 		assertNotNull(restored);
 		assertEquals(state, restored);
@@ -85,13 +89,67 @@ public class SessionTest extends AbstractHDIVTestCase {
 		state.addParameter(param);
 		page.addState(state);
 
-		session.addPage("20", page);
+		session.addPage(20, page);
 
 		// Restore page
-		IPage restored = session.getPage("20");
+		IPage restored = session.getPage(20);
 
 		assertNotNull(restored);
 		assertEquals(page, restored);
+	}
+
+	public void testPageRefresh() {
+
+		// First page
+		IPage page = new Page();
+		page.setId(20);
+
+		IState state = new State(0);
+		state.setAction("/action");
+		page.addState(state);
+
+		session.addPage(20, page);
+
+		IStateCache cache = (IStateCache) HDIVUtil.getHttpServletRequest().getSession()
+				.getAttribute(Constants.STATE_CACHE_NAME);
+		List<Integer> ids = cache.getPageIds();
+		assertEquals(1, ids.size());
+
+		// Second page
+		page = new Page();
+		page.setId(21);
+
+		state = new State(0);
+		state.setAction("/action");
+		page.addState(state);
+		page.setParentStateId("14-0-E3E5BA9F9AC0DEA35BBE14189510600E"); 
+
+		session.addPage(21, page);
+
+		cache = (IStateCache) HDIVUtil.getHttpServletRequest().getSession().getAttribute(Constants.STATE_CACHE_NAME);
+		ids = cache.getPageIds();
+		assertEquals(2, ids.size());
+
+		// Simulate Page refresh
+		HDIVUtil.setCurrentPageId(20, HDIVUtil.getHttpServletRequest());
+
+		// Third page
+		page = new Page();
+		page.setId(22);
+		
+		// Same parent state id because a refresh has been performed
+		page.setParentStateId("14-0-E3E5BA9F9AC0DEA35BBE14189510600E"); 
+
+		state = new State(0);
+		state.setAction("/action");
+		page.addState(state);
+
+		session.addPage(22, page);
+
+		cache = (IStateCache) HDIVUtil.getHttpServletRequest().getSession().getAttribute(Constants.STATE_CACHE_NAME);
+		ids = cache.getPageIds();
+		assertEquals(2, ids.size());
+
 	}
 
 }

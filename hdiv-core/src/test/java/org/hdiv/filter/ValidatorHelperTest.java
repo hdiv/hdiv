@@ -1,5 +1,5 @@
 /**
- * Copyright 2005-2013 hdiv.org
+ * Copyright 2005-2015 hdiv.org
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,8 @@
  */
 package org.hdiv.filter;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.Map;
 
 import javax.servlet.http.Cookie;
@@ -27,6 +29,7 @@ import org.hdiv.util.Constants;
 import org.hdiv.util.HDIVUtil;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.web.util.HtmlUtils;
 
 /**
  * Unit tests for the <code>org.hdiv.filter.ValidatorHelper</code> class.
@@ -52,8 +55,7 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 		this.helper = this.getApplicationContext().getBean(IValidationHelper.class);
 		this.confidentiality = this.getConfig().getConfidentiality();
 
-		DataComposerFactory dataComposerFactory = (DataComposerFactory) this.getApplicationContext().getBean(
-				"dataComposerFactory");
+		DataComposerFactory dataComposerFactory = this.getApplicationContext().getBean(DataComposerFactory.class);
 		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
 		this.dataComposer = dataComposerFactory.newInstance(request);
 		HDIVUtil.setDataComposer(dataComposer, request);
@@ -63,7 +65,7 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 	/**
 	 * Validation test with the HDIV parameter only. Validation should be correct.
 	 */
-	public void testValidateHashOnlyHDIVParameter() {
+	public void testValidateHasOnlyHDIVParameter() {
 
 		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
 
@@ -82,7 +84,7 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 	/**
 	 * Validation test for an start page.
 	 */
-	public void testValidateHashActionIsStartPage() {
+	public void testValidateHasActionIsStartPage() {
 
 		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
 
@@ -103,7 +105,7 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 	/**
 	 * Validation test with an start parameter.
 	 */
-	public void testValidateHashOneStartParameter() {
+	public void testValidateHasOneStartParameter() {
 
 		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
 
@@ -123,7 +125,7 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 	/**
 	 * Validation test for a non-editable parameter with a correct value.
 	 */
-	public void testValidateHashOneNotEditableOneParameter() {
+	public void testValidateHasOneNotEditableOneParameter() {
 
 		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
 
@@ -145,7 +147,7 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 	/**
 	 * Validation test with a non-editable multivalue parameter. The obtained values for the parameter must be 0 and 1
 	 */
-	public void testValidateHashOneNotEditableMultivalueParameter() {
+	public void testValidateHasOneNotEditableMultivalueParameter() {
 
 		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
 
@@ -171,7 +173,7 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 	/**
 	 * Validation test with a non-editable multivalue parameter and another non-editable parameter with a simple value.
 	 */
-	public void testValidateHashMultiValue() {
+	public void testValidateHasMultiValue() {
 
 		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
 
@@ -202,7 +204,7 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 	 * Validation test with an init parameter and another non-editable parameter. Validation should be correct as the
 	 * resulting values are correct.
 	 */
-	public void testValidateHashOneStartParameterOneNotEditableParameter() {
+	public void testValidateHasOneStartParameterOneNotEditableParameter() {
 
 		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
 
@@ -226,7 +228,7 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 	 * Validation test for a non-editable multivalue parameter with modified values. Should not pass validation as the
 	 * second value has been modified.
 	 */
-	public void testValidateHashOneParameterNotEditableMultivalueIndexOutOfBound() {
+	public void testValidateHasOneParameterNotEditableMultivalueIndexOutOfBound() {
 
 		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
 
@@ -254,7 +256,7 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 	 * Validation test with a modified non-editable parameter. More than expected parameters are received, so it should
 	 * not pass validation.
 	 */
-	public void testValidateHashInvalidNumberOfParameters() {
+	public void testValidateHasInvalidNumberOfParameters() {
 
 		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
 
@@ -280,7 +282,7 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 	 * Validation test with a non-editable multivalue parameter. repeated values are received, so it should not pass
 	 * validation.
 	 */
-	public void testValidateHashRepeatedValues() {
+	public void testValidateHasRepeatedValues() {
 
 		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
 
@@ -306,7 +308,7 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 	/**
 	 * Validation test with a non-editable parameter. Its value is modified so it should not pass validation.
 	 */
-	public void testValidateHashOnlyOneParameterNotEditableIndexOutOfBound() {
+	public void testValidateHasOnlyOneParameterNotEditableIndexOutOfBound() {
 
 		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
 
@@ -332,7 +334,7 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 	 * Validation test with a wrong page identifier. It should not pass validation as there isn't any state in memory
 	 * which matches this identifier.
 	 */
-	public void testValidateHashMemoryWrongStateIndetifier() {
+	public void testValidateHasMemoryWrongStateIndetifier() {
 
 		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
 
@@ -482,5 +484,99 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 		RequestWrapper requestWrapper = new RequestWrapper(request);
 		boolean result = helper.validate(requestWrapper).isValid();
 		assertFalse(result);
+	}
+
+	public void testParamWithAmpersand() {
+
+		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
+
+		this.dataComposer.beginRequest("GET", this.targetName);
+		this.dataComposer.composeParams("param1=111&amp;param2=Me+%26+You", "GET", "utf-8");
+		String pageState = this.dataComposer.endRequest();
+		this.dataComposer.endPage();
+
+		request.addParameter(hdivParameter, pageState);
+		request.addParameter("param1", "0");
+		request.addParameter("param2", "0");
+
+		RequestWrapper requestWrapper = new RequestWrapper(request);
+		boolean result = helper.validate(requestWrapper).isValid();
+		assertTrue(result);
+
+		String param1Value = requestWrapper.getParameter("param1");
+		assertEquals("111", param1Value);
+
+		String param2Value = requestWrapper.getParameter("param2");
+		assertEquals("Me & You", param2Value);
+
+	}
+
+	public void testValidateLongLiving() {
+
+		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
+
+		this.dataComposer.startScope("app");
+		this.dataComposer.beginRequest("GET", this.targetName);
+		String pageState = this.dataComposer.endRequest();
+		this.dataComposer.endScope();
+		this.dataComposer.endPage();
+
+		assertTrue(pageState.startsWith("A-"));
+
+		request.addParameter(hdivParameter, pageState);
+
+		RequestWrapper requestWrapper = new RequestWrapper(request);
+		boolean result = helper.validate(requestWrapper).isValid();
+		assertTrue(result);
+	}
+
+	public void testEncodeFormAction() throws UnsupportedEncodingException {
+
+		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
+
+		String url = "/sample/TESTÑ/edit";
+
+		// Escaped value is passed by Spring MVC for example
+		String escaped = HtmlUtils.htmlEscape(url);
+		// Encoded value is what browser sends
+		String encoded = URLEncoder.encode(url, "utf-8");
+
+		dataComposer.startPage();
+		dataComposer.beginRequest("POST", escaped);
+		String stateId = dataComposer.endRequest();
+		dataComposer.endPage();
+
+		request.setRequestURI(encoded);
+
+		assertNotNull(stateId);
+
+		request.addParameter(hdivParameter, stateId);
+
+		RequestWrapper requestWrapper = new RequestWrapper(request);
+		boolean result = helper.validate(requestWrapper).isValid();
+		assertTrue(result);
+	}
+
+	public void testFormActionWithWhitespace() throws UnsupportedEncodingException {
+
+		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
+
+		String url = "/sample/TEST TEST/edit";
+		String urlRequest = "/sample/TEST%20TEST/edit";
+
+		dataComposer.startPage();
+		dataComposer.beginRequest("POST", url);
+		String stateId = dataComposer.endRequest();
+		dataComposer.endPage();
+
+		request.setRequestURI(urlRequest);
+
+		assertNotNull(stateId);
+
+		request.addParameter(hdivParameter, stateId);
+
+		RequestWrapper requestWrapper = new RequestWrapper(request);
+		boolean result = helper.validate(requestWrapper).isValid();
+		assertTrue(result);
 	}
 }

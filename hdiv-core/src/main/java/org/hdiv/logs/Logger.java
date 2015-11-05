@@ -1,5 +1,5 @@
 /**
- * Copyright 2005-2013 hdiv.org
+ * Copyright 2005-2015 hdiv.org
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,7 +26,8 @@ import org.hdiv.util.HDIVUtil;
  * user. Since the way to obtain this user may vary from application to application, an standard interface has been
  * defined to be implemented by each application.
  * <p>
- * Log format = type;target;parameter;value;userLocalIP;ip;userId
+ * Log format =
+ * type;target;parameterName;parameterValue;[originalParameterValue];userLocalIP;ip;userId;[validationRuleName]
  * </p>
  * 
  * @author Roberto Velasco
@@ -87,6 +88,30 @@ public class Logger {
 	public void log(String type, String target, String parameterName, String parameterValue,
 			String originalParameterValue) {
 
+		this.log(type, target, parameterName, parameterValue, originalParameterValue, null);
+	}
+
+	/**
+	 * Prints formatted attack produced by the user if the logging level defined in the Web application rate should be
+	 * at least INFO.
+	 * 
+	 * @param type
+	 *            Error type
+	 * @param target
+	 *            target name
+	 * @param parameterName
+	 *            parameter name
+	 * @param parameterValue
+	 *            parameter value
+	 * @param originalParameterValue
+	 *            original parameter value
+	 * @param validationRuleName
+	 *            In an attack of type 'EDITABLE_VALIDATION_ERROR', contains the name of the rule that rejected the
+	 *            value
+	 */
+	public void log(String type, String target, String parameterName, String parameterValue,
+			String originalParameterValue, String validationRuleName) {
+
 		HttpServletRequest request = this.getHttpServletRequest();
 
 		String localIp = this.getUserLocalIP(request);
@@ -98,7 +123,8 @@ public class Logger {
 			target = request.getContextPath() + target;
 		}
 
-		this.log(type, target, parameterName, parameterValue, originalParameterValue, localIp, remoteIp, userName);
+		this.log(type, target, parameterName, parameterValue, originalParameterValue, localIp, remoteIp, userName,
+				validationRuleName);
 	}
 
 	/**
@@ -120,14 +146,16 @@ public class Logger {
 	 *            user remote ip
 	 * @param userName
 	 *            user name in application
+	 * @param validationRuleName
+	 *            In an attack of type 'EDITABLE_VALIDATION_ERROR', contains the name of the rule that rejected the
+	 *            value
 	 */
 	protected void log(String type, String target, String parameterName, String parameterValue,
-			String originalParameterValue, String localIp, String remoteIp, String userName) {
+			String originalParameterValue, String localIp, String remoteIp, String userName, String validationRuleName) {
 
 		String formatedData = this.format(type, target, parameterName, parameterValue, originalParameterValue, localIp,
-				remoteIp, userName);
+				remoteIp, userName, validationRuleName);
 		log.info(formatedData);
-
 	}
 
 	/**
@@ -135,7 +163,7 @@ public class Logger {
 	 * Formatted text with information from the attack produced by the user. The log format is as follows:
 	 * </p>
 	 * <p>
-	 * <code>[error type];[target];[parameter];[value];[user local IP address];[IP address of the client or the last proxy that sent the request];[userId]</code>
+	 * <code>[error type];[target];[parameterName];[parameterValue];[originalParameterValue];[user local IP address];[IP address of the client or the last proxy that sent the request];[userId];[validationRuleName]</code>
 	 * </p>
 	 * 
 	 * @param type
@@ -154,10 +182,14 @@ public class Logger {
 	 *            user remote ip
 	 * @param userName
 	 *            user name in application
+	 * @param validationRuleName
+	 *            In an attack of type 'EDITABLE_VALIDATION_ERROR', contains the name of the rule that rejected the
+	 *            value
+	 * 
 	 * @return String Formatted text with the attach.
 	 */
 	protected String format(String type, String target, String parameterName, String parameterValue,
-			String originalParameterValue, String localIp, String remoteIp, String userName) {
+			String originalParameterValue, String localIp, String remoteIp, String userName, String validationRuleName) {
 
 		StringBuffer buffer = new StringBuffer();
 		buffer.append(type);
@@ -166,17 +198,23 @@ public class Logger {
 		buffer.append(";");
 		buffer.append(parameterName);
 		buffer.append(";");
-		buffer.append(parameterValue);
+		if (parameterValue != null) {
+			buffer.append(parameterValue);
+		}
 		buffer.append(";");
 		if (originalParameterValue != null) {
 			buffer.append(originalParameterValue);
-			buffer.append(";");
 		}
+		buffer.append(";");
 		buffer.append(localIp);
 		buffer.append(";");
 		buffer.append(remoteIp);
 		buffer.append(";");
 		buffer.append(userName);
+		buffer.append(";");
+		if (validationRuleName != null) {
+			buffer.append(validationRuleName);
+		}
 
 		return buffer.toString();
 	}

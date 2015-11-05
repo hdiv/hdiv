@@ -1,5 +1,5 @@
 /**
- * Copyright 2005-2013 hdiv.org
+ * Copyright 2005-2015 hdiv.org
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ package org.hdiv.state;
 import javax.servlet.http.HttpServletRequest;
 
 import org.hdiv.AbstractHDIVTestCase;
+import org.hdiv.config.Strategy;
 import org.hdiv.dataComposer.DataComposerFactory;
 import org.hdiv.dataComposer.IDataComposer;
 import org.hdiv.exception.HDIVException;
@@ -74,5 +75,75 @@ public class StateUtilTest extends AbstractHDIVTestCase {
 			assertTrue(true);
 
 		}
+	}
+
+	public void testIsMemoryStrategy() {
+
+		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		IDataComposer dataComposer = this.dataComposerFactory.newInstance(request);
+
+		HDIVUtil.setDataComposer(dataComposer, request);
+
+		// memory strategy in conf and bad formatted stateId
+		boolean result = this.stateUtil.isMemoryStrategy("1111");
+		assertTrue(result);
+
+		// change strategy to Hash
+		getConfig().setStrategy(Strategy.HASH);
+		result = this.stateUtil.isMemoryStrategy("1111");
+		assertFalse(result);
+
+		// Hash strategy in conf but stateId hash memory stategy pattern
+		result = this.stateUtil.isMemoryStrategy("1-1-11111");
+		assertTrue(result);
+
+	}
+
+	public void testLongLivingApp() {
+
+		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		IDataComposer dataComposer = this.dataComposerFactory.newInstance(request);
+		HDIVUtil.setDataComposer(dataComposer, request);
+
+		dataComposer.startPage();
+		dataComposer.startScope("app");
+		dataComposer.beginRequest("GET", "test.do");
+		dataComposer.compose("parameter1", "2", false);
+		String stateId = dataComposer.endRequest();
+		dataComposer.endScope();
+		dataComposer.endPage();
+
+		assertNotNull(stateId);
+		assertTrue(stateId.startsWith("A-"));
+
+		IState restored = this.stateUtil.restoreState(stateId);
+
+		assertNotNull(restored);
+		assertEquals(restored.getAction(), "test.do");
+		assertEquals(restored.getParameter("parameter1").getValues().get(0), "2");
+	}
+
+	public void testLongLivingUser() {
+
+		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		IDataComposer dataComposer = this.dataComposerFactory.newInstance(request);
+		HDIVUtil.setDataComposer(dataComposer, request);
+
+		dataComposer.startPage();
+		dataComposer.startScope("user-session");
+		dataComposer.beginRequest("GET", "test.do");
+		dataComposer.compose("parameter1", "2", false);
+		String stateId = dataComposer.endRequest();
+		dataComposer.endScope();
+		dataComposer.endPage();
+
+		assertNotNull(stateId);
+		assertTrue(stateId.startsWith("U-"));
+
+		IState restored = this.stateUtil.restoreState(stateId);
+
+		assertNotNull(restored);
+		assertEquals(restored.getAction(), "test.do");
+		assertEquals(restored.getParameter("parameter1").getValues().get(0), "2");
 	}
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright 2005-2013 hdiv.org
+ * Copyright 2005-2015 hdiv.org
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,7 +39,7 @@ public class RandomUidGenerator implements UidGenerator, ServletContextAware{
     private ServletContext servletContext;
 	
     /**
-     * Initializaiton method
+     * Initialization method
      */
     public void init() {
     	this.random = new Random(System.currentTimeMillis() + this.servletContext.hashCode());

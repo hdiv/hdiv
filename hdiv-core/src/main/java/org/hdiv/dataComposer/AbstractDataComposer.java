@@ -1,5 +1,5 @@
 /**
- * Copyright 2005-2013 hdiv.org
+ * Copyright 2005-2015 hdiv.org
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -105,13 +105,24 @@ public abstract class AbstractDataComposer implements IDataComposer {
 
 	/**
 	 * Obtains a new unique identifier for the page.
+	 * 
+	 * @param parentStateId
+	 *            Parent state id
 	 */
-	public void initPage() {
+	public void initPage(String parentStateId) {
 		this.page = new Page();
 		int pageId = this.session.getPageId();
 		this.page.setId(pageId);
+		this.page.setParentStateId(parentStateId);
 	}
-
+	
+	/**
+	 * Obtains a new unique identifier for the page.
+	 */
+	public void initPage() {
+		initPage(null);
+	}
+	
 	/**
 	 * It generates a new encoded value for the parameter <code>parameter</code> and the value <code>value</code> passed
 	 * as parameters. The returned value guarantees the confidentiality in the cipher and memory strategies if
@@ -212,7 +223,7 @@ public abstract class AbstractDataComposer implements IDataComposer {
 	public String compose(String action, String parameter, String value, boolean editable, boolean isActionParam,
 			String charEncoding) {
 
-		// Get actual IState
+		// Get current IState
 		IState state = this.getStatesStack().peek();
 		if (state.getAction() != null && state.getAction().trim().length() == 0) {
 			state.setAction(action);
@@ -278,9 +289,8 @@ public abstract class AbstractDataComposer implements IDataComposer {
 			return null;
 		}
 
-		// Get actual IState
+		// Get current IState
 		IState state = this.getStatesStack().peek();
-
 		state.setParams(parameters);
 
 		if (this.hdivConfig.getConfidentiality()) {
@@ -300,7 +310,7 @@ public abstract class AbstractDataComposer implements IDataComposer {
 	 *            HTTP method
 	 * @return parameters in query format with confidential values
 	 */
-	private String applyConfidentialityToParams(String parameters, String method) {
+	protected String applyConfidentialityToParams(String parameters, String method) {
 
 		Map<String, Integer> pCount = new HashMap<String, Integer>();
 
@@ -449,7 +459,7 @@ public abstract class AbstractDataComposer implements IDataComposer {
 	 */
 	protected boolean isUserDefinedNonValidationParameter(String parameter) {
 
-		// Get actual IState
+		// Get current IState
 		IState state = this.getStatesStack().peek();
 		String action = state.getAction();
 
@@ -491,12 +501,12 @@ public abstract class AbstractDataComposer implements IDataComposer {
 			decodedValue = this.getDecodedValue(value, charEncoding);
 		}
 
-		// Get actual IState
+		// Get current IState
 		IState state = this.getStatesStack().peek();
 
 		IParameter parameter = state.getParameter(parameterName);
 		if (parameter != null) {
-			if (parameter.isEditable() && !editable) {
+			if (parameter.isEditable() != editable) {
 				// A parameter can be created as editable but if a new non editable value is added, the parameter is
 				// changed to non editable. This is required in some frameworks like Struts 2.
 				parameter.setEditable(editable);
@@ -545,7 +555,7 @@ public abstract class AbstractDataComposer implements IDataComposer {
 	 */
 	public void mergeParameters(String oldParameter, String newParameter) {
 
-		// Get actual IState
+		// Get current IState
 		IState state = this.getStatesStack().peek();
 		IParameter storedParameter = state.getParameter(oldParameter);
 
@@ -577,7 +587,7 @@ public abstract class AbstractDataComposer implements IDataComposer {
 	 * &amp;#x<i>Hex</i>; - <i>(Example: &amp;#xE5;) case insensitive</i><br>
 	 * </blockquote>
 	 * <p>
-	 * Based on {@link HtmlUtils.htmlUnescape}.
+	 * Based on {@link HtmlUtils#htmlUnescape}.
 	 * </p>
 	 * 
 	 * @param value
@@ -586,7 +596,7 @@ public abstract class AbstractDataComposer implements IDataComposer {
 	 *            character encoding
 	 * @return value decoded
 	 */
-	private String getDecodedValue(String value, String charEncoding) {
+	protected String getDecodedValue(String value, String charEncoding) {
 
 		if (value == null || value.length() == 0) {
 			return "";
@@ -596,6 +606,8 @@ public abstract class AbstractDataComposer implements IDataComposer {
 		try {
 			decodedValue = URLDecoder.decode(value, charEncoding);
 		} catch (UnsupportedEncodingException e) {
+			decodedValue = value;
+		} catch (IllegalArgumentException e) {
 			decodedValue = value;
 		}
 

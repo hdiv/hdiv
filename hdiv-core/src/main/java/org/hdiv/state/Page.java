@@ -1,5 +1,5 @@
 /**
- * Copyright 2005-2013 hdiv.org
+ * Copyright 2005-2015 hdiv.org
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -48,31 +48,54 @@ public class Page implements IPage, Serializable {
 	/**
 	 * Page <code>this</code> identifier.
 	 */
-	private int id;
+	protected int id;
 
 	/**
 	 * Unique id of flow
 	 */
-	private String flowId;
+	protected String flowId;
 
 	/**
 	 * Unique random token. Used only for links.
 	 * 
 	 * @since HDIV 2.0.4
 	 */
-	private String randomToken;
+	protected String randomToken;
 
 	/**
 	 * Unique random token. Used only for forms with PATCH, POST, PUT or DELETE methods.
 	 * 
 	 * @since 2.1.7
 	 */
-	private String formRandomToken;
+	protected String formRandomToken;
 
 	/**
 	 * Page size.
 	 */
-	private long size;
+	protected long size;
+
+	/**
+	 * Sequential counter to generate state ids.
+	 * 
+	 * @since 2.1.11
+	 */
+	protected int stateIdCounter;
+
+	/**
+	 * True if this page is reused. The most common case is in an Ajax request.
+	 * 
+	 * @since 2.1.11
+	 */
+	protected Boolean isReused;
+
+	/**
+	 *  Parent's state id
+	 * 
+	 * @since 2.1.13
+	 */
+	protected String parentStateId;
+	
+	
 
 	/**
 	 * Adds a new state to the page <code>this</code>.
@@ -178,6 +201,25 @@ public class Page implements IPage, Serializable {
 		return states;
 	}
 
+	public int getNextStateId() {
+
+		if (isReused != null && isReused) {
+			// We have to synchronize reused Pages due to concurrency problems
+			synchronized (this) {
+				return this.stateIdCounter++;
+			}
+		}
+		return this.stateIdCounter++;
+	}
+
+	public void markAsReused() {
+		this.isReused = true;
+	}
+
+	public boolean isReused() {
+		return this.isReused == null ? false : this.isReused;
+	}
+
 	/**
 	 * @return Returns number of states.
 	 */
@@ -275,6 +317,22 @@ public class Page implements IPage, Serializable {
 		this.size = size;
 	}
 
+
+	/**
+	 * @param parentStateId
+	 *            the parentStateId to set
+	 */
+	public void setParentStateId(String parentStateId) {
+		this.parentStateId = parentStateId;
+	}
+
+	/**
+	 * @return the parentStateId
+	 */
+	public String getParentStateId() {
+		return this.parentStateId;
+	}
+	
 	public String toString() {
 
 		StringBuffer result = new StringBuffer();

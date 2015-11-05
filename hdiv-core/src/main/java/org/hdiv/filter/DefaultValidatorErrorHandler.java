@@ -1,5 +1,5 @@
 /**
- * Copyright 2005-2013 hdiv.org
+ * Copyright 2005-2015 hdiv.org
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -177,8 +177,7 @@ public class DefaultValidatorErrorHandler implements ValidatorErrorHandler {
 			request.getSession().removeAttribute(Constants.EDITABLE_PARAMETER_ERROR);
 
 			this.errorPageWritter.writetErrorPage(out, editableErrors);
-			response.flushBuffer();
-
+			out.flush();
 		} catch (IOException e) {
 			throw new RuntimeException("Cant redirect to the default error page", e);
 		}

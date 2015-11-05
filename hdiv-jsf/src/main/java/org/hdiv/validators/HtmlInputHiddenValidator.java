@@ -1,5 +1,5 @@
 /**
- * Copyright 2005-2013 hdiv.org
+ * Copyright 2005-2015 hdiv.org
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -74,7 +74,7 @@ public class HtmlInputHiddenValidator implements ComponentValidator {
 
 		HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
 		if (rowIndex >= 0) {
-			// If rowIndex >= 0, actual position is a table and hidden's component
+			// If rowIndex >= 0, current position is a table and hidden's component
 			// clientId is correct
 
 			hiddenValue = request.getParameter(inputHidden.getClientId(context));
@@ -104,7 +104,7 @@ public class HtmlInputHiddenValidator implements ComponentValidator {
 				return error;
 			}
 		} else {
-			// else, actual position isn't a table, but hidden is in a table
+			// else, current position isn't a table, but hidden is in a table
 			// and its clientId is incorrect
 			List<String> clientIds = inputHidden.getClientIds();
 			for (int i = 0; i < clientIds.size(); i++) {

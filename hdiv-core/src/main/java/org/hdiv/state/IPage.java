@@ -1,5 +1,5 @@
 /**
- * Copyright 2005-2013 hdiv.org
+ * Copyright 2005-2015 hdiv.org
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -91,6 +91,25 @@ public interface IPage {
 	public int getStatesCount();
 
 	/**
+	 * Obtain next valid state id.
+	 * 
+	 * @return State Id to use.
+	 */
+	public int getNextStateId();
+
+	/**
+	 * Mark this page as reused in more than one request. Most common case is in Ajax requests.
+	 */
+	public void markAsReused();
+
+	/**
+	 * Is this request reused in more than one request?
+	 * 
+	 * @return isReused
+	 */
+	public boolean isReused();
+
+	/**
 	 * Returns the unique id of flow.
 	 * 
 	 * @return the flow id
@@ -121,4 +140,21 @@ public interface IPage {
 	 * @since HDIV 2.1.7
 	 */
 	public void setRandomToken(String randomToken, String method);
+
+	/**
+	 * @param parentStateId
+	 *            the parentStateId to set
+	 * 
+	 * @since HDIV 2.1.13
+	 */
+	public void setParentStateId(String parentStateId);
+
+	/**
+	 * Returns the state id of the parent page
+	 * 
+	 * @return the parent state id
+	 * @since HDIV 2.1.13
+	 */
+	public String getParentStateId();
+
 }

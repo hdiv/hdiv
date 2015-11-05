@@ -1,5 +1,5 @@
 /**
- * Copyright 2005-2013 hdiv.org
+ * Copyright 2005-2015 hdiv.org
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,8 @@
  */
 package org.hdiv.urlProcessor;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -31,6 +33,7 @@ import org.hdiv.regex.PatternMatcher;
 import org.hdiv.util.Constants;
 import org.hdiv.util.HDIVUtil;
 import org.springframework.util.Assert;
+import org.springframework.web.util.HtmlUtils;
 
 /**
  * This class contains methods to process urls.
@@ -94,10 +97,6 @@ public abstract class AbstractUrlProcessor {
 			url = url.replaceFirst(serverUrl, "");
 		}
 
-		// Detect if the url points to actual app
-		boolean internal = this.isInternalUrl(request, url, urlData);
-		urlData.setInternal(internal);
-
 		// Remove jsessionid
 		url = this.stripSession(url, urlData);
 
@@ -105,15 +104,16 @@ public abstract class AbstractUrlProcessor {
 		String contextPathRelativeUrl = this.getContextPathRelative(request, url);
 		urlData.setContextPathRelativeUrl(contextPathRelativeUrl);
 
+		// Detect if the url points to current app
+		boolean internal = this.isInternalUrl(request, contextPathRelativeUrl, urlData);
+		urlData.setInternal(internal);
+
 		// Calculate url without the context path for later processing
 		String contextPath = request.getContextPath();
-		if (contextPathRelativeUrl.startsWith(contextPath)) {
+		if (internal) {
 			// Remove contextPath
 			String urlWithoutContextPath = contextPathRelativeUrl.substring(contextPath.length());
 			urlData.setUrlWithoutContextPath(urlWithoutContextPath);
-		} else {
-			// If contextPath is not present, the relative url is out of application
-			urlData.setInternal(false);
 		}
 
 		return urlData;
@@ -129,7 +129,7 @@ public abstract class AbstractUrlProcessor {
 	 *            urls query string
 	 * @return Map
 	 */
-	protected Map<String, String[]> getUrlParamsAsMap(HttpServletRequest request, String urlParams) {
+	public Map<String, String[]> getUrlParamsAsMap(HttpServletRequest request, String urlParams) {
 
 		Map<String, String[]> params = new LinkedHashMap<String, String[]>();
 
@@ -154,6 +154,9 @@ public abstract class AbstractUrlProcessor {
 				param = token;
 			}
 
+			// Decode parameter value
+			val = this.getDecodedValue(val, Constants.ENCODING_UTF_8);
+
 			// Ignore Hdiv state parameter
 			if (!param.equals(hdivParameter)) {
 				// Add value to array or create it
@@ -170,6 +173,41 @@ public abstract class AbstractUrlProcessor {
 		}
 
 		return params;
+	}
+
+	/**
+	 * <p>
+	 * Decoded <code>value</code> using input <code>charEncoding</code>.
+	 * </p>
+	 * 
+	 * @param value
+	 *            value to decode
+	 * @param charEncoding
+	 *            character encoding
+	 * @return value decoded
+	 */
+	protected String getDecodedValue(String value, String charEncoding) {
+
+		if (value == null || value.length() == 0) {
+			return "";
+		}
+
+		String decodedValue = null;
+		try {
+			decodedValue = URLDecoder.decode(value, charEncoding);
+		} catch (UnsupportedEncodingException e) {
+			decodedValue = value;
+		} catch (IllegalArgumentException e) {
+			decodedValue = value;
+		}
+
+		// Remove escaped Html elements
+		if (decodedValue.contains("&")) {
+			// Can contain escaped characters
+			decodedValue = HtmlUtils.htmlUnescape(decodedValue);
+		}
+
+		return (decodedValue == null) ? "" : decodedValue;
 	}
 
 	/**
@@ -311,7 +349,7 @@ public abstract class AbstractUrlProcessor {
 	 */
 	public boolean isHdivStateNecessary(UrlData urlData) {
 
-		if (urlData.getOriginalUrl().startsWith("javascript:")) {
+		if (urlData.getOriginalUrl().toLowerCase().startsWith("javascript:")) {
 			return false;
 		}
 
@@ -548,7 +586,7 @@ public abstract class AbstractUrlProcessor {
 	 * @param url
 	 *            url
 	 * @param urlData
-	 *            actual url data
+	 *            current url data
 	 * @return url without sessionId
 	 */
 	protected String stripSession(String url, UrlData urlData) {

@@ -1,5 +1,5 @@
 /**
- * Copyright 2005-2013 hdiv.org
+ * Copyright 2005-2015 hdiv.org
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,18 +24,24 @@ import java.util.List;
 public interface IStateCache extends Serializable {
 
 	/**
-	 * Adds a new page identifier to the map <code>pageIds</code>.
+	 * Adds a new page identifier to the cache.
 	 * 
 	 * @param pageId
 	 *            page identifier to add
+	 * @param currentPageId
+	 *            page identifier of the current request. It can be null if no state id is present.  
+	 * @param isRefreshRequest
+	 * 			  if the request is a refresh request
+	 * @param isAjaxRequest
+	 * 			  if the request is an ajax request
 	 * 
-	 * @return If the map <code>pageIds</code> has reached its maximum size <code>maxSize</code>, the oldest page
-	 *         identifier is deleted. Otherwise, null will be returned.
+	 * @return If the cache has reached its maximum size, less important identifier is returned in order to delete it
+	 *         from session. Otherwise, null will be returned.
 	 */
-	public String addPage(String pageId);
+	public Integer addPage(int pageId, Integer currentPageId, boolean isRefreshRequest, boolean isAjaxRequest);
 
 	/**
 	 * @return the pageIds
 	 */
-	public List<String> getPageIds();
+	public List<Integer> getPageIds();
 }

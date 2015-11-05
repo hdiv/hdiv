@@ -388,7 +388,7 @@ compile ':hdiv:1.0-RC2'
 ]]></programlisting>
 			</listitem>
 			<listitem>
-				<para>Add HDIV config to your faces-config</para>
+				<para>This is the content of '/WEB-INF/hdiv-faces2-config.xml' file:</para>
 
 				<programlisting language="xml">
  <![CDATA[

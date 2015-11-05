@@ -38,7 +38,20 @@
 		<property name="session" ref="sessionHDIV" />
 		<property name="dataValidator" ref="dataValidator" />
 		<property name="dataComposerFactory" ref="dataComposerFactory" />
-		<property name="urlProcessor" ref="basicUrlProcessor"/>
+		<property name="urlProcessor" ref="basicUrlProcessor" />
+	</bean>
+
+	<!-- ComponentProcessor -->
+	<bean id="outcomeTargetComponentProcessor"
+		class="org.hdiv.components.support.OutcomeTargetComponentProcessor">
+		<property name="config" ref="config" />
+		<property name="linkUrlProcessor" ref="linkUrlProcessor" />
+	</bean>
+
+	<bean id="outputLinkComponentProcessor"
+		class="org.hdiv.components.support.OutputLinkComponentProcessor">
+		<property name="config" ref="config" />
+		<property name="linkUrlProcessor" ref="linkUrlProcessor" />
 	</bean>
 
 </beans>

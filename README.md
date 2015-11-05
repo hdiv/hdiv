@@ -1,6 +1,7 @@
-## HTTP DATA INTEGRITY VALIDATOR
-We can briefly define HDIV as a Java Web Application Security Framework.
-HDIV extends web application's behaviour by adding Security functionalities, maintaining the API and the framework specification.
+[![Build Status](https://travis-ci.org/hdiv/hdiv.svg)](https://travis-ci.org/hdiv/hdiv)
+
+## WEB APPLICATION SECURITY FRAMEWORK
+HDIV extends web application's behavior by adding Security functionalities, maintaining the API and the framework specification.
 
 Official Site: [http://hdiv.org](http://hdiv.org)
 
@@ -8,8 +9,8 @@ Documentation: [http://hdiv.org/hdiv-documentation-single/doc.html](http://hdiv.
 
 Wiki: [https://github.com/hdiv/hdiv/wiki](https://github.com/hdiv/hdiv/wiki)
 
-## How to build your own Hdiv jar
-Clone this repo and build jar files (you'll need Git and Maven installed):
+## How to build your own HDIV jar
+Clone this repository and build jar files (you'll need Git and Maven installed):
 
     git clone git://github.com/hdiv/hdiv.git
     cd hdiv

@@ -1,5 +1,5 @@
 /**
- * Copyright 2005-2013 hdiv.org
+ * Copyright 2005-2015 hdiv.org
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -218,10 +218,18 @@ public interface IDataComposer {
 	public void init();
 
 	/**
+	 * It is called in the pre-processing stage of each user request with the parent state id.
+	 * 
+	 * @param parentStateId
+	 *            Parent state id
+	 */
+	public void startPage(String parentStateId);
+
+	/**
 	 * It is called in the pre-processing stage of each user request.
 	 */
 	public void startPage();
-
+	
 	/**
 	 * It is called in the pre-processing stage of each user request. Create a new {@link IPage} based on an existing
 	 * page.

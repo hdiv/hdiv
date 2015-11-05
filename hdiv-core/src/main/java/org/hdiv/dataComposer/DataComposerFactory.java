@@ -1,5 +1,5 @@
 /**
- * Copyright 2005-2013 hdiv.org
+ * Copyright 2005-2015 hdiv.org
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,6 +14,9 @@
  * limitations under the License.
  */
 package org.hdiv.dataComposer;
+
+import java.util.Arrays;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -76,6 +79,11 @@ public class DataComposerFactory {
 	protected StateScopeManager stateScopeManager;
 
 	/**
+	 * HTTP headers to exclude page reuse in Ajax requests.
+	 */
+	protected List<String> excludePageReuseHeaders = Arrays.asList("X-PJAX", "X-HDIV-EXCLUDE-PAGE-REUSE");
+
+	/**
 	 * Creates a new instance of DataComposer based on the defined strategy.
 	 * 
 	 * @param request
@@ -134,18 +142,21 @@ public class DataComposerFactory {
 	 * @param dataComposer
 	 *            IDataComposer instance
 	 * @param request
-	 *            actual HttpServletRequest instance
+	 *            current HttpServletRequest instance
 	 */
 	protected void initDataComposer(IDataComposer dataComposer, HttpServletRequest request) {
 
-		String paramName = (String) request.getSession().getAttribute(Constants.MODIFY_STATE_HDIV_PARAMETER);
-		String preState = paramName != null ? request.getParameter(paramName) : null;
+		String hdivStateParamName = (String) request.getSession().getAttribute(Constants.HDIV_PARAMETER);
+		String hdivState = request.getParameter(hdivStateParamName);
+
+		String preState = this.getModifyStateParameterValue(request);
+
 		if (preState != null && preState.length() > 0) {
 
 			// We are modifying an existing state, preload dataComposer with it
 			IState state = this.stateUtil.restoreState(preState);
 			if (state.getPageId() > 0) {
-				IPage page = this.session.getPage(state.getPageId() + "");
+				IPage page = this.session.getPage(state.getPageId());
 				if (page != null) {
 					dataComposer.startPage(page);
 				}
@@ -153,15 +164,22 @@ public class DataComposerFactory {
 			if (state != null) {
 				dataComposer.beginRequest(state);
 			}
-		} else if (this.config.isReuseExistingPageInAjaxRequest() && isAjaxRequest(request)) {
-			String hdivStateParamName = (String) request.getSession().getAttribute(Constants.HDIV_PARAMETER);
-			String hdivState = request.getParameter(hdivStateParamName);
 
-			IState state = this.stateUtil.restoreState(hdivState);
-			IPage page = this.session.getPage(Integer.toString(state.getPageId()));
-			dataComposer.startPage(page);
+		} else if (this.reuseExistingPage(request)) {
+
+			if (hdivState != null && hdivState.length() > 0) {
+				IState state = this.stateUtil.restoreState(hdivState);
+				if (state.getPageId() > 0) {
+					IPage page = this.session.getPage(state.getPageId());
+					dataComposer.startPage(page);
+				} else {
+					dataComposer.startPage(hdivState);
+				}
+			} else {
+				dataComposer.startPage(hdivState);
+			}
 		} else {
-			dataComposer.startPage();
+			dataComposer.startPage(hdivState);
 		}
 
 		// Detect if request url is configured as a long living page
@@ -172,11 +190,69 @@ public class DataComposerFactory {
 		}
 	}
 
+	/**
+	 * Get _MODIFY_HDIV_STATE_ parameter value.
+	 * 
+	 * @param request
+	 *            current HttpServletRequest instance
+	 * @return parameter value.
+	 */
+	protected String getModifyStateParameterValue(HttpServletRequest request) {
+
+		String paramName = (String) request.getSession().getAttribute(Constants.MODIFY_STATE_HDIV_PARAMETER);
+		String preState = paramName != null ? request.getParameter(paramName) : null;
+		return preState;
+	}
+
+	/**
+	 * Is it necessary to create a new Page or reuse existing Page adding the created states to it?
+	 * 
+	 * @param request
+	 *            current HttpServletRequest instance
+	 * @return reuse or not
+	 */
+	protected boolean reuseExistingPage(HttpServletRequest request) {
+
+		if (isAjaxRequest(request)) {
+
+			if (excludePageReuseInAjax(request)) {
+				return false;
+			}
+			// Decides based on user settings
+			return this.config.isReuseExistingPageInAjaxRequest();
+		}
+		return false;
+	}
+
+	/**
+	 * Checks if request is an ajax request and store the result in a request's attribute
+	 * 
+	 * @param request
+	 *            the HttpServletRequest
+	 * 
+	 * @return isAjaxRquest
+	 */
 	protected boolean isAjaxRequest(HttpServletRequest request) {
 
 		String xRequestedWithValue = request.getHeader("x-requested-with");
 
-		return (xRequestedWithValue != null) ? "XMLHttpRequest".equalsIgnoreCase(xRequestedWithValue) : false;
+		boolean isAjaxRequest = (xRequestedWithValue != null) ? "XMLHttpRequest".equalsIgnoreCase(xRequestedWithValue)
+				: false;
+
+		request.setAttribute(Constants.AJAX_REQUEST, isAjaxRequest);
+
+		return isAjaxRequest;
+	}
+
+	protected boolean excludePageReuseInAjax(HttpServletRequest request) {
+
+		for (String header : this.excludePageReuseHeaders) {
+			String headerValue = request.getHeader(header);
+			if (headerValue != null) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/**
@@ -233,6 +309,14 @@ public class DataComposerFactory {
 	 */
 	public void setStateScopeManager(StateScopeManager stateScopeManager) {
 		this.stateScopeManager = stateScopeManager;
+	}
+
+	/**
+	 * @param excludePageReuseHeaders
+	 *            the excludePageReuseHeaders to set
+	 */
+	public void setExcludePageReuseHeaders(List<String> excludePageReuseHeaders) {
+		this.excludePageReuseHeaders = excludePageReuseHeaders;
 	}
 
 }

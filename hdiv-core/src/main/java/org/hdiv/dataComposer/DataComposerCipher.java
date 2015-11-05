@@ -1,5 +1,5 @@
 /**
- * Copyright 2005-2013 hdiv.org
+ * Copyright 2005-2015 hdiv.org
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -73,7 +73,13 @@ public class DataComposerCipher extends DataComposerMemory {
 		IState state = super.getStatesStack().pop();
 		state.setPageId(this.getPage().getId());
 
-		String stateData = this.encodingUtil.encode64Cipher(state);
+		// Prepare data to cipher
+		String token = this.getStateSuffix(state.getMethod());
+		Object[] cipherData = new Object[2];
+		cipherData[0] = state;
+		cipherData[1] = token;
+
+		String stateData = this.encodingUtil.encode64Cipher(cipherData);
 		String id = null;
 
 		// if state's length it's too long for GET methods we have to change the

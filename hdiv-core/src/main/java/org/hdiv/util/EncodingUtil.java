@@ -1,5 +1,5 @@
 /**
- * Copyright 2005-2013 hdiv.org
+ * Copyright 2005-2015 hdiv.org
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -59,7 +59,7 @@ public class EncodingUtil {
 	private ISession session;
 
 	/**
-	 * Provides the funtionallity of a message digest algorithm.
+	 * Provides the functionality of a message digest algorithm.
 	 */
 	private MessageDigest messageDigest;
 
@@ -88,7 +88,7 @@ public class EncodingUtil {
 	 * 
 	 * @param obj
 	 *            Object to encrypt
-	 * @return Objet <code>obj</code> compressed, encrypted and coded in Base64
+	 * @return Object <code>obj</code> compressed, encrypted and coded in Base64
 	 * @throws HDIVException
 	 *             if there is an error encoding object <code>data</code>
 	 * @see java.util.zip.GZIPOutputStream#GZIPOutputStream(java.io.OutputStream)

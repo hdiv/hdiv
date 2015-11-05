@@ -1,5 +1,5 @@
 /**
- * Copyright 2005-2013 hdiv.org
+ * Copyright 2005-2015 hdiv.org
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -113,6 +113,18 @@ public class LinkUrlProcessorTest extends AbstractHDIVTestCase {
 		assertTrue(result.equals("../testAction.do"));
 	}
 
+	public void testProcessAbsoluteExternalUrlToAnotherApp() {
+
+		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
+		request.setContextPath("/path");
+
+		String url = "/path-app/index.html";
+
+		String result = this.linkUrlProcessor.processUrl(request, url);
+
+		assertEquals(url, result);
+	}
+
 	public void testProcessAbsoluteExternalUrlWithContextPath() {
 
 		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
@@ -122,7 +134,7 @@ public class LinkUrlProcessorTest extends AbstractHDIVTestCase {
 
 		String result = this.linkUrlProcessor.processUrl(request, url);
 
-		assertEquals("http://www.google.com", result);
+		assertEquals(url, result);
 	}
 
 	public void testProcessAbsoluteExternalUrl() {
@@ -133,7 +145,7 @@ public class LinkUrlProcessorTest extends AbstractHDIVTestCase {
 
 		String result = this.linkUrlProcessor.processUrl(request, url);
 
-		assertEquals("http://www.google.com", result);
+		assertEquals(url, result);
 	}
 
 	public void testProcessAbsoluteInternalUrlWithContextPath() {
@@ -300,6 +312,22 @@ public class LinkUrlProcessorTest extends AbstractHDIVTestCase {
 		String result = this.linkUrlProcessor.processUrl(request, url);
 		assertTrue(result
 				.startsWith("/probando.do?stringArray=0&stringArray=1&stringArray=2&floatProperty=0&intProperty=0&_HDIV_STATE_"));
+	}
+
+	public void testJavaScriptLinks() {
+
+		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		String url = "javascript:performAction(this);";
+		String result = this.linkUrlProcessor.processUrl(request, url);
+		assertEquals(url, result);
+
+		url = "JavaScript:performAction(this);";
+		result = this.linkUrlProcessor.processUrl(request, url);
+		assertEquals(url, result);
+
+		url = "javaScript:performAction(this);";
+		result = this.linkUrlProcessor.processUrl(request, url);
+		assertEquals(url, result);
 	}
 
 }

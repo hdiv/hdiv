@@ -1,5 +1,5 @@
 /**
- * Copyright 2005-2013 hdiv.org
+ * Copyright 2005-2015 hdiv.org
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@ package org.hdiv.config.xml;
 import junit.framework.TestCase;
 
 import org.hdiv.config.HDIVConfig;
-import org.hdiv.config.HDIVValidations;
+import org.hdiv.validator.EditableDataValidationProvider;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -39,9 +39,9 @@ public class MinCustomSchemaTest extends TestCase {
 		assertNotNull(hdivConfig);
 		assertFalse(hdivConfig.isDebugMode());
 
-		HDIVValidations validations = this.context.getBean(HDIVValidations.class);
-		assertNotNull(validations);
-		System.out.println(validations.toString());
+		EditableDataValidationProvider provider = this.context.getBean(EditableDataValidationProvider.class);
+		assertNotNull(provider);
+		System.out.println(provider.toString());
 
 	}
 

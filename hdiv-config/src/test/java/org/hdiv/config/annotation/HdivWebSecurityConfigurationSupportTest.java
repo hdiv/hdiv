@@ -1,5 +1,5 @@
 /**
- * Copyright 2005-2013 hdiv.org
+ * Copyright 2005-2015 hdiv.org
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,7 +45,7 @@ public class HdivWebSecurityConfigurationSupportTest {
 			}
 			
 			@Override
-			void addLongLivingPages(LongLivingPagesRegistry registry) {
+			public void addLongLivingPages(LongLivingPagesRegistry registry) {
 				
 				registry.addLongLivingPages("/longLivingPage.html", "/longLiving/.*").scope(StateScopeType.APP);
 				registry.addLongLivingPages("/longLivingPageApp.html");

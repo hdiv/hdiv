@@ -1,5 +1,5 @@
 /**
- * Copyright 2005-2013 hdiv.org
+ * Copyright 2005-2015 hdiv.org
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -66,13 +66,13 @@ public class LinkUrlProcessor extends AbstractUrlProcessor {
 		if (dataComposer == null) {
 			// IDataComposer not initialized on request, request is out of filter
 			if (log.isDebugEnabled()) {
-				log.debug("IDataComposer not initialized on request, request is out of filter");
+				log.debug("IDataComposer not initialized on request. Request doesn't pass through ValidatorFilter, review it's mapping");
 			}
 			return url;
 		}
 
-		UrlData urlData = super.createUrlData(url, "GET", request);
-		if (super.isHdivStateNecessary(urlData)) {
+		UrlData urlData = this.createUrlData(url, "GET", request);
+		if (this.isHdivStateNecessary(urlData)) {
 			// the url needs protection
 			dataComposer.beginRequest("GET", urlData.getUrlWithoutContextPath());
 
@@ -82,7 +82,7 @@ public class LinkUrlProcessor extends AbstractUrlProcessor {
 			// Hdiv state param value
 			String stateParam = dataComposer.endRequest();
 			// Url with confidential values and hdiv state param
-			url = super.getProcessedUrlWithHdivState(request, urlData, stateParam);
+			url = this.getProcessedUrlWithHdivState(request, urlData, stateParam);
 		}
 
 		return url;

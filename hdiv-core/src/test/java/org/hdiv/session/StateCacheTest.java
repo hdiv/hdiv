@@ -1,5 +1,5 @@
 /**
- * Copyright 2005-2013 hdiv.org
+ * Copyright 2005-2015 hdiv.org
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 package org.hdiv.session;
+
+import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -48,19 +50,65 @@ public class StateCacheTest extends AbstractHDIVTestCase {
 		IState state2 = new State(0);
 		IState state3 = new State(0);
 
+		int currentPageid = -1;
+
 		page1.addState(state1);
 		page1.setId(1);
-		cache.addPage("1");
+		cache.addPage(1, currentPageid, false, false);
 
 		page2.addState(state2);
 		page2.setId(2);
-		cache.addPage("2");
+		cache.addPage(2, currentPageid, false, false);
 
 		page3.addState(state3);
 		page3.setId(3);
-		cache.addPage("3");
+		cache.addPage(3, currentPageid, false, false);
 
 		log.info("cache:" + cache.toString());
+
+		List<Integer> ids = cache.getPageIds();
+		assertEquals(3, ids.size());
+		assertEquals((Integer) 1, ids.get(0));
+		assertEquals((Integer) 2, ids.get(1));
+		assertEquals((Integer) 3, ids.get(2));
+	}
+
+	public void testPageReflesh() {
+
+		// cache's maximum size is defined using the Spring factory.
+		IStateCache cache = this.getApplicationContext().getBean(IStateCache.class);
+
+		IPage page1 = new Page();
+		IPage page2 = new Page();
+		IPage page3 = new Page();
+
+		IState state1 = new State(0);
+		IState state2 = new State(0);
+		IState state3 = new State(0);
+
+		int currentPageid = -1;
+
+		page1.addState(state1);
+		page1.setId(1);
+		cache.addPage(1, currentPageid, false, false);
+		assertEquals(1, cache.getPageIds().size());
+
+		page2.addState(state2);
+		page2.setId(2);
+		cache.addPage(2, currentPageid, false, false);
+		assertEquals(2, cache.getPageIds().size());
+
+		// Simulate a page refresh or F5
+		currentPageid = 1;
+
+		page3.addState(state3);
+		page3.setId(3);
+		cache.addPage(3, currentPageid, true, false);
+		assertEquals(2, cache.getPageIds().size());// Size is 2 instead of 3
+
+		List<Integer> ids = cache.getPageIds();
+		assertEquals((Integer) 1, ids.get(0));
+		assertEquals((Integer) 3, ids.get(1));
 	}
 
 }

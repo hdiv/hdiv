@@ -1,5 +1,5 @@
 /**
- * Copyright 2005-2013 hdiv.org
+ * Copyright 2005-2015 hdiv.org
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,7 +29,7 @@ import org.springframework.validation.Validator;
 public class EditableParameterValidator extends AbstractEditableParameterValidator implements SmartValidator {
 
 	/**
-	 * Wrapped validator.
+	 * Wrapped {@link Validator} instance.
 	 */
 	private Validator innerValidator;
 
@@ -40,14 +40,23 @@ public class EditableParameterValidator extends AbstractEditableParameterValidat
 	public void validate(Object obj, Errors errors) {
 		super.validateEditableParameters(errors);
 
-		// If Hdiv validation OK, delegate to inner validation
+		// If editable validation is OK, delegate to inner validator
 		if (!errors.hasErrors() && this.innerValidator != null) {
 			this.innerValidator.validate(obj, errors);
 		}
 	}
-	
+
 	public void validate(Object obj, Errors errors, Object... hints) {
-		validate(obj, errors);
+		super.validateEditableParameters(errors);
+
+		// If editable validation is OK, delegate to inner validator
+		if (!errors.hasErrors() && this.innerValidator != null) {
+			if (this.innerValidator instanceof SmartValidator) {
+				((SmartValidator) this.innerValidator).validate(obj, errors, hints);
+			} else {
+				this.innerValidator.validate(obj, errors);
+			}
+		}
 	}
 
 	/**

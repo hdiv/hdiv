@@ -18,6 +18,7 @@ package org.hdiv.config.validations;
 import junit.framework.TestCase;
 
 import org.hdiv.config.HDIVConfig;
+import org.hdiv.validator.EditableDataValidationResult;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -35,8 +36,8 @@ public class DefaultEditableValidationsTest extends TestCase {
 
 	protected boolean validateValue(String value) {
 
-		return config
-				.areEditableParameterValuesValid("/editableTest.html", "paramName", new String[] { value }, "text");
+		EditableDataValidationResult result = config.getEditableDataValidationProvider().validate("/editableTest.html", "paramName", new String[] { value }, "text");
+		return result.isValid();
 	}
 
 	public void testSqlInjection() {

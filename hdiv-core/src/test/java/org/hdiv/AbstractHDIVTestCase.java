@@ -1,5 +1,5 @@
 /**
- * Copyright 2005-2013 hdiv.org
+ * Copyright 2005-2015 hdiv.org
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ import java.util.regex.Pattern;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpSessionEvent;
 
@@ -29,11 +30,13 @@ import org.apache.commons.logging.LogFactory;
 import org.hdiv.config.HDIVConfig;
 import org.hdiv.dataComposer.DataComposerFactory;
 import org.hdiv.dataComposer.IDataComposer;
-import org.hdiv.filter.RequestInitializer;
+import org.hdiv.init.RequestInitializer;
 import org.hdiv.listener.InitListener;
 import org.hdiv.util.HDIVUtil;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.XmlWebApplicationContext;
 
@@ -66,6 +69,10 @@ public abstract class AbstractHDIVTestCase extends TestCase {
 	 */
 	private HDIVConfig config;
 
+	private InitListener initListener;
+	private MockHttpServletRequest mockRequest;
+	private MockHttpServletResponse mockResponse;
+	
 	protected final void setUp() throws Exception {
 
 		String[] files = { 
@@ -76,9 +83,13 @@ public abstract class AbstractHDIVTestCase extends TestCase {
 
 		// Servlet API mock
 		MockHttpServletRequest request = new MockHttpServletRequest("GET", "/path/testAction.do");
+		HttpServletResponse response = new MockHttpServletResponse();
 		HttpSession httpSession = request.getSession();
 		ServletContext servletContext = httpSession.getServletContext();
 		HDIVUtil.setHttpServletRequest(request);
+		// Store objects for teardown cleanup
+		this.mockRequest = request;
+		this.mockResponse = (MockHttpServletResponse)response;
 
 		// Init Spring Context
 		XmlWebApplicationContext webApplicationContext = new XmlWebApplicationContext();
@@ -96,7 +107,7 @@ public abstract class AbstractHDIVTestCase extends TestCase {
 		// Configure for testing
 		this.postCreateHdivConfig(this.config);
 
-		InitListener initListener = new InitListener();
+		this.initListener = new InitListener();
 		// Initialize ServletContext
 		ServletContextEvent servletContextEvent = new ServletContextEvent(servletContext);
 		initListener.contextInitialized(servletContextEvent);
@@ -106,7 +117,7 @@ public abstract class AbstractHDIVTestCase extends TestCase {
 
 		// Init Request scoped data
 		RequestInitializer requestInitializer = this.applicationContext.getBean(RequestInitializer.class);
-		requestInitializer.initRequest(request);
+		requestInitializer.initRequest(request, response);
 		DataComposerFactory dataComposerFactory = (DataComposerFactory) this.applicationContext
 				.getBean(DataComposerFactory.class);
 		IDataComposer dataComposer = dataComposerFactory.newInstance(request);
@@ -119,7 +130,28 @@ public abstract class AbstractHDIVTestCase extends TestCase {
 		onSetUp();
 	}
 
+	/**
+	 * Hook method for test initialization
+	 * 
+	 * @throws Exception
+	 */
 	protected abstract void onSetUp() throws Exception;
+
+	@Override
+	protected void tearDown() throws Exception {
+
+		RequestInitializer requestInitializer = this.applicationContext.getBean(RequestInitializer.class);
+		requestInitializer.endRequest(mockRequest, mockResponse);
+		
+		// Destroy HttpSession
+		HttpSessionEvent httpSessionEvent = new HttpSessionEvent(mockRequest.getSession());
+		initListener.sessionDestroyed(httpSessionEvent);
+		// Destroy ServletContext
+		ServletContextEvent servletContextEvent = new ServletContextEvent(mockRequest.getSession().getServletContext());
+		initListener.contextDestroyed(servletContextEvent);
+		
+		((ConfigurableApplicationContext) this.applicationContext).close();
+	}
 
 	/**
 	 * Hook method for {@link HDIVConfig} customization

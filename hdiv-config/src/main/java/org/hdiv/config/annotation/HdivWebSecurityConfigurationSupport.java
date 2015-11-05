@@ -1,5 +1,5 @@
 /**
- * Copyright 2005-2013 hdiv.org
+ * Copyright 2005-2015 hdiv.org
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 package org.hdiv.config.annotation;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -27,9 +27,9 @@ import org.hdiv.cipher.ICipherHTTP;
 import org.hdiv.cipher.IKeyFactory;
 import org.hdiv.cipher.KeyFactory;
 import org.hdiv.config.HDIVConfig;
-import org.hdiv.config.HDIVValidations;
 import org.hdiv.config.StartPage;
 import org.hdiv.config.annotation.ValidationConfigurer.ValidationConfig;
+import org.hdiv.config.annotation.ValidationConfigurer.ValidationConfig.EditableValidationConfigurer;
 import org.hdiv.config.annotation.builders.SecurityConfigBuilder;
 import org.hdiv.config.annotation.builders.SecurityConfigBuilder.CipherConfigure;
 import org.hdiv.config.annotation.grails.GrailsConfigurationSupport;
@@ -42,16 +42,20 @@ import org.hdiv.dataComposer.DataComposerFactory;
 import org.hdiv.dataValidator.DataValidator;
 import org.hdiv.dataValidator.IDataValidator;
 import org.hdiv.dataValidator.ValidationResult;
-import org.hdiv.filter.DefaultRequestInitializer;
 import org.hdiv.filter.DefaultValidatorErrorHandler;
 import org.hdiv.filter.IValidationHelper;
-import org.hdiv.filter.RequestInitializer;
 import org.hdiv.filter.ValidatorErrorHandler;
 import org.hdiv.filter.ValidatorHelperRequest;
 import org.hdiv.idGenerator.PageIdGenerator;
 import org.hdiv.idGenerator.RandomGuidUidGenerator;
 import org.hdiv.idGenerator.SequentialPageIdGenerator;
 import org.hdiv.idGenerator.UidGenerator;
+import org.hdiv.init.DefaultRequestInitializer;
+import org.hdiv.init.DefaultServletContextInitializer;
+import org.hdiv.init.DefaultSessionInitializer;
+import org.hdiv.init.RequestInitializer;
+import org.hdiv.init.ServletContextInitializer;
+import org.hdiv.init.SessionInitializer;
 import org.hdiv.logs.IUserData;
 import org.hdiv.logs.Logger;
 import org.hdiv.logs.UserData;
@@ -71,8 +75,13 @@ import org.hdiv.urlProcessor.BasicUrlProcessor;
 import org.hdiv.urlProcessor.FormUrlProcessor;
 import org.hdiv.urlProcessor.LinkUrlProcessor;
 import org.hdiv.util.EncodingUtil;
+import org.hdiv.validator.DefaultEditableDataValidationProvider;
+import org.hdiv.validator.DefaultValidationRepository;
+import org.hdiv.validator.EditableDataValidationProvider;
 import org.hdiv.validator.IValidation;
 import org.hdiv.validator.Validation;
+import org.hdiv.validator.ValidationRepository;
+import org.hdiv.validator.ValidationTarget;
 import org.springframework.beans.factory.BeanInitializationException;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Bean;
@@ -86,8 +95,58 @@ import org.springframework.context.annotation.Scope;
  * @since 2.1.7
  */
 @Import({ SpringMvcConfigurationSupport.class, ThymeleafConfigurationSupport.class, GrailsConfigurationSupport.class,
-		JsfConfigurationSupport.class , Struts1ConfigurationSupport.class})
-public abstract class HdivWebSecurityConfigurationSupport {
+		JsfConfigurationSupport.class, Struts1ConfigurationSupport.class })
+public class HdivWebSecurityConfigurationSupport {
+
+	/**
+	 * Override this method to configure HDIV
+	 * 
+	 * @param securityConfigBuilder
+	 *            {@link SecurityConfigBuilder} instance
+	 * @see SecurityConfigBuilder
+	 */
+	protected void configure(SecurityConfigBuilder securityConfigBuilder) {
+	}
+
+	/**
+	 * Override this method to add exclusions to the validation process.
+	 * 
+	 * @param registry
+	 *            {@link ExclusionRegistry} instance
+	 * @see ExclusionRegistry
+	 */
+	protected void addExclusions(ExclusionRegistry registry) {
+	}
+
+	/**
+	 * Override this method to add long living pages to the application.
+	 * 
+	 * @param registry
+	 *            {@link LongLivingPagesRegistry} instance
+	 * @see LongLivingPagesRegistry
+	 */
+	protected void addLongLivingPages(LongLivingPagesRegistry registry) {
+	}
+
+	/**
+	 * Override this method to add editable validation rules.
+	 * 
+	 * @param registry
+	 *            {@link RuleRegistry} instance
+	 * @see RuleRegistry
+	 */
+	protected void addRules(RuleRegistry registry) {
+	}
+
+	/**
+	 * Override this method to add editable validations to the application.
+	 * 
+	 * @param validationConfigurer
+	 *            {@link ValidationConfigurer} instance
+	 * @see ValidationConfigurer
+	 */
+	protected void configureEditableValidation(ValidationConfigurer validationConfigurer) {
+	}
 
 	@Bean
 	public HDIVConfig hdivConfig() {
@@ -96,7 +155,7 @@ public abstract class HdivWebSecurityConfigurationSupport {
 		this.configure(securityConfigBuilder);
 
 		HDIVConfig config = securityConfigBuilder.build();
-		config.setValidations(securityValidations());
+		config.setEditableDataValidationProvider(editableDataValidationProvider());
 
 		// User configured exclusions
 		ExclusionRegistry exclusionRegistry = new ExclusionRegistry(patternMatcherFactory());
@@ -125,12 +184,6 @@ public abstract class HdivWebSecurityConfigurationSupport {
 		SecurityConfigBuilder builder = new SecurityConfigBuilder(patternMatcherFactory());
 		return builder;
 	}
-
-	abstract void configure(SecurityConfigBuilder securityConfigBuilder);
-
-	abstract void addExclusions(ExclusionRegistry registry);
-
-	abstract void addLongLivingPages(LongLivingPagesRegistry registry);
 
 	@Bean
 	public IApplication securityApplication() {
@@ -326,6 +379,23 @@ public abstract class HdivWebSecurityConfigurationSupport {
 	}
 
 	@Bean
+	public ServletContextInitializer securityServletContextInitializer() {
+		DefaultServletContextInitializer servletContextInitializer = new DefaultServletContextInitializer();
+		servletContextInitializer.setConfig(hdivConfig());
+		servletContextInitializer.setApplication(securityApplication());
+		servletContextInitializer.setFormUrlProcessor(formUrlProcessor());
+		servletContextInitializer.setLinkUrlProcessor(linkUrlProcessor());
+		return servletContextInitializer;
+	}
+
+	@Bean
+	public SessionInitializer securitySessionInitializer() {
+		DefaultSessionInitializer sessionInitializer = new DefaultSessionInitializer();
+		sessionInitializer.setConfig(hdivConfig());
+		return sessionInitializer;
+	}
+
+	@Bean
 	public LinkUrlProcessor linkUrlProcessor() {
 		LinkUrlProcessor linkUrlProcessor = new LinkUrlProcessor();
 		linkUrlProcessor.setConfig(hdivConfig());
@@ -347,10 +417,18 @@ public abstract class HdivWebSecurityConfigurationSupport {
 	}
 
 	@Bean
-	public HDIVValidations securityValidations() {
+	public EditableDataValidationProvider editableDataValidationProvider() {
+
+		DefaultEditableDataValidationProvider provider = new DefaultEditableDataValidationProvider();
+		provider.setValidationRepository(editableValidationRepository());
+		return provider;
+	}
+
+	@Bean
+	public ValidationRepository editableValidationRepository() {
 
 		// Default rules
-		List<IValidation> defaultRules = defaultRules();
+		List<IValidation> defaultRules = getDefaultRules();
 		// Custom rules
 		RuleRegistry registry = new RuleRegistry();
 		this.addRules(registry);
@@ -363,13 +441,16 @@ public abstract class HdivWebSecurityConfigurationSupport {
 		this.configureEditableValidation(validationConfigurer);
 		List<ValidationConfig> validationConfigs = validationConfigurer.getValidationConfigs();
 
-		Map<PatternMatcher, List<IValidation>> validationsData = new HashMap<PatternMatcher, List<IValidation>>();
+		Map<ValidationTarget, List<IValidation>> validationsData = new LinkedHashMap<ValidationTarget, List<IValidation>>();
 
 		for (ValidationConfig validationConfig : validationConfigs) {
 
 			String urlPattern = validationConfig.getUrlPattern();
-			boolean useDefaultRules = validationConfig.getRuleConfigurer().isDefaultRules();
-			List<String> selectedRules = validationConfig.getRuleConfigurer().getRules();
+			EditableValidationConfigurer editableValidationConfigurer = validationConfig
+					.getEditableValidationConfigurer();
+			boolean useDefaultRules = editableValidationConfigurer.isDefaultRules();
+			List<String> selectedRules = editableValidationConfigurer.getRules();
+			List<String> selectedParams = editableValidationConfigurer.getParameters();
 
 			// Add selected rules
 			List<IValidation> activeRules = new ArrayList<IValidation>();
@@ -386,20 +467,28 @@ public abstract class HdivWebSecurityConfigurationSupport {
 			if (useDefaultRules) {
 				activeRules.addAll(defaultRules);
 			}
-			PatternMatcher patternMatcher = patternMatcherFactory.getPatternMatcher(urlPattern);
-			validationsData.put(patternMatcher, activeRules);
+
+			// Create ValidationTarget object
+			ValidationTarget target = new ValidationTarget();
+			PatternMatcher urlMatcher = patternMatcherFactory.getPatternMatcher(urlPattern);
+			List<PatternMatcher> paramMatchers = new ArrayList<PatternMatcher>();
+			for (String param : selectedParams) {
+				PatternMatcher matcher = patternMatcherFactory.getPatternMatcher(param);
+				paramMatchers.add(matcher);
+			}
+			target.setUrl(urlMatcher);
+			target.setParams(paramMatchers);
+
+			validationsData.put(target, activeRules);
 		}
 
-		HDIVValidations validations = new HDIVValidations();
-		validations.setUrls(validationsData);
-		return validations;
+		DefaultValidationRepository repository = new DefaultValidationRepository();
+		repository.setValidations(validationsData);
+		repository.setDefaultValidations(defaultRules);
+		return repository;
 	}
 
-	abstract void addRules(RuleRegistry registry);
-
-	abstract void configureEditableValidation(ValidationConfigurer validationConfigurer);
-
-	private List<IValidation> defaultRules() {
+	protected List<IValidation> getDefaultRules() {
 
 		// Load validations from xml
 		DefaultValidationParser parser = new DefaultValidationParser();
@@ -416,6 +505,7 @@ public abstract class HdivWebSecurityConfigurationSupport {
 			// Create bean for the validation
 			Validation validationBean = new Validation();
 			validationBean.setName(id);
+			validationBean.setDefaultValidation(true);
 			validationBean.setRejectedPattern(regex);
 
 			defaultRules.add(validationBean);

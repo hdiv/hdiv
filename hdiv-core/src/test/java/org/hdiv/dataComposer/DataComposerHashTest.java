@@ -1,5 +1,5 @@
 /**
- * Copyright 2005-2013 hdiv.org
+ * Copyright 2005-2015 hdiv.org
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,7 +30,7 @@ import org.hdiv.util.HDIVUtil;
 import org.springframework.mock.web.MockHttpServletRequest;
 
 /**
- * Unit tests for the <code>org.hdiv.composer.DataComposerMemory</code> class.
+ * Unit tests for the {@link DataComposerHash} class.
  * 
  * @author Gorka Vicente
  */
@@ -54,7 +54,7 @@ public class DataComposerHashTest extends AbstractHDIVTestCase {
 	}
 
 	/**
-	 * @see DataComposerMamory#compose(String, String, String, boolean)
+	 * @see DataComposerMemory#compose(String, String, String, boolean)
 	 */
 	public void testComposeSimple() {
 

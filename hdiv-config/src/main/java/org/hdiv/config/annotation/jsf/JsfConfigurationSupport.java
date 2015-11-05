@@ -1,5 +1,5 @@
 /**
- * Copyright 2005-2013 hdiv.org
+ * Copyright 2005-2015 hdiv.org
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,8 @@
  */
 package org.hdiv.config.annotation.jsf;
 
+import org.hdiv.components.support.OutcomeTargetComponentProcessor;
+import org.hdiv.components.support.OutputLinkComponentProcessor;
 import org.hdiv.config.HDIVConfig;
 import org.hdiv.config.annotation.condition.ConditionalOnFramework;
 import org.hdiv.config.annotation.condition.SupportedFramework;
@@ -131,6 +133,24 @@ public class JsfConfigurationSupport {
 		listener.setUiCommandValidator(uiCommandValidator);
 		listener.setEditableValidator(editableValidator);
 		return listener;
+	}
+
+	@Bean
+	public OutcomeTargetComponentProcessor outcomeTargetComponentProcessor() {
+
+		OutcomeTargetComponentProcessor processor = new OutcomeTargetComponentProcessor();
+		processor.setConfig(this.config);
+		processor.setLinkUrlProcessor(this.linkUrlProcessor);
+		return processor;
+	}
+
+	@Bean
+	public OutputLinkComponentProcessor outputLinkComponentProcessor() {
+
+		OutputLinkComponentProcessor processor = new OutputLinkComponentProcessor();
+		processor.setConfig(this.config);
+		processor.setLinkUrlProcessor(this.linkUrlProcessor);
+		return processor;
 	}
 
 }

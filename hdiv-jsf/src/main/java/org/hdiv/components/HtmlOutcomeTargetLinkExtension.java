@@ -1,5 +1,5 @@
 /**
- * Copyright 2005-2013 hdiv.org
+ * Copyright 2005-2015 hdiv.org
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,9 +18,13 @@ package org.hdiv.components;
 import java.io.IOException;
 
 import javax.faces.component.html.HtmlOutcomeTargetLink;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.servlet.ServletContext;
 
 import org.hdiv.components.support.OutcomeTargetComponentProcessor;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 /**
  * <p>
@@ -37,7 +41,18 @@ public class HtmlOutcomeTargetLinkExtension extends HtmlOutcomeTargetLink {
 	/**
 	 * Component processor for HtmlOutcomeTarget components.
 	 */
-	private OutcomeTargetComponentProcessor componentProcessor = new OutcomeTargetComponentProcessor();
+	private OutcomeTargetComponentProcessor componentProcessor;
+
+	protected void init(FacesContext context) {
+
+		if (this.componentProcessor == null) {
+			ExternalContext externalContext = context.getExternalContext();
+			ServletContext servletContext = (ServletContext) externalContext.getContext();
+			WebApplicationContext wac = WebApplicationContextUtils.getRequiredWebApplicationContext(servletContext);
+
+			this.componentProcessor = wac.getBean(OutcomeTargetComponentProcessor.class);
+		}
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -45,6 +60,9 @@ public class HtmlOutcomeTargetLinkExtension extends HtmlOutcomeTargetLink {
 	 * @see javax.faces.component.UIComponentBase#encodeBegin(javax.faces.context.FacesContext)
 	 */
 	public void encodeBegin(FacesContext context) throws IOException {
+
+		// Init dependencies
+		this.init(context);
 
 		this.componentProcessor.processOutcomeTargetLinkComponent(context, this);
 

@@ -2,7 +2,42 @@ HDIV CHANGELOG
 ==============
 http://www.hdiv.org
 
-Release 2.1.8 
+Release 2.1.13
+==================================
+ * Multiple iframe support in the same page 
+ * Fix issue with IE 6 when redirects to a URL with a fragment identifier.
+ * Extension of Struts 1 Tiles InsertTag class for actions with parameters (queryString) support.
+ * Fix issue in HDIV Core library. It was caused when repeated values were received in last positions of array named "values".
+ * Multipart request handler modified to return appropriate RequestWrapper object, if available, unwrapping the given request as far as necessary.
+ 
+Release 2.1.12
+==================================
+ * Fix issue in Struts1: HDIVTilesRequestProcessor class
+ * Fix issue in Spring version check.
+
+Release 2.1.11
+==================================
+
+ * Fix issue in longLiving request validation.
+ * Fix issue in concurrent Ajax requests with 'reuseExistingPageInAjaxRequest' option enabled.
+ * New 'X-HDIV-EXCLUDE-PAGE-REUSE' header to avoid page reusing in Ajax calls.
+
+Release 2.1.10
+==================================
+
+ * Take into account <hdiv:validationRule> tag order looking for a matching url.
+ * New 'parameters' attribute in <hdiv:validationRule> tag. Contains a list or unique regular expression that defines the parameters for which editable validation is applied (https://github.com/hdiv/hdiv/issues/66).
+ * F5 key support. Reloading the same page never expire session states (https://github.com/hdiv/hdiv/issues/67).
+ * Fix @Validation and grouping issue (https://github.com/hdiv/hdiv/issues/70).
+ * In case of detecting an attack in editable data validation, add validation name to the log.
+ * New 'ServletContextInitializer' and 'SessionInitializer' interfaces for ServletContext and HttpSession initialization. 
+
+Release 2.1.9
+==================================
+
+ * Minor error fixes.
+
+Release 2.1.8
 ==================================
 
  * Fix multipart issue in Struts1 (https://github.com/hdiv/hdiv/issues/59).

@@ -1,5 +1,5 @@
 /**
- * Copyright 2005-2013 hdiv.org
+ * Copyright 2005-2015 hdiv.org
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -74,11 +74,18 @@ public class SpringMvcConfigurationSupport {
 
 		EditableParameterValidator validator = new EditableParameterValidator();
 		if (jsr303Present) {
-			validator.setInnerValidator(new LocalValidatorFactoryBean());
+			validator.setInnerValidator(editableLocalValidatorFactoryBean());
 		}
 		return validator;
 	}
 
+	@Bean
+	public LocalValidatorFactoryBean editableLocalValidatorFactoryBean() {
+		
+		LocalValidatorFactoryBean localValidatorFactoryBean = new LocalValidatorFactoryBean();
+		return localValidatorFactoryBean;
+	}
+	
 	@Bean
 	public IMultipartConfig securityMultipartConfig() {
 

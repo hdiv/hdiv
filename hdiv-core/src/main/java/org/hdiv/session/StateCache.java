@@ -1,5 +1,5 @@
 /**
- * Copyright 2005-2013 hdiv.org
+ * Copyright 2005-2015 hdiv.org
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,15 +22,15 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
- * It is composed by a data structure limited by a maximum size (maxSize). Map data structure is composed by elements of
- * type IPage (all the possible requests generated in the request processing).
+ * It is composed by a data structure limited by a maximum size <code>maxSize</code>. <code>pageIds</code> structure is
+ * composed by elements of type IPage (all the possible requests generated in the request processing).
  * 
  * @author Roberto Velasco
  */
 public class StateCache implements IStateCache {
 
 	private static final int DEFAULT_MAX_SIZE = 5;
-	
+
 	/**
 	 * Commons Logging instance.
 	 */
@@ -48,28 +48,39 @@ public class StateCache implements IStateCache {
 	private int maxSize = DEFAULT_MAX_SIZE;
 
 	/**
-	 * page's ids map
+	 * Page identifiers buffer
 	 */
-	private List<String> pageIds = new ArrayList<String>();
+	private List<Integer> pageIds = new ArrayList<Integer>();
 
 	/**
-	 * Adds a new page identifier to the map <code>pageIds</code>.
+	 * Adds a new page identifier to the cache.
 	 * 
-	 * @return If the map <code>pageIds</code> has reached its maximum size <code>maxSize</code>, the oldest page
-	 *         identifier is deleted. Otherwise, null will be returned.
+	 * @param pageId
+	 *            page identifier to add
+	 * @param currentPageId
+	 *            page identifier of the current request. It can be null if no state id is present.
+	 *            
+	 * @param isRefreshRequest
+	 * 			  if request is a refresh request
+	 * 
+	 * @param isAjaxRequest
+	 * 			  if request is an ajax request
+	 * 
+	 * @return If the cache has reached its maximum size, less important identifier is returned in order to delete it
+	 *         from session. Otherwise, null will be returned.
 	 */
-	public synchronized String addPage(String key) {
+	public synchronized Integer addPage(int pageId, Integer currentPageId, boolean isRefreshRequest, boolean isAjaxRequest) {
 
-		if (this.pageIds.contains(key)) {
+		if (this.pageIds.contains(pageId)) {
 			// Page id already exist in session
 			return null;
 
 		} else {
-			String removedKey = this.cleanBuffer();
-			this.pageIds.add(key);
+			Integer removedKey = this.cleanBuffer(currentPageId, isRefreshRequest, isAjaxRequest);
+			this.pageIds.add(pageId);
 
 			if (log.isDebugEnabled()) {
-				log.debug("Page with [" + key + "] added to the cache.");
+				log.debug("Page with [" + pageId + "] added to the cache. Cache contains [" + pageIds + "]");
 			}
 
 			return removedKey;
@@ -77,32 +88,46 @@ public class StateCache implements IStateCache {
 	}
 
 	/**
-	 * If the map <code>pageIds</code> has reached its maximum size <code>maxSize</code>, the oldest page identifier in
-	 * the map is deleted.
+	 * If the buffer <code>pageIds</code> has reached its maximum size <code>maxSize</code>, one page is deleted. If
+	 * current page is the last one, the oldest key is removed, otherwise any newer page is removed
 	 * 
+	 * @param currentPageId
+	 *            page identifier of the current request. It can be null if no state id is present.
+	 * 
+	 * @param isRefreshRequest
+	 * 			  if request is a refresh request
+	 *
+	 * @param isAjaxRequest
+	 * 			  if request is an ajax request
+	 *            
 	 * @return Oldest page identifier in the map <code>pageIds</code>. Null in otherwise.
 	 */
-	public String cleanBuffer() {
+	public Integer cleanBuffer(Integer currentPageId, boolean isRefreshRequest, boolean isAjaxRequest) {
+
+		Integer removed = null;
+
+		int totalPages = this.pageIds.size();
+		
+		// Remove last page when we know that browser's forward history is empty (See issue #67)
+		if (currentPageId != null && totalPages > 1 && currentPageId == pageIds.get(totalPages - 2) && isRefreshRequest && !isAjaxRequest) {
+			removed = this.pageIds.remove(totalPages - 1);
+		}
 
 		if (this.pageIds.size() >= this.maxSize) {
-
-			// delete first element
-			String key = this.pageIds.remove(0);
-
-			if (log.isDebugEnabled()) {
-				log.debug("Full Cache, deleted page with id [" + key + "].");
-			}
-
-			return key;
+			removed = this.pageIds.remove(0);
 		}
-		return null;
+
+		if (log.isDebugEnabled() && removed != null) {
+			log.debug("Deleted pages with id [" + removed + "].");
+		}
+		return removed;
 	}
 
 	public String toString() {
 
 		StringBuffer result = new StringBuffer();
 		result.append("[");
-		for (String pageId : pageIds) {
+		for (Integer pageId : pageIds) {
 			result.append(" " + pageId);
 		}
 		result.append("]");
@@ -127,7 +152,7 @@ public class StateCache implements IStateCache {
 	/**
 	 * @return the pageIds
 	 */
-	public List<String> getPageIds() {
+	public List<Integer> getPageIds() {
 		return pageIds;
 	}
 

@@ -1,5 +1,5 @@
 /**
- * Copyright 2005-2013 hdiv.org
+ * Copyright 2005-2015 hdiv.org
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -155,7 +155,7 @@ public class DefaultErrorPageWritter {
 		out.println("		</div>");
 		out.println("		<div id=\"errorFooter\">");
 		out.println("			<div id=\"errorFooterColor\"></div>");
-		out.println("			<p>&copy; 2005-2014 hdiv.org</p>");
+		out.println("			<p>&copy; 2005-2015 hdiv.org</p>");
 		out.println("		</div>");
 		out.println("	</div>");
 		out.println("</body>");

@@ -1,5 +1,5 @@
 /**
- * Copyright 2005-2013 hdiv.org
+ * Copyright 2005-2015 hdiv.org
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,7 +30,7 @@ import org.hdiv.util.HDIVUtil;
 import org.springframework.mock.web.MockHttpServletRequest;
 
 /**
- * Unit tests for the <code>org.hdiv.composer.DataComposerMemory</code> class.
+ * Unit tests for the {@link DataComposerMemory} class.
  * 
  * @author Gorka Vicente
  */
@@ -53,7 +53,7 @@ public class DataComposerMemoryTest extends AbstractHDIVTestCase {
 	}
 
 	/**
-	 * @see DataComposerMamory#compose(String, String, String, boolean)
+	 * @see DataComposerMemory#compose(String, String, String, boolean)
 	 */
 	public void testComposeSimple() {
 
@@ -145,11 +145,10 @@ public class DataComposerMemoryTest extends AbstractHDIVTestCase {
 		dataComposer.endPage();
 
 		assertNotNull(stateId);
-		request.addParameter("_PREVIOUS_HDIV_STATE_", stateId);
 
 		// New request
 		IState state = this.stateUtil.restoreState(stateId);
-		IPage page = this.session.getPage(state.getPageId() + "");
+		IPage page = this.session.getPage(state.getPageId());
 		dataComposer = this.dataComposerFactory.newInstance(request);
 		HDIVUtil.setDataComposer(dataComposer, request);
 
@@ -162,6 +161,7 @@ public class DataComposerMemoryTest extends AbstractHDIVTestCase {
 		assertEquals(stateId, stateId2);
 		IState state2 = this.stateUtil.restoreState(stateId2);
 		assertEquals(state2.getParameter("parameter1").getConfidentialValue(), "1");
+		assertTrue(state2.getParameter("parameter1").existValue("2"));
 		assertTrue(state2.getParameter("parameter1").existValue("3"));
 	}
 

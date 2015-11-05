@@ -1,5 +1,5 @@
 /**
- * Copyright 2005-2013 hdiv.org
+ * Copyright 2005-2015 hdiv.org
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,22 +38,19 @@ public class OutcomeTargetComponentProcessor extends AbstractComponentProcessor 
 
 	public void processOutcomeTargetLinkComponent(FacesContext context, UIOutcomeTarget component) {
 
-		// Init dependencies
-		super.init(context);
-
 		try {
 			ExternalContext externalContext = context.getExternalContext();
 			HttpServletRequest request = (HttpServletRequest) externalContext.getRequest();
 
 			String url = this.helper.getUrl(context, component);
 
-			UrlData urlData = this.urlProcessor.createUrlData(url, "GET", request);
-			if (this.urlProcessor.isHdivStateNecessary(urlData)) {
+			UrlData urlData = this.linkUrlProcessor.createUrlData(url, "GET", request);
+			if (this.linkUrlProcessor.isHdivStateNecessary(urlData)) {
 
 				boolean hasUIParams = UtilsJsf.hasUIParameterChild(component);
 
 				// if url hasn't got parameters, we do not have to include HDIV's state
-				if (!this.hdivConfig.isValidationInUrlsWithoutParamsActivated() && !urlData.containsParams()
+				if (!this.config.isValidationInUrlsWithoutParamsActivated() && !urlData.containsParams()
 						&& !hasUIParams) {
 
 					// Do nothing
@@ -78,7 +75,7 @@ public class OutcomeTargetComponentProcessor extends AbstractComponentProcessor 
 				component.getChildren().add(paramComponent);
 			}
 		} catch (FacesException e) {
-			log.error("Error in JsfLinkUrlProcessor.processOutcomeTargetLinkComponent: " + e.getMessage());
+			log.error("Error in OutcomeTargetComponentProcessor.processOutcomeTargetLinkComponent: " + e.getMessage());
 			throw e;
 		}
 	}

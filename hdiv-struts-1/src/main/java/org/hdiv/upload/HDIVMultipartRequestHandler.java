@@ -1,5 +1,5 @@
 /**
- * Copyright 2005-2013 hdiv.org
+ * Copyright 2005-2015 hdiv.org
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,6 +27,7 @@ import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
+import javax.servlet.ServletRequestWrapper;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.fileupload.FileItem;
@@ -38,6 +39,7 @@ import org.apache.struts.upload.MultipartRequestWrapper;
 import org.hdiv.config.multipart.IMultipartConfig;
 import org.hdiv.config.multipart.exception.HdivMultipartException;
 import org.hdiv.filter.RequestWrapper;
+import org.hdiv.util.HDIVUtil;
 
 public class HDIVMultipartRequestHandler extends CommonsMultipartRequestHandler {
 
@@ -82,44 +84,44 @@ public class HDIVMultipartRequestHandler extends CommonsMultipartRequestHandler 
 
 			MultipartRequestWrapper wrapper = (MultipartRequestWrapper) request;
 			ServletRequest origRequest = wrapper.getRequest();
-			if (origRequest != null && origRequest instanceof RequestWrapper) {
+			if (origRequest == null)
+			    return;
+			
+			RequestWrapper requestWrapper = HDIVUtil.getNativeRequest(origRequest, RequestWrapper.class);
+			if (requestWrapper == null)
+			    return;
+			
+			Boolean maxLengthExceeded = (Boolean) request.getAttribute(ATTRIBUTE_MAX_LENGTH_EXCEEDED);
+			if ((maxLengthExceeded != null) && (maxLengthExceeded.booleanValue())) {
+			    return;
+			}
 
-				RequestWrapper requestWrapper = (RequestWrapper) origRequest;
+			HdivMultipartException multipartException = (HdivMultipartException) request.getAttribute(IMultipartConfig.FILEUPLOAD_EXCEPTION);
+			if (multipartException != null) {
+			    Exception orig = multipartException.getOriginal();
+			    log.error("Failed to parse multipart request", orig);
+			    if (orig instanceof ServletException) {
+				throw (ServletException) orig;
+			    } else {
+				throw new ServletException("Failed to parse multipart request", orig);
+			    }
+			}
 
-				Boolean maxLengthExceeded = (Boolean) request.getAttribute(ATTRIBUTE_MAX_LENGTH_EXCEEDED);
-				if ((maxLengthExceeded != null) && (maxLengthExceeded.booleanValue())) {
-					return;
-				}
+			// file items
+			Map<String, Object> items = requestWrapper.getFileElements();
+			for (Object fileItem : items.values()) {
+			    if (items != null) {
+				addFileParameter((List) fileItem);
+			    }
+			}
 
-				HdivMultipartException multipartException = (HdivMultipartException) request
-						.getAttribute(IMultipartConfig.FILEUPLOAD_EXCEPTION);
-				if (multipartException != null) {
-					Exception orig = multipartException.getOriginal();
-					log.error("Failed to parse multipart request", orig);
-					if (orig instanceof ServletException) {
-						throw (ServletException) orig;
-					} else {
-						throw new ServletException("Failed to parse multipart request", orig);
-					}
-				}
+			// text items
+			items = requestWrapper.getTextElements();
 
-				// file items
-				Map<String, Object> items = requestWrapper.getFileElements();
+			for (String currentTextKey : items.keySet()) {
 
-				for (Object fileItem : items.values()) {
-					if (items != null) {
-						addFileParameter((List) fileItem);
-					}
-				}
-
-				// text items
-				items = requestWrapper.getTextElements();
-
-				for (String currentTextKey : items.keySet()) {
-
-					String[] currentTextValue = (String[]) items.get(currentTextKey);
-					this.addTextParameter(wrapper, currentTextKey, currentTextValue);
-				}
+			    String[] currentTextValue = (String[]) items.get(currentTextKey);
+				this.addTextParameter(wrapper, currentTextKey, currentTextValue);
 			}
 		}
 	}

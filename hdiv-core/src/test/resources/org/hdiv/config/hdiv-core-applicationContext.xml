@@ -74,9 +74,20 @@
 		<property name="stateScopeManager" ref="stateScopeManager" />
 	</bean>
 
-	<bean id="requestInitializer" class="org.hdiv.filter.DefaultRequestInitializer">
+	<!-- Initializers -->
+	<bean id="requestInitializer" class="org.hdiv.init.DefaultRequestInitializer">
 		<property name="config" ref="config" />
 	</bean>
+	<bean id="servletContextInitializer" class="org.hdiv.init.DefaultServletContextInitializer">
+		<property name="config" ref="config" />
+		<property name="application" ref="application" />
+		<property name="linkUrlProcessor" ref="linkUrlProcessor" />
+		<property name="formUrlProcessor" ref="formUrlProcessor" />
+	</bean>
+	<bean id="sessionInitializer" class="org.hdiv.init.DefaultSessionInitializer">
+		<property name="config" ref="config" />
+	</bean>
+	
 	<bean id="validatorHelper" class="org.hdiv.filter.ValidatorHelperRequest"
 		init-method="init">
 		<property name="logger" ref="logger" />

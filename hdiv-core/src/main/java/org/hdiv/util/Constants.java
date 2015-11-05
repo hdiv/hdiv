@@ -1,5 +1,5 @@
 /**
- * Copyright 2005-2013 hdiv.org
+ * Copyright 2005-2015 hdiv.org
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -94,5 +94,12 @@ public class Constants {
 	 * Location of the internal resources files
 	 */
 	public static final String MESSAGE_SOURCE_PATH = "org.hdiv.msg.MessageResources";
+	
+	/**
+	 * Request attribute name that contains if request is an ajax request
+	 * 
+	 * @since 2.1.13
+	 */
+	public static final String AJAX_REQUEST = "org.hdiv.ajaxrequest";
 
 }

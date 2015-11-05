@@ -150,7 +150,6 @@
 					In addition to
 					that HDIV implements an internal system that detect Sql Injection
 					risks within source-code.
-
 				</para>
 				<sbr />
 			</listitem>
@@ -182,7 +181,6 @@
 
 					In addition to that HDIV implements an internal system that detects
 					XSS risks within source-code.
-
 				</para>
 				<sbr />
 			</listitem>
@@ -288,13 +286,13 @@
 			<listitem>
 				<para>
 					<emphasis role="bold">A8 (CSRF)</emphasis>
-					: HDIV adds aleatory tokens to each link or form existing within
+					: HDIV adds random tokens to each link or form existing within
 					the application. It makes extremely difficult to implement an CSRF
 					attack because the attacker doesn’t know which is the value.
 
 					In
 					order to offer an extreme security level HDIV doesn’t use an
-					aleatory token per session and create a new token for each
+					random token per session and create a new token for each
 					requested page.
 					Even the token used by links and forms within the
 					same page are

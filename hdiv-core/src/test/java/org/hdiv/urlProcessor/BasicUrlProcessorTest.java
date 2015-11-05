@@ -1,5 +1,5 @@
 /**
- * Copyright 2005-2013 hdiv.org
+ * Copyright 2005-2015 hdiv.org
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,9 +15,13 @@
  */
 package org.hdiv.urlProcessor;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.hdiv.AbstractHDIVTestCase;
+import org.hdiv.util.Constants;
 import org.hdiv.util.HDIVUtil;
 
 public class BasicUrlProcessorTest extends AbstractHDIVTestCase {
@@ -52,5 +56,22 @@ public class BasicUrlProcessorTest extends AbstractHDIVTestCase {
 		assertEquals(2, result.getUrlParams().size());
 		assertEquals("val1", result.getUrlParams().get("par1")[0]);
 		assertEquals("val2", result.getUrlParams().get("par2")[0]);
+	}
+
+	public void testParamValues() throws UnsupportedEncodingException {
+
+		String par1 = URLEncoder.encode("1111", Constants.ENCODING_UTF_8);
+		String par2 = URLEncoder.encode("You & Me", Constants.ENCODING_UTF_8);
+
+		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		String url = "?par1=" + par1 + "&amp;par2=" + par2;
+
+		BasicUrlData result = this.urlProcessor.processUrl(request, url);
+
+		assertEquals(result.getContextPathRelativeUrl(), "");
+		assertEquals(2, result.getUrlParams().size());
+		assertEquals("1111", result.getUrlParams().get("par1")[0]);
+		assertEquals("You & Me", result.getUrlParams().get("par2")[0]);
+
 	}
 }

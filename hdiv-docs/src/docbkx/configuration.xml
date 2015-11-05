@@ -8,15 +8,12 @@
 	<title>Configuration</title>
 	<para>
 		HDIV configuration is based on Spring configuration. HDIV has a
-		custom
-		schema to reduce the configuration tasks. First off all we need
-		an
-		spring configuration file to add HDIV configuration.
+		custom schema to reduce the configuration tasks. First off all we need
+		an spring configuration file to add HDIV configuration.
 	</para>
 
 	<programlisting language="xml">
- 		<![CDATA[
-<?xml version="1.0" encoding="UTF-8"?>
+<![CDATA[<?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans" 
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
        xmlns:hdiv="http://www.hdiv.org/schema/hdiv" 
@@ -32,7 +29,6 @@
 	<para>
 		Example configuration:
 		<programlisting language="java">
-		
 <![CDATA[@Configuration
 @EnableHdivWebSecurity
 public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
@@ -65,8 +61,7 @@ public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
 		<para>
 			By default HDIV filter doesn't allow any request that hasn't
 			been registered previously by HDIV. Of course, when an user access
-			the
-			first time is not possible to register the resource (url)
+			the first time is not possible to register the resource (url)
 			requested
 			by the user. For this case HDIV incorporates the concept of
 			start
@@ -85,8 +80,7 @@ public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
 			start
 			page to access the web site home page.
 			<programlisting language="xml">
-<![CDATA[
-<hdiv:config>
+<![CDATA[<hdiv:config>
     <hdiv:startPages>/home.html</hdiv:startPages>
 </hdiv:config>
 ]]></programlisting>
@@ -96,7 +90,6 @@ public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
 		<para>
 			In JavaConfig mode:
 			<programlisting language="java">
-		
 <![CDATA[@Configuration
 @EnableHdivWebSecurity
 public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
@@ -113,8 +106,7 @@ public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
 
 		<para>For Grails users update Config.groovy file:</para>
 		<programlisting language="xml">
- 					<![CDATA[
- grails {
+<![CDATA[grails {
     plugin {
         hdiv {
             config {
@@ -202,8 +194,7 @@ public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
 			entity within HDIV config file:
 		</para>
 		<programlisting language="xml">
- 			<![CDATA[
-<hdiv:validation id="customValidation" componentType="text">
+<![CDATA[<hdiv:validation id="customValidation" componentType="text">
     <hdiv:acceptedPattern><[a-zA-Z0-9@.\-_]*$></hdiv:acceptedPattern>
     <hdiv:rejectedPattern><[(\s|\S)*(--)(\s|\S)*></hdiv:rejectedPattern>
 </hdiv:validation>
@@ -220,9 +211,21 @@ public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
 		</para>
 
 		<programlisting language="xml">
- 		<![CDATA[
-<hdiv:editableValidations registerDefaults="true">
-	<hdiv:validationRule url=".*" enableDefaults="true">customValidation</hdiv:validationRule>
+<![CDATA[<hdiv:editableValidations registerDefaults="true">
+    <hdiv:validationRule url=".*" enableDefaults="true">customValidation</hdiv:validationRule>
+</hdiv:editableValidations>
+]]></programlisting>
+
+		<para>By default all editable fields of the request are validated. It
+			is possible to create a finer configuration and apply some rules only
+			to some fields.
+			In the next example 'customValidation' rule is applied only to 'name'
+			and 'description' fields:
+		</para>
+
+		<programlisting language="xml">
+<![CDATA[<hdiv:editableValidations registerDefaults="true">
+    <hdiv:validationRule url="/example/form.html" parameters="name, description">customValidation</hdiv:validationRule>
 </hdiv:editableValidations>
 ]]></programlisting>
 
@@ -258,8 +261,7 @@ public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
 			HDIV and Grails reference application:
 		</para>
 		<programlisting language="xml">
- 		<![CDATA[
-grails {
+<![CDATA[grails {
     plugin {
         hdiv {
 

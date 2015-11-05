@@ -1,5 +1,5 @@
 /**
- * Copyright 2005-2013 hdiv.org
+ * Copyright 2005-2015 hdiv.org
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -50,11 +50,16 @@ public class Validation implements IValidation, Serializable {
 	protected String componentType;
 
 	/**
+	 * True if the validation is part of the default validations.
+	 */
+	protected boolean defaultValidation = false;
+
+	/**
 	 * Checks if a component type has been defined to which apply the validation <code>this</code>.
 	 * 
 	 * @return True if the component type to which apply de validation has been defined. False otherwise.
 	 */
-	public boolean existComponentType() {
+	protected boolean existComponentType() {
 
 		return (this.componentType != null);
 	}
@@ -66,7 +71,7 @@ public class Validation implements IValidation, Serializable {
 	 *            Component type
 	 * @return True if the validation <code>this</code> is the same as <code>parameterType</code>.
 	 */
-	public boolean isTheSameComponentType(String parameterType) {
+	protected boolean isTheSameComponentType(String parameterType) {
 
 		if (parameterType.equals("password")) {
 			return this.componentType.equalsIgnoreCase("text");
@@ -95,30 +100,25 @@ public class Validation implements IValidation, Serializable {
 	 */
 	public boolean validate(String parameter, String[] values, String dataType) {
 
-		Matcher m = null;
-
 		// we check if the component type we apply the validation to is
 		// the same as the parameter's component type.
-		if (this.existComponentType() && (!this.isTheSameComponentType(dataType))) {
+		if (dataType != null && this.existComponentType() && !this.isTheSameComponentType(dataType)) {
 			return true;
 		}
 
 		// we validate all the values for the parameter
-		for (int j = 0; j < values.length; j++) {
+		for (String value : values) {
 
 			if (this.acceptedPattern != null) {
 
-				m = this.acceptedPattern.matcher(values[j]);
-
+				Matcher m = this.acceptedPattern.matcher(value);
 				if (!m.matches()) {
 					return false;
 				}
 			}
-
 			if (this.rejectedPattern != null) {
 
-				m = this.rejectedPattern.matcher(values[j]);
-
+				Matcher m = this.rejectedPattern.matcher(value);
 				if (m.find()) {
 					return false;
 				}
@@ -142,6 +142,9 @@ public class Validation implements IValidation, Serializable {
 		this.name = name;
 	}
 
+	/**
+	 * @return componentType
+	 */
 	public String getComponentType() {
 		return componentType;
 	}
@@ -163,11 +166,36 @@ public class Validation implements IValidation, Serializable {
 	}
 
 	/**
+	 * @return acceptedPattern
+	 */
+	public String getAcceptedPattern() {
+		return this.acceptedPattern == null ? null : this.acceptedPattern.pattern();
+	}
+
+	/**
 	 * @param rejectedPattern
 	 *            The rejected pattern to set.
 	 */
 	public void setRejectedPattern(String rejectedPattern) {
 		this.rejectedPattern = Pattern.compile(rejectedPattern, Pattern.DOTALL | Pattern.CASE_INSENSITIVE);
+	}
+
+	/**
+	 * @return rejectedPattern
+	 */
+	public String getRejectedPattern() {
+		return this.rejectedPattern == null ? null : this.rejectedPattern.pattern();
+	}
+
+	/**
+	 * @return defaultValidation
+	 */
+	public boolean isDefaultValidation() {
+		return defaultValidation;
+	}
+
+	public void setDefaultValidation(boolean defaultValidation) {
+		this.defaultValidation = defaultValidation;
 	}
 
 	public String toString() {
@@ -178,6 +206,7 @@ public class Validation implements IValidation, Serializable {
 				this.acceptedPattern == null ? "" : this.acceptedPattern.toString());
 		result = result.append(" rejectedPattern=").append(
 				this.rejectedPattern == null ? "" : this.rejectedPattern.toString());
+		result = result.append(" defaultValidation=").append(this.defaultValidation);
 		return result.toString();
 
 	}

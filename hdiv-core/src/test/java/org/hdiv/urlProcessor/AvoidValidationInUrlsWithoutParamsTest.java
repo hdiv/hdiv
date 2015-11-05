@@ -1,5 +1,5 @@
 /**
- * Copyright 2005-2013 hdiv.org
+ * Copyright 2005-2015 hdiv.org
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,7 @@ import org.hdiv.AbstractHDIVTestCase;
 import org.hdiv.dataComposer.DataComposerFactory;
 import org.hdiv.dataComposer.IDataComposer;
 import org.hdiv.util.HDIVUtil;
+import org.springframework.mock.web.MockHttpServletRequest;
 
 public class AvoidValidationInUrlsWithoutParamsTest extends AbstractHDIVTestCase {
 
@@ -148,4 +149,34 @@ public class AvoidValidationInUrlsWithoutParamsTest extends AbstractHDIVTestCase
 		assertTrue(requestId.length() > 0);
 	}
 
+
+	public void testAvoidValidationWithAjaxCallWithParameters() {
+
+		this.getConfig().setAvoidValidationInUrlsWithoutParams(Boolean.TRUE);
+		
+		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
+		request.addHeader("x-requested-with", "XMLHttpRequest");
+
+		String url = "/testAction.do?param=1";
+
+		String result = this.linkUrlProcessor.processUrl(request, url);
+
+		assertTrue(result.contains("_HDIV_STATE_"));
+		
+	}
+	
+	public void testAvoidValidationWithAjaxCall() {
+
+		this.getConfig().setAvoidValidationInUrlsWithoutParams(Boolean.TRUE);
+		
+		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
+		request.addHeader("x-requested-with", "XMLHttpRequest");
+
+		String url = "/testAction.do";
+
+		String result = this.linkUrlProcessor.processUrl(request, url);
+
+		assertTrue(!result.contains("_HDIV_STATE_"));
+	}
+	
 }

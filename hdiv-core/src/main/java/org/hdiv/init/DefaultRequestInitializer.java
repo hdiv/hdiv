@@ -1,5 +1,5 @@
 /**
- * Copyright 2005-2013 hdiv.org
+ * Copyright 2005-2015 hdiv.org
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,16 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.hdiv.filter;
+package org.hdiv.init;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.hdiv.config.HDIVConfig;
+import org.hdiv.filter.RequestWrapper;
+import org.hdiv.filter.ResponseWrapper;
 import org.hdiv.util.HDIVUtil;
 
 /**
- * {@link RequestInitializer} implementation with default behavior.
+ * {@link RequestInitializer} implementation with the default behavior.
  * 
  * @author Gotzon Illarramendi
  * @since 2.1.5
@@ -34,7 +36,7 @@ public class DefaultRequestInitializer implements RequestInitializer {
 	 */
 	protected HDIVConfig config;
 
-	public void initRequest(HttpServletRequest request) {
+	public void initRequest(HttpServletRequest request, HttpServletResponse response) {
 
 		// Put the request in threadlocal
 		HDIVUtil.setHttpServletRequest(request);
@@ -44,7 +46,7 @@ public class DefaultRequestInitializer implements RequestInitializer {
 
 	}
 
-	public void endRequest(HttpServletRequest request) {
+	public void endRequest(HttpServletRequest request, HttpServletResponse response) {
 
 		// Erase request from threadlocal
 		HDIVUtil.resetLocalData();

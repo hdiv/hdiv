@@ -1,5 +1,5 @@
 /**
- * Copyright 2005-2013 hdiv.org
+ * Copyright 2005-2015 hdiv.org
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,7 +30,7 @@ import org.hdiv.util.HDIVUtil;
 import org.springframework.mock.web.MockHttpServletRequest;
 
 /**
- * Unit tests for the <code>org.hdiv.composer.DataComposerMemory</code> class.
+ * Unit tests for the {@link DataComposerCipher} class.
  * 
  * @author Gorka Vicente
  */
@@ -54,7 +54,7 @@ public class DataComposerCipherTest extends AbstractHDIVTestCase {
 	}
 
 	/**
-	 * @see DataComposerMamory#compose(String, String, String, boolean)
+	 * @see DataComposerMemory#compose(String, String, String, boolean)
 	 */
 	public void testComposeSimple() {
 
@@ -337,6 +337,35 @@ public class DataComposerCipherTest extends AbstractHDIVTestCase {
 
 		// State action value is decoded because we store decoded values only
 		assertEquals("test test.do", state.getAction());
+	}
+
+	public void testComposeSameTwice() {
+
+		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		IDataComposer dataComposer = this.dataComposerFactory.newInstance(request);
+		HDIVUtil.setDataComposer(dataComposer, request);
+		assertTrue(dataComposer instanceof DataComposerCipher);
+
+		dataComposer.startPage();
+		dataComposer.beginRequest("POST", "test.do");
+		dataComposer.composeFormField("parameter1", "2", false, null);
+		String id = dataComposer.endRequest();
+		assertNotNull(id);
+
+		// Simulate other request creating a new DataComposer
+		IDataComposer dataComposer2 = this.dataComposerFactory.newInstance(request);
+		HDIVUtil.setDataComposer(dataComposer2, request);
+		assertTrue(dataComposer2 instanceof DataComposerCipher);
+
+		// Compose same data
+		dataComposer2.startPage();
+		dataComposer2.beginRequest("POST", "test.do");
+		dataComposer2.composeFormField("parameter1", "2", false, null);
+		String id2 = dataComposer2.endRequest();
+		assertNotNull(id2);
+
+		// Ciphered result is different
+		assertFalse(id == id2);
 	}
 
 }

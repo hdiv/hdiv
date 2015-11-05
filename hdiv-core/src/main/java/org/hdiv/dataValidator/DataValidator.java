@@ -1,5 +1,5 @@
 /**
- * Copyright 2005-2013 hdiv.org
+ * Copyright 2005-2015 hdiv.org
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,17 +36,17 @@ public class DataValidator implements IDataValidator {
 	/**
 	 * Commons Logging instance.
 	 */
-	private Log log = LogFactory.getLog(DataValidator.class);
+	protected Log log = LogFactory.getLog(DataValidator.class);
 
 	/**
 	 * HDIV general configuration.
 	 */
-	private HDIVConfig config;
+	protected HDIVConfig config;
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.hdiv.ee.dataValidator.IDataValidator#validate(java.lang.String, java.lang.String, java.lang.String,
+	 * @see org.hdiv.dataValidator.IDataValidator#validate(java.lang.String, java.lang.String, java.lang.String,
 	 * org.hdiv.state.IParameter, java.lang.String[])
 	 */
 	public IValidationResult validate(String value, String target, String parameter, IParameter stateParameter,
@@ -132,7 +132,7 @@ public class DataValidator implements IDataValidator {
 	 *            Data to check
 	 * @return Returns true if <code>data</code> is a number. False in otherwise.
 	 */
-	private boolean isInt(String data) {
+	protected boolean isInt(String data) {
 		Pattern p = HDIVUtil.intPattern;
 		Matcher m = p.matcher(data);
 		return m.matches();

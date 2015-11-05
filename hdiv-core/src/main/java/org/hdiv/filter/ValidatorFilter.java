@@ -1,5 +1,5 @@
 /**
- * Copyright 2005-2013 hdiv.org
+ * Copyright 2005-2015 hdiv.org
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,9 +29,9 @@ import org.hdiv.config.HDIVConfig;
 import org.hdiv.config.multipart.IMultipartConfig;
 import org.hdiv.config.multipart.exception.HdivMultipartException;
 import org.hdiv.exception.HDIVException;
+import org.hdiv.init.RequestInitializer;
 import org.hdiv.util.Constants;
 import org.hdiv.util.HDIVErrorCodes;
-import org.springframework.beans.BeansException;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -52,29 +52,29 @@ public class ValidatorFilter extends OncePerRequestFilter {
 	private static Log log = LogFactory.getLog(ValidatorFilter.class);
 
 	/**
-	 * HDIV configuration object
+	 * HDIV configuration object.
 	 */
-	private HDIVConfig hdivConfig;
+	protected HDIVConfig hdivConfig;
 
 	/**
-	 * IValidationHelper object
+	 * IValidationHelper object.
 	 */
-	private IValidationHelper validationHelper;
+	protected IValidationHelper validationHelper;
 
 	/**
-	 * The multipart config
+	 * The multipart configuration.
 	 */
-	private IMultipartConfig multipartConfig;
+	protected IMultipartConfig multipartConfig;
 
 	/**
-	 * Validation error handler
+	 * Validation error handler.
 	 */
-	private ValidatorErrorHandler errorHandler;
+	protected ValidatorErrorHandler errorHandler;
 
 	/**
 	 * Request data and wrappers initializer.
 	 */
-	private RequestInitializer requestInitializer;
+	protected RequestInitializer requestInitializer;
 
 	/**
 	 * Creates a new ValidatorFilter object.
@@ -94,10 +94,15 @@ public class ValidatorFilter extends OncePerRequestFilter {
 
 			this.hdivConfig = context.getBean(HDIVConfig.class);
 			this.validationHelper = context.getBean(IValidationHelper.class);
-			try {
-				// For applications without Multipart requests
+
+			String[] names = context.getBeanNamesForType(IMultipartConfig.class);
+			if (names.length > 1) {
+				throw new HDIVException("More than one bean of type 'multipartConfig' is defined.");
+			}
+			if (names.length == 1) {
 				this.multipartConfig = context.getBean(IMultipartConfig.class);
-			} catch (BeansException ex) {
+			} else {
+				// For applications without Multipart requests
 				this.multipartConfig = null;
 			}
 
@@ -127,7 +132,7 @@ public class ValidatorFilter extends OncePerRequestFilter {
 		this.initDependencies();
 
 		// Initialize request scoped data
-		this.requestInitializer.initRequest(request);
+		this.requestInitializer.initRequest(request, response);
 
 		RequestWrapper requestWrapper = this.requestInitializer.createRequestWrapper(request);
 		ResponseWrapper responseWrapper = this.requestInitializer.createResponseWrapper(response);
@@ -177,7 +182,8 @@ public class ValidatorFilter extends OncePerRequestFilter {
 			} else {
 
 				// Call to ValidatorErrorHandler
-				this.errorHandler.handleValidatorError(multipartProcessedRequest, response, result.getErrorCode());
+				this.errorHandler.handleValidatorError(multipartProcessedRequest, responseWrapper,
+						result.getErrorCode());
 			}
 
 		} catch (HDIVException e) {
@@ -196,7 +202,7 @@ public class ValidatorFilter extends OncePerRequestFilter {
 			}
 			// Show error page
 			if (!this.hdivConfig.isDebugMode()) {
-				this.errorHandler.handleValidatorError(multipartProcessedRequest, response,
+				this.errorHandler.handleValidatorError(multipartProcessedRequest, responseWrapper,
 						HDIVErrorCodes.INTERNAL_ERROR);
 			}
 		} finally {
@@ -207,7 +213,7 @@ public class ValidatorFilter extends OncePerRequestFilter {
 			}
 
 			// Destroy request scoped data
-			this.requestInitializer.endRequest(request);
+			this.requestInitializer.endRequest(multipartProcessedRequest, responseWrapper);
 		}
 	}
 
@@ -240,8 +246,11 @@ public class ValidatorFilter extends OncePerRequestFilter {
 			FilterChain filterChain) throws IOException, ServletException {
 
 		this.validationHelper.startPage(requestWrapper);
-		filterChain.doFilter(requestWrapper, responseWrapper);
-		this.validationHelper.endPage(requestWrapper);
+		try {
+			filterChain.doFilter(requestWrapper, responseWrapper);
+		} finally {
+			this.validationHelper.endPage(requestWrapper);
+		}
 	}
 
 }

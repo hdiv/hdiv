@@ -1,5 +1,5 @@
 /**
- * Copyright 2005-2013 hdiv.org
+ * Copyright 2005-2015 hdiv.org
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,32 +13,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.hdiv.config;
+package org.hdiv.validator;
 
 import org.hdiv.AbstractHDIVTestCase;
 
-public class EditableParameterValidationTest extends AbstractHDIVTestCase {
+public class ValidationTest extends AbstractHDIVTestCase {
 
 	protected void onSetUp() throws Exception {
 	}
 
-	public void testEditableParamValidator() {
+	public void testValidate() {
 
-		boolean exist = getConfig().existValidations();
-		assertTrue(exist);
+		Validation validation = new Validation();
+		validation.setName("example");
+		validation.setComponentType("text");
+		validation.setAcceptedPattern("^[a-zA-Z0-9@.\\-_]*$");
 
-		String url = "/home";
-		String parameter = "param";
-		String[] values = { "<script>" };
-		String dataType = "text";
-		boolean result = getConfig().areEditableParameterValuesValid(url, parameter, values, dataType);
+		boolean result = validation.validate("param", new String[] { "safetext" }, "text");
+		assertTrue(result);
 
+		result = validation.validate("param", new String[] { "NOsafetext<<<" }, "text");
 		assertFalse(result);
 
-		dataType = "textarea";
-		result = getConfig().areEditableParameterValuesValid(url, parameter, values, dataType);
+		result = validation.validate("param", new String[] { "safetext" }, "othertype");
+		assertTrue(result);
 
-		assertFalse(result);
 	}
 
 }

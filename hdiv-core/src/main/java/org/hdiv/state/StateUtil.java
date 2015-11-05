@@ -1,5 +1,5 @@
 /**
- * Copyright 2005-2013 hdiv.org
+ * Copyright 2005-2015 hdiv.org
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -99,7 +99,7 @@ public class StateUtil {
 			restoredState = this.restoreMemoryState(requestState);
 
 		} else if (this.isCipherStrategy()) {
-			restoredState = (IState) encodingUtil.decode64Cipher(requestState);
+			restoredState = this.restoreCipherState(requestState);
 
 		} else if (this.isHashStrategy()) {
 			restoredState = this.restoreHashState(requestState);
@@ -162,10 +162,10 @@ public class StateUtil {
 			throw new HDIVException(HDIVErrorCodes.HDIV_PARAMETER_INCORRECT_VALUE);
 		}
 
-		String pageId;
+		String pId;
 		String sId;
 		try {
-			pageId = requestState.substring(0, firstSeparator);
+			pId = requestState.substring(0, firstSeparator);
 			sId = requestState.substring(firstSeparator + 1, lastSeparator);
 		} catch (StringIndexOutOfBoundsException e) {
 			throw new HDIVException(HDIVErrorCodes.HDIV_PARAMETER_INCORRECT_VALUE, e);
@@ -178,16 +178,26 @@ public class StateUtil {
 			throw new HDIVException(HDIVErrorCodes.HDIV_PARAMETER_INCORRECT_VALUE, e);
 		}
 
-		// Obtain Scopes
+		// Obtain State from a StateScopes
 		StateScope stateScope = this.stateScopeManager.getStateScope(requestState);
 
 		if (stateScope != null) {
 			restoredState = stateScope.restoreState(stateId);
-		} else {
-
-			restoredState = this.getStateFromSession(pageId, stateId);
+			if (restoredState == null) {
+				throw new HDIVException(HDIVErrorCodes.PAGE_ID_INCORRECT);
+			}
+			return restoredState;
 		}
 
+		// Obtain State from a HttpSession
+		int pageId;
+		try {
+			pageId = Integer.parseInt(pId);
+		} catch (NumberFormatException e) {
+			throw new HDIVException(HDIVErrorCodes.HDIV_PARAMETER_INCORRECT_VALUE, e);
+		}
+
+		restoredState = this.getStateFromSession(pageId, stateId);
 		return restoredState;
 	}
 
@@ -200,7 +210,7 @@ public class StateUtil {
 	 *            current {@link IState} id
 	 * @return State with all the page data.
 	 */
-	protected IState getStateFromSession(String pageId, int stateId) {
+	protected IState getStateFromSession(int pageId, int stateId) {
 
 		IState sessionState = this.session.getState(pageId, stateId);
 
@@ -208,6 +218,20 @@ public class StateUtil {
 			throw new HDIVException(HDIVErrorCodes.HDIV_PARAMETER_INCORRECT_VALUE);
 		}
 		return sessionState;
+	}
+
+	/**
+	 * Restore state in cipher strategy.
+	 * 
+	 * @param requestState
+	 *            State received in the request
+	 * @return Decoded state of type <code>IState</code> obtained from <code>value</code>
+	 */
+	protected IState restoreCipherState(String requestState) {
+
+		Object[] cipherData = (Object[]) this.encodingUtil.decode64Cipher(requestState);
+		IState restoredState = (IState) cipherData[0];
+		return restoredState;
 	}
 
 	/**
@@ -223,7 +247,7 @@ public class StateUtil {
 		String restoredStateHash = this.encodingUtil.calculateStateHash(value);
 
 		IState decodedState = (IState) encodingUtil.decode64(value);
-		String sessionStateHash = this.session.getStateHash(decodedState.getPageId() + "", decodedState.getId());
+		String sessionStateHash = this.session.getStateHash(decodedState.getPageId(), decodedState.getId());
 
 		if (restoredStateHash.equals(sessionStateHash)) {
 			return decodedState;

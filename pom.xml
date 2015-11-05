@@ -7,9 +7,9 @@
 	<artifactId>hdiv</artifactId>
 	<packaging>pom</packaging>
 	<name>HDIV Parent</name>
-	<version>2.1.8-SNAPSHOT</version>
+	<version>2.1.13</version>
 	<url>http://www.hdiv.org</url>
-	<description>Java Web Application Security Framework</description>
+	<description>Web Application Security Framework</description>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -50,9 +50,9 @@
 			</roles>
 		</developer>
 		<developer>
-			<name>Aritz Rabadan</name>
-			<id>arabadan</id>
-			<email>arabadan at users.sourceforge.net</email>
+			<name>Fernando Lozano</name>
+			<id>fernandolozano</id>
+			<email>fernando at hdiv.org</email>
 			<roles>
 				<role>Developer</role>
 			</roles>
@@ -78,6 +78,7 @@
 				</configuration>
 			</plugin>
 			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
 				<version>2.1</version>
 				<configuration>
@@ -169,6 +170,12 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.17</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
 			<groupId>commons-logging</groupId>
 			<artifactId>commons-logging</artifactId>
 			<version>1.1.3</version>
@@ -187,8 +194,9 @@
 			<build>
 				<plugins>
 					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-install-plugin</artifactId>
-						<version>2.3.1</version>
+						<version>2.5.2</version>
 						<configuration>
 							<createChecksum>true</createChecksum>
 						</configuration>

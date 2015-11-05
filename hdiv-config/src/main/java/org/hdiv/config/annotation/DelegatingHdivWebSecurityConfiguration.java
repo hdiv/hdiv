@@ -1,5 +1,5 @@
 /**
- * Copyright 2005-2013 hdiv.org
+ * Copyright 2005-2015 hdiv.org
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,7 +42,8 @@ public class DelegatingHdivWebSecurityConfiguration extends HdivWebSecurityConfi
 
 	@PostConstruct
 	public void performVersionChecks() {
-		if (SpringVersion.getVersion().compareTo(MIN_SPRING_VERSION) < 0) {
+		String springVersion = SpringVersion.getVersion();
+		if (springVersion != null && springVersion.compareTo(MIN_SPRING_VERSION) < 0) {
 			// Spring version is lower than '4.0.0.RELEASE'
 			throw new HDIVException("HDIV JavaConfig feature require Spring version equal or greater than "
 					+ MIN_SPRING_VERSION + ". Use XML configuration instead of JavaConfig or update Spring version.");
@@ -64,7 +65,7 @@ public class DelegatingHdivWebSecurityConfiguration extends HdivWebSecurityConfi
 	}
 
 	@Override
-	void addLongLivingPages(LongLivingPagesRegistry registry) {
+	public void addLongLivingPages(LongLivingPagesRegistry registry) {
 
 		this.configurers.addLongLivingPages(registry);
 	}

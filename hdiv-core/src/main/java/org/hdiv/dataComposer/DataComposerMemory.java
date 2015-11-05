@@ -1,5 +1,5 @@
 /**
- * Copyright 2005-2013 hdiv.org
+ * Copyright 2005-2015 hdiv.org
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,11 +49,6 @@ public class DataComposerMemory extends AbstractDataComposer {
 	 * Commons Logging instance.
 	 */
 	private static Log log = LogFactory.getLog(DataComposerMemory.class);
-
-	/**
-	 * Represents the identifier of each possible state stored in the page <code>page</code>.
-	 */
-	protected int requestCounter = 0;
 
 	/**
 	 * State scope manager.
@@ -135,14 +130,34 @@ public class DataComposerMemory extends AbstractDataComposer {
 			action = URLDecoder.decode(action, Constants.ENCODING_UTF_8);
 		} catch (UnsupportedEncodingException e) {
 			throw new HDIVException(Constants.ENCODING_UTF_8 + " enconding not supported.", e);
+		} catch (IllegalArgumentException e) {
+			// Some decoding errors throw IllegalArgumentException
 		}
 
 		// Create new IState
-		IState state = new State(this.requestCounter);
-		state.setAction(action);
-		state.setMethod(method);
+		int stateId = this.getPage().getNextStateId();
+		IState state = this.createNewState(stateId, method, action);
 
 		return this.beginRequest(state);
+	}
+
+	/**
+	 * Create new {@link IState} instance.
+	 * 
+	 * @param stateId
+	 *            Identifier for the new {@link IState}
+	 * @param method
+	 *            HTTP method of the request.
+	 * @param action
+	 *            action name
+	 * @return new {@link IState} instance.
+	 */
+	protected IState createNewState(int stateId, String method, String action) {
+
+		IState state = new State(stateId);
+		state.setAction(action);
+		state.setMethod(method);
+		return state;
 	}
 
 	public String beginRequest(IState state) {
@@ -158,9 +173,6 @@ public class DataComposerMemory extends AbstractDataComposer {
 			// We can't know the id before compose all parameters
 			return null;
 		}
-
-		// It is Page scope or none
-		this.requestCounter = state.getId() + 1;
 
 		String id = this.getPage().getName() + DASH + state.getId() + DASH + this.getStateSuffix(state.getMethod());
 		return id;
@@ -195,7 +207,7 @@ public class DataComposerMemory extends AbstractDataComposer {
 		boolean firstState = page.getStatesCount() == 1;
 		if (firstState) {
 
-			super.session.addPage(page.getName(), page);
+			super.session.addPartialPage(page.getId(), page);
 		}
 
 		String id = this.getPage().getId() + DASH + state.getId() + DASH + this.getStateSuffix(state.getMethod());
@@ -209,6 +221,14 @@ public class DataComposerMemory extends AbstractDataComposer {
 
 		this.initPage();
 	}
+	
+	/**
+	 * It is called in the pre-processing stage of each user request assigning a new page identifier to the page with its parent state id.
+	 */
+	public void startPage(String parentStateId) {
+
+		this.initPage(parentStateId);
+	}
 
 	/**
 	 * It is called in the pre-processing stage of each user request. Create a new {@link IPage} based on an existing
@@ -218,7 +238,7 @@ public class DataComposerMemory extends AbstractDataComposer {
 	 *            other IPage
 	 */
 	public void startPage(IPage existingPage) {
-		this.requestCounter = existingPage.getStatesCount();
+		existingPage.markAsReused();
 		this.setPage(existingPage);
 	}
 
@@ -236,10 +256,10 @@ public class DataComposerMemory extends AbstractDataComposer {
 		IPage page = this.getPage();
 		if (page.getStatesCount() > 0) {
 			// The page has states, update them in session
-			super.session.addPage(page.getName(), page);
+			super.session.addPage(page.getId(), page);
 		} else {
 			if (log.isDebugEnabled()) {
-				log.debug("The page [" + page.getName() + "] has no states, is not stored in session");
+				log.debug("The page [" + page.getId() + "] has no states, is not stored in session");
 			}
 		}
 
