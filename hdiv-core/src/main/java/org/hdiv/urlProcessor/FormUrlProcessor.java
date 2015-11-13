@@ -37,63 +37,6 @@ public class FormUrlProcessor extends AbstractUrlProcessor {
 	 */
 	private static Log log = LogFactory.getLog(FormUrlProcessor.class);
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.hdiv.urlProcessor.AbstractUrlProcessor#createUrlData(java.lang.String, java.lang.String,
-	 * javax.servlet.http.HttpServletRequest)
-	 */
-	@Override
-	public UrlData createUrlData(String url, String method, HttpServletRequest request) {
-
-		// Execute common url parser
-		UrlData urlData = super.createUrlData(url, method, request);
-
-		// Specific url parsing for form action
-
-		String params = this.removeStateParameter(request, urlData.getUrlParams());
-		urlData.setUrlParams(params);
-
-		return urlData;
-	}
-
-	/**
-	 * Remove _HDIV_STATE_ parameter if it exist.
-	 * 
-	 * @param request
-	 *            {@link HttpServletRequest} object
-	 * @param params
-	 *            parameters string
-	 * @return parameters string without state id
-	 */
-	protected String removeStateParameter(HttpServletRequest request, String params) {
-
-		String hdivParameter = (String) request.getSession().getAttribute(Constants.HDIV_PARAMETER);
-
-		if (params == null || !params.contains(hdivParameter)) {
-			return params;
-		}
-
-		int start = params.indexOf(hdivParameter);
-
-		int end = params.indexOf("&", start);
-		if (end < 0) {
-			end = params.indexOf("#", start);
-		}
-		if (end < 0) {
-			end = params.length();
-		}
-
-		String result = params.substring(0, start);
-		result = result + params.substring(end, params.length());
-
-		if (result.endsWith("&")) {
-			result = result.substring(0, result.length() - 1);
-		}
-
-		return result;
-	}
-
 	/**
 	 * Process form action url to add hdiv state if it is necessary.
 	 * 
