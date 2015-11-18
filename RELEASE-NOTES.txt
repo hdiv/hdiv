@@ -5,6 +5,7 @@ http://www.hdiv.org
 Release 2.1.14
 ==================================
  * LinkUrlProcessor: remove input _HDIV_STATE_ parameter if it exists.
+ * Bug fixed in page refresh and non sequential page ids.
 
 Release 2.1.13
 ==================================
