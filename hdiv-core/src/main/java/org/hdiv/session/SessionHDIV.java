@@ -155,7 +155,7 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 		Object isAjaxRequestObject = request.getAttribute(Constants.AJAX_REQUEST);
 
 		if (isAjaxRequestObject != null) {
-			isAjaxRequest = (Boolean) isAjaxRequest;
+			isAjaxRequest = (Boolean) isAjaxRequestObject;
 		}
 
 		Integer removedPageId = cache.addPage(pageId, currentPage, isRefreshRequest, isAjaxRequest);
@@ -174,6 +174,8 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 		// we add a new page in session
 		this.addPageToSession(session, newPage, isPartial);
 
+		// log cache content
+		this.logCacheContent(cache);
 	}
 
 	/**
@@ -431,6 +433,32 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 			throw new HDIVException("Key not initialized on session");
 		}
 		return key;
+	}
+
+	/**
+	 * Log cache content in the logger.
+	 * 
+	 * @param cache
+	 */
+	protected void logCacheContent(IStateCache cache) {
+		if (log.isTraceEnabled()) {
+			synchronized (cache) {
+				List<Integer> ids = cache.getPageIds();
+				StringBuffer sb = new StringBuffer();
+				for (Integer id : ids) {
+					IPage page = this.getPage(id);
+					String parentPage = null;
+					if (page != null) {
+						parentPage = page.getParentStateId();
+					}
+					if (parentPage != null) {
+						parentPage = parentPage.substring(0, parentPage.indexOf("-"));
+					}
+					sb.append("[").append(id).append(" (").append(parentPage).append(")] ");
+				}
+				log.trace("Cache content [" + sb.toString() + "]");
+			}
+		}
 	}
 
 	/**
