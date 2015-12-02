@@ -51,6 +51,11 @@ public class ValidationRepositoryFactoryBean extends AbstractFactoryBean<Default
 	 */
 	protected Map<ValidationTargetData, List<String>> validationsData;
 
+	/**
+	 * All default editable validations.
+	 */
+	protected List<IValidation> defaultValidations;
+
 	@Override
 	public Class<?> getObjectType() {
 		return DefaultValidationRepository.class;
@@ -85,6 +90,8 @@ public class ValidationRepositoryFactoryBean extends AbstractFactoryBean<Default
 			vals.put(target, this.createValidationList(ids));
 		}
 		repository.setValidations(vals);
+
+		repository.setDefaultValidations(this.defaultValidations);
 
 		return repository;
 	}
@@ -145,5 +152,9 @@ public class ValidationRepositoryFactoryBean extends AbstractFactoryBean<Default
 
 	public void setValidationsData(Map<ValidationTargetData, List<String>> validationsData) {
 		this.validationsData = validationsData;
+	}
+
+	public void setDefaultValidations(List<IValidation> defaultValidations) {
+		this.defaultValidations = defaultValidations;
 	}
 }

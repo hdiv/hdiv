@@ -64,7 +64,7 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 	/**
 	 * Validation test with the HDIV parameter only. Validation should be correct.
 	 */
-	public void testValidateHashOnlyHDIVParameter() {
+	public void testValidateHasOnlyHDIVParameter() {
 
 		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
 
@@ -83,7 +83,7 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 	/**
 	 * Validation test for an start page.
 	 */
-	public void testValidateHashActionIsStartPage() {
+	public void testValidateHasActionIsStartPage() {
 
 		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
 
@@ -104,7 +104,7 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 	/**
 	 * Validation test with an start parameter.
 	 */
-	public void testValidateHashOneStartParameter() {
+	public void testValidateHasOneStartParameter() {
 
 		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
 
@@ -124,7 +124,7 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 	/**
 	 * Validation test for a non-editable parameter with a correct value.
 	 */
-	public void testValidateHashOneNotEditableOneParameter() {
+	public void testValidateHasOneNotEditableOneParameter() {
 
 		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
 
@@ -146,7 +146,7 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 	/**
 	 * Validation test with a non-editable multivalue parameter. The obtained values for the parameter must be 0 and 1
 	 */
-	public void testValidateHashOneNotEditableMultivalueParameter() {
+	public void testValidateHasOneNotEditableMultivalueParameter() {
 
 		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
 
@@ -172,7 +172,7 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 	/**
 	 * Validation test with a non-editable multivalue parameter and another non-editable parameter with a simple value.
 	 */
-	public void testValidateHashMultiValue() {
+	public void testValidateHasMultiValue() {
 
 		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
 
@@ -203,7 +203,7 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 	 * Validation test with an init parameter and another non-editable parameter. Validation should be correct as the
 	 * resulting values are correct.
 	 */
-	public void testValidateHashOneStartParameterOneNotEditableParameter() {
+	public void testValidateHasOneStartParameterOneNotEditableParameter() {
 
 		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
 
@@ -227,7 +227,7 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 	 * Validation test for a non-editable multivalue parameter with modified values. Should not pass validation as the
 	 * second value has been modified.
 	 */
-	public void testValidateHashOneParameterNotEditableMultivalueIndexOutOfBound() {
+	public void testValidateHasOneParameterNotEditableMultivalueIndexOutOfBound() {
 
 		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
 
@@ -255,7 +255,7 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 	 * Validation test with a modified non-editable parameter. More than expected parameters are received, so it should
 	 * not pass validation.
 	 */
-	public void testValidateHashInvalidNumberOfParameters() {
+	public void testValidateHasInvalidNumberOfParameters() {
 
 		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
 
@@ -281,7 +281,7 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 	 * Validation test with a non-editable multivalue parameter. repeated values are received, so it should not pass
 	 * validation.
 	 */
-	public void testValidateHashRepeatedValues() {
+	public void testValidateHasRepeatedValues() {
 
 		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
 
@@ -307,7 +307,7 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 	/**
 	 * Validation test with a non-editable parameter. Its value is modified so it should not pass validation.
 	 */
-	public void testValidateHashOnlyOneParameterNotEditableIndexOutOfBound() {
+	public void testValidateHasOnlyOneParameterNotEditableIndexOutOfBound() {
 
 		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
 
@@ -333,7 +333,7 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 	 * Validation test with a wrong page identifier. It should not pass validation as there isn't any state in memory
 	 * which matches this identifier.
 	 */
-	public void testValidateHashMemoryWrongStateIndetifier() {
+	public void testValidateHasMemoryWrongStateIndetifier() {
 
 		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
 

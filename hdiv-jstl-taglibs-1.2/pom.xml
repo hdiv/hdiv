@@ -11,7 +11,7 @@
 	<packaging>jar</packaging>
 	<name>HDIV jstl-taglibs-1.2</name>
 	<url>http://www.hdiv.org</url>
-	<description>Java Web Application Security Framework</description>
+	<description>Web Application Security Framework</description>
 
 	<dependencies>
 		<dependency>

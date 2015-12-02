@@ -9,6 +9,24 @@
 	</bean>
 
 	<bean id="validationRepository" class="org.hdiv.validator.DefaultValidationRepository">
+		<property name="defaultValidations">
+			<list>
+				<ref bean="safeText" />
+				<!-- Typical SQL Injection attack -->
+				<ref bean="SQLInjection" />
+				<!-- avoid stored or extended procedures execution -->
+				<ref bean="execCommand" />
+				<ref bean="unauthorizedChars" />
+				<!-- Simple XSS attack -->
+				<ref bean="simpleXSS" />
+				<!-- image XSS attack -->
+				<ref bean="imageXSS" />
+				<!-- script XSS attack -->
+				<ref bean="scriptXSS" />
+				<!-- avoid eval instruction -->
+				<ref bean="evalXSS" />
+			</list>
+		</property>
 		<property name="validations">
 			<map>
 				<entry>

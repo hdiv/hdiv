@@ -168,8 +168,8 @@ public class EditableValidator implements ComponentValidator {
 		String targetWithoutContextPath = getTargetWithoutContextPath(request, target);
 
 		String[] content = { (String) contentObj };
-		EditableDataValidationResult result = this.hdivConfig.areEditableParameterValuesValid(targetWithoutContextPath,
-				clientId, content, contentType);
+		EditableDataValidationResult result = this.hdivConfig.getEditableDataValidationProvider().validate(
+				targetWithoutContextPath, clientId, content, contentType);
 		return result.isValid();
 	}
 

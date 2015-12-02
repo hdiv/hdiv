@@ -420,8 +420,8 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	protected void validateEditableParameter(HttpServletRequest request, String target, String parameter,
 			String[] values, String dataType, List<ValidatorError> unauthorizedParameters) {
 
-		EditableDataValidationResult result = hdivConfig.areEditableParameterValuesValid(target, parameter, values,
-				dataType);
+		EditableDataValidationResult result = this.hdivConfig.getEditableDataValidationProvider().validate(target,
+				parameter, values, dataType);
 		if (!result.isValid()) {
 
 			StringBuffer unauthorizedValues = new StringBuffer(values[0]);
@@ -515,15 +515,9 @@ public class ValidatorHelperRequest implements IValidationHelper {
 
 		if (stateParameter == null && actionParamValues == null) {
 
-			// If the parameter is not defined in the state, it is an error.
-			// With this verification we guarantee that no extra parameters are added.
-			if (log.isDebugEnabled()) {
-				log.debug("Validation Error Detected: Parameter [" + parameter
-						+ "] does not exist in the state for action [" + target + "]");
-			}
-
-			ValidatorError error = new ValidatorError(HDIVErrorCodes.PARAMETER_NOT_EXISTS, target, parameter);
-			return new ValidatorHelperResult(error);
+			// The parameter is not defined in the state, it is an extra parameter.
+			return validateExtraParameter(request, stateParameter, actionParamValues, unauthorizedEditableParameters,
+					hdivParameter, target, parameter);
 		}
 
 		// At this point we are processing a noneditable parameter
@@ -550,6 +544,41 @@ public class ValidatorHelperRequest implements IValidationHelper {
 			String errorMessage = HDIVUtil.getMessage("validation.error", e.getMessage());
 			throw new HDIVException(errorMessage, e);
 		}
+	}
+
+	/**
+	 * Validate parameter non present in the state.
+	 * 
+	 * @param request
+	 *            HttpServletRequest to validate
+	 * @param stateParameter
+	 *            IParameter The restored state for this url
+	 * @param actionParamValues
+	 *            actio params values
+	 * @param unauthorizedEditableParameters
+	 *            Editable parameters with errors
+	 * @param hdivParameter
+	 *            Hdiv state parameter name
+	 * @param target
+	 *            Part of the url that represents the target action
+	 * @param parameter
+	 *            Parameter name to validate
+	 * @return Valid if parameter has not errors
+	 * @since HDIV 2.1.13
+	 */
+	protected ValidatorHelperResult validateExtraParameter(HttpServletRequest request, IParameter stateParameter,
+			String[] actionParamValues, List<ValidatorError> unauthorizedEditableParameters, String hdivParameter,
+			String target, String parameter) {
+
+		// If the parameter is not defined in the state, it is an error.
+		// With this verification we guarantee that no extra parameters are added.
+		if (log.isDebugEnabled()) {
+			log.debug("Validation Error Detected: Parameter [" + parameter
+					+ "] does not exist in the state for action [" + target + "]");
+		}
+
+		ValidatorError error = new ValidatorError(HDIVErrorCodes.PARAMETER_NOT_EXISTS, target, parameter);
+		return new ValidatorHelperResult(error);
 	}
 
 	/**
@@ -604,15 +633,16 @@ public class ValidatorHelperRequest implements IValidationHelper {
 		// checks if the parameter HDIV parameter exists in the parameters of
 		// the request
 		String requestState = request.getParameter(hdivParameter);
-		
+
 		if (requestState == null) {
 			ValidatorError error = new ValidatorError(HDIVErrorCodes.HDIV_PARAMETER_NOT_EXISTS, target, hdivParameter);
 			return new ValidatorHelperResult(error);
 		}
-		
-		// In some browsers (eg: IE 6), fragment identifier is sent with the request, it has to be removed from the requestState 
+
+		// In some browsers (eg: IE 6), fragment identifier is sent with the request, it has to be removed from the
+		// requestState
 		if (requestState.contains("#")) {
-			requestState = requestState.split("#")[0]; 
+			requestState = requestState.split("#")[0];
 		}
 
 		try {
@@ -885,14 +915,18 @@ public class ValidatorHelperRequest implements IValidationHelper {
 
 			if (!exists) {
 
+				String originalValue = "";
+				if (tempStateValues.size() == 1) {
+					originalValue = tempStateValues.get(0);
+				} else if (tempStateValues.size() > 1) {
+					originalValue = tempStateValues.toString();
+				}
+
 				if (receivedValues.contains(values[i])) {
-					String originalValue = tempStateValues.size() > 1 ? tempStateValues.toString() : tempStateValues
-							.get(0);
 					ValidatorError error = new ValidatorError(HDIVErrorCodes.REPEATED_VALUES, target, parameter,
 							values[i], originalValue);
 					return new ValidatorHelperResult(error);
 				}
-				String originalValue = tempStateValues.size() > 1 ? tempStateValues.toString() : tempStateValues.get(0);
 
 				ValidatorError error = new ValidatorError(HDIVErrorCodes.PARAMETER_VALUE_INCORRECT, target, parameter,
 						values[i], originalValue);
@@ -968,7 +1002,6 @@ public class ValidatorHelperRequest implements IValidationHelper {
 
 			IValidationResult result = this.dataValidator.validate(values[i], target, parameter, stateParameter,
 					actionParamValues);
-
 			if (!result.getLegal()) {
 				ValidatorError error = new ValidatorError(HDIVErrorCodes.PARAMETER_VALUE_INCORRECT, target, parameter,
 						values[i]);
@@ -1089,7 +1122,11 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	 */
 	protected String getHdivParameter(HttpServletRequest request) {
 
-		return (String) request.getSession().getAttribute(Constants.HDIV_PARAMETER);
+		String paramName = (String) request.getSession().getAttribute(Constants.HDIV_PARAMETER);
+		if (paramName == null) {
+			throw new HDIVException("HDIV parameter name missing in session. Deleted by the app?");
+		}
+		return paramName;
 	}
 
 	/**

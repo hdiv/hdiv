@@ -11,7 +11,7 @@
 	<packaging>jar</packaging>
 	<name>HDIV Thymeleaf</name>
 	<url>http://www.hdiv.org</url>
-	<description>Java Web Application Security Framework</description>
+	<description>Web Application Security Framework</description>
 
 	<properties>
 		<org.springframework.version>3.1.0.RELEASE</org.springframework.version>

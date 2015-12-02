@@ -9,7 +9,7 @@
 	<name>HDIV Parent</name>
 	<version>2.2.0-SNAPSHOT</version>
 	<url>http://www.hdiv.org</url>
-	<description>Java Web Application Security Framework</description>
+	<description>Web Application Security Framework</description>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -50,9 +50,9 @@
 			</roles>
 		</developer>
 		<developer>
-			<name>Aritz Rabadan</name>
-			<id>arabadan</id>
-			<email>arabadan at users.sourceforge.net</email>
+			<name>Fernando Lozano</name>
+			<id>fernandolozano</id>
+			<email>fernando at hdiv.org</email>
 			<roles>
 				<role>Developer</role>
 			</roles>

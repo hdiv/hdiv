@@ -37,6 +37,11 @@ public class DefaultValidationRepository implements ValidationRepository, Serial
 	protected Map<ValidationTarget, List<IValidation>> validations;
 
 	/**
+	 * All default editable validations.
+	 */
+	protected List<IValidation> defaultValidations;
+
+	/**
 	 * Returns the validation rules for a concrete url and parameter name.
 	 * 
 	 * @param url
@@ -77,6 +82,15 @@ public class DefaultValidationRepository implements ValidationRepository, Serial
 	}
 
 	/**
+	 * Returns default validation rules.
+	 * 
+	 * @return Default validations
+	 */
+	public List<IValidation> findDefaultValidations() {
+		return this.defaultValidations;
+	}
+
+	/**
 	 * @param validations
 	 *            the validations to set
 	 */
@@ -89,6 +103,21 @@ public class DefaultValidationRepository implements ValidationRepository, Serial
 	 */
 	public Map<ValidationTarget, List<IValidation>> getValidations() {
 		return validations;
+	}
+
+	/**
+	 * @return the defaultValidations
+	 */
+	public List<IValidation> getDefaultValidations() {
+		return defaultValidations;
+	}
+
+	/**
+	 * @param defaultValidations
+	 *            the defaultValidations to set
+	 */
+	public void setDefaultValidations(List<IValidation> defaultValidations) {
+		this.defaultValidations = defaultValidations;
 	}
 
 }

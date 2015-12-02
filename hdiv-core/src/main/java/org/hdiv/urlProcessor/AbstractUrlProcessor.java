@@ -82,6 +82,7 @@ public abstract class AbstractUrlProcessor {
 		int paramInit = url.indexOf("?");
 		if (paramInit > -1) {
 			String urlParams = url.substring(paramInit + 1);
+			urlParams = this.removeStateParameter(request, urlParams);
 			urlData.setUrlParams(urlParams);
 
 			url = url.substring(0, paramInit);
@@ -121,6 +122,46 @@ public abstract class AbstractUrlProcessor {
 	}
 
 	/**
+	 * Remove _HDIV_STATE_ parameter if it exist.
+	 * 
+	 * @param request
+	 *            {@link HttpServletRequest} object
+	 * @param params
+	 *            parameters string
+	 * @return parameters string without state id
+	 */
+	protected String removeStateParameter(HttpServletRequest request, String params) {
+
+		String hdivParameter = (String) request.getSession().getAttribute(Constants.HDIV_PARAMETER);
+
+		if (params == null || !params.contains(hdivParameter)) {
+			return params;
+		}
+
+		int start = params.indexOf(hdivParameter);
+		if (start > 0 && params.charAt(start - 1) != '?' && params.charAt(start - 1) != '&') {
+			return params;
+		}
+
+		int end = params.indexOf("&", start);
+		if (end < 0) {
+			end = params.indexOf("#", start);
+		}
+		if (end < 0) {
+			end = params.length();
+		}
+
+		String result = params.substring(0, start);
+		result = result + params.substring(end, params.length());
+
+		if (result.endsWith("&")) {
+			result = result.substring(0, result.length() - 1);
+		}
+
+		return result;
+	}
+
+	/**
 	 * Generates a Map with request parameter name and values.
 	 * 
 	 * @param request
@@ -129,7 +170,7 @@ public abstract class AbstractUrlProcessor {
 	 *            urls query string
 	 * @return Map
 	 */
-	protected Map<String, String[]> getUrlParamsAsMap(HttpServletRequest request, String urlParams) {
+	public Map<String, String[]> getUrlParamsAsMap(HttpServletRequest request, String urlParams) {
 
 		Map<String, String[]> params = new LinkedHashMap<String, String[]>();
 

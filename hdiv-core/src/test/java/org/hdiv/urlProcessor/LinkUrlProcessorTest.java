@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.hdiv.AbstractHDIVTestCase;
 import org.hdiv.util.HDIVUtil;
 import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.util.StringUtils;
 
 public class LinkUrlProcessorTest extends AbstractHDIVTestCase {
 
@@ -328,6 +329,36 @@ public class LinkUrlProcessorTest extends AbstractHDIVTestCase {
 		url = "javaScript:performAction(this);";
 		result = this.linkUrlProcessor.processUrl(request, url);
 		assertEquals(url, result);
+	}
+
+	public void testProcessUrlWithStateId() {
+
+		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+
+		String url = "/link.do?_HDIV_STATE_=11-11-1234567890";
+		String result = this.linkUrlProcessor.processUrl(request, url);
+		assertEquals(1, StringUtils.countOccurrencesOf(result, "_HDIV_STATE_"));
+		assertFalse(result.contains("11-11-1234567890"));
+		assertTrue(!result.equals(url));
+
+		url = "/link.do?aaaa=bbbb&_HDIV_STATE_=11-11-1234567890";
+		result = this.linkUrlProcessor.processUrl(request, url);
+		assertEquals(1, StringUtils.countOccurrencesOf(result, "_HDIV_STATE_"));
+		assertFalse(result.contains("11-11-1234567890"));
+		assertTrue(!result.equals(url));
+
+		url = "/link.do?aaaa=bbbb&_HDIV_STATE_=11-11-1234567890#hash";
+		result = this.linkUrlProcessor.processUrl(request, url);
+		assertEquals(1, StringUtils.countOccurrencesOf(result, "_HDIV_STATE_"));
+		assertFalse(result.contains("11-11-1234567890"));
+		assertTrue(!result.equals(url));
+		
+		url = "/link.do?aaaa=bbbb&_MODIFY_HDIV_STATE_=11-11-1234567890";
+		result = this.linkUrlProcessor.processUrl(request, url);
+		assertEquals(1, StringUtils.countOccurrencesOf(result, "&_HDIV_STATE_"));
+		assertEquals(1, StringUtils.countOccurrencesOf(result, "&_MODIFY_HDIV_STATE_"));
+		assertTrue(result.contains("11-11-1234567890"));
+		assertTrue(!result.equals(url));
 	}
 
 }

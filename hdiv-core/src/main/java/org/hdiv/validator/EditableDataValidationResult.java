@@ -37,7 +37,7 @@ public class EditableDataValidationResult {
 	 */
 	protected String validationId;
 
-	protected EditableDataValidationResult(boolean valid) {
+	public EditableDataValidationResult(boolean valid) {
 		this.valid = valid;
 	}
 

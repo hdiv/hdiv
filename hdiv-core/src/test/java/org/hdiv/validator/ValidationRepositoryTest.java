@@ -42,4 +42,16 @@ public class ValidationRepositoryTest extends AbstractHDIVTestCase {
 		assertEquals("safeText", name);
 	}
 
+	public void testDefaultValidations() {
+
+		List<IValidation> vals = this.validationRepository.findDefaultValidations();
+
+		assertEquals(8, vals.size());
+
+		IValidation validation = vals.get(0);
+		String name = validation.getName();
+
+		assertEquals("safeText", name);
+	}
+
 }

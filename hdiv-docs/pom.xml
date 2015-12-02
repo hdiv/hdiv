@@ -11,7 +11,7 @@
 	<packaging>pom</packaging>
 	<name>HDIV docs</name>
 	<url>http://www.hdiv.org</url>
-	<description>Java Web Application Security Framework</description>
+	<description>Web Application Security Framework</description>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

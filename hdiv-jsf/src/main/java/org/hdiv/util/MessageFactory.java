@@ -41,6 +41,7 @@ public class MessageFactory {
 	 * specific messages.
 	 * @param messageId MessageID
 	 * @param params extra params
+	 * @return FacesMessage
 	 */
 	public static FacesMessage getMessage(String messageId, Object params[]) {
 		Locale locale = null;

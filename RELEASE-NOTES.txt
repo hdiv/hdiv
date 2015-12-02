@@ -6,10 +6,18 @@ Release 2.2.0
 ==================================
  * Remove Cipher and Hash strategies.
  
+Release 2.1.14
+==================================
+ * LinkUrlProcessor: remove input _HDIV_STATE_ parameter if it exists.
+ * Bug fixed in page refresh and non sequential page ids.
+
 Release 2.1.13
 ==================================
  * Multiple iframe support in the same page 
  * Fix issue with IE 6 when redirects to a URL with a fragment identifier.
+ * Extension of Struts 1 Tiles InsertTag class for actions with parameters (queryString) support.
+ * Fix issue in HDIV Core library. It was caused when repeated values were received in last positions of array named "values".
+ * Multipart request handler modified to return appropriate RequestWrapper object, if available, unwrapping the given request as far as necessary.
  
 Release 2.1.12
 ==================================
