@@ -15,6 +15,8 @@
  */
 package org.hdiv.dataValidator;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.hdiv.state.IParameter;
 
 /**
@@ -31,9 +33,12 @@ public interface IDataValidator {
 	 * correct or not. The received value is checked with the one stored in the state to decide if it is correct.
 	 * </p>
 	 * <p>
-	 * In the memory strategy the state is obtained from the user session, using the state identifier received within the request.
+	 * In the memory strategy the state is obtained from the user session, using the state identifier received within
+	 * the request.
 	 * </p>
 	 * 
+	 * @param request
+	 *            current request
 	 * @param value
 	 *            value sent by the client
 	 * @param target
@@ -47,8 +52,8 @@ public interface IDataValidator {
 	 * @return object that represents the result of the validation process for the parameter <code>parameter</code> and
 	 *         the value <code>data</code>.
 	 */
-	public IValidationResult validate(String value, String target, String parameter, IParameter stateParameter,
-			String[] actionParamValues);
+	public IValidationResult validate(HttpServletRequest request, String value, String target, String parameter,
+			IParameter stateParameter, String[] actionParamValues);
 	// TODO merge stateParameter and actionParamValues parameters
 
 }

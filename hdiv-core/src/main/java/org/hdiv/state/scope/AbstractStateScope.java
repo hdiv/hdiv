@@ -15,6 +15,7 @@
  */
 package org.hdiv.state.scope;
 
+import org.hdiv.context.RequestContext;
 import org.hdiv.state.IState;
 
 /**
@@ -24,42 +25,42 @@ import org.hdiv.state.IState;
  */
 public abstract class AbstractStateScope implements StateScope {
 
-	public String addState(IState state, String token) {
+	public String addState(RequestContext context, IState state, String token) {
 
-		ScopedStateCache cache = this.getStateCache();
+		ScopedStateCache cache = this.getStateCache(context);
 		if (cache == null) {
 			cache = new ScopedStateCache();
 		}
 
 		String stateId = cache.addState(state, token);
 
-		this.setStateCache(cache);
+		this.setStateCache(context, cache);
 
 		return this.getScopePrefix() + "-" + stateId;
 	}
 
-	public IState restoreState(int stateId) {
+	public IState restoreState(RequestContext context, int stateId) {
 
-		ScopedStateCache cache = this.getStateCache();
+		ScopedStateCache cache = this.getStateCache(context);
 		return cache == null ? null : cache.getState(stateId);
 	}
 
-	public String getStateToken(int stateId) {
+	public String getStateToken(RequestContext context, int stateId) {
 
-		ScopedStateCache cache = this.getStateCache();
+		ScopedStateCache cache = this.getStateCache(context);
 		return cache == null ? null : cache.getStateToken(stateId);
 	}
 
 	public boolean isScopeState(String stateId) {
-		
+
 		int stateIndex = stateId.indexOf("-");
-		return stateIndex > 0 && stateId.substring(0,stateIndex).equals(this.getScopePrefix());
+		return stateIndex > 0 && stateId.substring(0, stateIndex).equals(this.getScopePrefix());
 	}
 
 	protected abstract String getScopePrefix();
 
-	protected abstract ScopedStateCache getStateCache();
+	protected abstract ScopedStateCache getStateCache(RequestContext context);
 
-	protected abstract void setStateCache(ScopedStateCache cache);
+	protected abstract void setStateCache(RequestContext context, ScopedStateCache cache);
 
 }

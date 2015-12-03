@@ -23,7 +23,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 
 import org.hdiv.AbstractHDIVTestCase;
-import org.hdiv.util.HDIVUtil;
 import org.springframework.mock.web.MockFilterChain;
 import org.springframework.mock.web.MockFilterConfig;
 import org.springframework.mock.web.MockHttpServletResponse;
@@ -37,7 +36,7 @@ public class ValidatorFilterTest extends AbstractHDIVTestCase {
 	public void testFilterCreation() {
 		ValidatorFilter filter = new ValidatorFilter();
 
-		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		HttpServletRequest request = this.getMockRequest();
 		MockHttpServletResponse response = new MockHttpServletResponse();
 		FilterConfig filterConfig = new MockFilterConfig(request.getSession().getServletContext(), "hdivFilter");
 		FilterChain filterChain = new MockFilterChain();

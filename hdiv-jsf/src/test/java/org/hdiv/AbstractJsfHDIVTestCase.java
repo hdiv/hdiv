@@ -18,7 +18,6 @@ package org.hdiv;
 import javax.servlet.http.HttpServletRequest;
 
 import org.hdiv.config.HDIVConfig;
-import org.hdiv.util.HDIVUtil;
 
 public abstract class AbstractJsfHDIVTestCase extends AbstractHDIVTestCase {
 
@@ -27,7 +26,7 @@ public abstract class AbstractJsfHDIVTestCase extends AbstractHDIVTestCase {
 	@Override
 	protected void onSetUp() throws Exception {
 
-		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		HttpServletRequest request = this.getMockRequest();
 
 		this.shaleMockObjects = new ShaleMockObjects();
 		this.shaleMockObjects.setUp(request);

@@ -21,6 +21,7 @@ import java.util.Stack;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.hdiv.context.RequestContext;
 import org.hdiv.exception.HDIVException;
 import org.hdiv.state.IPage;
 import org.hdiv.state.IState;
@@ -59,6 +60,10 @@ public class DataComposerMemory extends AbstractDataComposer {
 	 * Stack to store existing scopes, active and inactive
 	 */
 	protected Stack<String> scopeStack;
+
+	public DataComposerMemory(RequestContext requestContext) {
+		super(requestContext);
+	}
 
 	/**
 	 * DataComposer initialization with new stack to store all states of the page <code>page</code>.
@@ -194,7 +199,7 @@ public class DataComposerMemory extends AbstractDataComposer {
 		StateScope stateScope = this.stateScopeManager.getStateScopeByName(currentScope);
 		if (stateScope != null) {
 			// Its custom Scope
-			String stateId = stateScope.addState(state, this.getStateSuffix(state.getMethod()));
+			String stateId = stateScope.addState(this.context, state, this.getStateSuffix(state.getMethod()));
 			return stateId;
 		}
 
@@ -207,7 +212,7 @@ public class DataComposerMemory extends AbstractDataComposer {
 		boolean firstState = page.getStatesCount() == 1;
 		if (firstState) {
 
-			super.session.addPartialPage(page.getId(), page);
+			super.session.addPartialPage(this.context, page.getId(), page);
 		}
 
 		String id = this.getPage().getId() + DASH + state.getId() + DASH + this.getStateSuffix(state.getMethod());
@@ -221,9 +226,10 @@ public class DataComposerMemory extends AbstractDataComposer {
 
 		this.initPage();
 	}
-	
+
 	/**
-	 * It is called in the pre-processing stage of each user request assigning a new page identifier to the page with its parent state id.
+	 * It is called in the pre-processing stage of each user request assigning a new page identifier to the page with
+	 * its parent state id.
 	 */
 	public void startPage(String parentStateId) {
 
@@ -256,7 +262,7 @@ public class DataComposerMemory extends AbstractDataComposer {
 		IPage page = this.getPage();
 		if (page.getStatesCount() > 0) {
 			// The page has states, update them in session
-			super.session.addPage(page.getId(), page);
+			super.session.addPage(this.context, page.getId(), page);
 		} else {
 			if (log.isDebugEnabled()) {
 				log.debug("The page [" + page.getId() + "] has no states, is not stored in session");

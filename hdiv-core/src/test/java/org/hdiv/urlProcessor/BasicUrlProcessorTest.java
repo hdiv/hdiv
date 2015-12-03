@@ -22,7 +22,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.hdiv.AbstractHDIVTestCase;
 import org.hdiv.util.Constants;
-import org.hdiv.util.HDIVUtil;
 
 public class BasicUrlProcessorTest extends AbstractHDIVTestCase {
 
@@ -34,7 +33,7 @@ public class BasicUrlProcessorTest extends AbstractHDIVTestCase {
 
 	public void testProcessAction() {
 
-		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		HttpServletRequest request = this.getMockRequest();
 		String url = "/testAction.do?par1=val1&par2=val2";
 
 		BasicUrlData result = this.urlProcessor.processUrl(request, url);
@@ -47,7 +46,7 @@ public class BasicUrlProcessorTest extends AbstractHDIVTestCase {
 
 	public void testOnlyParams() {
 
-		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		HttpServletRequest request = this.getMockRequest();
 		String url = "?par1=val1&par2=val2";
 
 		BasicUrlData result = this.urlProcessor.processUrl(request, url);
@@ -63,7 +62,7 @@ public class BasicUrlProcessorTest extends AbstractHDIVTestCase {
 		String par1 = URLEncoder.encode("1111", Constants.ENCODING_UTF_8);
 		String par2 = URLEncoder.encode("You & Me", Constants.ENCODING_UTF_8);
 
-		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		HttpServletRequest request = this.getMockRequest();
 		String url = "?par1=" + par1 + "&amp;par2=" + par2;
 
 		BasicUrlData result = this.urlProcessor.processUrl(request, url);

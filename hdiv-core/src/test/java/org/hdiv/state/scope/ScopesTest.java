@@ -18,6 +18,7 @@ package org.hdiv.state.scope;
 import javax.servlet.http.HttpServletRequest;
 
 import org.hdiv.AbstractHDIVTestCase;
+import org.hdiv.context.RequestContext;
 import org.hdiv.dataComposer.DataComposerFactory;
 import org.hdiv.dataComposer.DataComposerMemory;
 import org.hdiv.dataComposer.IDataComposer;
@@ -43,7 +44,7 @@ public class ScopesTest extends AbstractHDIVTestCase {
 
 	public void testScopeDifferent() {
 
-		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		HttpServletRequest request = this.getMockRequest();
 		String url = "/testAction.do";
 		String url2 = "/otherAction.do";
 
@@ -60,7 +61,7 @@ public class ScopesTest extends AbstractHDIVTestCase {
 
 	public void testScopeSame() {
 
-		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		HttpServletRequest request = this.getMockRequest();
 		String url = "/testAction.do";
 
 		IDataComposer dataComposer = HDIVUtil.getDataComposer(request);
@@ -76,7 +77,7 @@ public class ScopesTest extends AbstractHDIVTestCase {
 
 	public void testScopeDifferentParams() {
 
-		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		HttpServletRequest request = this.getMockRequest();
 		String url = "/testAction.do?param=value";
 		String url2 = "/testAction.do?other=value";
 
@@ -93,7 +94,7 @@ public class ScopesTest extends AbstractHDIVTestCase {
 
 	public void testScopeSameParams() {
 
-		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		HttpServletRequest request = this.getMockRequest();
 		String url = "/testAction.do?param=value";
 
 		IDataComposer dataComposer = HDIVUtil.getDataComposer(request);
@@ -109,7 +110,8 @@ public class ScopesTest extends AbstractHDIVTestCase {
 
 	public void testScopedPage() {
 
-		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
+		MockHttpServletRequest request = this.getMockRequest();
+		RequestContext context = this.getRequestContext();
 		// Put a uri that is configured as a scoped page
 		request.setRequestURI("/scopedPage/user.html");
 		IDataComposer dataComposer = this.dataComposerFactory.newInstance(request);
@@ -127,7 +129,7 @@ public class ScopesTest extends AbstractHDIVTestCase {
 		StateScope scope = this.stateScopeManager.getStateScope(stateId);
 		assertEquals("user-session", scope.getScopeName());
 		int id = Integer.parseInt(stateId.substring(stateId.indexOf("-") + 1, stateId.indexOf("-") + 2));
-		IState state = scope.restoreState(id);
+		IState state = scope.restoreState(context, id);
 		assertEquals("test.do", state.getAction());
 
 	}

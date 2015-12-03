@@ -23,7 +23,6 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletRequestWrapper;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -64,19 +63,6 @@ public class HDIVUtil {
 
 	public static Pattern intPattern = Pattern.compile("[0-9]+");
 
-	/**
-	 * HttpServletRequest thread local
-	 */
-	private static ThreadLocal<HttpServletRequest> httpRequest = new ThreadLocal<HttpServletRequest>();
-
-	/**
-	 * ThreadLocales is always guaranteed to be cleaned up when returning the thread to the server's pool.
-	 */
-	public static void resetLocalData() {
-
-		httpRequest.set(null);
-	}
-
 	/* DataComposer */
 
 	/**
@@ -90,18 +76,6 @@ public class HDIVUtil {
 
 		IDataComposer requestDataComposer = (IDataComposer) request.getAttribute(DATACOMPOSER_REQUEST_KEY);
 		return requestDataComposer;
-	}
-
-	/**
-	 * Returns {@link IDataComposer} instance for this request.
-	 * 
-	 * @return {@link IDataComposer} instance
-	 */
-	public static IDataComposer getDataComposer() {
-
-		HttpServletRequest request = getHttpServletRequest();
-		IDataComposer newDataComposer = getDataComposer(request);
-		return newDataComposer;
 	}
 
 	/**
@@ -203,15 +177,6 @@ public class HDIVUtil {
 	/* IApplication */
 
 	/**
-	 * @return Returns the servlet context wrapper object.
-	 */
-	public static IApplication getApplication() {
-
-		ServletContext servletContext = getHttpServletRequest().getSession().getServletContext();
-		return getApplication(servletContext);
-	}
-
-	/**
 	 * Returns the servlet context wrapper object.
 	 * 
 	 * @param servletContext
@@ -239,17 +204,6 @@ public class HDIVUtil {
 	}
 
 	/* HDIVConfig */
-
-	/**
-	 * Return the <code>HDIVConfig</code> object
-	 * 
-	 * @return {@link HDIVConfig} instance
-	 */
-	public static HDIVConfig getHDIVConfig() {
-
-		ServletContext servletContext = getHttpServletRequest().getSession().getServletContext();
-		return getHDIVConfig(servletContext);
-	}
 
 	/**
 	 * Return the <code>HDIVConfig</code> object
@@ -343,10 +297,11 @@ public class HDIVUtil {
 	/**
 	 * Returns CurrentPageId value from <code>HttpServletRequest</code>
 	 * 
+	 * @param request
+	 *            {@link HttpServletRequest} object
 	 * @return pageId
 	 */
-	public static Integer getCurrentPageId() {
-		HttpServletRequest request = getHttpServletRequest();
+	public static Integer getCurrentPageId(HttpServletRequest request) {
 		return (Integer) request.getAttribute(CURRENT_PAGE_KEY);
 	}
 
@@ -363,77 +318,18 @@ public class HDIVUtil {
 		request.setAttribute(CURRENT_PAGE_KEY, pageId);
 	}
 
-	/* HttpSession */
-
-	/**
-	 * Return the <code>HttpSession</code> object.
-	 * 
-	 * @return {@link HttpSession} instance
-	 */
-	public static HttpSession getHttpSession() {
-		HttpServletRequest request = getHttpServletRequest();
-		return request.getSession();
-	}
-
-	/**
-	 * Return the <code>HttpSession</code> object.
-	 * 
-	 * @return {@link HttpSession} instance. It can have null value.
-	 */
-	public static HttpSession getNonRequiredHttpSession() {
-		HttpServletRequest request = getNonRequiredHttpServletRequest();
-		if (request == null) {
-			return null;
-		}
-		return request.getSession();
-	}
-
-	/* HttpServletRequest */
-
-	/**
-	 * Return the <code>HttpServletRequest</code> object.
-	 * 
-	 * @return {@link HttpServletRequest} instance
-	 */
-	public static HttpServletRequest getHttpServletRequest() {
-		HttpServletRequest request = (HttpServletRequest) httpRequest.get();
-		if (request == null) {
-			throw new HDIVException(
-					"The request has not been initialized in threadlocal. The request has not been intercepted by ValidatorFilter, review it's mapping.");
-		}
-		return request;
-	}
-
-	/**
-	 * Return the <code>HttpServletRequest</code> object. Return null if request not present.
-	 * 
-	 * @return {@link HttpServletRequest} instance
-	 */
-	public static HttpServletRequest getNonRequiredHttpServletRequest() {
-		HttpServletRequest request = (HttpServletRequest) httpRequest.get();
-		return request;
-	}
-
-	/**
-	 * Set the <code>HttpServletRequest</code> instance in {@link ThreadLocal}
-	 * 
-	 * @param httpServletRequest
-	 *            {@link HttpServletRequest} instance
-	 */
-	public static void setHttpServletRequest(HttpServletRequest httpServletRequest) {
-		httpRequest.set(httpServletRequest);
-	}
-
 	/* MessageSource */
 
 	/**
 	 * Return the {@link MessageSource} instance.
 	 * 
+	 * @param request
+	 *            HttpServletRequest object
 	 * @return {@link MessageSource} instance
 	 */
-	public static MessageSource getMessageSource() {
+	public static MessageSource getMessageSource(HttpServletRequest request) {
 
-		ServletContext servletContext = getHttpServletRequest().getSession().getServletContext();
+		ServletContext servletContext = request.getSession().getServletContext();
 		return getMessageSource(servletContext);
 	}
 
@@ -467,17 +363,21 @@ public class HDIVUtil {
 	/**
 	 * Try to resolve the message. Treat as an error if the message can't be found.
 	 * 
+	 * @param request
+	 *            HttpServletRequest object
 	 * @param key
 	 *            the code to lookup up, such as 'calculator.noRateSet'
 	 * @return The resolved message
 	 */
-	public static String getMessage(String key) {
-		return HDIVUtil.getMessage(key, null);
+	public static String getMessage(HttpServletRequest request, String key) {
+		return HDIVUtil.getMessage(request, key, null);
 	}
 
 	/**
 	 * Try to resolve the message. Treat as an error if the message can't be found.
 	 * 
+	 * @param request
+	 *            HttpServletRequest object
 	 * @param key
 	 *            the code to lookup up, such as 'calculator.noRateSet'
 	 * @param o
@@ -485,13 +385,15 @@ public class HDIVUtil {
 	 *            "{1,date}", "{2,time}" within a message), or null if none.
 	 * @return The resolved message
 	 */
-	public static String getMessage(String key, String o) {
-		return HDIVUtil.getMessage(key, o, Locale.getDefault());
+	public static String getMessage(HttpServletRequest request, String key, String o) {
+		return HDIVUtil.getMessage(request, key, o, Locale.getDefault());
 	}
 
 	/**
 	 * Try to resolve the message. Treat as an error if the message can't be found.
 	 * 
+	 * @param request
+	 *            HttpServletRequest object
 	 * @param key
 	 *            the code to lookup up, such as 'calculator.noRateSet'
 	 * @param o
@@ -501,9 +403,9 @@ public class HDIVUtil {
 	 *            locale
 	 * @return The resolved message
 	 */
-	public static String getMessage(String key, String o, Locale userLocale) {
+	public static String getMessage(HttpServletRequest request, String key, String o, Locale userLocale) {
 
-		String resolvedMessage = HDIVUtil.getMessageSource().getMessage(key, new String[] { o }, userLocale);
+		String resolvedMessage = HDIVUtil.getMessageSource(request).getMessage(key, new String[] { o }, userLocale);
 		if (log.isDebugEnabled()) {
 			log.debug(resolvedMessage);
 		}
@@ -561,12 +463,15 @@ public class HDIVUtil {
 		}
 		return u.toString();
 	}
-	
+
 	/**
-	 * Return an appropriate request object of the specified type, if available,
-	 * unwrapping the given request as far as necessary.
-	 * @param request the servlet request to introspect
-	 * @param requiredType the desired type of request object
+	 * Return an appropriate request object of the specified type, if available, unwrapping the given request as far as
+	 * necessary.
+	 * 
+	 * @param request
+	 *            the servlet request to introspect
+	 * @param requiredType
+	 *            the desired type of request object
 	 * @return the matching request object, or {@code null} if none of that type is available
 	 */
 	@SuppressWarnings("unchecked")
@@ -574,8 +479,7 @@ public class HDIVUtil {
 		if (requiredType != null) {
 			if (requiredType.isInstance(request)) {
 				return (T) request;
-			}
-			else if (request instanceof ServletRequestWrapper) {
+			} else if (request instanceof ServletRequestWrapper) {
 				return getNativeRequest(((ServletRequestWrapper) request).getRequest(), requiredType);
 			}
 		}

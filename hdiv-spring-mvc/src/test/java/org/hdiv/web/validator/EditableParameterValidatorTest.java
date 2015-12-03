@@ -28,7 +28,6 @@ import org.hdiv.filter.RequestWrapper;
 import org.hdiv.filter.ValidatorError;
 import org.hdiv.filter.ValidatorHelperResult;
 import org.hdiv.util.Constants;
-import org.hdiv.util.HDIVUtil;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.validation.Errors;
 import org.springframework.validation.MapBindingResult;
@@ -52,14 +51,14 @@ public class EditableParameterValidatorTest extends AbstractHDIVTestCase {
 
 		DataComposerFactory dataComposerFactory = (DataComposerFactory) this.getApplicationContext().getBean(
 				"dataComposerFactory");
-		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		HttpServletRequest request = this.getMockRequest();
 		this.dataComposer = dataComposerFactory.newInstance(request);
 		this.dataComposer.startPage();
 	}
 
 	public void testEditableValidator() {
 
-		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
+		MockHttpServletRequest request = this.getMockRequest();
 		request.setMethod("POST");
 
 		this.dataComposer.beginRequest("POST", this.targetName);

@@ -151,8 +151,8 @@ public class ValidatorFilter extends OncePerRequestFilter {
 		// Initialize request scoped data
 		this.requestInitializer.initRequest(request, response);
 
-		RequestWrapper requestWrapper = this.requestInitializer.createRequestWrapper(request);
-		ResponseWrapper responseWrapper = this.requestInitializer.createResponseWrapper(response);
+		RequestWrapper requestWrapper = this.requestInitializer.createRequestWrapper(request, response);
+		ResponseWrapper responseWrapper = this.requestInitializer.createResponseWrapper(request, response);
 
 		HttpServletRequest multipartProcessedRequest = requestWrapper;
 

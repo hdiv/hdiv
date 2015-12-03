@@ -17,7 +17,7 @@ package org.hdiv.state.scope;
 
 import javax.servlet.http.HttpSession;
 
-import org.hdiv.util.HDIVUtil;
+import org.hdiv.context.RequestContext;
 
 /**
  * <p>
@@ -43,22 +43,14 @@ public class UserSessionStateScope extends AbstractStateScope {
 		return this.scopeType.getPrefix();
 	}
 
-	public ScopedStateCache getStateCache() {
-		ScopedStateCache cache = (ScopedStateCache) this.getHttpSession().getAttribute(USER_STATE_CACHE_ATTR);
+	public ScopedStateCache getStateCache(RequestContext context) {
+		ScopedStateCache cache = (ScopedStateCache) context.getRequest().getSession()
+				.getAttribute(USER_STATE_CACHE_ATTR);
 		return cache;
 	}
 
-	public void setStateCache(ScopedStateCache cache) {
-		this.getHttpSession().setAttribute(USER_STATE_CACHE_ATTR, cache);
-	}
-
-	/**
-	 * Obtain {@link HttpSession} instance for ThreadLocal
-	 * 
-	 * @return HttpSession instance
-	 */
-	protected HttpSession getHttpSession() {
-		return HDIVUtil.getHttpSession();
+	public void setStateCache(RequestContext context, ScopedStateCache cache) {
+		context.getRequest().getSession().setAttribute(USER_STATE_CACHE_ATTR, cache);
 	}
 
 }

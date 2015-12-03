@@ -16,8 +16,7 @@
 package org.hdiv.dataComposer;
 
 import org.hdiv.AbstractHDIVTestCase;
-import org.hdiv.dataComposer.DataComposerFactory;
-import org.hdiv.dataComposer.IDataComposer;
+import org.hdiv.context.RequestContext;
 import org.hdiv.state.IParameter;
 import org.hdiv.state.IState;
 import org.hdiv.state.StateUtil;
@@ -40,7 +39,8 @@ public class AjaxTest extends AbstractHDIVTestCase {
 
 		this.getConfig().setReuseExistingPageInAjaxRequest(false);
 
-		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
+		MockHttpServletRequest request = this.getMockRequest();
+		RequestContext context = this.getRequestContext();
 		IDataComposer dataComposer = this.dataComposerFactory.newInstance(request);
 		HDIVUtil.setDataComposer(dataComposer, request);
 
@@ -84,27 +84,28 @@ public class AjaxTest extends AbstractHDIVTestCase {
 
 		assertEquals(sId1, sId2);
 		// Restore state
-		IState state = this.stateUtil.restoreState(stateId);
+		IState state = this.stateUtil.restoreState(context, stateId);
 		IParameter param = state.getParameter("parameter1");
 		String val = param.getValues().get(0);
 		assertEquals("1", val);
 
-		state = this.stateUtil.restoreState(stateId1);
+		state = this.stateUtil.restoreState(context, stateId1);
 		param = state.getParameter("parameter2");
 		val = param.getValues().get(0);
 		assertEquals("2", val);
 
-		state = this.stateUtil.restoreState(stateId2);
+		state = this.stateUtil.restoreState(context, stateId2);
 		param = state.getParameter("parameter3");
 		val = param.getValues().get(0);
 		assertEquals("3", val);
 	}
-	
+
 	public void testAjax() {
 
 		this.getConfig().setReuseExistingPageInAjaxRequest(true);
 
-		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
+		MockHttpServletRequest request = this.getMockRequest();
+		RequestContext context = this.getRequestContext();
 		IDataComposer dataComposer = this.dataComposerFactory.newInstance(request);
 		HDIVUtil.setDataComposer(dataComposer, request);
 
@@ -148,17 +149,17 @@ public class AjaxTest extends AbstractHDIVTestCase {
 
 		assertEquals(sId1 + 1, sId2);
 		// Restore state
-		IState state = this.stateUtil.restoreState(stateId);
+		IState state = this.stateUtil.restoreState(context, stateId);
 		IParameter param = state.getParameter("parameter1");
 		String val = param.getValues().get(0);
 		assertEquals("1", val);
 
-		state = this.stateUtil.restoreState(stateId1);
+		state = this.stateUtil.restoreState(context, stateId1);
 		param = state.getParameter("parameter2");
 		val = param.getValues().get(0);
 		assertEquals("2", val);
 
-		state = this.stateUtil.restoreState(stateId2);
+		state = this.stateUtil.restoreState(context, stateId2);
 		param = state.getParameter("parameter3");
 		val = param.getValues().get(0);
 		assertEquals("3", val);
@@ -168,7 +169,8 @@ public class AjaxTest extends AbstractHDIVTestCase {
 
 		this.getConfig().setReuseExistingPageInAjaxRequest(true);
 
-		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
+		MockHttpServletRequest request = this.getMockRequest();
+		RequestContext context = this.getRequestContext();
 		IDataComposer dataComposer = this.dataComposerFactory.newInstance(request);
 		HDIVUtil.setDataComposer(dataComposer, request);
 
@@ -213,17 +215,17 @@ public class AjaxTest extends AbstractHDIVTestCase {
 
 		assertEquals(sId1 + 1, sId2);
 		// Restore state
-		IState state = this.stateUtil.restoreState(stateId);
+		IState state = this.stateUtil.restoreState(context, stateId);
 		IParameter param = state.getParameter("parameter1");
 		String val = param.getValues().get(0);
 		assertEquals("1", val);
 
-		state = this.stateUtil.restoreState(stateId1);
+		state = this.stateUtil.restoreState(context, stateId1);
 		param = state.getParameter("parameter2");
 		val = param.getValues().get(0);
 		assertEquals("2", val);
 
-		state = this.stateUtil.restoreState(stateId2);
+		state = this.stateUtil.restoreState(context, stateId2);
 		param = state.getParameter("parameter3");
 		val = param.getValues().get(0);
 		assertEquals("3", val);

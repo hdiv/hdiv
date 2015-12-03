@@ -28,6 +28,7 @@ import junit.framework.TestCase;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hdiv.config.HDIVConfig;
+import org.hdiv.context.RequestContext;
 import org.hdiv.dataComposer.DataComposerFactory;
 import org.hdiv.dataComposer.IDataComposer;
 import org.hdiv.init.RequestInitializer;
@@ -73,6 +74,8 @@ public abstract class AbstractHDIVTestCase extends TestCase {
 	private MockHttpServletRequest mockRequest;
 	private MockHttpServletResponse mockResponse;
 	
+	private RequestContext requestContext;
+	
 	protected final void setUp() throws Exception {
 
 		String[] files = { 
@@ -86,7 +89,7 @@ public abstract class AbstractHDIVTestCase extends TestCase {
 		HttpServletResponse response = new MockHttpServletResponse();
 		HttpSession httpSession = request.getSession();
 		ServletContext servletContext = httpSession.getServletContext();
-		HDIVUtil.setHttpServletRequest(request);
+		this.requestContext = new RequestContext(request, response);
 		// Store objects for teardown cleanup
 		this.mockRequest = request;
 		this.mockResponse = (MockHttpServletResponse)response;
@@ -173,4 +176,15 @@ public abstract class AbstractHDIVTestCase extends TestCase {
 		return config;
 	}
 
+	public RequestContext getRequestContext() {
+		return requestContext;
+	}
+	
+	public MockHttpServletRequest getMockRequest() {
+		return mockRequest;
+	}
+	
+	public MockHttpServletResponse getMockResponse() {
+		return mockResponse;
+	}
 }

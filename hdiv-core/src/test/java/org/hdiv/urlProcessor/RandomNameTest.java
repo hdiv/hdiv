@@ -19,7 +19,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.hdiv.AbstractHDIVTestCase;
 import org.hdiv.config.HDIVConfig;
-import org.hdiv.util.HDIVUtil;
 
 public class RandomNameTest extends AbstractHDIVTestCase {
 
@@ -38,7 +37,7 @@ public class RandomNameTest extends AbstractHDIVTestCase {
 
 		this.getConfig().setAvoidValidationInUrlsWithoutParams(Boolean.FALSE);
 
-		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		HttpServletRequest request = this.getMockRequest();
 		String url = "/testAction.do";
 
 		String result = this.linkUrlProcessor.processUrl(request, url);

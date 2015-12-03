@@ -24,6 +24,7 @@ import java.util.Stack;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hdiv.config.HDIVConfig;
+import org.hdiv.context.RequestContext;
 import org.hdiv.idGenerator.UidGenerator;
 import org.hdiv.session.ISession;
 import org.hdiv.state.IPage;
@@ -91,6 +92,15 @@ public abstract class AbstractDataComposer implements IDataComposer {
 	protected HDIVConfig hdivConfig;
 
 	/**
+	 * Context holder for request-specific state.
+	 */
+	protected RequestContext context;
+
+	public AbstractDataComposer(RequestContext context) {
+		this.context = context;
+	}
+
+	/**
 	 * DataComposer initialization with new stack to store all states of the page <code>page</code>.
 	 */
 	public void init() {
@@ -106,22 +116,22 @@ public abstract class AbstractDataComposer implements IDataComposer {
 	 */
 	public void initPage(String parentStateId) {
 		this.page = new Page();
-		int pageId = this.session.getPageId();
+		int pageId = this.session.getPageId(this.context);
 		this.page.setId(pageId);
 		this.page.setParentStateId(parentStateId);
 	}
-	
+
 	/**
 	 * Obtains a new unique identifier for the page.
 	 */
 	public void initPage() {
 		initPage(null);
 	}
-	
+
 	/**
 	 * It generates a new encoded value for the parameter <code>parameter</code> and the value <code>value</code> passed
-	 * as parameters. The returned value guarantees the confidentiality in the memory strategy if
-	 * confidentiality indicator <code>confidentiality</code> is true.
+	 * as parameters. The returned value guarantees the confidentiality in the memory strategy if confidentiality
+	 * indicator <code>confidentiality</code> is true.
 	 * 
 	 * @param parameter
 	 *            HTTP parameter name
@@ -137,8 +147,8 @@ public abstract class AbstractDataComposer implements IDataComposer {
 
 	/**
 	 * It generates a new encoded value for the parameter <code>parameter</code> and the value <code>value</code> passed
-	 * as parameters. The returned value guarantees the confidentiality in the memory strategy if
-	 * confidentiality indicator <code>confidentiality</code> is true.
+	 * as parameters. The returned value guarantees the confidentiality in the memory strategy if confidentiality
+	 * indicator <code>confidentiality</code> is true.
 	 * 
 	 * @param action
 	 *            target action
@@ -177,8 +187,8 @@ public abstract class AbstractDataComposer implements IDataComposer {
 
 	/**
 	 * It generates a new encoded value for the parameter <code>parameter</code> and the value <code>value</code> passed
-	 * as parameters. The returned value guarantees the confidentiality in the memory strategy if
-	 * confidentiality indicator <code>confidentiality</code> is true.
+	 * as parameters. The returned value guarantees the confidentiality in the memory strategy if confidentiality
+	 * indicator <code>confidentiality</code> is true.
 	 * 
 	 * @param parameter
 	 *            HTTP parameter name
@@ -198,8 +208,8 @@ public abstract class AbstractDataComposer implements IDataComposer {
 
 	/**
 	 * It generates a new encoded value for the parameter <code>parameter</code> and the value <code>value</code> passed
-	 * as parameters. The returned value guarantees the confidentiality in the memory strategy if
-	 * confidentiality indicator <code>confidentiality</code> is true.
+	 * as parameters. The returned value guarantees the confidentiality in the memory strategy if confidentiality
+	 * indicator <code>confidentiality</code> is true.
 	 * 
 	 * @param action
 	 *            target action
@@ -436,7 +446,7 @@ public abstract class AbstractDataComposer implements IDataComposer {
 			return false;
 		}
 
-		if (this.hdivConfig.isParameterWithoutConfidentiality(parameterName)) {
+		if (this.hdivConfig.isParameterWithoutConfidentiality(context.getRequest(), parameterName)) {
 			return false;
 		}
 

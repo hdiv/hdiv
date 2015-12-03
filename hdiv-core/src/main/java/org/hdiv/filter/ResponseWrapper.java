@@ -22,6 +22,7 @@ import java.util.Map;
 import java.util.StringTokenizer;
 
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
 import javax.servlet.http.HttpSession;
@@ -29,7 +30,6 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hdiv.util.Constants;
-import org.hdiv.util.HDIVUtil;
 
 /**
  * A wrapper for HTTP servlet response.
@@ -66,16 +66,21 @@ public class ResponseWrapper extends HttpServletResponseWrapper {
 	 * confidentiality.
 	 */
 	protected boolean avoidCookiesConfidentiality;
+	
+	protected HttpServletRequest request;
 
 	/**
 	 * Constructs a response object wrapping the given response.
 	 * 
+	 * @param request HttpServletRequest instance
 	 * @param originalResponse
 	 *            response
 	 */
-	public ResponseWrapper(HttpServletResponse originalResponse) {
+	public ResponseWrapper(HttpServletRequest request, HttpServletResponse originalResponse) {
 
 		super(originalResponse);
+		
+		this.request = request;
 
 		if (log.isDebugEnabled()) {
 			log.debug("New ResponseWrapper instance.");
@@ -222,7 +227,7 @@ public class ResponseWrapper extends HttpServletResponseWrapper {
 	@SuppressWarnings("unchecked")
 	protected void updateSessionCookies() {
 
-		HttpSession session = HDIVUtil.getNonRequiredHttpSession();
+		HttpSession session = this.request.getSession();
 		if (session != null) {
 
 			Map<String, SavedCookie> sessionOriginalCookies = (Map<String, SavedCookie>) session
@@ -244,7 +249,7 @@ public class ResponseWrapper extends HttpServletResponseWrapper {
 	 */
 	protected void removeCookiesFromSession() {
 
-		HttpSession session = HDIVUtil.getNonRequiredHttpSession();
+		HttpSession session = this.request.getSession();
 		if (session != null) {
 			session.removeAttribute(Constants.HDIV_COOKIES_KEY);
 		}

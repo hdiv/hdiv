@@ -21,13 +21,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.hdiv.regex.PatternMatcher;
 import org.hdiv.regex.PatternMatcherFactory;
 import org.hdiv.state.IPage;
 import org.hdiv.util.Constants;
-import org.hdiv.util.HDIVUtil;
 import org.hdiv.validator.EditableDataValidationProvider;
 
 /**
@@ -273,13 +273,15 @@ public class HDIVConfig implements Serializable {
 	/**
 	 * Check if the parameter needs confidentiality.
 	 * 
+	 * @param request
+	 *            HttpServletRequest object
 	 * @param paramName
 	 *            parameter name to check
 	 * @return boolean
 	 */
-	public boolean isParameterWithoutConfidentiality(String paramName) {
+	public boolean isParameterWithoutConfidentiality(HttpServletRequest request, String paramName) {
 
-		HttpSession session = HDIVUtil.getNonRequiredHttpSession();
+		HttpSession session = request.getSession();
 		if (session != null) {
 			String modifyHdivStateParameterName = (String) session.getAttribute(Constants.MODIFY_STATE_HDIV_PARAMETER);
 			if (modifyHdivStateParameterName != null && modifyHdivStateParameterName.equals(paramName)) {

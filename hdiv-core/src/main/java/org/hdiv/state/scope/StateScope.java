@@ -15,6 +15,7 @@
  */
 package org.hdiv.state.scope;
 
+import org.hdiv.context.RequestContext;
 import org.hdiv.state.IState;
 
 /**
@@ -29,11 +30,11 @@ import org.hdiv.state.IState;
  */
 public interface StateScope {
 
-	String addState(IState state, String token);
+	String addState(RequestContext context, IState state, String token);
 
-	IState restoreState(int stateId);
+	IState restoreState(RequestContext context, int stateId);
 
-	String getStateToken(int stateId);
+	String getStateToken(RequestContext context, int stateId);
 
 	String getScopeName();
 

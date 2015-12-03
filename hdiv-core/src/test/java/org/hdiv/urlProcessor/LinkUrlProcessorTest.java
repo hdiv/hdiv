@@ -32,7 +32,7 @@ public class LinkUrlProcessorTest extends AbstractHDIVTestCase {
 
 	public void testProcessAction() {
 
-		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		HttpServletRequest request = this.getMockRequest();
 		String url = "/testAction.do";
 
 		String result = this.linkUrlProcessor.processUrl(request, url);
@@ -42,7 +42,7 @@ public class LinkUrlProcessorTest extends AbstractHDIVTestCase {
 
 	public void testProcessActionWithContextPath() {
 
-		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
+		MockHttpServletRequest request = this.getMockRequest();
 		request.setContextPath("/path");
 		String url = "/path/testAction.do";
 
@@ -53,7 +53,7 @@ public class LinkUrlProcessorTest extends AbstractHDIVTestCase {
 
 	public void testProcessActionWithAnchor() {
 
-		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		HttpServletRequest request = this.getMockRequest();
 		String url = "/testAction.do#anchor";
 
 		String result = this.linkUrlProcessor.processUrl(request, url);
@@ -64,7 +64,7 @@ public class LinkUrlProcessorTest extends AbstractHDIVTestCase {
 
 	public void testProcessActionWithParams() {
 
-		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		HttpServletRequest request = this.getMockRequest();
 		String url = "/testAction.do?params=value";
 
 		String result = this.linkUrlProcessor.processUrl(request, url);
@@ -74,7 +74,7 @@ public class LinkUrlProcessorTest extends AbstractHDIVTestCase {
 
 	public void testProcessActionParamWithoutValue() {
 
-		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		HttpServletRequest request = this.getMockRequest();
 		String url = "/testAction.do?params";
 
 		String result = this.linkUrlProcessor.processUrl(request, url);
@@ -84,7 +84,7 @@ public class LinkUrlProcessorTest extends AbstractHDIVTestCase {
 
 	public void testProcessActionRelative() {
 
-		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		HttpServletRequest request = this.getMockRequest();
 		String url = "testAction.do";
 
 		String result = this.linkUrlProcessor.processUrl(request, url);
@@ -94,7 +94,7 @@ public class LinkUrlProcessorTest extends AbstractHDIVTestCase {
 
 	public void testProcessActionRelative2() {
 
-		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		HttpServletRequest request = this.getMockRequest();
 		String url = "../testAction.do";
 
 		String result = this.linkUrlProcessor.processUrl(request, url);
@@ -104,7 +104,7 @@ public class LinkUrlProcessorTest extends AbstractHDIVTestCase {
 
 	public void testProcessActionRelative3() {
 
-		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
+		MockHttpServletRequest request = this.getMockRequest();
 		request.setContextPath("/path");
 
 		String url = "../testAction.do";
@@ -116,7 +116,7 @@ public class LinkUrlProcessorTest extends AbstractHDIVTestCase {
 
 	public void testProcessAbsoluteExternalUrlToAnotherApp() {
 
-		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
+		MockHttpServletRequest request = this.getMockRequest();
 		request.setContextPath("/path");
 
 		String url = "/path-app/index.html";
@@ -128,7 +128,7 @@ public class LinkUrlProcessorTest extends AbstractHDIVTestCase {
 
 	public void testProcessAbsoluteExternalUrlWithContextPath() {
 
-		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
+		MockHttpServletRequest request = this.getMockRequest();
 		request.setContextPath("/path");
 
 		String url = "http://www.google.com";
@@ -140,7 +140,7 @@ public class LinkUrlProcessorTest extends AbstractHDIVTestCase {
 
 	public void testProcessAbsoluteExternalUrl() {
 
-		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
+		MockHttpServletRequest request = this.getMockRequest();
 
 		String url = "http://www.google.com";
 
@@ -151,7 +151,7 @@ public class LinkUrlProcessorTest extends AbstractHDIVTestCase {
 
 	public void testProcessAbsoluteInternalUrlWithContextPath() {
 
-		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
+		MockHttpServletRequest request = this.getMockRequest();
 		request.setContextPath("/path");
 
 		String url = "http://localhost:8080/path/sample.do";
@@ -163,7 +163,7 @@ public class LinkUrlProcessorTest extends AbstractHDIVTestCase {
 
 	public void testProcessAbsoluteInternalUrlWithContextPath2() {
 
-		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
+		MockHttpServletRequest request = this.getMockRequest();
 		request.setContextPath("/diferentPath");
 
 		String url = "http://localhost:8080/path/sample.do";
@@ -175,7 +175,7 @@ public class LinkUrlProcessorTest extends AbstractHDIVTestCase {
 
 	public void testProcessAbsoluteInternalUrl() {
 
-		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
+		MockHttpServletRequest request = this.getMockRequest();
 
 		String url = "http://localhost:8080/path/sample.do";
 
@@ -186,7 +186,7 @@ public class LinkUrlProcessorTest extends AbstractHDIVTestCase {
 
 	public void testProcessActionStartPage() {
 
-		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		HttpServletRequest request = this.getMockRequest();
 
 		String url = "/testing.do"; // is a startPage
 		String result = this.linkUrlProcessor.processUrl(request, url);
@@ -203,7 +203,7 @@ public class LinkUrlProcessorTest extends AbstractHDIVTestCase {
 
 	public void testProcessActionStartPageWithParams() {
 
-		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		HttpServletRequest request = this.getMockRequest();
 
 		String url = "/testing.do?param=value"; // is a startPage
 		String result = this.linkUrlProcessor.processUrl(request, url);
@@ -220,7 +220,7 @@ public class LinkUrlProcessorTest extends AbstractHDIVTestCase {
 
 	public void testProcessWithBaseUrl() {
 
-		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
+		MockHttpServletRequest request = this.getMockRequest();
 
 		HDIVUtil.setBaseURL("/path/extra/plus/more", request);
 
@@ -233,7 +233,7 @@ public class LinkUrlProcessorTest extends AbstractHDIVTestCase {
 
 	public void testProcessMultiValueParam() {
 
-		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		HttpServletRequest request = this.getMockRequest();
 		String url = "/testAction.do?name=X&name=Y&name=Z";
 
 		String result = this.linkUrlProcessor.processUrl(request, url);
@@ -244,7 +244,7 @@ public class LinkUrlProcessorTest extends AbstractHDIVTestCase {
 
 	public void testProcessMultiValueParamConfidentialityFalse() {
 
-		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		HttpServletRequest request = this.getMockRequest();
 		boolean conf = this.getConfig().getConfidentiality();
 		this.getConfig().setConfidentiality(false);
 		String url = "/testAction.do?name=X&name=Y&name=Z";
@@ -258,7 +258,7 @@ public class LinkUrlProcessorTest extends AbstractHDIVTestCase {
 
 	public void testProcessActionJsessionId() {
 
-		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		HttpServletRequest request = this.getMockRequest();
 		String url = "/testAction.do;jsessionid=67CFB560B6EC2677D51814A2A2B16B24";
 
 		String result = this.linkUrlProcessor.processUrl(request, url);
@@ -268,7 +268,7 @@ public class LinkUrlProcessorTest extends AbstractHDIVTestCase {
 
 	public void testProcessActionJsessionIdParam() {
 
-		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		HttpServletRequest request = this.getMockRequest();
 		String url = "/testAction.do;jsessionid=67CFB560B6EC2677D51814A2A2B16B24?params=1";
 
 		String result = this.linkUrlProcessor.processUrl(request, url);
@@ -279,7 +279,7 @@ public class LinkUrlProcessorTest extends AbstractHDIVTestCase {
 
 	public void testProcessActionJsessionStartPage() {
 
-		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		HttpServletRequest request = this.getMockRequest();
 
 		String url = "/testing.do;jsessionid=67CFB560B6EC2677D51814A2A2B16B24"; // is a startPage
 		String result = this.linkUrlProcessor.processUrl(request, url);
@@ -289,7 +289,7 @@ public class LinkUrlProcessorTest extends AbstractHDIVTestCase {
 
 	public void testProcessActionWhitespace() {
 
-		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		HttpServletRequest request = this.getMockRequest();
 
 		String url = "/probando.do?param=text for testing";
 		String result = this.linkUrlProcessor.processUrl(request, url);
@@ -298,7 +298,7 @@ public class LinkUrlProcessorTest extends AbstractHDIVTestCase {
 
 	public void testProcessActionWhitespaceCharac() {
 
-		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		HttpServletRequest request = this.getMockRequest();
 
 		String url = "/probando.do?param=text+for+testing";
 		String result = this.linkUrlProcessor.processUrl(request, url);
@@ -307,7 +307,7 @@ public class LinkUrlProcessorTest extends AbstractHDIVTestCase {
 
 	public void testProcessActionAmpersand() {
 
-		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		HttpServletRequest request = this.getMockRequest();
 
 		String url = "/probando.do?stringArray=Value+1&amp;stringArray=Value+2&amp;stringArray=Value+3&amp;floatProperty=444.0&amp;intProperty=555";
 		String result = this.linkUrlProcessor.processUrl(request, url);
@@ -317,7 +317,7 @@ public class LinkUrlProcessorTest extends AbstractHDIVTestCase {
 
 	public void testJavaScriptLinks() {
 
-		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		HttpServletRequest request = this.getMockRequest();
 		String url = "javascript:performAction(this);";
 		String result = this.linkUrlProcessor.processUrl(request, url);
 		assertEquals(url, result);
@@ -333,7 +333,7 @@ public class LinkUrlProcessorTest extends AbstractHDIVTestCase {
 
 	public void testProcessUrlWithStateId() {
 
-		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		HttpServletRequest request = this.getMockRequest();
 
 		String url = "/link.do?_HDIV_STATE_=11-11-1234567890";
 		String result = this.linkUrlProcessor.processUrl(request, url);
@@ -352,7 +352,7 @@ public class LinkUrlProcessorTest extends AbstractHDIVTestCase {
 		assertEquals(1, StringUtils.countOccurrencesOf(result, "_HDIV_STATE_"));
 		assertFalse(result.contains("11-11-1234567890"));
 		assertTrue(!result.equals(url));
-		
+
 		url = "/link.do?aaaa=bbbb&_MODIFY_HDIV_STATE_=11-11-1234567890";
 		result = this.linkUrlProcessor.processUrl(request, url);
 		assertEquals(1, StringUtils.countOccurrencesOf(result, "&_HDIV_STATE_"));

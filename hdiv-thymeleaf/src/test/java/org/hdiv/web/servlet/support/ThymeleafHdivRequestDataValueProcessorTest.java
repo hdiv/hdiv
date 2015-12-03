@@ -21,6 +21,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.hdiv.AbstractHDIVTestCase;
+import org.hdiv.context.RequestContext;
 import org.hdiv.dataComposer.DataComposerFactory;
 import org.hdiv.dataComposer.IDataComposer;
 import org.hdiv.state.IParameter;
@@ -47,7 +48,7 @@ public class ThymeleafHdivRequestDataValueProcessorTest extends AbstractHDIVTest
 
 	public void testProcessUrl() {
 
-		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		HttpServletRequest request = this.getMockRequest();
 		String url = "/testAction.do";
 
 		String result = this.dataValueProcessor.processUrl(request, url);
@@ -59,7 +60,7 @@ public class ThymeleafHdivRequestDataValueProcessorTest extends AbstractHDIVTest
 
 		this.getConfig().setAvoidValidationInUrlsWithoutParams(true);
 
-		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		HttpServletRequest request = this.getMockRequest();
 		String url = "/testAction.do";
 
 		String result = this.dataValueProcessor.processUrl(request, url);
@@ -69,7 +70,7 @@ public class ThymeleafHdivRequestDataValueProcessorTest extends AbstractHDIVTest
 
 	public void testProcessAction() {
 
-		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		HttpServletRequest request = this.getMockRequest();
 		String action = "/testAction.do";
 
 		String result = this.dataValueProcessor.processAction(request, action);
@@ -87,7 +88,7 @@ public class ThymeleafHdivRequestDataValueProcessorTest extends AbstractHDIVTest
 
 	public void testProcessActionGetMethod() {
 
-		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		HttpServletRequest request = this.getMockRequest();
 		String action = "/onlyget.do"; // Is startPage only for get
 
 		String result = this.dataValueProcessor.processAction(request, action, "GET");
@@ -107,7 +108,7 @@ public class ThymeleafHdivRequestDataValueProcessorTest extends AbstractHDIVTest
 
 		this.getConfig().setAvoidValidationInUrlsWithoutParams(true);
 
-		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		HttpServletRequest request = this.getMockRequest();
 		String action = "/testAction.do";
 
 		String result = this.dataValueProcessor.processAction(request, action);
@@ -125,7 +126,8 @@ public class ThymeleafHdivRequestDataValueProcessorTest extends AbstractHDIVTest
 
 	public void testProcessFormThymeleafOrder() {
 
-		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		HttpServletRequest request = this.getMockRequest();
+		RequestContext context = this.getRequestContext();
 		IDataComposer dataComposer = this.dataComposerFactory.newInstance(request);
 		HDIVUtil.setDataComposer(dataComposer, request);
 
@@ -157,7 +159,7 @@ public class ThymeleafHdivRequestDataValueProcessorTest extends AbstractHDIVTest
 		dataComposer.endPage();
 
 		// Restore state
-		IState state = stateUtil.restoreState(stateValue);
+		IState state = stateUtil.restoreState(context, stateValue);
 		assertNotNull(state);
 
 		IParameter param = state.getParameter("param");

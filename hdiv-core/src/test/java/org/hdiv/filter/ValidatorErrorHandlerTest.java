@@ -23,7 +23,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.hdiv.AbstractHDIVTestCase;
 import org.hdiv.util.HDIVErrorCodes;
-import org.hdiv.util.HDIVUtil;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.mock.web.MockHttpSession;
 
@@ -37,7 +36,7 @@ public class ValidatorErrorHandlerTest extends AbstractHDIVTestCase {
 
 	public void testPageIncorrect() {
 
-		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		HttpServletRequest request = this.getMockRequest();
 		MockHttpServletResponse response = new MockHttpServletResponse();
 
 		ValidatorError error = new ValidatorError(HDIVErrorCodes.PAGE_ID_INCORRECT);
@@ -51,7 +50,7 @@ public class ValidatorErrorHandlerTest extends AbstractHDIVTestCase {
 
 	public void testHandleValidatorError() {
 
-		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		HttpServletRequest request = this.getMockRequest();
 		MockHttpSession session = (MockHttpSession) request.getSession();
 		session.setNew(false); // mark as not new sesssion
 		MockHttpServletResponse response = new MockHttpServletResponse();
@@ -70,7 +69,7 @@ public class ValidatorErrorHandlerTest extends AbstractHDIVTestCase {
 		// Remove default errorPage
 		getConfig().setErrorPage(null);
 
-		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		HttpServletRequest request = this.getMockRequest();
 		MockHttpServletResponse response = new MockHttpServletResponse();
 
 		ValidatorError error = new ValidatorError(HDIVErrorCodes.REQUIRED_PARAMETERS);

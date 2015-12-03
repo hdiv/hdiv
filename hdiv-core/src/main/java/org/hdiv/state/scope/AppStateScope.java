@@ -17,7 +17,7 @@ package org.hdiv.state.scope;
 
 import javax.servlet.ServletContext;
 
-import org.springframework.web.context.ServletContextAware;
+import org.hdiv.context.RequestContext;
 
 /**
  * <p>
@@ -29,13 +29,11 @@ import org.springframework.web.context.ServletContextAware;
  * 
  * @since 2.1.7
  */
-public class AppStateScope extends AbstractStateScope implements ServletContextAware {
+public class AppStateScope extends AbstractStateScope {
 
 	private static final String APP_STATE_CONTEXT_ATTR = ScopedStateCache.class.getCanonicalName();
 
 	protected StateScopeType scopeType = StateScopeType.APP;
-
-	protected ServletContext servletContext;
 
 	public String getScopeName() {
 		return this.scopeType.getName();
@@ -45,21 +43,14 @@ public class AppStateScope extends AbstractStateScope implements ServletContextA
 		return this.scopeType.getPrefix();
 	}
 
-	public ScopedStateCache getStateCache() {
-		ScopedStateCache cache = (ScopedStateCache) this.servletContext.getAttribute(APP_STATE_CONTEXT_ATTR);
+	public ScopedStateCache getStateCache(RequestContext context) {
+		ScopedStateCache cache = (ScopedStateCache) context.getRequest().getSession().getServletContext()
+				.getAttribute(APP_STATE_CONTEXT_ATTR);
 		return cache;
 	}
 
-	public void setStateCache(ScopedStateCache cache) {
-		this.servletContext.setAttribute(APP_STATE_CONTEXT_ATTR, cache);
-	}
-
-	/**
-	 * @param servletContext
-	 *            the servletContext to set
-	 */
-	public void setServletContext(ServletContext servletContext) {
-		this.servletContext = servletContext;
+	public void setStateCache(RequestContext context, ScopedStateCache cache) {
+		context.getRequest().getSession().getServletContext().setAttribute(APP_STATE_CONTEXT_ATTR, cache);
 	}
 
 }

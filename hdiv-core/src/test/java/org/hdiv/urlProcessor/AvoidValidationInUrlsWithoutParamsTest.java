@@ -49,7 +49,7 @@ public class AvoidValidationInUrlsWithoutParamsTest extends AbstractHDIVTestCase
 
 		this.getConfig().setAvoidValidationInUrlsWithoutParams(Boolean.FALSE);
 
-		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		HttpServletRequest request = this.getMockRequest();
 		String url = "/testAction.do";
 
 		String result = this.linkUrlProcessor.processUrl(request, url);
@@ -61,7 +61,7 @@ public class AvoidValidationInUrlsWithoutParamsTest extends AbstractHDIVTestCase
 
 		this.getConfig().setAvoidValidationInUrlsWithoutParams(Boolean.FALSE);
 
-		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		HttpServletRequest request = this.getMockRequest();
 		String url = "/testAction.do?param=1";
 
 		String result = this.linkUrlProcessor.processUrl(request, url);
@@ -73,7 +73,7 @@ public class AvoidValidationInUrlsWithoutParamsTest extends AbstractHDIVTestCase
 
 		this.getConfig().setAvoidValidationInUrlsWithoutParams(Boolean.TRUE);
 
-		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		HttpServletRequest request = this.getMockRequest();
 		String url = "/testAction.do";
 
 		String result = this.linkUrlProcessor.processUrl(request, url);
@@ -85,7 +85,7 @@ public class AvoidValidationInUrlsWithoutParamsTest extends AbstractHDIVTestCase
 
 		this.getConfig().setAvoidValidationInUrlsWithoutParams(Boolean.TRUE);
 
-		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		HttpServletRequest request = this.getMockRequest();
 		String url = "/testAction.do?param=1";
 
 		String result = this.linkUrlProcessor.processUrl(request, url);
@@ -101,7 +101,7 @@ public class AvoidValidationInUrlsWithoutParamsTest extends AbstractHDIVTestCase
 
 		this.getConfig().setAvoidValidationInUrlsWithoutParams(Boolean.FALSE);
 
-		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		HttpServletRequest request = this.getMockRequest();
 		String action = "/testAction.do";
 
 		String result = this.formUrlProcessor.processUrl(request, action);
@@ -114,7 +114,7 @@ public class AvoidValidationInUrlsWithoutParamsTest extends AbstractHDIVTestCase
 
 		this.getConfig().setAvoidValidationInUrlsWithoutParams(Boolean.FALSE);
 
-		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		HttpServletRequest request = this.getMockRequest();
 		String action = "/testAction.do?param=1";
 
 		String result = this.formUrlProcessor.processUrl(request, action);
@@ -127,7 +127,7 @@ public class AvoidValidationInUrlsWithoutParamsTest extends AbstractHDIVTestCase
 
 		this.getConfig().setAvoidValidationInUrlsWithoutParams(Boolean.TRUE);
 
-		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		HttpServletRequest request = this.getMockRequest();
 
 		IDataComposer dataComposer = this.dataComposerFactory.newInstance(request);
 		HDIVUtil.setDataComposer(dataComposer, request);
@@ -149,12 +149,11 @@ public class AvoidValidationInUrlsWithoutParamsTest extends AbstractHDIVTestCase
 		assertTrue(requestId.length() > 0);
 	}
 
-
 	public void testAvoidValidationWithAjaxCallWithParameters() {
 
 		this.getConfig().setAvoidValidationInUrlsWithoutParams(Boolean.TRUE);
-		
-		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
+
+		MockHttpServletRequest request = this.getMockRequest();
 		request.addHeader("x-requested-with", "XMLHttpRequest");
 
 		String url = "/testAction.do?param=1";
@@ -162,14 +161,14 @@ public class AvoidValidationInUrlsWithoutParamsTest extends AbstractHDIVTestCase
 		String result = this.linkUrlProcessor.processUrl(request, url);
 
 		assertTrue(result.contains("_HDIV_STATE_"));
-		
+
 	}
-	
+
 	public void testAvoidValidationWithAjaxCall() {
 
 		this.getConfig().setAvoidValidationInUrlsWithoutParams(Boolean.TRUE);
-		
-		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
+
+		MockHttpServletRequest request = this.getMockRequest();
 		request.addHeader("x-requested-with", "XMLHttpRequest");
 
 		String url = "/testAction.do";
@@ -178,5 +177,5 @@ public class AvoidValidationInUrlsWithoutParamsTest extends AbstractHDIVTestCase
 
 		assertTrue(!result.contains("_HDIV_STATE_"));
 	}
-	
+
 }

@@ -39,7 +39,7 @@ public class LifecycleTest extends AbstractJsfHDIVTestCase {
 		this.hdivParameter = this.getConfig().getStateParameterName();
 
 		DataComposerFactory dataComposerFactory = this.getApplicationContext().getBean(DataComposerFactory.class);
-		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		HttpServletRequest request = this.getMockRequest();
 		this.dataComposer = dataComposerFactory.newInstance(request);
 		HDIVUtil.setDataComposer(this.dataComposer, request);
 
@@ -64,7 +64,7 @@ public class LifecycleTest extends AbstractJsfHDIVTestCase {
 	public void testCorrectRequest() {
 
 		// Create state
-		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
+		MockHttpServletRequest request = this.getMockRequest();
 
 		this.dataComposer.startPage();
 

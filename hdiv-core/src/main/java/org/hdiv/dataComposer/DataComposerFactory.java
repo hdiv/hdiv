@@ -22,6 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.hdiv.config.HDIVConfig;
 import org.hdiv.config.Strategy;
+import org.hdiv.context.RequestContext;
 import org.hdiv.exception.HDIVException;
 import org.hdiv.idGenerator.UidGenerator;
 import org.hdiv.session.ISession;
@@ -89,8 +90,10 @@ public class DataComposerFactory {
 
 		IDataComposer dataComposer = null;
 
+		RequestContext context = new RequestContext(request);
+
 		if (this.config.getStrategy().equals(Strategy.MEMORY)) {
-			DataComposerMemory composer = new DataComposerMemory();
+			DataComposerMemory composer = new DataComposerMemory(context);
 			composer.setHdivConfig(this.config);
 			composer.setSession(this.session);
 			composer.setUidGenerator(this.uidGenerator);
@@ -99,11 +102,11 @@ public class DataComposerFactory {
 			dataComposer = composer;
 
 		} else {
-			String errorMessage = HDIVUtil.getMessage("strategy.error", this.config.getStrategy().toString());
+			String errorMessage = HDIVUtil.getMessage(request, "strategy.error", this.config.getStrategy().toString());
 			throw new HDIVException(errorMessage);
 		}
 
-		this.initDataComposer(dataComposer, request);
+		this.initDataComposer(dataComposer, context);
 
 		return dataComposer;
 	}
@@ -113,11 +116,12 @@ public class DataComposerFactory {
 	 * 
 	 * @param dataComposer
 	 *            IDataComposer instance
-	 * @param request
-	 *            current HttpServletRequest instance
+	 * @param context
+	 *            current request context
 	 */
-	protected void initDataComposer(IDataComposer dataComposer, HttpServletRequest request) {
+	protected void initDataComposer(IDataComposer dataComposer, RequestContext context) {
 
+		HttpServletRequest request = context.getRequest();
 		String hdivStateParamName = (String) request.getSession().getAttribute(Constants.HDIV_PARAMETER);
 		String hdivState = request.getParameter(hdivStateParamName);
 
@@ -126,9 +130,9 @@ public class DataComposerFactory {
 		if (preState != null && preState.length() > 0) {
 
 			// We are modifying an existing state, preload dataComposer with it
-			IState state = this.stateUtil.restoreState(preState);
+			IState state = this.stateUtil.restoreState(context, preState);
 			if (state.getPageId() > 0) {
-				IPage page = this.session.getPage(state.getPageId());
+				IPage page = this.session.getPage(context, state.getPageId());
 				if (page != null) {
 					dataComposer.startPage(page);
 				}
@@ -140,9 +144,9 @@ public class DataComposerFactory {
 		} else if (this.reuseExistingPage(request)) {
 
 			if (hdivState != null && hdivState.length() > 0) {
-				IState state = this.stateUtil.restoreState(hdivState);
+				IState state = this.stateUtil.restoreState(context, hdivState);
 				if (state.getPageId() > 0) {
-					IPage page = this.session.getPage(state.getPageId());
+					IPage page = this.session.getPage(context, state.getPageId());
 					dataComposer.startPage(page);
 				} else {
 					dataComposer.startPage(hdivState);

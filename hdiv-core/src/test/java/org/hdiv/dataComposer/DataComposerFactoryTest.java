@@ -18,7 +18,6 @@ package org.hdiv.dataComposer;
 import javax.servlet.http.HttpServletRequest;
 
 import org.hdiv.AbstractHDIVTestCase;
-import org.hdiv.util.HDIVUtil;
 import org.springframework.mock.web.MockHttpServletRequest;
 
 public class DataComposerFactoryTest extends AbstractHDIVTestCase {
@@ -32,7 +31,7 @@ public class DataComposerFactoryTest extends AbstractHDIVTestCase {
 
 	public void testNewInstance() {
 
-		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		HttpServletRequest request = this.getMockRequest();
 		IDataComposer dataComposer = this.dataComposerFactory.newInstance(request);
 
 		assertTrue(dataComposer instanceof DataComposerMemory);
@@ -40,7 +39,7 @@ public class DataComposerFactoryTest extends AbstractHDIVTestCase {
 
 	public void testNewInstanceAjax() {
 
-		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
+		MockHttpServletRequest request = this.getMockRequest();
 
 		IDataComposer dataComposer = this.dataComposerFactory.newInstance(request);
 
@@ -64,7 +63,7 @@ public class DataComposerFactoryTest extends AbstractHDIVTestCase {
 
 	public void testNewInstanceAjaxNoParameter() {
 
-		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
+		MockHttpServletRequest request = this.getMockRequest();
 
 		IDataComposer dataComposer = this.dataComposerFactory.newInstance(request);
 
@@ -87,7 +86,7 @@ public class DataComposerFactoryTest extends AbstractHDIVTestCase {
 
 	public void testNewInstancePjax() {
 
-		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
+		MockHttpServletRequest request = this.getMockRequest();
 
 		IDataComposer dataComposer = this.dataComposerFactory.newInstance(request);
 

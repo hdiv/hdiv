@@ -20,7 +20,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.hdiv.AbstractHDIVTestCase;
-import org.hdiv.util.HDIVUtil;
 
 public class HdivRequestDataValueProcessorTest extends AbstractHDIVTestCase {
 
@@ -35,7 +34,7 @@ public class HdivRequestDataValueProcessorTest extends AbstractHDIVTestCase {
 
 	public void testProcessUrl() {
 
-		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		HttpServletRequest request = this.getMockRequest();
 		String url = "/testAction.do";
 
 		String result = this.dataValueProcessor.processUrl(request, url);
@@ -47,7 +46,7 @@ public class HdivRequestDataValueProcessorTest extends AbstractHDIVTestCase {
 
 		this.getConfig().setAvoidValidationInUrlsWithoutParams(true);
 
-		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		HttpServletRequest request = this.getMockRequest();
 		String url = "/testAction.do";
 
 		String result = this.dataValueProcessor.processUrl(request, url);
@@ -57,7 +56,7 @@ public class HdivRequestDataValueProcessorTest extends AbstractHDIVTestCase {
 
 	public void testProcessAction() {
 
-		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		HttpServletRequest request = this.getMockRequest();
 		String action = "/testAction.do";
 
 		String result = this.dataValueProcessor.processAction(request, action);
@@ -75,7 +74,7 @@ public class HdivRequestDataValueProcessorTest extends AbstractHDIVTestCase {
 	
 	public void testProcessActionGetMethod() {
 
-		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		HttpServletRequest request = this.getMockRequest();
 		String action = "/onlyget.do"; // Is startPage only for get
 
 		String result = this.dataValueProcessor.processAction(request, action, "GET");
@@ -95,7 +94,7 @@ public class HdivRequestDataValueProcessorTest extends AbstractHDIVTestCase {
 
 		this.getConfig().setAvoidValidationInUrlsWithoutParams(true);
 
-		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		HttpServletRequest request = this.getMockRequest();
 		String action = "/testAction.do";
 
 		String result = this.dataValueProcessor.processAction(request, action);

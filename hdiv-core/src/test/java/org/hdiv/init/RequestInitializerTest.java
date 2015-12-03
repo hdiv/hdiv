@@ -22,7 +22,6 @@ import org.hdiv.AbstractHDIVTestCase;
 import org.hdiv.exception.HDIVException;
 import org.hdiv.filter.RequestWrapper;
 import org.hdiv.filter.ResponseWrapper;
-import org.hdiv.init.RequestInitializer;
 import org.hdiv.util.HDIVUtil;
 import org.springframework.mock.web.MockHttpServletResponse;
 
@@ -36,35 +35,37 @@ public class RequestInitializerTest extends AbstractHDIVTestCase {
 
 	public void testCreateRequestWrapper() {
 
-		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		HttpServletRequest request = this.getMockRequest();
+		HttpServletResponse response = this.getMockResponse();
 
-		RequestWrapper wrapper = this.requestInitializer.createRequestWrapper(request);
+		RequestWrapper wrapper = this.requestInitializer.createRequestWrapper(request, response);
 
 		assertNotNull(wrapper);
 	}
 
 	public void testCreateResponseWrapper() {
 
-		MockHttpServletResponse response = new MockHttpServletResponse();
+		HttpServletRequest request = this.getMockRequest();
+		HttpServletResponse response = this.getMockResponse();
 
-		ResponseWrapper wrapper = this.requestInitializer.createResponseWrapper(response);
+		ResponseWrapper wrapper = this.requestInitializer.createResponseWrapper(request, response);
 
 		assertNotNull(wrapper);
 	}
 
 	public void testInitRequest() {
 
-		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		HttpServletRequest request = this.getMockRequest();
 		HttpServletResponse response = new MockHttpServletResponse();
 
 		this.requestInitializer.initRequest(request, response);
 
-		assertNotNull(HDIVUtil.getHttpServletRequest());
+		assertNotNull(HDIVUtil.getRequestURI(request));
 	}
 
 	public void testEndRequest() {
 
-		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		HttpServletRequest request = this.getMockRequest();
 		HttpServletResponse response = new MockHttpServletResponse();
 		try {
 			this.requestInitializer.endRequest(request, response);

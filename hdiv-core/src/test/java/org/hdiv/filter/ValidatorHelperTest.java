@@ -55,7 +55,7 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 		this.confidentiality = this.getConfig().getConfidentiality();
 
 		DataComposerFactory dataComposerFactory = this.getApplicationContext().getBean(DataComposerFactory.class);
-		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		HttpServletRequest request = this.getMockRequest();
 		this.dataComposer = dataComposerFactory.newInstance(request);
 		HDIVUtil.setDataComposer(dataComposer, request);
 		this.dataComposer.startPage();
@@ -66,7 +66,7 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 	 */
 	public void testValidateHasOnlyHDIVParameter() {
 
-		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
+		MockHttpServletRequest request = this.getMockRequest();
 
 		this.dataComposer.beginRequest("GET", this.targetName);
 
@@ -85,7 +85,7 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 	 */
 	public void testValidateHasActionIsStartPage() {
 
-		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
+		MockHttpServletRequest request = this.getMockRequest();
 
 		this.dataComposer.beginRequest("GET", this.targetName);
 		request.setRequestURI("/testing.do");
@@ -106,7 +106,7 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 	 */
 	public void testValidateHasOneStartParameter() {
 
-		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
+		MockHttpServletRequest request = this.getMockRequest();
 
 		this.dataComposer.beginRequest("GET", this.targetName);
 		String pageState = this.dataComposer.endRequest();
@@ -126,7 +126,7 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 	 */
 	public void testValidateHasOneNotEditableOneParameter() {
 
-		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
+		MockHttpServletRequest request = this.getMockRequest();
 
 		this.dataComposer.beginRequest("GET", this.targetName);
 		this.dataComposer.compose("param1", "value1", false);
@@ -148,7 +148,7 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 	 */
 	public void testValidateHasOneNotEditableMultivalueParameter() {
 
-		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
+		MockHttpServletRequest request = this.getMockRequest();
 
 		this.dataComposer.beginRequest("GET", this.targetName);
 		this.dataComposer.compose("param1", "value1", false);
@@ -174,7 +174,7 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 	 */
 	public void testValidateHasMultiValue() {
 
-		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
+		MockHttpServletRequest request = this.getMockRequest();
 
 		this.dataComposer.beginRequest("GET", this.targetName);
 		this.dataComposer.compose("param1", "value1", false);
@@ -205,7 +205,7 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 	 */
 	public void testValidateHasOneStartParameterOneNotEditableParameter() {
 
-		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
+		MockHttpServletRequest request = this.getMockRequest();
 
 		this.dataComposer.beginRequest("GET", this.targetName);
 		this.dataComposer.compose("param1", "value1", false);
@@ -229,7 +229,7 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 	 */
 	public void testValidateHasOneParameterNotEditableMultivalueIndexOutOfBound() {
 
-		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
+		MockHttpServletRequest request = this.getMockRequest();
 
 		this.dataComposer.beginRequest("GET", this.targetName);
 
@@ -257,7 +257,7 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 	 */
 	public void testValidateHasInvalidNumberOfParameters() {
 
-		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
+		MockHttpServletRequest request = this.getMockRequest();
 
 		this.dataComposer.beginRequest("GET", this.targetName);
 		this.dataComposer.compose("param1", "value1", false);
@@ -283,7 +283,7 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 	 */
 	public void testValidateHasRepeatedValues() {
 
-		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
+		MockHttpServletRequest request = this.getMockRequest();
 
 		this.dataComposer.beginRequest("GET", this.targetName);
 		this.dataComposer.compose("param1", "value1", false);
@@ -309,7 +309,7 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 	 */
 	public void testValidateHasOnlyOneParameterNotEditableIndexOutOfBound() {
 
-		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
+		MockHttpServletRequest request = this.getMockRequest();
 
 		this.dataComposer.beginRequest("GET", this.targetName);
 
@@ -335,7 +335,7 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 	 */
 	public void testValidateHasMemoryWrongStateIndetifier() {
 
-		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
+		MockHttpServletRequest request = this.getMockRequest();
 
 		this.dataComposer.beginRequest("GET", this.targetName);
 		this.dataComposer.compose("param1", "value1", false);
@@ -362,7 +362,7 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 
 	public void testEditableParameterValidation() {
 
-		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
+		MockHttpServletRequest request = this.getMockRequest();
 		request.setMethod("POST");
 
 		this.dataComposer.beginRequest("POST", this.targetName);
@@ -387,7 +387,7 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 
 		getConfig().setShowErrorPageOnEditableValidation(true);
 
-		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
+		MockHttpServletRequest request = this.getMockRequest();
 		request.setMethod("POST");
 
 		this.dataComposer.beginRequest("POST", this.targetName);
@@ -410,11 +410,11 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 	 */
 	public void testValidateCookiesIntegrity() {
 
-		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
+		MockHttpServletRequest request = this.getMockRequest();
 		RequestWrapper requestWrapper = new RequestWrapper(request);
 
 		MockHttpServletResponse response = new MockHttpServletResponse();
-		ResponseWrapper responseWrapper = new ResponseWrapper(response);
+		ResponseWrapper responseWrapper = new ResponseWrapper(request, response);
 
 		responseWrapper.addCookie(new Cookie("name", "value"));
 
@@ -436,7 +436,7 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 
 	public void testValidateWhitespace() {
 
-		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
+		MockHttpServletRequest request = this.getMockRequest();
 		request.setMethod("POST");
 
 		this.dataComposer.beginRequest("POST", "/path/test Action.do");
@@ -452,7 +452,7 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 
 	public void testValidateEncoded() {
 
-		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
+		MockHttpServletRequest request = this.getMockRequest();
 		request.setMethod("POST");
 
 		this.dataComposer.beginRequest("POST", "/path/test%20Action.do");
@@ -468,7 +468,7 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 
 	public void testValidateLongConfidencialValue() {
 
-		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
+		MockHttpServletRequest request = this.getMockRequest();
 
 		this.dataComposer.beginRequest("GET", this.targetName);
 		this.dataComposer.compose("param", "value", false);
@@ -485,7 +485,7 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 
 	public void testParamWithAmpersand() {
 
-		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
+		MockHttpServletRequest request = this.getMockRequest();
 
 		this.dataComposer.beginRequest("GET", this.targetName);
 		this.dataComposer.composeParams("param1=111&amp;param2=Me+%26+You", "GET", "utf-8");
@@ -510,7 +510,7 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 
 	public void testValidateLongLiving() {
 
-		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
+		MockHttpServletRequest request = this.getMockRequest();
 
 		this.dataComposer.startScope("app");
 		this.dataComposer.beginRequest("GET", this.targetName);
@@ -529,7 +529,7 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 
 	public void testEncodeFormAction() throws UnsupportedEncodingException {
 
-		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
+		MockHttpServletRequest request = this.getMockRequest();
 
 		String url = "/sample/TESTÑ/edit";
 
@@ -556,7 +556,7 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 
 	public void testFormActionWithWhitespace() throws UnsupportedEncodingException {
 
-		MockHttpServletRequest request = (MockHttpServletRequest) HDIVUtil.getHttpServletRequest();
+		MockHttpServletRequest request = this.getMockRequest();
 
 		String url = "/sample/TEST TEST/edit";
 		String urlRequest = "/sample/TEST%20TEST/edit";

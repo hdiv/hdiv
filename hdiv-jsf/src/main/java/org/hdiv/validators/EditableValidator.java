@@ -230,7 +230,8 @@ public class EditableValidator implements ComponentValidator {
 
 			// Use Hdiv core message
 			Locale locale = context.getViewRoot().getLocale();
-			msg = HDIVUtil.getMessage(Constants.HDIV_EDITABLE_ERROR_KEY, label, locale);
+			HttpServletRequest request = (HttpServletRequest)context.getExternalContext().getRequest();
+			msg = HDIVUtil.getMessage(request, Constants.HDIV_EDITABLE_ERROR_KEY, label, locale);
 		}
 
 		FacesMessage facesMessage = new FacesMessage(msg);

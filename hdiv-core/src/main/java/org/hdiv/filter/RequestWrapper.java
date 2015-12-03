@@ -25,6 +25,9 @@ import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
+import javax.servlet.AsyncContext;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 
@@ -59,7 +62,7 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 	/**
 	 * Map with request parameters
 	 */
-	protected Map<String, Object> parameters = new HashMap<String, Object>();
+	protected Map<String, String[]> parameters = new HashMap<String, String[]>();
 
 	/**
 	 * The file request parameters.
@@ -87,6 +90,11 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 	 * confidentiality.
 	 */
 	protected boolean cookiesConfidentiality;
+
+	/**
+	 * True if this is an Async request.
+	 */
+	protected boolean isAsyncRequest = false;
 
 	/**
 	 * Constructs a request object wrapping the given request.
@@ -124,8 +132,7 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 			return (String[]) data;
 
 		} else {
-			String[] array = new String[1];
-			array[0] = (String) this.parameters.get(parameter);
+			String[] array = this.parameters.get(parameter);
 			return array;
 		}
 	}
@@ -152,7 +159,8 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 			return array[0];
 
 		} else {
-			return (String) this.parameters.get(parameter);
+			String[] values = this.parameters.get(parameter);
+			return values.length > 0 ? values[0] : null;
 		}
 	}
 
@@ -161,14 +169,14 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 	 * names plus the parameters read from the multipart request.
 	 */
 	@Override
-	public Enumeration<?> getParameterNames() {
+	public Enumeration<String> getParameterNames() {
 
-		Enumeration<?> baseParams = super.getParameterNames();
+		Enumeration<String> baseParams = super.getParameterNames();
 
 		if (!this.isMultipart)
 			return baseParams;
 
-		Vector<Object> list = new Vector<Object>();
+		Vector<String> list = new Vector<String>();
 
 		while (baseParams.hasMoreElements()) {
 			list.add(baseParams.nextElement());
@@ -219,9 +227,9 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 	 */
 	@Override
 	@SuppressWarnings("unchecked")
-	public Enumeration<?> getHeaders(String name) {
+	public Enumeration<String> getHeaders(String name) {
 
-		Enumeration<?> headerValues = super.getHeaders(name);
+		Enumeration<String> headerValues = super.getHeaders(name);
 
 		if (name.equalsIgnoreCase(COOKIE) && this.confidentiality && this.cookiesConfidentiality) {
 
@@ -286,7 +294,7 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 	 * @param value
 	 *            value
 	 */
-	public void addParameter(String name, Object value) {
+	public void addParameter(String name, String[] value) {
 
 		this.parameters.put(name, value);
 
@@ -302,13 +310,25 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 	 * @since HDIV 1.3
 	 */
 	@Override
-	@SuppressWarnings("unchecked")
-	public Map<? extends String, ?> getParameterMap() {
+	public Map<String, String[]> getParameterMap() {
 
-		Map<String, Object> map = new HashMap<String, Object>(super.getRequest().getParameterMap());
+		Map<String, String[]> map = new HashMap<String, String[]>(super.getRequest().getParameterMap());
 		map.putAll(this.parameters);
 
 		return map;
+	}
+
+	@Override
+	public AsyncContext startAsync() throws IllegalStateException {
+		this.isAsyncRequest = true;
+		return super.startAsync();
+	}
+
+	@Override
+	public AsyncContext startAsync(ServletRequest servletRequest, ServletResponse servletResponse)
+			throws IllegalStateException {
+		this.isAsyncRequest = true;
+		return super.startAsync(servletRequest, servletResponse);
 	}
 
 	/**
@@ -372,6 +392,13 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 	 */
 	public boolean isEditableParameter(String parameter) {
 		return this.editableParameters.contains(parameter);
+	}
+
+	/**
+	 * @return the isAsyncRequest
+	 */
+	public boolean isAsyncRequest() {
+		return isAsyncRequest;
 	}
 
 	/**

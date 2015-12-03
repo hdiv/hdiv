@@ -21,7 +21,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 
 import org.hdiv.AbstractHDIVTestCase;
-import org.hdiv.util.HDIVUtil;
 
 public class UserDataTest extends AbstractHDIVTestCase {
 
@@ -33,7 +32,7 @@ public class UserDataTest extends AbstractHDIVTestCase {
 
 	public void testDefault() {
 
-		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		HttpServletRequest request = this.getMockRequest();
 
 		String username = userData.getUsername(request);
 
@@ -45,7 +44,7 @@ public class UserDataTest extends AbstractHDIVTestCase {
 
 	public void testPrincipal() {
 
-		HttpServletRequest request = HDIVUtil.getHttpServletRequest();
+		HttpServletRequest request = this.getMockRequest();
 		HttpServletRequest mockResquest = new HttpServletRequestWrapper(request) {
 			@Override
 			public Principal getUserPrincipal() {

@@ -38,21 +38,14 @@ public class DefaultRequestInitializer implements RequestInitializer {
 
 	public void initRequest(HttpServletRequest request, HttpServletResponse response) {
 
-		// Put the request in threadlocal
-		HDIVUtil.setHttpServletRequest(request);
-
 		// Store request original request uri
 		HDIVUtil.setRequestURI(request.getRequestURI(), request);
-
 	}
 
 	public void endRequest(HttpServletRequest request, HttpServletResponse response) {
-
-		// Erase request from threadlocal
-		HDIVUtil.resetLocalData();
 	}
 
-	public RequestWrapper createRequestWrapper(HttpServletRequest request) {
+	public RequestWrapper createRequestWrapper(HttpServletRequest request, HttpServletResponse response) {
 		RequestWrapper requestWrapper = new RequestWrapper(request);
 		requestWrapper.setConfidentiality(this.config.getConfidentiality());
 		requestWrapper.setCookiesConfidentiality(this.config.isCookiesConfidentialityActivated());
@@ -60,8 +53,8 @@ public class DefaultRequestInitializer implements RequestInitializer {
 		return requestWrapper;
 	}
 
-	public ResponseWrapper createResponseWrapper(HttpServletResponse response) {
-		ResponseWrapper responseWrapper = new ResponseWrapper(response);
+	public ResponseWrapper createResponseWrapper(HttpServletRequest request, HttpServletResponse response) {
+		ResponseWrapper responseWrapper = new ResponseWrapper(request, response);
 		responseWrapper.setConfidentiality(this.config.getConfidentiality());
 		responseWrapper.setAvoidCookiesConfidentiality(!this.config.isCookiesConfidentialityActivated());
 

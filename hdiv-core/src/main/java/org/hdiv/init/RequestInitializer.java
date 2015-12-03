@@ -55,16 +55,20 @@ public interface RequestInitializer {
 	 * 
 	 * @param request
 	 *            HTTP request
+	 * @param response
+	 *            HTTP response
 	 * @return the request wrapper
 	 */
-	RequestWrapper createRequestWrapper(HttpServletRequest request);
+	RequestWrapper createRequestWrapper(HttpServletRequest request, HttpServletResponse response);
 
 	/**
 	 * Create response wrapper.
 	 * 
+	 * @param request
+	 *            HTTP request
 	 * @param response
 	 *            HTTP response
 	 * @return the response wrapper
 	 */
-	ResponseWrapper createResponseWrapper(HttpServletResponse response);
+	ResponseWrapper createResponseWrapper(HttpServletRequest request, HttpServletResponse response);
 }
