@@ -25,6 +25,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.hdiv.AbstractHDIVTestCase;
 import org.hdiv.dataComposer.DataComposerFactory;
 import org.hdiv.dataComposer.IDataComposer;
+import org.hdiv.util.HDIVErrorCodes;
 import org.hdiv.util.HDIVUtil;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
@@ -381,6 +382,7 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 		// Editable errors
 		List<ValidatorError> errors = result.getErrors();
 		assertEquals(1, errors.size());
+		assertEquals(HDIVErrorCodes.EDITABLE_VALIDATION_ERROR, errors.get(0).getType());
 	}
 
 	public void testEditableParameterValidationRedirect() {

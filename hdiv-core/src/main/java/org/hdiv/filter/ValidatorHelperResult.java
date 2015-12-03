@@ -89,14 +89,14 @@ public class ValidatorHelperResult {
 
 	public String toString() {
 		StringBuffer b = new StringBuffer();
-		b.append("Valid: ").append(this.valid);
+		b.append("Valid: ").append(this.valid).append(", ");
 		if (this.errors != null) {
 			for (ValidatorError error : errors) {
 				b.append(" Errorcode: ").append(error.toString());
 			}
 		}
 		if (this.value != null) {
-			b.append(" Value:").append(this.value);
+			b.append(" Value:").append(this.value).append(", ");
 		}
 		if (this.equals(VALIDATION_NOT_REQUIRED)) {
 			b.append(" Type: VALIDATION_NOT_REQUIRED");

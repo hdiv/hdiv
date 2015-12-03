@@ -446,7 +446,7 @@ public abstract class AbstractDataComposer implements IDataComposer {
 			return false;
 		}
 
-		if (this.hdivConfig.isParameterWithoutConfidentiality(context.getRequest(), parameterName)) {
+		if (this.hdivConfig.isParameterWithoutConfidentiality(this.context.getRequest(), parameterName)) {
 			return false;
 		}
 

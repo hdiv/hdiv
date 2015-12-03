@@ -719,11 +719,13 @@ public class ValidatorHelperRequest implements IValidationHelper {
 			} catch (NumberFormatException e) {
 				throw new HDIVException(HDIVErrorCodes.PAGE_ID_INCORRECT, e);
 			}
+			
+			RequestContext context = new RequestContext(request);
 
 			StateScope stateScope = this.stateScopeManager.getStateScope(value);
 			if (stateScope != null) {
 
-				String token = stateScope.getStateToken(new RequestContext(request), stateId);
+				String token = stateScope.getStateToken(context, stateId);
 				return requestSuffix.equals(token);
 			}
 
@@ -733,7 +735,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 				throw new HDIVException(HDIVErrorCodes.PAGE_ID_INCORRECT, e);
 			}
 
-			IPage currentPage = session.getPage(new RequestContext(request), pageId);
+			IPage currentPage = session.getPage(context, pageId);
 
 			if (currentPage == null) {
 				if (log.isErrorEnabled()) {

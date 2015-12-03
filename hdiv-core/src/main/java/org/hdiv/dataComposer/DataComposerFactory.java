@@ -90,7 +90,7 @@ public class DataComposerFactory {
 
 		IDataComposer dataComposer = null;
 
-		RequestContext context = new RequestContext(request);
+		RequestContext context = new RequestContext(request, request.getSession());
 
 		if (this.config.getStrategy().equals(Strategy.MEMORY)) {
 			DataComposerMemory composer = new DataComposerMemory(context);
