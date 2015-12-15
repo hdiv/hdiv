@@ -11,7 +11,7 @@
 		<title>Spring MVC</title>
 
 		<para>
-			Thanks to new
+			Thanks to the new
 			<link
 				xl:href="http://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/web/servlet/support/RequestDataValueProcessor.html">extension point</link>
 			included at Spring 3.1, HDIV
@@ -58,10 +58,10 @@
 ]]></programlisting>
 			</listitem>
 			<listitem>
-				<para>Multipart configuration. Replace Spring MVCs MultipartResolver
-					with HDIVs one.
+				<para>Multipart configuration. Replace Spring MVC's MultipartResolver
+					with the one from HDIV.
 				</para>
-				<para>If commons fileupload is used for multipart processing:</para>
+				<para>If commons-fileupload library is used for multipart processing:</para>
 
 				<programlisting language="xml">
  <![CDATA[
@@ -90,10 +90,10 @@
 			</listitem>
 		</orderedlist>
 		<para>
-			If you are using Spring MVC version previous to 3.1, it's
-			necessary to make an additional step, replacing Spring MVC tld by
-			HDIV tld related with the specific version. In the next example is
-			presented the code for Spring MVC 3.0.4:
+			If you are using a Spring MVC version prior to 3.1, it is
+			necessary to introduce an additional step, replacing Spring MVC tlds with
+			HDIV tlds according to the specific version. The next example shows
+			the code for Spring MVC 3.0.4:
 		</para>
 		<programlisting language="xml">
  <![CDATA[
@@ -148,13 +148,13 @@
 		<title>Grails</title>
 
 		<para>
-			Thanks to the plugin architecture and
+			With the plugin architecture and
 			<link xl:href="http://grails.org/plugin/hdiv">HDIV plugin </link>
 			implementation
-			supported by Grails project, HDIV installation is
-			implemented using
-			BuildConfig.groovy configuration file and adding
-			HDIV plugin to that:
+			supported by Grails, HDIV installation is
+			implemented using the
+			BuildConfig.groovy configuration file adding the
+			HDIV plugin to it:
 		</para>
 		<programlisting language="xml">
  <![CDATA[
@@ -184,7 +184,7 @@ compile ':hdiv:1.0-RC2'
 ]]></programlisting>
 			</listitem>
 			<listitem>
-				<para>Add HDIV listener and Filter within web.xml</para>
+				<para>Add HDIV Listener and Filter within web.xml</para>
 
 				<programlisting language="xml">
  <![CDATA[
@@ -280,7 +280,7 @@ compile ':hdiv:1.0-RC2'
 			The latest Struts 2 version supported by HDIV is Struts 2.0.11. To
 			support higher versions please vote in the
 			<link xl:href="https://issues.apache.org/jira/browse/WW-3718">JIRA issue </link>
-			requested to Struts 2 project. Follow the next steps in order
+			request to the Struts 2 project. Follow the next steps in order
 			to
 			install HDIV in a Struts 2 based web application:
 		</para>
@@ -303,7 +303,7 @@ compile ':hdiv:1.0-RC2'
 ]]></programlisting>
 			</listitem>
 			<listitem>
-				<para>Add HDIV listener and Filter within web.xml</para>
+				<para>Add HDIV Listener and Filter within web.xml</para>
 
 				<programlisting language="xml">
  <![CDATA[

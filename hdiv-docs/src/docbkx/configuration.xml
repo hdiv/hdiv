@@ -8,8 +8,8 @@
 	<title>Configuration</title>
 	<para>
 		HDIV configuration is based on Spring configuration. HDIV has a
-		custom schema to reduce the configuration tasks. First off all we need
-		an spring configuration file to add HDIV configuration.
+		custom schema to reduce the configuration tasks. First of all we need
+		a Spring configuration file to add HDIV configuration.
 	</para>
 
 	<programlisting language="xml">
@@ -23,7 +23,7 @@
 ]]></programlisting>
 
 	<para>
-		From HDIV 2.1.7 version, it is possible to configure HDIV in Java
+		From HDIV version 2.1.7, it is possible to configure HDIV in Java
 		instead of XML.
 	</para>
 	<para>
@@ -42,7 +42,7 @@ public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
 }
 ]]></programlisting>
 
-		There is an example application showing this feature:
+		For an example application showing this feature:
 		<link
 			xl:href="https://github.com/hdiv/hdiv-spring-mvc-showcase/tree/javaconfig">https://github.com/hdiv/hdiv-spring-mvc-showcase/tree/javaconfig
 		</link>
