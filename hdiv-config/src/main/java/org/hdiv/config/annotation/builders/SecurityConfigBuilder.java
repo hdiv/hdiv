@@ -24,12 +24,11 @@ import org.hdiv.regex.PatternMatcherFactory;
  */
 public class SecurityConfigBuilder {
 
-	private HDIVConfig config;
+	protected HDIVConfig config;
 
-	private int maxPagesPerSession;
+	protected int maxPagesPerSession;
 
-	private SessionExpiredConfigure sessionExpiredConfigure = new SessionExpiredConfigure();
-
+	protected SessionExpiredConfigure sessionExpiredConfigure = new SessionExpiredConfigure();
 
 	public SecurityConfigBuilder(PatternMatcherFactory patternMatcherFactory) {
 		this.config = new HDIVConfig();
