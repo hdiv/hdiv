@@ -59,26 +59,25 @@ public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
 		<title>Start Pages</title>
 
 		<para>
-			By default HDIV filter doesn't allow any request that hasn't
-			been registered previously by HDIV. Of course, when an user access
-			the first time is not possible to register the resource (url)
+			By default the HDIV filter does not allow any request that has not
+			been registered previously. Of course, when a user accesses for
+			the first time, it is not possible to register the resource (url)
 			requested
-			by the user. For this case HDIV incorporates the concept of
+			by the user. In this case HDIV uses the concept of
 			start
-			pages that are urls that HDIV doesn't make any kind of
+			pages - URLs to witch HDIV makes no
 			validation. We
 			can see start pages as the home pages
 			of your web site.
 		</para>
 		<para>
 			Note that
-			usually HDIV is applied just to the authenticated part
+			HDIV is usually applied only to authenticated parts
 			of the web page.
 		</para>
 		<para>
-			In the code below there is the configuration code to define an
-			start
-			page to access the web site home page.
+			This example shows the configuration code to define a
+			start page to access the home page of web site.
 			<programlisting language="xml">
 <![CDATA[<hdiv:config>
     <hdiv:startPages>/home.html</hdiv:startPages>
@@ -123,18 +122,16 @@ public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
 		<title>Editable data validation</title>
 
 		<para>As explained above HDIV offers a generic validation
-			functionality that
-			makes possible the application of validation rules
+			functionality to commit the application of validation rules
 			to all editable
-			data (information that comes from web forms fields
-			such as textbox and
-			textarea) sent by the client.
+			data sent by the client. This includes information that comes from web form fields
+			such as textbox and textarea.
 		</para>
 		<para>
 			HDIV includes a
 			default group of
 			validation
-			rules that try to avoid
+			rules that try to avoid the
 			most common risks
 			such as XSS and
 			SQL Injection.
@@ -143,7 +140,7 @@ public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
 			In order to activate HDIV editable
 			validation with the
 			default
-			configuration it's necessary to add the
+			configuration, it is necessary to add the
 			code below to your
 			Spring
 			configuration:
@@ -155,23 +152,20 @@ public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
 ]]></programlisting>
 
 		<para>
-			In addition to the default validations it's possible to create
-			your own custom validations. In order to create your custom
-			validations first of all
-			it's necessary to create a validation entity.
-			A validation entity could contain two kind of patterns:
+			In addition to the default validations it is possible to create
+			your own custom validations. To do this, first
+			it is necessary to create a validation entity, which could contain two kinds of patterns:
 		</para>
 		<itemizedlist>
 
 			<listitem>
 				<para>
 					<emphasis role="bold">AcceptedPattern</emphasis>
-					: the parameter value must accomplish the pattern (whitelist
-					pattern), otherwise HDIV generates an error that is visualized
+					: the parameter value must match the pattern (whitelist), otherwise HDIV generates an error message that is visible
 					within the original form.
-					It's possible also to redirect
+					It is also possible to redirect
 					the user to
-					the HDIV's generic error
+					HDIV's generic error
 					page. For this option add
 					showErrorPageOnEditableValidation="true"
 					to HDIV config entity.
@@ -180,16 +174,15 @@ public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
 			<listitem>
 				<para>
 					<emphasis role="bold">RejectedPattern</emphasis>
-					if the parameter value accomplish the defined pattern (blacklist
-					pattern),
+					if the parameter value matches the defined pattern (blacklist),
 					HDIV
-					generates an error that is visualized within the
-					original form or within HDIV generic error page.
+					generates an error that is visible within the
+					original form or the HDIV generic error page.
 				</para>
 			</listitem>
 		</itemizedlist>
 		<para>
-			In order to create a validation it's necessary to create a
+			In order to create a validation it is necessary to create a
 			validation
 			entity within HDIV config file:
 		</para>
@@ -200,14 +193,12 @@ public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
 </hdiv:validation>
 ]]></programlisting>
 
-		<para>Once validation has been defined, it's necessary to make an
-			additional step to activate the validation, add a validation rule to
+		<para>Once validation has been defined, it is necessary to make an
+			additional step to activate it. To do this, add a validation rule to the
 			editableValidations entity.
 			The validation rule is applied to a
-			specific url pattern. In the next
-			example we can see an example to
-			apply the validations defined in the
-			above example:
+			specific url pattern. We see here an example to
+			apply the validation as defined above:
 		</para>
 
 		<programlisting language="xml">
@@ -216,10 +207,10 @@ public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
 </hdiv:editableValidations>
 ]]></programlisting>
 
-		<para>By default all editable fields of the request are validated. It
-			is possible to create a finer configuration and apply some rules only
-			to some fields.
-			In the next example 'customValidation' rule is applied only to 'name'
+		<para>All editable fields of the request are validated by default. It
+			is possible to refine the configuration to apply selected rules
+			to only some fields.
+			In the next example the 'customValidation' rule is applied only to 'name'
 			and 'description' fields:
 		</para>
 
@@ -253,11 +244,11 @@ public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
 		</para>
 
 		<para>
-			In the case of Grails framework this configuration must be
+			For Grails framework, this configuration must be
 			included
-			within Config.groovy file. In the next code we can see the
+			within Config.groovy file. In following code shows the
 			validations
-			defined within
+			defined within the
 			HDIV and Grails reference application:
 		</para>
 		<programlisting language="xml">
