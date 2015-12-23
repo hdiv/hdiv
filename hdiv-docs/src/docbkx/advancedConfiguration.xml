@@ -746,19 +746,18 @@ log4j.logger.org.hdiv=INFO,R
 		</para>
 		<programlisting language="">
 		<![CDATA[
-[type of attack];[action];[parameter];[value];[userLocalIP];[IP];[userId]
+[attack type];[url];[parameterName];[parameterValue];[originalParameterValue];[userLocalIP];[IP];[userId];[validationRuleName]
 ]]></programlisting>
 
 		<para>
-			[type of attack]: Type of attack detected by HDIV. Its possible
-			values
-			are:
+			[attack type]: Type of the attack detected by HDIV. It's possible
+			values are:
 		</para>
 		<itemizedlist>
 			<listitem>
 				<para>
 					<code>INVALID_ACTION</code>
-					: The action received in the request does not match the state
+					: The action or url received in the request does not match the state
 					action.
 				</para>
 			</listitem>
@@ -834,32 +833,32 @@ log4j.logger.org.hdiv=INFO,R
 		</itemizedlist>
 
 		<para>
-			[action]: url or action name the HTTP request was directed to.
+			[url]: the url or action name of the HTTP request.
 		</para>
 		<para>
-			[parameter]: the parameter in the HTTP request.
-		</para>
-
-		<para>
-			[value]: parameter value.
+			[parameterName]: the parameter in the HTTP request.
 		</para>
 		<para>
-			[userLocalIP]: IP address if the request has been made through a
-			Proxy.
+			[parameterValue]: parameter value submitted bu the user.
+		</para>
+		<para>
+			[originalParameterValue]: original parameter value when it has been manipulated by the user.
+		</para>
+		<para>
+			[userLocalIP]: IP address if the request has been made through a Proxy.
 		</para>
 		<para>
 			[IP]: IP address the request was made from.
 		</para>
 		<para>
-			[userId]: User identifier. The way each web application gets the
-			user may vary
-			from application to application and that’s why the
+			[userId]: User identifier. Each web application gets
+			user identifier in a diferent way. That is why the IUserData
 			interface
-			(IUserData) has been defined. This interface makes possible
-			to
-			implement getting the user identity in different ways allowing the
-			use
-			of HDIV to any web application.
+			has been crated. This interface makes possible to
+			implement application specific system to get user identity.
+		</para>
+		<para>
+			[validationRuleName]: If it is an editable validation attack, this field contains the validation rule that has stoped the request.
 		</para>
 		<para>
 			Let’s see examples of an attacks detected by HDIV:
