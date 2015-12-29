@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
-
-<beans>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
 	<!-- State token id generator -->
 	<bean id="uidGenerator" class="org.hdiv.idGenerator.RandomGuidUidGenerator" />
 	
 	<!-- Page id generator -->
 	<bean id="pageIdGenerator" class="org.hdiv.idGenerator.SequentialPageIdGenerator"
-		singleton="false" />
+		scope="prototype" />
 
 	<!--LOGGER -->
 	<bean id="userData" class="org.hdiv.logs.UserData" />
-	<bean id="logger" class="org.hdiv.logs.Logger"/>
+	<bean id="logger" class="org.hdiv.logs.Logger" />
 
-	<bean id="cache" class="org.hdiv.session.StateCache" singleton="false">
+	<bean id="cache" class="org.hdiv.session.StateCache" scope="prototype">
 		<property name="maxSize">
 			<value>5</value>
 		</property>
 	</bean>
-	
+
 	<!--CONTEXT BEANS -->
 	<bean id="sessionHDIV" class="org.hdiv.session.SessionHDIV">
 	</bean>
@@ -63,7 +63,6 @@
 	<bean id="sessionInitializer" class="org.hdiv.init.DefaultSessionInitializer">
 		<property name="config" ref="config" />
 	</bean>
-	
 	<bean id="validatorHelper" class="org.hdiv.filter.ValidatorHelperRequest"
 		init-method="init">
 		<property name="stateUtil" ref="stateUtil" />
