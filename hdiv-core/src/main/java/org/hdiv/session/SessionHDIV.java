@@ -41,6 +41,11 @@ import org.springframework.beans.factory.BeanFactoryAware;
 public class SessionHDIV implements ISession, BeanFactoryAware {
 
 	/**
+	 * Prefix for the key of the pages stored in session.
+	 */
+	private static final String PAGE_ID_KEY_PREFIX = "hdiv-page-";
+
+	/**
 	 * Commons Logging instance.
 	 */
 	private static final Log log = LogFactory.getLog(SessionHDIV.class);
@@ -283,7 +288,7 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 		}
 
 		HttpSession session = context.getSession();
-		return (IPage) session.getAttribute(pageId + "");
+		return (IPage) session.getAttribute(PAGE_ID_KEY_PREFIX + pageId);
 	}
 
 	/**
@@ -301,7 +306,7 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 	protected void addPageToSession(RequestContext context, IPage page, boolean isPartial) {
 
 		HttpSession session = context.getSession();
-		session.setAttribute(page.getName(), page);
+		session.setAttribute(PAGE_ID_KEY_PREFIX + page.getName(), page);
 
 		if (log.isDebugEnabled()) {
 			log.debug("Added new page with id:" + page.getId());
@@ -320,7 +325,7 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 	protected void removePageFromSession(RequestContext context, int pageId) {
 
 		HttpSession session = context.getSession();
-		session.removeAttribute(pageId + "");
+		session.removeAttribute(PAGE_ID_KEY_PREFIX + pageId);
 
 		if (log.isDebugEnabled()) {
 			log.debug("Deleted page with id:" + pageId);

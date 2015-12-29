@@ -6,7 +6,8 @@ Release 2.2.0
 ==================================
  * Remove Cipher and Hash strategies.
  * Servlet API >= 3.0
- * Support asynchronous requests
+ * Support asynchronous requests.
+ * Add 'hdiv-page-' prefix to pages stored in user session.
  
 Release 2.1.14
 ==================================
