@@ -70,6 +70,11 @@ public abstract class AbstractUrlProcessor {
 
 		UrlData urlData = new UrlData(url, method);
 
+		// Remove URi template params
+		if (urlData.hasUriTemplate()) {
+			url = urlData.getUrlWithOutUriTemplate();
+		}
+
 		// Extract the anchor
 		if (url.indexOf('#') >= 0) {
 			String anchor = url.substring(url.indexOf('#') + 1);
@@ -294,6 +299,7 @@ public abstract class AbstractUrlProcessor {
 
 		StringBuffer sb = new StringBuffer();
 		sb.append(url).append(separator).append(hdivParameter).append("=").append(stateParam);
+		sb.append(urlData.getUriTemplate().replace("?", "&"));
 
 		url = appendAnchor(sb.toString(), urlData.getAnchor());
 

@@ -15,7 +15,10 @@
  */
 package org.hdiv.urlProcessor;
 
+import java.io.StringWriter;
 import java.util.Map;
+
+import org.springframework.web.util.UriTemplate;
 
 /**
  * Contains the data of an url.
@@ -82,6 +85,13 @@ public class UrlData {
 	private String method;
 
 	/**
+	 * UriTemplate https://tools.ietf.org/html/rfc6570
+	 * 
+	 * @since 2.2.0
+	 */
+	private UriTemplate uriTemplate;
+
+	/**
 	 * Constructor
 	 * 
 	 * @param url
@@ -92,6 +102,9 @@ public class UrlData {
 	public UrlData(String url, String method) {
 		this.originalUrl = url;
 		this.method = method;
+		if (!"".equals(url)) {
+			this.uriTemplate = new UriTemplate(url);
+		}
 	}
 
 	/**
@@ -276,6 +289,28 @@ public class UrlData {
 	 */
 	public void setUrlParams(String urlParams) {
 		this.urlParams = urlParams;
+	}
+
+	public boolean hasUriTemplate() {
+		return uriTemplate != null && uriTemplate.getVariableNames().size() > 0;
+	}
+
+	public String getUrlWithOutUriTemplate() {
+		return this.originalUrl.replace(getUriTemplate(), "");
+	}
+
+	public String getUriTemplate() {
+		if (!hasUriTemplate())
+			return "";
+
+		StringWriter sw = new StringWriter();
+		sw.append("{");
+		for (String variable : uriTemplate.getVariableNames()) {
+			sw.append(variable);
+		}
+		sw.append("}");
+
+		return sw.toString();
 	}
 
 }

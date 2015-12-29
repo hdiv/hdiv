@@ -243,6 +243,8 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 					String replaced = this.replaceCookieString(element, sessionCookies);
 					values.add(replaced);
 				}
+			} else {
+				return headerValues;
 			}
 			return values.elements();
 		}
@@ -378,7 +380,7 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 	 * 
 	 * @param parameter
 	 *            new parameter name
-	 * */
+	 */
 	public void addEditableParameter(String parameter) {
 		this.editableParameters.add(parameter);
 	}
