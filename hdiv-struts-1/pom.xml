@@ -57,14 +57,6 @@
 			<artifactId>struts-el</artifactId>
 			<version>${org.struts.version}</version>
 		</dependency>
-
-		<!-- for unit tests -->
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>3.8.2</version>
-			<scope>test</scope>
-		</dependency>
 	</dependencies>
 
 	<build>
