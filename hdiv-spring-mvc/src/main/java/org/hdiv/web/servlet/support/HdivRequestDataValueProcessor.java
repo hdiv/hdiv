@@ -68,6 +68,7 @@ public class HdivRequestDataValueProcessor implements RequestDataValueProcessor 
 	 * <li>option</li>
 	 * <li>radio</li>
 	 * <li>select</li>
+	 * <li>submit</li>
 	 * </ul>
 	 * Editable input types:
 	 * <ul>
