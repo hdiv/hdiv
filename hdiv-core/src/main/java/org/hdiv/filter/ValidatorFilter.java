@@ -101,30 +101,34 @@ public class ValidatorFilter extends OncePerRequestFilter {
 	/**
 	 * Initialize required dependencies.
 	 */
-	@Override
-	protected void initFilterBean() throws ServletException {
+	protected void initDependencies() {
 
-		ServletContext servletContext = getServletContext();
-		WebApplicationContext context = WebApplicationContextUtils.getRequiredWebApplicationContext(servletContext);
+		if (this.hdivConfig == null) {
+			synchronized (this) {
+				ServletContext servletContext = getServletContext();
+				WebApplicationContext context = WebApplicationContextUtils
+						.getRequiredWebApplicationContext(servletContext);
 
-		this.hdivConfig = context.getBean(HDIVConfig.class);
-		this.validationHelper = context.getBean(IValidationHelper.class);
+				this.hdivConfig = context.getBean(HDIVConfig.class);
+				this.validationHelper = context.getBean(IValidationHelper.class);
 
-		String[] names = context.getBeanNamesForType(IMultipartConfig.class);
-		if (names.length > 1) {
-			throw new HDIVException("More than one bean of type 'multipartConfig' is defined.");
+				String[] names = context.getBeanNamesForType(IMultipartConfig.class);
+				if (names.length > 1) {
+					throw new HDIVException("More than one bean of type 'multipartConfig' is defined.");
+				}
+				if (names.length == 1) {
+					this.multipartConfig = context.getBean(IMultipartConfig.class);
+				} else {
+					// For applications without Multipart requests
+					this.multipartConfig = null;
+				}
+
+				this.userData = context.getBean(IUserData.class);
+				this.logger = context.getBean(Logger.class);
+				this.errorHandler = context.getBean(ValidatorErrorHandler.class);
+				this.requestInitializer = context.getBean(RequestInitializer.class);
+			}
 		}
-		if (names.length == 1) {
-			this.multipartConfig = context.getBean(IMultipartConfig.class);
-		} else {
-			// For applications without Multipart requests
-			this.multipartConfig = null;
-		}
-
-		this.userData = context.getBean(IUserData.class);
-		this.logger = context.getBean(Logger.class);
-		this.errorHandler = context.getBean(ValidatorErrorHandler.class);
-		this.requestInitializer = context.getBean(RequestInitializer.class);
 	}
 
 	/**
@@ -142,6 +146,9 @@ public class ValidatorFilter extends OncePerRequestFilter {
 	 */
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
+
+		// Initialize dependencies
+		this.initDependencies();
 
 		// Initialize request scoped data
 		this.requestInitializer.initRequest(request, response);
