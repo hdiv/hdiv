@@ -84,6 +84,7 @@ public class HdivRequestDataValueProcessor implements RequestDataValueProcessor 
 		this.noEditableTypes.add("option");
 		this.noEditableTypes.add("radio");
 		this.noEditableTypes.add("select");
+		this.noEditableTypes.add("submit");		
 	}
 
 	/**
