@@ -8,27 +8,23 @@
 	<title>Advanced Configuration</title>
 	<para>
 		In addition to the configuration options presented in the chapter
-		above HDIV offers more advanced options to cover all the user needs.
+		above, HDIV offers more advanced options to cover all user needs.
 	</para>
 
 	<section xml:id="advancedConfiguration-startparameters">
 		<title>Start Parameters</title>
 
 		<para>
-			By default HDIV filter doesn't allow any request parameter that
-			hasn't been registered previously by HDIV.
+			By default the HDIV filter does not allow any request parameter that
+			has not been registered previously by HDIV.
 			In some cases parameters
-			are not created in server side or has a random
-			value. For this case
-			HDIV incorporates the concept of start
-			parameters that are parameter
-			names that HDIV doesn't make any kind
-			of validation.
+			are not created on the server side or they have a random
+			value, in which case they are incorporated as parameter
+			names for which HDIV makes no kind of validation.
 		</para>
 		<para>
-			In the code below there is the configuration code to define an
-			start
-			parameter.
+			The following shows the configuration code to define a
+			start parameter.
 			<programlisting language="xml">
 <![CDATA[
 <hdiv:config>
@@ -58,7 +54,7 @@ public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
 
 		<para>
 			In the examples above, the parameter is not validated in all the
-			application. If we want to restrict that to only one or some pages,
+			application. If we want to prevent validation in some pages,
 			there is another configuration option.
 		</para>
 
@@ -97,17 +93,17 @@ public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
 	<section xml:id="advancedConfiguration-sessionexpiration">
 		<title>Session expiration</title>
 		<para>
-			When an user makes a request to an expired web session, HDIV
-			adds the possibility to redirect the user to 'loginPage' instead of
+			When a user makes a request to an expired web session, HDIV
+			adds the possibility of redirecting the user to the 'loginPage' instead of
 			showing HDIV error pages.
 		</para>
 		<para>
-			In the case web session has not expired but the page state was
-			removed from session, user is redirected to 'homePage' to continue
+			If the web session has not expired but the page's state has been
+			removed from session, the user is redirected to the 'homePage' to continue
 			browsing without showing the error page.
 		</para>
 		<para>
-			For that you can use the code below:
+			In this case the following can be use:
 		</para>
 		<programlisting language="xml">
 <![CDATA[
@@ -140,7 +136,7 @@ public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
 		<title>Execution strategy</title>
 
 		<para>
-			Having the same objectives, HDIV has only one strategy:
+			HDIV has only one strategy:
 		</para>
 
 		<itemizedlist>
@@ -157,13 +153,13 @@ public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
 					(_HDIV_STATE_) is added to each request.
 					This parameter contains
 					the identifier
-					that makes possible to get the
-					state from session.
+					which allows access to
+					the state from the HttpSession.
 					In this
-					strategy
+					strategy,
 					non editable
-					values are hidden as
-					well guaranteeing
+					values are hidden
+					to guarantee
 					confidentiality.
 				</para>
 			</listitem>
@@ -175,19 +171,18 @@ public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
 	<section xml:id="advancedConfiguration-confidentiality">
 		<title>Confidentiality</title>
 		<para>
-			HDIV guarantees the confidentiality of the data as well. Usually
-			lots
-			of the data sent to the client has key information for the
-			attackers
+			HDIV guarantees the confidentiality of data. Usually
+			data sent to the client has key information for
+			attackers,
 			such as database registry identifiers, column or table
 			names, web
 			directories, etc.
 			All these values are hidden by HDIV to
-			avoid a
-			malicious use of them.
+			avoid there
+			malicious use.
 		</para>
 		<para>
-			For example a link of this type,
+			For example, a link of this type,
 			<code>http://www.host.com?data1=34</code>
 			is replaced
 			by
@@ -197,10 +192,9 @@ public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
 			identifiers.
 		</para>
 		<para>
-			By default the
+			By default
 			confidentiality
-			is activated (true value) but it's
-			possible to turn off
+			is activated (true value) but can be switched off
 			using an
 			attribute within HDIV config entity:
 		</para>
