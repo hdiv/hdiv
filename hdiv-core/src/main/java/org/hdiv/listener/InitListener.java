@@ -26,6 +26,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hdiv.init.ServletContextInitializer;
 import org.hdiv.init.SessionInitializer;
+import org.hdiv.util.HDIVUtil;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
@@ -102,7 +103,7 @@ public class InitListener implements ServletContextListener, HttpSessionListener
 	 */
 	protected void initServletContext(ServletContext servletContext) {
 
-		WebApplicationContext wac = WebApplicationContextUtils.getRequiredWebApplicationContext(servletContext);
+		WebApplicationContext wac = HDIVUtil.findWebApplicationContext(servletContext);
 
 		// Get initializer instances
 		this.servletContextInitializer = wac.getBean(ServletContextInitializer.class);

@@ -37,8 +37,8 @@ import org.hdiv.logs.IUserData;
 import org.hdiv.logs.Logger;
 import org.hdiv.util.Constants;
 import org.hdiv.util.HDIVErrorCodes;
+import org.hdiv.util.HDIVUtil;
 import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.context.support.WebApplicationContextUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 /**
@@ -106,8 +106,7 @@ public class ValidatorFilter extends OncePerRequestFilter {
 		if (this.hdivConfig == null) {
 			synchronized (this) {
 				ServletContext servletContext = getServletContext();
-				WebApplicationContext context = WebApplicationContextUtils
-						.getRequiredWebApplicationContext(servletContext);
+				WebApplicationContext context = HDIVUtil.findWebApplicationContext(servletContext);
 
 				this.hdivConfig = context.getBean(HDIVConfig.class);
 				this.validationHelper = context.getBean(IValidationHelper.class);

@@ -15,6 +15,7 @@
  */
 package org.hdiv.util;
 
+import java.util.Enumeration;
 import java.util.Locale;
 import java.util.Random;
 import java.util.regex.Pattern;
@@ -33,6 +34,8 @@ import org.hdiv.exception.HDIVException;
 import org.hdiv.urlProcessor.FormUrlProcessor;
 import org.hdiv.urlProcessor.LinkUrlProcessor;
 import org.springframework.context.MessageSource;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 /**
  * Class containing utility methods for access HDIV components: IDataComposer, IDataValidator, IApplication, ISession.
@@ -52,13 +55,21 @@ public class HDIVUtil {
 	private static Log log = LogFactory.getLog(HDIVUtil.class);
 
 	public static final String APPLICATION_SERVLETCONTEXT_KEY = "APPLICATION_SERVLETCONTEXT_KEY";
+
 	public static final String MESSAGESOURCE_SERVLETCONTEXT_KEY = "MESSAGESOURCE_SERVLETCONTEXT_KEY";
+
 	public static final String HDIVCONFIG_SERVLETCONTEXT_KEY = "HDIVCONFIG_SERVLETCONTEXT_KEY";
+
 	public static final String DATACOMPOSER_REQUEST_KEY = "DATACOMPOSER_REQUEST_KEY";
+
 	public static final String REQUESTURI_REQUEST_KEY = "REQUESTURI_REQUEST_KEY";
+
 	public static final String BASEURL_REQUEST_KEY = "BASEURL_REQUEST_KEY";
+
 	public static final String LINKURLPROCESSOR_SERVLETCONTEXT_KEY = "LINKURLPROCESSOR_SERVLETCONTEXT_KEY";
+
 	public static final String FORMURLPROCESSOR_SERVLETCONTEXT_KEY = "FORMURLPROCESSOR_SERVLETCONTEXT_KEY";
+
 	public static final String CURRENT_PAGE_KEY = "CURRENT_PAGE_KEY";
 
 	public static Pattern intPattern = Pattern.compile("[0-9]+");
@@ -484,6 +495,44 @@ public class HDIVUtil {
 			}
 		}
 		return null;
+	}
+
+	/**
+	 * Find a unique {@code WebApplicationContext} for this web app: either the root web app context (preferred) or a
+	 * unique {@code WebApplicationContext} among the registered {@code ServletContext} attributes (typically coming
+	 * from a single {@code DispatcherServlet} in the current web application).
+	 * <p>
+	 * Note that {@code DispatcherServlet}'s exposure of its context can be controlled through its
+	 * {@code publishContext} property, which is {@code true} by default but can be selectively switched to only publish
+	 * a single context despite multiple {@code DispatcherServlet} registrations in the web app.
+	 * 
+	 * @param sc
+	 *            ServletContext to find the web application context for
+	 * @return the desired WebApplicationContext for this web app, or {@code null} if none
+	 * @since 4.2
+	 * @see #getWebApplicationContext(ServletContext)
+	 * @see ServletContext#getAttributeNames()
+	 */
+	public static WebApplicationContext findWebApplicationContext(ServletContext sc) {
+		WebApplicationContext wac = WebApplicationContextUtils.getWebApplicationContext(sc);
+		if (wac == null) {
+			Enumeration<String> attrNames = sc.getAttributeNames();
+			while (attrNames.hasMoreElements()) {
+				String attrName = attrNames.nextElement();
+				Object attrValue = sc.getAttribute(attrName);
+				if (attrValue instanceof WebApplicationContext) {
+					if (wac != null) {
+						throw new IllegalStateException("No unique WebApplicationContext found: more than one "
+								+ "DispatcherServlet registered with publishContext=true?");
+					}
+					wac = (WebApplicationContext) attrValue;
+				}
+			}
+		}
+		if (wac == null) {
+			throw new IllegalStateException("No WebApplicationContext found: no ContextLoaderListener registered?");
+		}
+		return wac;
 	}
 
 }
