@@ -34,28 +34,15 @@ public class RequestContext {
 
 	public RequestContext(HttpServletRequest request) {
 		this.request = request;
-		this.session = request.getSession();
 	}
 
 	public RequestContext(HttpSession session) {
 		this.session = session;
 	}
 
-	public RequestContext(HttpServletRequest request, HttpSession session) {
-		this.request = request;
-		this.session = session;
-	}
-
 	public RequestContext(HttpServletRequest request, HttpServletResponse response) {
 		this.request = request;
 		this.response = response;
-		this.session = request.getSession();
-	}
-
-	public RequestContext(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
-		this.request = request;
-		this.response = response;
-		this.session = session;
 	}
 
 	/**
@@ -76,6 +63,9 @@ public class RequestContext {
 	 * @return the session
 	 */
 	public HttpSession getSession() {
+		if (session == null) {
+			return request.getSession();
+		}
 		return session;
 	}
 

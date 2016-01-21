@@ -89,7 +89,7 @@ public abstract class AbstractHDIVTestCase extends TestCase {
 		HttpServletResponse response = new MockHttpServletResponse();
 		HttpSession httpSession = request.getSession();
 		ServletContext servletContext = httpSession.getServletContext();
-		this.requestContext = new RequestContext(request, response, httpSession);
+		this.requestContext = new RequestContext(request, response);
 		// Store objects for teardown cleanup
 		this.mockRequest = request;
 		this.mockResponse = (MockHttpServletResponse)response;
