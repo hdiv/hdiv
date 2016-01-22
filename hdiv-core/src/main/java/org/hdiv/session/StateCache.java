@@ -55,19 +55,15 @@ public class StateCache implements IStateCache {
 	/**
 	 * Adds a new page identifier to the cache.
 	 * 
-	 * @param pageId
-	 *            page identifier to add
-	 * @param currentPageId
-	 *            page identifier of the current request. It can be null if no state id is present.
+	 * @param pageId page identifier to add
+	 * @param currentPageId page identifier of the current request. It can be null if no state id is present.
 	 * 
-	 * @param isRefreshRequest
-	 *            if request is a refresh request
+	 * @param isRefreshRequest if request is a refresh request
 	 * 
-	 * @param isAjaxRequest
-	 *            if request is an ajax request
+	 * @param isAjaxRequest if request is an ajax request
 	 * 
 	 * @return If the cache has reached its maximum size, less important identifier is returned in order to delete it
-	 *         from session. Otherwise, null will be returned.
+	 * from session. Otherwise, null will be returned.
 	 */
 	public synchronized Integer addPage(int pageId, Integer currentPageId, boolean isRefreshRequest,
 			boolean isAjaxRequest) {
@@ -76,7 +72,8 @@ public class StateCache implements IStateCache {
 			// Page id already exist in session
 			return null;
 
-		} else {
+		}
+		else {
 			Integer removedKey = this.cleanBuffer(currentPageId, isRefreshRequest, isAjaxRequest);
 			this.pageIds.add(pageId);
 
@@ -92,14 +89,11 @@ public class StateCache implements IStateCache {
 	 * If the buffer <code>pageIds</code> has reached its maximum size <code>maxSize</code>, one page is deleted. If
 	 * current page is the last one, the oldest key is removed, otherwise any newer page is removed
 	 * 
-	 * @param currentPageId
-	 *            page identifier of the current request. It can be null if no state id is present.
+	 * @param currentPageId page identifier of the current request. It can be null if no state id is present.
 	 * 
-	 * @param isRefreshRequest
-	 *            if request is a refresh request
+	 * @param isRefreshRequest if request is a refresh request
 	 *
-	 * @param isAjaxRequest
-	 *            if request is an ajax request
+	 * @param isAjaxRequest if request is an ajax request
 	 * 
 	 * @return Oldest page identifier in the map <code>pageIds</code>. Null in otherwise.
 	 */
@@ -155,8 +149,7 @@ public class StateCache implements IStateCache {
 	}
 
 	/**
-	 * @param maxSize
-	 *            The maxSize to set.
+	 * @param maxSize The maxSize to set.
 	 */
 	public void setMaxSize(int maxSize) {
 		this.maxSize = maxSize;

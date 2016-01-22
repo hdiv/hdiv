@@ -23,8 +23,7 @@ import org.hdiv.dataComposer.IDataComposer;
 import org.hdiv.util.HDIVUtil;
 
 /**
- * Render a textarea element. This tag is only valid when nested inside a form tag
- * body.
+ * Render a textarea element. This tag is only valid when nested inside a form tag body.
  * 
  * @author Gorka Vicente
  * @see org.apache.struts.taglib.html.TextareaTag
@@ -32,8 +31,8 @@ import org.hdiv.util.HDIVUtil;
 public class TextareaTagHDIV extends TextareaTag {
 
 	/**
-	 * Universal version identifier. Deserialization uses this number to ensure that
-	 * a loaded class corresponds exactly to a serialized object.
+	 * Universal version identifier. Deserialization uses this number to ensure that a loaded class corresponds exactly
+	 * to a serialized object.
 	 */
 	private static final long serialVersionUID = -6699085600980777073L;
 
@@ -52,6 +51,6 @@ public class TextareaTagHDIV extends TextareaTag {
 		dataComposer.composeFormField(prepareName(), "", true, "textarea");
 
 		return super.doStartTag();
-	}	
-	
+	}
+
 }

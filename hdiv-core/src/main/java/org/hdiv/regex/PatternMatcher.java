@@ -31,8 +31,7 @@ public interface PatternMatcher {
 	/**
 	 * Executes the regular expression over the input String.
 	 * 
-	 * @param input
-	 *            text to match over the regular expression
+	 * @param input text to match over the regular expression
 	 * @return true if regular expression matches
 	 */
 	boolean matches(String input);

@@ -61,8 +61,7 @@ public class DefaultSessionInitializer implements SessionInitializer, Applicatio
 	/**
 	 * PageIdGenerator initialization.
 	 * 
-	 * @param httpSession
-	 *            http session
+	 * @param httpSession http session
 	 */
 	protected void initPageIdGenerator(HttpSession httpSession) {
 
@@ -74,8 +73,7 @@ public class DefaultSessionInitializer implements SessionInitializer, Applicatio
 	/**
 	 * State parameter names initialization.
 	 * 
-	 * @param httpSession
-	 *            http session
+	 * @param httpSession http session
 	 * @since HDIV 1.1
 	 */
 	protected void initStateParameterNames(HttpSession httpSession) {
@@ -86,7 +84,8 @@ public class DefaultSessionInitializer implements SessionInitializer, Applicatio
 		if (this.config.isRandomName()) {
 			hdivParameterName = HDIVUtil.createRandomToken(Integer.MAX_VALUE);
 			modifyHdivStateParameterName = HDIVUtil.createRandomToken(Integer.MAX_VALUE);
-		} else {
+		}
+		else {
 			hdivParameterName = this.config.getStateParameterName();
 			modifyHdivStateParameterName = this.config.getModifyStateParameterName();
 		}
@@ -100,8 +99,7 @@ public class DefaultSessionInitializer implements SessionInitializer, Applicatio
 	}
 
 	/**
-	 * @param config
-	 *            the config to set
+	 * @param config the config to set
 	 */
 	public void setConfig(HDIVConfig config) {
 		this.config = config;

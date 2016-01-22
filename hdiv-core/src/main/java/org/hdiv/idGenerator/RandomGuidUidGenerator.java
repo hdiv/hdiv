@@ -18,8 +18,8 @@ package org.hdiv.idGenerator;
 import java.io.Serializable;
 
 /**
- * A key generator that uses the RandomGuid support class. The default
- * implementation used by HDIV to generate random tokens to avoid CSRF attacks.
+ * A key generator that uses the RandomGuid support class. The default implementation used by HDIV to generate random
+ * tokens to avoid CSRF attacks.
  * 
  * @author Gorka Vicente
  * @since HDIV 2.0.4
@@ -27,15 +27,14 @@ import java.io.Serializable;
 public class RandomGuidUidGenerator implements UidGenerator, Serializable {
 
 	private static final long serialVersionUID = 5187183004631843583L;
-	
+
 	/**
 	 * Should the random GUID generated be secure?
 	 */
 	private boolean secure;
 
 	/**
-	 * Returns whether or not the generated random numbers are <i>secure</i>,
-	 * meaning cryptographically strong.
+	 * Returns whether or not the generated random numbers are <i>secure</i>, meaning cryptographically strong.
 	 * 
 	 * @return true if the random is cryptographically strong
 	 */
@@ -44,8 +43,8 @@ public class RandomGuidUidGenerator implements UidGenerator, Serializable {
 	}
 
 	/**
-	 * Sets whether or not the generated random numbers should be <i>secure</i>.
-	 * If set to true, generated GUIDs are cryptographically strong.
+	 * Sets whether or not the generated random numbers should be <i>secure</i>. If set to true, generated GUIDs are
+	 * cryptographically strong.
 	 * @param secure boolean
 	 */
 	public void setSecure(boolean secure) {

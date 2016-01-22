@@ -21,10 +21,8 @@ import java.beans.SimpleBeanInfo;
 import java.util.ArrayList;
 
 /**
- * This is the <code>BeanInfo</code> descriptor for the
- * <code>org.hdiv.strutsel.taglib.html.ELFormTagHDIV</code> class. It is
- * needed to override the default mapping of custom tag attribute names to class
- * attribute names.
+ * This is the <code>BeanInfo</code> descriptor for the <code>org.hdiv.strutsel.taglib.html.ELFormTagHDIV</code> class.
+ * It is needed to override the default mapping of custom tag attribute names to class attribute names.
  * 
  * @author Gorka Vicente
  * @since HDIV 2.0
@@ -36,102 +34,122 @@ public class ELFormTagHDIVBeanInfo extends SimpleBeanInfo {
 
 		try {
 			proplist.add(new PropertyDescriptor("action", ELFormTagHDIV.class, null, "setActionExpr"));
-		} catch (IntrospectionException ex) {
+		}
+		catch (IntrospectionException ex) {
 		}
 
 		try {
 			proplist.add(new PropertyDescriptor("dir", ELFormTagHDIV.class, null, "setDirExpr"));
-		} catch (IntrospectionException ex) {
+		}
+		catch (IntrospectionException ex) {
 		}
 
 		try {
 			proplist.add(new PropertyDescriptor("disabled", ELFormTagHDIV.class, null, "setDisabledExpr"));
-		} catch (IntrospectionException ex) {
+		}
+		catch (IntrospectionException ex) {
 		}
 
 		try {
 			proplist.add(new PropertyDescriptor("enctype", ELFormTagHDIV.class, null, "setEnctypeExpr"));
-		} catch (IntrospectionException ex) {
+		}
+		catch (IntrospectionException ex) {
 		}
 
 		try {
 			proplist.add(new PropertyDescriptor("focus", ELFormTagHDIV.class, null, "setFocusExpr"));
-		} catch (IntrospectionException ex) {
+		}
+		catch (IntrospectionException ex) {
 		}
 
 		try {
 			proplist.add(new PropertyDescriptor("focusIndex", ELFormTagHDIV.class, null, "setFocusIndexExpr"));
-		} catch (IntrospectionException ex) {
+		}
+		catch (IntrospectionException ex) {
 		}
 
 		try {
 			proplist.add(new PropertyDescriptor("lang", ELFormTagHDIV.class, null, "setLangExpr"));
-		} catch (IntrospectionException ex) {
+		}
+		catch (IntrospectionException ex) {
 		}
 
 		try {
 			proplist.add(new PropertyDescriptor("method", ELFormTagHDIV.class, null, "setMethodExpr"));
-		} catch (IntrospectionException ex) {
+		}
+		catch (IntrospectionException ex) {
 		}
 
 		try {
 			proplist.add(new PropertyDescriptor("name", ELFormTagHDIV.class, null, "setNameExpr"));
-		} catch (IntrospectionException ex) {
+		}
+		catch (IntrospectionException ex) {
 		}
 
 		try {
 			proplist.add(new PropertyDescriptor("onreset", ELFormTagHDIV.class, null, "setOnresetExpr"));
-		} catch (IntrospectionException ex) {
+		}
+		catch (IntrospectionException ex) {
 		}
 
 		try {
 			proplist.add(new PropertyDescriptor("onsubmit", ELFormTagHDIV.class, null, "setOnsubmitExpr"));
-		} catch (IntrospectionException ex) {
+		}
+		catch (IntrospectionException ex) {
 		}
 
 		try {
 			proplist.add(new PropertyDescriptor("readonly", ELFormTagHDIV.class, null, "setReadonlyExpr"));
-		} catch (IntrospectionException ex) {
+		}
+		catch (IntrospectionException ex) {
 		}
 
 		try {
 			proplist.add(new PropertyDescriptor("scope", ELFormTagHDIV.class, null, "setScopeExpr"));
-		} catch (IntrospectionException ex) {
+		}
+		catch (IntrospectionException ex) {
 		}
 
 		try {
 			proplist.add(new PropertyDescriptor("scriptLanguage", ELFormTagHDIV.class, null, "setScriptLanguageExpr"));
-		} catch (IntrospectionException ex) {
+		}
+		catch (IntrospectionException ex) {
 		}
 
 		try {
 			proplist.add(new PropertyDescriptor("style", ELFormTagHDIV.class, null, "setStyleExpr"));
-		} catch (IntrospectionException ex) {
+		}
+		catch (IntrospectionException ex) {
 		}
 
 		try {
 			proplist.add(new PropertyDescriptor("styleClass", ELFormTagHDIV.class, null, "setStyleClassExpr"));
-		} catch (IntrospectionException ex) {
+		}
+		catch (IntrospectionException ex) {
 		}
 
 		try {
 			proplist.add(new PropertyDescriptor("styleId", ELFormTagHDIV.class, null, "setStyleIdExpr"));
-		} catch (IntrospectionException ex) {
+		}
+		catch (IntrospectionException ex) {
 		}
 
 		try {
 			proplist.add(new PropertyDescriptor("target", ELFormTagHDIV.class, null, "setTargetExpr"));
-		} catch (IntrospectionException ex) {
+		}
+		catch (IntrospectionException ex) {
 		}
 
 		try {
 			proplist.add(new PropertyDescriptor("type", ELFormTagHDIV.class, null, "setTypeExpr"));
-		} catch (IntrospectionException ex) {
+		}
+		catch (IntrospectionException ex) {
 		}
 
 		try {
 			proplist.add(new PropertyDescriptor("acceptCharset", ELFormTagHDIV.class, null, "setAcceptCharsetExpr"));
-		} catch (IntrospectionException ex) {
+		}
+		catch (IntrospectionException ex) {
 		}
 
 		PropertyDescriptor[] result = new PropertyDescriptor[proplist.size()];

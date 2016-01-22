@@ -29,10 +29,8 @@ public class GrailsHdivRequestDataValueProcessor extends HdivRequestDataValuePro
 	/**
 	 * Process the url for a link.
 	 * 
-	 * @param request
-	 *            request object
-	 * @param url
-	 *            link url
+	 * @param request request object
+	 * @param url link url
 	 * @return processed url
 	 */
 	public String processUrl(HttpServletRequest request, String url) {

@@ -38,8 +38,7 @@ import org.hdiv.util.Constants;
 import org.hdiv.util.HDIVUtil;
 
 /**
- * Struts' RequestProcessor extension to visualize the errors produced in the
- * editable fields detected by HDIV.
+ * Struts' RequestProcessor extension to visualize the errors produced in the editable fields detected by HDIV.
  * 
  * @author Gorka Vicente
  * @author Roberto Velasco
@@ -49,31 +48,28 @@ import org.hdiv.util.HDIVUtil;
 public class HDIVRequestProcessor extends RequestProcessor {
 
 	/**
-	 * The request attributes key under HDIV should store errors produced in the
-	 * editable fields.
+	 * The request attributes key under HDIV should store errors produced in the editable fields.
 	 */
 	private static final String EDITABLE_PARAMETER_ERROR = Constants.EDITABLE_PARAMETER_ERROR;
 
 	/**
-	 * Property that contains the error message to be shown by Struts when the value
-	 * of the editable parameter is not valid.
+	 * Property that contains the error message to be shown by Struts when the value of the editable parameter is not
+	 * valid.
 	 */
 	private static final String HDIV_EDITABLE_ERROR = Constants.HDIV_EDITABLE_ERROR_KEY;
 
 	/**
-	 * Property that contains the error message to be shown by Struts when the value
-	 * of the editable password parameter is not valid.
+	 * Property that contains the error message to be shown by Struts when the value of the editable password parameter
+	 * is not valid.
 	 */
-	private static final String HDIV_EDITABLE_PASSWORD_ERROR = Constants.HDIV_EDITABLE_PASSWORD_ERROR_KEY;	
+	private static final String HDIV_EDITABLE_PASSWORD_ERROR = Constants.HDIV_EDITABLE_PASSWORD_ERROR_KEY;
 
 	/**
 	 * <p>
-	 * If this request was not cancelled, and the request's {@link ActionMapping} has
-	 * not disabled validation, call the <code>validate</code> method of the
-	 * specified {@link ActionForm}, and forward to the input path if there were any
-	 * errors. Return <code>true</code> if we should continue processing, or
-	 * <code>false</code> if we have already forwarded control back to the input
-	 * form.
+	 * If this request was not cancelled, and the request's {@link ActionMapping} has not disabled validation, call the
+	 * <code>validate</code> method of the specified {@link ActionForm}, and forward to the input path if there were any
+	 * errors. Return <code>true</code> if we should continue processing, or <code>false</code> if we have already
+	 * forwarded control back to the input form.
 	 * </p>
 	 * 
 	 * @param request The servlet request we are processing
@@ -82,12 +78,10 @@ public class HDIVRequestProcessor extends RequestProcessor {
 	 * @param mapping The ActionMapping we are using
 	 * @exception IOException if an input/output error occurs
 	 * @exception ServletException if a servlet exception occurs
-	 * @exception InvalidCancelException if a cancellation is attempted without the
-	 *                proper action configuration
+	 * @exception InvalidCancelException if a cancellation is attempted without the proper action configuration
 	 */
-	protected boolean processValidate(HttpServletRequest request, HttpServletResponse response,
-			ActionForm form, ActionMapping mapping) throws IOException, ServletException,
-			InvalidCancelException {
+	protected boolean processValidate(HttpServletRequest request, HttpServletResponse response, ActionForm form,
+			ActionMapping mapping) throws IOException, ServletException, InvalidCancelException {
 
 		if (form == null) {
 			return (true);
@@ -108,7 +102,8 @@ public class HDIVRequestProcessor extends RequestProcessor {
 					log.debug(" Cancelled transaction, skipping validation");
 				}
 				return (true);
-			} else {
+			}
+			else {
 				request.removeAttribute(Globals.CANCEL_KEY);
 				throw new InvalidCancelException();
 			}
@@ -145,8 +140,8 @@ public class HDIVRequestProcessor extends RequestProcessor {
 			if (log.isTraceEnabled()) {
 				log.trace("  Validation failed but no input form available");
 			}
-			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, getInternal()
-					.getMessage("noInput", mapping.getPath()));
+			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
+					getInternal().getMessage("noInput", mapping.getPath()));
 			return (false);
 		}
 
@@ -159,7 +154,8 @@ public class HDIVRequestProcessor extends RequestProcessor {
 		if (moduleConfig.getControllerConfig().getInputForward()) {
 			ForwardConfig forward = mapping.findForward(input);
 			processForwardConfig(request, response, forward);
-		} else {
+		}
+		else {
 			internalModuleRelativeForward(input, request, response);
 		}
 
@@ -168,36 +164,34 @@ public class HDIVRequestProcessor extends RequestProcessor {
 	}
 
 	/**
-	 * Obtains the errors detected by HDIV during the validation process of the
-	 * editable parameters.
+	 * Obtains the errors detected by HDIV during the validation process of the editable parameters.
 	 * 
 	 * @param request The servlet request we are processing
-	 * @return errors detected by HDIV during the validation process of the editable
-	 *         parameters.
+	 * @return errors detected by HDIV during the validation process of the editable parameters.
 	 */
 	public ActionMessages getEditableParametersErrors(HttpServletRequest request) {
 
 		@SuppressWarnings("unchecked")
-		List<ValidatorError> validationErrors = (List<ValidatorError>)  request
-				.getAttribute(EDITABLE_PARAMETER_ERROR);
+		List<ValidatorError> validationErrors = (List<ValidatorError>) request.getAttribute(EDITABLE_PARAMETER_ERROR);
 
 		ActionMessages errors = null;
 		if (validationErrors != null && validationErrors.size() > 0) {
 
 			errors = new ActionMessages();
 
-			for (ValidatorError validationError: validationErrors) {
-				
+			for (ValidatorError validationError : validationErrors) {
+
 				String errorValues = validationError.getParameterValue();
-				
+
 				ActionMessage error = null;
-				if (errorValues.contains(HDIV_EDITABLE_PASSWORD_ERROR)) {					
-					error = new ActionMessage(HDIV_EDITABLE_PASSWORD_ERROR);															
-				} else {			
-					String printedValue = this.createMessageError(errorValues);	
+				if (errorValues.contains(HDIV_EDITABLE_PASSWORD_ERROR)) {
+					error = new ActionMessage(HDIV_EDITABLE_PASSWORD_ERROR);
+				}
+				else {
+					String printedValue = this.createMessageError(errorValues);
 					error = new ActionMessage(HDIV_EDITABLE_ERROR, printedValue);
-				}	
-				errors.add("hdiv.editable." + validationError.getParameterName(), error);				
+				}
+				errors.add("hdiv.editable." + validationError.getParameterName(), error);
 			}
 		}
 		return errors;
@@ -221,7 +215,8 @@ public class HDIVRequestProcessor extends RequestProcessor {
 			}
 			if (values[i].length() > 20) {
 				printedValue.append(TagUtils.getInstance().filter(values[i]).substring(0, 20) + "...");
-			} else {
+			}
+			else {
 				printedValue.append(TagUtils.getInstance().filter(values[i]));
 			}
 
@@ -233,65 +228,67 @@ public class HDIVRequestProcessor extends RequestProcessor {
 		return printedValue.toString();
 	}
 
-    /**
-     * <p>Forward or redirect to the specified destination, by the specified
-     * mechanism.  This method uses a <code>ForwardConfig</code> object
-     * instead an <code>ActionForward</code>.</p>
-     *
-     * @param request  The servlet request we are processing
-     * @param response The servlet response we are creating
-     * @param forward  The ForwardConfig controlling where we go next
-     * @throws IOException      if an input/output error occurs
-     * @throws ServletException if a servlet exception occurs
-     * @since HDIV 2.0.1
-     */
-    protected void processForwardConfig(HttpServletRequest request,
-        HttpServletResponse response, ForwardConfig forward)
-        throws IOException, ServletException {
-        if (forward == null) {
-            return;
-        }
+	/**
+	 * <p>
+	 * Forward or redirect to the specified destination, by the specified mechanism. This method uses a
+	 * <code>ForwardConfig</code> object instead an <code>ActionForward</code>.
+	 * </p>
+	 *
+	 * @param request The servlet request we are processing
+	 * @param response The servlet response we are creating
+	 * @param forward The ForwardConfig controlling where we go next
+	 * @throws IOException if an input/output error occurs
+	 * @throws ServletException if a servlet exception occurs
+	 * @since HDIV 2.0.1
+	 */
+	protected void processForwardConfig(HttpServletRequest request, HttpServletResponse response, ForwardConfig forward)
+			throws IOException, ServletException {
+		if (forward == null) {
+			return;
+		}
 
-        if (log.isDebugEnabled()) {
-            log.debug("processForwardConfig(" + forward + ")");
-        }
+		if (log.isDebugEnabled()) {
+			log.debug("processForwardConfig(" + forward + ")");
+		}
 
-        String forwardPath = forward.getPath();
-        String uri;
+		String forwardPath = forward.getPath();
+		String uri;
 
-        // If the forward can be unaliased into an action, then use the path of the action
-        String actionIdPath = RequestUtils.actionIdURL(forward, request, servlet);
-        if (actionIdPath != null) {
-            forwardPath = actionIdPath;
-            ForwardConfig actionIdForward = new ForwardConfig(forward);
-            actionIdForward.setPath(actionIdPath);
-            forward = actionIdForward;
-        }
+		// If the forward can be unaliased into an action, then use the path of the action
+		String actionIdPath = RequestUtils.actionIdURL(forward, request, servlet);
+		if (actionIdPath != null) {
+			forwardPath = actionIdPath;
+			ForwardConfig actionIdForward = new ForwardConfig(forward);
+			actionIdForward.setPath(actionIdPath);
+			forward = actionIdForward;
+		}
 
-        // paths not starting with / should be passed through without any
-        // processing (ie. they're absolute)
-        if (forwardPath.startsWith("/")) {
-            // get module relative uri
-            uri = RequestUtils.forwardURL(request, forward, null);
-        } else {
-            uri = forwardPath;
-        }
+		// paths not starting with / should be passed through without any
+		// processing (ie. they're absolute)
+		if (forwardPath.startsWith("/")) {
+			// get module relative uri
+			uri = RequestUtils.forwardURL(request, forward, null);
+		}
+		else {
+			uri = forwardPath;
+		}
 
-        if (forward.getRedirect()) {
-            // only prepend context path for relative uri
-            if (uri.startsWith("/")) {
-                uri = request.getContextPath() + uri;
-            }
-            
-            // Call to Hdiv LinkUrlProcessor
-            LinkUrlProcessor linkUrlProcessor = HDIVUtil.getLinkUrlProcessor(request.getSession().getServletContext());
-    		uri = linkUrlProcessor.processUrl(request, uri);
-            
-            response.sendRedirect(response.encodeRedirectURL(uri));
-            
-        } else {
-            doForward(uri, request, response);
-        }
-    }	
-	
+		if (forward.getRedirect()) {
+			// only prepend context path for relative uri
+			if (uri.startsWith("/")) {
+				uri = request.getContextPath() + uri;
+			}
+
+			// Call to Hdiv LinkUrlProcessor
+			LinkUrlProcessor linkUrlProcessor = HDIVUtil.getLinkUrlProcessor(request.getSession().getServletContext());
+			uri = linkUrlProcessor.processUrl(request, uri);
+
+			response.sendRedirect(response.encodeRedirectURL(uri));
+
+		}
+		else {
+			doForward(uri, request, response);
+		}
+	}
+
 }

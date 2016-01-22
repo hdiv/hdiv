@@ -33,30 +33,24 @@ public interface RequestInitializer {
 	/**
 	 * Initialize request scoped data
 	 * 
-	 * @param request
-	 *            request object
-	 * @param response
-	 *            response object
+	 * @param request request object
+	 * @param response response object
 	 */
 	void initRequest(HttpServletRequest request, HttpServletResponse response);
 
 	/**
 	 * Destroy request scoped data
 	 * 
-	 * @param request
-	 *            request object
-	 * @param response
-	 *            response object
+	 * @param request request object
+	 * @param response response object
 	 */
 	void endRequest(HttpServletRequest request, HttpServletResponse response);
 
 	/**
 	 * Create request wrapper.
 	 * 
-	 * @param request
-	 *            HTTP request
-	 * @param response
-	 *            HTTP response
+	 * @param request HTTP request
+	 * @param response HTTP response
 	 * @return the request wrapper
 	 */
 	RequestWrapper createRequestWrapper(HttpServletRequest request, HttpServletResponse response);
@@ -64,10 +58,8 @@ public interface RequestInitializer {
 	/**
 	 * Create response wrapper.
 	 * 
-	 * @param request
-	 *            HTTP request
-	 * @param response
-	 *            HTTP response
+	 * @param request HTTP request
+	 * @param response HTTP response
 	 * @return the response wrapper
 	 */
 	ResponseWrapper createResponseWrapper(HttpServletRequest request, HttpServletResponse response);

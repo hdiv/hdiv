@@ -24,7 +24,7 @@ import org.hdiv.regex.DefaultPatternMatcher;
 public class EditableDataValidationProviderTest extends AbstractHDIVTestCase {
 
 	private EditableDataValidationProvider validationProvider;
-	
+
 	private ValidationRepository validationRepository;
 
 	protected void onSetUp() throws Exception {

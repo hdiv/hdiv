@@ -62,8 +62,7 @@ public class DefaultRequestInitializer implements RequestInitializer {
 	}
 
 	/**
-	 * @param config
-	 *            the config to set
+	 * @param config the config to set
 	 */
 	public void setConfig(HDIVConfig config) {
 		this.config = config;

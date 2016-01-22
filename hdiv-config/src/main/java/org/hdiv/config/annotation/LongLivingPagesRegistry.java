@@ -39,8 +39,7 @@ public class LongLivingPagesRegistry {
 	 * Links and forms inside a long living pages never expire.
 	 * </p>
 	 * 
-	 * @param urlPatterns
-	 *            Url patterns.
+	 * @param urlPatterns Url patterns.
 	 * @return more configuration options
 	 */
 	public LongLivingPagesRegistration addLongLivingPages(String... urlPatterns) {

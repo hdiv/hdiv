@@ -27,16 +27,14 @@ public interface ServletContextInitializer {
 	/**
 	 * Initialize {@link ServletContext} scoped attributes.
 	 * 
-	 * @param servletContext
-	 *            {@link ServletContext} instance
+	 * @param servletContext {@link ServletContext} instance
 	 */
 	void initializeServletContext(ServletContext servletContext);
 
 	/**
 	 * Clean {@link ServletContext} scoped attributes.
 	 * 
-	 * @param servletContext
-	 *            {@link ServletContext} instance
+	 * @param servletContext {@link ServletContext} instance
 	 */
 	void destroyServletContext(ServletContext servletContext);
 }

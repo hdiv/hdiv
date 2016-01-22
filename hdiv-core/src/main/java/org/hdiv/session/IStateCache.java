@@ -26,17 +26,13 @@ public interface IStateCache extends Serializable {
 	/**
 	 * Adds a new page identifier to the cache.
 	 * 
-	 * @param pageId
-	 *            page identifier to add
-	 * @param currentPageId
-	 *            page identifier of the current request. It can be null if no state id is present.
-	 * @param isRefreshRequest
-	 *            if the request is a refresh request
-	 * @param isAjaxRequest
-	 *            if the request is an ajax request
+	 * @param pageId page identifier to add
+	 * @param currentPageId page identifier of the current request. It can be null if no state id is present.
+	 * @param isRefreshRequest if the request is a refresh request
+	 * @param isAjaxRequest if the request is an ajax request
 	 * 
 	 * @return If the cache has reached its maximum size, less important identifier is returned in order to delete it
-	 *         from session. Otherwise, null will be returned.
+	 * from session. Otherwise, null will be returned.
 	 */
 	public Integer addPage(int pageId, Integer currentPageId, boolean isRefreshRequest, boolean isAjaxRequest);
 

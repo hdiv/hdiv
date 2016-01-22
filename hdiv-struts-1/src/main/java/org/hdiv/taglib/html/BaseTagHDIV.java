@@ -22,59 +22,56 @@ import org.apache.struts.taglib.html.BaseTag;
 import org.apache.struts.util.RequestUtils;
 import org.hdiv.util.HDIVUtil;
 
-public class BaseTagHDIV extends BaseTag{
+public class BaseTagHDIV extends BaseTag {
 
 	/**
-     * Render a fully formed HTML &lt;base&gt; element and return it as a
-     * String.
-     *
-     * @param scheme     The scheme used in the url (ie. http or https).
-     * @param serverName
-     * @param port
-     * @param uri        The portion of the url from the protocol name up to
-     *                   the query string.
-     * @return String An HTML &lt;base&gt; element.
-     * @since Struts 1.1
-     */
-    protected String renderBaseElement(String scheme, String serverName,
-        int port, String uri) {
-        StringBuffer tag = new StringBuffer("<base href=\"");
+	 * Render a fully formed HTML &lt;base&gt; element and return it as a String.
+	 *
+	 * @param scheme The scheme used in the url (ie. http or https).
+	 * @param serverName
+	 * @param port
+	 * @param uri The portion of the url from the protocol name up to the query string.
+	 * @return String An HTML &lt;base&gt; element.
+	 * @since Struts 1.1
+	 */
+	protected String renderBaseElement(String scheme, String serverName, int port, String uri) {
+		StringBuffer tag = new StringBuffer("<base href=\"");
 
-        String finalUri = null;
-        
-        if (ref.equals(REF_SITE)) {
-            StringBuffer contextBase =
-                new StringBuffer(((HttpServletRequest) pageContext.getRequest())
-                    .getContextPath());
+		String finalUri = null;
 
-            contextBase.append("/");
-            finalUri = RequestUtils.createServerUriStringBuffer(scheme,
-                    serverName, port, contextBase.toString()).toString();
-            tag.append(finalUri);
-        } else {
-        	finalUri = RequestUtils.createServerUriStringBuffer(scheme,
-                    serverName, port, uri).toString();
-            tag.append(finalUri);
-        }
-        
-        //Store the base url value on request to be accessible from hdiv core
-        HttpServletRequest request = (HttpServletRequest) pageContext.getRequest();
-        HDIVUtil.setBaseURL(finalUri, request);
-        
-        tag.append("\"");
+		if (ref.equals(REF_SITE)) {
+			StringBuffer contextBase = new StringBuffer(
+					((HttpServletRequest) pageContext.getRequest()).getContextPath());
 
-        if (this.target != null) {
-            tag.append(" target=\"");
-            tag.append(this.target);
-            tag.append("\"");
-        }
+			contextBase.append("/");
+			finalUri = RequestUtils.createServerUriStringBuffer(scheme, serverName, port, contextBase.toString())
+					.toString();
+			tag.append(finalUri);
+		}
+		else {
+			finalUri = RequestUtils.createServerUriStringBuffer(scheme, serverName, port, uri).toString();
+			tag.append(finalUri);
+		}
 
-        if (TagUtils.getInstance().isXhtml(this.pageContext)) {
-            tag.append(" />");
-        } else {
-            tag.append(">");
-        }
+		// Store the base url value on request to be accessible from hdiv core
+		HttpServletRequest request = (HttpServletRequest) pageContext.getRequest();
+		HDIVUtil.setBaseURL(finalUri, request);
 
-        return tag.toString();
-    }
+		tag.append("\"");
+
+		if (this.target != null) {
+			tag.append(" target=\"");
+			tag.append(this.target);
+			tag.append("\"");
+		}
+
+		if (TagUtils.getInstance().isXhtml(this.pageContext)) {
+			tag.append(" />");
+		}
+		else {
+			tag.append(">");
+		}
+
+		return tag.toString();
+	}
 }

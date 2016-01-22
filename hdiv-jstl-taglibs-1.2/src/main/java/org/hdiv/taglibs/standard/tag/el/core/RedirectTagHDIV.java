@@ -21,8 +21,8 @@ import org.apache.taglibs.standard.tag.el.core.ExpressionUtil;
 import org.hdiv.taglibs.standard.tag.common.core.RedirectSupportHDIV;
 
 /**
- * <p>A handler for &lt;redirect&gt;, which redirects the browser to a
- * new URL.
+ * <p>
+ * A handler for &lt;redirect&gt;, which redirects the browser to a new URL.
  *
  * @author Gorka Vicente
  * @since HDIV 2.0
@@ -40,9 +40,8 @@ public class RedirectTagHDIV extends RedirectSupportHDIV {
 	private String context_;
 
 	/**
-	 * Constructs a new URLEncodeTag.  As with TagSupport, subclasses
-	 * should not provide other constructors and are expected to call
-	 * the superclass constructor
+	 * Constructs a new URLEncodeTag. As with TagSupport, subclasses should not provide other constructors and are
+	 * expected to call the superclass constructor
 	 */
 	public RedirectTagHDIV() {
 		super();
@@ -89,17 +88,13 @@ public class RedirectTagHDIV extends RedirectSupportHDIV {
 	 * Evaluates expressions as necessary
 	 */
 	private void evaluateExpressions() throws JspException {
-		/* 
-		 * Note: we don't check for type mismatches here; we assume
-		 * the expression evaluator will return the expected type
-		 * (by virtue of knowledge we give it about what that type is).
-		 * A ClassCastException here is truly unexpected, so we let it
-		 * propagate up.
+		/*
+		 * Note: we don't check for type mismatches here; we assume the expression evaluator will return the expected
+		 * type (by virtue of knowledge we give it about what that type is). A ClassCastException here is truly
+		 * unexpected, so we let it propagate up.
 		 */
 
-		url = (String) ExpressionUtil.evalNotNull("redirect", "url", url_, String.class, this,
-													pageContext);
-		context = (String) ExpressionUtil.evalNotNull("redirect", "context", context_,
-														String.class, this, pageContext);
+		url = (String) ExpressionUtil.evalNotNull("redirect", "url", url_, String.class, this, pageContext);
+		context = (String) ExpressionUtil.evalNotNull("redirect", "context", context_, String.class, this, pageContext);
 	}
 }

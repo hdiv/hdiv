@@ -34,8 +34,7 @@ public abstract class UtilsJsf {
 	/**
 	 * Checks if any of the names of the received parameters contains the ViewState.
 	 * 
-	 * @param paramNameSet
-	 *            parameter name group
+	 * @param paramNameSet parameter name group
 	 * @return boolean
 	 */
 	public static boolean hasFacesViewParamName(Set<String> paramNameSet) {
@@ -52,8 +51,7 @@ public abstract class UtilsJsf {
 	/**
 	 * Checks if the parameter name contains the ViewState
 	 * 
-	 * @param paramName
-	 *            parameter name
+	 * @param paramName parameter name
 	 * @return boolean
 	 */
 	public static boolean isFacesViewParamName(String paramName) {
@@ -82,8 +80,7 @@ public abstract class UtilsJsf {
 	/**
 	 * Returns the list of parameters added by JSF implementations.
 	 * 
-	 * @param submitedFormClientId
-	 *            client id of the form sent in the last request.
+	 * @param submitedFormClientId client id of the form sent in the last request.
 	 * @return list of parameter names
 	 */
 	public static List<String> getJSFImplementationParamNames(String submitedFormClientId) {
@@ -121,8 +118,7 @@ public abstract class UtilsJsf {
 	/**
 	 * Searches in the parent components of comp if exists one of type UIData. Returns null if not
 	 * 
-	 * @param comp
-	 *            componente en el que se basa la busqueda
+	 * @param comp componente en el que se basa la busqueda
 	 * @return componente UIData pariente o null si no existe
 	 */
 	public static UIData findParentUIData(UIComponent comp) {
@@ -141,8 +137,7 @@ public abstract class UtilsJsf {
 	/**
 	 * Search component children for UIParameter components.
 	 * 
-	 * @param component
-	 *            {@link UIComponent} component
+	 * @param component {@link UIComponent} component
 	 * @return if component has children
 	 */
 	public static boolean hasUIParameterChild(UIComponent component) {

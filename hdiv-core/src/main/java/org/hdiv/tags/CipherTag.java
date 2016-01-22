@@ -48,8 +48,7 @@ public class CipherTag extends TagSupport {
 	/**
 	 * Sets the action <code>action</code> defined in the tag.
 	 * 
-	 * @param action
-	 *            Action
+	 * @param action Action
 	 */
 	public void setAction(String action) {
 		this.setValue("action", action);
@@ -58,8 +57,7 @@ public class CipherTag extends TagSupport {
 	/**
 	 * Sets the parameter <code>parameter</code> defined in the tag.
 	 * 
-	 * @param parameter
-	 *            Parameter
+	 * @param parameter Parameter
 	 */
 	public void setParameter(String parameter) {
 		this.setValue("parameter", parameter);
@@ -68,8 +66,7 @@ public class CipherTag extends TagSupport {
 	/**
 	 * Sets the value <code>value</code> defined in the tag.
 	 * 
-	 * @param value
-	 *            Value
+	 * @param value Value
 	 */
 	public void setValue(String value) {
 		this.setValue("value", value);
@@ -78,8 +75,7 @@ public class CipherTag extends TagSupport {
 	/**
 	 * Sets the value <code>var</code> defined in the tag.
 	 * 
-	 * @param var
-	 *            Variable
+	 * @param var Variable
 	 */
 	public void setVar(String var) {
 		this.setValue("var", var);
@@ -88,8 +84,7 @@ public class CipherTag extends TagSupport {
 	/**
 	 * Process the start of this tag.
 	 * 
-	 * @throws JspException
-	 *             If the attributes passed to the tag are incorrect, an exception will be thrown.
+	 * @throws JspException If the attributes passed to the tag are incorrect, an exception will be thrown.
 	 */
 	@Override
 	public int doStartTag() throws JspException {
@@ -105,7 +100,8 @@ public class CipherTag extends TagSupport {
 		String cipheredValue;
 		if (action != null) {
 			cipheredValue = dataComposer.compose(action, parameter, value, false);
-		} else {
+		}
+		else {
 			cipheredValue = dataComposer.compose(parameter, value, false);
 		}
 
@@ -113,11 +109,13 @@ public class CipherTag extends TagSupport {
 			// getJspWriter to output content
 			if (var != null) {
 				pageContext.setAttribute(var, cipheredValue);
-			} else {
+			}
+			else {
 				JspWriter out = this.pageContext.getOut();
 				out.print(cipheredValue);
 			}
-		} catch (IOException e) {
+		}
+		catch (IOException e) {
 			throw new JspException("Error:" + e.getMessage());
 		}
 

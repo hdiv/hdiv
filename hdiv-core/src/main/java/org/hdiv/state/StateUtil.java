@@ -79,13 +79,10 @@ public class StateUtil {
 	 * Restore state data from <code>request</code>. State restore from memory can be done using an identifier or or
 	 * using the serialized data received in the request.
 	 * 
-	 * @param context
-	 *            Context holder for request-specific state.
-	 * @param requestState
-	 *            String that contains HDIV state received in the request
+	 * @param context Context holder for request-specific state.
+	 * @param requestState String that contains HDIV state received in the request
 	 * @return State Restore state data from <code>request</code>.
-	 * @throws HDIVException
-	 *             If the state doesn't exist a new HDIV exception is thrown.
+	 * @throws HDIVException If the state doesn't exist a new HDIV exception is thrown.
 	 */
 	public IState restoreState(RequestContext context, String requestState) {
 
@@ -106,8 +103,7 @@ public class StateUtil {
 	/**
 	 * Checks if the memory strategy is being used
 	 * 
-	 * @param value
-	 *            State id value
+	 * @param value State id value
 	 * 
 	 * @return True if strategy is memory. False in otherwise.
 	 */
@@ -121,10 +117,8 @@ public class StateUtil {
 	/**
 	 * Restore a state from Memory Strategy.
 	 * 
-	 * @param context
-	 *            Context holder for request-specific state.
-	 * @param requestState
-	 *            String that contains HDIV state received in the request
+	 * @param context Context holder for request-specific state.
+	 * @param requestState String that contains HDIV state received in the request
 	 * @return State Restore state data from <code>request</code>.
 	 */
 	protected IState restoreMemoryState(RequestContext context, String requestState) {
@@ -143,14 +137,16 @@ public class StateUtil {
 		try {
 			pId = requestState.substring(0, firstSeparator);
 			sId = requestState.substring(firstSeparator + 1, lastSeparator);
-		} catch (StringIndexOutOfBoundsException e) {
+		}
+		catch (StringIndexOutOfBoundsException e) {
 			throw new HDIVException(HDIVErrorCodes.HDIV_PARAMETER_INCORRECT_VALUE, e);
 		}
 
 		int stateId;
 		try {
 			stateId = Integer.parseInt(sId);
-		} catch (NumberFormatException e) {
+		}
+		catch (NumberFormatException e) {
 			throw new HDIVException(HDIVErrorCodes.HDIV_PARAMETER_INCORRECT_VALUE, e);
 		}
 
@@ -169,7 +165,8 @@ public class StateUtil {
 		int pageId;
 		try {
 			pageId = Integer.parseInt(pId);
-		} catch (NumberFormatException e) {
+		}
+		catch (NumberFormatException e) {
 			throw new HDIVException(HDIVErrorCodes.HDIV_PARAMETER_INCORRECT_VALUE, e);
 		}
 
@@ -180,12 +177,9 @@ public class StateUtil {
 	/**
 	 * Restores the state using the identifier obtained from the <code>HDIVParameter</code> of the request.
 	 * 
-	 * @param context
-	 *            Context holder for request-specific state.
-	 * @param pageId
-	 *            current {@link IPage} id
-	 * @param stateId
-	 *            current {@link IState} id
+	 * @param context Context holder for request-specific state.
+	 * @param pageId current {@link IPage} id
+	 * @param stateId current {@link IState} id
 	 * @return State with all the page data.
 	 */
 	protected IState getStateFromSession(RequestContext context, int pageId, int stateId) {
@@ -199,24 +193,21 @@ public class StateUtil {
 	}
 
 	/**
-	 * @param config
-	 *            the config to set
+	 * @param config the config to set
 	 */
 	public void setConfig(HDIVConfig config) {
 		this.config = config;
 	}
 
 	/**
-	 * @param session
-	 *            the session to set
+	 * @param session the session to set
 	 */
 	public void setSession(ISession session) {
 		this.session = session;
 	}
 
 	/**
-	 * @param stateScopeManager
-	 *            the stateScopeManager to set
+	 * @param stateScopeManager the stateScopeManager to set
 	 */
 	public void setStateScopeManager(StateScopeManager stateScopeManager) {
 		this.stateScopeManager = stateScopeManager;

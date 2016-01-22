@@ -73,7 +73,8 @@ public class StateUtilTest extends AbstractHDIVTestCase {
 			IState restored = this.stateUtil.restoreState(context, "1111-");
 			assertNull(restored);
 			fail();
-		} catch (HDIVException e) {
+		}
+		catch (HDIVException e) {
 			assertTrue(true);
 
 		}

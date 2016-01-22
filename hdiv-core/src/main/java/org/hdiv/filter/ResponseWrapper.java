@@ -66,20 +66,19 @@ public class ResponseWrapper extends HttpServletResponseWrapper {
 	 * confidentiality.
 	 */
 	protected boolean avoidCookiesConfidentiality;
-	
+
 	protected HttpServletRequest request;
 
 	/**
 	 * Constructs a response object wrapping the given response.
 	 * 
 	 * @param request HttpServletRequest instance
-	 * @param originalResponse
-	 *            response
+	 * @param originalResponse response
 	 */
 	public ResponseWrapper(HttpServletRequest request, HttpServletResponse originalResponse) {
 
 		super(originalResponse);
-		
+
 		this.request = request;
 
 		if (log.isDebugEnabled()) {
@@ -91,10 +90,8 @@ public class ResponseWrapper extends HttpServletResponseWrapper {
 	 * The default behavior of this method is to return setHeader(String name, String value) on the wrapped response
 	 * object.
 	 * 
-	 * @param name
-	 *            the name of the header
-	 * @param value
-	 *            the header value
+	 * @param name the name of the header
+	 * @param value the header value
 	 * @see javax.servlet.http.HttpServletResponseWrapper#setHeader(java.lang.String, java.lang.String)
 	 */
 	@Override
@@ -119,10 +116,8 @@ public class ResponseWrapper extends HttpServletResponseWrapper {
 	 * The default behavior of this method is to return addHeader(String name, String value) on the wrapped response
 	 * object.
 	 * 
-	 * @param name
-	 *            the name of the header
-	 * @param value
-	 *            the header value
+	 * @param name the name of the header
+	 * @param value the header value
 	 * @see javax.servlet.http.HttpServletResponseWrapper#addHeader(java.lang.String, java.lang.String)
 	 */
 	@Override
@@ -145,10 +140,8 @@ public class ResponseWrapper extends HttpServletResponseWrapper {
 	/**
 	 * Replaces cookies' original values by relative values in order to provide confidentiality.
 	 * 
-	 * @param values
-	 *            List of the original values to be replaced
-	 * @param value
-	 *            Original value of the cookie to be added
+	 * @param values List of the original values to be replaced
+	 * @param value Original value of the cookie to be added
 	 * @return Confidential values for the cookies
 	 */
 	protected String replaceOriginalValues(List<String> values, String value) {
@@ -173,8 +166,7 @@ public class ResponseWrapper extends HttpServletResponseWrapper {
 	/**
 	 * Parses an http cookie request header and append a keyword/value pair to <code>cookies</code> map.
 	 * 
-	 * @param cookieString
-	 *            value assigned to Set-Cookie attribute
+	 * @param cookieString value assigned to Set-Cookie attribute
 	 * @return Cookie list
 	 */
 	protected List<String> parseCookieString(String cookieString) {
@@ -202,8 +194,7 @@ public class ResponseWrapper extends HttpServletResponseWrapper {
 	/**
 	 * Adds the specified cookie to the response. It can be called multiple times to set more than one cookie.
 	 * 
-	 * @param cookie
-	 *            The <code>Cookie</code> to return to the client
+	 * @param cookie The <code>Cookie</code> to return to the client
 	 * @see javax.servlet.http.HttpServletResponse#addCookie
 	 */
 	@Override
@@ -238,7 +229,8 @@ public class ResponseWrapper extends HttpServletResponseWrapper {
 				sessionOriginalCookies.putAll(this.cookies);
 				session.setAttribute(Constants.HDIV_COOKIES_KEY, sessionOriginalCookies);
 
-			} else {
+			}
+			else {
 				session.setAttribute(Constants.HDIV_COOKIES_KEY, this.cookies);
 			}
 		}
@@ -265,16 +257,14 @@ public class ResponseWrapper extends HttpServletResponseWrapper {
 	}
 
 	/**
-	 * @param confidentiality
-	 *            the confidentiality to set
+	 * @param confidentiality the confidentiality to set
 	 */
 	public void setConfidentiality(boolean confidentiality) {
 		this.confidentiality = confidentiality;
 	}
 
 	/**
-	 * @param avoidCookiesConfidentiality
-	 *            the avoidCookiesConfidentiality to set
+	 * @param avoidCookiesConfidentiality the avoidCookiesConfidentiality to set
 	 */
 	public void setAvoidCookiesConfidentiality(boolean avoidCookiesConfidentiality) {
 		this.avoidCookiesConfidentiality = avoidCookiesConfidentiality;

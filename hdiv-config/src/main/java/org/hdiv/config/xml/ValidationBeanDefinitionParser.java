@@ -36,7 +36,7 @@ public class ValidationBeanDefinitionParser extends AbstractSingleBeanDefinition
 
 		String id = element.getAttribute("id");
 		bean.addPropertyValue("name", id);
-		
+
 		String componentType = element.getAttribute("componentType");
 
 		if (StringUtils.hasText(componentType)) {
@@ -50,15 +50,15 @@ public class ValidationBeanDefinitionParser extends AbstractSingleBeanDefinition
 			Node node = list.item(i);
 			if (node.getNodeType() == Node.ELEMENT_NODE) {
 				if (node.getLocalName().equalsIgnoreCase("acceptedPattern")) {
-	
+
 					String value = node.getTextContent();
 					if (StringUtils.hasText(value)) {
 						bean.addPropertyValue("acceptedPattern", value);
 					}
 				}
-	
+
 				if (node.getLocalName().equalsIgnoreCase("rejectedPattern")) {
-	
+
 					String value = node.getTextContent();
 					if (StringUtils.hasText(value)) {
 						bean.addPropertyValue("rejectedPattern", value);

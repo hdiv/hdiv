@@ -69,7 +69,8 @@ public class RequestInitializerTest extends AbstractHDIVTestCase {
 		HttpServletResponse response = new MockHttpServletResponse();
 		try {
 			this.requestInitializer.endRequest(request, response);
-		} catch (HDIVException e) {
+		}
+		catch (HDIVException e) {
 			assertTrue(true);
 		}
 

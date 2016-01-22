@@ -49,13 +49,10 @@ public class StrutsMultipartConfig extends AbstractMultipartConfig {
 	/**
 	 * Parses the input stream and partitions the parsed items into a set of form fields and a set of file items.
 	 * 
-	 * @param request
-	 *            The multipart request wrapper.
-	 * @param servletContext
-	 *            Our ServletContext object
+	 * @param request The multipart request wrapper.
+	 * @param servletContext Our ServletContext object
 	 * @return multipart processed request
-	 * @throws HdivMultipartException
-	 *             if an unrecoverable error occurs.
+	 * @throws HdivMultipartException if an unrecoverable error occurs.
 	 */
 	public HttpServletRequest handleMultipartRequest(RequestWrapper request, ServletContext servletContext)
 			throws HdivMultipartException {
@@ -74,14 +71,16 @@ public class StrutsMultipartConfig extends AbstractMultipartConfig {
 		try {
 			items = upload.parseRequest(request);
 
-		} catch (DiskFileUpload.SizeLimitExceededException e) {
+		}
+		catch (DiskFileUpload.SizeLimitExceededException e) {
 			if (log.isErrorEnabled()) {
 				log.error("Size limit exceeded exception");
 			}
 			// Special handling for uploads that are too big.
 			throw new HdivMultipartException(e);
 
-		} catch (FileUploadException e) {
+		}
+		catch (FileUploadException e) {
 			if (log.isErrorEnabled()) {
 				log.error("Failed to parse multipart request", e);
 			}
@@ -95,7 +94,8 @@ public class StrutsMultipartConfig extends AbstractMultipartConfig {
 
 			if (item.isFormField()) {
 				this.addTextParameter(request, item);
-			} else {
+			}
+			else {
 				this.addFileParameter(request, item);
 			}
 		}
@@ -115,10 +115,8 @@ public class StrutsMultipartConfig extends AbstractMultipartConfig {
 	 * Adds a regular text parameter to the set of text parameters for this request. Handles the case of multiple values
 	 * for the same parameter by using an array for the parameter value.
 	 * 
-	 * @param request
-	 *            The request in which the parameter was specified.
-	 * @param item
-	 *            The file item for the parameter to add.
+	 * @param request The request in which the parameter was specified.
+	 * @param item The file item for the parameter to add.
 	 */
 	public void addTextParameter(RequestWrapper request, FileItem item) {
 
@@ -131,14 +129,16 @@ public class StrutsMultipartConfig extends AbstractMultipartConfig {
 			try {
 				value = item.getString(encoding);
 				haveValue = true;
-			} catch (Exception e) {
+			}
+			catch (Exception e) {
 				// Handled below, since haveValue is false.
 			}
 		}
 		if (!haveValue) {
 			try {
 				value = item.getString("ISO-8859-1");
-			} catch (java.io.UnsupportedEncodingException uee) {
+			}
+			catch (java.io.UnsupportedEncodingException uee) {
 				value = item.getString();
 			}
 			haveValue = true;
@@ -151,7 +151,8 @@ public class StrutsMultipartConfig extends AbstractMultipartConfig {
 			newArray = new String[oldArray.length + 1];
 			System.arraycopy(oldArray, 0, newArray, 0, oldArray.length);
 			newArray[oldArray.length] = value;
-		} else {
+		}
+		else {
 			newArray = new String[] { value };
 		}
 
@@ -162,8 +163,7 @@ public class StrutsMultipartConfig extends AbstractMultipartConfig {
 	}
 
 	/**
-	 * @param memFileSize
-	 *            The memFileSize to set.
+	 * @param memFileSize The memFileSize to set.
 	 */
 	public void setMemFileSize(String memFileSize) {
 		this.memFileSize = memFileSize;

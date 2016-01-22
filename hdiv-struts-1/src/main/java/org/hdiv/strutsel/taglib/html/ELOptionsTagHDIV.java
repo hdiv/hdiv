@@ -21,18 +21,14 @@ import org.apache.strutsel.taglib.utils.EvalHelper;
 import org.hdiv.taglib.html.OptionsTagHDIV;
 
 /**
- * Tag for creating multiple &lt;select&gt; options from a collection. The
- * associated values displayed to the user may optionally be specified by a
- * second collection, or will be the same as the values themselves. Each
- * collection may be an array of objects, a Collection, an Enumeration, an
- * Iterator, or a Map. <b>NOTE</b> - This tag requires a Java2 (JDK 1.2 or
- * later) platform.
+ * Tag for creating multiple &lt;select&gt; options from a collection. The associated values displayed to the user may
+ * optionally be specified by a second collection, or will be the same as the values themselves. Each collection may be
+ * an array of objects, a Collection, an Enumeration, an Iterator, or a Map. <b>NOTE</b> - This tag requires a Java2
+ * (JDK 1.2 or later) platform.
  * <p>
- * This class is a subclass of the class
- * <code>org.hdiv.taglib.html.OptionsTagHDIV</code> which provides most of the
- * described functionality. This subclass allows all attribute values to be
- * specified as expressions utilizing the JavaServer Pages Standard Library
- * expression language.
+ * This class is a subclass of the class <code>org.hdiv.taglib.html.OptionsTagHDIV</code> which provides most of the
+ * described functionality. This subclass allows all attribute values to be specified as expressions utilizing the
+ * JavaServer Pages Standard Library expression language.
  * 
  * @author Gorka Vicente
  * @since HDIV 2.0
@@ -40,176 +36,152 @@ import org.hdiv.taglib.html.OptionsTagHDIV;
 public class ELOptionsTagHDIV extends OptionsTagHDIV {
 
 	/**
-	 * Instance variable mapped to "collection" tag attribute. (Mapping set in
-	 * associated BeanInfo class.)
+	 * Instance variable mapped to "collection" tag attribute. (Mapping set in associated BeanInfo class.)
 	 */
 	private String collectionExpr;
 
 	/**
-	 * Instance variable mapped to "filter" tag attribute. (Mapping set in
-	 * associated BeanInfo class.)
+	 * Instance variable mapped to "filter" tag attribute. (Mapping set in associated BeanInfo class.)
 	 */
 	private String filterExpr;
 
 	/**
-	 * Instance variable mapped to "labelName" tag attribute. (Mapping set in
-	 * associated BeanInfo class.)
+	 * Instance variable mapped to "labelName" tag attribute. (Mapping set in associated BeanInfo class.)
 	 */
 	private String labelNameExpr;
 
 	/**
-	 * Instance variable mapped to "labelProperty" tag attribute. (Mapping set
-	 * in associated BeanInfo class.)
+	 * Instance variable mapped to "labelProperty" tag attribute. (Mapping set in associated BeanInfo class.)
 	 */
 	private String labelPropertyExpr;
 
 	/**
-	 * Instance variable mapped to "name" tag attribute. (Mapping set in
-	 * associated BeanInfo class.)
+	 * Instance variable mapped to "name" tag attribute. (Mapping set in associated BeanInfo class.)
 	 */
 	private String nameExpr;
 
 	/**
-	 * Instance variable mapped to "property" tag attribute. (Mapping set in
-	 * associated BeanInfo class.)
+	 * Instance variable mapped to "property" tag attribute. (Mapping set in associated BeanInfo class.)
 	 */
 	private String propertyExpr;
 
 	/**
-	 * Instance variable mapped to "style" tag attribute. (Mapping set in
-	 * associated BeanInfo class.)
+	 * Instance variable mapped to "style" tag attribute. (Mapping set in associated BeanInfo class.)
 	 */
 	private String styleExpr;
 
 	/**
-	 * Instance variable mapped to "styleClass" tag attribute. (Mapping set in
-	 * associated BeanInfo class.)
+	 * Instance variable mapped to "styleClass" tag attribute. (Mapping set in associated BeanInfo class.)
 	 */
 	private String styleClassExpr;
 
 	/**
-	 * Getter method for "collection" tag attribute. (Mapping set in associated
-	 * BeanInfo class.)
+	 * Getter method for "collection" tag attribute. (Mapping set in associated BeanInfo class.)
 	 */
 	public String getCollectionExpr() {
 		return (collectionExpr);
 	}
 
 	/**
-	 * Getter method for "filter" tag attribute. (Mapping set in associated
-	 * BeanInfo class.)
+	 * Getter method for "filter" tag attribute. (Mapping set in associated BeanInfo class.)
 	 */
 	public String getFilterExpr() {
 		return (filterExpr);
 	}
 
 	/**
-	 * Getter method for "labelName" tag attribute. (Mapping set in associated
-	 * BeanInfo class.)
+	 * Getter method for "labelName" tag attribute. (Mapping set in associated BeanInfo class.)
 	 */
 	public String getLabelNameExpr() {
 		return (labelNameExpr);
 	}
 
 	/**
-	 * Getter method for "labelProperty" tag attribute. (Mapping set in
-	 * associated BeanInfo class.)
+	 * Getter method for "labelProperty" tag attribute. (Mapping set in associated BeanInfo class.)
 	 */
 	public String getLabelPropertyExpr() {
 		return (labelPropertyExpr);
 	}
 
 	/**
-	 * Getter method for "name" tag attribute. (Mapping set in associated
-	 * BeanInfo class.)
+	 * Getter method for "name" tag attribute. (Mapping set in associated BeanInfo class.)
 	 */
 	public String getNameExpr() {
 		return (nameExpr);
 	}
 
 	/**
-	 * Getter method for "property" tag attribute. (Mapping set in associated
-	 * BeanInfo class.)
+	 * Getter method for "property" tag attribute. (Mapping set in associated BeanInfo class.)
 	 */
 	public String getPropertyExpr() {
 		return (propertyExpr);
 	}
 
 	/**
-	 * Getter method for "style" tag attribute. (Mapping set in associated
-	 * BeanInfo class.)
+	 * Getter method for "style" tag attribute. (Mapping set in associated BeanInfo class.)
 	 */
 	public String getStyleExpr() {
 		return (styleExpr);
 	}
 
 	/**
-	 * Getter method for "styleClass" tag attribute. (Mapping set in associated
-	 * BeanInfo class.)
+	 * Getter method for "styleClass" tag attribute. (Mapping set in associated BeanInfo class.)
 	 */
 	public String getStyleClassExpr() {
 		return (styleClassExpr);
 	}
 
 	/**
-	 * Setter method for "collection" tag attribute. (Mapping set in associated
-	 * BeanInfo class.)
+	 * Setter method for "collection" tag attribute. (Mapping set in associated BeanInfo class.)
 	 */
 	public void setCollectionExpr(String collectionExpr) {
 		this.collectionExpr = collectionExpr;
 	}
 
 	/**
-	 * Setter method for "filter" tag attribute. (Mapping set in associated
-	 * BeanInfo class.)
+	 * Setter method for "filter" tag attribute. (Mapping set in associated BeanInfo class.)
 	 */
 	public void setFilterExpr(String filterExpr) {
 		this.filterExpr = filterExpr;
 	}
 
 	/**
-	 * Setter method for "labelName" tag attribute. (Mapping set in associated
-	 * BeanInfo class.)
+	 * Setter method for "labelName" tag attribute. (Mapping set in associated BeanInfo class.)
 	 */
 	public void setLabelNameExpr(String labelNameExpr) {
 		this.labelNameExpr = labelNameExpr;
 	}
 
 	/**
-	 * Setter method for "labelProperty" tag attribute. (Mapping set in
-	 * associated BeanInfo class.)
+	 * Setter method for "labelProperty" tag attribute. (Mapping set in associated BeanInfo class.)
 	 */
 	public void setLabelPropertyExpr(String labelPropertyExpr) {
 		this.labelPropertyExpr = labelPropertyExpr;
 	}
 
 	/**
-	 * Setter method for "name" tag attribute. (Mapping set in associated
-	 * BeanInfo class.)
+	 * Setter method for "name" tag attribute. (Mapping set in associated BeanInfo class.)
 	 */
 	public void setNameExpr(String nameExpr) {
 		this.nameExpr = nameExpr;
 	}
 
 	/**
-	 * Setter method for "property" tag attribute. (Mapping set in associated
-	 * BeanInfo class.)
+	 * Setter method for "property" tag attribute. (Mapping set in associated BeanInfo class.)
 	 */
 	public void setPropertyExpr(String propertyExpr) {
 		this.propertyExpr = propertyExpr;
 	}
 
 	/**
-	 * Setter method for "style" tag attribute. (Mapping set in associated
-	 * BeanInfo class.)
+	 * Setter method for "style" tag attribute. (Mapping set in associated BeanInfo class.)
 	 */
 	public void setStyleExpr(String styleExpr) {
 		this.styleExpr = styleExpr;
 	}
 
 	/**
-	 * Setter method for "styleClass" tag attribute. (Mapping set in associated
-	 * BeanInfo class.)
+	 * Setter method for "styleClass" tag attribute. (Mapping set in associated BeanInfo class.)
 	 */
 	public void setStyleClassExpr(String styleClassExpr) {
 		this.styleClassExpr = styleClassExpr;
@@ -242,8 +214,7 @@ public class ELOptionsTagHDIV extends OptionsTagHDIV {
 	}
 
 	/**
-	 * Processes all attribute values which use the JSTL expression evaluation
-	 * engine to determine their values.
+	 * Processes all attribute values which use the JSTL expression evaluation engine to determine their values.
 	 * 
 	 * @throws JspException if a JSP exception has occurred
 	 */

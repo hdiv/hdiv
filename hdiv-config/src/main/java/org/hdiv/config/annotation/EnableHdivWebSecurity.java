@@ -26,9 +26,9 @@ import org.hdiv.config.annotation.configuration.HdivWebSecurityConfigurerAdapter
 import org.springframework.context.annotation.Import;
 
 /**
- * Add this annotation to an {@code @Configuration} class to have the HDIV Security
- * configuration defined in any {@link HdivWebSecurityConfigurer} or more likely by extending the
- * {@link HdivWebSecurityConfigurerAdapter} base class and overriding individual methods:
+ * Add this annotation to an {@code @Configuration} class to have the HDIV Security configuration defined in any
+ * {@link HdivWebSecurityConfigurer} or more likely by extending the {@link HdivWebSecurityConfigurerAdapter} base class
+ * and overriding individual methods:
  *
  * <pre class="code">
  * &#064;Configuration
@@ -38,35 +38,32 @@ import org.springframework.context.annotation.Import;
  * 	&#064;Override
  * 	public void configure(SecurityConfigBuilder builder) {
  * 
- * 		builder
- * 			.sessionExpired()
- * 			.homePage("/").loginPage("/login.html").and()
- * 			.debugMode(false);
+ * 		builder.sessionExpired().homePage(&quot;/&quot;).loginPage(&quot;/login.html&quot;).and().debugMode(false);
  * 	}
- * 	
+ * 
  * 	&#064;Override
  * 	public void addExclusions(ExclusionRegistry registry) {
  * 
- * 		registry.addUrlExclusions("/", "/login.html", "/logout.html").method("GET");
- * 		registry.addUrlExclusions("/j_spring_security_check").method("POST");
- * 		registry.addUrlExclusions("/attacks/.*");
- * 		
- * 		registry.addParamExclusions("param1", "param2").forUrls("/attacks/.*");
+ * 		registry.addUrlExclusions(&quot;/&quot;, &quot;/login.html&quot;, &quot;/logout.html&quot;).method(&quot;GET&quot;);
+ * 		registry.addUrlExclusions(&quot;/j_spring_security_check&quot;).method(&quot;POST&quot;);
+ * 		registry.addUrlExclusions(&quot;/attacks/.*&quot;);
+ * 
+ * 		registry.addParamExclusions(&quot;param1&quot;, &quot;param2&quot;).forUrls(&quot;/attacks/.*&quot;);
  * 	}
  * 
  * 	&#064;Override
  * 	public void addRules(RuleRegistry registry) {
  * 
- * 		registry.addRule("safeText").acceptedPattern("^[a-zA-Z0-9&#064;.\\-_]*$");
+ * 		registry.addRule(&quot;safeText&quot;).acceptedPattern(&quot;&circ;[a-zA-Z0-9@.\\-_]*$&quot;);
  * 	}
  * 
  * 	&#064;Override
  * 	public void configureEditableValidation(ValidationConfigurer validationConfigurer) {
  * 
- * 		validationConfigurer.addValidation("/secure/.*");
- * 		validationConfigurer.addValidation("/safetext/.*").rules("safeText").disableDefaults();
+ * 		validationConfigurer.addValidation(&quot;/secure/.*&quot;);
+ * 		validationConfigurer.addValidation(&quot;/safetext/.*&quot;).rules(&quot;safeText&quot;).disableDefaults();
  * 	}
- *  // Possibly more overridden methods ...
+ * 	// Possibly more overridden methods ...
  * }
  * </pre>
  *

@@ -44,10 +44,8 @@ public class DefaultValidationRepository implements ValidationRepository, Serial
 	/**
 	 * Returns the validation rules for a concrete url and parameter name.
 	 * 
-	 * @param url
-	 *            request url
-	 * @param parameter
-	 *            parameter name
+	 * @param url request url
+	 * @param parameter parameter name
 	 * @return Selected validations
 	 */
 	public List<IValidation> findValidations(String url, String parameter) {
@@ -68,7 +66,8 @@ public class DefaultValidationRepository implements ValidationRepository, Serial
 							break;
 						}
 					}
-				} else {
+				}
+				else {
 					paramMatch = true;
 				}
 
@@ -91,8 +90,7 @@ public class DefaultValidationRepository implements ValidationRepository, Serial
 	}
 
 	/**
-	 * @param validations
-	 *            the validations to set
+	 * @param validations the validations to set
 	 */
 	public void setValidations(Map<ValidationTarget, List<IValidation>> validations) {
 		this.validations = validations;
@@ -113,8 +111,7 @@ public class DefaultValidationRepository implements ValidationRepository, Serial
 	}
 
 	/**
-	 * @param defaultValidations
-	 *            the defaultValidations to set
+	 * @param defaultValidations the defaultValidations to set
 	 */
 	public void setDefaultValidations(List<IValidation> defaultValidations) {
 		this.defaultValidations = defaultValidations;

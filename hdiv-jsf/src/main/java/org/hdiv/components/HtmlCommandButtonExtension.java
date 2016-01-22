@@ -60,7 +60,8 @@ public class HtmlCommandButtonExtension extends HtmlCommandButton {
 			HDIVFacesEvent hdivevent = new HDIVFacesEvent(this);
 			if (this.isImmediate()) {
 				hdivevent.setPhaseId(PhaseId.APPLY_REQUEST_VALUES);
-			} else {
+			}
+			else {
 				hdivevent.setPhaseId(PhaseId.PROCESS_VALIDATIONS);
 			}
 			super.queueEvent(hdivevent);
@@ -87,7 +88,8 @@ public class HtmlCommandButtonExtension extends HtmlCommandButton {
 		FacesListener[] listeners = null;
 		try {
 			listeners = this.getFacesListeners(HDIVFacesEventListener.class);
-		} catch (NullPointerException e) {
+		}
+		catch (NullPointerException e) {
 			// Sun RI 1.2 versions throw a NullPointerException when calling
 			// to this method because HDIVFacesListener is transient
 			// and it isn't stored in the state.
@@ -109,8 +111,7 @@ public class HtmlCommandButtonExtension extends HtmlCommandButton {
 	/**
 	 * Adds HDIV listener to the component if needed
 	 * 
-	 * @param context
-	 *            request context
+	 * @param context request context
 	 */
 	private void addListener(FacesContext context) {
 

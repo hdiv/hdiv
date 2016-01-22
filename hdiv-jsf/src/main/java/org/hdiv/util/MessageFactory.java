@@ -37,8 +37,7 @@ public class MessageFactory {
 	}
 
 	/**
-	 * This version of getMessage() is used in the RI for localizing RI
-	 * specific messages.
+	 * This version of getMessage() is used in the RI for localizing RI specific messages.
 	 * @param messageId MessageID
 	 * @param params extra params
 	 * @return FacesMessage
@@ -52,7 +51,8 @@ public class MessageFactory {
 			if (locale == null) {
 				locale = Locale.getDefault();
 			}
-		} else {
+		}
+		else {
 			locale = Locale.getDefault();
 		}
 
@@ -70,7 +70,8 @@ public class MessageFactory {
 				// see if we have a hit
 				try {
 					summary = bundle.getString(messageId);
-				} catch (MissingResourceException e) {
+				}
+				catch (MissingResourceException e) {
 				}
 			}
 		}
@@ -85,11 +86,12 @@ public class MessageFactory {
 			// see if we have a hit
 			try {
 				summary = bundle.getString(messageId);
-			} catch (MissingResourceException e) {
+			}
+			catch (MissingResourceException e) {
 			}
 		}
 
-		// we couldn't find a summary anywhere!  Return null
+		// we couldn't find a summary anywhere! Return null
 		if (null == summary) {
 			return null;
 		}
@@ -102,7 +104,8 @@ public class MessageFactory {
 
 		try {
 			detail = substituteParams(locale, bundle.getString(messageId + "_detail"), params);
-		} catch (MissingResourceException e) {
+		}
+		catch (MissingResourceException e) {
 		}
 
 		return (new FacesMessage(summary, detail));

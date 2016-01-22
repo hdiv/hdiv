@@ -56,12 +56,9 @@ public abstract class AbstractUrlProcessor {
 	/**
 	 * Create a new instance of {@link UrlData}.
 	 * 
-	 * @param url
-	 *            original url
-	 * @param method
-	 *            Http method
-	 * @param request
-	 *            {@link HttpServletRequest} object
+	 * @param url original url
+	 * @param method Http method
+	 * @param request {@link HttpServletRequest} object
 	 * @return new instance of {@link UrlData}
 	 */
 	public UrlData createUrlData(String url, String method, HttpServletRequest request) {
@@ -129,10 +126,8 @@ public abstract class AbstractUrlProcessor {
 	/**
 	 * Remove _HDIV_STATE_ parameter if it exist.
 	 * 
-	 * @param request
-	 *            {@link HttpServletRequest} object
-	 * @param params
-	 *            parameters string
+	 * @param request {@link HttpServletRequest} object
+	 * @param params parameters string
 	 * @return parameters string without state id
 	 */
 	protected String removeStateParameter(HttpServletRequest request, String params) {
@@ -169,10 +164,8 @@ public abstract class AbstractUrlProcessor {
 	/**
 	 * Generates a Map with request parameter name and values.
 	 * 
-	 * @param request
-	 *            {@link HttpServletRequest} object
-	 * @param urlParams
-	 *            urls query string
+	 * @param request {@link HttpServletRequest} object
+	 * @param urlParams urls query string
 	 * @return Map
 	 */
 	public Map<String, String[]> getUrlParamsAsMap(HttpServletRequest request, String urlParams) {
@@ -196,7 +189,8 @@ public abstract class AbstractUrlProcessor {
 			if (index > -1) {
 				param = token.substring(0, index);
 				val = token.substring(index + 1);
-			} else {
+			}
+			else {
 				param = token;
 			}
 
@@ -209,7 +203,8 @@ public abstract class AbstractUrlProcessor {
 				String[] values = params.get(param);
 				if (values == null) {
 					values = new String[] { val };
-				} else {
+				}
+				else {
 					int l = values.length;
 					values = Arrays.copyOf(values, l + 1);
 					values[l] = val;
@@ -226,10 +221,8 @@ public abstract class AbstractUrlProcessor {
 	 * Decoded <code>value</code> using input <code>charEncoding</code>.
 	 * </p>
 	 * 
-	 * @param value
-	 *            value to decode
-	 * @param charEncoding
-	 *            character encoding
+	 * @param value value to decode
+	 * @param charEncoding character encoding
 	 * @return value decoded
 	 */
 	protected String getDecodedValue(String value, String charEncoding) {
@@ -241,9 +234,11 @@ public abstract class AbstractUrlProcessor {
 		String decodedValue = null;
 		try {
 			decodedValue = URLDecoder.decode(value, charEncoding);
-		} catch (UnsupportedEncodingException e) {
+		}
+		catch (UnsupportedEncodingException e) {
 			decodedValue = value;
-		} catch (IllegalArgumentException e) {
+		}
+		catch (IllegalArgumentException e) {
 			decodedValue = value;
 		}
 
@@ -259,8 +254,7 @@ public abstract class AbstractUrlProcessor {
 	/**
 	 * Determines if the url is a startPage
 	 * 
-	 * @param urlData
-	 *            {@link UrlData} object with url info.
+	 * @param urlData {@link UrlData} object with url info.
 	 * 
 	 * @return boolean is startPage?
 	 */
@@ -277,12 +271,9 @@ public abstract class AbstractUrlProcessor {
 	/**
 	 * Generate a url with all parameters and include hdiv state parameter.
 	 * 
-	 * @param request
-	 *            {@link HttpServletRequest} object
-	 * @param urlData
-	 *            url data object
-	 * @param stateParam
-	 *            hdiv state parameter value
+	 * @param request {@link HttpServletRequest} object
+	 * @param urlData url data object
+	 * @param stateParam hdiv state parameter value
 	 * @return complete url
 	 */
 	public String getProcessedUrlWithHdivState(HttpServletRequest request, UrlData urlData, String stateParam) {
@@ -309,8 +300,7 @@ public abstract class AbstractUrlProcessor {
 	/**
 	 * Generate Query String with all parameters.
 	 * 
-	 * @param urlData
-	 *            url data object
+	 * @param urlData url data object
 	 * @return complete query string
 	 */
 	protected String getParamsQueryString(UrlData urlData) {
@@ -329,8 +319,7 @@ public abstract class AbstractUrlProcessor {
 	/**
 	 * Generate a url with all parameters.
 	 * 
-	 * @param urlData
-	 *            url data object
+	 * @param urlData url data object
 	 * @return complete url
 	 */
 	public String getParamProcessedUrl(UrlData urlData) {
@@ -356,8 +345,7 @@ public abstract class AbstractUrlProcessor {
 	/**
 	 * Generate final url with all parameters and anchor.
 	 * 
-	 * @param urlData
-	 *            url data object
+	 * @param urlData url data object
 	 * @return complete url
 	 */
 	public String getProcessedUrl(UrlData urlData) {
@@ -371,10 +359,8 @@ public abstract class AbstractUrlProcessor {
 	/**
 	 * Append anchor to url if constains any.
 	 * 
-	 * @param url
-	 *            url
-	 * @param anchor
-	 *            anchor
+	 * @param url url
+	 * @param anchor anchor
 	 * @return url with the anchor
 	 */
 	protected String appendAnchor(String url, String anchor) {
@@ -390,8 +376,7 @@ public abstract class AbstractUrlProcessor {
 	/**
 	 * Determines if Hdiv state is necessary for the url.
 	 * 
-	 * @param urlData
-	 *            url data object
+	 * @param urlData url data object
 	 * @return is necessary?
 	 */
 	public boolean isHdivStateNecessary(UrlData urlData) {
@@ -426,12 +411,9 @@ public abstract class AbstractUrlProcessor {
 	/**
 	 * Detects if the url points to this application
 	 * 
-	 * @param request
-	 *            {@link HttpServletRequest} object
-	 * @param url
-	 *            request url
-	 * @param urlData
-	 *            url data
+	 * @param request {@link HttpServletRequest} object
+	 * @param url request url
+	 * @param urlData url data
 	 * @return is internal?
 	 */
 	protected boolean isInternalUrl(HttpServletRequest request, String url, UrlData urlData) {
@@ -455,17 +437,20 @@ public abstract class AbstractUrlProcessor {
 			// http://localhost:8080/anotherApplication... or
 			return false;
 
-		} else {
+		}
+		else {
 
 			String contextPath = request.getContextPath();
 
 			if (url.startsWith(contextPath + "/") || url.equals(contextPath)) {
 				// url of type /APP/... or /APP
 				return true;
-			} else if (url.startsWith("/")) {
+			}
+			else if (url.startsWith("/")) {
 				// url of type /anotherApplication/...
 				return false;
-			} else {
+			}
+			else {
 				// url of type section/action...
 				return true;
 			}
@@ -475,8 +460,7 @@ public abstract class AbstractUrlProcessor {
 	/**
 	 * Returns from url the part related with the server side in an absolute url.
 	 * 
-	 * @param url
-	 *            absolute url
+	 * @param url absolute url
 	 * @return url protocol, domain and port
 	 */
 	protected String getServerFromUrl(String url) {
@@ -487,7 +471,8 @@ public abstract class AbstractUrlProcessor {
 			if (posicion > 0) {
 				url = url.substring(0, posicion);
 				return url;
-			} else {
+			}
+			else {
 				return url;
 			}
 		}
@@ -497,8 +482,7 @@ public abstract class AbstractUrlProcessor {
 	/**
 	 * Determines if the url contains a extension to exclude for Hdiv state inclusion.
 	 * 
-	 * @param urlData
-	 *            url data object
+	 * @param urlData url data object
 	 * @return is excluded or not
 	 */
 	protected boolean hasExtensionToExclude(UrlData urlData) {
@@ -540,10 +524,8 @@ public abstract class AbstractUrlProcessor {
 	/**
 	 * Composes the url starting with context path. Removes any relative url.
 	 * 
-	 * @param request
-	 *            {@link HttpServletRequest} object
-	 * @param url
-	 *            url
+	 * @param request {@link HttpServletRequest} object
+	 * @param url url
 	 * @return url starting with context path
 	 */
 	protected String getContextPathRelative(HttpServletRequest request, String url) {
@@ -559,18 +541,22 @@ public abstract class AbstractUrlProcessor {
 				// Remove server and port
 				baseUrl = baseUrl.replaceFirst(serverUrl, "");
 			}
-		} else {
+		}
+		else {
 			// Original RequestUri before Jsp processing
 			baseUrl = HDIVUtil.getRequestURI(request);
 		}
 
 		if (url.equals("")) {
 			return baseUrl;
-		} else if (url.startsWith("/")) {
+		}
+		else if (url.startsWith("/")) {
 			returnValue = url;
-		} else if (url.startsWith("..")) {
+		}
+		else if (url.startsWith("..")) {
 			returnValue = url;
-		} else {
+		}
+		else {
 			// relative path
 			String uri = baseUrl;
 			uri = uri.substring(uri.indexOf("/"), uri.lastIndexOf("/"));
@@ -583,10 +569,8 @@ public abstract class AbstractUrlProcessor {
 	/**
 	 * Removes references to relative paths from the URL.
 	 * 
-	 * @param url
-	 *            URL value
-	 * @param originalRequestUri
-	 *            originalRequestUri
+	 * @param url URL value
+	 * @param originalRequestUri originalRequestUri
 	 * @return returns URL without relative paths.
 	 */
 	protected String removeRelativePaths(String url, String originalRequestUri) {
@@ -610,7 +594,8 @@ public abstract class AbstractUrlProcessor {
 				if (!part.equals(".")) {
 					if (part.equals("..")) {
 						stack.pop();
-					} else {
+					}
+					else {
 						stack.push(part);
 					}
 				}
@@ -630,10 +615,8 @@ public abstract class AbstractUrlProcessor {
 	/**
 	 * Strips a servlet session ID from <tt>url</tt>.
 	 * 
-	 * @param url
-	 *            url
-	 * @param urlData
-	 *            current url data
+	 * @param url url
+	 * @param urlData current url data
 	 * @return url without sessionId
 	 */
 	protected String stripSession(String url, UrlData urlData) {
@@ -652,15 +635,15 @@ public abstract class AbstractUrlProcessor {
 			}
 
 			return HDIVUtil.stripSession(url);
-		} else {
+		}
+		else {
 			return url;
 		}
 
 	}
 
 	/**
-	 * @param config
-	 *            the config to set
+	 * @param config the config to set
 	 */
 	public void setConfig(HDIVConfig config) {
 		this.config = config;

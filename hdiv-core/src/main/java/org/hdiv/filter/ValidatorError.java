@@ -182,72 +182,63 @@ public class ValidatorError {
 	}
 
 	/**
-	 * @param type
-	 *            the type to set
+	 * @param type the type to set
 	 */
 	public void setType(String type) {
 		this.type = type;
 	}
 
 	/**
-	 * @param target
-	 *            the target to set
+	 * @param target the target to set
 	 */
 	public void setTarget(String target) {
 		this.target = target;
 	}
 
 	/**
-	 * @param parameterName
-	 *            the parameterName to set
+	 * @param parameterName the parameterName to set
 	 */
 	public void setParameterName(String parameterName) {
 		this.parameterName = parameterName;
 	}
 
 	/**
-	 * @param parameterValue
-	 *            the parameterValue to set
+	 * @param parameterValue the parameterValue to set
 	 */
 	public void setParameterValue(String parameterValue) {
 		this.parameterValue = parameterValue;
 	}
 
 	/**
-	 * @param originalParameterValue
-	 *            the originalParameterValue to set
+	 * @param originalParameterValue the originalParameterValue to set
 	 */
 	public void setOriginalParameterValue(String originalParameterValue) {
 		this.originalParameterValue = originalParameterValue;
 	}
 
 	/**
-	 * @param validationRuleName
-	 *            the validationRuleName to set
+	 * @param validationRuleName the validationRuleName to set
 	 */
 	public void setValidationRuleName(String validationRuleName) {
 		this.validationRuleName = validationRuleName;
 	}
 
 	/**
-	 * @param localIp
-	 *            the localIp to set
+	 * @param localIp the localIp to set
 	 */
 	public void setLocalIp(String localIp) {
 		this.localIp = localIp;
 	}
 
 	/**
-	 * @param remoteIp
-	 *            the remoteIp to set
+	 * @param remoteIp the remoteIp to set
 	 */
 	public void setRemoteIp(String remoteIp) {
 		this.remoteIp = remoteIp;
 	}
 
 	/**
-	 * @param userName
-	 *            the userName to set
+	 * @param userName the userName to set
 	 */
 	public void setUserName(String userName) {
 		this.userName = userName;

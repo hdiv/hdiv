@@ -40,10 +40,8 @@ public class FormUrlProcessor extends AbstractUrlProcessor {
 	/**
 	 * Process form action url to add hdiv state if it is necessary.
 	 * 
-	 * @param request
-	 *            {@link HttpServletRequest} object
-	 * @param url
-	 *            url to process
+	 * @param request {@link HttpServletRequest} object
+	 * @param url url to process
 	 * @return processed url
 	 */
 	public String processUrl(HttpServletRequest request, String url) {
@@ -54,12 +52,9 @@ public class FormUrlProcessor extends AbstractUrlProcessor {
 	/**
 	 * Process form action url to add hdiv state if it is necessary.
 	 * 
-	 * @param request
-	 *            {@link HttpServletRequest} object
-	 * @param url
-	 *            url to process
-	 * @param method
-	 *            form submit method
+	 * @param request {@link HttpServletRequest} object
+	 * @param url url to process
+	 * @param method form submit method
 	 * @return processed url
 	 */
 	public String processUrl(HttpServletRequest request, String url, String method) {

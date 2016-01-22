@@ -99,8 +99,7 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 	/**
 	 * Constructs a request object wrapping the given request.
 	 * 
-	 * @param servletRequest
-	 *            request
+	 * @param servletRequest request
 	 */
 	public RequestWrapper(HttpServletRequest servletRequest) {
 
@@ -115,8 +114,7 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 	 * Returns an array of String objects containing all of the values the given request parameter has. If the parameter
 	 * has a single value, the array has a length of 1.
 	 * 
-	 * @param parameter
-	 *            the name of the parameter whose value is requested
+	 * @param parameter the name of the parameter whose value is requested
 	 */
 	@Override
 	public String[] getParameterValues(String parameter) {
@@ -131,7 +129,8 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 		if (data.getClass().isArray()) {
 			return (String[]) data;
 
-		} else {
+		}
+		else {
 			String[] array = this.parameters.get(parameter);
 			return array;
 		}
@@ -141,8 +140,7 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 	 * Returns the value of a request parameter as a String. Request parameters are extra information sent with the
 	 * request. For HTTP servlets, parameters are contained in the query string or posted form data.
 	 * 
-	 * @param parameter
-	 *            name of the parameter
+	 * @param parameter name of the parameter
 	 */
 	@Override
 	public String getParameter(String parameter) {
@@ -158,7 +156,8 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 			String[] array = (String[]) data;
 			return array[0];
 
-		} else {
+		}
+		else {
 			String[] values = this.parameters.get(parameter);
 			return values.length > 0 ? values[0] : null;
 		}
@@ -192,10 +191,9 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 	/**
 	 * Returns the value of the specified request header as a String.
 	 * 
-	 * @param name
-	 *            header name
+	 * @param name header name
 	 * @return a String containing the value of the requested header, or null if the request does not have a header of
-	 *         that name
+	 * that name
 	 * @since HDIV 1.1.1
 	 */
 	@Override
@@ -218,11 +216,9 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 	/**
 	 * Returns all the values of the specified request header as an Enumeration of String objects.
 	 * 
-	 * @param name
-	 *            a String specifying the header name
+	 * @param name a String specifying the header name
 	 * @return an Enumeration containing the values of the requested header. If the request does not have any headers of
-	 *         that name return an empty enumeration. If the container does not allow access to header information,
-	 *         return null.
+	 * that name return an empty enumeration. If the container does not allow access to header information, return null.
 	 * @since HDIV 1.1.1
 	 */
 	@Override
@@ -243,7 +239,8 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 					String replaced = this.replaceCookieString(element, sessionCookies);
 					values.add(replaced);
 				}
-			} else {
+			}
+			else {
 				return headerValues;
 			}
 			return values.elements();
@@ -254,10 +251,8 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 	/**
 	 * Parses an http cookie request header and replace values if confidentiality is activated.
 	 * 
-	 * @param cookieHeader
-	 *            value assigned to cookie header
-	 * @param sessionCookies
-	 *            cookies stored in user session
+	 * @param cookieHeader value assigned to cookie header
+	 * @param sessionCookies cookies stored in user session
 	 * @return cookie request header with replaced values
 	 * @since HDIV 1.1.1
 	 */
@@ -291,10 +286,8 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 	/**
 	 * Add a single value for the specified HTTP parameter <code>name</code>.
 	 * 
-	 * @param name
-	 *            parameter name
-	 * @param value
-	 *            value
+	 * @param name parameter name
+	 * @param value value
 	 */
 	public void addParameter(String name, String[] value) {
 
@@ -354,10 +347,8 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 	/**
 	 * Adds a regular text parameter to the set of text parameters for this request.
 	 * 
-	 * @param name
-	 *            text parameter name
-	 * @param value
-	 *            text parameter value
+	 * @param name text parameter name
+	 * @param value text parameter value
 	 */
 	public void addTextParameter(String name, Object value) {
 		this.elementsText.put(name, value);
@@ -366,10 +357,8 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 	/**
 	 * Adds a file parameter to the set of file parameters for this request.
 	 * 
-	 * @param name
-	 *            file name
-	 * @param values
-	 *            file values
+	 * @param name file name
+	 * @param values file values
 	 */
 	public void addFileItem(String name, Object values) {
 		this.elementsFile.put(name, values);
@@ -378,8 +367,7 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 	/**
 	 * Add editable parameter.
 	 * 
-	 * @param parameter
-	 *            new parameter name
+	 * @param parameter new parameter name
 	 */
 	public void addEditableParameter(String parameter) {
 		this.editableParameters.add(parameter);
@@ -388,8 +376,7 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 	/**
 	 * Return true if parameter is editable.
 	 * 
-	 * @param parameter
-	 *            parameter name
+	 * @param parameter parameter name
 	 * @return boolean
 	 */
 	public boolean isEditableParameter(String parameter) {
@@ -406,24 +393,21 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 	/**
 	 * Determines whether this request is multipart.
 	 * 
-	 * @param isMultipart
-	 *            true if it is multipart
+	 * @param isMultipart true if it is multipart
 	 */
 	public void setMultipart(boolean isMultipart) {
 		this.isMultipart = isMultipart;
 	}
 
 	/**
-	 * @param cookiesConfidentiality
-	 *            The cookiesConfidentiality to set.
+	 * @param cookiesConfidentiality The cookiesConfidentiality to set.
 	 */
 	public void setCookiesConfidentiality(boolean cookiesConfidentiality) {
 		this.cookiesConfidentiality = cookiesConfidentiality;
 	}
 
 	/**
-	 * @param confidentiality
-	 *            The confidentiality to set.
+	 * @param confidentiality The confidentiality to set.
 	 */
 	public void setConfidentiality(boolean confidentiality) {
 		this.confidentiality = confidentiality;

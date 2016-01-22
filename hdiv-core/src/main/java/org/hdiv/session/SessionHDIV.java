@@ -70,8 +70,7 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 	/**
 	 * Obtains from the user session the page identifier for the current request.
 	 * 
-	 * @param context
-	 *            Context holder for request-specific state.
+	 * @param context Context holder for request-specific state.
 	 * @return Returns the pageId.
 	 */
 	public int getPageId(RequestContext context) {
@@ -102,10 +101,8 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 	/**
 	 * Returns the page with id <code>pageId</code>.
 	 * 
-	 * @param context
-	 *            Context holder for request-specific state.
-	 * @param pageId
-	 *            page id
+	 * @param context Context holder for request-specific state.
+	 * @param pageId page id
 	 * @return Returns the page with id <code>pageId</code>.
 	 * @since HDIV 2.0.4
 	 */
@@ -113,7 +110,8 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 		try {
 			return this.getPageFromSession(context, pageId);
 
-		} catch (IllegalStateException e) {
+		}
+		catch (IllegalStateException e) {
 			throw new HDIVException(HDIVErrorCodes.PAGE_ID_INCORRECT, e);
 		}
 	}
@@ -122,14 +120,10 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 	 * It adds a new page to the user session. To do this it adds a new page identifier to the cache and if it has
 	 * reached the maximum size allowed, the oldest page is deleted from the session and from the cache itself.
 	 * 
-	 * @param context
-	 *            Context holder for request-specific state.
-	 * @param pageId
-	 *            Page identifier
-	 * @param newPage
-	 *            Page with all the information about states
-	 * @param isPartial
-	 *            If is a partial page
+	 * @param context Context holder for request-specific state.
+	 * @param pageId Page identifier
+	 * @param newPage Page with all the information about states
+	 * @param isPartial If is a partial page
 	 */
 	protected void addPage(RequestContext context, int pageId, IPage newPage, boolean isPartial) {
 
@@ -184,12 +178,9 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 	/**
 	 * It adds a new page to the user session.
 	 * 
-	 * @param context
-	 *            Context holder for request-specific state.
-	 * @param pageId
-	 *            Page identifier
-	 * @param page
-	 *            Page with all the information about states
+	 * @param context Context holder for request-specific state.
+	 * @param pageId Page identifier
+	 * @param page Page with all the information about states
 	 */
 	public void addPage(RequestContext context, int pageId, IPage page) {
 		this.addPage(context, pageId, page, false);
@@ -198,12 +189,9 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 	/**
 	 * It adds a partial page to the user session.
 	 * 
-	 * @param context
-	 *            Context holder for request-specific state.
-	 * @param pageId
-	 *            Page identifier
-	 * @param page
-	 *            Page with all the information about states
+	 * @param context Context holder for request-specific state.
+	 * @param pageId Page identifier
+	 * @param page Page with all the information about states
 	 */
 	public void addPartialPage(RequestContext context, int pageId, IPage page) {
 		this.addPage(context, pageId, page, true);
@@ -213,10 +201,8 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 	 * Deletes from session the data related to the finished flows. This means a memory consumption optimization because
 	 * useless objects of type <code>IPage</code> are deleted.
 	 * 
-	 * @param context
-	 *            Context holder for request-specific state.
-	 * @param conversationId
-	 *            finished flow identifier
+	 * @param context Context holder for request-specific state.
+	 * @param conversationId finished flow identifier
 	 * @since HDIV 2.0.3
 	 */
 	public void removeEndedPages(RequestContext context, String conversationId) {
@@ -255,10 +241,9 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 	/**
 	 * Obtains the state identifier <code>stateId</code> related to the page identifier <code>pageId</code>.
 	 * 
-	 * @param context
-	 *            Context holder for request-specific state.
+	 * @param context Context holder for request-specific state.
 	 * @return State identifier <code>stateId</code> throws HDIVException If the state doesn't exist a new HDIV
-	 *         exception is thrown.
+	 * exception is thrown.
 	 */
 	public IState getState(RequestContext context, int pageId, int stateId) {
 
@@ -266,7 +251,8 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 			IPage currentPage = this.getPage(context, pageId);
 			return currentPage.getState(stateId);
 
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			throw new HDIVException(HDIVErrorCodes.PAGE_ID_INCORRECT, e);
 		}
 	}
@@ -274,10 +260,8 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 	/**
 	 * Internal method to retrieve a IPage instance from {@link HttpSession}
 	 * 
-	 * @param context
-	 *            {@link RequestContext} instance
-	 * @param pageId
-	 *            page id to retrieve from session
+	 * @param context {@link RequestContext} instance
+	 * @param pageId page id to retrieve from session
 	 * @return IPage instance
 	 * @since HDIV 2.1.5
 	 */
@@ -294,12 +278,9 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 	/**
 	 * Internal method to add a new IPage instance to {@link HttpSession}
 	 * 
-	 * @param context
-	 *            {@link RequestContext} instance
-	 * @param page
-	 *            IPage instance
-	 * @param isPartial
-	 *            If is partial page
+	 * @param context {@link RequestContext} instance
+	 * @param page IPage instance
+	 * @param isPartial If is partial page
 	 * 
 	 * @since HDIV 2.1.5
 	 */
@@ -316,10 +297,8 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 	/**
 	 * Internal method to remove a IPage instance from {@link HttpSession}
 	 * 
-	 * @param context
-	 *            {@link RequestContext} instance
-	 * @param pageId
-	 *            page id to remove from session
+	 * @param context {@link RequestContext} instance
+	 * @param pageId page id to remove from session
 	 * @since HDIV 2.1.5
 	 */
 	protected void removePageFromSession(RequestContext context, int pageId) {
@@ -336,8 +315,7 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 	 * Callback that supplies the owning factory to a bean instance. Invoked after population of normal bean properties
 	 * but before an init callback like InitializingBean's afterPropertiesSet or a custom init-method.
 	 * 
-	 * @param beanFactory
-	 *            owning BeanFactory (may not be null). The bean can immediately call methods on the factory.
+	 * @param beanFactory owning BeanFactory (may not be null). The bean can immediately call methods on the factory.
 	 */
 	public void setBeanFactory(BeanFactory beanFactory) {
 		this.beanFactory = beanFactory;
@@ -346,8 +324,7 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 	/**
 	 * Create new or obtain existing state Cache instance.
 	 * 
-	 * @param session
-	 *            {@link HttpSession} instance
+	 * @param session {@link HttpSession} instance
 	 * @return IStateCache instance
 	 */
 	protected IStateCache getStateCache(HttpSession session) {
@@ -364,10 +341,8 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 	/**
 	 * Save state Cache instance.
 	 * 
-	 * @param session
-	 *            {@link HttpSession} instance
-	 * @param stateCache
-	 *            {@link IStateCache} instance
+	 * @param session {@link HttpSession} instance
+	 * @param stateCache {@link IStateCache} instance
 	 * @since HDIV 2.1.6
 	 */
 	protected void saveStateCache(HttpSession session, IStateCache stateCache) {
@@ -390,10 +365,8 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 	/**
 	 * Log cache content in the logger.
 	 * 
-	 * @param context
-	 *            Context holder for request-specific state.
-	 * @param cache
-	 *            cache object
+	 * @param context Context holder for request-specific state.
+	 * @param cache cache object
 	 */
 	protected void logCacheContent(RequestContext context, IStateCache cache) {
 		if (log.isTraceEnabled()) {
@@ -417,16 +390,14 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 	}
 
 	/**
-	 * @param cacheName
-	 *            The cacheName to set.
+	 * @param cacheName The cacheName to set.
 	 */
 	public void setCacheName(String cacheName) {
 		this.cacheName = cacheName;
 	}
 
 	/**
-	 * @param pageIdGeneratorName
-	 *            The pageIdGeneratorName to set.
+	 * @param pageIdGeneratorName The pageIdGeneratorName to set.
 	 */
 	public void setPageIdGeneratorName(String pageIdGeneratorName) {
 		this.pageIdGeneratorName = pageIdGeneratorName;

@@ -43,8 +43,7 @@ public class BasicUrlData {
 	}
 
 	/**
-	 * @param contextPathRelativeUrl
-	 *            the contextPathRelativeUrl to set
+	 * @param contextPathRelativeUrl the contextPathRelativeUrl to set
 	 */
 	public void setContextPathRelativeUrl(String contextPathRelativeUrl) {
 		this.contextPathRelativeUrl = contextPathRelativeUrl;
@@ -58,8 +57,7 @@ public class BasicUrlData {
 	}
 
 	/**
-	 * @param urlParams
-	 *            the urlParams to set
+	 * @param urlParams the urlParams to set
 	 */
 	public void setUrlParams(Map<String, String[]> urlParams) {
 		this.urlParams = urlParams;

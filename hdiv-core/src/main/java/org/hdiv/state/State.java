@@ -164,7 +164,8 @@ public class State implements IState, Serializable {
 
 		try {
 			return new String(params, Constants.ENCODING_UTF_8);
-		} catch (UnsupportedEncodingException e) {
+		}
+		catch (UnsupportedEncodingException e) {
 			throw new HDIVException("Error converting parameters to String", e);
 		}
 	}
@@ -178,10 +179,12 @@ public class State implements IState, Serializable {
 		try {
 			if (params != null) {
 				this.params = params.getBytes(Constants.ENCODING_UTF_8);
-			} else {
+			}
+			else {
 				this.params = null;
 			}
-		} catch (UnsupportedEncodingException e) {
+		}
+		catch (UnsupportedEncodingException e) {
 			throw new HDIVException("Error converting action to byte array", e);
 		}
 	}

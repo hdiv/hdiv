@@ -31,10 +31,8 @@ public class BasicUrlProcessor extends AbstractUrlProcessor {
 	/**
 	 * Create {@link UrlData} instance only with the ContextPath relative url and parameters in a Map.
 	 * 
-	 * @param url
-	 *            original url, must be context relative
-	 * @param request
-	 *            {@link HttpServletRequest} object
+	 * @param url original url, must be context relative
+	 * @param request {@link HttpServletRequest} object
 	 * @return new instance of {@link BasicUrlData}
 	 */
 	public BasicUrlData createBasicUrlData(String url, HttpServletRequest request) {
@@ -58,10 +56,8 @@ public class BasicUrlProcessor extends AbstractUrlProcessor {
 	/**
 	 * Creates {@link BasicUrlData} instance with contextPath relative URL and parameters processed.
 	 * 
-	 * @param request
-	 *            {@link HttpServletRequest} object
-	 * @param url
-	 *            URL to process
+	 * @param request {@link HttpServletRequest} object
+	 * @param url URL to process
 	 * @return {@link BasicUrlData} instance
 	 */
 	public BasicUrlData processUrl(HttpServletRequest request, String url) {

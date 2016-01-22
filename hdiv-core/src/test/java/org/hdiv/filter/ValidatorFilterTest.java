@@ -50,10 +50,12 @@ public class ValidatorFilterTest extends AbstractHDIVTestCase {
 			String redirectUrl = response.getRedirectedUrl();
 			assertEquals(getConfig().getErrorPage(), redirectUrl);
 
-		} catch (ServletException e) {
+		}
+		catch (ServletException e) {
 			e.printStackTrace();
 			assertTrue(false);
-		} catch (IOException e) {
+		}
+		catch (IOException e) {
 			e.printStackTrace();
 			assertTrue(false);
 		}

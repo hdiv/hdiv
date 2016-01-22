@@ -69,8 +69,7 @@ public class StartPage implements Serializable {
 	}
 
 	/**
-	 * @param compiledPattern
-	 *            the compiledPattern to set
+	 * @param compiledPattern the compiledPattern to set
 	 */
 	public void setCompiledPattern(PatternMatcher compiledPattern) {
 		this.compiledPattern = compiledPattern;
@@ -117,14 +116,16 @@ public class StartPage implements Serializable {
 			if (other.method != null) {
 				return false;
 			}
-		} else if (!method.equals(other.method)) {
+		}
+		else if (!method.equals(other.method)) {
 			return false;
 		}
 		if (pattern == null) {
 			if (other.pattern != null) {
 				return false;
 			}
-		} else if (!pattern.equals(other.pattern)) {
+		}
+		else if (!pattern.equals(other.pattern)) {
 			return false;
 		}
 		return true;

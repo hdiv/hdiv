@@ -60,7 +60,8 @@ public class OutcomeTargetComponentProcessor extends AbstractComponentProcessor 
 				IDataComposer dataComposer = HDIVUtil.getDataComposer(request);
 				dataComposer.beginRequest("GET", urlData.getUrlWithoutContextPath());
 
-				String processedParams = dataComposer.composeParams(urlData.getUrlParams(), "GET", Constants.ENCODING_UTF_8);
+				String processedParams = dataComposer.composeParams(urlData.getUrlParams(), "GET",
+						Constants.ENCODING_UTF_8);
 				urlData.setUrlParams(processedParams);
 
 				String stateParam = dataComposer.endRequest();
@@ -74,7 +75,8 @@ public class OutcomeTargetComponentProcessor extends AbstractComponentProcessor 
 				paramComponent.setValue(stateParam);
 				component.getChildren().add(paramComponent);
 			}
-		} catch (FacesException e) {
+		}
+		catch (FacesException e) {
 			log.error("Error in OutcomeTargetComponentProcessor.processOutcomeTargetLinkComponent: " + e.getMessage());
 			throw e;
 		}

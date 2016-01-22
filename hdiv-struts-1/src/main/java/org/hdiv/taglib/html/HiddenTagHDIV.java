@@ -26,9 +26,8 @@ import org.hdiv.dataComposer.IDataComposer;
 import org.hdiv.util.HDIVUtil;
 
 /**
- * Renders an HTML <b>&lt;input&gt;</b> element of type hidden, populated from the
- * specified value or the specified property of the bean associated with our current
- * form. This tag is only valid when nested inside a form tag body.
+ * Renders an HTML <b>&lt;input&gt;</b> element of type hidden, populated from the specified value or the specified
+ * property of the bean associated with our current form. This tag is only valid when nested inside a form tag body.
  * 
  * @author Gorka Vicente
  * @see org.apache.struts.taglib.html.HiddenTag
@@ -36,8 +35,8 @@ import org.hdiv.util.HDIVUtil;
 public class HiddenTagHDIV extends HiddenTag {
 
 	/**
-	 * Universal version identifier. Deserialization uses this number to ensure that
-	 * a loaded class corresponds exactly to a serialized object.
+	 * Universal version identifier. Deserialization uses this number to ensure that a loaded class corresponds exactly
+	 * to a serialized object.
 	 */
 	private static final long serialVersionUID = 8200582308056745466L;
 
@@ -52,34 +51,34 @@ public class HiddenTagHDIV extends HiddenTag {
 	private String encodedValue = null;
 
 	/**
-	 * Generate the required input tag, followed by the optional rendered text.
-	 * Support for <code>write</code> property since Struts 1.1.
+	 * Generate the required input tag, followed by the optional rendered text. Support for <code>write</code> property
+	 * since Struts 1.1.
 	 * 
 	 * @exception JspException if a JSP exception has occurred
 	 * @see org.hdiv.dataComposer.IDataComposer#composeFormField(String, String, boolean, String)
 	 */
 	public int doStartTag() throws JspException {
 
-		try { 
-			String hiddenValue = value;			
+		try {
+			String hiddenValue = value;
 			Object lookupValue = null;
-			
-			if (value == null) {				
+
+			if (value == null) {
 				// locate and return the specified property of the specified bean
-				 lookupValue = TagUtils.getInstance().lookup(pageContext, name, property, null);
+				lookupValue = TagUtils.getInstance().lookup(pageContext, name, property, null);
 
 				if (lookupValue != null) {
 					hiddenValue = lookupValue.toString();
 				}
 			}
-								
+
 			HttpServletRequest request = (HttpServletRequest) this.pageContext.getRequest();
 			IDataComposer dataComposer = HDIVUtil.getDataComposer(request);
 			this.encodedValue = dataComposer.composeFormField(prepareName(), hiddenValue, false, null);
-			 
+
 			// Render the result to the output writer
 			TagUtils.getInstance().write(this.pageContext, this.renderInputElement());
-			
+
 			// Is rendering the value separately requested?
 			if (!write) {
 				return (EVAL_BODY_TAG);
@@ -90,10 +89,12 @@ public class HiddenTagHDIV extends HiddenTag {
 			String results = null;
 			if (value != null) {
 				results = TagUtils.getInstance().filter(value);
-			} else {
+			}
+			else {
 				if (lookupValue == null) {
 					results = "";
-				} else {
+				}
+				else {
 					results = TagUtils.getInstance().filter(lookupValue.toString());
 				}
 			}
@@ -101,13 +102,14 @@ public class HiddenTagHDIV extends HiddenTag {
 			// Render the result to the output writer
 			TagUtils.getInstance().write(pageContext, results);
 			return (EVAL_BODY_TAG);
-		
-		} catch (JspException e) {
+
+		}
+		catch (JspException e) {
 			log.debug(e.getMessage());
 			throw e;
 		}
 	}
-	
+
 	/**
 	 * Render the value element.
 	 * 
@@ -116,11 +118,12 @@ public class HiddenTagHDIV extends HiddenTag {
 	protected void prepareValue(StringBuffer results) throws JspException {
 
 		results.append(" value=\"");
-		
+
 		if (this.encodedValue != null) {
 			results.append(this.formatValue(this.encodedValue));
-			
-		} else if (redisplay || !"password".equals(type)) {
+
+		}
+		else if (redisplay || !"password".equals(type)) {
 			Object lookupValue = TagUtils.getInstance().lookup(pageContext, name, property, null);
 			results.append(this.formatValue(lookupValue));
 		}

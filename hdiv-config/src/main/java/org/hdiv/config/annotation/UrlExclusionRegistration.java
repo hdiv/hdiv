@@ -40,8 +40,7 @@ public class UrlExclusionRegistration {
 	/**
 	 * HTTP method to apply to the url exclusion. If no method is configured, defaults to all methods.
 	 * 
-	 * @param method
-	 *            HTTP method
+	 * @param method HTTP method
 	 */
 	public void method(String method) {
 		Assert.notNull(method, "Method is required");

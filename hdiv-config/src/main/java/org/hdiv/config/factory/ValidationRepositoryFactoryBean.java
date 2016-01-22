@@ -99,8 +99,7 @@ public class ValidationRepositoryFactoryBean extends AbstractFactoryBean<Default
 	/**
 	 * Convert List with bean ids in another List with the bean instances.
 	 * 
-	 * @param ids
-	 *            List with bean ids.
+	 * @param ids List with bean ids.
 	 * @return List with bean instances.
 	 */
 	@SuppressWarnings("unchecked")
@@ -112,7 +111,8 @@ public class ValidationRepositoryFactoryBean extends AbstractFactoryBean<Default
 			if (bean instanceof IValidation) {
 				IValidation validation = (IValidation) bean;
 				newList.add(validation);
-			} else if (bean instanceof List<?>) {
+			}
+			else if (bean instanceof List<?>) {
 				List<IValidation> validations = (List<IValidation>) bean;
 				newList.addAll(validations);
 			}

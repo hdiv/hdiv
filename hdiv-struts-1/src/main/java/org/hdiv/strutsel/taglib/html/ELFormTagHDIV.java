@@ -21,14 +21,12 @@ import org.apache.strutsel.taglib.utils.EvalHelper;
 import org.hdiv.taglib.html.FormTagHDIV;
 
 /**
- * Custom tag that represents an input form, associated with a bean whose
- * properties correspond to the various fields of the form.
+ * Custom tag that represents an input form, associated with a bean whose properties correspond to the various fields of
+ * the form.
  * <p>
- * This class is a subclass of the class
- * <code>org.hdiv.taglib.html.FormTagHDIV</code> which provides most of the
- * described functionality. This subclass allows all attribute values to be
- * specified as expressions utilizing the JavaServer Pages Standard Library
- * expression language.
+ * This class is a subclass of the class <code>org.hdiv.taglib.html.FormTagHDIV</code> which provides most of the
+ * described functionality. This subclass allows all attribute values to be specified as expressions utilizing the
+ * JavaServer Pages Standard Library expression language.
  * 
  * @author Gorka Vicente
  * @since HDIV 2.0
@@ -36,374 +34,323 @@ import org.hdiv.taglib.html.FormTagHDIV;
 public class ELFormTagHDIV extends FormTagHDIV {
 
 	/**
-	 * Instance variable mapped to "action" tag attribute. (Mapping set in
-	 * associated BeanInfo class.)
+	 * Instance variable mapped to "action" tag attribute. (Mapping set in associated BeanInfo class.)
 	 */
 	private String actionExpr;
 
 	/**
-	 * Instance variable mapped to "dir" tag attribute. (Mapping set in
-	 * associated BeanInfo class.)
+	 * Instance variable mapped to "dir" tag attribute. (Mapping set in associated BeanInfo class.)
 	 */
 	private String dirExpr;
 
 	/**
-	 * Instance variable mapped to "disabled" tag attribute. (Mapping set in
-	 * associated BeanInfo class.)
+	 * Instance variable mapped to "disabled" tag attribute. (Mapping set in associated BeanInfo class.)
 	 */
 	private String disabledExpr;
 
 	/**
-	 * Instance variable mapped to "enctype" tag attribute. (Mapping set in
-	 * associated BeanInfo class.)
+	 * Instance variable mapped to "enctype" tag attribute. (Mapping set in associated BeanInfo class.)
 	 */
 	private String enctypeExpr;
 
 	/**
-	 * Instance variable mapped to "focus" tag attribute. (Mapping set in
-	 * associated BeanInfo class.)
+	 * Instance variable mapped to "focus" tag attribute. (Mapping set in associated BeanInfo class.)
 	 */
 	private String focusExpr;
 
 	/**
-	 * Instance variable mapped to "focusIndex" tag attribute. (Mapping set in
-	 * associated BeanInfo class.)
+	 * Instance variable mapped to "focusIndex" tag attribute. (Mapping set in associated BeanInfo class.)
 	 */
 	private String focusIndexExpr;
 
 	/**
-	 * Instance variable mapped to "lang" tag attribute. (Mapping set in
-	 * associated BeanInfo class.)
+	 * Instance variable mapped to "lang" tag attribute. (Mapping set in associated BeanInfo class.)
 	 */
 	private String langExpr;
 
 	/**
-	 * Instance variable mapped to "method" tag attribute. (Mapping set in
-	 * associated BeanInfo class.)
+	 * Instance variable mapped to "method" tag attribute. (Mapping set in associated BeanInfo class.)
 	 */
 	private String methodExpr;
 
 	/**
-	 * Instance variable mapped to "onreset" tag attribute. (Mapping set in
-	 * associated BeanInfo class.)
+	 * Instance variable mapped to "onreset" tag attribute. (Mapping set in associated BeanInfo class.)
 	 */
 	private String onresetExpr;
 
 	/**
-	 * Instance variable mapped to "onsubmit" tag attribute. (Mapping set in
-	 * associated BeanInfo class.)
+	 * Instance variable mapped to "onsubmit" tag attribute. (Mapping set in associated BeanInfo class.)
 	 */
 	private String onsubmitExpr;
 
 	/**
-	 * Instance variable mapped to "readonly" tag attribute. (Mapping set in
-	 * associated BeanInfo class.)
+	 * Instance variable mapped to "readonly" tag attribute. (Mapping set in associated BeanInfo class.)
 	 */
 	private String readonlyExpr;
 
 	/**
-	 * Instance variable mapped to "scriptLanguage" tag attribute. (Mapping set
-	 * in associated BeanInfo class.)
+	 * Instance variable mapped to "scriptLanguage" tag attribute. (Mapping set in associated BeanInfo class.)
 	 */
 	private String scriptLanguageExpr;
 
 	/**
-	 * Instance variable mapped to "style" tag attribute. (Mapping set in
-	 * associated BeanInfo class.)
+	 * Instance variable mapped to "style" tag attribute. (Mapping set in associated BeanInfo class.)
 	 */
 	private String styleExpr;
 
 	/**
-	 * Instance variable mapped to "styleClass" tag attribute. (Mapping set in
-	 * associated BeanInfo class.)
+	 * Instance variable mapped to "styleClass" tag attribute. (Mapping set in associated BeanInfo class.)
 	 */
 	private String styleClassExpr;
 
 	/**
-	 * Instance variable mapped to "styleId" tag attribute. (Mapping set in
-	 * associated BeanInfo class.)
+	 * Instance variable mapped to "styleId" tag attribute. (Mapping set in associated BeanInfo class.)
 	 */
 	private String styleIdExpr;
 
 	/**
-	 * Instance variable mapped to "target" tag attribute. (Mapping set in
-	 * associated BeanInfo class.)
+	 * Instance variable mapped to "target" tag attribute. (Mapping set in associated BeanInfo class.)
 	 */
 	private String targetExpr;
 
 	/**
-	 * Instance variable mapped to "acceptCharset" tag attribute. (Mapping set
-	 * in associated BeanInfo class.)
+	 * Instance variable mapped to "acceptCharset" tag attribute. (Mapping set in associated BeanInfo class.)
 	 */
 	private String acceptCharsetExpr;
 
 	/**
-	 * Getter method for "action" tag attribute. (Mapping set in associated
-	 * BeanInfo class.)
+	 * Getter method for "action" tag attribute. (Mapping set in associated BeanInfo class.)
 	 */
 	public String getActionExpr() {
 		return (actionExpr);
 	}
 
 	/**
-	 * Getter method for "dir" tag attribute. (Mapping set in associated
-	 * BeanInfo class.)
+	 * Getter method for "dir" tag attribute. (Mapping set in associated BeanInfo class.)
 	 */
 	public String getDirExpr() {
 		return (dirExpr);
 	}
 
 	/**
-	 * Getter method for "disabled" tag attribute. (Mapping set in associated
-	 * BeanInfo class.)
+	 * Getter method for "disabled" tag attribute. (Mapping set in associated BeanInfo class.)
 	 */
 	public String getDisabledExpr() {
 		return (disabledExpr);
 	}
 
 	/**
-	 * Getter method for "enctype" tag attribute. (Mapping set in associated
-	 * BeanInfo class.)
+	 * Getter method for "enctype" tag attribute. (Mapping set in associated BeanInfo class.)
 	 */
 	public String getEnctypeExpr() {
 		return (enctypeExpr);
 	}
 
 	/**
-	 * Getter method for "focus" tag attribute. (Mapping set in associated
-	 * BeanInfo class.)
+	 * Getter method for "focus" tag attribute. (Mapping set in associated BeanInfo class.)
 	 */
 	public String getFocusExpr() {
 		return (focusExpr);
 	}
 
 	/**
-	 * Getter method for "focusIndex" tag attribute. (Mapping set in associated
-	 * BeanInfo class.)
+	 * Getter method for "focusIndex" tag attribute. (Mapping set in associated BeanInfo class.)
 	 */
 	public String getFocusIndexExpr() {
 		return (focusIndexExpr);
 	}
 
 	/**
-	 * Getter method for "lang" tag attribute. (Mapping set in associated
-	 * BeanInfo class.)
+	 * Getter method for "lang" tag attribute. (Mapping set in associated BeanInfo class.)
 	 */
 	public String getLangExpr() {
 		return (langExpr);
 	}
 
 	/**
-	 * Getter method for "method" tag attribute. (Mapping set in associated
-	 * BeanInfo class.)
+	 * Getter method for "method" tag attribute. (Mapping set in associated BeanInfo class.)
 	 */
 	public String getMethodExpr() {
 		return (methodExpr);
 	}
 
 	/**
-	 * Getter method for "onreset" tag attribute. (Mapping set in associated
-	 * BeanInfo class.)
+	 * Getter method for "onreset" tag attribute. (Mapping set in associated BeanInfo class.)
 	 */
 	public String getOnresetExpr() {
 		return (onresetExpr);
 	}
 
 	/**
-	 * Getter method for "onsubmit" tag attribute. (Mapping set in associated
-	 * BeanInfo class.)
+	 * Getter method for "onsubmit" tag attribute. (Mapping set in associated BeanInfo class.)
 	 */
 	public String getOnsubmitExpr() {
 		return (onsubmitExpr);
 	}
 
 	/**
-	 * Getter method for "readonly" tag attribute. (Mapping set in associated
-	 * BeanInfo class.)
+	 * Getter method for "readonly" tag attribute. (Mapping set in associated BeanInfo class.)
 	 */
 	public String getReadonlyExpr() {
 		return (readonlyExpr);
 	}
 
 	/**
-	 * Getter method for "scriptLanguage" tag attribute. (Mapping set in
-	 * associated BeanInfo class.)
+	 * Getter method for "scriptLanguage" tag attribute. (Mapping set in associated BeanInfo class.)
 	 */
 	public String getScriptLanguageExpr() {
 		return (scriptLanguageExpr);
 	}
 
 	/**
-	 * Getter method for "style" tag attribute. (Mapping set in associated
-	 * BeanInfo class.)
+	 * Getter method for "style" tag attribute. (Mapping set in associated BeanInfo class.)
 	 */
 	public String getStyleExpr() {
 		return (styleExpr);
 	}
 
 	/**
-	 * Getter method for "styleClass" tag attribute. (Mapping set in associated
-	 * BeanInfo class.)
+	 * Getter method for "styleClass" tag attribute. (Mapping set in associated BeanInfo class.)
 	 */
 	public String getStyleClassExpr() {
 		return (styleClassExpr);
 	}
 
 	/**
-	 * Getter method for "styleId" tag attribute. (Mapping set in associated
-	 * BeanInfo class.)
+	 * Getter method for "styleId" tag attribute. (Mapping set in associated BeanInfo class.)
 	 */
 	public String getStyleIdExpr() {
 		return (styleIdExpr);
 	}
 
 	/**
-	 * Getter method for "target" tag attribute. (Mapping set in associated
-	 * BeanInfo class.)
+	 * Getter method for "target" tag attribute. (Mapping set in associated BeanInfo class.)
 	 */
 	public String getTargetExpr() {
 		return (targetExpr);
 	}
 
 	/**
-	 * Getter method for "acceptCharset" tag attribute. (Mapping set in
-	 * associated BeanInfo class.)
+	 * Getter method for "acceptCharset" tag attribute. (Mapping set in associated BeanInfo class.)
 	 */
 	public String getAcceptCharsetExpr() {
 		return (acceptCharsetExpr);
 	}
 
 	/**
-	 * Setter method for "action" tag attribute. (Mapping set in associated
-	 * BeanInfo class.)
+	 * Setter method for "action" tag attribute. (Mapping set in associated BeanInfo class.)
 	 */
 	public void setActionExpr(String actionExpr) {
 		this.actionExpr = actionExpr;
 	}
 
 	/**
-	 * Setter method for "dir" tag attribute. (Mapping set in associated
-	 * BeanInfo class.)
+	 * Setter method for "dir" tag attribute. (Mapping set in associated BeanInfo class.)
 	 */
 	public void setDirExpr(String dirExpr) {
 		this.dirExpr = dirExpr;
 	}
 
 	/**
-	 * Setter method for "disabled" tag attribute. (Mapping set in associated
-	 * BeanInfo class.)
+	 * Setter method for "disabled" tag attribute. (Mapping set in associated BeanInfo class.)
 	 */
 	public void setDisabledExpr(String disabledExpr) {
 		this.disabledExpr = disabledExpr;
 	}
 
 	/**
-	 * Setter method for "enctype" tag attribute. (Mapping set in associated
-	 * BeanInfo class.)
+	 * Setter method for "enctype" tag attribute. (Mapping set in associated BeanInfo class.)
 	 */
 	public void setEnctypeExpr(String enctypeExpr) {
 		this.enctypeExpr = enctypeExpr;
 	}
 
 	/**
-	 * Setter method for "focus" tag attribute. (Mapping set in associated
-	 * BeanInfo class.)
+	 * Setter method for "focus" tag attribute. (Mapping set in associated BeanInfo class.)
 	 */
 	public void setFocusExpr(String focusExpr) {
 		this.focusExpr = focusExpr;
 	}
 
 	/**
-	 * Setter method for "focusIndex" tag attribute. (Mapping set in associated
-	 * BeanInfo class.)
+	 * Setter method for "focusIndex" tag attribute. (Mapping set in associated BeanInfo class.)
 	 */
 	public void setFocusIndexExpr(String focusIndexExpr) {
 		this.focusIndexExpr = focusIndexExpr;
 	}
 
 	/**
-	 * Setter method for "lang" tag attribute. (Mapping set in associated
-	 * BeanInfo class.)
+	 * Setter method for "lang" tag attribute. (Mapping set in associated BeanInfo class.)
 	 */
 	public void setLangExpr(String langExpr) {
 		this.langExpr = langExpr;
 	}
 
 	/**
-	 * Setter method for "method" tag attribute. (Mapping set in associated
-	 * BeanInfo class.)
+	 * Setter method for "method" tag attribute. (Mapping set in associated BeanInfo class.)
 	 */
 	public void setMethodExpr(String methodExpr) {
 		this.methodExpr = methodExpr;
 	}
 
 	/**
-	 * Setter method for "onreset" tag attribute. (Mapping set in associated
-	 * BeanInfo class.)
+	 * Setter method for "onreset" tag attribute. (Mapping set in associated BeanInfo class.)
 	 */
 	public void setOnresetExpr(String onresetExpr) {
 		this.onresetExpr = onresetExpr;
 	}
 
 	/**
-	 * Setter method for "onsubmit" tag attribute. (Mapping set in associated
-	 * BeanInfo class.)
+	 * Setter method for "onsubmit" tag attribute. (Mapping set in associated BeanInfo class.)
 	 */
 	public void setOnsubmitExpr(String onsubmitExpr) {
 		this.onsubmitExpr = onsubmitExpr;
 	}
 
 	/**
-	 * Setter method for "readonly" tag attribute. (Mapping set in associated
-	 * BeanInfo class.)
+	 * Setter method for "readonly" tag attribute. (Mapping set in associated BeanInfo class.)
 	 */
 	public void setReadonlyExpr(String readonlyExpr) {
 		this.readonlyExpr = readonlyExpr;
 	}
 
 	/**
-	 * Setter method for "scriptLanguage" tag attribute. (Mapping set in
-	 * associated BeanInfo class.)
+	 * Setter method for "scriptLanguage" tag attribute. (Mapping set in associated BeanInfo class.)
 	 */
 	public void setScriptLanguageExpr(String scriptLanguageExpr) {
 		this.scriptLanguageExpr = scriptLanguageExpr;
 	}
 
 	/**
-	 * Setter method for "style" tag attribute. (Mapping set in associated
-	 * BeanInfo class.)
+	 * Setter method for "style" tag attribute. (Mapping set in associated BeanInfo class.)
 	 */
 	public void setStyleExpr(String styleExpr) {
 		this.styleExpr = styleExpr;
 	}
 
 	/**
-	 * Setter method for "styleClass" tag attribute. (Mapping set in associated
-	 * BeanInfo class.)
+	 * Setter method for "styleClass" tag attribute. (Mapping set in associated BeanInfo class.)
 	 */
 	public void setStyleClassExpr(String styleClassExpr) {
 		this.styleClassExpr = styleClassExpr;
 	}
 
 	/**
-	 * Setter method for "styleId" tag attribute. (Mapping set in associated
-	 * BeanInfo class.)
+	 * Setter method for "styleId" tag attribute. (Mapping set in associated BeanInfo class.)
 	 */
 	public void setStyleIdExpr(String styleIdExpr) {
 		this.styleIdExpr = styleIdExpr;
 	}
 
 	/**
-	 * Setter method for "target" tag attribute. (Mapping set in associated
-	 * BeanInfo class.)
+	 * Setter method for "target" tag attribute. (Mapping set in associated BeanInfo class.)
 	 */
 	public void setTargetExpr(String targetExpr) {
 		this.targetExpr = targetExpr;
 	}
 
 	/**
-	 * Setter method for "acceptCharset" tag attribute. (Mapping set in
-	 * associated BeanInfo class.)
+	 * Setter method for "acceptCharset" tag attribute. (Mapping set in associated BeanInfo class.)
 	 */
 	public void setAcceptCharsetExpr(String acceptCharsetExpr) {
 		this.acceptCharsetExpr = acceptCharsetExpr;
@@ -445,8 +392,7 @@ public class ELFormTagHDIV extends FormTagHDIV {
 	}
 
 	/**
-	 * Processes all attribute values which use the JSTL expression evaluation
-	 * engine to determine their values.
+	 * Processes all attribute values which use the JSTL expression evaluation engine to determine their values.
 	 * 
 	 * @throws JspException if a JSP exception has occurred
 	 */

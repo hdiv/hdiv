@@ -16,8 +16,7 @@
 package org.hdiv.validation;
 
 /**
- * Object that encapsulates data about an attack detected in the validation
- * process
+ * Object that encapsulates data about an attack detected in the validation process
  * 
  * @author Gotzon Illarramendi
  */
@@ -49,17 +48,12 @@ public class ValidationError {
 	/**
 	 * Constructor with default properties
 	 * 
-	 * @param errorKey
-	 *            error key
-	 * @param errorComponent
-	 *            component that has generated the error
-	 * @param errorParam
-	 *            parameter that has generated the error
-	 * @param errorValue
-	 *            value of the parameter that has generated the error
+	 * @param errorKey error key
+	 * @param errorComponent component that has generated the error
+	 * @param errorParam parameter that has generated the error
+	 * @param errorValue value of the parameter that has generated the error
 	 */
-	public ValidationError(String errorKey, String errorComponent,
-			String errorParam, String errorValue) {
+	public ValidationError(String errorKey, String errorComponent, String errorParam, String errorValue) {
 		super();
 		this.errorKey = errorKey;
 		this.errorComponent = errorComponent;

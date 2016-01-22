@@ -30,8 +30,7 @@ public interface IValidationHelper {
 	/**
 	 * Initialization of the objects needed for the validation process.
 	 * 
-	 * @throws HDIVException
-	 *             if there is an initialization error.
+	 * @throws HDIVException if there is an initialization error.
 	 */
 	public void init();
 
@@ -39,29 +38,25 @@ public interface IValidationHelper {
 	 * Checks if the values of the parameters received in the request <code>request</code> are valid. These values are
 	 * valid if and only if the noneditable parameters haven't been modified.<br>
 	 * 
-	 * @param request
-	 *            HTTP servlet request
+	 * @param request HTTP servlet request
 	 * @return {@link ValidatorHelperResult} with true value If all the parameter values of the request
-	 *         <code>request</code> pass the the HDIV validation. False, otherwise.
-	 * @throws HDIVException
-	 *             If the request doesn't pass the HDIV validation an exception is thrown explaining the cause of the
-	 *             error.
+	 * <code>request</code> pass the the HDIV validation. False, otherwise.
+	 * @throws HDIVException If the request doesn't pass the HDIV validation an exception is thrown explaining the cause
+	 * of the error.
 	 */
 	public ValidatorHelperResult validate(HttpServletRequest request);
 
 	/**
 	 * It is called in the pre-processing stage of each user request.
 	 * 
-	 * @param request
-	 *            HTTP servlet request
+	 * @param request HTTP servlet request
 	 */
 	public void startPage(HttpServletRequest request);
 
 	/**
 	 * It is called in the post-processing stage of each user request.
 	 * 
-	 * @param request
-	 *            HTTP servlet request
+	 * @param request HTTP servlet request
 	 */
 	public void endPage(HttpServletRequest request);
 

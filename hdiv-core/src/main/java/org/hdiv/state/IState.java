@@ -24,8 +24,7 @@ public interface IState {
 	 * Adds a new parameter to the state <code>this</code>. If it is a required parameter <code>parameter</code>, it is
 	 * also added to the required parameters.
 	 * 
-	 * @param parameter
-	 *            The parameter
+	 * @param parameter The parameter
 	 */
 	public void addParameter(IParameter parameter);
 
@@ -33,8 +32,7 @@ public interface IState {
 	 * Returns the parameter that matches the given identifier <code>key</code>. Null is returned if the parameter name
 	 * is not found.
 	 * 
-	 * @param key
-	 *            parameter identifier
+	 * @param key parameter identifier
 	 * @return IParameter object that matches the given identifier <code>key</code>.
 	 */
 	public IParameter getParameter(String key);
@@ -52,8 +50,7 @@ public interface IState {
 	public String getAction();
 
 	/**
-	 * @param action
-	 *            The action to set.
+	 * @param action The action to set.
 	 */
 	public void setAction(String action);
 
@@ -68,16 +65,14 @@ public interface IState {
 	public int getPageId();
 
 	/**
-	 * @param pageId
-	 *            The pageId to set.
+	 * @param pageId The pageId to set.
 	 */
 	public void setPageId(int pageId);
 
 	/**
 	 * Checks if exists a parameter with the given identifier <code>key</code>.
 	 * 
-	 * @param key
-	 *            parameter identifier
+	 * @param key parameter identifier
 	 * @return True if exists a parameter with this identifier <code>key</code>. False otherwise.
 	 */
 	public boolean existParameter(String key);
@@ -93,8 +88,7 @@ public interface IState {
 	public String getParams();
 
 	/**
-	 * @param params
-	 *            IState parameters in one String.
+	 * @param params IState parameters in one String.
 	 */
 	public void setParams(String params);
 
@@ -104,8 +98,7 @@ public interface IState {
 	public String getMethod();
 
 	/**
-	 * @param method
-	 *            HTTP method for this request
+	 * @param method HTTP method for this request
 	 */
 	public void setMethod(String method);
 

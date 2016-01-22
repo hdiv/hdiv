@@ -55,8 +55,7 @@ public class RedirectExternalContext extends javax.faces.context.ExternalContext
 	/**
 	 * ExternalContext constructor
 	 * 
-	 * @param wrapped
-	 *            original ExternalContext
+	 * @param wrapped original ExternalContext
 	 */
 	public RedirectExternalContext(ExternalContext wrapped) {
 

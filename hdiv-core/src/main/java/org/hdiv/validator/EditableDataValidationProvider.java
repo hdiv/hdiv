@@ -27,14 +27,10 @@ public interface EditableDataValidationProvider {
 	 * Checks if the values <code>values</code> are valid for the editable parameter <code>parameter</code>.
 	 * </p>
 	 * 
-	 * @param url
-	 *            request url
-	 * @param parameter
-	 *            parameter name
-	 * @param values
-	 *            parameter's values
-	 * @param dataType
-	 *            editable data type
+	 * @param url request url
+	 * @param parameter parameter name
+	 * @param values parameter's values
+	 * @param dataType editable data type
 	 * @return True if the values <code>values</code> are valid for the parameter <code>parameter</code>.
 	 */
 	EditableDataValidationResult validate(String url, String parameter, String[] values, String dataType);

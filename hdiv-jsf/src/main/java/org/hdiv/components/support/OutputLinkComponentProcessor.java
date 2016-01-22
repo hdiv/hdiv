@@ -59,7 +59,8 @@ public class OutputLinkComponentProcessor extends AbstractComponentProcessor {
 				IDataComposer dataComposer = HDIVUtil.getDataComposer(request);
 				dataComposer.beginRequest("GET", urlData.getUrlWithoutContextPath());
 
-				String processedParams = dataComposer.composeParams(urlData.getUrlParams(), "GET", Constants.ENCODING_UTF_8);
+				String processedParams = dataComposer.composeParams(urlData.getUrlParams(), "GET",
+						Constants.ENCODING_UTF_8);
 				urlData.setUrlParams(processedParams);
 
 				if (hasUIParams) {
@@ -89,7 +90,8 @@ public class OutputLinkComponentProcessor extends AbstractComponentProcessor {
 					paramComponent.setName(hdivParameter);
 					paramComponent.setValue(stateParam);
 					component.getChildren().add(paramComponent);
-				} else {
+				}
+				else {
 
 					String stateParam = dataComposer.endRequest();
 
@@ -98,7 +100,8 @@ public class OutputLinkComponentProcessor extends AbstractComponentProcessor {
 					component.setValue(url);
 				}
 			}
-		} catch (FacesException e) {
+		}
+		catch (FacesException e) {
 			log.error("Error in OutputLinkComponentProcessor.processOutputLink: " + e.getMessage());
 			throw e;
 		}

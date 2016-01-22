@@ -51,8 +51,7 @@ public class RedirectExternalContext extends ExternalContextWrapper {
 	/**
 	 * Default constructor
 	 * 
-	 * @param wrapped
-	 *            original ExternalContext
+	 * @param wrapped original ExternalContext
 	 */
 	public RedirectExternalContext(ExternalContext wrapped) {
 		super();
@@ -79,8 +78,7 @@ public class RedirectExternalContext extends ExternalContextWrapper {
 	 * If it is an internal redirect (to the application itself) it generates the state, stores it in session and adds a
 	 * parameter to the url
 	 * 
-	 * @param url
-	 *            url to redirect
+	 * @param url url to redirect
 	 */
 	public void redirect(String url) throws IOException {
 

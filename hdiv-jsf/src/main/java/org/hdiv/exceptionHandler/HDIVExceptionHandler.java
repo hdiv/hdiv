@@ -54,8 +54,7 @@ public class HDIVExceptionHandler extends ExceptionHandlerWrapper {
 	/**
 	 * Constructor
 	 * 
-	 * @param original
-	 *            original ExceptionHandler
+	 * @param original original ExceptionHandler
 	 */
 	public HDIVExceptionHandler(ExceptionHandler original) {
 		this.original = original;
@@ -93,7 +92,8 @@ public class HDIVExceptionHandler extends ExceptionHandlerWrapper {
 					NavigationHandler nav = fc.getApplication().getNavigationHandler();
 					nav.handleNavigation(fc, null, this.getErrorPage(fc));
 					fc.renderResponse();
-				} finally {
+				}
+				finally {
 					i.remove();
 				}
 			}
@@ -104,8 +104,7 @@ public class HDIVExceptionHandler extends ExceptionHandlerWrapper {
 	/**
 	 * Obtains error page from HDIV configuration.
 	 * 
-	 * @param facesContext
-	 *            active FacesContext
+	 * @param facesContext active FacesContext
 	 * @return error page
 	 */
 	private String getErrorPage(FacesContext facesContext) {

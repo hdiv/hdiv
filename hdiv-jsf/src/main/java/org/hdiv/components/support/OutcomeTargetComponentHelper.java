@@ -34,12 +34,12 @@ import org.apache.commons.logging.LogFactory;
 
 /**
  * <p>
- * This class has been mostly copied from:
- * com.sun.faces.renderkit.html_basic.OutcomeTargetRenderer
- * </p><p>
- * Copied method are responsible for generating the url of the
- * link/button from the outcome of the component.
- * </p><p>
+ * This class has been mostly copied from: com.sun.faces.renderkit.html_basic.OutcomeTargetRenderer
+ * </p>
+ * <p>
+ * Copied method are responsible for generating the url of the link/button from the outcome of the component.
+ * </p>
+ * <p>
  * Only for JSF 2.0+
  * </p>
  * @author Gotzon Illarramendi
@@ -51,8 +51,7 @@ public class OutcomeTargetComponentHelper {
 	protected static final Param[] EMPTY_PARAMS = new Param[0];
 
 	/**
-	 * Returns the url that the component would generate if it was a 
-	 * UIOutcomeTarget
+	 * Returns the url that the component would generate if it was a UIOutcomeTarget
 	 * @param context {@link FacesContext} instance
 	 * @param component {@link UIOutcomeTarget} instance
 	 * @return the url
@@ -66,10 +65,9 @@ public class OutcomeTargetComponentHelper {
 	}
 
 	/**
-	 * Invoke the {@link NavigationHandler} preemptively to resolve a {@link NavigationCase}
-	 * for the outcome declared on the {@link UIOutcomeTarget} component. The current view id
-	 * is used as the from-view-id when matching navigation cases and the from-action is
-	 * assumed to be null.
+	 * Invoke the {@link NavigationHandler} preemptively to resolve a {@link NavigationCase} for the outcome declared on
+	 * the {@link UIOutcomeTarget} component. The current view id is used as the from-view-id when matching navigation
+	 * cases and the from-action is assumed to be null.
 	 *
 	 * @param context the {@link FacesContext} for the current request
 	 * @param component the target {@link UIComponent}
@@ -79,11 +77,11 @@ public class OutcomeTargetComponentHelper {
 	protected NavigationCase getNavigationCase(FacesContext context, UIComponent component) {
 		NavigationHandler navHandler = context.getApplication().getNavigationHandler();
 		if (!(navHandler instanceof ConfigurableNavigationHandler)) {
-			//            if (logger.isLoggable(Level.WARNING)) {
-			//                logger.log(Level.WARNING,
-			//                    "jsf.outcome.target.invalid.navigationhandler.type",
-			//                    component.getId());
-			//            }
+			// if (logger.isLoggable(Level.WARNING)) {
+			// logger.log(Level.WARNING,
+			// "jsf.outcome.target.invalid.navigationhandler.type",
+			// component.getId());
+			// }
 			log.warn("jsf.outcome.target.invalid.navigationhandler.type Componente:" + component.getId());
 			return null;
 		}
@@ -92,26 +90,28 @@ public class OutcomeTargetComponentHelper {
 		if (outcome == null) {
 			outcome = context.getViewRoot().getViewId();
 			// QUESTION should we avoid the call to getNavigationCase() and instead instantiate one explicitly?
-			//String viewId = context.getViewRoot().getViewId();
-			//return new NavigationCase(viewId, null, null, null, viewId, false, false);
+			// String viewId = context.getViewRoot().getViewId();
+			// return new NavigationCase(viewId, null, null, null, viewId, false, false);
 		}
 		NavigationCase navCase = ((ConfigurableNavigationHandler) navHandler).getNavigationCase(context, null, outcome);
 		if (navCase == null) {
-			//            if (logger.isLoggable(Level.WARNING)) {
-			//                logger.log(Level.WARNING,
-			//                           "jsf.outcometarget.navigation.case.not.resolved",
-			//                           component.getId());
-			//            }
+			// if (logger.isLoggable(Level.WARNING)) {
+			// logger.log(Level.WARNING,
+			// "jsf.outcometarget.navigation.case.not.resolved",
+			// component.getId());
+			// }
 			log.warn("jsf.outcometarget.navigation.case.not.resolved Componente:" + component.getId());
 		}
 		return navCase;
 	}
 
 	/**
-	 * <p>Resolve the target view id and then delegate to
-	 * {@link ViewHandler#getBookmarkableURL(javax.faces.context.FacesContext, String, java.util.Map, boolean)}
-	 * to produce a redirect URL, which will add the page parameters if necessary
-	 * and properly prioritizing the parameter overrides.</p>
+	 * <p>
+	 * Resolve the target view id and then delegate to
+	 * {@link ViewHandler#getBookmarkableURL(javax.faces.context.FacesContext, String, java.util.Map, boolean)} to
+	 * produce a redirect URL, which will add the page parameters if necessary and properly prioritizing the parameter
+	 * overrides.
+	 * </p>
 	 *
 	 * @param context the {@link FacesContext} for the current request
 	 * @param component the target {@link UIComponent}
@@ -175,7 +175,8 @@ public class OutcomeTargetComponentHelper {
 				}
 			}
 			return parameterList.toArray(new Param[parameterList.size()]);
-		} else {
+		}
+		else {
 			return EMPTY_PARAMS;
 		}
 
@@ -200,12 +201,13 @@ public class OutcomeTargetComponentHelper {
 	}
 
 	/**
-	 * <p>Simple class to encapsulate the name and value of a
-	 * <code>UIParameter</code>.
+	 * <p>
+	 * Simple class to encapsulate the name and value of a <code>UIParameter</code>.
 	 */
 	public static class Param {
 
 		public String name;
+
 		public String value;
 
 		// -------------------------------------------------------- Constructors

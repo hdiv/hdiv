@@ -38,8 +38,7 @@ public class LongLivingStatesTag extends TagSupport {
 	/**
 	 * Sets the type <code>scope</code> defined in the tag.
 	 * 
-	 * @param scope
-	 *            Scope name
+	 * @param scope Scope name
 	 */
 	public void setScope(String scope) {
 		this.setValue("scope", scope);

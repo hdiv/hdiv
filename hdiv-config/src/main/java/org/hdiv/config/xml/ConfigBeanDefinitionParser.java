@@ -232,9 +232,11 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		if (this.springMvcPresent && this.springMvcModulePresent) {
 			if (this.grailsPresent) {
 				this.createGrailsRequestDataValueProcessor(element, source, parserContext);
-			} else if (this.thymeleafPresent) {
+			}
+			else if (this.thymeleafPresent) {
 				this.createThymeleafRequestDataValueProcessor(element, source, parserContext);
-			} else {
+			}
+			else {
 				this.createRequestDataValueProcessor(element, source, parserContext);
 			}
 			this.createSimpleBean(element, source, parserContext, SpringMVCMultipartConfig.class,
@@ -262,7 +264,8 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 			}
 			this.createOutputLinkComponentProcessor(element, source, parserContext);
 
-		} else {
+		}
+		else {
 			this.createValidatorHelper(element, source, parserContext);
 		}
 
@@ -291,7 +294,8 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		if (userData == null || userData.length() < 1) {
 			// If user don't define userData bean, create default
 			return this.createSimpleBean(element, source, parserContext, UserData.class, USER_DATA_NAME);
-		} else {
+		}
+		else {
 			// Use user defined
 			parserContext.getRegistry().registerAlias(userData, USER_DATA_NAME);
 			return new RuntimeBeanReference(USER_DATA_NAME);
@@ -337,7 +341,7 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 
 		return this.createSimpleBean(element, source, parserContext, SessionHDIV.class, ISession.class.getName());
 	}
-	
+
 	protected RuntimeBeanReference createStateUtil(Element element, Object source, ParserContext parserContext) {
 		RootBeanDefinition bean = new RootBeanDefinition(StateUtil.class);
 		bean.setSource(source);
@@ -716,14 +720,10 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 	/**
 	 * Utility method to register a bean of type String.
 	 * 
-	 * @param name
-	 *            bean name
-	 * @param value
-	 *            String value
-	 * @param source
-	 *            source object
-	 * @param parserContext
-	 *            context to obtain the registry
+	 * @param name bean name
+	 * @param value String value
+	 * @param source source object
+	 * @param parserContext context to obtain the registry
 	 * @return bean reference
 	 */
 	protected RuntimeBeanReference createStringBean(String name, String value, Object source,
@@ -739,12 +739,9 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 	/**
 	 * Register a bean in the registry if it doesn't exit previously.
 	 * 
-	 * @param bean
-	 *            bean definition
-	 * @param beanName
-	 *            bean name
-	 * @param parserContext
-	 *            context to obtain the registry
+	 * @param bean bean definition
+	 * @param beanName bean name
+	 * @param parserContext context to obtain the registry
 	 * @return bean reference
 	 */
 	protected RuntimeBeanReference registerBean(RootBeanDefinition bean, String beanName, ParserContext parserContext) {
@@ -755,7 +752,8 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		if (!exist) {
 			parserContext.getRegistry().registerBeanDefinition(beanName, bean);
 			return new RuntimeBeanReference(beanName);
-		} else {
+		}
+		else {
 			// Use user defined
 			return new RuntimeBeanReference(beanName);
 		}
@@ -790,13 +788,17 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 			if (node.getNodeType() == Node.ELEMENT_NODE) {
 				if (node.getLocalName().equalsIgnoreCase("startPages")) {
 					this.processStartPages(node, bean);
-				} else if (node.getLocalName().equalsIgnoreCase("startParameters")) {
+				}
+				else if (node.getLocalName().equalsIgnoreCase("startParameters")) {
 					this.processStartParameters(node, bean);
-				} else if (node.getLocalName().equalsIgnoreCase("paramsWithoutValidation")) {
+				}
+				else if (node.getLocalName().equalsIgnoreCase("paramsWithoutValidation")) {
 					this.processParamsWithoutValidation(node, bean);
-				} else if (node.getLocalName().equalsIgnoreCase("sessionExpired")) {
+				}
+				else if (node.getLocalName().equalsIgnoreCase("sessionExpired")) {
 					this.processSessionExpired(node, bean);
-				} else if (node.getLocalName().equalsIgnoreCase("longLivingPages")) {
+				}
+				else if (node.getLocalName().equalsIgnoreCase("longLivingPages")) {
 					this.processLongLivingPages(node, bean);
 				}
 			}

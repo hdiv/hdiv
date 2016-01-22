@@ -27,16 +27,14 @@ public interface SessionInitializer {
 	/**
 	 * Initialize {@link HttpSession} scoped attributes.
 	 * 
-	 * @param session
-	 *            {@link HttpSession} instance
+	 * @param session {@link HttpSession} instance
 	 */
 	void initializeSession(HttpSession session);
 
 	/**
 	 * Clean {@link HttpSession} scoped attributes.
 	 * 
-	 * @param session
-	 *            {@link HttpSession} instance
+	 * @param session {@link HttpSession} instance
 	 */
 	void destroySession(HttpSession session);
 }

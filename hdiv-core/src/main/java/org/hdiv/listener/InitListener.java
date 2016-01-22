@@ -63,8 +63,7 @@ public class InitListener implements ServletContextListener, HttpSessionListener
 	/**
 	 * Initialize {@link ServletContext} scoped objects.
 	 * 
-	 * @param servletContextEvent
-	 *            ServletContext creation event
+	 * @param servletContextEvent ServletContext creation event
 	 * @since HDIV 2.1.0
 	 */
 	public void contextInitialized(ServletContextEvent servletContextEvent) {
@@ -74,7 +73,8 @@ public class InitListener implements ServletContextListener, HttpSessionListener
 
 		if (wac != null) {
 			this.initServletContext(servletContext);
-		} else {
+		}
+		else {
 			if (log.isWarnEnabled()) {
 				log.warn("Hdiv's InitListener is registered before Spring's ContextLoaderListener. It must be after ContextLoaderListener.");
 			}
@@ -84,8 +84,7 @@ public class InitListener implements ServletContextListener, HttpSessionListener
 	/**
 	 * Executed at {@link ServletContext} destroy.
 	 * 
-	 * @param servletContextEvent
-	 *            ServletContext destroy event
+	 * @param servletContextEvent ServletContext destroy event
 	 * @since HDIV 2.1.0
 	 */
 	public void contextDestroyed(ServletContextEvent servletContextEvent) {
@@ -98,8 +97,7 @@ public class InitListener implements ServletContextListener, HttpSessionListener
 	/**
 	 * Initialize {@link ServletContext} scoped objects.
 	 * 
-	 * @param servletContext
-	 *            ServletContext instance
+	 * @param servletContext ServletContext instance
 	 */
 	protected void initServletContext(ServletContext servletContext) {
 
@@ -117,8 +115,7 @@ public class InitListener implements ServletContextListener, HttpSessionListener
 	/**
 	 * Initialize {@link HttpSession} scoped objects.
 	 * 
-	 * @param httpSessionEvent
-	 *            session created event
+	 * @param httpSessionEvent session created event
 	 */
 	public void sessionCreated(HttpSessionEvent httpSessionEvent) {
 
@@ -135,8 +132,7 @@ public class InitListener implements ServletContextListener, HttpSessionListener
 	/**
 	 * Executed at {@link HttpSession} destroy.
 	 * 
-	 * @param httpSessionEvent
-	 *            HttpSession destroy event
+	 * @param httpSessionEvent HttpSession destroy event
 	 */
 	public void sessionDestroyed(HttpSessionEvent httpSessionEvent) {
 

@@ -15,7 +15,6 @@
  */
 package org.hdiv.taglib.html;
 
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.JspException;
 
@@ -23,21 +22,19 @@ import org.apache.struts.taglib.html.SubmitTag;
 import org.hdiv.dataComposer.IDataComposer;
 import org.hdiv.util.HDIVUtil;
 
-
 /**
  * Renders an HTML &lt;input&gt; element of type <code>submit</code>.
  * <p>
- * If a graphical button is needed (a button with an image), then the
- * <code>image</code> tag is more appropriate.
+ * If a graphical button is needed (a button with an image), then the <code>image</code> tag is more appropriate.
  * </p>
  * 
  * @author Gorka Vicente
  */
 public class SubmitTagHDIV extends SubmitTag {
-	
+
 	/**
-	 * Universal version identifier. Deserialization uses this number to ensure that
-	 * a loaded class corresponds exactly to a serialized object.
+	 * Universal version identifier. Deserialization uses this number to ensure that a loaded class corresponds exactly
+	 * to a serialized object.
 	 */
 	private static final long serialVersionUID = 1116605394174886446L;
 
@@ -58,6 +55,6 @@ public class SubmitTagHDIV extends SubmitTag {
 		}
 
 		return super.doStartTag();
-	}		
+	}
 
 }

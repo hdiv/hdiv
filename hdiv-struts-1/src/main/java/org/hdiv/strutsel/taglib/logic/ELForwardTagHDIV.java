@@ -21,14 +21,12 @@ import org.apache.strutsel.taglib.utils.EvalHelper;
 import org.hdiv.taglib.logic.ForwardTagHDIV;
 
 /**
- * Perform a forward or redirect to a page that is looked up in the
- * configuration information associated with our application.
+ * Perform a forward or redirect to a page that is looked up in the configuration information associated with our
+ * application.
  * <p>
- * This class is a subclass of the class
- * <code>org.apache.struts.taglib.logix.ForwardTag</code> which provides most
- * of the described functionality. This subclass allows all attribute values to
- * be specified as expressions utilizing the JavaServer Pages Standard Library
- * expression language.
+ * This class is a subclass of the class <code>org.apache.struts.taglib.logix.ForwardTag</code> which provides most of
+ * the described functionality. This subclass allows all attribute values to be specified as expressions utilizing the
+ * JavaServer Pages Standard Library expression language.
  * 
  * @author Gorka Vicente
  * @since HDIV 2.0
@@ -36,22 +34,19 @@ import org.hdiv.taglib.logic.ForwardTagHDIV;
 public class ELForwardTagHDIV extends ForwardTagHDIV {
 
 	/**
-	 * Instance variable mapped to "name" tag attribute. (Mapping set in
-	 * associated BeanInfo class.)
+	 * Instance variable mapped to "name" tag attribute. (Mapping set in associated BeanInfo class.)
 	 */
 	private String nameExpr;
 
 	/**
-	 * Getter method for "name" tag attribute. (Mapping set in associated
-	 * BeanInfo class.)
+	 * Getter method for "name" tag attribute. (Mapping set in associated BeanInfo class.)
 	 */
 	public String getNameExpr() {
 		return (nameExpr);
 	}
 
 	/**
-	 * Setter method for "name" tag attribute. (Mapping set in associated
-	 * BeanInfo class.)
+	 * Setter method for "name" tag attribute. (Mapping set in associated BeanInfo class.)
 	 */
 	public void setNameExpr(String nameExpr) {
 		this.nameExpr = nameExpr;
@@ -77,8 +72,7 @@ public class ELForwardTagHDIV extends ForwardTagHDIV {
 	}
 
 	/**
-	 * Processes all attribute values which use the JSTL expression evaluation
-	 * engine to determine their values.
+	 * Processes all attribute values which use the JSTL expression evaluation engine to determine their values.
 	 * 
 	 * @throws JspException if a JSP exception has occurred
 	 */

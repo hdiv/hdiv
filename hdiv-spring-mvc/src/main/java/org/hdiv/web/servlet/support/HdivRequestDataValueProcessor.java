@@ -85,16 +85,14 @@ public class HdivRequestDataValueProcessor implements RequestDataValueProcessor 
 		this.noEditableTypes.add("option");
 		this.noEditableTypes.add("radio");
 		this.noEditableTypes.add("select");
-		this.noEditableTypes.add("submit");		
+		this.noEditableTypes.add("submit");
 	}
 
 	/**
 	 * Process the action url of the form tag, maintained for legacy support Spring 3.1.x.
 	 * 
-	 * @param request
-	 *            request object
-	 * @param action
-	 *            form action url
+	 * @param request request object
+	 * @param action form action url
 	 * @return processed action url
 	 */
 	public String processAction(HttpServletRequest request, String action) {
@@ -104,12 +102,9 @@ public class HdivRequestDataValueProcessor implements RequestDataValueProcessor 
 	/**
 	 * Process the action url of the form tag.
 	 * 
-	 * @param request
-	 *            request object
-	 * @param action
-	 *            form action url
-	 * @param method
-	 *            form submit method
+	 * @param request request object
+	 * @param action form action url
+	 * @param method form submit method
 	 * @return processed action url
 	 */
 	public String processAction(HttpServletRequest request, String action, String method) {
@@ -128,14 +123,10 @@ public class HdivRequestDataValueProcessor implements RequestDataValueProcessor 
 	/**
 	 * Process form field value.
 	 * 
-	 * @param request
-	 *            request object
-	 * @param name
-	 *            the name of the field
-	 * @param value
-	 *            the value of the field
-	 * @param type
-	 *            the type of the field
+	 * @param request request object
+	 * @param name the name of the field
+	 * @param value the value of the field
+	 * @param type the type of the field
 	 * @return processed field value
 	 */
 	public String processFormFieldValue(HttpServletRequest request, String name, String value, String type) {
@@ -161,7 +152,8 @@ public class HdivRequestDataValueProcessor implements RequestDataValueProcessor 
 		if (isEditable(type)) {
 			dataComposer.composeFormField(name, value, true, type);
 			return value;
-		} else {
+		}
+		else {
 			String result = dataComposer.composeFormField(name, value, false, type);
 			return result;
 		}
@@ -171,8 +163,7 @@ public class HdivRequestDataValueProcessor implements RequestDataValueProcessor 
 	/**
 	 * Extra hidden fields with the HDIV state value.
 	 * 
-	 * @param request
-	 *            request object
+	 * @param request request object
 	 * @return hidden field name/value
 	 */
 	public Map<String, String> getExtraHiddenFields(HttpServletRequest request) {
@@ -206,10 +197,8 @@ public class HdivRequestDataValueProcessor implements RequestDataValueProcessor 
 	/**
 	 * Process the url for a link.
 	 * 
-	 * @param request
-	 *            request object
-	 * @param url
-	 *            link url
+	 * @param request request object
+	 * @param url link url
 	 * @return processed url
 	 */
 	public String processUrl(HttpServletRequest request, String url) {
@@ -228,8 +217,7 @@ public class HdivRequestDataValueProcessor implements RequestDataValueProcessor 
 	/**
 	 * Determines if a field type is editable or not.
 	 * 
-	 * @param type
-	 *            field type
+	 * @param type field type
 	 * @return editable
 	 */
 	protected boolean isEditable(String type) {
@@ -241,24 +229,21 @@ public class HdivRequestDataValueProcessor implements RequestDataValueProcessor 
 	}
 
 	/**
-	 * @param linkUrlProcessor
-	 *            the linkUrlProcessor to set
+	 * @param linkUrlProcessor the linkUrlProcessor to set
 	 */
 	public void setLinkUrlProcessor(LinkUrlProcessor linkUrlProcessor) {
 		this.linkUrlProcessor = linkUrlProcessor;
 	}
 
 	/**
-	 * @param formUrlProcessor
-	 *            the formUrlProcessor to set
+	 * @param formUrlProcessor the formUrlProcessor to set
 	 */
 	public void setFormUrlProcessor(FormUrlProcessor formUrlProcessor) {
 		this.formUrlProcessor = formUrlProcessor;
 	}
 
 	/**
-	 * @param innerRequestDataValueProcessor
-	 *            the innerRequestDataValueProcessor to set
+	 * @param innerRequestDataValueProcessor the innerRequestDataValueProcessor to set
 	 */
 	public void setInnerRequestDataValueProcessor(RequestDataValueProcessor innerRequestDataValueProcessor) {
 		this.innerRequestDataValueProcessor = innerRequestDataValueProcessor;

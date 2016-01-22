@@ -28,6 +28,7 @@ import org.hdiv.exception.HDIVException;
 public class HDIVUtilJsf {
 
 	public static final String FACESEVENTLISTENER_SERVLETCONTEXT_KEY = "FACESEVENTLISTENER_SERVLETCONTEXT_KEY";
+
 	public static final String TARGET_REQUEST_KEY = "TARGET_REQUEST_KEY";
 
 	/* HDIVFacesEventListener */
@@ -40,7 +41,8 @@ public class HDIVUtilJsf {
 		if (newFacesEventListener == null) {
 			throw new HDIVException(
 					"HDIVFacesEventListener object has not been initialized correctly in servletContext.");
-		} else {
+		}
+		else {
 			return newFacesEventListener;
 		}
 	}

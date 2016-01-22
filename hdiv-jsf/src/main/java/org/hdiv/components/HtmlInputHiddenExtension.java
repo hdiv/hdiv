@@ -42,8 +42,7 @@ public class HtmlInputHiddenExtension extends HtmlInputHidden {
 	/**
 	 * Obtains hidden real value which has been stored in the JSF state
 	 * 
-	 * @param clientId
-	 *            ClientId value
+	 * @param clientId ClientId value
 	 * 
 	 * @return hidden real value
 	 */
@@ -56,8 +55,7 @@ public class HtmlInputHiddenExtension extends HtmlInputHidden {
 	/**
 	 * Returns component's client id for the row passed as a parameter
 	 * 
-	 * @param rowIndex
-	 *            row index in UIData
+	 * @param rowIndex row index in UIData
 	 * @return component id
 	 */
 	@SuppressWarnings("unchecked")

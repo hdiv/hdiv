@@ -57,16 +57,14 @@ public abstract class AbstractComponentProcessor {
 	}
 
 	/**
-	 * @param config
-	 *            the config to set
+	 * @param config the config to set
 	 */
 	public void setConfig(HDIVConfig config) {
 		this.config = config;
 	}
 
 	/**
-	 * @param linkUrlProcessor
-	 *            the linkUrlProcessor to set
+	 * @param linkUrlProcessor the linkUrlProcessor to set
 	 */
 	public void setLinkUrlProcessor(LinkUrlProcessor linkUrlProcessor) {
 		this.linkUrlProcessor = linkUrlProcessor;

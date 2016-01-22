@@ -81,11 +81,11 @@ public class SpringMvcConfigurationSupport {
 
 	@Bean
 	public LocalValidatorFactoryBean editableLocalValidatorFactoryBean() {
-		
+
 		LocalValidatorFactoryBean localValidatorFactoryBean = new LocalValidatorFactoryBean();
 		return localValidatorFactoryBean;
 	}
-	
+
 	@Bean
 	public IMultipartConfig securityMultipartConfig() {
 

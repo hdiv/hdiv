@@ -31,13 +31,13 @@ import org.hdiv.util.HDIVUtil;
 public class RedirectTagHDIV extends RedirectTag {
 
 	/**
-	 * Universal version identifier. Deserialization uses this number to ensure that
-	 * a loaded class corresponds exactly to a serialized object.
+	 * Universal version identifier. Deserialization uses this number to ensure that a loaded class corresponds exactly
+	 * to a serialized object.
 	 */
 	private static final long serialVersionUID = 1717614535121671431L;
 
 	protected LinkUrlProcessor linkUrlProcessor;
-	
+
 	/**
 	 * Render the redirect and skip the remainder of this page.
 	 *
@@ -47,7 +47,7 @@ public class RedirectTagHDIV extends RedirectTag {
 
 		// calculate the url to redirect to
 		String url = this.generateRedirectURL();
-		
+
 		// If useLocalEncoding set to true, urlencoding is done on the bytes of
 		// character encoding from ServletResponse#getCharacterEncoding. Use UTF-8
 		// otherwise.
@@ -55,19 +55,19 @@ public class RedirectTagHDIV extends RedirectTag {
 		if (useLocalEncoding) {
 			charEncoding = pageContext.getResponse().getCharacterEncoding();
 		}
-		
+
 		// generate a new encoded values for the url parameters
-		HttpServletRequest request = (HttpServletRequest) pageContext.getRequest();				
+		HttpServletRequest request = (HttpServletRequest) pageContext.getRequest();
 		// Call to Hdiv LinkUrlProcessor
-		if(this.linkUrlProcessor == null){
+		if (this.linkUrlProcessor == null) {
 			this.linkUrlProcessor = HDIVUtil.getLinkUrlProcessor(request.getSession().getServletContext());
 		}
 		String urlHDIVstate = this.linkUrlProcessor.processUrl(request, url, charEncoding);
-		
+
 		// redirect to the given url
 		this.doRedirect(urlHDIVstate);
 
 		return (SKIP_PAGE);
 	}
-	
+
 }

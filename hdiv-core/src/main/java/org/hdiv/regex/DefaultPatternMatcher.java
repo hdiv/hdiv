@@ -41,8 +41,7 @@ public class DefaultPatternMatcher implements PatternMatcher, Serializable {
 	/**
 	 * Constructor that compiles the regular expression.
 	 * 
-	 * @param regex
-	 *            java regular expression
+	 * @param regex java regular expression
 	 */
 	public DefaultPatternMatcher(String regex) {
 		this.regex = regex;
@@ -69,7 +68,7 @@ public class DefaultPatternMatcher implements PatternMatcher, Serializable {
 		Matcher matcher = pattern.matcher(input);
 		return matcher.matches();
 	}
-	
+
 	public String getPattern() {
 		return regex;
 	}
@@ -108,7 +107,8 @@ public class DefaultPatternMatcher implements PatternMatcher, Serializable {
 			if (other.regex != null) {
 				return false;
 			}
-		} else if (!regex.equals(other.regex)) {
+		}
+		else if (!regex.equals(other.regex)) {
 			return false;
 		}
 		return true;

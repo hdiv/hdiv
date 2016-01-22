@@ -74,12 +74,9 @@ public class UICommandValidator implements ComponentValidator {
 	/**
 	 * Validates a parameter of component UICommand
 	 * 
-	 * @param context
-	 *            Request context
-	 * @param parameter
-	 *            UIParameter component to validate
-	 * @param rowIndex
-	 *            index that shows where it is the UICommand component inside a UIData
+	 * @param context Request context
+	 * @param parameter UIParameter component to validate
+	 * @param rowIndex index that shows where it is the UICommand component inside a UIData
 	 * @return validation result
 	 */
 	private ValidationError processParam(FacesContext context, UIParameter parameter, int rowIndex) {

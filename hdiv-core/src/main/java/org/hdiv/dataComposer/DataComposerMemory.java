@@ -121,10 +121,8 @@ public class DataComposerMemory extends AbstractDataComposer {
 	 * long as the destiny of the request is an action. It creates a new state to store all the parameters and values of
 	 * the request or form.
 	 * 
-	 * @param method
-	 *            HTTP method of the request.
-	 * @param action
-	 *            action name
+	 * @param method HTTP method of the request.
+	 * @param action action name
 	 * @return state id for this request
 	 * 
 	 * @see org.hdiv.dataComposer.DataComposerMemory#beginRequest()
@@ -133,9 +131,11 @@ public class DataComposerMemory extends AbstractDataComposer {
 
 		try {
 			action = URLDecoder.decode(action, Constants.ENCODING_UTF_8);
-		} catch (UnsupportedEncodingException e) {
+		}
+		catch (UnsupportedEncodingException e) {
 			throw new HDIVException(Constants.ENCODING_UTF_8 + " enconding not supported.", e);
-		} catch (IllegalArgumentException e) {
+		}
+		catch (IllegalArgumentException e) {
 			// Some decoding errors throw IllegalArgumentException
 		}
 
@@ -149,12 +149,9 @@ public class DataComposerMemory extends AbstractDataComposer {
 	/**
 	 * Create new {@link IState} instance.
 	 * 
-	 * @param stateId
-	 *            Identifier for the new {@link IState}
-	 * @param method
-	 *            HTTP method of the request.
-	 * @param action
-	 *            action name
+	 * @param stateId Identifier for the new {@link IState}
+	 * @param method HTTP method of the request.
+	 * @param action action name
 	 * @return new {@link IState} instance.
 	 */
 	protected IState createNewState(int stateId, String method, String action) {
@@ -240,8 +237,7 @@ public class DataComposerMemory extends AbstractDataComposer {
 	 * It is called in the pre-processing stage of each user request. Create a new {@link IPage} based on an existing
 	 * page.
 	 * 
-	 * @param existingPage
-	 *            other IPage
+	 * @param existingPage other IPage
 	 */
 	public void startPage(IPage existingPage) {
 		existingPage.markAsReused();
@@ -263,7 +259,8 @@ public class DataComposerMemory extends AbstractDataComposer {
 		if (page.getStatesCount() > 0) {
 			// The page has states, update them in session
 			super.session.addPage(this.context, page.getId(), page);
-		} else {
+		}
+		else {
 			if (log.isDebugEnabled()) {
 				log.debug("The page [" + page.getId() + "] has no states, is not stored in session");
 			}
@@ -272,8 +269,7 @@ public class DataComposerMemory extends AbstractDataComposer {
 	}
 
 	/**
-	 * @param stateScopeManager
-	 *            the stateScopeManager to set
+	 * @param stateScopeManager the stateScopeManager to set
 	 */
 	public void setStateScopeManager(StateScopeManager stateScopeManager) {
 		this.stateScopeManager = stateScopeManager;

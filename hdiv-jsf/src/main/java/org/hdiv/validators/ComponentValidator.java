@@ -31,10 +31,8 @@ public interface ComponentValidator {
 	/**
 	 * Validates a component
 	 * 
-	 * @param context
-	 *            Request context
-	 * @param component
-	 *            Component to validate
+	 * @param context Request context
+	 * @param component Component to validate
 	 * @return If it is null, no attack was detected. Otherwise it shows info about it.
 	 */
 	public ValidationError validate(FacesContext context, UIComponent component);

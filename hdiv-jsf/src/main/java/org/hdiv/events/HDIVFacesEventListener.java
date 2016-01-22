@@ -88,8 +88,7 @@ public class HDIVFacesEventListener implements FacesListener, StateHolder {
 	/**
 	 * Process a HDIVFacesEvent event
 	 * 
-	 * @param facesEvent
-	 *            Evento de HDIV
+	 * @param facesEvent Evento de HDIV
 	 */
 	public void processListener(HDIVFacesEvent facesEvent) {
 
@@ -134,8 +133,7 @@ public class HDIVFacesEventListener implements FacesListener, StateHolder {
 	/**
 	 * Searches the form inside the component. Input component must be UICommand type and must be inside a form.
 	 * 
-	 * @param comp
-	 *            Base component
+	 * @param comp Base component
 	 * @return UIForm component
 	 */
 
@@ -152,10 +150,8 @@ public class HDIVFacesEventListener implements FacesListener, StateHolder {
 	/**
 	 * Validates HtmlInputHidden components inside the form
 	 * 
-	 * @param context
-	 *            Request context
-	 * @param component
-	 *            UIForm component
+	 * @param context Request context
+	 * @param component UIForm component
 	 * @return validation result
 	 */
 	private ValidationError validateHiddens(FacesContext context, UIComponent component) {
@@ -168,7 +164,8 @@ public class HDIVFacesEventListener implements FacesListener, StateHolder {
 				if (error != null) {
 					return error;
 				}
-			} else {
+			}
+			else {
 				ValidationError error = validateHiddens(context, uicomponent);
 				if (error != null) {
 					return error;
@@ -181,10 +178,8 @@ public class HDIVFacesEventListener implements FacesListener, StateHolder {
 	/**
 	 * Redirects the execution to the HDIV error page
 	 * 
-	 * @param context
-	 *            Request context
-	 * @param comp
-	 *            component which throws the event
+	 * @param context Request context
+	 * @param comp component which throws the event
 	 */
 	private void forwardToErrorPage(FacesContext context, UICommand comp) {
 		if (!comp.isImmediate()) {
@@ -192,10 +187,12 @@ public class HDIVFacesEventListener implements FacesListener, StateHolder {
 			try {
 				String contextPath = context.getExternalContext().getRequestContextPath();
 				context.getExternalContext().redirect(contextPath + this.config.getErrorPage());
-			} catch (IOException e) {
+			}
+			catch (IOException e) {
 				throw new StateValidationException();
 			}
-		} else {
+		}
+		else {
 			// Previous strategy doesn't work with immediate components because
 			// the execution of business logic continues running-
 			// An exception is thrown to be catched by the ExceptionHandler
@@ -208,10 +205,8 @@ public class HDIVFacesEventListener implements FacesListener, StateHolder {
 	/**
 	 * Helper method to write an attack in the log
 	 * 
-	 * @param context
-	 *            Request context
-	 * @param error
-	 *            validation result
+	 * @param context Request context
+	 * @param error validation result
 	 */
 	private void log(FacesContext context, ValidationError error) {
 
@@ -253,48 +248,42 @@ public class HDIVFacesEventListener implements FacesListener, StateHolder {
 	}
 
 	/**
-	 * @param requestParamValidator
-	 *            the requestParamValidator to set
+	 * @param requestParamValidator the requestParamValidator to set
 	 */
 	public void setRequestParamValidator(ComponentValidator requestParamValidator) {
 		this.requestParamValidator = requestParamValidator;
 	}
 
 	/**
-	 * @param uiCommandValidator
-	 *            the uiCommandValidator to set
+	 * @param uiCommandValidator the uiCommandValidator to set
 	 */
 	public void setUiCommandValidator(ComponentValidator uiCommandValidator) {
 		this.uiCommandValidator = uiCommandValidator;
 	}
 
 	/**
-	 * @param htmlInputHiddenValidator
-	 *            the htmlInputHiddenValidator to set
+	 * @param htmlInputHiddenValidator the htmlInputHiddenValidator to set
 	 */
 	public void setHtmlInputHiddenValidator(ComponentValidator htmlInputHiddenValidator) {
 		this.htmlInputHiddenValidator = htmlInputHiddenValidator;
 	}
 
 	/**
-	 * @param editableValidator
-	 *            the editableValidator to set
+	 * @param editableValidator the editableValidator to set
 	 */
 	public void setEditableValidator(EditableValidator editableValidator) {
 		this.editableValidator = editableValidator;
 	}
 
 	/**
-	 * @param config
-	 *            the config to set
+	 * @param config the config to set
 	 */
 	public void setConfig(HDIVConfig config) {
 		this.config = config;
 	}
 
 	/**
-	 * @param logger
-	 *            the logger to set
+	 * @param logger the logger to set
 	 */
 	public void setLogger(Logger logger) {
 		this.logger = logger;

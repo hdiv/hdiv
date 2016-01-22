@@ -42,8 +42,7 @@ public class HDIVFacesContext extends FacesContextWrapper {
 	/**
 	 * Default constructor
 	 * 
-	 * @param wrapped
-	 *            original FacesContext
+	 * @param wrapped original FacesContext
 	 */
 	public HDIVFacesContext(FacesContext wrapped) {
 		super();

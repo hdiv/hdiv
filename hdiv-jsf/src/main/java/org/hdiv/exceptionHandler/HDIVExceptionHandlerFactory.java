@@ -39,8 +39,7 @@ public class HDIVExceptionHandlerFactory extends ExceptionHandlerFactory {
 	/**
 	 * Default constructor
 	 * 
-	 * @param original
-	 *            original ExceptionHandlerFactory
+	 * @param original original ExceptionHandlerFactory
 	 */
 	public HDIVExceptionHandlerFactory(ExceptionHandlerFactory original) {
 		this.original = original;

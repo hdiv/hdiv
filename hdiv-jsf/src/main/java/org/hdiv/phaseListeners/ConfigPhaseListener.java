@@ -115,8 +115,7 @@ public class ConfigPhaseListener implements PhaseListener {
 	 * Adds to the state a data unique for the user. This way state becomes something unique for each user. Session id
 	 * is used as this unique data.
 	 * 
-	 * @param facesContext
-	 *            request context
+	 * @param facesContext request context
 	 */
 	private void addUserUniqueTokenToState(FacesContext facesContext) {
 
@@ -138,8 +137,7 @@ public class ConfigPhaseListener implements PhaseListener {
 	/**
 	 * Check {@link HDIVConfig} to ensure all enabled features are supported by Jsf module.
 	 * 
-	 * @param context
-	 *            request context
+	 * @param context request context
 	 */
 	private void checkSupportedFeatures(FacesContext context) {
 

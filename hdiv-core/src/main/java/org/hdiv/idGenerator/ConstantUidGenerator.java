@@ -18,29 +18,30 @@ package org.hdiv.idGenerator;
 import java.io.Serializable;
 
 /**
- * Implementation of <code>UidGenerator</code> that generates constant tokens.
- * <b>Only for testing</b>
+ * Implementation of <code>UidGenerator</code> that generates constant tokens. <b>Only for testing</b>
  * 
  * @author Gotzon Illarramendi
  * @since HDIV 2.1.0
  */
-public class ConstantUidGenerator implements UidGenerator{
+public class ConstantUidGenerator implements UidGenerator {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.hdiv.util.UidGenerator#generateUid()
 	 */
 	public Serializable generateUid() {
-		
+
 		return "TOKEN";
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.hdiv.util.UidGenerator#parseUid(java.lang.String)
 	 */
 	public Serializable parseUid(String encodedUid) {
-		
+
 		return encodedUid;
 	}
 

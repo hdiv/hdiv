@@ -26,29 +26,25 @@ import org.hdiv.util.HDIVUtil;
 
 /**
  * <p>
- * Renders a set of HTML <code>&lt;option&gt;</code> elements, representing
- * possible choices for a <code>&lt;select&gt;</code> element. This tag can be used
- * multiple times within a single <code>&lt;html:select&gt;</code> element, either
- * in conjunction with or instead of one or more <code>&lt;html:option&gt;</code>
- * or <code>&lt;html:options&gt;</code> elements.
+ * Renders a set of HTML <code>&lt;option&gt;</code> elements, representing possible choices for a
+ * <code>&lt;select&gt;</code> element. This tag can be used multiple times within a single
+ * <code>&lt;html:select&gt;</code> element, either in conjunction with or instead of one or more
+ * <code>&lt;html:option&gt;</code> or <code>&lt;html:options&gt;</code> elements.
  * </p>
  * <p>
- * This tag operates on a collection of beans, where each bean has a <strong>label</strong>
- * property and a <strong>value</strong> property. The actual names of these
- * properties can be configured using the <code>label</code> and <code>value</code>
- * attributes of this tag.
+ * This tag operates on a collection of beans, where each bean has a <strong>label</strong> property and a
+ * <strong>value</strong> property. The actual names of these properties can be configured using the <code>label</code>
+ * and <code>value</code> attributes of this tag.
  * </p>
  * <p>
- * This tag differs from the <code>&lt;html:options&gt;</code> tag in that it makes
- * more consistent use of the <code>name</code> and <code>property</code>
- * attributes, and allows the collection to be more easily obtained from the
+ * This tag differs from the <code>&lt;html:options&gt;</code> tag in that it makes more consistent use of the
+ * <code>name</code> and <code>property</code> attributes, and allows the collection to be more easily obtained from the
  * enclosing form bean.
  * </p>
  * <p>
- * Note that this tag does not support a <code>styleId</code> attribute, as it
- * would have to apply the value to all the <code>option</code> elements created by
- * this element, which would mean that more than one <code>id</code> element might
- * have the same value, which the HTML specification says is illegal.
+ * Note that this tag does not support a <code>styleId</code> attribute, as it would have to apply the value to all the
+ * <code>option</code> elements created by this element, which would mean that more than one <code>id</code> element
+ * might have the same value, which the HTML specification says is illegal.
  * </p>
  * 
  * @author Gorka Vicente
@@ -57,70 +53,67 @@ import org.hdiv.util.HDIVUtil;
 public class OptionsCollectionTagHDIV extends OptionsCollectionTag {
 
 	/**
-	 * Universal version identifier. Deserialization uses this number to ensure that
-	 * a loaded class corresponds exactly to a serialized object.
-	 */		
+	 * Universal version identifier. Deserialization uses this number to ensure that a loaded class corresponds exactly
+	 * to a serialized object.
+	 */
 	private static final long serialVersionUID = -5125638576746874243L;
 
 	/**
-     * Add an option element to the specified StringBuffer based on the
-     * specified parameters.
-     *<p>
-     * Note that this tag specifically does not support the
-     * <code>styleId</code> tag attribute, which causes the HTML
-     * <code>id</code> attribute to be emitted.  This is because the HTML
-     * specification states that all "id" attributes in a document have to be
-     * unique.  This tag will likely generate more than one <code>option</code>
-     * element element, but it cannot use the same <code>id</code> value.  It's
-     * conceivable some sort of mechanism to supply an array of <code>id</code>
-     * values could be devised, but that doesn't seem to be worth the trouble.
-     *
-     * @param sb StringBuffer accumulating our results
-     * @param value Value to be returned to the server for this option
-     * @param label Value to be shown to the user for this option
-     * @param matched Should this value be marked as selected?
-     * 
-     * @see org.hdiv.dataComposer.IDataComposer#composeFormField(String, String, boolean, String)
-     */
-    protected void addOption(StringBuffer sb, String label, String value, boolean matched) {
+	 * Add an option element to the specified StringBuffer based on the specified parameters.
+	 * <p>
+	 * Note that this tag specifically does not support the <code>styleId</code> tag attribute, which causes the HTML
+	 * <code>id</code> attribute to be emitted. This is because the HTML specification states that all "id" attributes
+	 * in a document have to be unique. This tag will likely generate more than one <code>option</code> element element,
+	 * but it cannot use the same <code>id</code> value. It's conceivable some sort of mechanism to supply an array of
+	 * <code>id</code> values could be devised, but that doesn't seem to be worth the trouble.
+	 *
+	 * @param sb StringBuffer accumulating our results
+	 * @param value Value to be returned to the server for this option
+	 * @param label Value to be shown to the user for this option
+	 * @param matched Should this value be marked as selected?
+	 * 
+	 * @see org.hdiv.dataComposer.IDataComposer#composeFormField(String, String, boolean, String)
+	 */
+	protected void addOption(StringBuffer sb, String label, String value, boolean matched) {
 
-        // Acquire the select tag we are associated with. If selectTag is null
+		// Acquire the select tag we are associated with. If selectTag is null
 		// super.doStartTag returns JspException before invoke this method.
-        SelectTag selectTag = (SelectTag) pageContext.getAttribute(Constants.SELECT_KEY);    	    	
-    	
-        sb.append("<option value=\"");
-        
-        HttpServletRequest request = (HttpServletRequest) this.pageContext.getRequest();
+		SelectTag selectTag = (SelectTag) pageContext.getAttribute(Constants.SELECT_KEY);
+
+		sb.append("<option value=\"");
+
+		HttpServletRequest request = (HttpServletRequest) this.pageContext.getRequest();
 		IDataComposer dataComposer = HDIVUtil.getDataComposer(request);
-        String cipheredValue = dataComposer.composeFormField(selectTag.getProperty(), value, false, null);
-        
-        if (filter) {
-            sb.append(TagUtils.getInstance().filter(cipheredValue));
-        } else {
-            sb.append(cipheredValue);
-        }
-        sb.append("\"");
-        if (matched) {
-            renderAttribute(sb, "selected", "selected");
-        }
-        
-        renderAttribute(sb, "style", this.getStyle());
-        renderAttribute(sb, "class", this.getStyleClass());
-        
-        sb.append(">");
-        
-        if (filter) {
-            sb.append(TagUtils.getInstance().filter(label));
-        } else {
-            sb.append(label);
-        }
-        
-        sb.append("</option>\r\n");
-    }	
+		String cipheredValue = dataComposer.composeFormField(selectTag.getProperty(), value, false, null);
+
+		if (filter) {
+			sb.append(TagUtils.getInstance().filter(cipheredValue));
+		}
+		else {
+			sb.append(cipheredValue);
+		}
+		sb.append("\"");
+		if (matched) {
+			renderAttribute(sb, "selected", "selected");
+		}
+
+		renderAttribute(sb, "style", this.getStyle());
+		renderAttribute(sb, "class", this.getStyleClass());
+
+		sb.append(">");
+
+		if (filter) {
+			sb.append(TagUtils.getInstance().filter(label));
+		}
+		else {
+			sb.append(label);
+		}
+
+		sb.append("</option>\r\n");
+	}
 
 	/**
-	 * Prepares an attribute if the value is not null, appending it to the the given
-	 * StringBuffer.
+	 * Prepares an attribute if the value is not null, appending it to the the given StringBuffer.
 	 * @param handlers The StringBuffer that output will be appended to.
 	 */
 	protected void renderAttribute(StringBuffer handlers, String name, Object value) {
@@ -132,6 +125,6 @@ public class OptionsCollectionTagHDIV extends OptionsCollectionTag {
 			handlers.append(value);
 			handlers.append("\"");
 		}
-	}     
-    
+	}
+
 }

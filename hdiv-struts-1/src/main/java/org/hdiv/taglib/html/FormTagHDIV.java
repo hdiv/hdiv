@@ -28,11 +28,10 @@ import org.hdiv.util.Constants;
 import org.hdiv.util.HDIVUtil;
 
 /**
- * Renders an HTML <b>&lt;form&gt;</b> element whose contents are described by the
- * body content of this tag. The form implicitly interacts with the specified request
- * scope or session scope bean to populate the input fields with the current property
- * values from the bean. The form bean is located, and created if necessary, based on
- * the form bean specification for the associated ActionMapping.
+ * Renders an HTML <b>&lt;form&gt;</b> element whose contents are described by the body content of this tag. The form
+ * implicitly interacts with the specified request scope or session scope bean to populate the input fields with the
+ * current property values from the bean. The form bean is located, and created if necessary, based on the form bean
+ * specification for the associated ActionMapping.
  * 
  * @author Aritz Rabadan
  * @author Gorka Vicente
@@ -41,8 +40,8 @@ import org.hdiv.util.HDIVUtil;
 public class FormTagHDIV extends FormTag {
 
 	/**
-	 * Universal version identifier. Deserialization uses this number to ensure that
-	 * a loaded class corresponds exactly to a serialized object.
+	 * Universal version identifier. Deserialization uses this number to ensure that a loaded class corresponds exactly
+	 * to a serialized object.
 	 */
 	private static final long serialVersionUID = 5073853465806606664L;
 
@@ -63,7 +62,7 @@ public class FormTagHDIV extends FormTag {
 		String url = response.encodeURL(TagUtils.getInstance().getActionMappingURL(calcAction, this.pageContext));
 
 		// Call to Hdiv FormUrlProcessor
-		if(this.formUrlProcessor == null){
+		if (this.formUrlProcessor == null) {
 			this.formUrlProcessor = HDIVUtil.getFormUrlProcessor(request.getSession().getServletContext());
 		}
 		String encodedURL = formUrlProcessor.processUrl(request, url);
@@ -72,14 +71,14 @@ public class FormTagHDIV extends FormTag {
 		results.append(encodedURL);
 		results.append("\"");
 	}
-	
+
 	/**
 	 * @return If the action is not specified returns the original request uri.
 	 */
 	public String getPostbackAction() {
-		
+
 		String tempPostbackAction = null;
-		
+
 		HttpServletRequest request = (HttpServletRequest) pageContext.getRequest();
 		tempPostbackAction = (String) request.getAttribute(Globals.ORIGINAL_URI_KEY);
 
@@ -99,25 +98,25 @@ public class FormTagHDIV extends FormTag {
 		this.addHDIVParameter();
 		return super.doEndTag();
 	}
-	
+
 	/**
 	 * Adds HDIV state as parameter.
 	 */
 	protected void addHDIVParameter() throws JspException {
-		
+
 		HttpServletRequest request = (HttpServletRequest) this.pageContext.getRequest();
 		IDataComposer dataComposer = HDIVUtil.getDataComposer(request);
-		if(!dataComposer.isRequestStarted()){
+		if (!dataComposer.isRequestStarted()) {
 			return;
 		}
 		String requestId = dataComposer.endRequest();
-		
+
 		if (requestId.length() > 0) {
 			String hdivParameter = (String) request.getSession().getAttribute(Constants.HDIV_PARAMETER);
 			TagUtils.getInstance().write(pageContext, this.generateHiddenTag(hdivParameter, requestId));
-		}		
-	}	
-    
+		}
+	}
+
 	/**
 	 * Renders an HTML <b>&lt;input&gt;</b> element of type hidden.
 	 * 
@@ -126,14 +125,14 @@ public class FormTagHDIV extends FormTag {
 	 * @return HTML <b>&lt;input&gt;</b> element of type hidden
 	 */
 	private String generateHiddenTag(String name, String requestId) {
-		
+
 		StringBuffer hdivParameter = new StringBuffer();
-		
-		hdivParameter.append("<input type=\"hidden\"");		
+
+		hdivParameter.append("<input type=\"hidden\"");
 		renderAttribute(hdivParameter, "name", name);
 		renderAttribute(hdivParameter, "value", requestId);
 		hdivParameter.append(">\n");
-		
+
 		return hdivParameter.toString();
 	}
 

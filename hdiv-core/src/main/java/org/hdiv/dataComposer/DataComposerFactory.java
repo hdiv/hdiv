@@ -81,8 +81,7 @@ public class DataComposerFactory {
 	/**
 	 * Creates a new instance of DataComposer based on the defined strategy.
 	 * 
-	 * @param request
-	 *            {@link HttpServletRequest} instance
+	 * @param request {@link HttpServletRequest} instance
 	 * 
 	 * @return IDataComposer instance
 	 */
@@ -101,7 +100,8 @@ public class DataComposerFactory {
 			composer.init();
 			dataComposer = composer;
 
-		} else {
+		}
+		else {
 			String errorMessage = HDIVUtil.getMessage(request, "strategy.error", this.config.getStrategy().toString());
 			throw new HDIVException(errorMessage);
 		}
@@ -114,10 +114,8 @@ public class DataComposerFactory {
 	/**
 	 * Initialize IDataComposer instance.
 	 * 
-	 * @param dataComposer
-	 *            IDataComposer instance
-	 * @param context
-	 *            current request context
+	 * @param dataComposer IDataComposer instance
+	 * @param context current request context
 	 */
 	protected void initDataComposer(IDataComposer dataComposer, RequestContext context) {
 
@@ -141,20 +139,24 @@ public class DataComposerFactory {
 				dataComposer.beginRequest(state);
 			}
 
-		} else if (this.reuseExistingPage(request)) {
+		}
+		else if (this.reuseExistingPage(request)) {
 
 			if (hdivState != null && hdivState.length() > 0) {
 				IState state = this.stateUtil.restoreState(context, hdivState);
 				if (state.getPageId() > 0) {
 					IPage page = this.session.getPage(context, state.getPageId());
 					dataComposer.startPage(page);
-				} else {
+				}
+				else {
 					dataComposer.startPage(hdivState);
 				}
-			} else {
+			}
+			else {
 				dataComposer.startPage(hdivState);
 			}
-		} else {
+		}
+		else {
 			dataComposer.startPage(hdivState);
 		}
 
@@ -169,10 +171,8 @@ public class DataComposerFactory {
 	/**
 	 * Get _MODIFY_HDIV_STATE_ parameter value.
 	 * 
-	 * @param dataComposer
-	 *            IDataComposer instance
-	 * @param request
-	 *            current HttpServletRequest instance
+	 * @param dataComposer IDataComposer instance
+	 * @param request current HttpServletRequest instance
 	 * @return parameter value.
 	 */
 	protected String getModifyStateParameterValue(IDataComposer dataComposer, HttpServletRequest request) {
@@ -185,8 +185,7 @@ public class DataComposerFactory {
 	/**
 	 * Is it necessary to create a new Page or reuse existing Page adding the created states to it?
 	 * 
-	 * @param request
-	 *            current HttpServletRequest instance
+	 * @param request current HttpServletRequest instance
 	 * @return reuse or not
 	 */
 	protected boolean reuseExistingPage(HttpServletRequest request) {
@@ -205,8 +204,7 @@ public class DataComposerFactory {
 	/**
 	 * Checks if request is an ajax request and store the result in a request's attribute
 	 * 
-	 * @param request
-	 *            the HttpServletRequest
+	 * @param request the HttpServletRequest
 	 * 
 	 * @return isAjaxRquest
 	 */
@@ -234,56 +232,49 @@ public class DataComposerFactory {
 	}
 
 	/**
-	 * @param config
-	 *            the hdivConfig to set
+	 * @param config the hdivConfig to set
 	 */
 	public void setConfig(HDIVConfig config) {
 		this.config = config;
 	}
 
 	/**
-	 * @param session
-	 *            the session to set
+	 * @param session the session to set
 	 */
 	public void setSession(ISession session) {
 		this.session = session;
 	}
 
 	/**
-	 * @param uidGenerator
-	 *            the uidGenerator to set
+	 * @param uidGenerator the uidGenerator to set
 	 */
 	public void setUidGenerator(UidGenerator uidGenerator) {
 		this.uidGenerator = uidGenerator;
 	}
 
 	/**
-	 * @param allowedLength
-	 *            the allowedLength to set
+	 * @param allowedLength the allowedLength to set
 	 */
 	public void setAllowedLength(int allowedLength) {
 		this.allowedLength = allowedLength;
 	}
 
 	/**
-	 * @param stateUtil
-	 *            the stateUtil to set
+	 * @param stateUtil the stateUtil to set
 	 */
 	public void setStateUtil(StateUtil stateUtil) {
 		this.stateUtil = stateUtil;
 	}
 
 	/**
-	 * @param stateScopeManager
-	 *            the stateScopeManager to set
+	 * @param stateScopeManager the stateScopeManager to set
 	 */
 	public void setStateScopeManager(StateScopeManager stateScopeManager) {
 		this.stateScopeManager = stateScopeManager;
 	}
 
 	/**
-	 * @param excludePageReuseHeaders
-	 *            the excludePageReuseHeaders to set
+	 * @param excludePageReuseHeaders the excludePageReuseHeaders to set
 	 */
 	public void setExcludePageReuseHeaders(List<String> excludePageReuseHeaders) {
 		this.excludePageReuseHeaders = excludePageReuseHeaders;

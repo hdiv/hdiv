@@ -136,7 +136,7 @@ public class Parameter implements IParameter, Serializable {
 	 * Checks if the position <code>position</code> exists in the array of values <code>values</code>.
 	 * 
 	 * @return True if <code>position</code> is valid position in the array of values <code>values</code>. False
-	 *         otherwise.
+	 * otherwise.
 	 */
 	public boolean existPosition(int position) {
 		return (position == 0) || (values != null && position < values.size());
@@ -179,8 +179,7 @@ public class Parameter implements IParameter, Serializable {
 	}
 
 	/**
-	 * @param editable
-	 *            Modify the editable value of the parameter
+	 * @param editable Modify the editable value of the parameter
 	 * @since 2.1.8
 	 */
 	public void setEditable(boolean editable) {
@@ -208,8 +207,7 @@ public class Parameter implements IParameter, Serializable {
 	}
 
 	/**
-	 * @param actionParam
-	 *            The actionParam to set.
+	 * @param actionParam The actionParam to set.
 	 */
 	public void setActionParam(boolean actionParam) {
 		this.actionParam = actionParam;
@@ -229,7 +227,8 @@ public class Parameter implements IParameter, Serializable {
 
 		if (values == null) {
 			result.append(this.value);
-		} else {
+		}
+		else {
 			for (int i = 0; i < this.values.size(); i++) {
 				String value = this.values.get(i);
 				result.append(value);

@@ -63,8 +63,7 @@ public class DefaultValidationParser extends DefaultHandler {
 	/**
 	 * Read xml file from the given path.
 	 * 
-	 * @param filePath
-	 *            xml file path
+	 * @param filePath xml file path
 	 */
 	public void readDefaultValidations(String filePath) {
 
@@ -74,11 +73,14 @@ public class DefaultValidationParser extends DefaultHandler {
 			SAXParserFactory spf = SAXParserFactory.newInstance();
 			SAXParser sp = spf.newSAXParser();
 			sp.parse(is, this);
-		} catch (ParserConfigurationException e) {
+		}
+		catch (ParserConfigurationException e) {
 			throw new HDIVException(e.getMessage(), e);
-		} catch (SAXException e) {
+		}
+		catch (SAXException e) {
 			throw new HDIVException(e.getMessage(), e);
-		} catch (IOException e) {
+		}
+		catch (IOException e) {
 			throw new HDIVException(e.getMessage(), e);
 		}
 	}

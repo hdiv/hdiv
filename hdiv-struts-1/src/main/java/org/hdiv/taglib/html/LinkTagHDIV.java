@@ -35,8 +35,8 @@ import org.hdiv.util.HDIVUtil;
 public class LinkTagHDIV extends LinkTag {
 
 	/**
-	 * Universal version identifier. Deserialization uses this number to ensure that
-	 * a loaded class corresponds exactly to a serialized object.
+	 * Universal version identifier. Deserialization uses this number to ensure that a loaded class corresponds exactly
+	 * to a serialized object.
 	 */
 	private static final long serialVersionUID = -376718532211972980L;
 
@@ -44,17 +44,17 @@ public class LinkTagHDIV extends LinkTag {
 	 * Commons logging instance
 	 */
 	private static final Log log = LogFactory.getLog(LinkTagHDIV.class);
-	
-	protected LinkUrlProcessor linkUrlProcessor;
-	
-    /**
-     * Render the end of the hyperlink.
-     *
-     * @exception JspException if a JSP exception has occurred
-     */
-    public int doEndTag() throws JspException {
 
-        HttpServletRequest request = (HttpServletRequest) pageContext.getRequest();       
+	protected LinkUrlProcessor linkUrlProcessor;
+
+	/**
+	 * Render the end of the hyperlink.
+	 *
+	 * @exception JspException if a JSP exception has occurred
+	 */
+	public int doEndTag() throws JspException {
+
+		HttpServletRequest request = (HttpServletRequest) pageContext.getRequest();
 
 		// Validate if any specifier was included
 		if ((forward == null) && (href == null) && (page == null) && (action == null)) {
@@ -77,16 +77,16 @@ public class LinkTagHDIV extends LinkTag {
 		// character encoding from ServletResponse#getCharacterEncoding. Use UTF-8
 		// otherwise.
 		String charEncoding = "UTF-8";
-	    if (useLocalEncoding){
-	    	charEncoding = pageContext.getResponse().getCharacterEncoding();
-	    }
+		if (useLocalEncoding) {
+			charEncoding = pageContext.getResponse().getCharacterEncoding();
+		}
 
-	    // Call to Hdiv LinkUrlProcessor
-	 	if(this.linkUrlProcessor == null){
-	 		this.linkUrlProcessor = HDIVUtil.getLinkUrlProcessor(request.getSession().getServletContext());
-	 	}
+		// Call to Hdiv LinkUrlProcessor
+		if (this.linkUrlProcessor == null) {
+			this.linkUrlProcessor = HDIVUtil.getLinkUrlProcessor(request.getSession().getServletContext());
+		}
 		String urlWithHDIVParameter = this.linkUrlProcessor.processUrl(request, url, charEncoding);
-		
+
 		renderAttribute(results, "href", urlWithHDIVParameter);
 
 		renderAttribute(results, "target", getTarget());
@@ -98,19 +98,19 @@ public class LinkTagHDIV extends LinkTag {
 		prepareOtherAttributes(results);
 		results.append(">");
 
-        // Prepare the textual content and ending element of this hyperlink
-        if (text != null) {
-            results.append(text);
-        }
-        results.append("</a>");				
+		// Prepare the textual content and ending element of this hyperlink
+		if (text != null) {
+			results.append(text);
+		}
+		results.append("</a>");
 		TagUtils.getInstance().write(pageContext, results.toString());
 
 		return (EVAL_PAGE);
 	}
 
 	/**
-	 * Prepares an attribute if the <code>value</code> is not null, appending it to
-	 * the the given StringBuffer <code>result</code>.
+	 * Prepares an attribute if the <code>value</code> is not null, appending it to the the given StringBuffer
+	 * <code>result</code>.
 	 * 
 	 * @param result The StringBuffer that output will be appended to.
 	 */
@@ -124,7 +124,7 @@ public class LinkTagHDIV extends LinkTag {
 			result.append("\"");
 		}
 	}
-	
+
 	/**
 	 * 'Hook' to enable tags to be extended and additional attributes added.
 	 * 
@@ -132,6 +132,6 @@ public class LinkTagHDIV extends LinkTag {
 	 */
 	protected void prepareOtherAttributes(StringBuffer handlers) {
 
-	}	
-	
+	}
+
 }

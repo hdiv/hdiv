@@ -32,8 +32,8 @@ import org.hdiv.util.HDIVUtil;
 
 /**
  * <p>
- * Support for tag handlers for &lt;redirect&gt;, JSTL 1.0's tag for redirecting
- * to a new URL (with optional query parameters).
+ * Support for tag handlers for &lt;redirect&gt;, JSTL 1.0's tag for redirecting to a new URL (with optional query
+ * parameters).
  * </p>
  * 
  * @author Gorka Vicente
@@ -123,7 +123,8 @@ public abstract class RedirectSupportHDIV extends BodyTagSupport implements Para
 		// redirect!
 		try {
 			response.sendRedirect(result);
-		} catch (java.io.IOException ex) {
+		}
+		catch (java.io.IOException ex) {
 			throw new JspTagException(ex.toString(), ex);
 		}
 

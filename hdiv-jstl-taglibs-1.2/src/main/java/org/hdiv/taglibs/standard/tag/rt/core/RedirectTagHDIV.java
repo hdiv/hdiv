@@ -20,21 +20,21 @@ import javax.servlet.jsp.JspTagException;
 import org.hdiv.taglibs.standard.tag.common.core.RedirectSupportHDIV;
 
 /**
- * <p>A handler for &lt;redirect&gt; that supports rtexprvalue-based
- * attributes.</p>
+ * <p>
+ * A handler for &lt;redirect&gt; that supports rtexprvalue-based attributes.
+ * </p>
  *
  * @author Gorka Vicente
  * @since HDIV 2.0
  */
 public class RedirectTagHDIV extends RedirectSupportHDIV {
 
-    public void setUrl(String url) throws JspTagException {
-        this.url = url;
-    }
+	public void setUrl(String url) throws JspTagException {
+		this.url = url;
+	}
 
-    public void setContext(String context) throws JspTagException {
-        this.context = context;
-    }
+	public void setContext(String context) throws JspTagException {
+		this.context = context;
+	}
 
 }
-

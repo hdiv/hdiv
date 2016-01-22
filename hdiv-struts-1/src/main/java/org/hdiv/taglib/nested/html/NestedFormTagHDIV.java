@@ -33,8 +33,8 @@ import org.hdiv.taglib.html.FormTagHDIV;
 public class NestedFormTagHDIV extends FormTagHDIV implements NestedNameSupport {
 
 	/**
-	 * Universal version identifier. Deserialization uses this number to ensure that
-	 * a loaded class corresponds exactly to a serialized object.
+	 * Universal version identifier. Deserialization uses this number to ensure that a loaded class corresponds exactly
+	 * to a serialized object.
 	 */
 	private static final long serialVersionUID = 5398511484328451925L;
 
@@ -47,7 +47,6 @@ public class NestedFormTagHDIV extends FormTagHDIV implements NestedNameSupport 
 	 * The name
 	 */
 	protected String name = null;
-
 
 	/**
 	 * Return the name.
@@ -87,8 +86,7 @@ public class NestedFormTagHDIV extends FormTagHDIV implements NestedNameSupport 
 	}
 
 	/**
-	 * Overriding to allow the chance to set the details of the system, so that
-	 * dynamic includes can be possible
+	 * Overriding to allow the chance to set the details of the system, so that dynamic includes can be possible
 	 * 
 	 * @return int JSP continuation directive.
 	 */
@@ -123,7 +121,8 @@ public class NestedFormTagHDIV extends FormTagHDIV implements NestedNameSupport 
 		// reset the original nesting values
 		if (originalNesting == null) {
 			NestedPropertyHelper.deleteReference(request);
-		} else {
+		}
+		else {
 			NestedPropertyHelper.setProperty(request, originalNesting);
 			NestedPropertyHelper.setName(request, originalNestingName);
 		}

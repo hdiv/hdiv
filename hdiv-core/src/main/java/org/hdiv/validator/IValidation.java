@@ -41,12 +41,9 @@ public interface IValidation {
 	 * <li>rejected: the value is rejected if doesn't pass the validation</li>
 	 * </ul>
 	 * 
-	 * @param parameter
-	 *            parameter name
-	 * @param values
-	 *            parameter's values
-	 * @param dataType
-	 *            editable data type
+	 * @param parameter parameter name
+	 * @param values parameter's values
+	 * @param dataType editable data type
 	 * @return True if the values <code>values</code> are valid for the parameter <code>parameter</code>.
 	 * @since HDIV 1.1.1
 	 */

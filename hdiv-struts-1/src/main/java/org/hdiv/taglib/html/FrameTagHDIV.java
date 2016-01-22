@@ -25,17 +25,13 @@ import org.hdiv.urlProcessor.LinkUrlProcessor;
 import org.hdiv.util.HDIVUtil;
 
 /**
- * Generate an HTML <code>&lt;frame&gt;</code> tag with similar capabilities as
- * those the <code>&lt;html:link&gt;</code> tag provides for hyperlink elements.
- * The <code>src</code> element is rendered using the same technique that
- * {@link LinkTagHDIV} uses to render the <code>href</code> attribute of a
- * hyperlink. Additionall, the HTML 4.0 frame tag attributes <code>noresize</code>,
- * <code>scrolling</code>, <code>marginheight</code>, <code>marginwidth</code>,
- * <code>frameborder</code>, and <code>longdesc</code> are supported. The frame
- * <code>name</code> attribute is rendered based on the <code>frameName</code>
- * property. Note that the value of <code>longdesc</code> is intended to be a URI,
- * but currently no rewriting is supported. The attribute is set directly from the
- * property value.
+ * Generate an HTML <code>&lt;frame&gt;</code> tag with similar capabilities as those the <code>&lt;html:link&gt;</code>
+ * tag provides for hyperlink elements. The <code>src</code> element is rendered using the same technique that
+ * {@link LinkTagHDIV} uses to render the <code>href</code> attribute of a hyperlink. Additionall, the HTML 4.0 frame
+ * tag attributes <code>noresize</code>, <code>scrolling</code>, <code>marginheight</code>, <code>marginwidth</code>,
+ * <code>frameborder</code>, and <code>longdesc</code> are supported. The frame <code>name</code> attribute is rendered
+ * based on the <code>frameName</code> property. Note that the value of <code>longdesc</code> is intended to be a URI,
+ * but currently no rewriting is supported. The attribute is set directly from the property value.
  * 
  * @author Gorka Vicente
  * @see org.apache.struts.taglib.html.FrameTag
@@ -44,8 +40,8 @@ import org.hdiv.util.HDIVUtil;
 public class FrameTagHDIV extends LinkTagHDIV {
 
 	/**
-	 * Universal version identifier. Deserialization uses this number to ensure that
-	 * a loaded class corresponds exactly to a serialized object.
+	 * Universal version identifier. Deserialization uses this number to ensure that a loaded class corresponds exactly
+	 * to a serialized object.
 	 */
 	private static final long serialVersionUID = -376718532211972980L;
 
@@ -54,98 +50,98 @@ public class FrameTagHDIV extends LinkTagHDIV {
 	 */
 	private static final Log log = LogFactory.getLog(FrameTagHDIV.class);
 
-    /**
-     * The frameborder attribute that should be rendered (1, 0).
-     */
-    protected String frameborder = null;
+	/**
+	 * The frameborder attribute that should be rendered (1, 0).
+	 */
+	protected String frameborder = null;
 
-    /**
-     * The <code>name</code> attribute that should be rendered for this frame.
-     */
-    protected String frameName = null;
+	/**
+	 * The <code>name</code> attribute that should be rendered for this frame.
+	 */
+	protected String frameName = null;
 
-    /**
-     * URI of a long description of this frame (complements title).
-     */
-    protected String longdesc = null;
+	/**
+	 * URI of a long description of this frame (complements title).
+	 */
+	protected String longdesc = null;
 
-    /**
-     * The margin height in pixels, or zero for no setting.
-     */
-    protected Integer marginheight = null;
+	/**
+	 * The margin height in pixels, or zero for no setting.
+	 */
+	protected Integer marginheight = null;
 
-    /**
-     * The margin width in pixels, or null for no setting.
-     */
-    protected Integer marginwidth = null;
+	/**
+	 * The margin width in pixels, or null for no setting.
+	 */
+	protected Integer marginwidth = null;
 
-    /**
-     * Should users be disallowed to resize the frame?
-     */
-    protected boolean noresize = false;
+	/**
+	 * Should users be disallowed to resize the frame?
+	 */
+	protected boolean noresize = false;
 
-    /**
-     * What type of scrolling should be supported (yes, no, auto)?
-     */
-    protected String scrolling = null;
+	/**
+	 * What type of scrolling should be supported (yes, no, auto)?
+	 */
+	protected String scrolling = null;
 
-    protected LinkUrlProcessor linkUrlProcessor;
-    
-    public String getFrameborder() {
-        return (this.frameborder);
-    }
+	protected LinkUrlProcessor linkUrlProcessor;
 
-    public void setFrameborder(String frameborder) {
-        this.frameborder = frameborder;
-    }
+	public String getFrameborder() {
+		return (this.frameborder);
+	}
 
-    public String getFrameName() {
-        return (this.frameName);
-    }
+	public void setFrameborder(String frameborder) {
+		this.frameborder = frameborder;
+	}
 
-    public void setFrameName(String frameName) {
-        this.frameName = frameName;
-    }
+	public String getFrameName() {
+		return (this.frameName);
+	}
 
-    public String getLongdesc() {
-        return (this.longdesc);
-    }
+	public void setFrameName(String frameName) {
+		this.frameName = frameName;
+	}
 
-    public void setLongdesc(String longdesc) {
-        this.longdesc = longdesc;
-    }
+	public String getLongdesc() {
+		return (this.longdesc);
+	}
 
-    public Integer getMarginheight() {
-        return (this.marginheight);
-    }
+	public void setLongdesc(String longdesc) {
+		this.longdesc = longdesc;
+	}
 
-    public void setMarginheight(Integer marginheight) {
-        this.marginheight = marginheight;
-    }
+	public Integer getMarginheight() {
+		return (this.marginheight);
+	}
 
-    public Integer getMarginwidth() {
-        return (this.marginwidth);
-    }
+	public void setMarginheight(Integer marginheight) {
+		this.marginheight = marginheight;
+	}
 
-    public void setMarginwidth(Integer marginwidth) {
-        this.marginwidth = marginwidth;
-    }
+	public Integer getMarginwidth() {
+		return (this.marginwidth);
+	}
 
-    public boolean getNoresize() {
-        return (this.noresize);
-    }
+	public void setMarginwidth(Integer marginwidth) {
+		this.marginwidth = marginwidth;
+	}
 
-    public void setNoresize(boolean noresize) {
-        this.noresize = noresize;
-    }    
-    
-    public String getScrolling() {
-        return (this.scrolling);
-    }
+	public boolean getNoresize() {
+		return (this.noresize);
+	}
 
-    public void setScrolling(String scrolling) {
-        this.scrolling = scrolling;
-    }
+	public void setNoresize(boolean noresize) {
+		this.noresize = noresize;
+	}
+
+	public String getScrolling() {
+		return (this.scrolling);
+	}
+
+	public void setScrolling(String scrolling) {
+		this.scrolling = scrolling;
+	}
 
 	/**
 	 * Render the appropriately encoded URI.
@@ -165,30 +161,30 @@ public class FrameTagHDIV extends LinkTagHDIV {
 		results.append("src=\"");
 
 		// Call to Hdiv LinkUrlProcessor
-		if(this.linkUrlProcessor == null){
+		if (this.linkUrlProcessor == null) {
 			this.linkUrlProcessor = HDIVUtil.getLinkUrlProcessor(request.getSession().getServletContext());
 		}
 		String urlWithHDIVParameter = linkUrlProcessor.processUrl(request, url);
-		
+
 		results.append(urlWithHDIVParameter);
-		
+
 		results.append("\"");
 		super.prepareAttribute(results, "name", getFrameName());
 
 		if (noresize) {
 			results.append(" noresize=\"noresize\"");
 		}
-	
-        prepareAttribute(results, "scrolling", getScrolling());
-        prepareAttribute(results, "marginheight", getMarginheight());
-        prepareAttribute(results, "marginwidth", getMarginwidth());
-        prepareAttribute(results, "frameborder", getFrameborder());
-        prepareAttribute(results, "longdesc", getLongdesc());		
-		
-        results.append(prepareStyles());
-        prepareOtherAttributes(results);
-        results.append(getElementClose());		
-		
+
+		prepareAttribute(results, "scrolling", getScrolling());
+		prepareAttribute(results, "marginheight", getMarginheight());
+		prepareAttribute(results, "marginwidth", getMarginwidth());
+		prepareAttribute(results, "frameborder", getFrameborder());
+		prepareAttribute(results, "longdesc", getLongdesc());
+
+		results.append(prepareStyles());
+		prepareOtherAttributes(results);
+		results.append(getElementClose());
+
 		TagUtils.getInstance().write(pageContext, results.toString());
 
 		// Skip the body of this tag

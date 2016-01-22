@@ -51,8 +51,7 @@ public class ComponentMessagesLog {
 	/**
 	 * Default constructor
 	 * 
-	 * @param logger
-	 *            Logger instance
+	 * @param logger Logger instance
 	 */
 	public ComponentMessagesLog(Logger logger) {
 		this.logger = logger;
@@ -62,8 +61,7 @@ public class ComponentMessagesLog {
 	 * Searches for validation messages created by the framework itself that show value modification by the user and
 	 * creates logs for them.
 	 * 
-	 * @param facesContext
-	 *            request context
+	 * @param facesContext request context
 	 */
 	public void processMessages(FacesContext facesContext) {
 		Iterator<String> clientIterator = facesContext.getClientIdsWithMessages();
@@ -86,16 +84,11 @@ public class ComponentMessagesLog {
 	/**
 	 * Creates a log for the corresponding component
 	 * 
-	 * @param requestValue
-	 *            real value
-	 * @param facesContext
-	 *            request context
-	 * @param clientComponent
-	 *            component that has been modified
-	 * @param clientMessages
-	 *            messages created by the framework
-	 * @param requestUri
-	 *            original url of the request
+	 * @param requestValue real value
+	 * @param facesContext request context
+	 * @param clientComponent component that has been modified
+	 * @param clientMessages messages created by the framework
+	 * @param requestUri original url of the request
 	 */
 	private void manageClientMessages(String requestValue, FacesContext facesContext, UIComponent clientComponent,
 			Iterator<FacesMessage> clientMessages, String requestUri) {

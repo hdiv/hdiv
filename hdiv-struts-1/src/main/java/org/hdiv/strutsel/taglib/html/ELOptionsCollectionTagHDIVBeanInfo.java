@@ -22,16 +22,13 @@ import java.util.ArrayList;
 
 /**
  * This is the <code>BeanInfo</code> descriptor for the
- * <code>org.hdiv.strutsel.taglib.html.ELOptionsCollectionTagHDIV</code>
- * class. It is needed to override the default mapping of custom tag attribute
- * names to class attribute names.
+ * <code>org.hdiv.strutsel.taglib.html.ELOptionsCollectionTagHDIV</code> class. It is needed to override the default
+ * mapping of custom tag attribute names to class attribute names.
  * <p>
- * This is because the value of the unevaluated EL expression has to be kept
- * separately from the evaluated value, which is stored in the base class. This
- * is related to the fact that the JSP compiler can choose to reuse different
- * tag instances if they received the same original attribute values, and the
- * JSP compiler can choose to not re-call the setter methods, because it can
- * assume the same values are already set.
+ * This is because the value of the unevaluated EL expression has to be kept separately from the evaluated value, which
+ * is stored in the base class. This is related to the fact that the JSP compiler can choose to reuse different tag
+ * instances if they received the same original attribute values, and the JSP compiler can choose to not re-call the
+ * setter methods, because it can assume the same values are already set.
  * 
  * @author Gorka Vicente
  * @since HDIV 2.0
@@ -43,37 +40,45 @@ public class ELOptionsCollectionTagHDIVBeanInfo extends SimpleBeanInfo {
 
 		try {
 			proplist.add(new PropertyDescriptor("filter", ELOptionsCollectionTagHDIV.class, null, "setFilterExpr"));
-		} catch (IntrospectionException ex) {
+		}
+		catch (IntrospectionException ex) {
 		}
 
 		try {
 			proplist.add(new PropertyDescriptor("label", ELOptionsCollectionTagHDIV.class, null, "setLabelExpr"));
-		} catch (IntrospectionException ex) {
+		}
+		catch (IntrospectionException ex) {
 		}
 
 		try {
 			proplist.add(new PropertyDescriptor("name", ELOptionsCollectionTagHDIV.class, null, "setNameExpr"));
-		} catch (IntrospectionException ex) {
+		}
+		catch (IntrospectionException ex) {
 		}
 
 		try {
 			proplist.add(new PropertyDescriptor("property", ELOptionsCollectionTagHDIV.class, null, "setPropertyExpr"));
-		} catch (IntrospectionException ex) {
+		}
+		catch (IntrospectionException ex) {
 		}
 
 		try {
 			proplist.add(new PropertyDescriptor("style", ELOptionsCollectionTagHDIV.class, null, "setStyleExpr"));
-		} catch (IntrospectionException ex) {
+		}
+		catch (IntrospectionException ex) {
 		}
 
 		try {
-			proplist.add(new PropertyDescriptor("styleClass", ELOptionsCollectionTagHDIV.class, null, "setStyleClassExpr"));
-		} catch (IntrospectionException ex) {
+			proplist.add(new PropertyDescriptor("styleClass", ELOptionsCollectionTagHDIV.class, null,
+					"setStyleClassExpr"));
+		}
+		catch (IntrospectionException ex) {
 		}
 
 		try {
 			proplist.add(new PropertyDescriptor("value", ELOptionsCollectionTagHDIV.class, null, "setValueExpr"));
-		} catch (IntrospectionException ex) {
+		}
+		catch (IntrospectionException ex) {
 		}
 
 		PropertyDescriptor[] result = new PropertyDescriptor[proplist.size()];

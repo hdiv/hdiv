@@ -39,8 +39,7 @@ public class RuleRegistry {
 	/**
 	 * Register a new rule for the editable validation.
 	 * 
-	 * @param name
-	 *            Name of the rule
+	 * @param name Name of the rule
 	 * @return More configuration options
 	 */
 	public RuleRegistration addRule(String name) {

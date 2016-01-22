@@ -54,12 +54,9 @@ public class SpringMVCMultipartConfig implements IMultipartConfig {
 	/**
 	 * Parses the input stream and partitions the parsed items into a set of form fields and a set of file items.
 	 * 
-	 * @param request
-	 *            The multipart request wrapper.
-	 * @param servletContext
-	 *            Our ServletContext object
-	 * @throws HdivMultipartException
-	 *             if an unrecoverable error occurs.
+	 * @param request The multipart request wrapper.
+	 * @param servletContext Our ServletContext object
+	 * @throws HdivMultipartException if an unrecoverable error occurs.
 	 */
 	public HttpServletRequest handleMultipartRequest(RequestWrapper request, ServletContext servletContext)
 			throws HdivMultipartException {
@@ -81,7 +78,8 @@ public class SpringMVCMultipartConfig implements IMultipartConfig {
 			// Resolve multipart with the original request
 			processedRequest = multipartResolver.resolveMultipart((HttpServletRequest) request.getRequest());
 
-		} catch (MultipartException e) {
+		}
+		catch (MultipartException e) {
 
 			throw new HdivMultipartException(e);
 		}
@@ -94,8 +92,7 @@ public class SpringMVCMultipartConfig implements IMultipartConfig {
 	/**
 	 * Cleanup any resources used for the multipart handling, like a storage for the uploaded files.
 	 * 
-	 * @param request
-	 *            the request to cleanup resources for
+	 * @param request the request to cleanup resources for
 	 * @since HDIV 2.1.0
 	 */
 	public void cleanupMultipart(HttpServletRequest request) {
@@ -113,8 +110,7 @@ public class SpringMVCMultipartConfig implements IMultipartConfig {
 	/**
 	 * Obtain MultipartResolver instance for this application.
 	 * 
-	 * @param servletContext
-	 *            app ServletContext
+	 * @param servletContext app ServletContext
 	 * @return MultipartResolver instance
 	 */
 	@SuppressWarnings("rawtypes")
@@ -131,7 +127,8 @@ public class SpringMVCMultipartConfig implements IMultipartConfig {
 			if (resolver != null) {
 				return resolver;
 			}
-		} catch (NoSuchBeanDefinitionException ex) {
+		}
+		catch (NoSuchBeanDefinitionException ex) {
 			// No MultipartResolver in this context.
 		}
 
@@ -150,7 +147,8 @@ public class SpringMVCMultipartConfig implements IMultipartConfig {
 		if (this.webApplicationContext != null) {
 			try {
 				resolver = this.webApplicationContext.getBean(MULTIPART_RESOLVER_BEAN_NAME, MultipartResolver.class);
-			} catch (NoSuchBeanDefinitionException ex) {
+			}
+			catch (NoSuchBeanDefinitionException ex) {
 				// No MultipartResolver in this context.
 			}
 		}

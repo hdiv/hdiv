@@ -79,8 +79,7 @@ public class HDIVUtil {
 	/**
 	 * Returns data composer object from <code>HttpServletRequest</code>
 	 * 
-	 * @param request
-	 *            HttpServletRequest
+	 * @param request HttpServletRequest
 	 * @return {@link IDataComposer} instance
 	 */
 	public static IDataComposer getDataComposer(HttpServletRequest request) {
@@ -92,8 +91,7 @@ public class HDIVUtil {
 	/**
 	 * Returns true if a data composer object exist in <code>HttpServletRequest</code>
 	 * 
-	 * @param request
-	 *            HttpServletRequest
+	 * @param request HttpServletRequest
 	 * @return boolean
 	 */
 	public static boolean isDataComposer(HttpServletRequest request) {
@@ -105,10 +103,8 @@ public class HDIVUtil {
 	/**
 	 * Set the <code>IDataComposer</code>
 	 * 
-	 * @param newDataComposer
-	 *            new {@link IDataComposer}
-	 * @param request
-	 *            {@link HttpServletRequest} instance
+	 * @param newDataComposer new {@link IDataComposer}
+	 * @param request {@link HttpServletRequest} instance
 	 */
 	public static void setDataComposer(IDataComposer newDataComposer, HttpServletRequest request) {
 
@@ -118,8 +114,7 @@ public class HDIVUtil {
 	/**
 	 * Remove the <code>IDataComposer</code> from the request.
 	 * 
-	 * @param request
-	 *            {@link HttpServletRequest} instance
+	 * @param request {@link HttpServletRequest} instance
 	 */
 	public static void removeDataComposer(HttpServletRequest request) {
 
@@ -131,8 +126,7 @@ public class HDIVUtil {
 	/**
 	 * Returns RequestURI value from <code>HttpServletRequest</code>
 	 * 
-	 * @param request
-	 *            HttpServletRequest
+	 * @param request HttpServletRequest
 	 * @return String
 	 */
 	public static String getRequestURI(HttpServletRequest request) {
@@ -147,10 +141,8 @@ public class HDIVUtil {
 	/**
 	 * Set the RequestURI
 	 * 
-	 * @param requestURI
-	 *            RequestURI to set
-	 * @param request
-	 *            {@link HttpServletRequest} object
+	 * @param requestURI RequestURI to set
+	 * @param request {@link HttpServletRequest} object
 	 */
 	public static void setRequestURI(String requestURI, HttpServletRequest request) {
 
@@ -162,8 +154,7 @@ public class HDIVUtil {
 	/**
 	 * Returns BaseURL value from <code>HttpServletRequest</code>
 	 * 
-	 * @param request
-	 *            HttpServletRequest
+	 * @param request HttpServletRequest
 	 * @return String
 	 */
 	public static String getBaseURL(HttpServletRequest request) {
@@ -175,10 +166,8 @@ public class HDIVUtil {
 	/**
 	 * Set the BaseURL
 	 * 
-	 * @param baseURL
-	 *            BaseURL to set
-	 * @param request
-	 *            {@link HttpServletRequest} object
+	 * @param baseURL BaseURL to set
+	 * @param request {@link HttpServletRequest} object
 	 */
 	public static void setBaseURL(String baseURL, HttpServletRequest request) {
 
@@ -190,8 +179,7 @@ public class HDIVUtil {
 	/**
 	 * Returns the servlet context wrapper object.
 	 * 
-	 * @param servletContext
-	 *            {@link ServletContext} instance
+	 * @param servletContext {@link ServletContext} instance
 	 * @return IApplication object
 	 */
 	public static IApplication getApplication(ServletContext servletContext) {
@@ -205,10 +193,8 @@ public class HDIVUtil {
 	/**
 	 * Set the <code>IApplication</code> in <code>ServletContext</code>
 	 * 
-	 * @param newApplication
-	 *            new {@link IApplication} instance
-	 * @param servletContext
-	 *            {@link ServletContext} instance
+	 * @param newApplication new {@link IApplication} instance
+	 * @param servletContext {@link ServletContext} instance
 	 */
 	public static void setApplication(IApplication newApplication, ServletContext servletContext) {
 		servletContext.setAttribute(APPLICATION_SERVLETCONTEXT_KEY, newApplication);
@@ -219,8 +205,7 @@ public class HDIVUtil {
 	/**
 	 * Return the <code>HDIVConfig</code> object
 	 * 
-	 * @param servletContext
-	 *            {@link ServletContext} instance
+	 * @param servletContext {@link ServletContext} instance
 	 * @return {@link HDIVConfig} instance
 	 */
 	public static HDIVConfig getHDIVConfig(ServletContext servletContext) {
@@ -236,10 +221,8 @@ public class HDIVUtil {
 	/**
 	 * Set the <code>HDIVConfig</code> object
 	 * 
-	 * @param hdivConfig
-	 *            {@link HDIVConfig} instance
-	 * @param servletContext
-	 *            {@link ServletContext} instance
+	 * @param hdivConfig {@link HDIVConfig} instance
+	 * @param servletContext {@link ServletContext} instance
 	 */
 	public static void setHDIVConfig(HDIVConfig hdivConfig, ServletContext servletContext) {
 		servletContext.setAttribute(HDIVCONFIG_SERVLETCONTEXT_KEY, hdivConfig);
@@ -250,8 +233,7 @@ public class HDIVUtil {
 	/**
 	 * Return the <code>LinkUrlProcessor</code> instance.
 	 * 
-	 * @param servletContext
-	 *            {@link ServletContext} instance
+	 * @param servletContext {@link ServletContext} instance
 	 * @return {@link LinkUrlProcessor} instance
 	 */
 	public static LinkUrlProcessor getLinkUrlProcessor(ServletContext servletContext) {
@@ -266,10 +248,8 @@ public class HDIVUtil {
 	/**
 	 * Set the <code>LinkUrlProcessor</code> instance.
 	 * 
-	 * @param urlProcessor
-	 *            {@link LinkUrlProcessor} instance
-	 * @param servletContext
-	 *            {@link ServletContext} instance
+	 * @param urlProcessor {@link LinkUrlProcessor} instance
+	 * @param servletContext {@link ServletContext} instance
 	 */
 	public static void setLinkUrlProcessor(LinkUrlProcessor urlProcessor, ServletContext servletContext) {
 		servletContext.setAttribute(LINKURLPROCESSOR_SERVLETCONTEXT_KEY, urlProcessor);
@@ -278,8 +258,7 @@ public class HDIVUtil {
 	/**
 	 * Return the <code>FormUrlProcessor</code> instance.
 	 * 
-	 * @param servletContext
-	 *            {@link ServletContext} instance
+	 * @param servletContext {@link ServletContext} instance
 	 * @return {@link FormUrlProcessor} instance
 	 */
 	public static FormUrlProcessor getFormUrlProcessor(ServletContext servletContext) {
@@ -294,10 +273,8 @@ public class HDIVUtil {
 	/**
 	 * Set the <code>FormUrlProcessor</code> instance.
 	 * 
-	 * @param urlProcessor
-	 *            {@link FormUrlProcessor} instance
-	 * @param servletContext
-	 *            {@link ServletContext} instance
+	 * @param urlProcessor {@link FormUrlProcessor} instance
+	 * @param servletContext {@link ServletContext} instance
 	 */
 	public static void setFormUrlProcessor(FormUrlProcessor urlProcessor, ServletContext servletContext) {
 		servletContext.setAttribute(FORMURLPROCESSOR_SERVLETCONTEXT_KEY, urlProcessor);
@@ -308,8 +285,7 @@ public class HDIVUtil {
 	/**
 	 * Returns CurrentPageId value from <code>HttpServletRequest</code>
 	 * 
-	 * @param request
-	 *            {@link HttpServletRequest} object
+	 * @param request {@link HttpServletRequest} object
 	 * @return pageId
 	 */
 	public static Integer getCurrentPageId(HttpServletRequest request) {
@@ -319,10 +295,8 @@ public class HDIVUtil {
 	/**
 	 * Set the CurrentPageId
 	 * 
-	 * @param pageId
-	 *            Current page id
-	 * @param request
-	 *            {@link HttpServletRequest} object
+	 * @param pageId Current page id
+	 * @param request {@link HttpServletRequest} object
 	 */
 	public static void setCurrentPageId(Integer pageId, HttpServletRequest request) {
 
@@ -334,8 +308,7 @@ public class HDIVUtil {
 	/**
 	 * Return the {@link MessageSource} instance.
 	 * 
-	 * @param request
-	 *            HttpServletRequest object
+	 * @param request HttpServletRequest object
 	 * @return {@link MessageSource} instance
 	 */
 	public static MessageSource getMessageSource(HttpServletRequest request) {
@@ -347,8 +320,7 @@ public class HDIVUtil {
 	/**
 	 * Return the {@link MessageSource} instance.
 	 * 
-	 * @param servletContext
-	 *            {@link ServletContext} instance
+	 * @param servletContext {@link ServletContext} instance
 	 * @return {@link MessageSource} instance
 	 */
 	public static MessageSource getMessageSource(ServletContext servletContext) {
@@ -362,10 +334,8 @@ public class HDIVUtil {
 	/**
 	 * Set the {@link MessageSource} instance.
 	 * 
-	 * @param msgSource
-	 *            {@link MessageSource} instance
-	 * @param servletContext
-	 *            {@link ServletContext} instance
+	 * @param msgSource {@link MessageSource} instance
+	 * @param servletContext {@link ServletContext} instance
 	 */
 	public static void setMessageSource(MessageSource msgSource, ServletContext servletContext) {
 		servletContext.setAttribute(MESSAGESOURCE_SERVLETCONTEXT_KEY, msgSource);
@@ -374,10 +344,8 @@ public class HDIVUtil {
 	/**
 	 * Try to resolve the message. Treat as an error if the message can't be found.
 	 * 
-	 * @param request
-	 *            HttpServletRequest object
-	 * @param key
-	 *            the code to lookup up, such as 'calculator.noRateSet'
+	 * @param request HttpServletRequest object
+	 * @param key the code to lookup up, such as 'calculator.noRateSet'
 	 * @return The resolved message
 	 */
 	public static String getMessage(HttpServletRequest request, String key) {
@@ -387,13 +355,10 @@ public class HDIVUtil {
 	/**
 	 * Try to resolve the message. Treat as an error if the message can't be found.
 	 * 
-	 * @param request
-	 *            HttpServletRequest object
-	 * @param key
-	 *            the code to lookup up, such as 'calculator.noRateSet'
-	 * @param o
-	 *            Array of arguments that will be filled in for params within the message (params look like "{0}",
-	 *            "{1,date}", "{2,time}" within a message), or null if none.
+	 * @param request HttpServletRequest object
+	 * @param key the code to lookup up, such as 'calculator.noRateSet'
+	 * @param o Array of arguments that will be filled in for params within the message (params look like "{0}",
+	 * "{1,date}", "{2,time}" within a message), or null if none.
 	 * @return The resolved message
 	 */
 	public static String getMessage(HttpServletRequest request, String key, String o) {
@@ -403,15 +368,11 @@ public class HDIVUtil {
 	/**
 	 * Try to resolve the message. Treat as an error if the message can't be found.
 	 * 
-	 * @param request
-	 *            HttpServletRequest object
-	 * @param key
-	 *            the code to lookup up, such as 'calculator.noRateSet'
-	 * @param o
-	 *            Array of arguments that will be filled in for params within the message (params look like "{0}",
-	 *            "{1,date}", "{2,time}" within a message), or null if none.
-	 * @param userLocale
-	 *            locale
+	 * @param request HttpServletRequest object
+	 * @param key the code to lookup up, such as 'calculator.noRateSet'
+	 * @param o Array of arguments that will be filled in for params within the message (params look like "{0}",
+	 * "{1,date}", "{2,time}" within a message), or null if none.
+	 * @param userLocale locale
 	 * @return The resolved message
 	 */
 	public static String getMessage(HttpServletRequest request, String key, String o, Locale userLocale) {
@@ -426,10 +387,9 @@ public class HDIVUtil {
 	/**
 	 * Generates a random number between 0 (inclusive) and n (exclusive).
 	 * 
-	 * @param n
-	 *            the bound on the random number to be returned. Must be positive.
+	 * @param n the bound on the random number to be returned. Must be positive.
 	 * @return Returns a pseudorandom, uniformly distributed int value between 0 (inclusive) and <code>n</code>
-	 *         (exclusive).
+	 * (exclusive).
 	 * @since HDIV 1.1
 	 */
 	public static String createRandomToken(int n) {
@@ -448,8 +408,7 @@ public class HDIVUtil {
 	 * "jsessionid=". We thus remove anything we find between ";jsessionid=" (inclusive) and either EOS or a subsequent
 	 * ';' (exclusive).
 	 * 
-	 * @param url
-	 *            url
+	 * @param url url
 	 * @return url without sessionId
 	 */
 	public static String stripSession(String url) {
@@ -479,10 +438,8 @@ public class HDIVUtil {
 	 * Return an appropriate request object of the specified type, if available, unwrapping the given request as far as
 	 * necessary.
 	 * 
-	 * @param request
-	 *            the servlet request to introspect
-	 * @param requiredType
-	 *            the desired type of request object
+	 * @param request the servlet request to introspect
+	 * @param requiredType the desired type of request object
 	 * @return the matching request object, or {@code null} if none of that type is available
 	 */
 	@SuppressWarnings("unchecked")
@@ -490,7 +447,8 @@ public class HDIVUtil {
 		if (requiredType != null) {
 			if (requiredType.isInstance(request)) {
 				return (T) request;
-			} else if (request instanceof ServletRequestWrapper) {
+			}
+			else if (request instanceof ServletRequestWrapper) {
 				return getNativeRequest(((ServletRequestWrapper) request).getRequest(), requiredType);
 			}
 		}
@@ -506,8 +464,7 @@ public class HDIVUtil {
 	 * {@code publishContext} property, which is {@code true} by default but can be selectively switched to only publish
 	 * a single context despite multiple {@code DispatcherServlet} registrations in the web app.
 	 * 
-	 * @param sc
-	 *            ServletContext to find the web application context for
+	 * @param sc ServletContext to find the web application context for
 	 * @return the desired WebApplicationContext for this web app, or {@code null} if none
 	 * @since 4.2
 	 * @see #getWebApplicationContext(ServletContext)

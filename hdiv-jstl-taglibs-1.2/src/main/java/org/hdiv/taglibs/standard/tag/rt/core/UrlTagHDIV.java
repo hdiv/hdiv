@@ -20,19 +20,20 @@ import javax.servlet.jsp.JspTagException;
 import org.hdiv.taglibs.standard.tag.common.core.UrlSupportHDIV;
 
 /**
- * <p>A handler for &lt;urlEncode&gt; that supports rtexprvalue-based
- * attributes.</p>
+ * <p>
+ * A handler for &lt;urlEncode&gt; that supports rtexprvalue-based attributes.
+ * </p>
  *
  * @author Gorka Vicente.
  * @since HDIV 2.0
  */
 public class UrlTagHDIV extends UrlSupportHDIV {
 
-    public void setValue(String value) throws JspTagException {
-        this.value = value;
-    }
+	public void setValue(String value) throws JspTagException {
+		this.value = value;
+	}
 
-    public void setContext(String context) throws JspTagException {
-        this.context = context;
-    }
-} 
+	public void setContext(String context) throws JspTagException {
+		this.context = context;
+	}
+}

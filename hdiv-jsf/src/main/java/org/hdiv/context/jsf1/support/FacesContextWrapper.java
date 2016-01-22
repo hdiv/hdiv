@@ -28,14 +28,15 @@ import javax.faces.context.ResponseWriter;
 import javax.faces.render.RenderKit;
 
 /**
- * <p>Provides a simple implementation of {@link FacesContext} that can
- * be subclassed by developers wishing to provide specialized behavior
- * to an existing {@link FacesContext} instance.  The default
- * implementation of all methods is to call through to the wrapped
- * {@link FacesContext} instance.</p>
+ * <p>
+ * Provides a simple implementation of {@link FacesContext} that can be subclassed by developers wishing to provide
+ * specialized behavior to an existing {@link FacesContext} instance. The default implementation of all methods is to
+ * call through to the wrapped {@link FacesContext} instance.
+ * </p>
  *
- * <p>Usage: extend this class and override {@link #getWrapped} to
- * return the instance being wrapping.</p>
+ * <p>
+ * Usage: extend this class and override {@link #getWrapped} to return the instance being wrapping.
+ * </p>
  *
  */
 public abstract class FacesContextWrapper extends FacesContext {
@@ -51,9 +52,10 @@ public abstract class FacesContextWrapper extends FacesContext {
 	// ----------------------------------------------- Methods from FacesContext
 
 	/**
-	 * <p>The default behavior of this method is to
-	 * call {@link FacesContext#getApplication()}
-	 * on the wrapped {@link FacesContext} object.</p>
+	 * <p>
+	 * The default behavior of this method is to call {@link FacesContext#getApplication()} on the wrapped
+	 * {@link FacesContext} object.
+	 * </p>
 	 *
 	 * @see javax.faces.context.FacesContext#getApplication()
 	 */
@@ -62,9 +64,10 @@ public abstract class FacesContextWrapper extends FacesContext {
 	}
 
 	/**
-	 * <p>The default behavior of this method is to
-	 * call {@link javax.faces.context.FacesContext#getClientIdsWithMessages()}
-	 * on the wrapped {@link FacesContext} object.</p>
+	 * <p>
+	 * The default behavior of this method is to call
+	 * {@link javax.faces.context.FacesContext#getClientIdsWithMessages()} on the wrapped {@link FacesContext} object.
+	 * </p>
 	 *
 	 * @see FacesContext#getClientIdsWithMessages()
 	 */
@@ -73,9 +76,10 @@ public abstract class FacesContextWrapper extends FacesContext {
 	}
 
 	/**
-	 * <p>The default behavior of this method is to
-	 * call {@link FacesContext#getExternalContext()}
-	 * on the wrapped {@link FacesContext} object.</p>
+	 * <p>
+	 * The default behavior of this method is to call {@link FacesContext#getExternalContext()} on the wrapped
+	 * {@link FacesContext} object.
+	 * </p>
 	 *
 	 * @see javax.faces.context.FacesContext#getExternalContext()
 	 */
@@ -84,9 +88,10 @@ public abstract class FacesContextWrapper extends FacesContext {
 	}
 
 	/**
-	 * <p>The default behavior of this method is to
-	 * call {@link FacesContext#getMaximumSeverity()}
-	 * on the wrapped {@link FacesContext} object.</p>
+	 * <p>
+	 * The default behavior of this method is to call {@link FacesContext#getMaximumSeverity()} on the wrapped
+	 * {@link FacesContext} object.
+	 * </p>
 	 *
 	 * @see javax.faces.context.FacesContext#getMaximumSeverity()
 	 */
@@ -95,9 +100,10 @@ public abstract class FacesContextWrapper extends FacesContext {
 	}
 
 	/**
-	 * <p>The default behavior of this method is to
-	 * call {@link FacesContext#getMessages()}
-	 * on the wrapped {@link FacesContext} object.</p>
+	 * <p>
+	 * The default behavior of this method is to call {@link FacesContext#getMessages()} on the wrapped
+	 * {@link FacesContext} object.
+	 * </p>
 	 *
 	 * @see javax.faces.context.FacesContext#getMessages()
 	 */
@@ -106,9 +112,10 @@ public abstract class FacesContextWrapper extends FacesContext {
 	}
 
 	/**
-	 * <p>The default behavior of this method is to
-	 * call {@link FacesContext#getMessages(String)}
-	 * on the wrapped {@link FacesContext} object.</p>
+	 * <p>
+	 * The default behavior of this method is to call {@link FacesContext#getMessages(String)} on the wrapped
+	 * {@link FacesContext} object.
+	 * </p>
 	 *
 	 * @see javax.faces.context.FacesContext#getMessages(String)
 	 */
@@ -117,9 +124,10 @@ public abstract class FacesContextWrapper extends FacesContext {
 	}
 
 	/**
-	 * <p>The default behavior of this method is to
-	 * call {@link FacesContext#getRenderKit()}
-	 * on the wrapped {@link FacesContext} object.</p>
+	 * <p>
+	 * The default behavior of this method is to call {@link FacesContext#getRenderKit()} on the wrapped
+	 * {@link FacesContext} object.
+	 * </p>
 	 *
 	 * @see javax.faces.context.FacesContext#getRenderKit()
 	 */
@@ -128,9 +136,10 @@ public abstract class FacesContextWrapper extends FacesContext {
 	}
 
 	/**
-	 * <p>The default behavior of this method is to
-	 * call {@link FacesContext#getRenderResponse()}
-	 * on the wrapped {@link FacesContext} object.</p>
+	 * <p>
+	 * The default behavior of this method is to call {@link FacesContext#getRenderResponse()} on the wrapped
+	 * {@link FacesContext} object.
+	 * </p>
 	 *
 	 * @see javax.faces.context.FacesContext#getRenderResponse()
 	 */
@@ -139,9 +148,10 @@ public abstract class FacesContextWrapper extends FacesContext {
 	}
 
 	/**
-	 * <p>The default behavior of this method is to
-	 * call {@link FacesContext#getResponseComplete()}
-	 * on the wrapped {@link FacesContext} object.</p>
+	 * <p>
+	 * The default behavior of this method is to call {@link FacesContext#getResponseComplete()} on the wrapped
+	 * {@link FacesContext} object.
+	 * </p>
 	 *
 	 * @see javax.faces.context.FacesContext#getResponseComplete()
 	 */
@@ -150,9 +160,10 @@ public abstract class FacesContextWrapper extends FacesContext {
 	}
 
 	/**
-	 * <p>The default behavior of this method is to
-	 * call {@link FacesContext#getResponseStream()}
-	 * on the wrapped {@link FacesContext} object.</p>
+	 * <p>
+	 * The default behavior of this method is to call {@link FacesContext#getResponseStream()} on the wrapped
+	 * {@link FacesContext} object.
+	 * </p>
 	 *
 	 * @see javax.faces.context.FacesContext#getResponseStream()
 	 */
@@ -161,9 +172,10 @@ public abstract class FacesContextWrapper extends FacesContext {
 	}
 
 	/**
-	 * <p>The default behavior of this method is to
-	 * call {@link FacesContext#setResponseStream(ResponseStream)}
-	 * on the wrapped {@link FacesContext} object.</p>
+	 * <p>
+	 * The default behavior of this method is to call {@link FacesContext#setResponseStream(ResponseStream)} on the
+	 * wrapped {@link FacesContext} object.
+	 * </p>
 	 *
 	 * @see javax.faces.context.FacesContext#setResponseStream(ResponseStream)
 	 */
@@ -172,9 +184,10 @@ public abstract class FacesContextWrapper extends FacesContext {
 	}
 
 	/**
-	 * <p>The default behavior of this method is to
-	 * call {@link FacesContext#getResponseWriter()}
-	 * on the wrapped {@link FacesContext} object.</p>
+	 * <p>
+	 * The default behavior of this method is to call {@link FacesContext#getResponseWriter()} on the wrapped
+	 * {@link FacesContext} object.
+	 * </p>
 	 *
 	 * @see javax.faces.context.FacesContext#getResponseWriter()
 	 */
@@ -183,9 +196,10 @@ public abstract class FacesContextWrapper extends FacesContext {
 	}
 
 	/**
-	 * <p>The default behavior of this method is to
-	 * call {@link FacesContext#setResponseWriter(ResponseWriter)}
-	 * on the wrapped {@link FacesContext} object.</p>
+	 * <p>
+	 * The default behavior of this method is to call {@link FacesContext#setResponseWriter(ResponseWriter)} on the
+	 * wrapped {@link FacesContext} object.
+	 * </p>
 	 *
 	 * @see javax.faces.context.FacesContext#setResponseWriter(ResponseWriter)
 	 */
@@ -194,9 +208,10 @@ public abstract class FacesContextWrapper extends FacesContext {
 	}
 
 	/**
-	 * <p>The default behavior of this method is to
-	 * call {@link FacesContext#getViewRoot()}
-	 * on the wrapped {@link FacesContext} object.</p>
+	 * <p>
+	 * The default behavior of this method is to call {@link FacesContext#getViewRoot()} on the wrapped
+	 * {@link FacesContext} object.
+	 * </p>
 	 *
 	 * @see javax.faces.context.FacesContext#getViewRoot()
 	 */
@@ -205,9 +220,10 @@ public abstract class FacesContextWrapper extends FacesContext {
 	}
 
 	/**
-	 * <p>The default behavior of this method is to
-	 * call {@link FacesContext#setViewRoot(UIViewRoot)}
-	 * on the wrapped {@link FacesContext} object.</p>
+	 * <p>
+	 * The default behavior of this method is to call {@link FacesContext#setViewRoot(UIViewRoot)} on the wrapped
+	 * {@link FacesContext} object.
+	 * </p>
 	 *
 	 * @see javax.faces.context.FacesContext#setViewRoot(UIViewRoot)
 	 */
@@ -216,9 +232,10 @@ public abstract class FacesContextWrapper extends FacesContext {
 	}
 
 	/**
-	 * <p>The default behavior of this method is to
-	 * call {@link FacesContext#addMessage(String, FacesMessage)}
-	 * on the wrapped {@link FacesContext} object.</p>
+	 * <p>
+	 * The default behavior of this method is to call {@link FacesContext#addMessage(String, FacesMessage)} on the
+	 * wrapped {@link FacesContext} object.
+	 * </p>
 	 *
 	 * @see javax.faces.context.FacesContext#addMessage(String, FacesMessage)
 	 */
@@ -227,9 +244,10 @@ public abstract class FacesContextWrapper extends FacesContext {
 	}
 
 	/**
-	 * <p>The default behavior of this method is to
-	 * call {@link FacesContext#release()}
-	 * on the wrapped {@link FacesContext} object.</p>
+	 * <p>
+	 * The default behavior of this method is to call {@link FacesContext#release()} on the wrapped {@link FacesContext}
+	 * object.
+	 * </p>
 	 *
 	 * @see javax.faces.context.FacesContext#release()
 	 */
@@ -238,9 +256,10 @@ public abstract class FacesContextWrapper extends FacesContext {
 	}
 
 	/**
-	 * <p>The default behavior of this method is to
-	 * call {@link FacesContext#renderResponse()}
-	 * on the wrapped {@link FacesContext} object.</p>
+	 * <p>
+	 * The default behavior of this method is to call {@link FacesContext#renderResponse()} on the wrapped
+	 * {@link FacesContext} object.
+	 * </p>
 	 *
 	 * @see javax.faces.context.FacesContext#renderResponse()
 	 */
@@ -249,9 +268,10 @@ public abstract class FacesContextWrapper extends FacesContext {
 	}
 
 	/**
-	 * <p>The default behavior of this method is to
-	 * call {@link FacesContext#responseComplete()}
-	 * on the wrapped {@link FacesContext} object.</p>
+	 * <p>
+	 * The default behavior of this method is to call {@link FacesContext#responseComplete()} on the wrapped
+	 * {@link FacesContext} object.
+	 * </p>
 	 *
 	 * @see javax.faces.context.FacesContext#responseComplete()
 	 */
@@ -260,9 +280,10 @@ public abstract class FacesContextWrapper extends FacesContext {
 	}
 
 	/**
-	 * <p>The default behavior of this method is to
-	 * call {@link FacesContext#getELContext()}
-	 * on the wrapped {@link FacesContext} object.</p>
+	 * <p>
+	 * The default behavior of this method is to call {@link FacesContext#getELContext()} on the wrapped
+	 * {@link FacesContext} object.
+	 * </p>
 	 *
 	 * @see javax.faces.context.FacesContext#getELContext()
 	 */

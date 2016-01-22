@@ -77,8 +77,7 @@ public class SavedCookie implements Serializable {
 	/**
 	 * Constructs a new SavedCookie from <code>cookie</code> object.
 	 * 
-	 * @param cookie
-	 *            original cookie
+	 * @param cookie original cookie
 	 */
 	public SavedCookie(Cookie cookie) {
 
@@ -89,10 +88,8 @@ public class SavedCookie implements Serializable {
 	/**
 	 * Constructs a new SavedCookie.
 	 * 
-	 * @param name
-	 *            Cookie name
-	 * @param value
-	 *            Cookie value
+	 * @param name Cookie name
+	 * @param value Cookie value
 	 */
 	public SavedCookie(String name, String value) {
 		this.name = name;
@@ -103,10 +100,8 @@ public class SavedCookie implements Serializable {
 	 * Compares this Cookie to the specified object. The result is <code>true</code> if and only if the argument is not
 	 * <code>null</code> and is a <code>Cookie</code> object that represents the same sequence of values as this object.
 	 * 
-	 * @param c
-	 *            the object to compare this <code>Cookie</code> against.
-	 * @param cookiesConfidentialityActivated
-	 *            cookies' confidentiality indicator
+	 * @param c the object to compare this <code>Cookie</code> against.
+	 * @param cookiesConfidentialityActivated cookies' confidentiality indicator
 	 * @return True if the <code>Cookie</code> are equal. False otherwise.
 	 */
 	public boolean isEqual(Cookie c, boolean cookiesConfidentialityActivated) {
@@ -115,10 +110,12 @@ public class SavedCookie implements Serializable {
 		if (result) {
 			if (this.getValue() == null) {
 				result = (c.getValue() == null);
-			} else {
+			}
+			else {
 				if (cookiesConfidentialityActivated) {
 					result = c.getValue().equals("0");
-				} else {
+				}
+				else {
 					result = this.getValue().equals(c.getValue());
 				}
 			}

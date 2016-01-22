@@ -65,24 +65,24 @@ public abstract class AbstractMultipartConfig implements IMultipartConfig {
 	 * representing kilobytes, megabytes and gigabytes respectively. If the size value cannot be converted, for example
 	 * due to invalid syntax, the supplied default is returned instead.
 	 * 
-	 * @param sizeString
-	 *            The string representation of the size to be converted.
-	 * @param defaultSize
-	 *            The value to be returned if the string is invalid.
+	 * @param sizeString The string representation of the size to be converted.
+	 * @param defaultSize The value to be returned if the string is invalid.
 	 * @return The actual size in bytes.
 	 */
 	public long convertSizeToBytes(String sizeString, long defaultSize) {
 
-		if(sizeString == null) {
+		if (sizeString == null) {
 			return defaultSize;
 		}
 		int multiplier = 1;
 
 		if (sizeString.endsWith("K")) {
 			multiplier = 1024;
-		} else if (sizeString.endsWith("M")) {
+		}
+		else if (sizeString.endsWith("M")) {
 			multiplier = 1024 * 1024;
-		} else if (sizeString.endsWith("G")) {
+		}
+		else if (sizeString.endsWith("G")) {
 			multiplier = 1024 * 1024 * 1024;
 		}
 		if (multiplier != 1) {
@@ -92,7 +92,8 @@ public abstract class AbstractMultipartConfig implements IMultipartConfig {
 		long size = 0;
 		try {
 			size = Long.parseLong(sizeString);
-		} catch (NumberFormatException nfe) {
+		}
+		catch (NumberFormatException nfe) {
 			log.warn("Invalid format for file size ('" + sizeString + "'). Using default.");
 			size = defaultSize;
 			multiplier = 1;
@@ -110,8 +111,7 @@ public abstract class AbstractMultipartConfig implements IMultipartConfig {
 	 * <li>The temp dir specified by the <code>javax.servlet.context.tempdir</code> attribute.</li>
 	 * </ol>
 	 * 
-	 * @param servletContext
-	 *            servlet context
+	 * @param servletContext servlet context
 	 * @return The path to the directory to be used to store uploaded files.
 	 */
 	public String getRepositoryPath(ServletContext servletContext) {
@@ -132,7 +132,8 @@ public abstract class AbstractMultipartConfig implements IMultipartConfig {
 				saveDir = System.getProperty("java.io.tmpdir");
 			}
 
-		} else {
+		}
+		else {
 			File multipartSaveDir = new File(saveDir);
 
 			if (!multipartSaveDir.exists()) {
@@ -150,17 +151,16 @@ public abstract class AbstractMultipartConfig implements IMultipartConfig {
 	/**
 	 * Adds a file parameter to the set of file parameters for this request and also to the list of all parameters.
 	 * 
-	 * @param request
-	 *            The request in which the parameter was specified.
-	 * @param item
-	 *            The file item for the parameter to add.
+	 * @param request The request in which the parameter was specified.
+	 * @param item The file item for the parameter to add.
 	 */
 	public void addFileParameter(RequestWrapper request, FileItem item) {
 
 		List values;
 		if (request.getFileElements().get(item.getFieldName()) != null) {
 			values = (List) request.getFileElements().get(item.getFieldName());
-		} else {
+		}
+		else {
 			values = new ArrayList();
 		}
 
@@ -169,16 +169,14 @@ public abstract class AbstractMultipartConfig implements IMultipartConfig {
 	}
 
 	/**
-	 * @param maxFileSize
-	 *            The maximum size to set.
+	 * @param maxFileSize The maximum size to set.
 	 */
 	public void setMaxFileSize(String maxFileSize) {
 		this.maxFileSize = maxFileSize;
 	}
 
 	/**
-	 * @param tempDir
-	 *            The tempDir to set.
+	 * @param tempDir The tempDir to set.
 	 */
 	public void setTempDir(String tempDir) {
 		this.tempDir = tempDir;

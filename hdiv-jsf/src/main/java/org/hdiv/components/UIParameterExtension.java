@@ -81,7 +81,8 @@ public class UIParameterExtension extends UIParameter {
 			// It is the Hdiv parameter added automatically by the link, so do
 			// nothing
 
-		} else {
+		}
+		else {
 			UIComponent parent = this.getParent();
 			String parentClientId = parent.getClientId(context);
 			Map<String, Object> values = (Map<String, Object>) this.getAttributes()

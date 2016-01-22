@@ -34,8 +34,7 @@ public interface IUserData {
 	 * If the user is anonymous, not logged in for example, return {@link IUserData#ANONYMOUS}.
 	 * </p>
 	 * 
-	 * @param request
-	 *            request object
+	 * @param request request object
 	 * @return application user name
 	 */
 	public String getUsername(HttpServletRequest request);

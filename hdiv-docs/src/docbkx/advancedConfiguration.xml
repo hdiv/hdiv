@@ -245,27 +245,24 @@ grails {
 	<section xml:id="advancedConfiguration-errorpage">
 		<title>Error page</title>
 		<para>
-			When HDIV detects a malicious request HDIV redirects the user to
-			the
-			ErrorPage.
+			When HDIV detects a malicious request it redirects the user to
+			the error page.
 		</para>
 		<para>
-			It's important to note that when the possible attack is
-			related
-			just
-			with
+			It is important to note that when the possible attack is
+			related only to 
 			editable data, the user is not redirected to the
 			error page
 			and the
-			error is visualized within the original form.
+			error is displayed within the original form.
 		</para>
 		<para>
-			Since HDIV 2.1.7 custom error page configuration is not
+			For HDIV 2.1.7 and later versions, custom error page configuration is not
 			mandatory. If it is not configured, a default error page is shown.
 		</para>
 		<para>
 			In the
-			next code we can see the previous configuration (start pages
+			code bellow we see the previous configuration (start pages
 			configuration) and the definition of an error page:
 
 			<programlisting language="xml">
@@ -294,7 +291,7 @@ public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
 ]]></programlisting>
 		</para>
 
-		<para>For Grails users update Config.groovy file:</para>
+		<para>For Grails users, update the Config.groovy file:</para>
 		<programlisting language="xml">
  			<![CDATA[
  grails {
@@ -312,40 +309,30 @@ public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
 	<section xml:id="advancedConfiguration-cache">
 		<title>Cache configuration</title>
 		<para>
-			When HDIV is executing with the memory strategy, it's necessary
-			to
-			take into account that the amount of memory stored within
-			HttpSession
-			should be
-			controlled. By default HDIV stores all the data
-			related with
+			When HDIV is executing using the memory strategy, the amount of memory stored within
+			the HttpSession should be limited.
+			By default, the cache size is 5 so HDIV stores all the data
+			related to
 			the last 5 pages
-			visited by the user. It means that if
-			the
-			user
-			access to a one of the
-			previous 5 pages and use a link or
-			form it's
-			a
+			visited by the user. This means that if
+			the user accesses one of the
+			previous 5 pages, and uses a link or
+			button, it is a
 			valid request for
 			HDIV.
 		</para>
 		<para>
-			If you need to reduce the memory
+			If it is necessary to reduce the memory
 			consumption
-			and improve the app
-			scalability it's a good practice to
-			reduce this
-			default value for
-			other
-			lower. Otherwise, if you need to increase back button support more
-			than 5 pages, increase its value.
+			to improve the app
+			scalability, it is good practice to
+			reduce the default value.
+			But if you need to increase back button support to more
+			than 5 pages, increase the default value.
 		</para>
 		<para>
-			It's possible to overwrite
-			this
-			attribute within HDIV config
-			entity:
+			It's possible to overwrite this
+			attribute within HDIV config entity:
 		</para>
 		<programlisting language="xml">
  					<![CDATA[
@@ -373,8 +360,7 @@ public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
 
 		<para>
 			If you are a Grails user, configuration is implemented within
-			plugin
-			configuration:
+			plugin configuration:
 		</para>
 		<programlisting language="xml">
  					<![CDATA[

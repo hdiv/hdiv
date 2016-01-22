@@ -35,52 +35,50 @@ import org.hdiv.util.HDIVUtil;
 public class RewriteTagHDIV extends LinkTagHDIV {
 
 	protected LinkUrlProcessor linkUrlProcessor;
-	
-    /**
-     * Render the URI.
-     *
-     * @throws JspException if a JSP exception has occurred
-     */
-    public int doEndTag() throws JspException {
-        // Generate the hyperlink URL
-        Map params =
-            TagUtils.getInstance().computeParameters(pageContext, paramId,
-                paramName, paramProperty, paramScope, name, property, scope,
-                transaction);
 
-        // Add parameters collected from the tag's inner body
-        if (!this.parameters.isEmpty()) {
-            if (params == null) {
-                params = new HashMap();
-            }
-            params.putAll(this.parameters);
-        }
+	/**
+	 * Render the URI.
+	 *
+	 * @throws JspException if a JSP exception has occurred
+	 */
+	public int doEndTag() throws JspException {
+		// Generate the hyperlink URL
+		Map params = TagUtils.getInstance().computeParameters(pageContext, paramId, paramName, paramProperty,
+				paramScope, name, property, scope, transaction);
 
-        String url = null;
+		// Add parameters collected from the tag's inner body
+		if (!this.parameters.isEmpty()) {
+			if (params == null) {
+				params = new HashMap();
+			}
+			params.putAll(this.parameters);
+		}
 
-        try {
-            // Note that we're encoding the & character to &amp; in XHTML mode only,
-            // otherwise the & is written as is to work in javascripts.
-            url = TagUtils.getInstance().computeURLWithCharEncoding(pageContext,
-                    forward, href, page, action, module, params, anchor, false,
-                    this.isXhtml(), useLocalEncoding);
-        } catch (MalformedURLException e) {
-            TagUtils.getInstance().saveException(pageContext, e);
-            throw new JspException(messages.getMessage("rewrite.url",
-                    e.toString()));
-        }
+		String url = null;
+
+		try {
+			// Note that we're encoding the & character to &amp; in XHTML mode only,
+			// otherwise the & is written as is to work in javascripts.
+			url = TagUtils.getInstance().computeURLWithCharEncoding(pageContext, forward, href, page, action, module,
+					params, anchor, false, this.isXhtml(), useLocalEncoding);
+		}
+		catch (MalformedURLException e) {
+			TagUtils.getInstance().saveException(pageContext, e);
+			throw new JspException(messages.getMessage("rewrite.url", e.toString()));
+		}
 
 		HttpServletRequest request = (HttpServletRequest) pageContext.getRequest();
-		String charEncoding = useLocalEncoding ? charEncoding = pageContext.getResponse().getCharacterEncoding() : "UTF-8";		    		    
-		
+		String charEncoding = useLocalEncoding ? charEncoding = pageContext.getResponse().getCharacterEncoding()
+				: "UTF-8";
+
 		// Call to Hdiv LinkUrlProcessor
-		if(this.linkUrlProcessor == null){
+		if (this.linkUrlProcessor == null) {
 			this.linkUrlProcessor = HDIVUtil.getLinkUrlProcessor(request.getSession().getServletContext());
 		}
 		url = this.linkUrlProcessor.processUrl(request, url, charEncoding);
-        
-        TagUtils.getInstance().write(pageContext, url);
-        return (EVAL_PAGE);
-    }
+
+		TagUtils.getInstance().write(pageContext, url);
+		return (EVAL_PAGE);
+	}
 
 }

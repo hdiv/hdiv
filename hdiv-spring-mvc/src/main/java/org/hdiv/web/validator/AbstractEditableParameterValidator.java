@@ -34,8 +34,7 @@ public abstract class AbstractEditableParameterValidator {
 	/**
 	 * Obtains the errors from request detected by HDIV during the validation process of the editable parameters.
 	 * 
-	 * @param errors
-	 *            errors detected by HDIV during the validation process of the editable parameters.
+	 * @param errors errors detected by HDIV during the validation process of the editable parameters.
 	 */
 	@SuppressWarnings("unchecked")
 	protected void validateEditableParameters(Errors errors) {
@@ -89,7 +88,8 @@ public abstract class AbstractEditableParameterValidator {
 
 			errors.rejectValue(param, Constants.HDIV_EDITABLE_PASSWORD_ERROR_KEY);
 
-		} else {
+		}
+		else {
 			String printedValue = this.createMessageError(paramValues);
 			errors.rejectValue(param, Constants.HDIV_EDITABLE_ERROR_KEY, new String[] { printedValue }, printedValue
 					+ " has not allowed characters");
@@ -99,8 +99,7 @@ public abstract class AbstractEditableParameterValidator {
 	/**
 	 * It creates the message error from the values <code>values</code>.
 	 * 
-	 * @param paramValues
-	 *            values with not allowed characters
+	 * @param paramValues values with not allowed characters
 	 * @return message error to show
 	 */
 	protected String createMessageError(String paramValues) {
@@ -115,7 +114,8 @@ public abstract class AbstractEditableParameterValidator {
 			}
 			if (values[i].length() > 20) {
 				printedValue.append(values[i].substring(0, 20) + "...");
-			} else {
+			}
+			else {
 				printedValue.append(values[i]);
 			}
 			if (printedValue.length() > 20) {

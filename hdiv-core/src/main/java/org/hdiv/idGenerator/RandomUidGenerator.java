@@ -26,53 +26,56 @@ import org.springframework.web.context.ServletContextAware;
  * Unique id generator based on the java.util.Random class.
  * 
  */
-public class RandomUidGenerator implements UidGenerator, ServletContextAware{
+public class RandomUidGenerator implements UidGenerator, ServletContextAware {
 
 	/**
-     * Used to generate unique server state IDs.
-     */
-    protected Random random;
-    
-    /**
-     * ServletContext of the application
-     */
-    private ServletContext servletContext;
-	
-    /**
-     * Initialization method
-     */
-    public void init() {
-    	this.random = new Random(System.currentTimeMillis() + this.servletContext.hashCode());
+	 * Used to generate unique server state IDs.
+	 */
+	protected Random random;
+
+	/**
+	 * ServletContext of the application
+	 */
+	private ServletContext servletContext;
+
+	/**
+	 * Initialization method
+	 */
+	public void init() {
+		this.random = new Random(System.currentTimeMillis() + this.servletContext.hashCode());
 	}
-    
-    /*
-     * (non-Javadoc)
-     * @see org.hdiv.util.UidGenerator#generateUid()
-     */
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.hdiv.util.UidGenerator#generateUid()
+	 */
 	public Serializable generateUid() {
-		
+
 		long uid = this.random.nextLong();
-		if(uid < 0){
-			uid = uid * -1;//Hacerlo positivo
+		if (uid < 0) {
+			uid = uid * -1;// Hacerlo positivo
 		}
 		return new Long(uid).toString();
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.hdiv.util.UidGenerator#parseUid(java.lang.String)
 	 */
 	public Serializable parseUid(String encodedUid) {
-		
+
 		return encodedUid;
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.springframework.web.context.ServletContextAware#setServletContext(javax.servlet.ServletContext)
 	 */
 	public void setServletContext(ServletContext servletContext) {
-		
+
 		this.servletContext = servletContext;
 	}
 

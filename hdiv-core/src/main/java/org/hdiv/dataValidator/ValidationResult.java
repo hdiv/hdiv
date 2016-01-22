@@ -35,7 +35,6 @@ public class ValidationResult implements IValidationResult {
 	 */
 	private String expectedValue;
 
-
 	/**
 	 * @return Returns the legal.
 	 */

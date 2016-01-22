@@ -38,10 +38,8 @@ public class LinkUrlProcessor extends AbstractUrlProcessor {
 	/**
 	 * Process the url to add hdiv state if it is necessary.
 	 * 
-	 * @param request
-	 *            {@link HttpServletRequest} object
-	 * @param url
-	 *            url to process
+	 * @param request {@link HttpServletRequest} object
+	 * @param url url to process
 	 * @return processed url
 	 */
 	public String processUrl(HttpServletRequest request, String url) {
@@ -52,12 +50,9 @@ public class LinkUrlProcessor extends AbstractUrlProcessor {
 	/**
 	 * Process the url to add hdiv state if it is necessary.
 	 * 
-	 * @param request
-	 *            {@link HttpServletRequest} object
-	 * @param url
-	 *            url to process
-	 * @param encoding
-	 *            char encoding
+	 * @param request {@link HttpServletRequest} object
+	 * @param url url to process
+	 * @param encoding char encoding
 	 * @return processed url
 	 */
 	public String processUrl(HttpServletRequest request, String url, String encoding) {

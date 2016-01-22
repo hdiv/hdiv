@@ -70,15 +70,20 @@ public class OnFrameworkCondition implements ConfigurationCondition {
 
 		if (frwk == SupportedFramework.SPRING_MVC) {
 			return springMvcModulePresent;
-		} else if (frwk == SupportedFramework.THYMELEAF) {
+		}
+		else if (frwk == SupportedFramework.THYMELEAF) {
 			return thymeleafModulePresent;
-		} else if (frwk == SupportedFramework.GRAILS) {
+		}
+		else if (frwk == SupportedFramework.GRAILS) {
 			return grailsPresent && grailsModulePresent;
-		} else if (frwk == SupportedFramework.JSF) {
+		}
+		else if (frwk == SupportedFramework.JSF) {
 			return jsfPresent && jsfModulePresent;
-		} else if (frwk == SupportedFramework.STRUTS1) {
+		}
+		else if (frwk == SupportedFramework.STRUTS1) {
 			return struts1ModulePresent;
-		} else {
+		}
+		else {
 			return false;
 		}
 	}

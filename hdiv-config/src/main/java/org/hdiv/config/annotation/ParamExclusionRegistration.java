@@ -36,8 +36,7 @@ public class ParamExclusionRegistration {
 	/**
 	 * Url pattern for which apply the parameter exclusion.
 	 * 
-	 * @param urlPattern
-	 *            Url pattern.
+	 * @param urlPattern Url pattern.
 	 */
 	public void forUrls(String urlPattern) {
 		Assert.notNull(urlPattern, "A URL path is required");

@@ -59,7 +59,7 @@ public abstract class AbstractHDIVTestCase extends TestCase {
 	 * Compiled MEMORY_PATTERN
 	 */
 	protected Pattern memoryPattern = Pattern.compile(MEMORY_PATTERN);
-	
+
 	/**
 	 * Spring Factory
 	 */
@@ -71,18 +71,17 @@ public abstract class AbstractHDIVTestCase extends TestCase {
 	private HDIVConfig config;
 
 	private InitListener initListener;
+
 	private MockHttpServletRequest mockRequest;
+
 	private MockHttpServletResponse mockResponse;
-	
+
 	private RequestContext requestContext;
-	
+
 	protected final void setUp() throws Exception {
 
-		String[] files = { 
-				"/org/hdiv/config/hdiv-core-applicationContext.xml", 
-				"/org/hdiv/config/hdiv-config.xml",
-				"/org/hdiv/config/hdiv-validations.xml", 
-				"/org/hdiv/config/applicationContext-extra.xml" };
+		String[] files = { "/org/hdiv/config/hdiv-core-applicationContext.xml", "/org/hdiv/config/hdiv-config.xml",
+				"/org/hdiv/config/hdiv-validations.xml", "/org/hdiv/config/applicationContext-extra.xml" };
 
 		// Servlet API mock
 		MockHttpServletRequest request = new MockHttpServletRequest("GET", "/path/testAction.do");
@@ -92,7 +91,7 @@ public abstract class AbstractHDIVTestCase extends TestCase {
 		this.requestContext = new RequestContext(request, response);
 		// Store objects for teardown cleanup
 		this.mockRequest = request;
-		this.mockResponse = (MockHttpServletResponse)response;
+		this.mockResponse = (MockHttpServletResponse) response;
 
 		// Init Spring Context
 		XmlWebApplicationContext webApplicationContext = new XmlWebApplicationContext();
@@ -145,14 +144,14 @@ public abstract class AbstractHDIVTestCase extends TestCase {
 
 		RequestInitializer requestInitializer = this.applicationContext.getBean(RequestInitializer.class);
 		requestInitializer.endRequest(mockRequest, mockResponse);
-		
+
 		// Destroy HttpSession
 		HttpSessionEvent httpSessionEvent = new HttpSessionEvent(mockRequest.getSession());
 		initListener.sessionDestroyed(httpSessionEvent);
 		// Destroy ServletContext
 		ServletContextEvent servletContextEvent = new ServletContextEvent(mockRequest.getSession().getServletContext());
 		initListener.contextDestroyed(servletContextEvent);
-		
+
 		((ConfigurableApplicationContext) this.applicationContext).close();
 	}
 
@@ -179,11 +178,11 @@ public abstract class AbstractHDIVTestCase extends TestCase {
 	public RequestContext getRequestContext() {
 		return requestContext;
 	}
-	
+
 	public MockHttpServletRequest getMockRequest() {
 		return mockRequest;
 	}
-	
+
 	public MockHttpServletResponse getMockResponse() {
 		return mockResponse;
 	}

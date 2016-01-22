@@ -34,8 +34,7 @@ public class ValidationConfigurer {
 	/**
 	 * Add an editable validation for a url pattern.
 	 * 
-	 * @param urlPattern
-	 *            Url pattern
+	 * @param urlPattern Url pattern
 	 * @return More configuration options
 	 */
 	public EditableValidationConfigurer addValidation(String urlPattern) {
@@ -76,8 +75,7 @@ public class ValidationConfigurer {
 			/**
 			 * Configure editable validation only for some parameters.
 			 * 
-			 * @param parameterNames
-			 *            parameter name patterns
+			 * @param parameterNames parameter name patterns
 			 * @return More configuration options
 			 */
 			public RuleConfigurer forParameters(String... parameterNames) {
@@ -103,8 +101,7 @@ public class ValidationConfigurer {
 			/**
 			 * Rule names to apply to the editable validation.
 			 * 
-			 * @param ruleNames
-			 *            Rule names
+			 * @param ruleNames Rule names
 			 * @return More configuration options
 			 */
 			public RuleConfigurer rules(String... ruleNames) {

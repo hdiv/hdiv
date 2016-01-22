@@ -21,17 +21,13 @@ import java.beans.SimpleBeanInfo;
 import java.util.ArrayList;
 
 /**
- * This is the <code>BeanInfo</code> descriptor for the
- * <code>org.hdiv.strutsel.taglib.html.ELSubmitTagHDIV</code> class. It is
- * needed to override the default mapping of custom tag attribute names to class
- * attribute names.
+ * This is the <code>BeanInfo</code> descriptor for the <code>org.hdiv.strutsel.taglib.html.ELSubmitTagHDIV</code>
+ * class. It is needed to override the default mapping of custom tag attribute names to class attribute names.
  * <p>
- * This is because the value of the unevaluated EL expression has to be kept
- * separately from the evaluated value, which is stored in the base class. This
- * is related to the fact that the JSP compiler can choose to reuse different
- * tag instances if they received the same original attribute values, and the
- * JSP compiler can choose to not re-call the setter methods, because it can
- * assume the same values are already set.
+ * This is because the value of the unevaluated EL expression has to be kept separately from the evaluated value, which
+ * is stored in the base class. This is related to the fact that the JSP compiler can choose to reuse different tag
+ * instances if they received the same original attribute values, and the JSP compiler can choose to not re-call the
+ * setter methods, because it can assume the same values are already set.
  * 
  * @author Gorka Vicente
  * @since HDIV 2.0
@@ -43,147 +39,176 @@ public class ELSubmitTagHDIVBeanInfo extends SimpleBeanInfo {
 
 		try {
 			proplist.add(new PropertyDescriptor("accesskey", ELSubmitTagHDIV.class, null, "setAccesskeyExpr"));
-		} catch (IntrospectionException ex) {
+		}
+		catch (IntrospectionException ex) {
 		}
 
 		try {
 			proplist.add(new PropertyDescriptor("alt", ELSubmitTagHDIV.class, null, "setAltExpr"));
-		} catch (IntrospectionException ex) {
+		}
+		catch (IntrospectionException ex) {
 		}
 
 		try {
 			proplist.add(new PropertyDescriptor("altKey", ELSubmitTagHDIV.class, null, "setAltKeyExpr"));
-		} catch (IntrospectionException ex) {
+		}
+		catch (IntrospectionException ex) {
 		}
 
 		try {
 			proplist.add(new PropertyDescriptor("bundle", ELSubmitTagHDIV.class, null, "setBundleExpr"));
-		} catch (IntrospectionException ex) {
+		}
+		catch (IntrospectionException ex) {
 		}
 
 		try {
 			proplist.add(new PropertyDescriptor("dir", ELSubmitTagHDIV.class, null, "setDirExpr"));
-		} catch (IntrospectionException ex) {
+		}
+		catch (IntrospectionException ex) {
 		}
 
 		try {
 			proplist.add(new PropertyDescriptor("disabled", ELSubmitTagHDIV.class, null, "setDisabledExpr"));
-		} catch (IntrospectionException ex) {
+		}
+		catch (IntrospectionException ex) {
 		}
 
 		try {
 			proplist.add(new PropertyDescriptor("indexed", ELSubmitTagHDIV.class, null, "setIndexedExpr"));
-		} catch (IntrospectionException ex) {
+		}
+		catch (IntrospectionException ex) {
 		}
 
 		try {
 			proplist.add(new PropertyDescriptor("lang", ELSubmitTagHDIV.class, null, "setLangExpr"));
-		} catch (IntrospectionException ex) {
+		}
+		catch (IntrospectionException ex) {
 		}
 
 		try {
 			proplist.add(new PropertyDescriptor("onblur", ELSubmitTagHDIV.class, null, "setOnblurExpr"));
-		} catch (IntrospectionException ex) {
+		}
+		catch (IntrospectionException ex) {
 		}
 
 		try {
 			proplist.add(new PropertyDescriptor("onchange", ELSubmitTagHDIV.class, null, "setOnchangeExpr"));
-		} catch (IntrospectionException ex) {
+		}
+		catch (IntrospectionException ex) {
 		}
 
 		try {
 			proplist.add(new PropertyDescriptor("onclick", ELSubmitTagHDIV.class, null, "setOnclickExpr"));
-		} catch (IntrospectionException ex) {
+		}
+		catch (IntrospectionException ex) {
 		}
 
 		try {
 			proplist.add(new PropertyDescriptor("ondblclick", ELSubmitTagHDIV.class, null, "setOndblclickExpr"));
-		} catch (IntrospectionException ex) {
+		}
+		catch (IntrospectionException ex) {
 		}
 
 		try {
 			proplist.add(new PropertyDescriptor("onfocus", ELSubmitTagHDIV.class, null, "setOnfocusExpr"));
-		} catch (IntrospectionException ex) {
+		}
+		catch (IntrospectionException ex) {
 		}
 
 		try {
 			proplist.add(new PropertyDescriptor("onkeydown", ELSubmitTagHDIV.class, null, "setOnkeydownExpr"));
-		} catch (IntrospectionException ex) {
+		}
+		catch (IntrospectionException ex) {
 		}
 
 		try {
 			proplist.add(new PropertyDescriptor("onkeypress", ELSubmitTagHDIV.class, null, "setOnkeypressExpr"));
-		} catch (IntrospectionException ex) {
+		}
+		catch (IntrospectionException ex) {
 		}
 
 		try {
 			proplist.add(new PropertyDescriptor("onkeyup", ELSubmitTagHDIV.class, null, "setOnkeyupExpr"));
-		} catch (IntrospectionException ex) {
+		}
+		catch (IntrospectionException ex) {
 		}
 
 		try {
 			proplist.add(new PropertyDescriptor("onmousedown", ELSubmitTagHDIV.class, null, "setOnmousedownExpr"));
-		} catch (IntrospectionException ex) {
+		}
+		catch (IntrospectionException ex) {
 		}
 
 		try {
 			proplist.add(new PropertyDescriptor("onmousemove", ELSubmitTagHDIV.class, null, "setOnmousemoveExpr"));
-		} catch (IntrospectionException ex) {
+		}
+		catch (IntrospectionException ex) {
 		}
 
 		try {
 			proplist.add(new PropertyDescriptor("onmouseout", ELSubmitTagHDIV.class, null, "setOnmouseoutExpr"));
-		} catch (IntrospectionException ex) {
+		}
+		catch (IntrospectionException ex) {
 		}
 
 		try {
 			proplist.add(new PropertyDescriptor("onmouseover", ELSubmitTagHDIV.class, null, "setOnmouseoverExpr"));
-		} catch (IntrospectionException ex) {
+		}
+		catch (IntrospectionException ex) {
 		}
 
 		try {
 			proplist.add(new PropertyDescriptor("onmouseup", ELSubmitTagHDIV.class, null, "setOnmouseupExpr"));
-		} catch (IntrospectionException ex) {
+		}
+		catch (IntrospectionException ex) {
 		}
 
 		try {
 			proplist.add(new PropertyDescriptor("property", ELSubmitTagHDIV.class, null, "setPropertyExpr"));
-		} catch (IntrospectionException ex) {
+		}
+		catch (IntrospectionException ex) {
 		}
 
 		try {
 			proplist.add(new PropertyDescriptor("style", ELSubmitTagHDIV.class, null, "setStyleExpr"));
-		} catch (IntrospectionException ex) {
+		}
+		catch (IntrospectionException ex) {
 		}
 
 		try {
 			proplist.add(new PropertyDescriptor("styleClass", ELSubmitTagHDIV.class, null, "setStyleClassExpr"));
-		} catch (IntrospectionException ex) {
+		}
+		catch (IntrospectionException ex) {
 		}
 
 		try {
 			proplist.add(new PropertyDescriptor("styleId", ELSubmitTagHDIV.class, null, "setStyleIdExpr"));
-		} catch (IntrospectionException ex) {
+		}
+		catch (IntrospectionException ex) {
 		}
 
 		try {
 			proplist.add(new PropertyDescriptor("tabindex", ELSubmitTagHDIV.class, null, "setTabindexExpr"));
-		} catch (IntrospectionException ex) {
+		}
+		catch (IntrospectionException ex) {
 		}
 
 		try {
 			proplist.add(new PropertyDescriptor("title", ELSubmitTagHDIV.class, null, "setTitleExpr"));
-		} catch (IntrospectionException ex) {
+		}
+		catch (IntrospectionException ex) {
 		}
 
 		try {
 			proplist.add(new PropertyDescriptor("titleKey", ELSubmitTagHDIV.class, null, "setTitleKeyExpr"));
-		} catch (IntrospectionException ex) {
+		}
+		catch (IntrospectionException ex) {
 		}
 
 		try {
 			proplist.add(new PropertyDescriptor("value", ELSubmitTagHDIV.class, null, "setValueExpr"));
-		} catch (IntrospectionException ex) {
+		}
+		catch (IntrospectionException ex) {
 		}
 
 		PropertyDescriptor[] result = new PropertyDescriptor[proplist.size()];

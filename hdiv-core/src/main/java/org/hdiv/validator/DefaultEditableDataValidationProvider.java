@@ -35,14 +35,10 @@ public class DefaultEditableDataValidationProvider implements EditableDataValida
 	 * validations defined in the hdiv-config.xml configuration file of Spring.
 	 * </p>
 	 * 
-	 * @param url
-	 *            target url
-	 * @param parameter
-	 *            parameter name
-	 * @param values
-	 *            parameter's values
-	 * @param dataType
-	 *            editable data type
+	 * @param url target url
+	 * @param parameter parameter name
+	 * @param values parameter's values
+	 * @param dataType editable data type
 	 * @return True if the values <code>values</code> are valid for the parameter <code>parameter</code>.
 	 */
 	public EditableDataValidationResult validate(String url, String parameter, String[] values, String dataType) {
@@ -66,8 +62,7 @@ public class DefaultEditableDataValidationProvider implements EditableDataValida
 	}
 
 	/**
-	 * @param validationRepository
-	 *            the validationRepository to set
+	 * @param validationRepository the validationRepository to set
 	 */
 	public void setValidationRepository(ValidationRepository validationRepository) {
 		this.validationRepository = validationRepository;

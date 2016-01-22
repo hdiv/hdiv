@@ -25,8 +25,7 @@ public interface StateScopeManager {
 	/**
 	 * Obtain the correct {@link StateScope} based on a state identifier.
 	 * 
-	 * @param stateId
-	 *            State identifier
+	 * @param stateId State identifier
 	 * @return the corresponding {@link StateScope} or null
 	 */
 	StateScope getStateScope(String stateId);
@@ -34,8 +33,7 @@ public interface StateScopeManager {
 	/**
 	 * Obtain the correct {@link StateScope} based on a scope name.
 	 * 
-	 * @param scopeName
-	 *            The name of the scope
+	 * @param scopeName The name of the scope
 	 * @return the corresponding {@link StateScope} or null
 	 */
 	StateScope getStateScopeByName(String scopeName);

@@ -28,25 +28,25 @@ import org.junit.Test;
 public class HdivWebSecurityConfigurationSupportTest {
 
 	private HdivWebSecurityConfigurationSupport configuration;
-	
+
 	@Before
 	public void setUp() {
 		configuration = new HdivWebSecurityConfigurationSupport() {
-			
+
 			@Override
 			public void addExclusions(ExclusionRegistry registry) {
 
 				registry.addUrlExclusions("/", "/login.html", "/logout.html").method("GET");
 				registry.addUrlExclusions("/j_spring_security_check").method("POST");
 				registry.addUrlExclusions("/attacks/.*");
-				
+
 				registry.addParamExclusions("param1.*", "param2").forUrls("/attacks/.*");
 				registry.addParamExclusions("param3.*", "param4");
 			}
-			
+
 			@Override
 			public void addLongLivingPages(LongLivingPagesRegistry registry) {
-				
+
 				registry.addLongLivingPages("/longLivingPage.html", "/longLiving/.*").scope(StateScopeType.APP);
 				registry.addLongLivingPages("/longLivingPageApp.html");
 			}
@@ -64,6 +64,7 @@ public class HdivWebSecurityConfigurationSupportTest {
 				validationConfigurer.addValidation("/safetext/.*");
 			}
 
+			// @formatter:off
 			@Override
 			public void configure(SecurityConfigBuilder builder) {
 
@@ -77,6 +78,7 @@ public class HdivWebSecurityConfigurationSupportTest {
 					.strategy(Strategy.MEMORY)
 					.validateUrlsWithoutParams(false);
 			}
+			// @formatter:on
 		};
 	}
 
@@ -84,7 +86,7 @@ public class HdivWebSecurityConfigurationSupportTest {
 	public void config() {
 		HDIVConfig config = configuration.hdivConfig();
 		assertNotNull(config);
-		
+
 		assertEquals(true, config.isDebugMode());
 		assertEquals(false, config.getConfidentiality());
 		assertEquals("/customErrorPage.html", config.getErrorPage());
@@ -92,36 +94,36 @@ public class HdivWebSecurityConfigurationSupportTest {
 		assertEquals(Strategy.MEMORY, config.getStrategy());
 		assertEquals(false, config.isValidationInUrlsWithoutParamsActivated());
 	}
-	
+
 	@Test
 	public void exclusions() {
 		HDIVConfig config = configuration.hdivConfig();
 		assertNotNull(config);
-		
+
 		assertEquals(true, config.isStartPage("/attacks/view.html", null));
 		assertEquals(false, config.isStartPage("/j_spring_security_check", "GET"));
 		assertEquals(true, config.isStartPage("/", "GET"));
-		
+
 		assertEquals(true, config.isParameterWithoutValidation("/attacks/home.html", "param1"));
 		assertEquals(true, config.isParameterWithoutValidation("/attacks/home.html", "param1234"));
 		assertEquals(true, config.isParameterWithoutValidation("/attacks/home.html", "param2"));
 		assertEquals(false, config.isParameterWithoutValidation("/attacks/home.html", "param234"));
 		assertEquals(false, config.isParameterWithoutValidation("/out/home.html", "param2"));
-		
+
 		assertEquals(true, config.isStartParameter("param3"));
 		assertEquals(true, config.isStartParameter("param34"));
 		assertEquals(true, config.isStartParameter("param4"));
 		assertEquals(false, config.isStartParameter("param456"));
 	}
-	
+
 	@Test
-	public void longLivingPages(){
+	public void longLivingPages() {
 		HDIVConfig config = configuration.hdivConfig();
 		assertNotNull(config);
-		
+
 		assertEquals("app", config.isLongLivingPages("/longLiving/sample.html"));
 		assertEquals("user-session", config.isLongLivingPages("/longLivingPageApp.html"));
 		assertEquals(null, config.isLongLivingPages("/noLongLiving.html"));
 	}
-	
+
 }

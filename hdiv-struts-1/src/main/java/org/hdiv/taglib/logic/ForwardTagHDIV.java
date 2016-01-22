@@ -25,8 +25,8 @@ import org.hdiv.urlProcessor.LinkUrlProcessor;
 import org.hdiv.util.HDIVUtil;
 
 /**
- * Perform a forward or redirect to a page that is looked up in the
- * configuration information associated with our application.
+ * Perform a forward or redirect to a page that is looked up in the configuration information associated with our
+ * application.
  *
  * @author Gorka Vicente
  * @see org.apache.struts.taglib.logic.ForwardTag
@@ -34,13 +34,13 @@ import org.hdiv.util.HDIVUtil;
 public class ForwardTagHDIV extends ForwardTag {
 
 	/**
-	 * Universal version identifier. Deserialization uses this number to ensure that
-	 * a loaded class corresponds exactly to a serialized object.
+	 * Universal version identifier. Deserialization uses this number to ensure that a loaded class corresponds exactly
+	 * to a serialized object.
 	 */
 	private static final long serialVersionUID = -762185680912315095L;
 
 	protected LinkUrlProcessor linkUrlProcessor;
-	
+
 	/**
 	 * Redirect to the given path converting exceptions to JspException.
 	 * @param path The path to redirect to.
@@ -48,26 +48,27 @@ public class ForwardTagHDIV extends ForwardTag {
 	 * @since Struts 1.2
 	 */
 	protected void doRedirect(String path) throws JspException {
-		
+
 		HttpServletRequest request = (HttpServletRequest) pageContext.getRequest();
 		HttpServletResponse response = (HttpServletResponse) pageContext.getResponse();
-		
+
 		try {
 			if (path.startsWith("/")) {
 				path = request.getContextPath() + path;
-			}			
+			}
 
 			// generate a new encoded values for the url parameters
 			// Call to Hdiv LinkUrlProcessor
-			if(this.linkUrlProcessor == null){
+			if (this.linkUrlProcessor == null) {
 				this.linkUrlProcessor = HDIVUtil.getLinkUrlProcessor(request.getSession().getServletContext());
 			}
 			String urlHDIVstate = linkUrlProcessor.processUrl(request, path);
-				
+
 			String encodedURL = response.encodeRedirectURL(urlHDIVstate);
 			response.sendRedirect(encodedURL);
 
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			TagUtils.getInstance().saveException(pageContext, e);
 			throw new JspException(messages.getMessage("forward.redirect", name, e.toString()));
 		}

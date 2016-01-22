@@ -71,11 +71,13 @@ public class DataValidator implements IDataValidator {
 				if (stateParameter.existValue(value)) {
 					result.setResult(value);
 					result.setLegal(true);
-				} else {
+				}
+				else {
 					result.setLegal(false);
 				}
 				return result;
-			} else {
+			}
+			else {
 				// actionParamValues contains values
 				for (int i = 0; i < actionParamValues.length; i++) {
 					if (value.equals(actionParamValues[i])) {
@@ -88,7 +90,8 @@ public class DataValidator implements IDataValidator {
 				return result;
 			}
 
-		} else {
+		}
+		else {
 			// Confidentiality = true
 			if (!this.isInt(value)) {
 				result.setLegal(false);
@@ -108,11 +111,13 @@ public class DataValidator implements IDataValidator {
 					result.setResult(stateParameter.getValuePosition(position));
 					return result;
 
-				} else {
+				}
+				else {
 					result.setLegal(false);
 					return result;
 				}
-			} else {
+			}
+			else {
 
 				if (actionParamValues.length > position) {
 
@@ -130,8 +135,7 @@ public class DataValidator implements IDataValidator {
 	/**
 	 * Is data an integer?
 	 * 
-	 * @param data
-	 *            Data to check
+	 * @param data Data to check
 	 * @return Returns true if <code>data</code> is a number. False in otherwise.
 	 */
 	protected boolean isInt(String data) {
@@ -141,8 +145,7 @@ public class DataValidator implements IDataValidator {
 	}
 
 	/**
-	 * @param config
-	 *            the config to set
+	 * @param config the config to set
 	 */
 	public void setConfig(HDIVConfig config) {
 		this.config = config;

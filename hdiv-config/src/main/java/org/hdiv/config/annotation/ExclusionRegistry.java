@@ -40,6 +40,7 @@ public class ExclusionRegistry {
 	private PatternMatcherFactory patternMatcherFactory;
 
 	private final List<UrlExclusionRegistration> urlRegistrations = new ArrayList<UrlExclusionRegistration>();
+
 	private final List<ParamExclusionRegistration> paramRegistrations = new ArrayList<ParamExclusionRegistration>();
 
 	public ExclusionRegistry(PatternMatcherFactory patternMatcherFactory) {
@@ -54,8 +55,7 @@ public class ExclusionRegistry {
 	 * Excluded urls are not validated by HDIV.
 	 * </p>
 	 * 
-	 * @param urlPatterns
-	 *            Url patterns.
+	 * @param urlPatterns Url patterns.
 	 * @return more configuration options
 	 */
 	public UrlExclusionRegistration addUrlExclusions(String... urlPatterns) {
@@ -73,8 +73,7 @@ public class ExclusionRegistry {
 	 * Excluded parameters are not validated by HDIV.
 	 * </p>
 	 * 
-	 * @param parameterPatterns
-	 *            Parameter name patterns.
+	 * @param parameterPatterns Parameter name patterns.
 	 * @return more configuration options
 	 */
 	public ParamExclusionRegistration addParamExclusions(String... parameterPatterns) {

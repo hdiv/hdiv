@@ -39,13 +39,10 @@ public class ApplicationHDIV implements IApplication, ApplicationContextAware {
 	 * Translates aliases back to the corresponding canonical bean name. Will ask the parent factory if the bean cannot
 	 * be found in this factory instance.
 	 * 
-	 * @param name
-	 *            the name of the bean to return
+	 * @param name the name of the bean to return
 	 * @return the instance of the bean
-	 * @throws NoSuchBeanDefinitionException
-	 *             if there is no bean definition with the specified name
-	 * @throws BeansException
-	 *             if the bean could not be obtained
+	 * @throws NoSuchBeanDefinitionException if there is no bean definition with the specified name
+	 * @throws BeansException if the bean could not be obtained
 	 */
 	public Object getBean(String name) {
 		return this.applicationContext.getBean(name);

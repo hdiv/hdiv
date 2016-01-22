@@ -23,8 +23,8 @@ package org.hdiv.exception;
 public class HDIVException extends RuntimeException {
 
 	/**
-	 * Universal version identifier. Deserialization uses this number to ensure that
-	 * a loaded class corresponds exactly to a serialized object.
+	 * Universal version identifier. Deserialization uses this number to ensure that a loaded class corresponds exactly
+	 * to a serialized object.
 	 */
 	private static final long serialVersionUID = 4564720056088062302L;
 
@@ -37,16 +37,14 @@ public class HDIVException extends RuntimeException {
 		super();
 	}
 
-    /**
-	 * Constructs a new runtime exception with the specified cause and a detail
-	 * message of <tt>(cause==null ? null : cause.toString())</tt> (which typically
-	 * contains the class and detail message of <tt>cause</tt>). This constructor
-	 * is useful for runtime exceptions that are little more than wrappers for other
+	/**
+	 * Constructs a new runtime exception with the specified cause and a detail message of
+	 * <tt>(cause==null ? null : cause.toString())</tt> (which typically contains the class and detail message of
+	 * <tt>cause</tt>). This constructor is useful for runtime exceptions that are little more than wrappers for other
 	 * throwables.
 	 * 
-	 * @param cause the cause (which is saved for later retrieval by the
-	 *            {@link #getCause()} method). (A <tt>null</tt> value is permitted,
-	 *            and indicates that the cause is nonexistent or unknown.)
+	 * @param cause the cause (which is saved for later retrieval by the {@link #getCause()} method). (A <tt>null</tt>
+	 * value is permitted, and indicates that the cause is nonexistent or unknown.)
 	 * @see java.lang.RuntimeException#RuntimeException(java.lang.Throwable)
 	 */
 	public HDIVException(Throwable cause) {
@@ -54,12 +52,11 @@ public class HDIVException extends RuntimeException {
 	}
 
 	/**
-	 * Constructs a new runtime exception with the specified detail message. The
-	 * cause is not initialized, and may subsequently be initialized by a call to
-	 * {@link #initCause}.
+	 * Constructs a new runtime exception with the specified detail message. The cause is not initialized, and may
+	 * subsequently be initialized by a call to {@link #initCause}.
 	 * 
-	 * @param message the detail message. The detail message is saved for later
-	 *            retrieval by the {@link #getMessage()} method.
+	 * @param message the detail message. The detail message is saved for later retrieval by the {@link #getMessage()}
+	 * method.
 	 * @see java.lang.RuntimeException
 	 */
 	public HDIVException(String message) {
@@ -68,14 +65,11 @@ public class HDIVException extends RuntimeException {
 	}
 
 	/**
-	 * Constructs a new runtime exception with the specified detail message and
-	 * cause.
+	 * Constructs a new runtime exception with the specified detail message and cause.
 	 * 
-	 * @param message the detail message (which is saved for later retrieval by the
-	 *            {@link #getMessage()} method).
-	 * @param cause the cause (which is saved for later retrieval by the
-	 *            {@link #getCause()} method). (A <tt>null</tt> value is permitted,
-	 *            and indicates that the cause is nonexistent or unknown.)
+	 * @param message the detail message (which is saved for later retrieval by the {@link #getMessage()} method).
+	 * @param cause the cause (which is saved for later retrieval by the {@link #getCause()} method). (A <tt>null</tt>
+	 * value is permitted, and indicates that the cause is nonexistent or unknown.)
 	 * @see java.lang.RuntimeException
 	 */
 	public HDIVException(String message, Throwable cause) {
@@ -83,9 +77,8 @@ public class HDIVException extends RuntimeException {
 	}
 
 	/**
-	 * Returns the cause of this throwable or <code>null</code> if the cause is
-	 * nonexistent or unknown. (The cause is the throwable that caused this throwable
-	 * to get thrown.)
+	 * Returns the cause of this throwable or <code>null</code> if the cause is nonexistent or unknown. (The cause is
+	 * the throwable that caused this throwable to get thrown.)
 	 * 
 	 * @see java.lang.RuntimeException#getCause()
 	 */

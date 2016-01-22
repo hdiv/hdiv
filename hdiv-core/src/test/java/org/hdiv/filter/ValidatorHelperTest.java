@@ -356,7 +356,8 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 			RequestWrapper requestWrapper = new RequestWrapper(request);
 			result = helper.validate(requestWrapper).isValid();
 			assertFalse(result);
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			assertTrue(true);
 		}
 	}

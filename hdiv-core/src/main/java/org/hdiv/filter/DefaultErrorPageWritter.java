@@ -30,10 +30,8 @@ public class DefaultErrorPageWritter {
 	/**
 	 * Create default HDIV error page and write to the output.
 	 * 
-	 * @param out
-	 *            output to the response
-	 * @param editableErrors
-	 *            existing editable errors to show in error page.
+	 * @param out output to the response
+	 * @param editableErrors existing editable errors to show in error page.
 	 */
 	public void writetErrorPage(PrintWriter out, List<ValidatorError> editableErrors) {
 

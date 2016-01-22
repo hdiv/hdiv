@@ -94,10 +94,8 @@ public class UrlData {
 	/**
 	 * Constructor
 	 * 
-	 * @param url
-	 *            Original url
-	 * @param method
-	 *            Http method.
+	 * @param url Original url
+	 * @param method Http method.
 	 */
 	public UrlData(String url, String method) {
 		this.originalUrl = url;
@@ -134,8 +132,7 @@ public class UrlData {
 	}
 
 	/**
-	 * @param originalUrl
-	 *            the originalUrl to set
+	 * @param originalUrl the originalUrl to set
 	 */
 	public void setOriginalUrl(String originalUrl) {
 		this.originalUrl = originalUrl;
@@ -149,8 +146,7 @@ public class UrlData {
 	}
 
 	/**
-	 * @param anchor
-	 *            the anchor to set
+	 * @param anchor the anchor to set
 	 */
 	public void setAnchor(String anchor) {
 		this.anchor = anchor;
@@ -164,8 +160,7 @@ public class UrlData {
 	}
 
 	/**
-	 * @param contextPathRelativeUrl
-	 *            the contextPathRelativeUrl to set
+	 * @param contextPathRelativeUrl the contextPathRelativeUrl to set
 	 */
 	public void setContextPathRelativeUrl(String contextPathRelativeUrl) {
 		this.contextPathRelativeUrl = contextPathRelativeUrl;
@@ -179,8 +174,7 @@ public class UrlData {
 	}
 
 	/**
-	 * @param urlWithoutContextPath
-	 *            the urlWithoutContextPath to set
+	 * @param urlWithoutContextPath the urlWithoutContextPath to set
 	 */
 	public void setUrlWithoutContextPath(String urlWithoutContextPath) {
 		this.urlWithoutContextPath = urlWithoutContextPath;
@@ -194,8 +188,7 @@ public class UrlData {
 	}
 
 	/**
-	 * @param originalUrlParams
-	 *            the originalUrlParams to set
+	 * @param originalUrlParams the originalUrlParams to set
 	 */
 	public void setOriginalUrlParams(Map<String, String[]> originalUrlParams) {
 		this.originalUrlParams = originalUrlParams;
@@ -209,8 +202,7 @@ public class UrlData {
 	}
 
 	/**
-	 * @param processedUrlParams
-	 *            the processedUrlParams to set
+	 * @param processedUrlParams the processedUrlParams to set
 	 */
 	public void setProcessedUrlParams(Map<String, String[]> processedUrlParams) {
 		this.processedUrlParams = processedUrlParams;
@@ -224,8 +216,7 @@ public class UrlData {
 	}
 
 	/**
-	 * @param internal
-	 *            the internal to set
+	 * @param internal the internal to set
 	 */
 	public void setInternal(boolean internal) {
 		this.internal = internal;
@@ -239,8 +230,7 @@ public class UrlData {
 	}
 
 	/**
-	 * @param server
-	 *            the server to set
+	 * @param server the server to set
 	 */
 	public void setServer(String server) {
 		this.server = server;
@@ -254,8 +244,7 @@ public class UrlData {
 	}
 
 	/**
-	 * @param method
-	 *            the method to set
+	 * @param method the method to set
 	 */
 	public void setMethod(String method) {
 		this.method = method;
@@ -269,8 +258,7 @@ public class UrlData {
 	}
 
 	/**
-	 * @param jSessionId
-	 *            the jSessionId to set
+	 * @param jSessionId the jSessionId to set
 	 */
 	public void setjSessionId(String jSessionId) {
 		this.jSessionId = jSessionId;
@@ -284,8 +272,7 @@ public class UrlData {
 	}
 
 	/**
-	 * @param urlParams
-	 *            the urlParams to set
+	 * @param urlParams the urlParams to set
 	 */
 	public void setUrlParams(String urlParams) {
 		this.urlParams = urlParams;

@@ -32,8 +32,7 @@ import org.hdiv.util.HDIVUtil;
 
 /**
  * <p>
- * Support for tag handlers for &lt;url&gt;, the URL creation and rewriting tag
- * in JSTL 1.0.
+ * Support for tag handlers for &lt;url&gt;, the URL creation and rewriting tag in JSTL 1.0.
  * </p>
  * 
  * @author Gorka Vicente
@@ -110,7 +109,8 @@ public abstract class UrlSupportHDIV extends BodyTagSupport implements ParamPare
 		else {
 			try {
 				pageContext.getOut().print(result);
-			} catch (java.io.IOException ex) {
+			}
+			catch (java.io.IOException ex) {
 				throw new JspTagException(ex.toString(), ex);
 			}
 		}
@@ -138,7 +138,8 @@ public abstract class UrlSupportHDIV extends BodyTagSupport implements ParamPare
 				return (request.getContextPath() + url);
 			else
 				return url;
-		} else {
+		}
+		else {
 			if (!context.startsWith("/") || !url.startsWith("/")) {
 				throw new JspTagException(Resources.getMessage("IMPORT_BAD_RELATIVE"));
 			}
@@ -147,7 +148,8 @@ public abstract class UrlSupportHDIV extends BodyTagSupport implements ParamPare
 				// browsers interpret this as host name, not as
 				// path on same host.
 				return url;
-			} else {
+			}
+			else {
 				return (context + url);
 			}
 		}

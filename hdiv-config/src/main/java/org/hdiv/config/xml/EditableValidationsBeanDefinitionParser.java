@@ -164,12 +164,9 @@ public class EditableValidationsBeanDefinitionParser extends AbstractSingleBeanD
 	/**
 	 * Initialize Map with url, parameter and ValidationRule data.
 	 * 
-	 * @param node
-	 *            processing xml node
-	 * @param bean
-	 *            bean configuration
-	 * @param validationsData
-	 *            Map with url, parameter and ValidationRule data
+	 * @param node processing xml node
+	 * @param bean bean configuration
+	 * @param validationsData Map with url, parameter and ValidationRule data
 	 */
 	protected void processValidationRule(Node node, BeanDefinitionBuilder bean,
 			Map<ValidationTargetData, List<String>> validationsData) {
@@ -214,8 +211,7 @@ public class EditableValidationsBeanDefinitionParser extends AbstractSingleBeanD
 	/**
 	 * Convert String with bean id's in List
 	 * 
-	 * @param data
-	 *            String data
+	 * @param data String data
 	 * @return List with bean id's
 	 */
 	protected List<String> convertToList(String data) {
@@ -233,10 +229,8 @@ public class EditableValidationsBeanDefinitionParser extends AbstractSingleBeanD
 	/**
 	 * Create beans for the default editable validations.
 	 * 
-	 * @param element
-	 *            xml element
-	 * @param parserContext
-	 *            xml parser context
+	 * @param element xml element
+	 * @param parserContext xml parser context
 	 * @return default validations
 	 */
 	protected List<IValidation> createDefaultEditableValidations(Element element, ParserContext parserContext) {

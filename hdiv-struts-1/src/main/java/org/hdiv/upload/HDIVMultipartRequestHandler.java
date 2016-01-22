@@ -68,10 +68,8 @@ public class HDIVMultipartRequestHandler extends CommonsMultipartRequestHandler 
 	 * process, the parsed items are translated from Commons FileUpload <code>FileItem</code> instances to Struts
 	 * <code>FormFile</code> instances.
 	 * 
-	 * @param request
-	 *            The multipart request to be processed.
-	 * @throws ServletException
-	 *             if an unrecoverable error occurs.
+	 * @param request The multipart request to be processed.
+	 * @throws ServletException if an unrecoverable error occurs.
 	 */
 	public void handleRequest(HttpServletRequest request) throws ServletException {
 
@@ -85,34 +83,36 @@ public class HDIVMultipartRequestHandler extends CommonsMultipartRequestHandler 
 			MultipartRequestWrapper wrapper = (MultipartRequestWrapper) request;
 			ServletRequest origRequest = wrapper.getRequest();
 			if (origRequest == null)
-			    return;
-			
+				return;
+
 			RequestWrapper requestWrapper = HDIVUtil.getNativeRequest(origRequest, RequestWrapper.class);
 			if (requestWrapper == null)
-			    return;
-			
+				return;
+
 			Boolean maxLengthExceeded = (Boolean) request.getAttribute(ATTRIBUTE_MAX_LENGTH_EXCEEDED);
 			if ((maxLengthExceeded != null) && (maxLengthExceeded.booleanValue())) {
-			    return;
+				return;
 			}
 
-			HdivMultipartException multipartException = (HdivMultipartException) request.getAttribute(IMultipartConfig.FILEUPLOAD_EXCEPTION);
+			HdivMultipartException multipartException = (HdivMultipartException) request
+					.getAttribute(IMultipartConfig.FILEUPLOAD_EXCEPTION);
 			if (multipartException != null) {
-			    Exception orig = multipartException.getOriginal();
-			    log.error("Failed to parse multipart request", orig);
-			    if (orig instanceof ServletException) {
-				throw (ServletException) orig;
-			    } else {
-				throw new ServletException("Failed to parse multipart request", orig);
-			    }
+				Exception orig = multipartException.getOriginal();
+				log.error("Failed to parse multipart request", orig);
+				if (orig instanceof ServletException) {
+					throw (ServletException) orig;
+				}
+				else {
+					throw new ServletException("Failed to parse multipart request", orig);
+				}
 			}
 
 			// file items
 			Map<String, Object> items = requestWrapper.getFileElements();
 			for (Object fileItem : items.values()) {
-			    if (items != null) {
-				addFileParameter((List) fileItem);
-			    }
+				if (items != null) {
+					addFileParameter((List) fileItem);
+				}
 			}
 
 			// text items
@@ -120,7 +120,7 @@ public class HDIVMultipartRequestHandler extends CommonsMultipartRequestHandler 
 
 			for (String currentTextKey : items.keySet()) {
 
-			    String[] currentTextValue = (String[]) items.get(currentTextKey);
+				String[] currentTextValue = (String[]) items.get(currentTextKey);
 				this.addTextParameter(wrapper, currentTextKey, currentTextValue);
 			}
 		}
@@ -130,12 +130,9 @@ public class HDIVMultipartRequestHandler extends CommonsMultipartRequestHandler 
 	 * Adds a regular text parameter to the set of text parameters for this request and also to the list of all
 	 * parameters. Handles the case of multiple values for the same parameter by using an array for the parameter value.
 	 * 
-	 * @param request
-	 *            The request in which the parameter was specified.
-	 * @param name
-	 *            Parameter name.
-	 * @param value
-	 *            Parameter value.
+	 * @param request The request in which the parameter was specified.
+	 * @param name Parameter name.
+	 * @param value Parameter value.
 	 */
 	protected void addTextParameter(HttpServletRequest request, String name, String[] value) {
 
@@ -154,8 +151,7 @@ public class HDIVMultipartRequestHandler extends CommonsMultipartRequestHandler 
 	/**
 	 * Adds a file parameter to the set of file parameters for this request and also to the list of all parameters.
 	 * 
-	 * @param items
-	 *            file items for the parameter to add
+	 * @param items file items for the parameter to add
 	 */
 	protected void addFileParameter(List items) {
 
@@ -228,8 +224,7 @@ public class HDIVMultipartRequestHandler extends CommonsMultipartRequestHandler 
 		/**
 		 * Constructs an instance of this class which wraps the supplied file item.
 		 * 
-		 * @param fileItem
-		 *            The Commons file item to be wrapped.
+		 * @param fileItem The Commons file item to be wrapped.
 		 */
 		public CommonsFormFile(FileItem fileItem) {
 			this.fileItem = fileItem;
@@ -249,8 +244,7 @@ public class HDIVMultipartRequestHandler extends CommonsMultipartRequestHandler 
 		 * <p>
 		 * NOTE: This method is not supported in this implementation.
 		 * 
-		 * @param contentType
-		 *            A string representing the content type.
+		 * @param contentType A string representing the content type.
 		 */
 		public void setContentType(String contentType) {
 			throw new UnsupportedOperationException("The setContentType() method is not supported.");
@@ -270,8 +264,7 @@ public class HDIVMultipartRequestHandler extends CommonsMultipartRequestHandler 
 		 * <p>
 		 * NOTE: This method is not supported in this implementation.
 		 * 
-		 * @param filesize
-		 *            The size of the file, in bytes.
+		 * @param filesize The size of the file, in bytes.
 		 */
 		public void setFileSize(int filesize) {
 			throw new UnsupportedOperationException("The setFileSize() method is not supported.");
@@ -291,8 +284,7 @@ public class HDIVMultipartRequestHandler extends CommonsMultipartRequestHandler 
 		 * <p>
 		 * NOTE: This method is not supported in this implementation.
 		 * 
-		 * @param fileName
-		 *            The client-side name for the file.
+		 * @param fileName The client-side name for the file.
 		 */
 		public void setFileName(String fileName) {
 			throw new UnsupportedOperationException("The setFileName() method is not supported.");
@@ -304,10 +296,8 @@ public class HDIVMultipartRequestHandler extends CommonsMultipartRequestHandler 
 		 * 
 		 * @return An array of bytes representing the data contained in this form file.
 		 * 
-		 * @exception FileNotFoundException
-		 *                If some sort of file representation cannot be found for the FormFile
-		 * @exception IOException
-		 *                If there is some sort of IOException
+		 * @exception FileNotFoundException If some sort of file representation cannot be found for the FormFile
+		 * @exception IOException If there is some sort of IOException
 		 */
 		public byte[] getFileData() throws FileNotFoundException, IOException {
 			return fileItem.get();
@@ -316,10 +306,8 @@ public class HDIVMultipartRequestHandler extends CommonsMultipartRequestHandler 
 		/**
 		 * Get an InputStream that represents this file. This is the preferred method of getting file data.
 		 * 
-		 * @exception FileNotFoundException
-		 *                If some sort of file representation cannot be found for the FormFile
-		 * @exception IOException
-		 *                If there is some sort of IOException
+		 * @exception FileNotFoundException If some sort of file representation cannot be found for the FormFile
+		 * @exception IOException If there is some sort of IOException
 		 */
 		public InputStream getInputStream() throws FileNotFoundException, IOException {
 			return fileItem.getInputStream();
@@ -338,8 +326,7 @@ public class HDIVMultipartRequestHandler extends CommonsMultipartRequestHandler 
 		 * task. Apparently, however, some Linux JDKs do not implement <code>File.getName()</code> correctly for Windows
 		 * paths, so we attempt to take care of that here.
 		 * 
-		 * @param filePath
-		 *            The full path to the file.
+		 * @param filePath The full path to the file.
 		 * 
 		 * @return The base file name, from the end of the path.
 		 */

@@ -55,10 +55,8 @@ public class HtmlInputHiddenValidator implements ComponentValidator {
 	/**
 	 * Validates Hidden component received as input
 	 * 
-	 * @param context
-	 *            Request context
-	 * @param inputHidden
-	 *            component to validate
+	 * @param context Request context
+	 * @param inputHidden component to validate
 	 * @return validation result
 	 */
 	protected ValidationError validateHiddenComponent(FacesContext context, HtmlInputHiddenExtension inputHidden) {
@@ -103,7 +101,8 @@ public class HtmlInputHiddenValidator implements ComponentValidator {
 				error.setErrorComponent(inputHidden.getClientId(context));
 				return error;
 			}
-		} else {
+		}
+		else {
 			// else, current position isn't a table, but hidden is in a table
 			// and its clientId is incorrect
 			List<String> clientIds = inputHidden.getClientIds();
@@ -144,10 +143,8 @@ public class HtmlInputHiddenValidator implements ComponentValidator {
 	/**
 	 * Return true only if the two objects have the same value.
 	 * 
-	 * @param hiddenValue
-	 *            component value
-	 * @param realValue
-	 *            request value
+	 * @param hiddenValue component value
+	 * @param realValue request value
 	 * @return result
 	 */
 	protected boolean hasEqualValue(Object hiddenValue, Object realValue) {

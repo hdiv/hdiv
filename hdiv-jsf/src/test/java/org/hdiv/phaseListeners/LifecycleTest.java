@@ -55,7 +55,8 @@ public class LifecycleTest extends AbstractJsfHDIVTestCase {
 			this.runLifecycle();
 
 			assertFalse(false);
-		} catch (UnsupportedOperationException e) {
+		}
+		catch (UnsupportedOperationException e) {
 			assertTrue(true);
 		}
 

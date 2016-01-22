@@ -49,8 +49,7 @@ public class Logger {
 	 * Prints formatted attack produced by the user if the logging level defined in the Web application rate should be
 	 * at least INFO.
 	 * 
-	 * @param error
-	 *            Validator error data
+	 * @param error Validator error data
 	 */
 	public void log(ValidatorError error) {
 
@@ -62,25 +61,16 @@ public class Logger {
 	/**
 	 * Logs formatted attack produced by the user.
 	 * 
-	 * @param type
-	 *            Error type
-	 * @param target
-	 *            target name
-	 * @param parameterName
-	 *            parameter name
-	 * @param parameterValue
-	 *            parameter value
-	 * @param originalParameterValue
-	 *            original parameter value
-	 * @param localIp
-	 *            user local IP
-	 * @param remoteIp
-	 *            user remote IP
-	 * @param userName
-	 *            user name in application
-	 * @param validationRuleName
-	 *            In an attack of type 'EDITABLE_VALIDATION_ERROR', contains the name of the rule that rejected the
-	 *            value
+	 * @param type Error type
+	 * @param target target name
+	 * @param parameterName parameter name
+	 * @param parameterValue parameter value
+	 * @param originalParameterValue original parameter value
+	 * @param localIp user local IP
+	 * @param remoteIp user remote IP
+	 * @param userName user name in application
+	 * @param validationRuleName In an attack of type 'EDITABLE_VALIDATION_ERROR', contains the name of the rule that
+	 * rejected the value
 	 */
 	protected void log(String type, String target, String parameterName, String parameterValue,
 			String originalParameterValue, String localIp, String remoteIp, String userName, String validationRuleName) {
@@ -98,25 +88,16 @@ public class Logger {
 	 * <code>[error type];[target];[parameterName];[parameterValue];[originalParameterValue];[user local IP address];[IP address of the client or the last proxy that sent the request];[userId];[validationRuleName]</code>
 	 * </p>
 	 * 
-	 * @param type
-	 *            Error type
-	 * @param target
-	 *            target name
-	 * @param parameterName
-	 *            parameter name
-	 * @param parameterValue
-	 *            parameter value
-	 * @param originalParameterValue
-	 *            original parameter value
-	 * @param localIp
-	 *            user local IP
-	 * @param remoteIp
-	 *            user remote IP
-	 * @param userName
-	 *            user name in application
-	 * @param validationRuleName
-	 *            In an attack of type 'EDITABLE_VALIDATION_ERROR', contains the name of the rule that rejected the
-	 *            value
+	 * @param type Error type
+	 * @param target target name
+	 * @param parameterName parameter name
+	 * @param parameterValue parameter value
+	 * @param originalParameterValue original parameter value
+	 * @param localIp user local IP
+	 * @param remoteIp user remote IP
+	 * @param userName user name in application
+	 * @param validationRuleName In an attack of type 'EDITABLE_VALIDATION_ERROR', contains the name of the rule that
+	 * rejected the value
 	 * 
 	 * @return String Formatted text with the attach.
 	 */

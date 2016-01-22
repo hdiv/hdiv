@@ -184,8 +184,7 @@ public class HDIVConfig implements Serializable {
 	protected Map<PatternMatcher, String> longLivingPages = new HashMap<PatternMatcher, String>();
 
 	/**
-	 * @param strategy
-	 *            the strategy to set
+	 * @param strategy the strategy to set
 	 */
 	public void setStrategy(Strategy strategy) {
 		this.strategy = strategy;
@@ -194,8 +193,7 @@ public class HDIVConfig implements Serializable {
 	/**
 	 * Checks if <code>parameter</code> is an init parameter, in which case it will not be treated by HDIV.
 	 * 
-	 * @param parameter
-	 *            Parameter name
+	 * @param parameter Parameter name
 	 * @return True if <code>parameter</code> is an init parameter. False otherwise.
 	 */
 	public boolean isStartParameter(String parameter) {
@@ -211,10 +209,8 @@ public class HDIVConfig implements Serializable {
 	/**
 	 * Checks if <code>target</code> is an init action, in which case it will not be treated by HDIV.
 	 * 
-	 * @param target
-	 *            target name
-	 * @param method
-	 *            request method (get,post...)
+	 * @param target target name
+	 * @param method request method (get,post...)
 	 * @return True if <code>target</code> is an init action. False otherwise.
 	 */
 	public boolean isStartPage(String target, String method) {
@@ -230,7 +226,8 @@ public class HDIVConfig implements Serializable {
 			if (m.matches(target)) {
 				if (startPage.isAnyMethod()) {
 					return true;
-				} else if (startPage.getMethod().equalsIgnoreCase(method)) {
+				}
+				else if (startPage.getMethod().equalsIgnoreCase(method)) {
 					return true;
 				}
 			}
@@ -273,10 +270,8 @@ public class HDIVConfig implements Serializable {
 	/**
 	 * Check if the parameter needs confidentiality.
 	 * 
-	 * @param request
-	 *            HttpServletRequest object
-	 * @param paramName
-	 *            parameter name to check
+	 * @param request HttpServletRequest object
+	 * @param paramName parameter name to check
 	 * @return boolean
 	 */
 	public boolean isParameterWithoutConfidentiality(HttpServletRequest request, String paramName) {
@@ -295,10 +290,8 @@ public class HDIVConfig implements Serializable {
 	 * Checks if the parameter <code>parameter</code> is defined by the user as a no required validation parameter for
 	 * the action <code>action</code>.
 	 * 
-	 * @param action
-	 *            action name
-	 * @param parameter
-	 *            parameter name
+	 * @param action action name
+	 * @param parameter parameter name
 	 * @return True if it is parameter that needs no validation. False otherwise.
 	 */
 	public boolean isParameterWithoutValidation(String action, String parameter) {
@@ -329,8 +322,7 @@ public class HDIVConfig implements Serializable {
 	/**
 	 * Calculates if the provided url path is configured as a long-living pages.
 	 * 
-	 * @param url
-	 *            url path
+	 * @param url url path
 	 * @return Scope name or null if it is not a long-living page
 	 */
 	public String isLongLivingPages(String url) {
@@ -349,11 +341,9 @@ public class HDIVConfig implements Serializable {
 	/**
 	 * Checks if the HDIV validation must be applied to the parameter <code>parameter</code>
 	 * 
-	 * @param parameter
-	 *            Parameter name
-	 * @param hdivParameter
-	 *            Name of the parameter that HDIV will include in the requests or/and forms which contains the state
-	 *            identifier parameter
+	 * @param parameter Parameter name
+	 * @param hdivParameter Name of the parameter that HDIV will include in the requests or/and forms which contains the
+	 * state identifier parameter
 	 * @return True if <code>parameter</code> doesn't need HDIV validation.
 	 */
 	public boolean needValidation(String parameter, String hdivParameter) {
@@ -436,8 +426,7 @@ public class HDIVConfig implements Serializable {
 	/**
 	 * It creates a map from the list of start pages defined by the user.
 	 * 
-	 * @param userStartPages
-	 *            list of start pages defined by the user
+	 * @param userStartPages list of start pages defined by the user
 	 */
 	public void setUserStartPages(List<StartPage> userStartPages) {
 
@@ -453,8 +442,7 @@ public class HDIVConfig implements Serializable {
 	/**
 	 * It creates a map from the list of init parameters defined by the user.
 	 * 
-	 * @param userStartParameters
-	 *            list of init parameters defined by the user
+	 * @param userStartParameters list of init parameters defined by the user
 	 */
 	public void setUserStartParameters(List<String> userStartParameters) {
 
@@ -471,8 +459,7 @@ public class HDIVConfig implements Serializable {
 	}
 
 	/**
-	 * @param avoidCookiesConfidentiality
-	 *            the avoidCookiesConfidentiality to set
+	 * @param avoidCookiesConfidentiality the avoidCookiesConfidentiality to set
 	 */
 	public void setAvoidCookiesConfidentiality(boolean avoidCookiesConfidentiality) {
 		this.avoidCookiesConfidentiality = avoidCookiesConfidentiality;
@@ -486,8 +473,7 @@ public class HDIVConfig implements Serializable {
 	}
 
 	/**
-	 * @param avoidCookiesIntegrity
-	 *            the avoidCookiesIntegrity to set
+	 * @param avoidCookiesIntegrity the avoidCookiesIntegrity to set
 	 */
 	public void setAvoidCookiesIntegrity(boolean avoidCookiesIntegrity) {
 		this.avoidCookiesIntegrity = avoidCookiesIntegrity;
@@ -501,16 +487,14 @@ public class HDIVConfig implements Serializable {
 	}
 
 	/**
-	 * @param avoidValidationInUrlsWithoutParams
-	 *            The avoidValidationInUrlsWithoutParams to set.
+	 * @param avoidValidationInUrlsWithoutParams The avoidValidationInUrlsWithoutParams to set.
 	 */
 	public void setAvoidValidationInUrlsWithoutParams(Boolean avoidValidationInUrlsWithoutParams) {
 		this.avoidValidationInUrlsWithoutParams = avoidValidationInUrlsWithoutParams.booleanValue();
 	}
 
 	/**
-	 * @param protectedExtensions
-	 *            The protected extensions to set.
+	 * @param protectedExtensions The protected extensions to set.
 	 * @since HDIV 2.0
 	 */
 	public void setProtectedExtensions(List<String> protectedExtensions) {
@@ -553,8 +537,7 @@ public class HDIVConfig implements Serializable {
 	}
 
 	/**
-	 * @param randomName
-	 *            the randomName to set
+	 * @param randomName the randomName to set
 	 */
 	public void setRandomName(boolean randomName) {
 		this.randomName = randomName;
@@ -575,8 +558,7 @@ public class HDIVConfig implements Serializable {
 	}
 
 	/**
-	 * @param debugMode
-	 *            the debugMode to set
+	 * @param debugMode the debugMode to set
 	 */
 	public void setDebugMode(boolean debugMode) {
 		this.debugMode = debugMode;
@@ -590,8 +572,7 @@ public class HDIVConfig implements Serializable {
 	}
 
 	/**
-	 * @param showErrorPageOnEditableValidation
-	 *            the showErrorPageOnEditableValidation to set
+	 * @param showErrorPageOnEditableValidation the showErrorPageOnEditableValidation to set
 	 */
 	public void setShowErrorPageOnEditableValidation(boolean showErrorPageOnEditableValidation) {
 		this.showErrorPageOnEditableValidation = showErrorPageOnEditableValidation;
@@ -605,16 +586,14 @@ public class HDIVConfig implements Serializable {
 	}
 
 	/**
-	 * @param reuseExistingPageInAjaxRequest
-	 *            the reuseExistingPageInAjaxRequest to set
+	 * @param reuseExistingPageInAjaxRequest the reuseExistingPageInAjaxRequest to set
 	 */
 	public void setReuseExistingPageInAjaxRequest(boolean reuseExistingPageInAjaxRequest) {
 		this.reuseExistingPageInAjaxRequest = reuseExistingPageInAjaxRequest;
 	}
 
 	/**
-	 * @param patternMatcherFactory
-	 *            the patternMatcherFactory to set
+	 * @param patternMatcherFactory the patternMatcherFactory to set
 	 */
 	public void setPatternMatcherFactory(PatternMatcherFactory patternMatcherFactory) {
 		this.patternMatcherFactory = patternMatcherFactory;
@@ -628,8 +607,7 @@ public class HDIVConfig implements Serializable {
 	}
 
 	/**
-	 * @param stateParameterName
-	 *            the stateParameterName to set
+	 * @param stateParameterName the stateParameterName to set
 	 */
 	public void setStateParameterName(String stateParameterName) {
 		this.stateParameterName = stateParameterName;
@@ -643,16 +621,14 @@ public class HDIVConfig implements Serializable {
 	}
 
 	/**
-	 * @param modifyStateParameterName
-	 *            the modifyStateParameterName to set
+	 * @param modifyStateParameterName the modifyStateParameterName to set
 	 */
 	public void setModifyStateParameterName(String modifyStateParameterName) {
 		this.modifyStateParameterName = modifyStateParameterName;
 	}
 
 	/**
-	 * @param longLivingPages
-	 *            the longLivingPages to set
+	 * @param longLivingPages the longLivingPages to set
 	 */
 	public void setLongLivingPages(Map<String, String> longLivingPages) {
 
@@ -664,8 +640,7 @@ public class HDIVConfig implements Serializable {
 	}
 
 	/**
-	 * @param editableDataValidationProvider
-	 *            the editableDataValidationProvider to set
+	 * @param editableDataValidationProvider the editableDataValidationProvider to set
 	 */
 	public void setEditableDataValidationProvider(EditableDataValidationProvider editableDataValidationProvider) {
 		this.editableDataValidationProvider = editableDataValidationProvider;

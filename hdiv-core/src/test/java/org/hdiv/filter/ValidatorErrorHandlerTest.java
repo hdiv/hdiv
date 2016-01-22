@@ -84,7 +84,8 @@ public class ValidatorErrorHandlerTest extends AbstractHDIVTestCase {
 		String responseContent = null;
 		try {
 			responseContent = response.getContentAsString();
-		} catch (UnsupportedEncodingException e) {
+		}
+		catch (UnsupportedEncodingException e) {
 			responseContent = null;
 		}
 		assertNotNull(responseContent);

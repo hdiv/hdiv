@@ -22,16 +22,14 @@ public interface IPage {
 	/**
 	 * Adds a new state to the page <code>this</code>.
 	 * 
-	 * @param state
-	 *            State that represents all the data that composes a possible request.
+	 * @param state State that represents all the data that composes a possible request.
 	 */
 	public void addState(IState state);
 
 	/**
 	 * Checks if exists a state with the given identifier <code>key</code>.
 	 * 
-	 * @param id
-	 *            State identifier
+	 * @param id State identifier
 	 * @return true if exist
 	 */
 	public boolean existState(int id);
@@ -39,8 +37,7 @@ public interface IPage {
 	/**
 	 * Returns the state with the given identifier <code>key</code> from the map of states
 	 * 
-	 * @param id
-	 *            State identifier
+	 * @param id State identifier
 	 * @return IState State with the identifier <code>key</code>.
 	 */
 	public IState getState(int id);
@@ -56,8 +53,7 @@ public interface IPage {
 	public int getId();
 
 	/**
-	 * @param id
-	 *            The page id to set.
+	 * @param id The page id to set.
 	 */
 	public void setId(int id);
 
@@ -98,33 +94,28 @@ public interface IPage {
 	public String getFlowId();
 
 	/**
-	 * @param flowId
-	 *            the flowId to set
+	 * @param flowId the flowId to set
 	 */
 	public void setFlowId(String flowId);
 
 	/**
 	 * Returns the corresponding token for the given HTTP method.
 	 * 
-	 * @param method
-	 *            HTTP method
+	 * @param method HTTP method
 	 * @return the randomToken
 	 * @since HDIV 2.1.7
 	 */
 	public String getRandomToken(String method);
 
 	/**
-	 * @param randomToken
-	 *            the randomToken to set
-	 * @param method
-	 *            HTTP method
+	 * @param randomToken the randomToken to set
+	 * @param method HTTP method
 	 * @since HDIV 2.1.7
 	 */
 	public void setRandomToken(String randomToken, String method);
 
 	/**
-	 * @param parentStateId
-	 *            the parentStateId to set
+	 * @param parentStateId the parentStateId to set
 	 * 
 	 * @since HDIV 2.1.13
 	 */

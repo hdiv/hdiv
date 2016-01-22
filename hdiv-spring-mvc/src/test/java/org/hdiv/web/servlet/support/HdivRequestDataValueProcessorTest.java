@@ -71,7 +71,7 @@ public class HdivRequestDataValueProcessorTest extends AbstractHDIVTestCase {
 		assertNotNull(extraParams);
 		assertTrue(extraParams.size() > 0);
 	}
-	
+
 	public void testProcessActionGetMethod() {
 
 		HttpServletRequest request = this.getMockRequest();

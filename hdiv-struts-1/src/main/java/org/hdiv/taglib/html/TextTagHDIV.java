@@ -23,8 +23,7 @@ import org.hdiv.dataComposer.IDataComposer;
 import org.hdiv.util.HDIVUtil;
 
 /**
- * Render an input button of type text. This tag is only valid when nested inside a
- * form tag body.
+ * Render an input button of type text. This tag is only valid when nested inside a form tag body.
  * 
  * @author Gorka Vicente
  * @see org.apache.struts.taglib.html.TextTag
@@ -32,8 +31,8 @@ import org.hdiv.util.HDIVUtil;
 public class TextTagHDIV extends TextTag {
 
 	/**
-	 * Universal version identifier. Deserialization uses this number to ensure that
-	 * a loaded class corresponds exactly to a serialized object.
+	 * Universal version identifier. Deserialization uses this number to ensure that a loaded class corresponds exactly
+	 * to a serialized object.
 	 */
 	private static final long serialVersionUID = 2458533605499373795L;
 
@@ -44,11 +43,11 @@ public class TextTagHDIV extends TextTag {
 	 * @see org.hdiv.dataComposer.IDataComposer#composeFormField(String, String, boolean, String)
 	 */
 	public int doStartTag() throws JspException {
-		
+
 		HttpServletRequest request = (HttpServletRequest) this.pageContext.getRequest();
 		IDataComposer dataComposer = HDIVUtil.getDataComposer(request);
-				
-		// this property is editable and we must check it		
+
+		// this property is editable and we must check it
 		dataComposer.composeFormField(prepareName(), "", true, "text");
 
 		return super.doStartTag();

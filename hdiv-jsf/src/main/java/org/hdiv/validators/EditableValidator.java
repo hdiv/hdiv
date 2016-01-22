@@ -65,10 +65,8 @@ public class EditableValidator implements ComponentValidator {
 	/**
 	 * Validates all the editable components of the form
 	 * 
-	 * @param context
-	 *            Request context
-	 * @param formComponent
-	 *            UIForm component to validate
+	 * @param context Request context
+	 * @param formComponent UIForm component to validate
 	 * @return result
 	 */
 	protected ValidationError validateEditablesForm(FacesContext context, UIForm formComponent) {
@@ -86,10 +84,8 @@ public class EditableValidator implements ComponentValidator {
 	/**
 	 * Recursive method. When a component is non editable, verifies its children.
 	 * 
-	 * @param context
-	 *            Request context
-	 * @param uiComponent
-	 *            UIComponent to validate
+	 * @param context Request context
+	 * @param uiComponent UIComponent to validate
 	 * @return result
 	 */
 	protected ValidationError validateComponent(FacesContext context, UIComponent uiComponent) {
@@ -97,7 +93,8 @@ public class EditableValidator implements ComponentValidator {
 				|| (uiComponent instanceof HtmlInputSecret) || (uiComponent instanceof HtmlInputHidden)) {
 			UIInput inputComponent = (UIInput) uiComponent;
 			return validateInput(context, inputComponent);
-		} else {
+		}
+		else {
 			ValidationError error = null;
 			for (UIComponent child : uiComponent.getChildren()) {
 				ValidationError tempError = validateComponent(context, child);
@@ -112,10 +109,8 @@ public class EditableValidator implements ComponentValidator {
 	/**
 	 * Configures variables to call validateContent
 	 * 
-	 * @param context
-	 *            Request context
-	 * @param inputComponent
-	 *            {@link UIInput} to validate
+	 * @param context Request context
+	 * @param inputComponent {@link UIInput} to validate
 	 * @return result
 	 */
 	protected ValidationError validateInput(FacesContext context, UIInput inputComponent) {
@@ -125,11 +120,14 @@ public class EditableValidator implements ComponentValidator {
 		String contentType = null;
 		if (inputComponent instanceof HtmlInputHidden) {
 			contentType = "hidden";
-		} else if (inputComponent instanceof HtmlInputTextarea) {
+		}
+		else if (inputComponent instanceof HtmlInputTextarea) {
 			contentType = "textarea";
-		} else if (inputComponent instanceof HtmlInputText) {
+		}
+		else if (inputComponent instanceof HtmlInputText) {
 			contentType = "text";
-		} else if (inputComponent instanceof HtmlInputSecret) {
+		}
+		else if (inputComponent instanceof HtmlInputSecret) {
 			contentType = "password";
 		}
 
@@ -149,14 +147,10 @@ public class EditableValidator implements ComponentValidator {
 	/**
 	 * Uses HdivConfig to validate editable field content
 	 * 
-	 * @param context
-	 *            Request context
-	 * @param clientId
-	 *            clientId value of the component
-	 * @param contentObj
-	 *            value of the component
-	 * @param contentType
-	 *            type of content
+	 * @param context Request context
+	 * @param clientId clientId value of the component
+	 * @param contentObj value of the component
+	 * @param contentType type of content
 	 * @return is the content valid?
 	 */
 	protected boolean validateContent(FacesContext context, String clientId, Object contentObj, String contentType) {
@@ -176,10 +170,8 @@ public class EditableValidator implements ComponentValidator {
 	/**
 	 * Removes the target's ContextPath part
 	 * 
-	 * @param request
-	 *            HttpServletRequest to validate
-	 * @param target
-	 *            target to strip the ContextPath
+	 * @param request HttpServletRequest to validate
+	 * @param target target to strip the ContextPath
 	 * @return target without the ContextPath
 	 */
 	protected String getTargetWithoutContextPath(HttpServletRequest request, String target) {
@@ -190,10 +182,8 @@ public class EditableValidator implements ComponentValidator {
 	/**
 	 * Create {@link FacesMessage} for error
 	 * 
-	 * @param context
-	 *            Request context
-	 * @param inputComponent
-	 *            {@link UIInput} to validate
+	 * @param context Request context
+	 * @param inputComponent {@link UIInput} to validate
 	 * @return FacesMessage
 	 */
 	protected FacesMessage createFacesMessage(FacesContext context, UIInput inputComponent) {
@@ -204,9 +194,11 @@ public class EditableValidator implements ComponentValidator {
 
 		if (inputComponent instanceof HtmlInputTextarea) {
 			label = ((HtmlInputTextarea) inputComponent).getLabel();
-		} else if (inputComponent instanceof HtmlInputText) {
+		}
+		else if (inputComponent instanceof HtmlInputText) {
 			label = ((HtmlInputText) inputComponent).getLabel();
-		} else if (inputComponent instanceof HtmlInputSecret) {
+		}
+		else if (inputComponent instanceof HtmlInputSecret) {
 			label = ((HtmlInputSecret) inputComponent).getLabel();
 		}
 
@@ -230,7 +222,7 @@ public class EditableValidator implements ComponentValidator {
 
 			// Use Hdiv core message
 			Locale locale = context.getViewRoot().getLocale();
-			HttpServletRequest request = (HttpServletRequest)context.getExternalContext().getRequest();
+			HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
 			msg = HDIVUtil.getMessage(request, Constants.HDIV_EDITABLE_ERROR_KEY, label, locale);
 		}
 

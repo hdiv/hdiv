@@ -41,7 +41,8 @@ public class HdivCommonsMultipartResolver extends CommonsMultipartResolver {
 			Exception orig = multipartException.getOriginal();
 			if (orig instanceof MultipartException) {
 				throw (MultipartException) orig;
-			} else {
+			}
+			else {
 				throw new MultipartException("Could not parse multipart servlet request", orig);
 			}
 		}

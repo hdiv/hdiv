@@ -21,17 +21,13 @@ import java.beans.SimpleBeanInfo;
 import java.util.ArrayList;
 
 /**
- * This is the <code>BeanInfo</code> descriptor for the
- * <code>org.hdiv.strutsel.taglib.html.ELTextareaTagHDIV</code> class. It is
- * needed to override the default mapping of custom tag attribute names to class
- * attribute names.
+ * This is the <code>BeanInfo</code> descriptor for the <code>org.hdiv.strutsel.taglib.html.ELTextareaTagHDIV</code>
+ * class. It is needed to override the default mapping of custom tag attribute names to class attribute names.
  * <p>
- * This is because the value of the unevaluated EL expression has to be kept
- * separately from the evaluated value, which is stored in the base class. This
- * is related to the fact that the JSP compiler can choose to reuse different
- * tag instances if they received the same original attribute values, and the
- * JSP compiler can choose to not re-call the setter methods, because it can
- * assume the same values are already set.
+ * This is because the value of the unevaluated EL expression has to be kept separately from the evaluated value, which
+ * is stored in the base class. This is related to the fact that the JSP compiler can choose to reuse different tag
+ * instances if they received the same original attribute values, and the JSP compiler can choose to not re-call the
+ * setter methods, because it can assume the same values are already set.
  * 
  * @author Gorka Vicente
  * @since HDIV 2.0
@@ -43,193 +39,231 @@ public class ELTextareaTagHDIVBeanInfo extends SimpleBeanInfo {
 
 		try {
 			proplist.add(new PropertyDescriptor("accesskey", ELTextareaTagHDIV.class, null, "setAccesskeyExpr"));
-		} catch (IntrospectionException ex) {
+		}
+		catch (IntrospectionException ex) {
 		}
 
 		try {
 			proplist.add(new PropertyDescriptor("alt", ELTextareaTagHDIV.class, null, "setAltExpr"));
-		} catch (IntrospectionException ex) {
+		}
+		catch (IntrospectionException ex) {
 		}
 
 		try {
 			proplist.add(new PropertyDescriptor("altKey", ELTextareaTagHDIV.class, null, "setAltKeyExpr"));
-		} catch (IntrospectionException ex) {
+		}
+		catch (IntrospectionException ex) {
 		}
 
 		try {
 			proplist.add(new PropertyDescriptor("bundle", ELTextareaTagHDIV.class, null, "setBundleExpr"));
-		} catch (IntrospectionException ex) {
+		}
+		catch (IntrospectionException ex) {
 		}
 
 		try {
 			proplist.add(new PropertyDescriptor("cols", ELTextareaTagHDIV.class, null, "setColsExpr"));
-		} catch (IntrospectionException ex) {
+		}
+		catch (IntrospectionException ex) {
 		}
 
 		try {
 			proplist.add(new PropertyDescriptor("dir", ELTextareaTagHDIV.class, null, "setDirExpr"));
-		} catch (IntrospectionException ex) {
+		}
+		catch (IntrospectionException ex) {
 		}
 
 		try {
 			proplist.add(new PropertyDescriptor("disabled", ELTextareaTagHDIV.class, null, "setDisabledExpr"));
-		} catch (IntrospectionException ex) {
+		}
+		catch (IntrospectionException ex) {
 		}
 
 		try {
 			proplist.add(new PropertyDescriptor("errorKey", ELTextareaTagHDIV.class, null, "setErrorKeyExpr"));
-		} catch (IntrospectionException ex) {
+		}
+		catch (IntrospectionException ex) {
 		}
 
 		try {
 			proplist.add(new PropertyDescriptor("errorStyle", ELTextareaTagHDIV.class, null, "setErrorStyleExpr"));
-		} catch (IntrospectionException ex) {
+		}
+		catch (IntrospectionException ex) {
 		}
 
 		try {
-			proplist
-					.add(new PropertyDescriptor("errorStyleClass", ELTextareaTagHDIV.class, null, "setErrorStyleClassExpr"));
-		} catch (IntrospectionException ex) {
+			proplist.add(new PropertyDescriptor("errorStyleClass", ELTextareaTagHDIV.class, null,
+					"setErrorStyleClassExpr"));
+		}
+		catch (IntrospectionException ex) {
 		}
 
 		try {
 			proplist.add(new PropertyDescriptor("errorStyleId", ELTextareaTagHDIV.class, null, "setErrorStyleIdExpr"));
-		} catch (IntrospectionException ex) {
+		}
+		catch (IntrospectionException ex) {
 		}
 
 		try {
 			proplist.add(new PropertyDescriptor("indexed", ELTextareaTagHDIV.class, null, "setIndexedExpr"));
-		} catch (IntrospectionException ex) {
+		}
+		catch (IntrospectionException ex) {
 		}
 
 		try {
 			proplist.add(new PropertyDescriptor("lang", ELTextareaTagHDIV.class, null, "setLangExpr"));
-		} catch (IntrospectionException ex) {
+		}
+		catch (IntrospectionException ex) {
 		}
 
 		try {
 			proplist.add(new PropertyDescriptor("name", ELTextareaTagHDIV.class, null, "setNameExpr"));
-		} catch (IntrospectionException ex) {
+		}
+		catch (IntrospectionException ex) {
 		}
 
 		try {
 			proplist.add(new PropertyDescriptor("onblur", ELTextareaTagHDIV.class, null, "setOnblurExpr"));
-		} catch (IntrospectionException ex) {
+		}
+		catch (IntrospectionException ex) {
 		}
 
 		try {
 			proplist.add(new PropertyDescriptor("onchange", ELTextareaTagHDIV.class, null, "setOnchangeExpr"));
-		} catch (IntrospectionException ex) {
+		}
+		catch (IntrospectionException ex) {
 		}
 
 		try {
 			proplist.add(new PropertyDescriptor("onclick", ELTextareaTagHDIV.class, null, "setOnclickExpr"));
-		} catch (IntrospectionException ex) {
+		}
+		catch (IntrospectionException ex) {
 		}
 
 		try {
 			proplist.add(new PropertyDescriptor("ondblclick", ELTextareaTagHDIV.class, null, "setOndblclickExpr"));
-		} catch (IntrospectionException ex) {
+		}
+		catch (IntrospectionException ex) {
 		}
 
 		try {
 			proplist.add(new PropertyDescriptor("onfocus", ELTextareaTagHDIV.class, null, "setOnfocusExpr"));
-		} catch (IntrospectionException ex) {
+		}
+		catch (IntrospectionException ex) {
 		}
 
 		try {
 			proplist.add(new PropertyDescriptor("onkeydown", ELTextareaTagHDIV.class, null, "setOnkeydownExpr"));
-		} catch (IntrospectionException ex) {
+		}
+		catch (IntrospectionException ex) {
 		}
 
 		try {
 			proplist.add(new PropertyDescriptor("onkeypress", ELTextareaTagHDIV.class, null, "setOnkeypressExpr"));
-		} catch (IntrospectionException ex) {
+		}
+		catch (IntrospectionException ex) {
 		}
 
 		try {
 			proplist.add(new PropertyDescriptor("onkeyup", ELTextareaTagHDIV.class, null, "setOnkeyupExpr"));
-		} catch (IntrospectionException ex) {
+		}
+		catch (IntrospectionException ex) {
 		}
 
 		try {
 			proplist.add(new PropertyDescriptor("onmousedown", ELTextareaTagHDIV.class, null, "setOnmousedownExpr"));
-		} catch (IntrospectionException ex) {
+		}
+		catch (IntrospectionException ex) {
 		}
 
 		try {
 			proplist.add(new PropertyDescriptor("onmousemove", ELTextareaTagHDIV.class, null, "setOnmousemoveExpr"));
-		} catch (IntrospectionException ex) {
+		}
+		catch (IntrospectionException ex) {
 		}
 
 		try {
 			proplist.add(new PropertyDescriptor("onmouseout", ELTextareaTagHDIV.class, null, "setOnmouseoutExpr"));
-		} catch (IntrospectionException ex) {
+		}
+		catch (IntrospectionException ex) {
 		}
 
 		try {
 			proplist.add(new PropertyDescriptor("onmouseover", ELTextareaTagHDIV.class, null, "setOnmouseoverExpr"));
-		} catch (IntrospectionException ex) {
+		}
+		catch (IntrospectionException ex) {
 		}
 
 		try {
 			proplist.add(new PropertyDescriptor("onmouseup", ELTextareaTagHDIV.class, null, "setOnmouseupExpr"));
-		} catch (IntrospectionException ex) {
+		}
+		catch (IntrospectionException ex) {
 		}
 
 		try {
 			proplist.add(new PropertyDescriptor("onselect", ELTextareaTagHDIV.class, null, "setOnselectExpr"));
-		} catch (IntrospectionException ex) {
+		}
+		catch (IntrospectionException ex) {
 		}
 
 		try {
 			proplist.add(new PropertyDescriptor("property", ELTextareaTagHDIV.class, null, "setPropertyExpr"));
-		} catch (IntrospectionException ex) {
+		}
+		catch (IntrospectionException ex) {
 		}
 
 		try {
 			proplist.add(new PropertyDescriptor("readonly", ELTextareaTagHDIV.class, null, "setReadonlyExpr"));
-		} catch (IntrospectionException ex) {
+		}
+		catch (IntrospectionException ex) {
 		}
 
 		try {
 			proplist.add(new PropertyDescriptor("rows", ELTextareaTagHDIV.class, null, "setRowsExpr"));
-		} catch (IntrospectionException ex) {
+		}
+		catch (IntrospectionException ex) {
 		}
 
 		try {
 			proplist.add(new PropertyDescriptor("style", ELTextareaTagHDIV.class, null, "setStyleExpr"));
-		} catch (IntrospectionException ex) {
+		}
+		catch (IntrospectionException ex) {
 		}
 
 		try {
 			proplist.add(new PropertyDescriptor("styleClass", ELTextareaTagHDIV.class, null, "setStyleClassExpr"));
-		} catch (IntrospectionException ex) {
+		}
+		catch (IntrospectionException ex) {
 		}
 
 		try {
 			proplist.add(new PropertyDescriptor("styleId", ELTextareaTagHDIV.class, null, "setStyleIdExpr"));
-		} catch (IntrospectionException ex) {
+		}
+		catch (IntrospectionException ex) {
 		}
 
 		try {
 			proplist.add(new PropertyDescriptor("tabindex", ELTextareaTagHDIV.class, null, "setTabindexExpr"));
-		} catch (IntrospectionException ex) {
+		}
+		catch (IntrospectionException ex) {
 		}
 
 		try {
 			proplist.add(new PropertyDescriptor("title", ELTextareaTagHDIV.class, null, "setTitleExpr"));
-		} catch (IntrospectionException ex) {
+		}
+		catch (IntrospectionException ex) {
 		}
 
 		try {
 			proplist.add(new PropertyDescriptor("titleKey", ELTextareaTagHDIV.class, null, "setTitleKeyExpr"));
-		} catch (IntrospectionException ex) {
+		}
+		catch (IntrospectionException ex) {
 		}
 
 		try {
 			proplist.add(new PropertyDescriptor("value", ELTextareaTagHDIV.class, null, "setValueExpr"));
-		} catch (IntrospectionException ex) {
+		}
+		catch (IntrospectionException ex) {
 		}
 
 		PropertyDescriptor[] result = new PropertyDescriptor[proplist.size()];

@@ -22,17 +22,15 @@ import org.hdiv.config.multipart.exception.HdivMultipartException;
 import org.hdiv.filter.RequestWrapper;
 
 /**
- * Class containing multipart request configuration and methods initialized from
- * Spring Factory.
+ * Class containing multipart request configuration and methods initialized from Spring Factory.
  * 
  * @author Gorka Vicente
  */
 public interface IMultipartConfig {
 
 	/**
-	 * This is the ServletRequest attribute that should be set when a multipart
-	 * request is being read and failed. It's the job of the implementation to
-	 * put this attribute in the request if multipart process failed; in the
+	 * This is the ServletRequest attribute that should be set when a multipart request is being read and failed. It's
+	 * the job of the implementation to put this attribute in the request if multipart process failed; in the
 	 * handleRequest(HttpServletRequest) method.
 	 * 
 	 * @since HDIV 2.0.1
@@ -40,26 +38,20 @@ public interface IMultipartConfig {
 	public static final String FILEUPLOAD_EXCEPTION = "org.hdiv.exception.HDIVMultipartException";
 
 	/**
-	 * Parses the input stream and partitions the parsed items into a set of
-	 * form fields and a set of file items.
+	 * Parses the input stream and partitions the parsed items into a set of form fields and a set of file items.
 	 * 
-	 * @param request
-	 *            The multipart request wrapper.
-	 * @param servletContext
-	 *            Our ServletContext object
+	 * @param request The multipart request wrapper.
+	 * @param servletContext Our ServletContext object
 	 * @return multipart processed request
-	 * @throws HdivMultipartException
-	 *             if an unrecoverable error occurs.
+	 * @throws HdivMultipartException if an unrecoverable error occurs.
 	 */
 	public HttpServletRequest handleMultipartRequest(RequestWrapper request, ServletContext servletContext)
 			throws HdivMultipartException;
 
 	/**
-	 * Cleanup any resources used for the multipart handling, like a storage for
-	 * the uploaded files.
+	 * Cleanup any resources used for the multipart handling, like a storage for the uploaded files.
 	 * 
-	 * @param request
-	 *            the request to cleanup resources for
+	 * @param request the request to cleanup resources for
 	 * @since HDIV 2.1.0
 	 */
 	void cleanupMultipart(HttpServletRequest request);

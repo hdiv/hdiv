@@ -87,8 +87,7 @@ public abstract class AbstractHdivWebSecurityConfiguration {
 	/**
 	 * Override this method to configure HDIV
 	 * 
-	 * @param securityConfigBuilder
-	 *            {@link SecurityConfigBuilder} instance
+	 * @param securityConfigBuilder {@link SecurityConfigBuilder} instance
 	 * @see SecurityConfigBuilder
 	 */
 	protected void configure(SecurityConfigBuilder securityConfigBuilder) {
@@ -97,8 +96,7 @@ public abstract class AbstractHdivWebSecurityConfiguration {
 	/**
 	 * Override this method to add exclusions to the validation process.
 	 * 
-	 * @param registry
-	 *            {@link ExclusionRegistry} instance
+	 * @param registry {@link ExclusionRegistry} instance
 	 * @see ExclusionRegistry
 	 */
 	protected void addExclusions(ExclusionRegistry registry) {
@@ -107,8 +105,7 @@ public abstract class AbstractHdivWebSecurityConfiguration {
 	/**
 	 * Override this method to add long living pages to the application.
 	 * 
-	 * @param registry
-	 *            {@link LongLivingPagesRegistry} instance
+	 * @param registry {@link LongLivingPagesRegistry} instance
 	 * @see LongLivingPagesRegistry
 	 */
 	protected void addLongLivingPages(LongLivingPagesRegistry registry) {
@@ -117,8 +114,7 @@ public abstract class AbstractHdivWebSecurityConfiguration {
 	/**
 	 * Override this method to add editable validation rules.
 	 * 
-	 * @param registry
-	 *            {@link RuleRegistry} instance
+	 * @param registry {@link RuleRegistry} instance
 	 * @see RuleRegistry
 	 */
 	protected void addRules(RuleRegistry registry) {
@@ -127,8 +123,7 @@ public abstract class AbstractHdivWebSecurityConfiguration {
 	/**
 	 * Override this method to add editable validations to the application.
 	 * 
-	 * @param validationConfigurer
-	 *            {@link ValidationConfigurer} instance
+	 * @param validationConfigurer {@link ValidationConfigurer} instance
 	 * @see ValidationConfigurer
 	 */
 	protected void configureEditableValidation(ValidationConfigurer validationConfigurer) {

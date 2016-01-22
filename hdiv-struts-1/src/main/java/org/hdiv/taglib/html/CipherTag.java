@@ -28,8 +28,7 @@ import org.hdiv.util.HDIVUtil;
 /**
  * Tag to cipher data without using Struts.
  * <p>
- * Being "hdiv" the identifier used to reference HDIV tag library, the format of the
- * tag will be as follows:
+ * Being "hdiv" the identifier used to reference HDIV tag library, the format of the tag will be as follows:
  * <code>&lt;hdiv:cipher action="a1" parameter="p1" value="v1" /&gt;</code>.
  * </p>
  * <p>
@@ -42,8 +41,8 @@ import org.hdiv.util.HDIVUtil;
 public class CipherTag extends TagSupport {
 
 	/**
-	 * Universal version identifier. Deserialization uses this number to ensure that
-	 * a loaded class corresponds exactly to a serialized object.
+	 * Universal version identifier. Deserialization uses this number to ensure that a loaded class corresponds exactly
+	 * to a serialized object.
 	 */
 	private static final long serialVersionUID = -3083219212736900931L;
 
@@ -77,8 +76,7 @@ public class CipherTag extends TagSupport {
 	/**
 	 * Process the start of this tag.
 	 * 
-	 * @throws JspException If the attributes passed to the tag are incorrect, an
-	 *             exception will be thrown.
+	 * @throws JspException If the attributes passed to the tag are incorrect, an exception will be thrown.
 	 */
 	public int doStartTag() throws JspException {
 
@@ -92,7 +90,8 @@ public class CipherTag extends TagSupport {
 		String cipheredValue;
 		if (action != null) {
 			cipheredValue = dataComposer.compose(action, parameter, value, false);
-		} else {
+		}
+		else {
 			cipheredValue = dataComposer.compose(parameter, value, false);
 		}
 
@@ -100,7 +99,8 @@ public class CipherTag extends TagSupport {
 			// getJspWriter to output content
 			JspWriter out = this.pageContext.getOut();
 			out.print(cipheredValue);
-		} catch (IOException e) {
+		}
+		catch (IOException e) {
 			throw new JspException("Error:" + e.getMessage());
 		}
 

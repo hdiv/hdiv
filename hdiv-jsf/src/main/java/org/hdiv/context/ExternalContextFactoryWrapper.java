@@ -39,8 +39,7 @@ public class ExternalContextFactoryWrapper extends ExternalContextFactory {
 	/**
 	 * Default constructor
 	 * 
-	 * @param original
-	 *            original ExternalContextFactory
+	 * @param original original ExternalContextFactory
 	 */
 	public ExternalContextFactoryWrapper(ExternalContextFactory original) {
 		super();

@@ -37,20 +37,14 @@ public interface IDataValidator {
 	 * the request.
 	 * </p>
 	 * 
-	 * @param request
-	 *            current request
-	 * @param value
-	 *            value sent by the client
-	 * @param target
-	 *            target action name
-	 * @param parameter
-	 *            parameter name
-	 * @param stateParameter
-	 *            {@link IParameter} object with parameters data
-	 * @param actionParamValues
-	 *            values for the action parameters
+	 * @param request current request
+	 * @param value value sent by the client
+	 * @param target target action name
+	 * @param parameter parameter name
+	 * @param stateParameter {@link IParameter} object with parameters data
+	 * @param actionParamValues values for the action parameters
 	 * @return object that represents the result of the validation process for the parameter <code>parameter</code> and
-	 *         the value <code>data</code>.
+	 * the value <code>data</code>.
 	 */
 	public IValidationResult validate(HttpServletRequest request, String value, String target, String parameter,
 			IParameter stateParameter, String[] actionParamValues);

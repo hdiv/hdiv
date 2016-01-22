@@ -46,8 +46,7 @@ public class LongLivingPagesRegistration {
 	 * Determine which {@link StateScopeType} to use.
 	 * </p>
 	 * 
-	 * @param scopeType
-	 *            Scope to use.
+	 * @param scopeType Scope to use.
 	 */
 	public void scope(StateScopeType scopeType) {
 		Assert.notNull(scopeType, "Scope is required");

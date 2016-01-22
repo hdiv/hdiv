@@ -88,32 +88,28 @@ public class DefaultServletContextInitializer implements ServletContextInitializ
 	}
 
 	/**
-	 * @param config
-	 *            the config to set
+	 * @param config the config to set
 	 */
 	public void setConfig(HDIVConfig config) {
 		this.config = config;
 	}
 
 	/**
-	 * @param application
-	 *            the application to set
+	 * @param application the application to set
 	 */
 	public void setApplication(IApplication application) {
 		this.application = application;
 	}
 
 	/**
-	 * @param linkUrlProcessor
-	 *            the linkUrlProcessor to set
+	 * @param linkUrlProcessor the linkUrlProcessor to set
 	 */
 	public void setLinkUrlProcessor(LinkUrlProcessor linkUrlProcessor) {
 		this.linkUrlProcessor = linkUrlProcessor;
 	}
 
 	/**
-	 * @param formUrlProcessor
-	 *            the formUrlProcessor to set
+	 * @param formUrlProcessor the formUrlProcessor to set
 	 */
 	public void setFormUrlProcessor(FormUrlProcessor formUrlProcessor) {
 		this.formUrlProcessor = formUrlProcessor;

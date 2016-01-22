@@ -30,7 +30,6 @@ public class MinCustomSchemaTest extends TestCase {
 	protected void setUp() throws Exception {
 
 		this.context = new ClassPathXmlApplicationContext("org/hdiv/config/xml/hdiv-config-test-schema-min.xml");
-
 	}
 
 	public void testSchema() {
@@ -42,7 +41,6 @@ public class MinCustomSchemaTest extends TestCase {
 		EditableDataValidationProvider provider = this.context.getBean(EditableDataValidationProvider.class);
 		assertNotNull(provider);
 		System.out.println(provider.toString());
-
 	}
 
 }

@@ -70,20 +70,30 @@ public class HdivWebSecurityTest {
 			registry.addRule("safeText").acceptedPattern("^[a-zA-Z0-9@.\\-_]*$");
 		}
 
+		// @formatter:off
 		@Override
 		public void configureEditableValidation(ValidationConfigurer validationConfigurer) {
 
-			validationConfigurer.addValidation("/secure/.*").forParameters("param1", "params2").rules("safeText")
+			validationConfigurer
+				.addValidation("/secure/.*")
+					.forParameters("param1", "params2")
+					.rules("safeText")
 					.disableDefaults();
-			validationConfigurer.addValidation("/safetext/.*");
+			validationConfigurer
+				.addValidation("/safetext/.*");
 		}
 
 		@Override
 		public void configure(SecurityConfigBuilder builder) {
 
-			builder.sessionExpired().homePage("/").loginPage("/login.html").and()
+			builder
+				.sessionExpired()
+					.homePage("/")
+					.loginPage("/login.html")
+				.and()
 					.debugMode(true);
 		}
+		// @formatter:on
 	}
 
 	@Autowired

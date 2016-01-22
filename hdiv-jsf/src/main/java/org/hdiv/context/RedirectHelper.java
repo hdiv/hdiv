@@ -36,8 +36,7 @@ public class RedirectHelper {
 	 * Checks that url needs to be securized (points to the application itself) and if so creates HDIV state and adds
 	 * the identifier as a parameter to the url.
 	 * 
-	 * @param url
-	 *            Url to secure
+	 * @param url Url to secure
 	 * @return secured url
 	 */
 	public String addHDIVStateToURL(String url) {
@@ -50,8 +49,7 @@ public class RedirectHelper {
 	}
 
 	/**
-	 * @param linkUrlProcessor
-	 *            the linkUrlProcessor to set
+	 * @param linkUrlProcessor the linkUrlProcessor to set
 	 */
 	public void setLinkUrlProcessor(LinkUrlProcessor linkUrlProcessor) {
 		this.linkUrlProcessor = linkUrlProcessor;

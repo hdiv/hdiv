@@ -32,6 +32,7 @@ public class SecurityConfigBuilderTest {
 		this.builder = new SecurityConfigBuilder(new PatternMatcherFactory());
 	}
 
+	// @formatter:off
 	@Test
 	public void build() {
 		assertNotNull(this.builder);
@@ -52,4 +53,5 @@ public class SecurityConfigBuilderTest {
 		
 		assertEquals(23, this.builder.getMaxPagesPerSession());
 	}
+	// @formatter:on
 }

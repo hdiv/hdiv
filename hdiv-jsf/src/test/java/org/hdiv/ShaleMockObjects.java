@@ -117,16 +117,27 @@ public class ShaleMockObjects {
 
 	// Mock object instances for our tests
 	protected MockApplication application = null;
+
 	protected MockServletConfig config = null;
+
 	protected MockExternalContext externalContext = null;
+
 	protected MockFacesContext facesContext = null;
+
 	protected MockFacesContextFactory facesContextFactory = null;
+
 	protected MockLifecycle lifecycle = null;
+
 	protected MockLifecycleFactory lifecycleFactory = null;
+
 	protected MockRenderKit renderKit = null;
+
 	protected HttpServletRequest request = null;
+
 	protected MockHttpServletResponse response = null;
+
 	protected ServletContext servletContext = null;
+
 	protected HttpSession session = null;
 
 	// Thread context class loader saved and restored after each test

@@ -31,12 +31,9 @@ public interface ValidatorErrorHandler {
 	/**
 	 * Process a request with validation errors.
 	 * 
-	 * @param request
-	 *            {@link HttpServletRequest} instance
-	 * @param response
-	 *            {@link HttpServletResponse} instance
-	 * @param errors
-	 *            Validation errors
+	 * @param request {@link HttpServletRequest} instance
+	 * @param response {@link HttpServletResponse} instance
+	 * @param errors Validation errors
 	 * @since 2.1.13
 	 */
 	void handleValidatorError(HttpServletRequest request, HttpServletResponse response, List<ValidatorError> errors);

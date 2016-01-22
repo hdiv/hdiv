@@ -82,19 +82,16 @@ public class Page implements IPage, Serializable {
 	protected Boolean isReused;
 
 	/**
-	 *  Parent's state id
+	 * Parent's state id
 	 * 
 	 * @since 2.1.13
 	 */
 	protected String parentStateId;
-	
-	
 
 	/**
 	 * Adds a new state to the page <code>this</code>.
 	 * 
-	 * @param state
-	 *            State that represents all the data that composes a possible request.
+	 * @param state State that represents all the data that composes a possible request.
 	 */
 	public void addState(IState state) {
 		int id = state.getId();
@@ -105,11 +102,13 @@ public class Page implements IPage, Serializable {
 			}
 			this.states.add(id, state);
 
-		} else if (this.states.size() > id) {
+		}
+		else if (this.states.size() > id) {
 			// overwrite existing position
 			this.states.set(id, state);
 
-		} else {
+		}
+		else {
 			// list size == id
 			this.states.add(id, state);
 		}
@@ -118,8 +117,7 @@ public class Page implements IPage, Serializable {
 	/**
 	 * Checks if exists a state with the given identifier <code>id</code>.
 	 * 
-	 * @param id
-	 *            State identifier
+	 * @param id State identifier
 	 */
 	public boolean existState(int id) {
 		return this.states.get(id) != null;
@@ -128,8 +126,7 @@ public class Page implements IPage, Serializable {
 	/**
 	 * Returns the state with the given identifier <code>id</code> from the map of states
 	 * 
-	 * @param id
-	 *            State identifier
+	 * @param id State identifier
 	 * @return IState State with the identifier <code>id</code>.
 	 */
 	public IState getState(int id) {
@@ -151,8 +148,7 @@ public class Page implements IPage, Serializable {
 	}
 
 	/**
-	 * @param id
-	 *            The page id to set.
+	 * @param id The page id to set.
 	 */
 	public void setId(int id) {
 		this.id = id;
@@ -201,8 +197,7 @@ public class Page implements IPage, Serializable {
 	}
 
 	/**
-	 * @param flowId
-	 *            the flowId to set
+	 * @param flowId the flowId to set
 	 */
 	public void setFlowId(String flowId) {
 		this.flowId = flowId;
@@ -211,8 +206,7 @@ public class Page implements IPage, Serializable {
 	/**
 	 * Returns the corresponding token for the given HTTP method.
 	 * 
-	 * @param method
-	 *            HTTP method
+	 * @param method HTTP method
 	 * @return the randomToken
 	 * @since HDIV 2.1.7
 	 */
@@ -220,29 +214,28 @@ public class Page implements IPage, Serializable {
 
 		if (this.isFormMethod(method)) {
 			return this.formRandomToken;
-		} else {
+		}
+		else {
 			return randomToken;
 		}
 	}
 
 	/**
-	 * @param randomToken
-	 *            the randomToken to set
-	 * @param method
-	 *            HTTP method
+	 * @param randomToken the randomToken to set
+	 * @param method HTTP method
 	 * @since HDIV 2.1.7
 	 */
 	public void setRandomToken(String randomToken, String method) {
 		if (this.isFormMethod(method)) {
 			this.formRandomToken = randomToken;
-		} else {
+		}
+		else {
 			this.randomToken = randomToken;
 		}
 	}
 
 	/**
-	 * @param method
-	 *            HTTP method
+	 * @param method HTTP method
 	 * @return true if method is POST, PATCH, PUT or DELETE, false otherwise.
 	 */
 	protected boolean isFormMethod(String method) {
@@ -270,17 +263,14 @@ public class Page implements IPage, Serializable {
 	}
 
 	/**
-	 * @param size
-	 *            the size to set
+	 * @param size the size to set
 	 */
 	public void setSize(long size) {
 		this.size = size;
 	}
 
-
 	/**
-	 * @param parentStateId
-	 *            the parentStateId to set
+	 * @param parentStateId the parentStateId to set
 	 */
 	public void setParentStateId(String parentStateId) {
 		this.parentStateId = parentStateId;
@@ -292,7 +282,7 @@ public class Page implements IPage, Serializable {
 	public String getParentStateId() {
 		return this.parentStateId;
 	}
-	
+
 	public String toString() {
 
 		StringBuffer result = new StringBuffer();

@@ -53,15 +53,15 @@ public class EditableParameterValidator extends AbstractEditableParameterValidat
 		if (!errors.hasErrors() && this.innerValidator != null) {
 			if (this.innerValidator instanceof SmartValidator) {
 				((SmartValidator) this.innerValidator).validate(obj, errors, hints);
-			} else {
+			}
+			else {
 				this.innerValidator.validate(obj, errors);
 			}
 		}
 	}
 
 	/**
-	 * @param innerValidator
-	 *            the innerValidator to set
+	 * @param innerValidator the innerValidator to set
 	 */
 	public void setInnerValidator(Validator innerValidator) {
 		this.innerValidator = innerValidator;

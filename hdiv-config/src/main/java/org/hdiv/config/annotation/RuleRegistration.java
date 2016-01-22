@@ -45,8 +45,7 @@ public class RuleRegistration {
 	 * Some options are, 'text' and 'textarea'.
 	 * </p>
 	 * 
-	 * @param componentType
-	 *            Type of the component.
+	 * @param componentType Type of the component.
 	 * @return More configuration options
 	 */
 	public RuleRegistration componentType(String componentType) {
@@ -63,8 +62,7 @@ public class RuleRegistration {
 	 * Contains the whitelist validation.
 	 * </p>
 	 * 
-	 * @param acceptedPattern
-	 *            Accepter pattern
+	 * @param acceptedPattern Accepter pattern
 	 * @return More configuration options
 	 */
 	public RuleRegistration acceptedPattern(String acceptedPattern) {
@@ -81,8 +79,7 @@ public class RuleRegistration {
 	 * Contains the blacklist validation.
 	 * </p>
 	 * 
-	 * @param rejectedPattern
-	 *            Rejected pattern
+	 * @param rejectedPattern Rejected pattern
 	 * @return More configuration options
 	 */
 	public RuleRegistration rejectedPattern(String rejectedPattern) {

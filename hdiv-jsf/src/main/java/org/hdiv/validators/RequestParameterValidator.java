@@ -64,10 +64,8 @@ public class RequestParameterValidator implements ComponentValidator {
 	/**
 	 * Verifies that all the received parameters correspond to an attribute of the form that has been sent
 	 * 
-	 * @param context
-	 *            Request context
-	 * @param formComponent
-	 *            for component to validate
+	 * @param context Request context
+	 * @param formComponent for component to validate
 	 * @return validation result
 	 */
 	private ValidationError validateRequestParameters(FacesContext context, UIForm formComponent) {
@@ -105,7 +103,8 @@ public class RequestParameterValidator implements ComponentValidator {
 						log.debug("Parameter '" + requestParamName + "' is a startParameter");
 					}
 					validParameter = true;
-				} else {
+				}
+				else {
 					// It is not a startParameter, non expected parameter
 					// raise error
 					validParameter = false;
@@ -126,10 +125,8 @@ public class RequestParameterValidator implements ComponentValidator {
 	/**
 	 * Stores all the component ids that are children of the form
 	 * 
-	 * @param context
-	 *            Request context
-	 * @param component
-	 *            form component
+	 * @param context Request context
+	 * @param component form component
 	 * @return list with client ids
 	 */
 	private List<String> getClientIds(FacesContext context, UIForm component) {
@@ -149,12 +146,9 @@ public class RequestParameterValidator implements ComponentValidator {
 	/**
 	 * Adds to 'clientIds' all the component ids susceptible to creating parameters in the request
 	 * 
-	 * @param context
-	 *            Request context
-	 * @param component
-	 *            Component to validate
-	 * @param clientIds
-	 *            possible clientId values
+	 * @param context Request context
+	 * @param component Component to validate
+	 * @param clientIds possible clientId values
 	 */
 	@SuppressWarnings("rawtypes")
 	private void getAllClientIds(FacesContext context, UIComponent component, List<String> clientIds) {
@@ -168,7 +162,8 @@ public class RequestParameterValidator implements ComponentValidator {
 				if (uicom instanceof UIParameter) {
 					UIParameter parameter = (UIParameter) uicom;
 					clientIds.add(parameter.getName());
-				} else {
+				}
+				else {
 					String id = UtilsJsf.removeRowId(uicom.getClientId(context));
 					clientIds.add(id);
 				}

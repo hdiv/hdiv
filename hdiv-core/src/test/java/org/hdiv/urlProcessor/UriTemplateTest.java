@@ -20,8 +20,11 @@ import org.hdiv.AbstractHDIVTestCase;
 public class UriTemplateTest extends AbstractHDIVTestCase {
 
 	private LinkUrlProcessor linkUrlProcessor;
+
 	private String urlWithoutUriTemplate;
+
 	private String uriTemplate;
+
 	private String url;
 
 	@Override

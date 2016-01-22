@@ -67,8 +67,7 @@ public class Validation implements IValidation, Serializable {
 	/**
 	 * Checks if the type <code>parameterType</code> is the same as the one defined in the validation <code>this</code>.
 	 * 
-	 * @param parameterType
-	 *            Component type
+	 * @param parameterType Component type
 	 * @return True if the validation <code>this</code> is the same as <code>parameterType</code>.
 	 */
 	protected boolean isTheSameComponentType(String parameterType) {
@@ -89,12 +88,9 @@ public class Validation implements IValidation, Serializable {
 	 * <li>rejected: the value is rejected if doesn't pass the validation</li>
 	 * </ul>
 	 * 
-	 * @param parameter
-	 *            parameter name
-	 * @param values
-	 *            parameter's values
-	 * @param dataType
-	 *            editable data type
+	 * @param parameter parameter name
+	 * @param values parameter's values
+	 * @param dataType editable data type
 	 * @return True if the values <code>values</code> are valid for the parameter <code>parameter</code>.
 	 * @since HDIV 1.1.1
 	 */
@@ -135,8 +131,7 @@ public class Validation implements IValidation, Serializable {
 	}
 
 	/**
-	 * @param name
-	 *            the name to set
+	 * @param name the name to set
 	 */
 	public void setName(String name) {
 		this.name = name;
@@ -150,16 +145,14 @@ public class Validation implements IValidation, Serializable {
 	}
 
 	/**
-	 * @param componentType
-	 *            The comkponent type to set.
+	 * @param componentType The comkponent type to set.
 	 */
 	public void setComponentType(String componentType) {
 		this.componentType = componentType;
 	}
 
 	/**
-	 * @param acceptedPattern
-	 *            The accepted pattern to set.
+	 * @param acceptedPattern The accepted pattern to set.
 	 */
 	public void setAcceptedPattern(String acceptedPattern) {
 		this.acceptedPattern = Pattern.compile(acceptedPattern);
@@ -173,8 +166,7 @@ public class Validation implements IValidation, Serializable {
 	}
 
 	/**
-	 * @param rejectedPattern
-	 *            The rejected pattern to set.
+	 * @param rejectedPattern The rejected pattern to set.
 	 */
 	public void setRejectedPattern(String rejectedPattern) {
 		this.rejectedPattern = Pattern.compile(rejectedPattern);

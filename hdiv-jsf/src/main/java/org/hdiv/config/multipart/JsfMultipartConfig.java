@@ -32,12 +32,9 @@ public class JsfMultipartConfig implements IMultipartConfig {
 	/**
 	 * Parses the input stream and partitions the parsed items into a set of form fields and a set of file items.
 	 * 
-	 * @param request
-	 *            The multipart request wrapper.
-	 * @param servletContext
-	 *            Our ServletContext object
-	 * @throws HdivMultipartException
-	 *             if an unrecoverable error occurs.
+	 * @param request The multipart request wrapper.
+	 * @param servletContext Our ServletContext object
+	 * @throws HdivMultipartException if an unrecoverable error occurs.
 	 */
 	public HttpServletRequest handleMultipartRequest(RequestWrapper request, ServletContext servletContext)
 			throws HdivMultipartException {
@@ -48,8 +45,7 @@ public class JsfMultipartConfig implements IMultipartConfig {
 	/**
 	 * Cleanup any resources used for the multipart handling, like a storage for the uploaded files.
 	 * 
-	 * @param request
-	 *            the request to cleanup resources for
+	 * @param request the request to cleanup resources for
 	 */
 	public void cleanupMultipart(HttpServletRequest request) {
 

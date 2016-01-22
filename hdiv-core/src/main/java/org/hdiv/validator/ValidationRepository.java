@@ -27,10 +27,8 @@ public interface ValidationRepository {
 	/**
 	 * Returns the validation rules for a concrete url and parameter name.
 	 * 
-	 * @param url
-	 *            url
-	 * @param parameter
-	 *            parameter name
+	 * @param url url
+	 * @param parameter parameter name
 	 * @return Selected validations
 	 */
 	List<IValidation> findValidations(String url, String parameter);
