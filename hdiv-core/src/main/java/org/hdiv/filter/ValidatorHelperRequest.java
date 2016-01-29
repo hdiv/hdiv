@@ -599,7 +599,8 @@ public class ValidatorHelperRequest implements IValidationHelper {
 		String requestState = request.getParameter(hdivParameter);
 
 		if (requestState == null) {
-			ValidatorError error = new ValidatorError(HDIVErrorCodes.HDIV_PARAMETER_NOT_EXISTS, target, hdivParameter);
+			ValidatorError error = new ValidatorError(HDIVErrorCodes.HDIV_PARAMETER_DOES_NOT_EXIST, target,
+					hdivParameter);
 			return new ValidatorHelperResult(error);
 		}
 

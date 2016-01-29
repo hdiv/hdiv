@@ -23,7 +23,7 @@ package org.hdiv.util;
 public class HDIVErrorCodes {
 
 	/**
-	 * The action received in the request does not match the state action.
+	 * The action or url received in the request does not match the one expected.
 	 */
 	public static final String ACTION_ERROR = "INVALID_ACTION";
 
@@ -33,7 +33,7 @@ public class HDIVErrorCodes {
 	public static final String PARAMETER_NOT_EXISTS = "INVALID_PARAMETER_NAME";
 
 	/**
-	 * All the required parameters for the request have not been received.
+	 * For a certain parameter, the expected number of values have not been received.
 	 */
 	public static final String REQUIRED_PARAMETERS = "NOT_RECEIVED_ALL_REQUIRED_PARAMETERS";
 
@@ -53,22 +53,22 @@ public class HDIVErrorCodes {
 	public static final String REPEATED_VALUES = "REPEATED_VALUES_FOR_PARAMETER";
 
 	/**
-	 * Incorrect value. Confidentiality activated.
+	 * Incorrect parameter value received if confidentiality is activated.
 	 */
 	public static final String CONFIDENTIAL_VALUE_INCORRECT = "INVALID_CONFIDENTIAL_VALUE";
 
 	/**
 	 * The HDIV parameter has not been received in the request.
 	 */
-	public static final String HDIV_PARAMETER_NOT_EXISTS = "HDIV_PARAMETER_NOT_EXISTS";
+	public static final String HDIV_PARAMETER_DOES_NOT_EXIST = "HDIV_PARAMETER_DOES_NOT_EXIST";
 
 	/**
-	 * Incorrect HDIV parameter value.
+	 * The HDIV parameter has an incorrect value.
 	 */
 	public static final String HDIV_PARAMETER_INCORRECT_VALUE = "INVALID_HDIV_PARAMETER_VALUE";
 
 	/**
-	 * HDIV parameter has an incorrect page identifier.
+	 * The HDIV parameter has an incorrect page identifier.
 	 */
 	public static final String PAGE_ID_INCORRECT = "INVALID_PAGE_ID";
 

@@ -380,19 +380,13 @@ grails {
 	<section xml:id="advancedConfiguration-cookies">
 		<title>Cookies</title>
 		<para>
-			By default HDIV validates cookies integrity and confidentiality.
-			It's
-			possible to disable integrity validations and confidentiality
-			properties to
-			your application from HDIV config entity.
+			By default HDIV validates cookie integrity and confidentiality.
+			It is possible to disable these features
+			within HDIV configuration.
 		</para>
 		<para>
-			In the
-			next code we define
-			the required code to disable integrity
-			and
-			confidentiality to
-			cookies:
+			Here we define
+			the required code to disable these features:
 		</para>
 		<programlisting language="xml">
  					<![CDATA[
@@ -442,12 +436,10 @@ grails {
 		<para>
 			In addition to start pages configuration and the url mapping
 			defined by
-			HDIV Filter, HDIV allows the validation exclusion depending
-			on the
-			extension.
-			At the same time is possible the inclusion of
-			extensions
-			to protect them.
+			HDIV Filter, HDIV allows validation exclusion of some
+			extensions.
+			Equally, it is possible to include other
+			extensions.
 		</para>
 		<programlisting language="xml">
  					<![CDATA[
@@ -477,19 +469,15 @@ grails {
 	<section xml:id="advancedConfiguration-debugmode">
 		<title>Debug mode</title>
 		<para>
-			HDIV offers a debug execution mode in order to apply HDIV in
-			production
-			environments without any functional or integration
-			problems. In other
-			words HDIV
-			process and validates all the requests
-			but doesn't change original execution
-			of the request, just logging the
-			possible attack but without stopping
-			it.
+			A debug execution mode is offered in order to apply HDIV in
+			production environments without any functional or integration
+			problems. In other words HDIV
+			processes and validates all the requests
+			but does not change the original request execution, only logging the
+			possible attack but without stopping it.
 		</para>
 		<para>
-			It's possible to configure this option from HDIV config entity:
+			It is possible to configure this option from HDIV configuration:
 		</para>
 		<programlisting language="xml">
  					<![CDATA[
@@ -517,8 +505,7 @@ public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
 
 		<para>
 			If you are a Grails user, configuration is implemented within
-			plugin
-			configuration:
+			plugin configuration:
 		</para>
 		<programlisting language="xml">
  					<![CDATA[
@@ -538,25 +525,15 @@ grails {
 	<section xml:id="advancedConfiguration-logger">
 		<title>Logger</title>
 		<para>
-			HDIV has a logger that will print in a file all the attacks
-			detected,
-			which helps system administrators checking the attacks the
-			web
-			application has suffered.
+			HDIV has a logger that prints all attacks
+			detected in a file,
+			helping system administrators to check all attacks on
+			the application.
 
 			HDIV uses the Commons Logging API, which
-			can
-			use Log4j as the
-			underlying log system. If the Log4j library is
-			available for the
-			context library directory, Commoms Logging will use
-			the library and
-			the configuration of the log4j.properties placed in
-			the context
-			classpath.
+			can be configured to work with an underlaying log system, for example, Log4j or Java Logging.
 
-			With this setting we can log the attacks
-			detected by HDIV in a file:
+			Attacks detected are logged by HDIV in a file.
 		</para>
 
 		<programlisting language="">
@@ -583,10 +560,10 @@ log4j.logger.org.hdiv=INFO,R
 ]]></programlisting>
 
 		<para>
-			With this setting attack message logs will be written in the
+			The configuration avobe logs attack information in the
 			c:/hdiv.log
 			file, following the format defined in the
-			log4j.appender.R.layout.ConversionPattern property:
+			'log4j.appender.R.layout.ConversionPattern' property:
 		</para>
 		<itemizedlist>
 			<listitem>
@@ -621,18 +598,11 @@ log4j.logger.org.hdiv=INFO,R
 			</listitem>
 		</itemizedlist>
 		<para>
-			We can check Log4j documentation for
-			different configurations of
-			the log
-			message.
+			Log4j documentation can be checked for
+			different log message formats.
 
-			Log messages written by HDIV, due to %m conversion
-			character
-			defined in
-			the conversion pattern declared in
-			log4j.properties, have
-			the
-			following format:
+			Log messages written by HDIV have
+			the following format:
 		</para>
 		<programlisting language="">
 		<![CDATA[
@@ -640,22 +610,21 @@ log4j.logger.org.hdiv=INFO,R
 ]]></programlisting>
 
 		<para>
-			[attack type]: Type of the attack detected by HDIV. It's possible
+			[attack type]: Type of attack detected by HDIV. Possible
 			values are:
 		</para>
 		<itemizedlist>
 			<listitem>
 				<para>
 					<code>INVALID_ACTION</code>
-					: The action or url received in the request does not match the state
-					action.
+					: The action or url received in the request does not match the one expected.
 				</para>
 			</listitem>
 			<listitem>
 				<para>
 					<code>INVALID_PARAMETER_NAME</code>
 					: The parameter received in the request does not exist in the
-					request state.
+					excepted request.
 				</para>
 			</listitem>
 			<listitem>
@@ -674,7 +643,7 @@ log4j.logger.org.hdiv=INFO,R
 			<listitem>
 				<para>
 					<code>NOT_RECEIVED_ALL_PARAMETER_VALUES</code>
-					: For a certain parameter not the expected number of values has
+					: For a certain parameter, the expected number of values have not
 					been received.
 				</para>
 			</listitem>
@@ -687,25 +656,25 @@ log4j.logger.org.hdiv=INFO,R
 			<listitem>
 				<para>
 					<code>INVALID_CONFIDENTIAL_VALUE</code>
-					: Incorrect value. Confidentiality activated.
+					: Incorrect parameter value received if confidentiality is activated.
 				</para>
 			</listitem>
 			<listitem>
 				<para>
-					<code>HDIV_PARAMETER_NOT_EXISTS</code>
+					<code>HDIV_PARAMETER_DOES_NOT_EXIST</code>
 					: The HDIV parameter has not been received in the request.
 				</para>
 			</listitem>
 			<listitem>
 				<para>
 					<code>INVALID_HDIV_PARAMETER_VALUE</code>
-					: The HDIV parameter has incorrect value.
+					: The HDIV parameter has an incorrect value.
 				</para>
 			</listitem>
 			<listitem>
 				<para>
 					<code>INVALID_PAGE_ID</code>
-					: HDIV parameter has an incorrect page identifier.
+					: The HDIV parameter has an incorrect page identifier.
 				</para>
 			</listitem>
 			<listitem>
