@@ -53,17 +53,19 @@ public class EditableDataValidationProviderTest extends AbstractHDIVTestCase {
 
 		Map<ValidationTarget, List<IValidation>> validations = ((DefaultValidationRepository) this.validationRepository)
 				.getValidations();
-		assertEquals(3, validations.size());
+		assertEquals(4, validations.size());
 
 		Object[] ptrs = validations.keySet().toArray();
 
 		ValidationTarget vt0 = (ValidationTarget) ptrs[0];
 		ValidationTarget vt1 = (ValidationTarget) ptrs[1];
 		ValidationTarget vt2 = (ValidationTarget) ptrs[2];
+		ValidationTarget vt3 = (ValidationTarget) ptrs[3];
 
 		assertEquals(new DefaultPatternMatcher("/insecureParams/.*"), vt0.getUrl());
 		assertEquals(new DefaultPatternMatcher("/insecure/.*"), vt1.getUrl());
-		assertEquals(new DefaultPatternMatcher(".*"), vt2.getUrl());
+		assertEquals(null, vt2.getUrl());
+		assertEquals(new DefaultPatternMatcher(".*"), vt3.getUrl());
 	}
 
 	public void testEditableParamValidatorPatternOrder() {
@@ -121,6 +123,18 @@ public class EditableDataValidationProviderTest extends AbstractHDIVTestCase {
 		// otherParam
 		parameter = "otherParam";
 		result = this.validationProvider.validate(url, parameter, values, dataType);
+
+		assertFalse(result.isValid());
+	}
+
+	public void testEditableParamValidatorEmptyUrl() {
+
+		// param1
+		String url = "/secureParams/action";
+		String parameter = "param3";
+		String[] values = { "<script>" };
+		String dataType = null;
+		EditableDataValidationResult result = this.validationProvider.validate(url, parameter, values, dataType);
 
 		assertFalse(result.isValid());
 	}

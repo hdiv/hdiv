@@ -124,7 +124,7 @@ public class CustomSchemaTest extends TestCase {
 		assertNotNull(validationRepository);
 
 		Map<ValidationTarget, List<IValidation>> validations = validationRepository.getValidations();
-		assertEquals(3, validations.size());
+		assertEquals(4, validations.size());
 
 		// First url
 		List<IValidation> vals = this.getValidations(validations, "a");
@@ -161,6 +161,20 @@ public class CustomSchemaTest extends TestCase {
 		val = (Validation) vals.get(2);
 		assertEquals("SQLInjection", val.getName());// first default rule
 		assertTrue(val.isDefaultValidation());
+
+		// Fourth url
+		vals = this.getValidations(validations, null);
+		target = this.getTarget(validations, null);
+		params = target.getParams();
+		assertEquals(2, params.size());
+		assertEquals(new DefaultPatternMatcher("param4"), params.get(0));
+		assertEquals(new DefaultPatternMatcher("param5"), params.get(1));
+		assertEquals(1, vals.size());
+		// 1 custom rule
+
+		val = (Validation) vals.get(0);
+		assertEquals("id3", val.getName());
+		assertFalse(val.isDefaultValidation());
 	}
 
 	public void testEditableValidationsOrder() {
@@ -169,17 +183,19 @@ public class CustomSchemaTest extends TestCase {
 		assertNotNull(validationRepository);
 
 		Map<ValidationTarget, List<IValidation>> validations = validationRepository.getValidations();
-		assertEquals(3, validations.size());
+		assertEquals(4, validations.size());
 
 		Object[] ptrs = validations.keySet().toArray();
 
 		ValidationTarget vt0 = (ValidationTarget) ptrs[0];
 		ValidationTarget vt1 = (ValidationTarget) ptrs[1];
 		ValidationTarget vt2 = (ValidationTarget) ptrs[2];
+		ValidationTarget vt3 = (ValidationTarget) ptrs[3];
 
 		assertEquals(new DefaultPatternMatcher("a"), vt0.getUrl());
 		assertEquals(new DefaultPatternMatcher("b"), vt1.getUrl());
 		assertEquals(new DefaultPatternMatcher("c"), vt2.getUrl());
+		assertEquals(null, vt3.getUrl());
 	}
 
 	public void testEditableValidationsParams() {
@@ -264,7 +280,13 @@ public class CustomSchemaTest extends TestCase {
 	protected List<IValidation> getValidations(Map<ValidationTarget, List<IValidation>> validations, String pattern) {
 
 		for (ValidationTarget target : validations.keySet()) {
-			if (target.getUrl().matches(pattern)) {
+			PatternMatcher urlPattern = target.getUrl();
+			if (pattern == null) {
+				if (urlPattern == null) {
+					return validations.get(target);
+				}
+			}
+			else if (urlPattern.matches(pattern)) {
 				return validations.get(target);
 			}
 		}
@@ -274,7 +296,13 @@ public class CustomSchemaTest extends TestCase {
 	protected ValidationTarget getTarget(Map<ValidationTarget, List<IValidation>> validations, String pattern) {
 
 		for (ValidationTarget target : validations.keySet()) {
-			if (target.getUrl().matches(pattern)) {
+			PatternMatcher urlPattern = target.getUrl();
+			if (pattern == null) {
+				if (urlPattern == null) {
+					return target;
+				}
+			}
+			else if (target.getUrl().matches(pattern)) {
 				return target;
 			}
 		}

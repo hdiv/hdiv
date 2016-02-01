@@ -63,7 +63,6 @@ public class EditableValidationsTest {
 			validationConfigurer.addValidation("/secure/.*").rules("safeText").disableDefaults();
 			validationConfigurer.addValidation("/.*");
 		}
-
 	}
 
 	@Autowired

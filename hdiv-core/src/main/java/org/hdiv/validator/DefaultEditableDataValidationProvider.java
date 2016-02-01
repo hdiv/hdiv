@@ -44,10 +44,14 @@ public class DefaultEditableDataValidationProvider implements EditableDataValida
 	public EditableDataValidationResult validate(String url, String parameter, String[] values, String dataType) {
 
 		if (this.validationRepository == null) {
-			return EditableDataValidationResult.VALID;
+			return EditableDataValidationResult.VALIDATION_NOT_REQUIRED;
 		}
 
 		List<IValidation> validations = this.validationRepository.findValidations(url, parameter);
+
+		if (validations.isEmpty()) {
+			return EditableDataValidationResult.VALIDATION_NOT_REQUIRED;
+		}
 
 		for (IValidation currentValidation : validations) {
 

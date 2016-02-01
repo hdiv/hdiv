@@ -54,7 +54,8 @@ public class DefaultValidationRepository implements ValidationRepository, Serial
 
 			PatternMatcher urlMatcher = target.getUrl();
 
-			if (urlMatcher.matches(url)) {
+			// Null URL is equivalent to all URLs.
+			if (urlMatcher == null || urlMatcher.matches(url)) {
 
 				List<PatternMatcher> paramMatchers = target.getParams();
 				boolean paramMatch = false;

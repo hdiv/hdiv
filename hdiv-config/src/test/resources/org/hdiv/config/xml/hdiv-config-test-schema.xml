@@ -24,6 +24,7 @@ http://www.hdiv.org/schema/hdiv http://www.hdiv.org/schema/hdiv/hdiv.xsd">
 			id2,
 			id3
 		 </hdiv:validationRule>
+		 <hdiv:validationRule parameters="param4, param5" enableDefaults="false">id3</hdiv:validationRule>
 	</hdiv:editableValidations>
 
 	<hdiv:config confidentiality="true" avoidCookiesIntegrity="true"
