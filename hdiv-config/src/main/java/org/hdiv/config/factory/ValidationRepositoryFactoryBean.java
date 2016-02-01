@@ -39,7 +39,7 @@ public class ValidationRepositoryFactoryBean extends AbstractFactoryBean<Default
 	/**
 	 * Regular expression executor factory.
 	 */
-	private transient PatternMatcherFactory patternMatcherFactory;
+	protected transient PatternMatcherFactory patternMatcherFactory;
 
 	/**
 	 * <p>
@@ -72,7 +72,7 @@ public class ValidationRepositoryFactoryBean extends AbstractFactoryBean<Default
 		for (ValidationTargetData data : this.validationsData.keySet()) {
 
 			ValidationTarget target = new ValidationTarget();
-			List<String> ids = validationsData.get(data);
+			List<String> ids = this.validationsData.get(data);
 
 			if (data.getUrl() != null) {
 				PatternMatcher matcher = this.patternMatcherFactory.getPatternMatcher(data.getUrl());
@@ -103,7 +103,7 @@ public class ValidationRepositoryFactoryBean extends AbstractFactoryBean<Default
 	 * @return List with bean instances.
 	 */
 	@SuppressWarnings("unchecked")
-	private List<IValidation> createValidationList(List<String> ids) {
+	protected List<IValidation> createValidationList(List<String> ids) {
 		List<IValidation> newList = new ArrayList<IValidation>();
 
 		for (String id : ids) {

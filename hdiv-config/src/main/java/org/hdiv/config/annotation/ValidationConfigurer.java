@@ -32,6 +32,19 @@ public class ValidationConfigurer {
 	private List<ValidationConfig> validationConfigs = new ArrayList<ValidationConfig>();
 
 	/**
+	 * Add an editable validation for all urls.
+	 * 
+	 * @return More configuration options
+	 */
+	public EditableValidationConfigurer addValidation() {
+
+		ValidationConfig validationConfig = new ValidationConfig();
+		this.validationConfigs.add(validationConfig);
+		EditableValidationConfigurer editableValidationConfigurer = validationConfig.getEditableValidationConfigurer();
+		return editableValidationConfigurer;
+	}
+	
+	/**
 	 * Add an editable validation for a url pattern.
 	 * 
 	 * @param urlPattern Url pattern
@@ -56,6 +69,9 @@ public class ValidationConfigurer {
 
 		private EditableValidationConfigurer editableValidationConfigurer = new EditableValidationConfigurer();
 
+		public ValidationConfig() {
+		}
+		
 		public ValidationConfig(String urlPattern) {
 			this.urlPattern = urlPattern;
 		}

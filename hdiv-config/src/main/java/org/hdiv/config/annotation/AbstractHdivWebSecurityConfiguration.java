@@ -399,13 +399,15 @@ public abstract class AbstractHdivWebSecurityConfiguration {
 
 			// Create ValidationTarget object
 			ValidationTarget target = new ValidationTarget();
-			PatternMatcher urlMatcher = patternMatcherFactory.getPatternMatcher(urlPattern);
+			if (urlPattern != null) {
+				PatternMatcher urlMatcher = patternMatcherFactory.getPatternMatcher(urlPattern);
+				target.setUrl(urlMatcher);
+			}
 			List<PatternMatcher> paramMatchers = new ArrayList<PatternMatcher>();
 			for (String param : selectedParams) {
 				PatternMatcher matcher = patternMatcherFactory.getPatternMatcher(param);
 				paramMatchers.add(matcher);
 			}
-			target.setUrl(urlMatcher);
 			target.setParams(paramMatchers);
 
 			validationsData.put(target, activeRules);

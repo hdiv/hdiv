@@ -61,7 +61,7 @@ public class EditableValidationsTest {
 			validationConfigurer.addValidation("/insecure/.*").disableDefaults();
 			validationConfigurer.addValidation("/secureParam/.*").forParameters("param1");
 			validationConfigurer.addValidation("/secure/.*").rules("safeText").disableDefaults();
-			validationConfigurer.addValidation("/.*");
+			validationConfigurer.addValidation();
 		}
 	}
 
@@ -106,7 +106,7 @@ public class EditableValidationsTest {
 		assertEquals(new DefaultPatternMatcher("/insecure/.*"), vt0.getUrl());
 		assertEquals(new DefaultPatternMatcher("/secureParam/.*"), vt1.getUrl());
 		assertEquals(new DefaultPatternMatcher("/secure/.*"), vt2.getUrl());
-		assertEquals(new DefaultPatternMatcher("/.*"), vt3.getUrl());
+		assertEquals(null, vt3.getUrl());
 	}
 
 }
