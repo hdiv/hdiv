@@ -125,7 +125,7 @@ public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
 			functionality to commit the application of validation rules
 			to all editable
 			data sent by the client. This includes information that comes from web form fields
-			such as textbox and textarea.
+			such as <code>textbox</code> and <code>textarea</code>.
 		</para>
 		<para>
 			HDIV includes a
@@ -167,8 +167,8 @@ public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
 					the user to
 					HDIV's generic error
 					page. For this option add
-					showErrorPageOnEditableValidation="true"
-					to HDIV config entity.
+					<code>showErrorPageOnEditableValidation="true"</code>
+					to HDIV config.
 				</para>
 			</listitem>
 			<listitem>
@@ -210,8 +210,8 @@ public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
 		<para>All editable fields of the request are validated by default. It
 			is possible to refine the configuration to apply selected rules
 			to only some fields.
-			In the next example the 'customValidation' rule is applied only to 'name'
-			and 'description' fields:
+			In the next example the <code>customValidation</code> rule is applied only to <code>name</code>
+			and <code>description</code> fields:
 		</para>
 
 		<programlisting language="xml">

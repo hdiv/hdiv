@@ -64,8 +64,8 @@
 				<para>
 					<emphasis role="bold">Editable Data Validation</emphasis>
 					:
-					Editable validation is the data that comes from 'textbox' and
-					'textarea' fields within a form. In other words,
+					Editable validation is the data that comes from <code>textbox</code> and
+					<code>textarea</code> fields within a form. In other words,
 					it is new data that
 					comes from the client side and by default it is untrusted data.
 					HDIV
@@ -91,10 +91,10 @@
 					values are hidden by
 					HDIV to avoid there malicious use. For
 					example a link of this type,
-					http://www.host.com?data1=12
+					<code>http://www.host.com?data1=12</code>
 					is
 					replaced by
-					http://www.host.com?data1=0, guaranteeing
+					<code>http://www.host.com?data1=0</code>, guaranteeing
 					confidentiality of the
 					values representing database identifiers.
 				</para>
@@ -135,7 +135,7 @@
 					: the source of the problem of sql injection
 					risk is based on SQL
 					queries with are not been parameterized
-					(without PreparedStatement
+					(without <code>PreparedStatement</code>
 					in Java
 					environments). First of all
 					HDIV
@@ -155,7 +155,7 @@
 					form
 					elements. It is important to note that
 					even using a
-					PreparedStatement,
+					<code>PreparedStatement</code>,
 					if the query is based on untrusted data
 					generated
 					previously at the

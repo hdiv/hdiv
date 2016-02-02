@@ -38,7 +38,7 @@
 ]]></programlisting>
 			</listitem>
 			<listitem>
-				<para>Add HDIV listener and filter within web.xml</para>
+				<para>Add HDIV listener and filter within <code>web.xml</code> file</para>
 
 				<programlisting language="xml">
  <![CDATA[
@@ -58,10 +58,10 @@
 ]]></programlisting>
 			</listitem>
 			<listitem>
-				<para>Multipart configuration. Replace Spring MVC's MultipartResolver
+				<para>Multipart configuration. Replace Spring MVC's <code>MultipartResolver</code>
 					with the one from HDIV.
 				</para>
-				<para>If commons-fileupload library is used for multipart processing:</para>
+				<para>If <code>commons-fileupload</code> library is used for multipart processing:</para>
 
 				<programlisting language="xml">
  <![CDATA[
@@ -80,7 +80,7 @@
 			<listitem>
 				<para>Editable data validation. In order to add editable validation
 					errors into Spring MVC binding and validation errors, configure
-					'hdivEditableValidator' as application wide validator.
+					<code>hdivEditableValidator</code> as application wide validator.
 				</para>
 
 				<programlisting language="xml">
@@ -153,7 +153,7 @@
 			implementation
 			supported by Grails, HDIV installation is
 			implemented using the
-			BuildConfig.groovy configuration file adding the
+			<code>BuildConfig.groovy</code> configuration file adding the
 			HDIV plugin to it:
 		</para>
 		<programlisting language="xml">
@@ -184,7 +184,7 @@ compile ':hdiv:1.0-RC2'
 ]]></programlisting>
 			</listitem>
 			<listitem>
-				<para>Add HDIV Listener and Filter within web.xml</para>
+				<para>Add HDIV Listener and Filter within <code>web.xml</code> file</para>
 
 				<programlisting language="xml">
  <![CDATA[
@@ -234,7 +234,7 @@ compile ':hdiv:1.0-RC2'
 </dependency>]]></programlisting>
 			</listitem>
 			<listitem>
-				<para>Add HDIV listener and Filter within web.xml</para>
+				<para>Add HDIV listener and Filter within <code>web.xml</code> file</para>
 
 				<programlisting language="xml">
  <![CDATA[
@@ -303,7 +303,7 @@ compile ':hdiv:1.0-RC2'
 ]]></programlisting>
 			</listitem>
 			<listitem>
-				<para>Add HDIV Listener and Filter within web.xml</para>
+				<para>Add HDIV Listener and Filter within <code>web.xml</code> file</para>
 
 				<programlisting language="xml">
  <![CDATA[
@@ -360,7 +360,7 @@ compile ':hdiv:1.0-RC2'
 			<listitem>
 				<para>Add HDIV listener, HIDV Filter and define your custom
 					faces-config (with HDIV configuration, see the next point) within
-					web.xml
+					<code>web.xml</code> file
 				</para>
 
 				<programlisting language="xml">
@@ -388,7 +388,7 @@ compile ':hdiv:1.0-RC2'
 ]]></programlisting>
 			</listitem>
 			<listitem>
-				<para>This is the content of '/WEB-INF/hdiv-faces2-config.xml' file:</para>
+				<para>This is the content of <code>/WEB-INF/hdiv-faces2-config.xml</code> file:</para>
 
 				<programlisting language="xml">
  <![CDATA[
