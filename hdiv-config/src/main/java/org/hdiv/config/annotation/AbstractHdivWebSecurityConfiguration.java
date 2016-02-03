@@ -359,59 +359,10 @@ public abstract class AbstractHdivWebSecurityConfiguration {
 		// Default rules
 		List<IValidation> defaultRules = getDefaultRules();
 		// Custom rules
-		RuleRegistry registry = new RuleRegistry();
-		this.addRules(registry);
-		Map<String, IValidation> registeredRules = registry.getRules();
-
-		PatternMatcherFactory patternMatcherFactory = patternMatcherFactory();
+		Map<String, IValidation> customRules = getCustomRules();
 
 		// Validation configuration
-		ValidationConfigurer validationConfigurer = new ValidationConfigurer();
-		this.configureEditableValidation(validationConfigurer);
-		List<ValidationConfig> validationConfigs = validationConfigurer.getValidationConfigs();
-
-		Map<ValidationTarget, List<IValidation>> validationsData = new LinkedHashMap<ValidationTarget, List<IValidation>>();
-
-		for (ValidationConfig validationConfig : validationConfigs) {
-
-			String urlPattern = validationConfig.getUrlPattern();
-			EditableValidationConfigurer editableValidationConfigurer = validationConfig
-					.getEditableValidationConfigurer();
-			boolean useDefaultRules = editableValidationConfigurer.isDefaultRules();
-			List<String> selectedRules = editableValidationConfigurer.getRules();
-			List<String> selectedParams = editableValidationConfigurer.getParameters();
-
-			// Add selected rules
-			List<IValidation> activeRules = new ArrayList<IValidation>();
-			for (String ruleName : selectedRules) {
-
-				IValidation val = registeredRules.get(ruleName);
-				if (val == null) {
-					throw new BeanInitializationException("Rule with name '" + ruleName + "' not registered.");
-				}
-				activeRules.add(val);
-			}
-
-			// Add default rules if is required
-			if (useDefaultRules) {
-				activeRules.addAll(defaultRules);
-			}
-
-			// Create ValidationTarget object
-			ValidationTarget target = new ValidationTarget();
-			if (urlPattern != null) {
-				PatternMatcher urlMatcher = patternMatcherFactory.getPatternMatcher(urlPattern);
-				target.setUrl(urlMatcher);
-			}
-			List<PatternMatcher> paramMatchers = new ArrayList<PatternMatcher>();
-			for (String param : selectedParams) {
-				PatternMatcher matcher = patternMatcherFactory.getPatternMatcher(param);
-				paramMatchers.add(matcher);
-			}
-			target.setParams(paramMatchers);
-
-			validationsData.put(target, activeRules);
-		}
+		Map<ValidationTarget, List<IValidation>> validationsData = getValidationsData(defaultRules, customRules);
 
 		DefaultValidationRepository repository = new DefaultValidationRepository();
 		repository.setValidations(validationsData);
@@ -442,5 +393,68 @@ public abstract class AbstractHdivWebSecurityConfiguration {
 			defaultRules.add(validationBean);
 		}
 		return defaultRules;
+	}
+
+	protected Map<String, IValidation> getCustomRules() {
+
+		RuleRegistry registry = new RuleRegistry();
+		this.addRules(registry);
+		Map<String, IValidation> customRules = registry.getRules();
+		return customRules;
+	}
+
+	protected Map<ValidationTarget, List<IValidation>> getValidationsData(List<IValidation> defaultRules,
+			Map<String, IValidation> customRules) {
+
+		PatternMatcherFactory patternMatcherFactory = patternMatcherFactory();
+
+		ValidationConfigurer validationConfigurer = new ValidationConfigurer();
+		this.configureEditableValidation(validationConfigurer);
+		List<ValidationConfig> validationConfigs = validationConfigurer.getValidationConfigs();
+
+		Map<ValidationTarget, List<IValidation>> validationsData = new LinkedHashMap<ValidationTarget, List<IValidation>>();
+
+		for (ValidationConfig validationConfig : validationConfigs) {
+
+			String urlPattern = validationConfig.getUrlPattern();
+			EditableValidationConfigurer editableValidationConfigurer = validationConfig
+					.getEditableValidationConfigurer();
+			boolean useDefaultRules = editableValidationConfigurer.isDefaultRules();
+			List<String> selectedRules = editableValidationConfigurer.getRules();
+			List<String> selectedParams = editableValidationConfigurer.getParameters();
+
+			// Add selected rules
+			List<IValidation> activeRules = new ArrayList<IValidation>();
+			for (String ruleName : selectedRules) {
+
+				IValidation val = customRules.get(ruleName);
+				if (val == null) {
+					throw new BeanInitializationException("Rule with name '" + ruleName + "' not registered.");
+				}
+				activeRules.add(val);
+			}
+
+			// Add default rules if is required
+			if (useDefaultRules) {
+				activeRules.addAll(defaultRules);
+			}
+
+			// Create ValidationTarget object
+			ValidationTarget target = new ValidationTarget();
+			if (urlPattern != null) {
+				PatternMatcher urlMatcher = patternMatcherFactory.getPatternMatcher(urlPattern);
+				target.setUrl(urlMatcher);
+			}
+			List<PatternMatcher> paramMatchers = new ArrayList<PatternMatcher>();
+			for (String param : selectedParams) {
+				PatternMatcher matcher = patternMatcherFactory.getPatternMatcher(param);
+				paramMatchers.add(matcher);
+			}
+			target.setParams(paramMatchers);
+
+			validationsData.put(target, activeRules);
+		}
+
+		return validationsData;
 	}
 }
