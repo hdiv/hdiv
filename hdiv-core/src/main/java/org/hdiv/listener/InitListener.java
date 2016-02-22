@@ -43,7 +43,7 @@ public class InitListener implements ServletContextListener, HttpSessionListener
 	/**
 	 * Commons Logging instance.
 	 */
-	private static Log log = LogFactory.getLog(InitListener.class);
+	private static final Log log = LogFactory.getLog(InitListener.class);
 
 	/**
 	 * Has servlet context been initialized?

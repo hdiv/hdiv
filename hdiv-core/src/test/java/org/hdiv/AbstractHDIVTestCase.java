@@ -48,7 +48,7 @@ import org.springframework.web.context.support.XmlWebApplicationContext;
  */
 public abstract class AbstractHDIVTestCase extends TestCase {
 
-	private static Log log = LogFactory.getLog(AbstractHDIVTestCase.class);
+	private static final Log log = LogFactory.getLog(AbstractHDIVTestCase.class);
 
 	/**
 	 * Pattern to check if the memory strategy is being used

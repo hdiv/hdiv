@@ -46,7 +46,7 @@ import org.apache.commons.logging.LogFactory;
  */
 public class OutcomeTargetComponentHelper {
 
-	private static Log log = LogFactory.getLog(OutcomeTargetComponentHelper.class);
+	private static final Log log = LogFactory.getLog(OutcomeTargetComponentHelper.class);
 
 	protected static final Param[] EMPTY_PARAMS = new Param[0];
 

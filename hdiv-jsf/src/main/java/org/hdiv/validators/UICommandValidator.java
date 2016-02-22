@@ -37,7 +37,7 @@ import org.hdiv.validation.ValidationError;
  */
 public class UICommandValidator implements ComponentValidator {
 
-	private static Log log = LogFactory.getLog(UICommandValidator.class);
+	private static final Log log = LogFactory.getLog(UICommandValidator.class);
 
 	/*
 	 * (non-Javadoc)

@@ -36,7 +36,7 @@ public abstract class AbstractMultipartConfig implements IMultipartConfig {
 	/**
 	 * Commons Logging instance.
 	 */
-	private static Log log = LogFactory.getLog(AbstractMultipartConfig.class);
+	private static final Log log = LogFactory.getLog(AbstractMultipartConfig.class);
 
 	/**
 	 * The default value for the maximum allowable size, in bytes, of an uploaded file. The value is equivalent to 2MB.

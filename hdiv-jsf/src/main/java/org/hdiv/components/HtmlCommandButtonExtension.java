@@ -40,7 +40,7 @@ import org.hdiv.util.HDIVUtilJsf;
  */
 public class HtmlCommandButtonExtension extends HtmlCommandButton {
 
-	private static Log log = LogFactory.getLog(HtmlCommandButtonExtension.class);
+	private static final Log log = LogFactory.getLog(HtmlCommandButtonExtension.class);
 
 	/*
 	 * (non-Javadoc)

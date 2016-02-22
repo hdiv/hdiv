@@ -35,7 +35,7 @@ public class FormUrlProcessor extends AbstractUrlProcessor {
 	/**
 	 * Commons Logging instance.
 	 */
-	private static Log log = LogFactory.getLog(FormUrlProcessor.class);
+	private static final Log log = LogFactory.getLog(FormUrlProcessor.class);
 
 	/**
 	 * Process form action url to add hdiv state if it is necessary.

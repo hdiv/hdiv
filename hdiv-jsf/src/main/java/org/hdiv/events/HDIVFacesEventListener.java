@@ -53,7 +53,7 @@ import org.hdiv.validators.EditableValidator;
  */
 public class HDIVFacesEventListener implements FacesListener, StateHolder {
 
-	private static Log log = LogFactory.getLog(HDIVFacesEventListener.class);
+	private static final Log log = LogFactory.getLog(HDIVFacesEventListener.class);
 
 	/**
 	 * Parameter validator
@@ -189,7 +189,7 @@ public class HDIVFacesEventListener implements FacesListener, StateHolder {
 				context.getExternalContext().redirect(contextPath + this.config.getErrorPage());
 			}
 			catch (IOException e) {
-				throw new StateValidationException();
+				throw new StateValidationException(e);
 			}
 		}
 		else {

@@ -25,4 +25,11 @@ public class StateValidationException extends HDIVException {
 
 	private static final long serialVersionUID = 373542288299714280L;
 
+	public StateValidationException() {
+	}
+
+	public StateValidationException(Throwable cause) {
+		super(cause);
+	}
+
 }

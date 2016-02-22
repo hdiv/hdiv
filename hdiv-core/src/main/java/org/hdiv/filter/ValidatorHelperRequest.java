@@ -71,7 +71,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	/**
 	 * Commons Logging instance.
 	 */
-	private static Log log = LogFactory.getLog(ValidatorHelperRequest.class);
+	private static final Log log = LogFactory.getLog(ValidatorHelperRequest.class);
 
 	/**
 	 * HDIV configuration object.

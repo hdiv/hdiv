@@ -45,7 +45,7 @@ import org.springframework.web.util.WebUtils;
  */
 public class SpringMVCMultipartConfig implements IMultipartConfig {
 
-	private static Log log = LogFactory.getLog(SpringMVCMultipartConfig.class);
+	private static final Log log = LogFactory.getLog(SpringMVCMultipartConfig.class);
 
 	private static final String MULTIPART_RESOLVER_BEAN_NAME = DispatcherServlet.MULTIPART_RESOLVER_BEAN_NAME;
 

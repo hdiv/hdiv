@@ -40,7 +40,7 @@ import org.hdiv.util.HDIVUtilJsf;
  */
 public class HtmlCommandLinkExtension extends HtmlCommandLink {
 
-	private static Log log = LogFactory.getLog(HtmlCommandLinkExtension.class);
+	private static final Log log = LogFactory.getLog(HtmlCommandLinkExtension.class);
 
 	/*
 	 * (non-Javadoc)

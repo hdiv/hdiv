@@ -41,7 +41,7 @@ import org.hdiv.util.UtilsJsf;
  */
 public class ComponentMessagesLog {
 
-	private static Log log = LogFactory.getLog(ComponentMessagesLog.class);
+	private static final Log log = LogFactory.getLog(ComponentMessagesLog.class);
 
 	/**
 	 * HDIV logger

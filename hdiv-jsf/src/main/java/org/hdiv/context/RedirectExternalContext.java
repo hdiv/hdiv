@@ -40,7 +40,7 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
  */
 public class RedirectExternalContext extends javax.faces.context.ExternalContextWrapper {
 
-	private static Log log = LogFactory.getLog(RedirectExternalContext.class);
+	private static final Log log = LogFactory.getLog(RedirectExternalContext.class);
 
 	/**
 	 * Class for helping with the redirect logic

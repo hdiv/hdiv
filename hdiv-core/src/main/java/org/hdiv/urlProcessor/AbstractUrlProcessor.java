@@ -46,7 +46,7 @@ public abstract class AbstractUrlProcessor {
 	/**
 	 * Commons Logging instance.
 	 */
-	private static Log log = LogFactory.getLog(AbstractUrlProcessor.class);
+	private static final Log log = LogFactory.getLog(AbstractUrlProcessor.class);
 
 	/**
 	 * Hdiv configuration.

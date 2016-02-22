@@ -32,7 +32,7 @@ import org.hdiv.state.State;
  */
 public class StateCacheTest extends AbstractHDIVTestCase {
 
-	private static Log log = LogFactory.getLog(StateCacheTest.class);
+	private static final Log log = LogFactory.getLog(StateCacheTest.class);
 
 	protected void onSetUp() throws Exception {
 	}

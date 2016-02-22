@@ -38,7 +38,7 @@ public class DataValidator implements IDataValidator {
 	/**
 	 * Commons Logging instance.
 	 */
-	protected Log log = LogFactory.getLog(DataValidator.class);
+	private static final Log log = LogFactory.getLog(DataValidator.class);
 
 	/**
 	 * HDIV general configuration.

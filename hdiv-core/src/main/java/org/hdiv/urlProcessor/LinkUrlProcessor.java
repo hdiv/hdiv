@@ -33,7 +33,7 @@ public class LinkUrlProcessor extends AbstractUrlProcessor {
 	/**
 	 * Commons Logging instance.
 	 */
-	private static Log log = LogFactory.getLog(LinkUrlProcessor.class);
+	private static final Log log = LogFactory.getLog(LinkUrlProcessor.class);
 
 	/**
 	 * Process the url to add hdiv state if it is necessary.

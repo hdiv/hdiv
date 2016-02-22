@@ -33,7 +33,7 @@ import org.hdiv.util.UtilsJsf;
 
 public class OutputLinkComponentProcessor extends AbstractComponentProcessor {
 
-	private static Log log = LogFactory.getLog(OutputLinkComponentProcessor.class);
+	private static final Log log = LogFactory.getLog(OutputLinkComponentProcessor.class);
 
 	public void processOutputLink(FacesContext context, HtmlOutputLink component) {
 

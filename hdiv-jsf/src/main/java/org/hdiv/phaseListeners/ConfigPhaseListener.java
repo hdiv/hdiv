@@ -44,7 +44,7 @@ public class ConfigPhaseListener implements PhaseListener {
 
 	private static final long serialVersionUID = -3803869221110488120L;
 
-	private static Log log = LogFactory.getLog(ConfigPhaseListener.class);
+	private static final Log log = LogFactory.getLog(ConfigPhaseListener.class);
 
 	/**
 	 * Name of the attribute that contains the user token

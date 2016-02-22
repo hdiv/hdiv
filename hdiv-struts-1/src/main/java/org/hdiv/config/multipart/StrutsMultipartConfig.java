@@ -39,7 +39,7 @@ public class StrutsMultipartConfig extends AbstractMultipartConfig {
 	/**
 	 * Commons Logging instance.
 	 */
-	private static Log log = LogFactory.getLog(StrutsMultipartConfig.class);
+	private static final Log log = LogFactory.getLog(StrutsMultipartConfig.class);
 
 	/**
 	 * The size threshold which determines whether an uploaded file will be written to disk or cached in memory.

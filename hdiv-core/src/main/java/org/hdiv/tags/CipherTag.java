@@ -116,7 +116,7 @@ public class CipherTag extends TagSupport {
 			}
 		}
 		catch (IOException e) {
-			throw new JspException("Error:" + e.getMessage());
+			throw new JspException("Error:" + e.getMessage(), e);
 		}
 
 		return SKIP_BODY;

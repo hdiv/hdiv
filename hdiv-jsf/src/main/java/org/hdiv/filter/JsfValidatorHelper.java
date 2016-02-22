@@ -50,7 +50,7 @@ public class JsfValidatorHelper extends ValidatorHelperRequest {
 	/**
 	 * Commons Logging instance.
 	 */
-	private static Log log = LogFactory.getLog(JsfValidatorHelper.class);
+	private static final Log log = LogFactory.getLog(JsfValidatorHelper.class);
 
 	/*
 	 * (non-Javadoc)

@@ -39,7 +39,7 @@ public class StateUtil {
 	/**
 	 * Commons Logging instance.
 	 */
-	private Log log = LogFactory.getLog(StateUtil.class);
+	private static final Log log = LogFactory.getLog(StateUtil.class);
 
 	/**
 	 * Pattern to check if the memory strategy is being used

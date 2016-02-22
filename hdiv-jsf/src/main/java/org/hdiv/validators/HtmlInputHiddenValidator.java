@@ -36,7 +36,7 @@ import org.hdiv.validation.ValidationError;
  */
 public class HtmlInputHiddenValidator implements ComponentValidator {
 
-	private static Log log = LogFactory.getLog(HtmlInputHiddenValidator.class);
+	private static final Log log = LogFactory.getLog(HtmlInputHiddenValidator.class);
 
 	/*
 	 * (non-Javadoc)

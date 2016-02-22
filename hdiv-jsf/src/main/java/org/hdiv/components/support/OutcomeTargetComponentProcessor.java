@@ -32,7 +32,7 @@ import org.hdiv.util.UtilsJsf;
 
 public class OutcomeTargetComponentProcessor extends AbstractComponentProcessor {
 
-	private static Log log = LogFactory.getLog(OutcomeTargetComponentProcessor.class);
+	private static final Log log = LogFactory.getLog(OutcomeTargetComponentProcessor.class);
 
 	protected OutcomeTargetComponentHelper helper = new OutcomeTargetComponentHelper();
 

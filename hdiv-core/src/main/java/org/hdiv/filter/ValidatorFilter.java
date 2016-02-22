@@ -54,7 +54,7 @@ public class ValidatorFilter extends OncePerRequestFilter {
 	/**
 	 * Commons Logging instance.
 	 */
-	private static Log log = LogFactory.getLog(ValidatorFilter.class);
+	private static final Log log = LogFactory.getLog(ValidatorFilter.class);
 
 	/**
 	 * HDIV configuration object.

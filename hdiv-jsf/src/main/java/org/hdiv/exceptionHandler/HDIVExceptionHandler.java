@@ -44,7 +44,7 @@ import org.hdiv.util.HDIVUtil;
  */
 public class HDIVExceptionHandler extends ExceptionHandlerWrapper {
 
-	private static Log log = LogFactory.getLog(HDIVExceptionHandler.class);
+	private static final Log log = LogFactory.getLog(HDIVExceptionHandler.class);
 
 	/**
 	 * Original ExceptionHandler

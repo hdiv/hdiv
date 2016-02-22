@@ -59,7 +59,7 @@ public abstract class AbstractDataComposer implements IDataComposer {
 	/**
 	 * Commons Logging instance.
 	 */
-	private static Log log = LogFactory.getLog(AbstractDataComposer.class);
+	private static final Log log = LogFactory.getLog(AbstractDataComposer.class);
 
 	/**
 	 * Dash character

@@ -49,7 +49,7 @@ public class DataComposerMemory extends AbstractDataComposer {
 	/**
 	 * Commons Logging instance.
 	 */
-	private static Log log = LogFactory.getLog(DataComposerMemory.class);
+	private static final Log log = LogFactory.getLog(DataComposerMemory.class);
 
 	/**
 	 * State scope manager.

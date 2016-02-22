@@ -37,7 +37,7 @@ public class Logger {
 	/**
 	 * Commons Logging instance.
 	 */
-	private static Log log = LogFactory.getLog(Logger.class);
+	private static final Log log = LogFactory.getLog(Logger.class);
 
 	/**
 	 * Logger is initialized.

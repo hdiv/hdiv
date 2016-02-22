@@ -40,7 +40,7 @@ import org.hdiv.validation.ValidationError;
  */
 public class RequestParameterValidator implements ComponentValidator {
 
-	private static Log log = LogFactory.getLog(RequestParameterValidator.class);
+	private static final Log log = LogFactory.getLog(RequestParameterValidator.class);
 
 	/**
 	 * HDIV configuration

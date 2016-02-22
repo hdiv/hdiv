@@ -47,7 +47,7 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 	/**
 	 * Commons Logging instance.
 	 */
-	private static Log log = LogFactory.getLog(RequestWrapper.class);
+	private static final Log log = LogFactory.getLog(RequestWrapper.class);
 
 	/**
 	 * HTTP header to sent cookies.

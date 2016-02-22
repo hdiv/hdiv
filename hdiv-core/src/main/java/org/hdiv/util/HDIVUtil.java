@@ -52,7 +52,7 @@ public class HDIVUtil {
 	/**
 	 * Commons Logging instance.
 	 */
-	private static Log log = LogFactory.getLog(HDIVUtil.class);
+	private static final Log log = LogFactory.getLog(HDIVUtil.class);
 
 	public static final String APPLICATION_SERVLETCONTEXT_KEY = "APPLICATION_SERVLETCONTEXT_KEY";
 
@@ -72,7 +72,7 @@ public class HDIVUtil {
 
 	public static final String CURRENT_PAGE_KEY = "CURRENT_PAGE_KEY";
 
-	public static Pattern intPattern = Pattern.compile("[0-9]+");
+	public static final Pattern intPattern = Pattern.compile("[0-9]+");
 
 	/* DataComposer */
 

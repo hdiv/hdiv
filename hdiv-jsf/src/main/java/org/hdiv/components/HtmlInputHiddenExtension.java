@@ -37,7 +37,7 @@ import org.hdiv.util.UtilsJsf;
  */
 public class HtmlInputHiddenExtension extends HtmlInputHidden {
 
-	private static Log log = LogFactory.getLog(HtmlInputHiddenExtension.class);
+	private static final Log log = LogFactory.getLog(HtmlInputHiddenExtension.class);
 
 	/**
 	 * Obtains hidden real value which has been stored in the JSF state

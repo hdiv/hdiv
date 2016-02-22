@@ -36,7 +36,7 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
  */
 public class RedirectExternalContext extends ExternalContextWrapper {
 
-	private static Log log = LogFactory.getLog(RedirectExternalContext.class);
+	private static final Log log = LogFactory.getLog(RedirectExternalContext.class);
 
 	/**
 	 * Helper with the redirect logic
