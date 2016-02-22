@@ -176,8 +176,9 @@ public class RandomGuid {
 		StringBuffer sb = new StringBuffer();
 		for (int j = 0; j < array.length; ++j) {
 			int b = array[j] & 0xFF;
-			if (b < 0x10)
+			if (b < 0x10) {
 				sb.append('0');
+			}
 			sb.append(Integer.toHexString(b));
 		}
 		guid = sb.toString();

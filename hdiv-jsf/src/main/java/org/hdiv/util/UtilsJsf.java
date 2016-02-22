@@ -109,9 +109,9 @@ public abstract class UtilsJsf {
 	 * @return clientId without row id
 	 */
 	public static String removeRowId(String clientId) {
-		if (clientId == null)
+		if (clientId == null) {
 			return null;
-
+		}
 		return clientId.replaceAll(":\\d*:", ":");
 	}
 
@@ -149,7 +149,6 @@ public abstract class UtilsJsf {
 				break;
 			}
 		}
-
 		return hasParams;
 	}
 

@@ -287,9 +287,9 @@ public class UrlData {
 	}
 
 	public String getUriTemplate() {
-		if (!hasUriTemplate())
+		if (!hasUriTemplate()) {
 			return "";
-
+		}
 		StringWriter sw = new StringWriter();
 		sw.append("{");
 		for (String variable : uriTemplate.getVariableNames()) {

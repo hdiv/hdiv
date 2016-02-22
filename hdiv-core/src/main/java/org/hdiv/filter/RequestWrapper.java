@@ -128,7 +128,6 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 
 		if (data.getClass().isArray()) {
 			return (String[]) data;
-
 		}
 		else {
 			String[] array = this.parameters.get(parameter);
@@ -155,7 +154,6 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 		if (data.getClass().isArray()) {
 			String[] array = (String[]) data;
 			return array[0];
-
 		}
 		else {
 			String[] values = this.parameters.get(parameter);
@@ -172,8 +170,9 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 
 		Enumeration<String> baseParams = super.getParameterNames();
 
-		if (!this.isMultipart)
+		if (!this.isMultipart) {
 			return baseParams;
+		}
 
 		Vector<String> list = new Vector<String>();
 
