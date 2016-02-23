@@ -195,7 +195,7 @@ public class ValidatorFilter extends OncePerRequestFilter {
 			}
 
 			// All errors, integrity and editable validation
-			List<ValidatorError> errors = result.getErrors();
+			List<ValidatorError> errors = result == null ? null : result.getErrors();
 
 			boolean hasEditableError = false;
 			if (errors != null && !errors.isEmpty()) {
