@@ -14,6 +14,17 @@ body {
 
 code {
 	font-size: 16px;
+	font-family: Consolas,"Liberation Mono",Courier,monospace;
+	color: #6D180B;
+}
+
+:not(pre)>code {
+    background-color: #F2F2F2;
+    border: 1px solid #CCCCCC;
+    border-radius: 4px;
+    padding: 1px 3px 0;
+    text-shadow: none;
+    white-space: nowrap;
 }
 
 body>*:first-child {
