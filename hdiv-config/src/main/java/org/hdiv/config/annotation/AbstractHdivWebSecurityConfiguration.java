@@ -80,7 +80,7 @@ import org.springframework.context.annotation.Scope;
 /**
  * Main abstract class for {@link Configuration} support. Creates all internal bean instances.
  * 
- * @since 2.2.0
+ * @since 3.0.0
  */
 public abstract class AbstractHdivWebSecurityConfiguration {
 

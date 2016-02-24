@@ -22,7 +22,7 @@ import javax.servlet.http.HttpSession;
 /**
  * Context holder for request-specific state. Contains request-specific data for validation and composition phases.
  * 
- * @since 2.2.0
+ * @since 3.0.0
  */
 public class RequestContext {
 

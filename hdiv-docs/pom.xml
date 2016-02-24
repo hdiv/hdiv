@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>org.hdiv</groupId>
 		<artifactId>hdiv</artifactId>
-		<version>2.2.0-SNAPSHOT</version>
+		<version>3.0.0</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>hdiv-docs</artifactId>
@@ -53,6 +53,9 @@
 					<chunkedOutput>false</chunkedOutput>
 					<sectionAutolabel>true</sectionAutolabel>
 					<sectionLabelIncludesComponentLabel>true</sectionLabelIncludesComponentLabel>
+					<highlightSource>1</highlightSource>
+					<foCustomization>src/docbkx/resources/docbook-fo.xsl</foCustomization>
+					<htmlCustomization>src/docbkx/resources/docbook-fo.xsl</htmlCustomization>
 				</configuration>
 				<dependencies>
 					<dependency>
@@ -61,6 +64,18 @@
 						<version>5.0-all</version>
 						<classifier>resources</classifier>
 						<type>zip</type>
+						<scope>runtime</scope>
+					</dependency>
+					<dependency>
+						<groupId>net.sf.xslthl</groupId>
+						<artifactId>xslthl</artifactId>
+						<version>2.0.1</version>
+						<scope>runtime</scope>
+					</dependency>
+					<dependency>
+						<groupId>net.sf.offo</groupId>
+						<artifactId>fop-hyph</artifactId>
+						<version>1.2</version>
 						<scope>runtime</scope>
 					</dependency>
 				</dependencies>

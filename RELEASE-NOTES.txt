@@ -2,12 +2,13 @@ HDIV CHANGELOG
 ==============
 http://www.hdiv.org
 
-Release 2.2.0
+Release 3.0.0
 ==================================
  * Remove Cipher and Hash strategies.
  * Servlet API >= 3.0
  * Support asynchronous requests.
  * Add 'hdiv-page-' prefix to pages stored in user session.
+ * Refactor validation error message creation. It is not created in ValidatorHelperRequest but ValidatorFilter.
  
 Release 2.1.14
 ==================================

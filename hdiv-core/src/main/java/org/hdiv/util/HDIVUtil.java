@@ -440,6 +440,7 @@ public class HDIVUtil {
 	 * 
 	 * @param request the servlet request to introspect
 	 * @param requiredType the desired type of request object
+	 * @param <T> the type of the element
 	 * @return the matching request object, or {@code null} if none of that type is available
 	 */
 	@SuppressWarnings("unchecked")
@@ -466,8 +467,6 @@ public class HDIVUtil {
 	 * 
 	 * @param sc ServletContext to find the web application context for
 	 * @return the desired WebApplicationContext for this web app, or {@code null} if none
-	 * @since 4.2
-	 * @see #getWebApplicationContext(ServletContext)
 	 * @see ServletContext#getAttributeNames()
 	 */
 	public static WebApplicationContext findWebApplicationContext(ServletContext sc) {

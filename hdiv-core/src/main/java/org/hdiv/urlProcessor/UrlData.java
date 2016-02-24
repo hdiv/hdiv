@@ -87,7 +87,7 @@ public class UrlData {
 	/**
 	 * UriTemplate https://tools.ietf.org/html/rfc6570
 	 * 
-	 * @since 2.2.0
+	 * @since 3.0.0
 	 */
 	private UriTemplate uriTemplate;
 

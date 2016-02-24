@@ -29,7 +29,7 @@ public class EditableDataValidationResult {
 
 	/**
 	 * Constant valid result for parameters that do not require validation.
-	 * @since HDIV 2.2.0
+	 * @since HDIV 3.0.0
 	 */
 	public static final EditableDataValidationResult VALIDATION_NOT_REQUIRED = new EditableDataValidationResult(true);
 
