@@ -78,10 +78,12 @@ public abstract class AbstractHDIVTestCase extends TestCase {
 
 	private RequestContext requestContext;
 
+	private String[] files = { "/org/hdiv/config/hdiv-core-applicationContext.xml", "/org/hdiv/config/hdiv-config.xml",
+			"/org/hdiv/config/hdiv-validations.xml", "/org/hdiv/config/applicationContext-extra.xml" };
+
 	protected final void setUp() throws Exception {
 
-		String[] files = { "/org/hdiv/config/hdiv-core-applicationContext.xml", "/org/hdiv/config/hdiv-config.xml",
-				"/org/hdiv/config/hdiv-validations.xml", "/org/hdiv/config/applicationContext-extra.xml" };
+		preSetUp();
 
 		// Servlet API mock
 		MockHttpServletRequest request = new MockHttpServletRequest("GET", "/path/testAction.do");
@@ -97,8 +99,8 @@ public abstract class AbstractHDIVTestCase extends TestCase {
 		XmlWebApplicationContext webApplicationContext = new XmlWebApplicationContext();
 		webApplicationContext.setServletContext(servletContext);
 		webApplicationContext.setConfigLocations(files);
-		servletContext
-				.setAttribute(WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE, webApplicationContext);
+		servletContext.setAttribute(WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE,
+				webApplicationContext);
 		// Create beans
 		webApplicationContext.refresh();
 
@@ -139,8 +141,37 @@ public abstract class AbstractHDIVTestCase extends TestCase {
 	 */
 	protected abstract void onSetUp() throws Exception;
 
+	/**
+	 * Hook method for test pre-initialization
+	 * 
+	 * @throws Exception
+	 */
+	protected void preSetUp() throws Exception {
+		
+	}
+
+	/**
+	 * Hook method for test end
+	 * 
+	 * @throws Exception
+	 */
+	protected void onTearDown() throws Exception {
+		
+	}
+
+	/**
+	 * Hook method for test pre-end
+	 * 
+	 * @throws Exception
+	 */
+	protected void preTearDown() throws Exception {
+		
+	}
+
 	@Override
 	protected void tearDown() throws Exception {
+
+		preTearDown();
 
 		RequestInitializer requestInitializer = this.applicationContext.getBean(RequestInitializer.class);
 		requestInitializer.endRequest(mockRequest, mockResponse);
@@ -153,6 +184,8 @@ public abstract class AbstractHDIVTestCase extends TestCase {
 		initListener.contextDestroyed(servletContextEvent);
 
 		((ConfigurableApplicationContext) this.applicationContext).close();
+
+		onTearDown();
 	}
 
 	/**
@@ -185,5 +218,24 @@ public abstract class AbstractHDIVTestCase extends TestCase {
 
 	public MockHttpServletResponse getMockResponse() {
 		return mockResponse;
+	}
+
+	/**
+	 * Return the configuration files
+	 * 
+	 * @return files configuration files
+	 */
+	protected String[] getFiles() {
+		return files;
+	}
+
+	/**
+	 * Set the configuration files
+	 * 
+	 * @param files
+	 *            configuration files
+	 */
+	protected void setFiles(String[] files) {
+		this.files = files;
 	}
 }
