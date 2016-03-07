@@ -85,6 +85,10 @@ public class State implements IState, Serializable {
 	 */
 	private String method;
 
+	public State() {
+
+	}
+
 	public State(int id) {
 		this.id = id;
 	}

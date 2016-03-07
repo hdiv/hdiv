@@ -35,6 +35,10 @@ public class Parameter implements IParameter, Serializable {
 
 	private static final int VALUES_LIST_SIZE = 3;
 
+	public Parameter() {
+
+	}
+
 	public Parameter(String name, String[] values, boolean editable, String editableDataType, boolean actionParam) {
 
 		this(name, values[0], editable, editableDataType, actionParam);
