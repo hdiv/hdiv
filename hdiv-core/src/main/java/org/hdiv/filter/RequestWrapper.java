@@ -33,7 +33,10 @@ import javax.servlet.http.HttpServletRequestWrapper;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.hdiv.context.RequestContext;
+import org.hdiv.session.ISession;
 import org.hdiv.util.Constants;
+import org.springframework.util.Assert;
 
 /**
  * A wrapper for HTTP servlet request.
@@ -97,6 +100,16 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 	protected boolean isAsyncRequest = false;
 
 	/**
+	 * Session object wrapper.
+	 */
+	protected ISession session;
+
+	/**
+	 * Request context data.
+	 */
+	protected RequestContext requestContext = new RequestContext(this);
+
+	/**
 	 * Constructs a request object wrapping the given request.
 	 * 
 	 * @param servletRequest request
@@ -104,6 +117,8 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 	public RequestWrapper(HttpServletRequest servletRequest) {
 
 		super(servletRequest);
+
+		Assert.notNull(servletRequest);
 
 		if (log.isDebugEnabled()) {
 			log.debug("New RequestWrapper instance.");
@@ -202,8 +217,8 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 		String cookieHeader = super.getHeader(name);
 		if (name.equalsIgnoreCase(COOKIE) && this.confidentiality && this.cookiesConfidentiality) {
 
-			Map<String, SavedCookie> sessionCookies = (Map<String, SavedCookie>) super.getSession().getAttribute(
-					Constants.HDIV_COOKIES_KEY);
+			Map<String, SavedCookie> sessionCookies = this.session.getAttribute(this.requestContext,
+					Constants.HDIV_COOKIES_KEY, Map.class);
 
 			if (sessionCookies != null) {
 				return this.replaceCookieString(cookieHeader, sessionCookies);
@@ -229,8 +244,8 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 		if (name.equalsIgnoreCase(COOKIE) && this.confidentiality && this.cookiesConfidentiality) {
 
 			Vector<String> values = new Vector<String>();
-			Map<String, SavedCookie> sessionCookies = (Map<String, SavedCookie>) super.getSession().getAttribute(
-					Constants.HDIV_COOKIES_KEY);
+			Map<String, SavedCookie> sessionCookies = this.session.getAttribute(this.requestContext,
+					Constants.HDIV_COOKIES_KEY, Map.class);
 
 			if (sessionCookies != null) {
 				while (headerValues.hasMoreElements()) {
@@ -410,6 +425,13 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 	 */
 	public void setConfidentiality(boolean confidentiality) {
 		this.confidentiality = confidentiality;
+	}
+
+	/**
+	 * @param session the session to set
+	 */
+	public void setSession(ISession session) {
+		this.session = session;
 	}
 
 }

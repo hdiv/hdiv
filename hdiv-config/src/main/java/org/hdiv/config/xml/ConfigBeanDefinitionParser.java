@@ -21,7 +21,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.hdiv.application.ApplicationHDIV;
-
 import org.hdiv.components.support.OutcomeTargetComponentProcessor;
 import org.hdiv.components.support.OutputLinkComponentProcessor;
 import org.hdiv.config.HDIVConfig;
@@ -369,7 +368,7 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
 
 		ManagedList<RuntimeBeanReference> defs = new ManagedList<RuntimeBeanReference>();
-		defs.add(this.createSimpleBean(element, source, parserContext, UserSessionStateScope.class));
+		defs.add(this.createUserSessionStateScope(element, source, parserContext));
 		defs.add(this.createSimpleBean(element, source, parserContext, AppStateScope.class));
 
 		RootBeanDefinition listBean = new RootBeanDefinition(ListFactoryBean.class);
@@ -380,6 +379,16 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		bean.getConstructorArgumentValues().addGenericArgumentValue(listBean);
 
 		return this.registerBean(bean, StateScopeManager.class.getName(), parserContext);
+	}
+
+	protected RuntimeBeanReference createUserSessionStateScope(Element element, Object source,
+			ParserContext parserContext) {
+		RootBeanDefinition bean = new RootBeanDefinition(UserSessionStateScope.class);
+		bean.setSource(source);
+		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
+		bean.getPropertyValues().addPropertyValue("session", this.sessionRef);
+
+		return this.registerBean(bean, UserSessionStateScope.class.getName(), parserContext);
 	}
 
 	protected RuntimeBeanReference createDataComposerFactory(Element element, Object source, ParserContext parserContext) {
@@ -419,6 +428,7 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		bean.setSource(source);
 		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
 		bean.getPropertyValues().addPropertyValue("config", this.configRef);
+		bean.getPropertyValues().addPropertyValue("session", this.sessionRef);
 
 		return this.registerBean(bean, RequestInitializer.class.getName(), parserContext);
 	}

@@ -18,6 +18,7 @@ package org.hdiv.state.scope;
 import javax.servlet.ServletContext;
 
 import org.hdiv.context.RequestContext;
+import org.springframework.web.context.ServletContextAware;
 
 /**
  * <p>
@@ -29,9 +30,11 @@ import org.hdiv.context.RequestContext;
  * 
  * @since 2.1.7
  */
-public class AppStateScope extends AbstractStateScope {
+public class AppStateScope extends AbstractStateScope implements ServletContextAware {
 
 	private static final String APP_STATE_CONTEXT_ATTR = ScopedStateCache.class.getCanonicalName();
+
+	protected ServletContext servletContext;
 
 	protected StateScopeType scopeType = StateScopeType.APP;
 
@@ -44,13 +47,16 @@ public class AppStateScope extends AbstractStateScope {
 	}
 
 	public ScopedStateCache getStateCache(RequestContext context) {
-		ScopedStateCache cache = (ScopedStateCache) context.getRequest().getSession().getServletContext()
-				.getAttribute(APP_STATE_CONTEXT_ATTR);
+		ScopedStateCache cache = (ScopedStateCache) this.servletContext.getAttribute(APP_STATE_CONTEXT_ATTR);
 		return cache;
 	}
 
 	public void setStateCache(RequestContext context, ScopedStateCache cache) {
-		context.getRequest().getSession().getServletContext().setAttribute(APP_STATE_CONTEXT_ATTR, cache);
+		this.servletContext.setAttribute(APP_STATE_CONTEXT_ATTR, cache);
+	}
+
+	public void setServletContext(ServletContext servletContext) {
+		this.servletContext = servletContext;
 	}
 
 }

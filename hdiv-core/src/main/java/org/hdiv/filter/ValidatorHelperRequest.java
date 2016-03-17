@@ -350,8 +350,8 @@ public class ValidatorHelperRequest implements IValidationHelper {
 		}
 
 		@SuppressWarnings("unchecked")
-		Map<String, SavedCookie> sessionCookies = (Map<String, SavedCookie>) request.getSession().getAttribute(
-				Constants.HDIV_COOKIES_KEY);
+		Map<String, SavedCookie> sessionCookies =this.session.getAttribute(new RequestContext(request),//TODO cache context?
+				Constants.HDIV_COOKIES_KEY, Map.class);
 
 		if (sessionCookies == null) {
 			return ValidatorHelperResult.VALID;
@@ -1066,7 +1066,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	 */
 	protected String getHdivParameter(HttpServletRequest request) {
 
-		String paramName = (String) request.getSession().getAttribute(Constants.HDIV_PARAMETER);
+		String paramName = HDIVUtil.getHdivStateParameterName(request);
 		if (paramName == null) {
 			throw new HDIVException("HDIV parameter name missing in session. Deleted by the app?");
 		}

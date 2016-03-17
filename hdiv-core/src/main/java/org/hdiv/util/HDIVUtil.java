@@ -385,6 +385,50 @@ public class HDIVUtil {
 	}
 
 	/**
+	 * Get Hdiv state parameter name from request.
+	 * @param request HttpServletRequest object
+	 * @return Parameter name
+	 * @since 3.0.1
+	 */
+	public static String getHdivStateParameterName(HttpServletRequest request) {
+
+		return (String) request.getAttribute(Constants.HDIV_PARAMETER);
+	}
+
+	/**
+	 * Set Hdiv state parameter name in request.
+	 * @param request HttpServletRequest object
+	 * @param parameterName The name of the parameter
+	 * @since 3.0.1
+	 */
+	public static void setHdivStateParameterName(HttpServletRequest request, String parameterName) {
+
+		request.setAttribute(Constants.HDIV_PARAMETER, parameterName);
+	}
+
+	/**
+	 * Get Hdiv state modification parameter name from request.
+	 * @param request HttpServletRequest object
+	 * @return Parameter name
+	 * @since 3.0.1
+	 */
+	public static String getModifyHdivStateParameterName(HttpServletRequest request) {
+
+		return (String) request.getAttribute(Constants.MODIFY_STATE_HDIV_PARAMETER);
+	}
+
+	/**
+	 * Set Hdiv state modification parameter name in request.
+	 * @param request HttpServletRequest object
+	 * @param parameterName The name of the parameter
+	 * @since 3.0.1
+	 */
+	public static void setModifyHdivStateParameterName(HttpServletRequest request, String parameterName) {
+
+		request.setAttribute(Constants.MODIFY_STATE_HDIV_PARAMETER, parameterName);
+	}
+
+	/**
 	 * Generates a random number between 0 (inclusive) and n (exclusive).
 	 * 
 	 * @param n the bound on the random number to be returned. Must be positive.

@@ -57,10 +57,10 @@ public class DefaultValidatorErrorHandler implements ValidatorErrorHandler {
 	public void handleValidatorError(HttpServletRequest request, HttpServletResponse response,
 			List<ValidatorError> errors) {
 
-		HttpSession session = request.getSession(false);
-
 		if (this.isPageNotFoundError(errors)) {
 			// Page not found in session
+
+			HttpSession session = request.getSession(false);
 
 			if (session == null || session.isNew()) {
 				// New session, maybe expired session
