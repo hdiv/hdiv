@@ -85,7 +85,7 @@ public class OutputLinkComponentProcessor extends AbstractComponentProcessor {
 					UIParameter paramComponent = (UIParameter) context.getApplication().createComponent(
 							UIParameter.COMPONENT_TYPE);
 
-					String hdivParameter = (String) externalContext.getSessionMap().get(Constants.HDIV_PARAMETER);
+					String hdivParameter = HDIVUtil.getHdivStateParameterName(request);
 
 					paramComponent.setName(hdivParameter);
 					paramComponent.setValue(stateParam);

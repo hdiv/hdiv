@@ -25,7 +25,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.hdiv.dataComposer.IDataComposer;
 import org.hdiv.urlProcessor.FormUrlProcessor;
 import org.hdiv.urlProcessor.LinkUrlProcessor;
-import org.hdiv.util.Constants;
 import org.hdiv.util.HDIVUtil;
 import org.springframework.web.servlet.support.RequestDataValueProcessor;
 
@@ -185,8 +184,10 @@ public class HdivRequestDataValueProcessor implements RequestDataValueProcessor 
 		String requestId = dataComposer.endRequest();
 
 		if (requestId != null && requestId.length() > 0) {
-			String hdivStateParam = (String) request.getSession().getAttribute(Constants.HDIV_PARAMETER);
-			extraFields.put(hdivStateParam, requestId);
+			String hdivStateParam = HDIVUtil.getHdivStateParameterName(request);
+			if (hdivStateParam != null) {
+				extraFields.put(hdivStateParam, requestId);
+			}
 
 			// Publish the state in request to make it accessible on jsp
 			request.setAttribute(FormUrlProcessor.FORM_STATE_ID, requestId);

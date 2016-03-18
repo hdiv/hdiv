@@ -22,7 +22,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.hdiv.dataComposer.IDataComposer;
 import org.hdiv.urlProcessor.FormUrlProcessor;
-import org.hdiv.util.Constants;
 import org.hdiv.util.HDIVUtil;
 import org.springframework.web.servlet.support.RequestDataValueProcessor;
 
@@ -72,7 +71,7 @@ public class ThymeleafHdivRequestDataValueProcessor extends HdivRequestDataValue
 		String formStateId = (String) request.getAttribute(FormUrlProcessor.FORM_STATE_ID);
 
 		if (formStateId != null && formStateId.length() > 0) {
-			String hdivStateParam = (String) request.getSession().getAttribute(Constants.HDIV_PARAMETER);
+			String hdivStateParam = HDIVUtil.getHdivStateParameterName(request);
 			extraFields.put(hdivStateParam, formStateId);
 		}
 		return extraFields;

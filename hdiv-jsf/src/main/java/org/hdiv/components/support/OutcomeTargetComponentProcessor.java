@@ -66,7 +66,7 @@ public class OutcomeTargetComponentProcessor extends AbstractComponentProcessor 
 
 				String stateParam = dataComposer.endRequest();
 
-				String hdivParameter = (String) externalContext.getSessionMap().get(Constants.HDIV_PARAMETER);
+				String hdivParameter = HDIVUtil.getHdivStateParameterName(request);
 
 				// Add a children UIParam component with HDIV state
 				UIParameter paramComponent = (UIParameter) context.getApplication().createComponent(
