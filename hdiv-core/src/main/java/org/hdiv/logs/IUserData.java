@@ -24,7 +24,7 @@ import javax.servlet.http.HttpServletRequest;
  */
 public interface IUserData {
 
-	public static final String ANONYMOUS = "anonymous";
+	String ANONYMOUS = "anonymous";
 
 	/**
 	 * <p>
@@ -37,6 +37,6 @@ public interface IUserData {
 	 * @param request request object
 	 * @return application user name
 	 */
-	public String getUsername(HttpServletRequest request);
+	String getUsername(HttpServletRequest request);
 
 }
