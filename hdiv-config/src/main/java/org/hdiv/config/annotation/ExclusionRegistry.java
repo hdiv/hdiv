@@ -16,6 +16,7 @@
 package org.hdiv.config.annotation;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,18 +33,18 @@ import org.springframework.util.Assert;
  * Can contain two types of exclusions, URL and parameter. The first to exclude URLs from validation and the second to
  * exclude parameter names.
  * </p>
- * 
+ *
  * @since 2.1.7
  */
 public class ExclusionRegistry {
 
-	private PatternMatcherFactory patternMatcherFactory;
+	private final PatternMatcherFactory patternMatcherFactory;
 
 	private final List<UrlExclusionRegistration> urlRegistrations = new ArrayList<UrlExclusionRegistration>();
 
 	private final List<ParamExclusionRegistration> paramRegistrations = new ArrayList<ParamExclusionRegistration>();
 
-	public ExclusionRegistry(PatternMatcherFactory patternMatcherFactory) {
+	public ExclusionRegistry(final PatternMatcherFactory patternMatcherFactory) {
 		this.patternMatcherFactory = patternMatcherFactory;
 	}
 
@@ -54,13 +55,13 @@ public class ExclusionRegistry {
 	 * <p>
 	 * Excluded urls are not validated by HDIV.
 	 * </p>
-	 * 
+	 *
 	 * @param urlPatterns Url patterns.
 	 * @return more configuration options
 	 */
-	public UrlExclusionRegistration addUrlExclusions(String... urlPatterns) {
+	public UrlExclusionRegistration addUrlExclusions(final String... urlPatterns) {
 		Assert.notEmpty(urlPatterns, "Url patterns are required");
-		UrlExclusionRegistration registration = new UrlExclusionRegistration(urlPatterns);
+		final UrlExclusionRegistration registration = new UrlExclusionRegistration(urlPatterns);
 		urlRegistrations.add(registration);
 		return registration;
 	}
@@ -72,24 +73,24 @@ public class ExclusionRegistry {
 	 * <p>
 	 * Excluded parameters are not validated by HDIV.
 	 * </p>
-	 * 
+	 *
 	 * @param parameterPatterns Parameter name patterns.
 	 * @return more configuration options
 	 */
-	public ParamExclusionRegistration addParamExclusions(String... parameterPatterns) {
+	public ParamExclusionRegistration addParamExclusions(final String... parameterPatterns) {
 		Assert.notEmpty(parameterPatterns, "Parameter patterns are required");
-		ParamExclusionRegistration registration = new ParamExclusionRegistration(parameterPatterns);
+		final ParamExclusionRegistration registration = new ParamExclusionRegistration(Arrays.asList(parameterPatterns));
 		paramRegistrations.add(registration);
 		return registration;
 	}
 
 	protected List<StartPage> getUrlExclusions() {
 
-		List<StartPage> allStartPages = new ArrayList<StartPage>();
+		final List<StartPage> allStartPages = new ArrayList<StartPage>();
 
-		for (UrlExclusionRegistration regitration : urlRegistrations) {
-			List<StartPage> startPages = regitration.getExclusions();
-			for (StartPage sp : startPages) {
+		for (final UrlExclusionRegistration regitration : urlRegistrations) {
+			final List<StartPage> startPages = regitration.getExclusions();
+			for (final StartPage sp : startPages) {
 				// Compile Pattern
 				sp.setCompiledPattern(patternMatcherFactory.getPatternMatcher(sp.getPattern()));
 				allStartPages.add(sp);
@@ -100,14 +101,12 @@ public class ExclusionRegistry {
 
 	protected List<String> getParamExclusions() {
 
-		List<String> paramExclusions = new ArrayList<String>();
+		final List<String> paramExclusions = new ArrayList<String>();
 
-		for (ParamExclusionRegistration regitration : paramRegistrations) {
-			String urlPattern = regitration.getUrlPattern();
+		for (final ParamExclusionRegistration regitration : paramRegistrations) {
+			final String urlPattern = regitration.getUrlPattern();
 			if (urlPattern == null) {
-				for (String paramPattern : regitration.getParameterPatterns()) {
-					paramExclusions.add(paramPattern);
-				}
+				paramExclusions.addAll(regitration.getParameterPatterns());
 			}
 		}
 		return paramExclusions;
@@ -115,16 +114,12 @@ public class ExclusionRegistry {
 
 	protected Map<String, List<String>> getParamExclusionsForUrl() {
 
-		Map<String, List<String>> paramExclusions = new HashMap<String, List<String>>();
+		final Map<String, List<String>> paramExclusions = new HashMap<String, List<String>>();
 
-		for (ParamExclusionRegistration regitration : paramRegistrations) {
-			String urlPattern = regitration.getUrlPattern();
+		for (final ParamExclusionRegistration regitration : paramRegistrations) {
+			final String urlPattern = regitration.getUrlPattern();
 			if (urlPattern != null) {
-				List<String> paramPatterns = new ArrayList<String>();
-				for (String paramPattern : regitration.getParameterPatterns()) {
-					paramPatterns.add(paramPattern);
-				}
-				paramExclusions.put(urlPattern, paramPatterns);
+				paramExclusions.put(urlPattern, regitration.getParameterPatterns());
 			}
 		}
 		return paramExclusions;

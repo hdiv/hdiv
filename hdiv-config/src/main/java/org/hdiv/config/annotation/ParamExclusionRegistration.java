@@ -15,35 +15,37 @@
  */
 package org.hdiv.config.annotation;
 
+import java.util.List;
+
 import org.springframework.util.Assert;
 
 /**
  * Contains the data of one parameter exclusion.
- * 
+ *
  * @since 2.1.7
  */
 public class ParamExclusionRegistration {
 
-	private String[] parameterPatterns;
+	private final List<String> parameterPatterns;
 
 	private String urlPattern;
 
-	public ParamExclusionRegistration(String[] parameterPatterns) {
+	public ParamExclusionRegistration(final List<String> parameterPatterns) {
 		Assert.notEmpty(parameterPatterns, "Parameter names pattern are required to create a exclusion.");
 		this.parameterPatterns = parameterPatterns;
 	}
 
 	/**
 	 * Url pattern for which apply the parameter exclusion.
-	 * 
+	 *
 	 * @param urlPattern Url pattern.
 	 */
-	public void forUrls(String urlPattern) {
+	public void forUrls(final String urlPattern) {
 		Assert.notNull(urlPattern, "A URL path is required");
 		this.urlPattern = urlPattern;
 	}
 
-	protected String[] getParameterPatterns() {
+	protected List<String> getParameterPatterns() {
 		return parameterPatterns;
 	}
 
