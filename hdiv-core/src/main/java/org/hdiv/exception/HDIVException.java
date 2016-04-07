@@ -17,7 +17,7 @@ package org.hdiv.exception;
 
 /**
  * Exception thrown when HDIV validation is not passed.
- * 
+ *
  * @author Roberto Velasco
  */
 public class HDIVException extends RuntimeException {
@@ -30,11 +30,10 @@ public class HDIVException extends RuntimeException {
 
 	/**
 	 * Create a new exception.
-	 * 
+	 *
 	 * @see java.lang.RuntimeException
 	 */
 	public HDIVException() {
-		super();
 	}
 
 	/**
@@ -42,48 +41,37 @@ public class HDIVException extends RuntimeException {
 	 * <tt>(cause==null ? null : cause.toString())</tt> (which typically contains the class and detail message of
 	 * <tt>cause</tt>). This constructor is useful for runtime exceptions that are little more than wrappers for other
 	 * throwables.
-	 * 
+	 *
 	 * @param cause the cause (which is saved for later retrieval by the {@link #getCause()} method). (A <tt>null</tt>
 	 * value is permitted, and indicates that the cause is nonexistent or unknown.)
 	 * @see java.lang.RuntimeException#RuntimeException(java.lang.Throwable)
 	 */
-	public HDIVException(Throwable cause) {
+	public HDIVException(final Throwable cause) {
 		super(cause);
 	}
 
 	/**
 	 * Constructs a new runtime exception with the specified detail message. The cause is not initialized, and may
 	 * subsequently be initialized by a call to {@link #initCause}.
-	 * 
+	 *
 	 * @param message the detail message. The detail message is saved for later retrieval by the {@link #getMessage()}
 	 * method.
 	 * @see java.lang.RuntimeException
 	 */
-	public HDIVException(String message) {
-
+	public HDIVException(final String message) {
 		super(message);
 	}
 
 	/**
 	 * Constructs a new runtime exception with the specified detail message and cause.
-	 * 
+	 *
 	 * @param message the detail message (which is saved for later retrieval by the {@link #getMessage()} method).
 	 * @param cause the cause (which is saved for later retrieval by the {@link #getCause()} method). (A <tt>null</tt>
 	 * value is permitted, and indicates that the cause is nonexistent or unknown.)
 	 * @see java.lang.RuntimeException
 	 */
-	public HDIVException(String message, Throwable cause) {
+	public HDIVException(final String message, final Throwable cause) {
 		super(message, cause);
-	}
-
-	/**
-	 * Returns the cause of this throwable or <code>null</code> if the cause is nonexistent or unknown. (The cause is
-	 * the throwable that caused this throwable to get thrown.)
-	 * 
-	 * @see java.lang.RuntimeException#getCause()
-	 */
-	public Throwable getCause() {
-		return super.getCause();
 	}
 
 }
