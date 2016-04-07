@@ -113,9 +113,9 @@ public class HiddenTagHDIV extends HiddenTag {
 	/**
 	 * Render the value element.
 	 * 
-	 * @param results The StringBuffer that output will be appended to.
+	 * @param results The StringBuilder that output will be appended to.
 	 */
-	protected void prepareValue(StringBuffer results) throws JspException {
+	protected void prepareValue(StringBuilder results) throws JspException {
 
 		results.append(" value=\"");
 

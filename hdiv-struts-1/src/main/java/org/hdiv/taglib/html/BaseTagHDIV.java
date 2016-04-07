@@ -25,6 +25,11 @@ import org.hdiv.util.HDIVUtil;
 public class BaseTagHDIV extends BaseTag {
 
 	/**
+	 *
+	 */
+	private static final long serialVersionUID = 1L;
+
+	/**
 	 * Render a fully formed HTML &lt;base&gt; element and return it as a String.
 	 *
 	 * @param scheme The scheme used in the url (ie. http or https).
@@ -34,18 +39,17 @@ public class BaseTagHDIV extends BaseTag {
 	 * @return String An HTML &lt;base&gt; element.
 	 * @since Struts 1.1
 	 */
-	protected String renderBaseElement(String scheme, String serverName, int port, String uri) {
-		StringBuffer tag = new StringBuffer("<base href=\"");
+	@Override
+	protected String renderBaseElement(final String scheme, final String serverName, final int port, final String uri) {
+		final StringBuilder tag = new StringBuilder("<base href=\"");
 
 		String finalUri = null;
 
 		if (ref.equals(REF_SITE)) {
-			StringBuffer contextBase = new StringBuffer(
-					((HttpServletRequest) pageContext.getRequest()).getContextPath());
+			final StringBuilder contextBase = new StringBuilder(((HttpServletRequest) pageContext.getRequest()).getContextPath());
 
 			contextBase.append("/");
-			finalUri = RequestUtils.createServerUriStringBuffer(scheme, serverName, port, contextBase.toString())
-					.toString();
+			finalUri = RequestUtils.createServerUriStringBuffer(scheme, serverName, port, contextBase.toString()).toString();
 			tag.append(finalUri);
 		}
 		else {
@@ -54,18 +58,18 @@ public class BaseTagHDIV extends BaseTag {
 		}
 
 		// Store the base url value on request to be accessible from hdiv core
-		HttpServletRequest request = (HttpServletRequest) pageContext.getRequest();
+		final HttpServletRequest request = (HttpServletRequest) pageContext.getRequest();
 		HDIVUtil.setBaseURL(finalUri, request);
 
 		tag.append("\"");
 
-		if (this.target != null) {
+		if (target != null) {
 			tag.append(" target=\"");
-			tag.append(this.target);
+			tag.append(target);
 			tag.append("\"");
 		}
 
-		if (TagUtils.getInstance().isXhtml(this.pageContext)) {
+		if (TagUtils.getInstance().isXhtml(pageContext)) {
 			tag.append(" />");
 		}
 		else {
