@@ -21,7 +21,7 @@ import javax.servlet.http.Cookie;
 
 /**
  * Stores off the values of a cookie in a serializable holder.
- * 
+ *
  * @author Gorka Vicente
  * @since HDIV 1.1.1
  */
@@ -33,25 +33,25 @@ public class SavedCookie implements Serializable {
 	 */
 	private static final long serialVersionUID = 4731047668982223493L;
 
-	private String name;
+	private final String name;
 
-	private String value;
+	private final String value;
 
-	private String comment;
+	private final String comment;
 
-	private String domain;
+	private final String domain;
 
-	private int maxAge;
+	private final int maxAge;
 
-	private String path;
+	private final String path;
 
-	private boolean secure;
+	private final boolean secure;
 
-	private int version;
+	private final int version;
 
 	/**
 	 * Constructs a new SavedCookie.
-	 * 
+	 *
 	 * @param name Cookie name
 	 * @param value Cookie value
 	 * @param comment Cookie comment
@@ -61,8 +61,8 @@ public class SavedCookie implements Serializable {
 	 * @param secure Cookie secure boolean value
 	 * @param version Cookie version number
 	 */
-	public SavedCookie(String name, String value, String comment, String domain, int maxAge, String path,
-			boolean secure, int version) {
+	public SavedCookie(final String name, final String value, final String comment, final String domain, final int maxAge, final String path,
+			final boolean secure, final int version) {
 
 		this.name = name;
 		this.value = value;
@@ -76,10 +76,10 @@ public class SavedCookie implements Serializable {
 
 	/**
 	 * Constructs a new SavedCookie from <code>cookie</code> object.
-	 * 
+	 *
 	 * @param cookie original cookie
 	 */
-	public SavedCookie(Cookie cookie) {
+	public SavedCookie(final Cookie cookie) {
 
 		this(cookie.getName(), cookie.getValue(), cookie.getComment(), cookie.getDomain(), cookie.getMaxAge(), cookie
 				.getPath(), cookie.getSecure(), cookie.getVersion());
@@ -87,24 +87,23 @@ public class SavedCookie implements Serializable {
 
 	/**
 	 * Constructs a new SavedCookie.
-	 * 
+	 *
 	 * @param name Cookie name
 	 * @param value Cookie value
 	 */
-	public SavedCookie(String name, String value) {
-		this.name = name;
-		this.value = value;
+	public SavedCookie(final String name, final String value) {
+		this(name, value, null, null, 0, null, false, 0);
 	}
 
 	/**
 	 * Compares this Cookie to the specified object. The result is <code>true</code> if and only if the argument is not
 	 * <code>null</code> and is a <code>Cookie</code> object that represents the same sequence of values as this object.
-	 * 
+	 *
 	 * @param c the object to compare this <code>Cookie</code> against.
 	 * @param cookiesConfidentialityActivated cookies' confidentiality indicator
 	 * @return True if the <code>Cookie</code> are equal. False otherwise.
 	 */
-	public boolean isEqual(Cookie c, boolean cookiesConfidentialityActivated) {
+	public boolean isEqual(final Cookie c, final boolean cookiesConfidentialityActivated) {
 
 		boolean result = (this.getName() == null ? c.getName() == null : this.getName().equals(c.getName()));
 		if (result) {
