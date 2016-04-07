@@ -18,10 +18,11 @@ package org.hdiv.config;
 import java.io.Serializable;
 
 import org.hdiv.regex.PatternMatcher;
+import org.hdiv.util.Method;
 
 /**
  * Contains the information of a start page.
- * 
+ *
  * @since 2.1.4
  * @author Gotzon Illarramendi
  */
@@ -32,7 +33,7 @@ public class StartPage implements Serializable {
 	/**
 	 * StartPage method. null or "" value is equivalent to 'any method'
 	 */
-	private String method;
+	final Method method;
 
 	/**
 	 * Url pattern
@@ -42,23 +43,26 @@ public class StartPage implements Serializable {
 	/**
 	 * Compiled pattern
 	 */
-	private PatternMatcher compiledPattern;
+	PatternMatcher compiledPattern;
 
-	public StartPage(String method, String pattern) {
+	public StartPage(final String method, final String pattern) {
+		this.method = Method.secureValueOf(method);
+		this.pattern = pattern;
+	}
+
+	public StartPage(final String method, final PatternMatcher compiledPattern) {
+		this.method = Method.secureValueOf(method);
+		this.compiledPattern = compiledPattern;
+	}
+
+	public StartPage(final Method method, final String pattern) {
 		this.method = method;
 		this.pattern = pattern;
 	}
 
-	public StartPage(String method, PatternMatcher compiledPattern) {
+	public StartPage(final Method method, final PatternMatcher compiledPattern) {
 		this.method = method;
 		this.compiledPattern = compiledPattern;
-	}
-
-	/**
-	 * @return the method
-	 */
-	public String getMethod() {
-		return method;
 	}
 
 	/**
@@ -71,12 +75,13 @@ public class StartPage implements Serializable {
 	/**
 	 * @param compiledPattern the compiledPattern to set
 	 */
-	public void setCompiledPattern(PatternMatcher compiledPattern) {
+	public void setCompiledPattern(final PatternMatcher compiledPattern) {
 		this.compiledPattern = compiledPattern;
 	}
 
 	/**
-	 * @return the compiledPattern
+	 * Returns the compiled pattern
+	 * @return
 	 */
 	public PatternMatcher getCompiledPattern() {
 		return compiledPattern;
@@ -84,11 +89,15 @@ public class StartPage implements Serializable {
 
 	/**
 	 * The method is "any method"?
-	 * 
+	 *
 	 * @return is any method?
 	 */
 	public boolean isAnyMethod() {
-		return method == null || method.length() == 0;
+		return method == null;
+	}
+
+	public Method getMethod() {
+		return method;
 	}
 
 	@Override
@@ -101,7 +110,7 @@ public class StartPage implements Serializable {
 	}
 
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(final Object obj) {
 		if (this == obj) {
 			return true;
 		}
@@ -111,7 +120,7 @@ public class StartPage implements Serializable {
 		if (getClass() != obj.getClass()) {
 			return false;
 		}
-		StartPage other = (StartPage) obj;
+		final StartPage other = (StartPage) obj;
 		if (method == null) {
 			if (other.method != null) {
 				return false;
@@ -133,13 +142,13 @@ public class StartPage implements Serializable {
 
 	@Override
 	public String toString() {
-		String msg = "StartPage [method=" + this.method;
+		String msg = "StartPage [method=" + method;
 
-		if (this.pattern != null) {
-			msg = msg + ", pattern=" + this.pattern;
+		if (pattern != null) {
+			msg = msg + ", pattern=" + pattern;
 		}
-		if (this.compiledPattern != null) {
-			msg = msg + ", compiledPattern=" + this.compiledPattern;
+		if (compiledPattern != null) {
+			msg = msg + ", compiledPattern=" + compiledPattern;
 		}
 		return msg + "]";
 	}
