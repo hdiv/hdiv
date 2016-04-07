@@ -20,44 +20,59 @@ import org.hdiv.state.IState;
 
 /**
  * Common code for {@link StateScope} implementation.
- * 
+ *
  * @since 2.1.7
  */
 public abstract class AbstractStateScope implements StateScope {
 
-	public String addState(RequestContext context, IState state, String token) {
+	private final String preffix;
 
-		ScopedStateCache cache = this.getStateCache(context);
+	private final String name;
+
+	protected AbstractStateScope(final StateScopeType type) {
+		preffix = type.getPrefix();
+		name = type.getName();
+	}
+
+	public String addState(final RequestContext context, final IState state, final String token) {
+
+		ScopedStateCache cache = getStateCache(context);
 		if (cache == null) {
 			cache = new ScopedStateCache();
 		}
 
-		String stateId = cache.addState(state, token);
+		final String stateId = cache.addState(state, token);
 
-		this.setStateCache(context, cache);
+		setStateCache(context, cache);
 
-		return this.getScopePrefix() + "-" + stateId;
+		return new StringBuilder().append(preffix).append('-').append(stateId).toString();
 	}
 
-	public IState restoreState(RequestContext context, int stateId) {
+	public IState restoreState(final RequestContext context, final int stateId) {
 
-		ScopedStateCache cache = this.getStateCache(context);
+		final ScopedStateCache cache = getStateCache(context);
 		return cache == null ? null : cache.getState(stateId);
 	}
 
-	public String getStateToken(RequestContext context, int stateId) {
+	public String getStateToken(final RequestContext context, final int stateId) {
 
-		ScopedStateCache cache = this.getStateCache(context);
+		final ScopedStateCache cache = getStateCache(context);
 		return cache == null ? null : cache.getStateToken(stateId);
 	}
 
-	public boolean isScopeState(String stateId) {
+	public boolean isScopeState(final String stateId) {
 
-		int stateIndex = stateId.indexOf("-");
-		return stateIndex > 0 && stateId.substring(0, stateIndex).equals(this.getScopePrefix());
+		final int stateIndex = stateId.indexOf('-');
+		return stateIndex > 0 && stateId.substring(0, stateIndex).equals(getScopePrefix());
 	}
 
-	protected abstract String getScopePrefix();
+	public final String getScopePrefix() {
+		return preffix;
+	}
+
+	public String getScopeName() {
+		return name;
+	}
 
 	protected abstract ScopedStateCache getStateCache(RequestContext context);
 

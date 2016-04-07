@@ -26,30 +26,25 @@ import org.hdiv.context.RequestContext;
  * <p>
  * States scoped to 'user' are stored at {@link HttpSession} and are shared by all the pages of the same user.
  * </p>
- * 
+ *
  * @since 2.1.7
  */
 public class UserSessionStateScope extends AbstractStateScope {
 
+	public UserSessionStateScope() {
+		super(StateScopeType.USER_SESSION);
+	}
+
 	private static final String USER_STATE_CACHE_ATTR = ScopedStateCache.class.getCanonicalName();
 
-	protected StateScopeType scopeType = StateScopeType.USER_SESSION;
-
-	public String getScopeName() {
-		return this.scopeType.getName();
-	}
-
-	public String getScopePrefix() {
-		return this.scopeType.getPrefix();
-	}
-
-	public ScopedStateCache getStateCache(RequestContext context) {
-		ScopedStateCache cache = (ScopedStateCache) context.getRequest().getSession()
-				.getAttribute(USER_STATE_CACHE_ATTR);
+	@Override
+	public ScopedStateCache getStateCache(final RequestContext context) {
+		final ScopedStateCache cache = (ScopedStateCache) context.getRequest().getSession().getAttribute(USER_STATE_CACHE_ATTR);
 		return cache;
 	}
 
-	public void setStateCache(RequestContext context, ScopedStateCache cache) {
+	@Override
+	public void setStateCache(final RequestContext context, final ScopedStateCache cache) {
 		context.getRequest().getSession().setAttribute(USER_STATE_CACHE_ATTR, cache);
 	}
 

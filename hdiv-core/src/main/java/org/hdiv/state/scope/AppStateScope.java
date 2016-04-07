@@ -26,30 +26,24 @@ import org.hdiv.context.RequestContext;
  * <p>
  * States scoped to 'app' are stored at {@link ServletContext} and are shared by all the users of the application.
  * </p>
- * 
+ *
  * @since 2.1.7
  */
-public class AppStateScope extends AbstractStateScope {
+public final class AppStateScope extends AbstractStateScope {
+
+	public AppStateScope() {
+		super(StateScopeType.APP);
+	}
 
 	private static final String APP_STATE_CONTEXT_ATTR = ScopedStateCache.class.getCanonicalName();
 
-	protected StateScopeType scopeType = StateScopeType.APP;
-
-	public String getScopeName() {
-		return this.scopeType.getName();
+	@Override
+	public ScopedStateCache getStateCache(final RequestContext context) {
+		return (ScopedStateCache) context.getRequest().getSession().getServletContext().getAttribute(APP_STATE_CONTEXT_ATTR);
 	}
 
-	public String getScopePrefix() {
-		return this.scopeType.getPrefix();
-	}
-
-	public ScopedStateCache getStateCache(RequestContext context) {
-		ScopedStateCache cache = (ScopedStateCache) context.getRequest().getSession().getServletContext()
-				.getAttribute(APP_STATE_CONTEXT_ATTR);
-		return cache;
-	}
-
-	public void setStateCache(RequestContext context, ScopedStateCache cache) {
+	@Override
+	public void setStateCache(final RequestContext context, final ScopedStateCache cache) {
 		context.getRequest().getSession().getServletContext().setAttribute(APP_STATE_CONTEXT_ATTR, cache);
 	}
 

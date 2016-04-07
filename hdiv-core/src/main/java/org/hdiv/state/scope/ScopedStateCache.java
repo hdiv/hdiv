@@ -28,47 +28,47 @@ import org.hdiv.state.IState;
 
 /**
  * Cache than manages scoped states for a specific type of {@link StateScope}.
- * 
+ *
  * @since 2.1.7
  */
 public class ScopedStateCache implements Serializable {
 
 	private static final long serialVersionUID = 5141785794691242839L;
 
-	private Map<Integer, StateAndToken> states = new HashMap<Integer, StateAndToken>();
+	private final Map<Integer, StateAndToken> states = new HashMap<Integer, StateAndToken>();
 
-	private AtomicInteger index = new AtomicInteger();
+	private final AtomicInteger index = new AtomicInteger();
 
-	public String addState(IState state, String token) {
+	public String addState(final IState state, final String token) {
 
-		Integer previousStateId = this.existEqualState(state);
+		final Integer previousStateId = this.existEqualState(state);
 		if (previousStateId != null) {
-			StateAndToken previousState = states.get(previousStateId);
+			final StateAndToken previousState = states.get(previousStateId);
 			return previousStateId + "-" + previousState.getToken();
 		}
 
-		int id = this.index.getAndIncrement();
+		final int id = this.index.getAndIncrement();
 		states.put(id, new StateAndToken(state, token));
 
 		return id + "-" + token;
 	}
 
-	public IState getState(int stateId) {
+	public IState getState(final int stateId) {
 
-		StateAndToken st = states.get(stateId);
+		final StateAndToken st = states.get(stateId);
 		return st == null ? null : st.getState();
 	}
 
-	public String getStateToken(int stateId) {
+	public String getStateToken(final int stateId) {
 
-		StateAndToken st = states.get(stateId);
+		final StateAndToken st = states.get(stateId);
 		return st == null ? null : st.getToken();
 	}
 
-	protected Integer existEqualState(IState state) {
+	protected Integer existEqualState(final IState state) {
 
-		for (Entry<Integer, StateAndToken> entry : states.entrySet()) {
-			IState cacheState = entry.getValue().getState();
+		for (final Entry<Integer, StateAndToken> entry : states.entrySet()) {
+			final IState cacheState = entry.getValue().getState();
 
 			if (this.areEqualStates(cacheState, state)) {
 				return entry.getKey();
@@ -78,7 +78,7 @@ public class ScopedStateCache implements Serializable {
 		return null;
 	}
 
-	protected boolean areEqualStates(IState state1, IState state2) {
+	protected boolean areEqualStates(final IState state1, final IState state2) {
 
 		// Same action
 		if (!(state1.getAction().equals(state2.getAction()))) {
@@ -91,8 +91,8 @@ public class ScopedStateCache implements Serializable {
 		}
 
 		// Same Parameters
-		Collection<IParameter> params1 = state1.getParameters();
-		Collection<IParameter> params2 = state2.getParameters();
+		final Collection<IParameter> params1 = state1.getParameters();
+		final Collection<IParameter> params2 = state2.getParameters();
 		if (params1 != null && params2 == null) {
 			return false;
 		}
@@ -103,10 +103,10 @@ public class ScopedStateCache implements Serializable {
 			if (params1.size() != params2.size()) {
 				return false;
 			}
-			for (IParameter param1 : params1) {
+			for (final IParameter param1 : params1) {
 
 				boolean exist = false;
-				for (IParameter param2 : params2) {
+				for (final IParameter param2 : params2) {
 					if (this.areEqualParameters(param1, param2)) {
 						exist = true;
 					}
@@ -117,8 +117,8 @@ public class ScopedStateCache implements Serializable {
 			}
 		}
 
-		String parameters1 = state1.getParams();
-		String parameters2 = state2.getParams();
+		final String parameters1 = state1.getParams();
+		final String parameters2 = state2.getParams();
 		if (parameters1 != null && parameters2 == null) {
 			return false;
 		}
@@ -132,8 +132,8 @@ public class ScopedStateCache implements Serializable {
 		}
 
 		// Same required Parameters
-		List<String> requiredParams1 = state1.getRequiredParams();
-		List<String> requiredParams2 = state2.getRequiredParams();
+		final List<String> requiredParams1 = state1.getRequiredParams();
+		final List<String> requiredParams2 = state2.getRequiredParams();
 		if (requiredParams1 != null && requiredParams2 == null) {
 			return false;
 		}
@@ -144,7 +144,7 @@ public class ScopedStateCache implements Serializable {
 			if (requiredParams1.size() != requiredParams2.size()) {
 				return false;
 			}
-			for (String requiredParam : requiredParams1) {
+			for (final String requiredParam : requiredParams1) {
 				if (!requiredParams2.contains(requiredParam)) {
 					return false;
 				}
@@ -154,7 +154,7 @@ public class ScopedStateCache implements Serializable {
 		return true;
 	}
 
-	protected boolean areEqualParameters(IParameter param1, IParameter param2) {
+	protected boolean areEqualParameters(final IParameter param1, final IParameter param2) {
 
 		if (!param1.getName().equals(param2.getName())) {
 			return false;
@@ -165,11 +165,11 @@ public class ScopedStateCache implements Serializable {
 		if (param1.isEditable() != param2.isEditable()) {
 			return false;
 		}
-		List<String> values = param2.getValues();
+		final List<String> values = param2.getValues();
 		if (values.size() != param1.getValues().size()) {
 			return false;
 		}
-		for (String paramValue : values) {
+		for (final String paramValue : values) {
 			if (!param1.existValue(paramValue)) {
 				return false;
 			}
@@ -181,11 +181,10 @@ public class ScopedStateCache implements Serializable {
 
 		private static final long serialVersionUID = -7927456168851506372L;
 
-		private IState state;
+		private final IState state;
+		private final String token;
 
-		private String token;
-
-		public StateAndToken(IState state, String token) {
+		public StateAndToken(final IState state, final String token) {
 			this.state = state;
 			this.token = token;
 		}
