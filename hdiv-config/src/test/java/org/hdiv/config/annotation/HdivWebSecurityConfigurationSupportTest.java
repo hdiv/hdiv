@@ -22,6 +22,7 @@ import org.hdiv.config.HDIVConfig;
 import org.hdiv.config.Strategy;
 import org.hdiv.config.annotation.builders.SecurityConfigBuilder;
 import org.hdiv.state.scope.StateScopeType;
+import org.hdiv.util.Method;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -34,7 +35,7 @@ public class HdivWebSecurityConfigurationSupportTest {
 		configuration = new HdivWebSecurityConfigurationSupport() {
 
 			@Override
-			public void addExclusions(ExclusionRegistry registry) {
+			public void addExclusions(final ExclusionRegistry registry) {
 
 				registry.addUrlExclusions("/", "/login.html", "/logout.html").method("GET");
 				registry.addUrlExclusions("/j_spring_security_check").method("POST");
@@ -45,20 +46,20 @@ public class HdivWebSecurityConfigurationSupportTest {
 			}
 
 			@Override
-			public void addLongLivingPages(LongLivingPagesRegistry registry) {
+			public void addLongLivingPages(final LongLivingPagesRegistry registry) {
 
 				registry.addLongLivingPages("/longLivingPage.html", "/longLiving/.*").scope(StateScopeType.APP);
 				registry.addLongLivingPages("/longLivingPageApp.html");
 			}
 
 			@Override
-			public void addRules(RuleRegistry registry) {
+			public void addRules(final RuleRegistry registry) {
 
 				registry.addRule("safeText").acceptedPattern("^[a-zA-Z0-9@.\\-_]*$");
 			}
 
 			@Override
-			public void configureEditableValidation(ValidationConfigurer validationConfigurer) {
+			public void configureEditableValidation(final ValidationConfigurer validationConfigurer) {
 
 				validationConfigurer.addValidation("/secure/.*").rules("safeText").disableDefaults();
 				validationConfigurer.addValidation("/safetext/.*");
@@ -66,7 +67,7 @@ public class HdivWebSecurityConfigurationSupportTest {
 
 			// @formatter:off
 			@Override
-			public void configure(SecurityConfigBuilder builder) {
+			public void configure(final SecurityConfigBuilder builder) {
 
 				builder
 					.sessionExpired()
@@ -84,7 +85,7 @@ public class HdivWebSecurityConfigurationSupportTest {
 
 	@Test
 	public void config() {
-		HDIVConfig config = configuration.hdivConfig();
+		final HDIVConfig config = configuration.hdivConfig();
 		assertNotNull(config);
 
 		assertEquals(true, config.isDebugMode());
@@ -97,10 +98,10 @@ public class HdivWebSecurityConfigurationSupportTest {
 
 	@Test
 	public void exclusions() {
-		HDIVConfig config = configuration.hdivConfig();
+		final HDIVConfig config = configuration.hdivConfig();
 		assertNotNull(config);
 
-		assertEquals(true, config.isStartPage("/attacks/view.html", null));
+		assertEquals(true, config.isStartPage("/attacks/view.html", (Method) null));
 		assertEquals(false, config.isStartPage("/j_spring_security_check", "GET"));
 		assertEquals(true, config.isStartPage("/", "GET"));
 
@@ -118,7 +119,7 @@ public class HdivWebSecurityConfigurationSupportTest {
 
 	@Test
 	public void longLivingPages() {
-		HDIVConfig config = configuration.hdivConfig();
+		final HDIVConfig config = configuration.hdivConfig();
 		assertNotNull(config);
 
 		assertEquals("app", config.isLongLivingPages("/longLiving/sample.html"));
