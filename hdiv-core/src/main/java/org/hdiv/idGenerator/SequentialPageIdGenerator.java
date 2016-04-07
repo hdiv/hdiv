@@ -19,7 +19,7 @@ import java.util.Random;
 
 /**
  * This implementation uses a sequence number to generate unique page ids.
- * 
+ *
  * @author Gotzon Illarramendi
  * @since HDIV 2.1.0
  */
@@ -36,30 +36,26 @@ public class SequentialPageIdGenerator implements PageIdGenerator {
 	 * Constructor that initializes the sequence number in a non-constant value.
 	 */
 	public SequentialPageIdGenerator() {
-		this.id = this.generateInitialPageId();
+		this.id = generateInitialPageId();
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.hdiv.util.PageIdGenerator#getNextPageId()
 	 */
 	public synchronized int getNextPageId() {
-
-		this.id = this.id + 1;
-		return this.id;
+		return ++this.id;
 	}
 
 	/**
 	 * Generate the initial number of sequencer, which is based on a random value between 1 and 20.
-	 * 
+	 *
 	 * @return valor sequencer initial value
 	 */
 	protected int generateInitialPageId() {
-
-		Random r = new Random();
-		int i = r.nextInt(20);
-		return i;
+		final Random r = new Random();
+		return r.nextInt(20);
 	}
 
 }
