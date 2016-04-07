@@ -16,6 +16,7 @@
 package org.hdiv.idGenerator;
 
 import java.io.Serializable;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * This implementation uses a sequence number to generate unique ids. <b>Only for testing</b>
@@ -25,20 +26,13 @@ import java.io.Serializable;
  */
 public class SequentialUidGenerator implements UidGenerator {
 
-	private long seq = 0;
+	private final AtomicLong seq = new AtomicLong(0);
 
 	public Serializable generateUid() {
-
-		Long id = null;
-
-		synchronized (this) {
-			id = new Long(this.seq);
-			this.seq = this.seq + 1;
-		}
-		return id;
+		return seq.getAndIncrement();
 	}
 
-	public Serializable parseUid(String encodedUid) {
+	public Serializable parseUid(final String encodedUid) {
 
 		return encodedUid;
 	}
