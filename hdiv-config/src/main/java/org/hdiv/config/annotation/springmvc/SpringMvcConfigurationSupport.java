@@ -36,7 +36,7 @@ import org.springframework.web.servlet.support.RequestDataValueProcessor;
 
 /**
  * Contains the configuration beans for Spring MVC framework support.
- * 
+ *
  * @since 2.1.7
  */
 @Configuration
@@ -59,7 +59,7 @@ public class SpringMvcConfigurationSupport {
 	@Bean(name = ConfigBeanDefinitionParser.REQUEST_DATA_VALUE_PROCESSOR_BEAN_NAME)
 	public RequestDataValueProcessor requestDataValueProcessor() {
 
-		HdivRequestDataValueProcessor dataValueProcessor = new HdivRequestDataValueProcessor();
+		final HdivRequestDataValueProcessor dataValueProcessor = new HdivRequestDataValueProcessor();
 		dataValueProcessor.setFormUrlProcessor(this.formUrlProcessor);
 		dataValueProcessor.setLinkUrlProcessor(this.linkUrlProcessor);
 
@@ -72,7 +72,7 @@ public class SpringMvcConfigurationSupport {
 	@Bean(name = EditableValidationsBeanDefinitionParser.EDITABLE_VALIDATOR_BEAN_NAME)
 	public Validator editableParameterValidator() {
 
-		EditableParameterValidator validator = new EditableParameterValidator();
+		final EditableParameterValidator validator = new EditableParameterValidator();
 		if (jsr303Present) {
 			validator.setInnerValidator(editableLocalValidatorFactoryBean());
 		}
@@ -81,15 +81,11 @@ public class SpringMvcConfigurationSupport {
 
 	@Bean
 	public LocalValidatorFactoryBean editableLocalValidatorFactoryBean() {
-
-		LocalValidatorFactoryBean localValidatorFactoryBean = new LocalValidatorFactoryBean();
-		return localValidatorFactoryBean;
+		return new LocalValidatorFactoryBean();
 	}
 
 	@Bean
 	public IMultipartConfig securityMultipartConfig() {
-
-		IMultipartConfig multipartConfig = new SpringMVCMultipartConfig();
-		return multipartConfig;
+		return new SpringMVCMultipartConfig();
 	}
 }
