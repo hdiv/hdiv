@@ -23,6 +23,7 @@ import org.hdiv.AbstractJsfHDIVTestCase;
 import org.hdiv.dataComposer.DataComposerFactory;
 import org.hdiv.dataComposer.IDataComposer;
 import org.hdiv.util.HDIVUtil;
+import org.hdiv.util.Method;
 import org.springframework.mock.web.MockHttpServletRequest;
 
 public class LifecycleTest extends AbstractJsfHDIVTestCase {
@@ -31,17 +32,17 @@ public class LifecycleTest extends AbstractJsfHDIVTestCase {
 
 	private String hdivParameter;
 
-	private String targetName = "/path/testAction.do";;
+	private final String targetName = "/path/testAction.do";;
 
 	@Override
 	protected void innerSetUp() throws Exception {
 
-		this.hdivParameter = this.getConfig().getStateParameterName();
+		hdivParameter = getConfig().getStateParameterName();
 
-		DataComposerFactory dataComposerFactory = this.getApplicationContext().getBean(DataComposerFactory.class);
-		HttpServletRequest request = this.getMockRequest();
-		this.dataComposer = dataComposerFactory.newInstance(request);
-		HDIVUtil.setDataComposer(this.dataComposer, request);
+		final DataComposerFactory dataComposerFactory = getApplicationContext().getBean(DataComposerFactory.class);
+		final HttpServletRequest request = getMockRequest();
+		dataComposer = dataComposerFactory.newInstance(request);
+		HDIVUtil.setDataComposer(dataComposer, request);
 
 	}
 
@@ -52,11 +53,11 @@ public class LifecycleTest extends AbstractJsfHDIVTestCase {
 			// MockExternalContext throws an UnsupportedOperationException on redirect
 
 			// Run PhaseaListeners
-			this.runLifecycle();
+			runLifecycle();
 
 			assertFalse(false);
 		}
-		catch (UnsupportedOperationException e) {
+		catch (final UnsupportedOperationException e) {
 			assertTrue(true);
 		}
 
@@ -65,18 +66,18 @@ public class LifecycleTest extends AbstractJsfHDIVTestCase {
 	public void testCorrectRequest() {
 
 		// Create state
-		MockHttpServletRequest request = this.getMockRequest();
+		final MockHttpServletRequest request = getMockRequest();
 
-		this.dataComposer.startPage();
+		dataComposer.startPage();
 
-		this.dataComposer.beginRequest("GET", this.targetName);
-		String pageState = this.dataComposer.endRequest();
-		this.dataComposer.endPage();
+		dataComposer.beginRequest(Method.GET, targetName);
+		final String pageState = dataComposer.endRequest();
+		dataComposer.endPage();
 
 		request.addParameter(hdivParameter, pageState);
 
 		// Run PhaseaListeners
-		this.runLifecycle();
+		runLifecycle();
 
 		assertTrue(true);
 	}
@@ -84,22 +85,19 @@ public class LifecycleTest extends AbstractJsfHDIVTestCase {
 	private void runLifecycle() {
 
 		// RESTORE_VIEW phase
-		PhaseEvent event = new PhaseEvent(shaleMockObjects.getFacesContext(), PhaseId.RESTORE_VIEW,
-				shaleMockObjects.getLifecycle());
+		PhaseEvent event = new PhaseEvent(shaleMockObjects.getFacesContext(), PhaseId.RESTORE_VIEW, shaleMockObjects.getLifecycle());
 
-		ConfigPhaseListener conf = new ConfigPhaseListener();
+		final ConfigPhaseListener conf = new ConfigPhaseListener();
 		conf.beforePhase(event);
 
 		// PROCESS_VALIDATIONS phase
-		ComponentMessagesPhaseListener msg = new ComponentMessagesPhaseListener();
-		event = new PhaseEvent(shaleMockObjects.getFacesContext(), PhaseId.PROCESS_VALIDATIONS,
-				shaleMockObjects.getLifecycle());
+		final ComponentMessagesPhaseListener msg = new ComponentMessagesPhaseListener();
+		event = new PhaseEvent(shaleMockObjects.getFacesContext(), PhaseId.PROCESS_VALIDATIONS, shaleMockObjects.getLifecycle());
 		msg.beforePhase(event);
 		msg.afterPhase(event);
 
 		// RENDER_RESPONSE phase
-		event = new PhaseEvent(shaleMockObjects.getFacesContext(), PhaseId.RENDER_RESPONSE,
-				shaleMockObjects.getLifecycle());
+		event = new PhaseEvent(shaleMockObjects.getFacesContext(), PhaseId.RENDER_RESPONSE, shaleMockObjects.getLifecycle());
 		conf.afterPhase(event);
 	}
 
