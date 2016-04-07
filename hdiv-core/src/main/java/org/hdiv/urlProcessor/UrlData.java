@@ -16,21 +16,26 @@
 package org.hdiv.urlProcessor;
 
 import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-import org.springframework.web.util.UriTemplate;
+import org.hdiv.util.Method;
+import org.springframework.util.Assert;
 
 /**
  * Contains the data of an url.
- * 
+ *
  * @author Gotzon Illarramendi
  */
-public class UrlData {
+public final class UrlData {
 
 	/**
 	 * Original url, previous to any change.
 	 */
-	private String originalUrl;
+	private final String originalUrl;
 
 	/**
 	 * Original urls anchor
@@ -54,7 +59,7 @@ public class UrlData {
 
 	/**
 	 * URL parameters in query string format. For example: param1=val1&param2=val2
-	 * 
+	 *
 	 * @since 2.1.7
 	 */
 	private String urlParams;
@@ -82,42 +87,41 @@ public class UrlData {
 	/**
 	 * Http method.
 	 */
-	private String method;
+	private Method method;
 
 	/**
 	 * UriTemplate https://tools.ietf.org/html/rfc6570
-	 * 
+	 *
 	 * @since 3.0.0
 	 */
-	private UriTemplate uriTemplate;
+	private List<String> variableNames;
 
 	/**
 	 * Constructor
-	 * 
+	 *
 	 * @param url Original url
 	 * @param method Http method.
 	 */
-	public UrlData(String url, String method) {
-		this.originalUrl = url;
+	public UrlData(final String url, final Method method) {
+		originalUrl = url;
 		this.method = method;
 		if (!"".equals(url)) {
-			this.uriTemplate = new UriTemplate(url);
+			variableNames = new Parser(url).variableNames;
 		}
 	}
 
 	/**
 	 * Is url method GET?
-	 * 
+	 *
 	 * @return true is it is GET
 	 */
 	public boolean isGetMethod() {
-
-		return this.method != null && this.method.equalsIgnoreCase("GET");
+		return Method.GET == method;
 	}
 
 	/**
 	 * Determines if url contains parameters
-	 * 
+	 *
 	 * @return has parameters?
 	 */
 	public boolean containsParams() {
@@ -132,13 +136,6 @@ public class UrlData {
 	}
 
 	/**
-	 * @param originalUrl the originalUrl to set
-	 */
-	public void setOriginalUrl(String originalUrl) {
-		this.originalUrl = originalUrl;
-	}
-
-	/**
 	 * @return the anchor
 	 */
 	public String getAnchor() {
@@ -148,7 +145,7 @@ public class UrlData {
 	/**
 	 * @param anchor the anchor to set
 	 */
-	public void setAnchor(String anchor) {
+	public void setAnchor(final String anchor) {
 		this.anchor = anchor;
 	}
 
@@ -162,7 +159,7 @@ public class UrlData {
 	/**
 	 * @param contextPathRelativeUrl the contextPathRelativeUrl to set
 	 */
-	public void setContextPathRelativeUrl(String contextPathRelativeUrl) {
+	public void setContextPathRelativeUrl(final String contextPathRelativeUrl) {
 		this.contextPathRelativeUrl = contextPathRelativeUrl;
 	}
 
@@ -176,7 +173,7 @@ public class UrlData {
 	/**
 	 * @param urlWithoutContextPath the urlWithoutContextPath to set
 	 */
-	public void setUrlWithoutContextPath(String urlWithoutContextPath) {
+	public void setUrlWithoutContextPath(final String urlWithoutContextPath) {
 		this.urlWithoutContextPath = urlWithoutContextPath;
 	}
 
@@ -190,7 +187,7 @@ public class UrlData {
 	/**
 	 * @param originalUrlParams the originalUrlParams to set
 	 */
-	public void setOriginalUrlParams(Map<String, String[]> originalUrlParams) {
+	public void setOriginalUrlParams(final Map<String, String[]> originalUrlParams) {
 		this.originalUrlParams = originalUrlParams;
 	}
 
@@ -204,7 +201,7 @@ public class UrlData {
 	/**
 	 * @param processedUrlParams the processedUrlParams to set
 	 */
-	public void setProcessedUrlParams(Map<String, String[]> processedUrlParams) {
+	public void setProcessedUrlParams(final Map<String, String[]> processedUrlParams) {
 		this.processedUrlParams = processedUrlParams;
 	}
 
@@ -218,7 +215,7 @@ public class UrlData {
 	/**
 	 * @param internal the internal to set
 	 */
-	public void setInternal(boolean internal) {
+	public void setInternal(final boolean internal) {
 		this.internal = internal;
 	}
 
@@ -232,21 +229,21 @@ public class UrlData {
 	/**
 	 * @param server the server to set
 	 */
-	public void setServer(String server) {
+	public void setServer(final String server) {
 		this.server = server;
 	}
 
 	/**
 	 * @return the method
 	 */
-	public String getMethod() {
+	public Method getMethod() {
 		return method;
 	}
 
 	/**
 	 * @param method the method to set
 	 */
-	public void setMethod(String method) {
+	public void setMethod(final Method method) {
 		this.method = method;
 	}
 
@@ -260,7 +257,7 @@ public class UrlData {
 	/**
 	 * @param jSessionId the jSessionId to set
 	 */
-	public void setjSessionId(String jSessionId) {
+	public void setjSessionId(final String jSessionId) {
 		this.jSessionId = jSessionId;
 	}
 
@@ -274,30 +271,60 @@ public class UrlData {
 	/**
 	 * @param urlParams the urlParams to set
 	 */
-	public void setUrlParams(String urlParams) {
+	public void setUrlParams(final String urlParams) {
 		this.urlParams = urlParams;
 	}
 
 	public boolean hasUriTemplate() {
-		return uriTemplate != null && uriTemplate.getVariableNames().size() > 0;
+		return variableNames != null && variableNames.size() > 0;
 	}
 
 	public String getUrlWithOutUriTemplate() {
-		return this.originalUrl.replace(getUriTemplate(), "");
+		return originalUrl.replace(getUriTemplate(), "");
 	}
 
 	public String getUriTemplate() {
 		if (!hasUriTemplate()) {
 			return "";
 		}
-		StringWriter sw = new StringWriter();
-		sw.append("{");
-		for (String variable : uriTemplate.getVariableNames()) {
-			sw.append(variable);
+		final StringWriter sw = new StringWriter();
+		sw.append('{');
+		for (int i = 0; i < variableNames.size(); i++) {
+			sw.append(variableNames.get(i));
 		}
-		sw.append("}");
+		sw.append('}');
 
 		return sw.toString();
+	}
+
+	/**
+	 * Static inner class to parse URI template strings into a matching regular expression.
+	 */
+	private static class Parser {
+
+		/** Captures URI template variable names. */
+		private static final Pattern NAMES_PATTERN = Pattern.compile("\\{([^/]+?)\\}");
+
+		private final List<String> variableNames = new ArrayList<String>();
+
+		private Parser(final String uriTemplate) {
+			Assert.hasText(uriTemplate, "'uriTemplate' must not be null");
+			final Matcher matcher = NAMES_PATTERN.matcher(uriTemplate);
+			while (matcher.find()) {
+				final String match = matcher.group(1);
+				final int colonIdx = match.indexOf(':');
+				if (colonIdx == -1) {
+					variableNames.add(match);
+				}
+				else {
+					if (colonIdx + 1 == match.length()) {
+						throw new IllegalArgumentException("No custom regular expression specified after ':' in \"" + match + "\"");
+					}
+					variableNames.add(match.substring(0, colonIdx));
+				}
+			}
+		}
+
 	}
 
 }
