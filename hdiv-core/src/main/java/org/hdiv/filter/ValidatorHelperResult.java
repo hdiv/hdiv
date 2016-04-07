@@ -18,9 +18,11 @@ package org.hdiv.filter;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hdiv.state.IState;
+
 /**
  * Result of the invocation of the validation of a request with {@link IValidationHelper}
- * 
+ *
  * @author Gotzon Illarramendi
  * @since 2.1.4
  */
@@ -39,37 +41,37 @@ public class ValidatorHelperResult {
 	/**
 	 * Validation is valid or not
 	 */
-	private boolean valid;
+	private final boolean valid;
 
 	/**
 	 * Validation method result value
 	 */
-	private Object value;
+	private IState value;
 
 	/**
 	 * Validation error data
 	 */
 	private List<ValidatorError> errors;
 
-	public ValidatorHelperResult(boolean valid) {
+	public ValidatorHelperResult(final boolean valid) {
 		this.valid = valid;
 	}
 
-	public ValidatorHelperResult(ValidatorError error) {
+	public ValidatorHelperResult(final ValidatorError error) {
 		this(false, error);
 	}
 
-	public ValidatorHelperResult(List<ValidatorError> errors) {
+	public ValidatorHelperResult(final List<ValidatorError> errors) {
 		this.valid = false;
 		this.errors = errors;
 	}
 
-	public ValidatorHelperResult(boolean valid, Object value) {
+	public ValidatorHelperResult(final boolean valid, final IState value) {
 		this.valid = valid;
 		this.value = value;
 	}
 
-	public ValidatorHelperResult(boolean valid, ValidatorError error) {
+	public ValidatorHelperResult(final boolean valid, final ValidatorError error) {
 		this.valid = valid;
 		this.errors = new ArrayList<ValidatorError>();
 		this.errors.add(error);
@@ -83,15 +85,16 @@ public class ValidatorHelperResult {
 		return errors;
 	}
 
-	public Object getValue() {
+	public IState getValue() {
 		return value;
 	}
 
+	@Override
 	public String toString() {
-		StringBuffer b = new StringBuffer();
+		final StringBuilder b = new StringBuilder();
 		b.append("Valid: ").append(this.valid).append(", ");
 		if (this.errors != null) {
-			for (ValidatorError error : errors) {
+			for (final ValidatorError error : errors) {
 				b.append(" Errorcode: ").append(error.toString());
 			}
 		}
