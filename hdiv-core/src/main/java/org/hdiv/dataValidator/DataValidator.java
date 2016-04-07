@@ -29,7 +29,7 @@ import org.hdiv.util.HDIVUtil;
 /**
  * Validates that one parameter value or values are correct, besides to replacing the relative values by its real
  * values.
- * 
+ *
  * @author Roberto Velasco
  * @author Oscar Ocariz
  */
@@ -47,20 +47,20 @@ public class DataValidator implements IDataValidator {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.hdiv.dataValidator.IDataValidator#validate(javax.servlet.http.HttpServletRequest, java.lang.String,
 	 * java.lang.String, java.lang.String, org.hdiv.state.IParameter, java.lang.String[])
 	 */
-	public IValidationResult validate(HttpServletRequest request, String value, String target, String parameter,
-			IParameter stateParameter, String[] actionParamValues) {
+	public IValidationResult validate(final HttpServletRequest request, final String value, final String target,
+			final String parameter, final IParameter stateParameter, final String[] actionParamValues) {
 
-		boolean confidentiality = this.config.getConfidentiality();
-		boolean noConfidentiality = this.config.isParameterWithoutConfidentiality(request, parameter);
+		final boolean confidentiality = config.getConfidentiality();
+		final boolean noConfidentiality = config.isParameterWithoutConfidentiality(request, parameter);
 		if (log.isDebugEnabled() && noConfidentiality) {
 			log.debug("Parameter [" + parameter + "] is ParameterWithoutConfidentiality.");
 		}
 
-		IValidationResult result = new ValidationResult();
+		final IValidationResult result = new ValidationResult();
 
 		// TODO include here checking that there are no more values. Currently done in the helper
 
@@ -93,13 +93,13 @@ public class DataValidator implements IDataValidator {
 		}
 		else {
 			// Confidentiality = true
-			if (!this.isInt(value)) {
+			if (!isInt(value)) {
 				result.setLegal(false);
 				return result;
 			}
 
 			// Confidentiality assures that data is int value
-			int position = new Integer(value).intValue();
+			final int position = Integer.parseInt(value);
 
 			if (stateParameter != null) {
 
@@ -134,20 +134,20 @@ public class DataValidator implements IDataValidator {
 
 	/**
 	 * Is data an integer?
-	 * 
+	 *
 	 * @param data Data to check
 	 * @return Returns true if <code>data</code> is a number. False in otherwise.
 	 */
-	protected boolean isInt(String data) {
-		Pattern p = HDIVUtil.intPattern;
-		Matcher m = p.matcher(data);
+	protected boolean isInt(final String data) {
+		final Pattern p = HDIVUtil.intPattern;
+		final Matcher m = p.matcher(data);
 		return m.matches();
 	}
 
 	/**
 	 * @param config the config to set
 	 */
-	public void setConfig(HDIVConfig config) {
+	public void setConfig(final HDIVConfig config) {
 		this.config = config;
 	}
 
