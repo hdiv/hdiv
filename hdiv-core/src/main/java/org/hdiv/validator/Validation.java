@@ -21,7 +21,7 @@ import java.util.regex.Pattern;
 
 /**
  * Editable data (text/textarea) validation definition.
- * 
+ *
  * @author Gorka Vicente
  * @since HDIV 1.1
  */
@@ -56,7 +56,7 @@ public class Validation implements IValidation, Serializable {
 
 	/**
 	 * Checks if a component type has been defined to which apply the validation <code>this</code>.
-	 * 
+	 *
 	 * @return True if the component type to which apply de validation has been defined. False otherwise.
 	 */
 	protected boolean existComponentType() {
@@ -66,16 +66,16 @@ public class Validation implements IValidation, Serializable {
 
 	/**
 	 * Checks if the type <code>parameterType</code> is the same as the one defined in the validation <code>this</code>.
-	 * 
+	 *
 	 * @param parameterType Component type
 	 * @return True if the validation <code>this</code> is the same as <code>parameterType</code>.
 	 */
-	protected boolean isTheSameComponentType(String parameterType) {
+	protected boolean isTheSameComponentType(final String parameterType) {
 
-		if (parameterType.equals("password")) {
-			return this.componentType.equalsIgnoreCase("text");
+		if ("password".equals(parameterType)) {
+			return "text".equals(componentType);
 		}
-		return this.componentType.equalsIgnoreCase(parameterType);
+		return componentType.equalsIgnoreCase(parameterType);
 	}
 
 	/**
@@ -87,14 +87,14 @@ public class Validation implements IValidation, Serializable {
 	 * <li>accepted: the value is valid only if it passes the validation</li>
 	 * <li>rejected: the value is rejected if doesn't pass the validation</li>
 	 * </ul>
-	 * 
+	 *
 	 * @param parameter parameter name
 	 * @param values parameter's values
 	 * @param dataType editable data type
 	 * @return True if the values <code>values</code> are valid for the parameter <code>parameter</code>.
 	 * @since HDIV 1.1.1
 	 */
-	public boolean validate(String parameter, String[] values, String dataType) {
+	public boolean validate(final String parameter, final String[] values, final String dataType) {
 
 		// we check if the component type we apply the validation to is
 		// the same as the parameter's component type.
@@ -103,18 +103,18 @@ public class Validation implements IValidation, Serializable {
 		}
 
 		// we validate all the values for the parameter
-		for (String value : values) {
+		for (final String value : values) {
 
 			if (this.acceptedPattern != null) {
 
-				Matcher m = this.acceptedPattern.matcher(value);
+				final Matcher m = this.acceptedPattern.matcher(value);
 				if (!m.matches()) {
 					return false;
 				}
 			}
 			if (this.rejectedPattern != null) {
 
-				Matcher m = this.rejectedPattern.matcher(value);
+				final Matcher m = this.rejectedPattern.matcher(value);
 				if (m.matches()) {
 					return false;
 				}
@@ -133,7 +133,7 @@ public class Validation implements IValidation, Serializable {
 	/**
 	 * @param name the name to set
 	 */
-	public void setName(String name) {
+	public void setName(final String name) {
 		this.name = name;
 	}
 
@@ -147,14 +147,14 @@ public class Validation implements IValidation, Serializable {
 	/**
 	 * @param componentType The comkponent type to set.
 	 */
-	public void setComponentType(String componentType) {
+	public void setComponentType(final String componentType) {
 		this.componentType = componentType;
 	}
 
 	/**
 	 * @param acceptedPattern The accepted pattern to set.
 	 */
-	public void setAcceptedPattern(String acceptedPattern) {
+	public void setAcceptedPattern(final String acceptedPattern) {
 		this.acceptedPattern = Pattern.compile(acceptedPattern);
 	}
 
@@ -168,7 +168,7 @@ public class Validation implements IValidation, Serializable {
 	/**
 	 * @param rejectedPattern The rejected pattern to set.
 	 */
-	public void setRejectedPattern(String rejectedPattern) {
+	public void setRejectedPattern(final String rejectedPattern) {
 		this.rejectedPattern = Pattern.compile(rejectedPattern);
 	}
 
@@ -186,12 +186,13 @@ public class Validation implements IValidation, Serializable {
 		return defaultValidation;
 	}
 
-	public void setDefaultValidation(boolean defaultValidation) {
+	public void setDefaultValidation(final boolean defaultValidation) {
 		this.defaultValidation = defaultValidation;
 	}
 
+	@Override
 	public String toString() {
-		StringBuffer result = new StringBuffer().append("");
+		StringBuilder result = new StringBuilder().append("");
 		result = result.append(" name=").append(this.getName());
 		result = result.append(" componentType=").append(this.getComponentType());
 		result = result.append(" acceptedPattern=").append(
