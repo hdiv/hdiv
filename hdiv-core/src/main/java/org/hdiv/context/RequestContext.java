@@ -21,26 +21,26 @@ import javax.servlet.http.HttpSession;
 
 /**
  * Context holder for request-specific state. Contains request-specific data for validation and composition phases.
- * 
+ *
  * @since 3.0.0
  */
 public class RequestContext {
 
-	protected HttpServletRequest request;
+	private HttpServletRequest request;
 
-	protected HttpServletResponse response;
+	private HttpServletResponse response;
 
-	protected HttpSession session;
+	private HttpSession session;
 
-	public RequestContext(HttpServletRequest request) {
-		this.request = request;
+	public RequestContext(final HttpServletRequest request) {
+		this(request, null);
 	}
 
-	public RequestContext(HttpSession session) {
+	public RequestContext(final HttpSession session) {
 		this.session = session;
 	}
 
-	public RequestContext(HttpServletRequest request, HttpServletResponse response) {
+	public RequestContext(final HttpServletRequest request, final HttpServletResponse response) {
 		this.request = request;
 		this.response = response;
 	}
