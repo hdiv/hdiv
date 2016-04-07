@@ -36,7 +36,7 @@ public interface IValidationResult {
 	/**
 	 * @return Returns the result.
 	 */
-	public Object getResult();
+	public <T> T getResult();
 
 	/**
 	 * @param result The result to set.
