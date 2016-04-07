@@ -104,7 +104,7 @@ public class Logger {
 	protected String format(String type, String target, String parameterName, String parameterValue,
 			String originalParameterValue, String localIp, String remoteIp, String userName, String validationRuleName) {
 
-		StringBuffer buffer = new StringBuffer();
+		StringBuilder buffer = new StringBuilder();
 		buffer.append(type);
 		buffer.append(";");
 		buffer.append(target);
