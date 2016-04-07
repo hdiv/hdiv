@@ -117,7 +117,7 @@ public class MessageFactory {
 		if (params == null || msgtext == null) {
 			return msgtext;
 		}
-		StringBuffer b = new StringBuffer(100);
+		StringBuilder b = new StringBuilder(128);
 		MessageFormat mf = new MessageFormat(msgtext);
 		if (locale != null) {
 			mf.setLocale(locale);

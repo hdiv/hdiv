@@ -23,6 +23,7 @@ import org.hdiv.dataComposer.DataComposerFactory;
 import org.hdiv.dataComposer.IDataComposer;
 import org.hdiv.exception.HDIVException;
 import org.hdiv.util.HDIVUtil;
+import org.hdiv.util.Method;
 
 /**
  * Unit tests for the <code>org.hdiv.state.StateUtil</code> class.
@@ -34,28 +35,29 @@ public class StateUtilTest extends AbstractHDIVTestCase {
 
 	private StateUtil stateUtil;
 
+	@Override
 	protected void onSetUp() throws Exception {
 
-		this.dataComposerFactory = this.getApplicationContext().getBean(DataComposerFactory.class);
-		this.stateUtil = this.getApplicationContext().getBean(StateUtil.class);
+		dataComposerFactory = getApplicationContext().getBean(DataComposerFactory.class);
+		stateUtil = getApplicationContext().getBean(StateUtil.class);
 	}
 
 	public void testRestore() {
 
-		HttpServletRequest request = this.getMockRequest();
-		RequestContext context = this.getRequestContext();
-		IDataComposer dataComposer = this.dataComposerFactory.newInstance(request);
+		final HttpServletRequest request = getMockRequest();
+		final RequestContext context = getRequestContext();
+		final IDataComposer dataComposer = dataComposerFactory.newInstance(request);
 		HDIVUtil.setDataComposer(dataComposer, request);
 
 		dataComposer.startPage();
-		dataComposer.beginRequest("GET", "test.do");
+		dataComposer.beginRequest(Method.GET, "test.do");
 		dataComposer.compose("parameter1", "2", false);
-		String stateId = dataComposer.endRequest();
+		final String stateId = dataComposer.endRequest();
 		dataComposer.endPage();
 
 		assertNotNull(stateId);
 
-		IState restored = this.stateUtil.restoreState(context, stateId);
+		final IState restored = stateUtil.restoreState(context, stateId);
 
 		assertNotNull(restored);
 		assertEquals(restored.getAction(), "test.do");
@@ -64,17 +66,17 @@ public class StateUtilTest extends AbstractHDIVTestCase {
 
 	public void testRestoreIncorrectStateId() {
 
-		HttpServletRequest request = this.getMockRequest();
-		RequestContext context = this.getRequestContext();
-		IDataComposer dataComposer = this.dataComposerFactory.newInstance(request);
+		final HttpServletRequest request = getMockRequest();
+		final RequestContext context = getRequestContext();
+		final IDataComposer dataComposer = dataComposerFactory.newInstance(request);
 		HDIVUtil.setDataComposer(dataComposer, request);
 
 		try {
-			IState restored = this.stateUtil.restoreState(context, "1111-");
+			final IState restored = stateUtil.restoreState(context, "1111-");
 			assertNull(restored);
 			fail();
 		}
-		catch (HDIVException e) {
+		catch (final HDIVException e) {
 			assertTrue(true);
 
 		}
@@ -82,35 +84,35 @@ public class StateUtilTest extends AbstractHDIVTestCase {
 
 	public void testIsMemoryStrategy() {
 
-		HttpServletRequest request = this.getMockRequest();
-		IDataComposer dataComposer = this.dataComposerFactory.newInstance(request);
+		final HttpServletRequest request = getMockRequest();
+		final IDataComposer dataComposer = dataComposerFactory.newInstance(request);
 
 		HDIVUtil.setDataComposer(dataComposer, request);
 
 		// memory strategy in conf and bad formatted stateId
-		boolean result = this.stateUtil.isMemoryStrategy("1111");
+		final boolean result = stateUtil.isMemoryStrategy("1111");
 		assertTrue(result);
 	}
 
 	public void testLongLivingApp() {
 
-		HttpServletRequest request = this.getMockRequest();
-		RequestContext context = this.getRequestContext();
-		IDataComposer dataComposer = this.dataComposerFactory.newInstance(request);
+		final HttpServletRequest request = getMockRequest();
+		final RequestContext context = getRequestContext();
+		final IDataComposer dataComposer = dataComposerFactory.newInstance(request);
 		HDIVUtil.setDataComposer(dataComposer, request);
 
 		dataComposer.startPage();
 		dataComposer.startScope("app");
-		dataComposer.beginRequest("GET", "test.do");
+		dataComposer.beginRequest(Method.GET, "test.do");
 		dataComposer.compose("parameter1", "2", false);
-		String stateId = dataComposer.endRequest();
+		final String stateId = dataComposer.endRequest();
 		dataComposer.endScope();
 		dataComposer.endPage();
 
 		assertNotNull(stateId);
 		assertTrue(stateId.startsWith("A-"));
 
-		IState restored = this.stateUtil.restoreState(context, stateId);
+		final IState restored = stateUtil.restoreState(context, stateId);
 
 		assertNotNull(restored);
 		assertEquals(restored.getAction(), "test.do");
@@ -119,23 +121,23 @@ public class StateUtilTest extends AbstractHDIVTestCase {
 
 	public void testLongLivingUser() {
 
-		HttpServletRequest request = this.getMockRequest();
-		RequestContext context = this.getRequestContext();
-		IDataComposer dataComposer = this.dataComposerFactory.newInstance(request);
+		final HttpServletRequest request = getMockRequest();
+		final RequestContext context = getRequestContext();
+		final IDataComposer dataComposer = dataComposerFactory.newInstance(request);
 		HDIVUtil.setDataComposer(dataComposer, request);
 
 		dataComposer.startPage();
 		dataComposer.startScope("user-session");
-		dataComposer.beginRequest("GET", "test.do");
+		dataComposer.beginRequest(Method.GET, "test.do");
 		dataComposer.compose("parameter1", "2", false);
-		String stateId = dataComposer.endRequest();
+		final String stateId = dataComposer.endRequest();
 		dataComposer.endScope();
 		dataComposer.endPage();
 
 		assertNotNull(stateId);
 		assertTrue(stateId.startsWith("U-"));
 
-		IState restored = this.stateUtil.restoreState(context, stateId);
+		final IState restored = stateUtil.restoreState(context, stateId);
 
 		assertNotNull(restored);
 		assertEquals(restored.getAction(), "test.do");
