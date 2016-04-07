@@ -24,7 +24,7 @@ import org.hdiv.util.HDIVUtil;
 
 /**
  * Tag to mark a part of the page as long living page.
- * 
+ *
  * @since 2.1.7
  */
 public class LongLivingStatesTag extends TagSupport {
@@ -37,20 +37,19 @@ public class LongLivingStatesTag extends TagSupport {
 
 	/**
 	 * Sets the type <code>scope</code> defined in the tag.
-	 * 
+	 *
 	 * @param scope Scope name
 	 */
-	public void setScope(String scope) {
-		this.setValue("scope", scope);
+	public void setScope(final String scope) {
+		setValue("scope", scope);
 	}
 
 	@Override
 	public int doStartTag() throws JspException {
 
-		IDataComposer dataComposer = (IDataComposer) this.pageContext.getRequest().getAttribute(
-				HDIVUtil.DATACOMPOSER_REQUEST_KEY);
+		final IDataComposer dataComposer = HDIVUtil.getDataComposer(pageContext.getRequest());
 
-		String scope = (String) this.getValue("scope");
+		String scope = (String) getValue("scope");
 		if (scope == null) {
 			// Default scope
 			scope = StateScopeType.USER_SESSION.getName();
@@ -64,10 +63,7 @@ public class LongLivingStatesTag extends TagSupport {
 	@Override
 	public int doEndTag() throws JspException {
 
-		IDataComposer dataComposer = (IDataComposer) this.pageContext.getRequest().getAttribute(
-				HDIVUtil.DATACOMPOSER_REQUEST_KEY);
-
-		dataComposer.endScope();
+		HDIVUtil.getDataComposer(pageContext.getRequest()).endScope();
 
 		return EVAL_PAGE;
 	}
