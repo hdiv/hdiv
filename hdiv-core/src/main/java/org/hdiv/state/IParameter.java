@@ -21,72 +21,72 @@ public interface IParameter {
 
 	/**
 	 * Adds the value <code>value</code> to the parameter <code>this</code>.
-	 * 
+	 *
 	 * @param value New value
 	 */
-	public void addValue(String value);
+	void addValue(String value);
 
 	/**
 	 * Checks if parameter has <code>value</code>.
-	 * 
+	 *
 	 * @param value Value
-	 * 
+	 *
 	 * @return True if <code>value</code> exists in the array of values <code>values</code>. False otherwise.
 	 */
-	public boolean existValue(String value);
+	boolean existValue(String value);
 
 	/**
 	 * Checks if the position <code>position</code> exists in the array of values <code>values</code>.
-	 * 
+	 *
 	 * @param position Position
-	 * 
+	 *
 	 * @return True if <code>position</code> is valid position in the array of values <code>values</code>. False
 	 * otherwise.
 	 */
-	public boolean existPosition(int position);
+	boolean existPosition(int position);
 
 	/**
 	 * @param position Position index
 	 * @return Obtains the value of the position <code>position</code> in the list of values of the parameter.
 	 */
-	public String getValuePosition(int position);
+	String getValuePosition(int position);
 
 	/**
 	 * @return Returns the parameter name.
 	 */
-	public String getName();
+	String getName();
 
 	/**
 	 * @return Returns the values of parameter.
 	 */
-	public List<String> getValues();
+	List<String> getValues();
 
 	/**
 	 * @return Returns if parameter <code>this</code> is editable or not.
 	 */
-	public boolean isEditable();
+	boolean isEditable();
 
 	/**
 	 * @param editable Modify the editable value of the parameter
 	 * @since 2.1.8
 	 */
-	public void setEditable(boolean editable);
+	void setEditable(boolean editable);
 
 	/**
 	 * @return Returns confidential value
 	 */
-	public String getConfidentialValue();
+	String getConfidentialValue();
 
 	/**
 	 * Indicates if the parameter has been added to the action attribute of a link or form.
-	 * 
+	 *
 	 * @return True if the parameter has been added to the action attribute of a link or form. False in otherwise.
 	 */
-	public boolean isActionParam();
+	boolean isActionParam();
 
 	/**
 	 * @return Returns the editable data type.
 	 */
-	public String getEditableDataType();
+	String getEditableDataType();
 
 }
