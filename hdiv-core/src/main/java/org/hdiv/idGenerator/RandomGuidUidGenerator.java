@@ -47,15 +47,15 @@ public class RandomGuidUidGenerator implements UidGenerator, Serializable {
 	 * cryptographically strong.
 	 * @param secure boolean
 	 */
-	public void setSecure(boolean secure) {
+	public void setSecure(final boolean secure) {
 		this.secure = secure;
 	}
 
 	public Serializable generateUid() {
-		return new RandomGuid(secure).toString();
+		return RandomGuid.getRandomGuid(secure);
 	}
 
-	public Serializable parseUid(String encodedUid) {
+	public Serializable parseUid(final String encodedUid) {
 		return encodedUid;
 	}
 }
