@@ -23,6 +23,7 @@ import java.util.Map;
 import org.hdiv.config.factory.ValidationRepositoryFactoryBean;
 import org.hdiv.config.factory.ValidationRepositoryFactoryBean.ValidationTargetData;
 import org.hdiv.config.validations.DefaultValidationParser;
+import org.hdiv.config.validations.DefaultValidationParser.ValidationParam;
 import org.hdiv.validator.DefaultEditableDataValidationProvider;
 import org.hdiv.validator.IValidation;
 import org.hdiv.validator.Validation;
@@ -70,13 +71,13 @@ public class EditableValidationsBeanDefinitionParser extends AbstractSingleBeanD
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.springframework.beans.factory.xml.AbstractBeanDefinitionParser#resolveId(org.w3c.dom.Element,
 	 * org.springframework.beans.factory.support.AbstractBeanDefinition,
 	 * org.springframework.beans.factory.xml.ParserContext)
 	 */
 	@Override
-	protected String resolveId(Element element, AbstractBeanDefinition definition, ParserContext parserContext)
+	protected String resolveId(final Element element, final AbstractBeanDefinition definition, final ParserContext parserContext)
 			throws BeanDefinitionStoreException {
 
 		return EDITABLE_VALIDATION_PROVIDER_BEAN_NAME;
@@ -84,36 +85,38 @@ public class EditableValidationsBeanDefinitionParser extends AbstractSingleBeanD
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.springframework.beans.factory.xml.AbstractSingleBeanDefinitionParser#getBeanClass(org.w3c.dom.Element)
 	 */
-	protected Class<?> getBeanClass(Element element) {
+	@Override
+	protected Class<?> getBeanClass(final Element element) {
 		return DefaultEditableDataValidationProvider.class;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.springframework.beans.factory.xml.AbstractSingleBeanDefinitionParser#doParse(org.w3c.dom.Element,
 	 * org.springframework.beans.factory.xml.ParserContext,
 	 * org.springframework.beans.factory.support.BeanDefinitionBuilder)
 	 */
-	protected void doParse(Element element, ParserContext parserContext, BeanDefinitionBuilder bean) {
+	@Override
+	protected void doParse(final Element element, final ParserContext parserContext, final BeanDefinitionBuilder bean) {
 
-		Object source = parserContext.extractSource(element);
+		final Object source = parserContext.extractSource(element);
 
-		Map<ValidationTargetData, List<String>> validationsData = new LinkedHashMap<ValidationTargetData, List<String>>();
-		List<IValidation> defaultValidations = new ArrayList<IValidation>();
+		final Map<ValidationTargetData, List<String>> validationsData = new LinkedHashMap<ValidationTargetData, List<String>>();
+		final List<IValidation> defaultValidations = new ArrayList<IValidation>();
 
-		RuntimeBeanReference repositoryRef = this.createValidationRepository(element, source, parserContext,
-				validationsData, defaultValidations);
+		final RuntimeBeanReference repositoryRef = this.createValidationRepository(element, source, parserContext, validationsData,
+				defaultValidations);
 		bean.getBeanDefinition().getPropertyValues().addPropertyValue("validationRepository", repositoryRef);
 
 		// Register default editable validation
 		boolean registerDefaults = true;
-		Node named = element.getAttributes().getNamedItem("registerDefaults");
+		final Node named = element.getAttributes().getNamedItem("registerDefaults");
 		if (named != null) {
-			String registerDefaultsValue = named.getTextContent();
+			final String registerDefaultsValue = named.getTextContent();
 			if (registerDefaultsValue != null) {
 				registerDefaults = Boolean.TRUE.toString().equalsIgnoreCase(registerDefaultsValue);
 			}
@@ -121,14 +124,14 @@ public class EditableValidationsBeanDefinitionParser extends AbstractSingleBeanD
 
 		if (registerDefaults) {
 			// Create beans for default validations
-			List<IValidation> defaultVals = createDefaultEditableValidations(element, parserContext);
+			final List<IValidation> defaultVals = createDefaultEditableValidations(element, parserContext);
 			defaultValidations.addAll(defaultVals);
 		}
 
-		NodeList list = element.getChildNodes();
+		final NodeList list = element.getChildNodes();
 
 		for (int i = 0; i < list.getLength(); i++) {
-			Node node = list.item(i);
+			final Node node = list.item(i);
 			if (node.getNodeType() == Node.ELEMENT_NODE) {
 				if (node.getLocalName().equalsIgnoreCase("validationRule")) {
 
@@ -138,62 +141,60 @@ public class EditableValidationsBeanDefinitionParser extends AbstractSingleBeanD
 		}
 
 		if (this.springMvcPresent) {
-			parserContext.getRegistry().registerBeanDefinition(EDITABLE_VALIDATOR_BEAN_NAME,
-					this.createValidator(element, source, parserContext));
+			parserContext.getRegistry().registerBeanDefinition(EDITABLE_VALIDATOR_BEAN_NAME, this.createValidator(element, source, parserContext));
 		}
 	}
 
-	protected RuntimeBeanReference createValidationRepository(Element element, Object source,
-			ParserContext parserContext, Map<ValidationTargetData, List<String>> validationsData,
-			List<IValidation> defaultValidations) {
+	protected RuntimeBeanReference createValidationRepository(final Element element, final Object source, final ParserContext parserContext,
+			final Map<ValidationTargetData, List<String>> validationsData, final List<IValidation> defaultValidations) {
 
-		RootBeanDefinition bean = new RootBeanDefinition(ValidationRepositoryFactoryBean.class);
+		final RootBeanDefinition bean = new RootBeanDefinition(ValidationRepositoryFactoryBean.class);
 		bean.setSource(source);
 		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
 
-		RuntimeBeanReference beanRef = new RuntimeBeanReference(ConfigBeanDefinitionParser.PATTERN_MATCHER_FACTORY_NAME);
+		final RuntimeBeanReference beanRef = new RuntimeBeanReference(ConfigBeanDefinitionParser.PATTERN_MATCHER_FACTORY_NAME);
 		bean.getPropertyValues().addPropertyValue("patternMatcherFactory", beanRef);
 		bean.getPropertyValues().addPropertyValue("defaultValidations", defaultValidations);
 		bean.getPropertyValues().addPropertyValue("validationsData", validationsData);
 
-		String name = ValidationRepository.class.getName();
+		final String name = ValidationRepository.class.getName();
 		parserContext.getRegistry().registerBeanDefinition(name, bean);
 		return new RuntimeBeanReference(name);
 	}
 
 	/**
 	 * Initialize Map with url, parameter and ValidationRule data.
-	 * 
+	 *
 	 * @param node processing xml node
 	 * @param bean bean configuration
 	 * @param validationsData Map with url, parameter and ValidationRule data
 	 */
-	protected void processValidationRule(Node node, BeanDefinitionBuilder bean,
-			Map<ValidationTargetData, List<String>> validationsData) {
+	protected void processValidationRule(final Node node, final BeanDefinitionBuilder bean,
+			final Map<ValidationTargetData, List<String>> validationsData) {
 
-		String value = node.getTextContent();
-		List<String> ids = this.convertToList(value);
+		final String value = node.getTextContent();
+		final List<String> ids = this.convertToList(value);
 
-		NamedNodeMap attributes = node.getAttributes();
-		Node urlNode = attributes.getNamedItem("url");
-		Node paramsNode = attributes.getNamedItem("parameters");
+		final NamedNodeMap attributes = node.getAttributes();
+		final Node urlNode = attributes.getNamedItem("url");
+		final Node paramsNode = attributes.getNamedItem("parameters");
 
 		if (urlNode != null || paramsNode != null) {
-			ValidationTargetData data = new ValidationTargetData();
+			final ValidationTargetData data = new ValidationTargetData();
 			if (urlNode != null) {
-				String url = urlNode.getTextContent();
+				final String url = urlNode.getTextContent();
 				data.setUrl(url);
 			}
 			if (paramsNode != null) {
-				String params = paramsNode.getTextContent();
-				List<String> paramsList = convertToList(params);
+				final String params = paramsNode.getTextContent();
+				final List<String> paramsList = convertToList(params);
 				data.setParams(paramsList);
 			}
 
 			boolean enableDefaults = true;
-			Node named = attributes.getNamedItem("enableDefaults");
+			final Node named = attributes.getNamedItem("enableDefaults");
 			if (named != null) {
-				String enableDefaultsVal = named.getTextContent();
+				final String enableDefaultsVal = named.getTextContent();
 				if (enableDefaultsVal != null) {
 					enableDefaults = Boolean.TRUE.toString().equalsIgnoreCase(enableDefaultsVal);
 				}
@@ -210,17 +211,17 @@ public class EditableValidationsBeanDefinitionParser extends AbstractSingleBeanD
 
 	/**
 	 * Convert String with bean id's in List
-	 * 
+	 *
 	 * @param data String data
 	 * @return List with bean id's
 	 */
-	protected List<String> convertToList(String data) {
+	protected List<String> convertToList(final String data) {
 		if (data == null || data.length() == 0) {
 			return new ArrayList<String>();
 		}
-		String[] result = data.split(",");
-		List<String> list = new ArrayList<String>();
-		for (String val : result) {
+		final String[] result = data.split(",");
+		final List<String> list = new ArrayList<String>();
+		for (final String val : result) {
 			list.add(val.trim());
 		}
 		return list;
@@ -228,27 +229,27 @@ public class EditableValidationsBeanDefinitionParser extends AbstractSingleBeanD
 
 	/**
 	 * Create beans for the default editable validations.
-	 * 
+	 *
 	 * @param element xml element
 	 * @param parserContext xml parser context
 	 * @return default validations
 	 */
-	protected List<IValidation> createDefaultEditableValidations(Element element, ParserContext parserContext) {
+	protected List<IValidation> createDefaultEditableValidations(final Element element, final ParserContext parserContext) {
 
 		// Load validations from xml
-		DefaultValidationParser parser = new DefaultValidationParser();
+		final DefaultValidationParser parser = new DefaultValidationParser();
 		parser.readDefaultValidations();
-		List<Map<String, String>> validations = parser.getValidations();
+		final List<Map<ValidationParam, String>> validations = parser.getValidations();
 
-		List<IValidation> defaultValidations = new ArrayList<IValidation>();
+		final List<IValidation> defaultValidations = new ArrayList<IValidation>();
 
-		for (Map<String, String> validation : validations) {
+		for (final Map<ValidationParam, String> validation : validations) {
 			// Map contains validation id and regex extracted from the xml
-			String id = validation.get("id");
-			String regex = validation.get("regex");
+			final String id = validation.get(ValidationParam.ID);
+			final String regex = validation.get(ValidationParam.REGEX);
 
 			// Create validation instance
-			Validation validationBean = new Validation();
+			final Validation validationBean = new Validation();
 			validationBean.setName(id);
 			validationBean.setDefaultValidation(true);
 			validationBean.setRejectedPattern(regex);
@@ -256,8 +257,8 @@ public class EditableValidationsBeanDefinitionParser extends AbstractSingleBeanD
 			defaultValidations.add(validationBean);
 		}
 
-		Object source = parserContext.extractSource(element);
-		RootBeanDefinition bean = new RootBeanDefinition(ListFactoryBean.class);
+		final Object source = parserContext.extractSource(element);
+		final RootBeanDefinition bean = new RootBeanDefinition(ListFactoryBean.class);
 		bean.setSource(source);
 		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
 		bean.getPropertyValues().addPropertyValue("sourceList", defaultValidations);
@@ -268,16 +269,16 @@ public class EditableValidationsBeanDefinitionParser extends AbstractSingleBeanD
 		return defaultValidations;
 	}
 
-	protected RootBeanDefinition createValidator(Element element, Object source, ParserContext parserContext) {
-		RootBeanDefinition bean = new RootBeanDefinition(EditableParameterValidator.class);
+	protected RootBeanDefinition createValidator(final Element element, final Object source, final ParserContext parserContext) {
+		final RootBeanDefinition bean = new RootBeanDefinition(EditableParameterValidator.class);
 		bean.setSource(source);
 		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
 		if (jsr303Present) {
 
-			RootBeanDefinition validatorDef = new RootBeanDefinition(LocalValidatorFactoryBean.class);
+			final RootBeanDefinition validatorDef = new RootBeanDefinition(LocalValidatorFactoryBean.class);
 			validatorDef.setSource(source);
 			validatorDef.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
-			String validatorName = parserContext.getReaderContext().registerWithGeneratedName(validatorDef);
+			final String validatorName = parserContext.getReaderContext().registerWithGeneratedName(validatorDef);
 			parserContext.registerComponent(new BeanComponentDefinition(validatorDef, validatorName));
 
 			bean.getPropertyValues().addPropertyValue("innerValidator", new RuntimeBeanReference(validatorName));
