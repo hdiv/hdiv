@@ -36,4 +36,10 @@ public interface PatternMatcher {
 	 */
 	boolean matches(String input);
 
+	/**
+	 * Obtain the pattern used to find
+	 * @return pattern to find
+	 */
+	public String getPattern();
+
 }
