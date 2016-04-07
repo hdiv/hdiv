@@ -28,6 +28,7 @@ import org.hdiv.config.annotation.ValidationConfigurer.ValidationConfig;
 import org.hdiv.config.annotation.ValidationConfigurer.ValidationConfig.EditableValidationConfigurer;
 import org.hdiv.config.annotation.builders.SecurityConfigBuilder;
 import org.hdiv.config.validations.DefaultValidationParser;
+import org.hdiv.config.validations.DefaultValidationParser.ValidationParam;
 import org.hdiv.dataComposer.DataComposerFactory;
 import org.hdiv.dataValidator.DataValidator;
 import org.hdiv.dataValidator.IDataValidator;
@@ -79,82 +80,82 @@ import org.springframework.context.annotation.Scope;
 
 /**
  * Main abstract class for {@link Configuration} support. Creates all internal bean instances.
- * 
+ *
  * @since 3.0.0
  */
 public abstract class AbstractHdivWebSecurityConfiguration {
 
 	/**
 	 * Override this method to configure HDIV
-	 * 
+	 *
 	 * @param securityConfigBuilder {@link SecurityConfigBuilder} instance
 	 * @see SecurityConfigBuilder
 	 */
-	protected void configure(SecurityConfigBuilder securityConfigBuilder) {
+	protected void configure(final SecurityConfigBuilder securityConfigBuilder) {
 	}
 
 	/**
 	 * Override this method to add exclusions to the validation process.
-	 * 
+	 *
 	 * @param registry {@link ExclusionRegistry} instance
 	 * @see ExclusionRegistry
 	 */
-	protected void addExclusions(ExclusionRegistry registry) {
+	protected void addExclusions(final ExclusionRegistry registry) {
 	}
 
 	/**
 	 * Override this method to add long living pages to the application.
-	 * 
+	 *
 	 * @param registry {@link LongLivingPagesRegistry} instance
 	 * @see LongLivingPagesRegistry
 	 */
-	protected void addLongLivingPages(LongLivingPagesRegistry registry) {
+	protected void addLongLivingPages(final LongLivingPagesRegistry registry) {
 	}
 
 	/**
 	 * Override this method to add editable validation rules.
-	 * 
+	 *
 	 * @param registry {@link RuleRegistry} instance
 	 * @see RuleRegistry
 	 */
-	protected void addRules(RuleRegistry registry) {
+	protected void addRules(final RuleRegistry registry) {
 	}
 
 	/**
 	 * Override this method to add editable validations to the application.
-	 * 
+	 *
 	 * @param validationConfigurer {@link ValidationConfigurer} instance
 	 * @see ValidationConfigurer
 	 */
-	protected void configureEditableValidation(ValidationConfigurer validationConfigurer) {
+	protected void configureEditableValidation(final ValidationConfigurer validationConfigurer) {
 	}
 
 	@Bean
 	public HDIVConfig hdivConfig() {
 
-		SecurityConfigBuilder securityConfigBuilder = this.securityConfigBuilder();
-		this.configure(securityConfigBuilder);
+		final SecurityConfigBuilder securityConfigBuilder = securityConfigBuilder();
+		configure(securityConfigBuilder);
 
-		HDIVConfig config = securityConfigBuilder.build();
+		final HDIVConfig config = securityConfigBuilder.build();
 		config.setEditableDataValidationProvider(editableDataValidationProvider());
 
 		// User configured exclusions
-		ExclusionRegistry exclusionRegistry = new ExclusionRegistry(patternMatcherFactory());
-		this.addExclusions(exclusionRegistry);
+		final ExclusionRegistry exclusionRegistry = new ExclusionRegistry(patternMatcherFactory());
+		addExclusions(exclusionRegistry);
 		// Start Pages
-		List<StartPage> exclusions = exclusionRegistry.getUrlExclusions();
+		final List<StartPage> exclusions = exclusionRegistry.getUrlExclusions();
 		config.setUserStartPages(exclusions);
 		// StartParameters
-		List<String> paramExclusions = exclusionRegistry.getParamExclusions();
+		final List<String> paramExclusions = exclusionRegistry.getParamExclusions();
 		config.setUserStartParameters(paramExclusions);
 		// ParamsWithoutValidation
-		Map<String, List<String>> paramsWithoutValidation = exclusionRegistry.getParamExclusionsForUrl();
+		final Map<String, List<String>> paramsWithoutValidation = exclusionRegistry.getParamExclusionsForUrl();
 		config.setParamsWithoutValidation(paramsWithoutValidation);
 
 		// Long living pages
-		LongLivingPagesRegistry longLivingPagesRegistry = new LongLivingPagesRegistry();
-		this.addLongLivingPages(longLivingPagesRegistry);
-		Map<String, String> longLivingPages = longLivingPagesRegistry.getLongLivingPages();
+		final LongLivingPagesRegistry longLivingPagesRegistry = new LongLivingPagesRegistry();
+		addLongLivingPages(longLivingPagesRegistry);
+		final Map<String, String> longLivingPages = longLivingPagesRegistry.getLongLivingPages();
 		config.setLongLivingPages(longLivingPages);
 
 		return config;
@@ -162,32 +163,32 @@ public abstract class AbstractHdivWebSecurityConfiguration {
 
 	@Bean
 	protected SecurityConfigBuilder securityConfigBuilder() {
-		SecurityConfigBuilder builder = new SecurityConfigBuilder(patternMatcherFactory());
+		final SecurityConfigBuilder builder = new SecurityConfigBuilder(patternMatcherFactory());
 		return builder;
 	}
 
 	@Bean
 	public IApplication securityApplication() {
-		ApplicationHDIV application = new ApplicationHDIV();
+		final ApplicationHDIV application = new ApplicationHDIV();
 		return application;
 	}
 
 	@Bean
 	public ValidationResult validationResult() {
-		ValidationResult result = new ValidationResult();
+		final ValidationResult result = new ValidationResult();
 		return result;
 	}
 
 	@Bean
 	public PatternMatcherFactory patternMatcherFactory() {
 
-		PatternMatcherFactory patternMatcherFactory = new PatternMatcherFactory();
+		final PatternMatcherFactory patternMatcherFactory = new PatternMatcherFactory();
 		return patternMatcherFactory;
 	}
 
 	@Bean
 	public UidGenerator uidGenerator() {
-		RandomGuidUidGenerator uidGenerator = new RandomGuidUidGenerator();
+		final RandomGuidUidGenerator uidGenerator = new RandomGuidUidGenerator();
 		return uidGenerator;
 	}
 
@@ -195,25 +196,25 @@ public abstract class AbstractHdivWebSecurityConfiguration {
 	@Scope(BeanDefinition.SCOPE_PROTOTYPE)
 	public PageIdGenerator pageIdGenerator() {
 
-		SequentialPageIdGenerator pageIdGenerator = new SequentialPageIdGenerator();
+		final SequentialPageIdGenerator pageIdGenerator = new SequentialPageIdGenerator();
 		return pageIdGenerator;
 	}
 
 	@Bean
 	public IUserData securityUserData() {
-		UserData userData = new UserData();
+		final UserData userData = new UserData();
 		return userData;
 	}
 
 	@Bean
 	public Logger securityLogger() {
-		Logger logger = new Logger();
+		final Logger logger = new Logger();
 		return logger;
 	}
 
 	@Bean
 	public ValidatorErrorHandler validatorErrorHandler() {
-		DefaultValidatorErrorHandler validatorErrorHandler = new DefaultValidatorErrorHandler();
+		final DefaultValidatorErrorHandler validatorErrorHandler = new DefaultValidatorErrorHandler();
 		validatorErrorHandler.setConfig(hdivConfig());
 		return validatorErrorHandler;
 	}
@@ -222,10 +223,10 @@ public abstract class AbstractHdivWebSecurityConfiguration {
 	@Scope(BeanDefinition.SCOPE_PROTOTYPE)
 	public IStateCache stateCache() {
 
-		SecurityConfigBuilder builder = this.securityConfigBuilder();
-		int maxPagesPerSession = builder.getMaxPagesPerSession();
+		final SecurityConfigBuilder builder = securityConfigBuilder();
+		final int maxPagesPerSession = builder.getMaxPagesPerSession();
 
-		StateCache stateCache = new StateCache();
+		final StateCache stateCache = new StateCache();
 		if (maxPagesPerSession > 0) {
 			stateCache.setMaxSize(maxPagesPerSession);
 		}
@@ -234,13 +235,13 @@ public abstract class AbstractHdivWebSecurityConfiguration {
 
 	@Bean
 	public ISession securitySession() {
-		SessionHDIV session = new SessionHDIV();
+		final SessionHDIV session = new SessionHDIV();
 		return session;
 	}
 
 	@Bean
 	public StateUtil stateUtil() {
-		StateUtil stateUtil = new StateUtil();
+		final StateUtil stateUtil = new StateUtil();
 		stateUtil.setConfig(hdivConfig());
 		stateUtil.setSession(securitySession());
 		stateUtil.setStateScopeManager(stateScopeManager());
@@ -250,17 +251,17 @@ public abstract class AbstractHdivWebSecurityConfiguration {
 
 	@Bean
 	public IDataValidator dataValidator() {
-		DataValidator dataValidator = new DataValidator();
+		final DataValidator dataValidator = new DataValidator();
 		dataValidator.setConfig(hdivConfig());
 		return dataValidator;
 	}
 
 	@Bean
 	public StateScopeManager stateScopeManager() {
-		List<StateScope> stateScopes = new ArrayList<StateScope>();
+		final List<StateScope> stateScopes = new ArrayList<StateScope>();
 		stateScopes.add(userSessionStateScope());
 		stateScopes.add(appStateScope());
-		DefaultStateScopeManager scopeManager = new DefaultStateScopeManager(stateScopes);
+		final DefaultStateScopeManager scopeManager = new DefaultStateScopeManager(stateScopes);
 		return scopeManager;
 	}
 
@@ -276,7 +277,7 @@ public abstract class AbstractHdivWebSecurityConfiguration {
 
 	@Bean
 	public DataComposerFactory dataComposerFactory() {
-		DataComposerFactory dataComposerFactory = new DataComposerFactory();
+		final DataComposerFactory dataComposerFactory = new DataComposerFactory();
 		dataComposerFactory.setConfig(hdivConfig());
 		dataComposerFactory.setSession(securitySession());
 		dataComposerFactory.setStateUtil(stateUtil());
@@ -288,7 +289,7 @@ public abstract class AbstractHdivWebSecurityConfiguration {
 	@Bean
 	public IValidationHelper requestValidationHelper() {
 
-		ValidatorHelperRequest validatorHelperRequest = new ValidatorHelperRequest();
+		final ValidatorHelperRequest validatorHelperRequest = new ValidatorHelperRequest();
 		validatorHelperRequest.setStateUtil(stateUtil());
 		validatorHelperRequest.setHdivConfig(hdivConfig());
 		validatorHelperRequest.setSession(securitySession());
@@ -302,14 +303,14 @@ public abstract class AbstractHdivWebSecurityConfiguration {
 
 	@Bean
 	public RequestInitializer securityRequestInitializer() {
-		DefaultRequestInitializer requestInitializer = new DefaultRequestInitializer();
+		final DefaultRequestInitializer requestInitializer = new DefaultRequestInitializer();
 		requestInitializer.setConfig(hdivConfig());
 		return requestInitializer;
 	}
 
 	@Bean
 	public ServletContextInitializer securityServletContextInitializer() {
-		DefaultServletContextInitializer servletContextInitializer = new DefaultServletContextInitializer();
+		final DefaultServletContextInitializer servletContextInitializer = new DefaultServletContextInitializer();
 		servletContextInitializer.setConfig(hdivConfig());
 		servletContextInitializer.setApplication(securityApplication());
 		servletContextInitializer.setFormUrlProcessor(formUrlProcessor());
@@ -319,28 +320,28 @@ public abstract class AbstractHdivWebSecurityConfiguration {
 
 	@Bean
 	public SessionInitializer securitySessionInitializer() {
-		DefaultSessionInitializer sessionInitializer = new DefaultSessionInitializer();
+		final DefaultSessionInitializer sessionInitializer = new DefaultSessionInitializer();
 		sessionInitializer.setConfig(hdivConfig());
 		return sessionInitializer;
 	}
 
 	@Bean
 	public LinkUrlProcessor linkUrlProcessor() {
-		LinkUrlProcessor linkUrlProcessor = new LinkUrlProcessor();
+		final LinkUrlProcessor linkUrlProcessor = new LinkUrlProcessor();
 		linkUrlProcessor.setConfig(hdivConfig());
 		return linkUrlProcessor;
 	}
 
 	@Bean
 	public FormUrlProcessor formUrlProcessor() {
-		FormUrlProcessor formUrlProcessor = new FormUrlProcessor();
+		final FormUrlProcessor formUrlProcessor = new FormUrlProcessor();
 		formUrlProcessor.setConfig(hdivConfig());
 		return formUrlProcessor;
 	}
 
 	@Bean
 	public BasicUrlProcessor basicUrlProcessor() {
-		BasicUrlProcessor basicUrlProcessor = new BasicUrlProcessor();
+		final BasicUrlProcessor basicUrlProcessor = new BasicUrlProcessor();
 		basicUrlProcessor.setConfig(hdivConfig());
 		return basicUrlProcessor;
 	}
@@ -348,7 +349,7 @@ public abstract class AbstractHdivWebSecurityConfiguration {
 	@Bean
 	public EditableDataValidationProvider editableDataValidationProvider() {
 
-		DefaultEditableDataValidationProvider provider = new DefaultEditableDataValidationProvider();
+		final DefaultEditableDataValidationProvider provider = new DefaultEditableDataValidationProvider();
 		provider.setValidationRepository(editableValidationRepository());
 		return provider;
 	}
@@ -357,14 +358,14 @@ public abstract class AbstractHdivWebSecurityConfiguration {
 	public ValidationRepository editableValidationRepository() {
 
 		// Default rules
-		List<IValidation> defaultRules = getDefaultRules();
+		final List<IValidation> defaultRules = getDefaultRules();
 		// Custom rules
-		Map<String, IValidation> customRules = getCustomRules();
+		final Map<String, IValidation> customRules = getCustomRules();
 
 		// Validation configuration
-		Map<ValidationTarget, List<IValidation>> validationsData = getValidationsData(defaultRules, customRules);
+		final Map<ValidationTarget, List<IValidation>> validationsData = getValidationsData(defaultRules, customRules);
 
-		DefaultValidationRepository repository = new DefaultValidationRepository();
+		final DefaultValidationRepository repository = new DefaultValidationRepository();
 		repository.setValidations(validationsData);
 		repository.setDefaultValidations(defaultRules);
 		return repository;
@@ -373,19 +374,19 @@ public abstract class AbstractHdivWebSecurityConfiguration {
 	protected List<IValidation> getDefaultRules() {
 
 		// Load validations from xml
-		DefaultValidationParser parser = new DefaultValidationParser();
+		final DefaultValidationParser parser = new DefaultValidationParser();
 		parser.readDefaultValidations();
-		List<Map<String, String>> validations = parser.getValidations();
+		final List<Map<ValidationParam, String>> validations = parser.getValidations();
 
-		List<IValidation> defaultRules = new ArrayList<IValidation>();
+		final List<IValidation> defaultRules = new ArrayList<IValidation>();
 
-		for (Map<String, String> validation : validations) {
+		for (final Map<ValidationParam, String> validation : validations) {
 			// Map contains validation id and regex extracted from the xml
-			String id = validation.get("id");
-			String regex = validation.get("regex");
+			final String id = validation.get(ValidationParam.ID);
+			final String regex = validation.get(ValidationParam.REGEX);
 
 			// Create bean for the validation
-			Validation validationBean = new Validation();
+			final Validation validationBean = new Validation();
 			validationBean.setName(id);
 			validationBean.setDefaultValidation(true);
 			validationBean.setRejectedPattern(regex);
@@ -397,37 +398,36 @@ public abstract class AbstractHdivWebSecurityConfiguration {
 
 	protected Map<String, IValidation> getCustomRules() {
 
-		RuleRegistry registry = new RuleRegistry();
-		this.addRules(registry);
-		Map<String, IValidation> customRules = registry.getRules();
+		final RuleRegistry registry = new RuleRegistry();
+		addRules(registry);
+		final Map<String, IValidation> customRules = registry.getRules();
 		return customRules;
 	}
 
-	protected Map<ValidationTarget, List<IValidation>> getValidationsData(List<IValidation> defaultRules,
-			Map<String, IValidation> customRules) {
+	protected Map<ValidationTarget, List<IValidation>> getValidationsData(final List<IValidation> defaultRules,
+			final Map<String, IValidation> customRules) {
 
-		PatternMatcherFactory patternMatcherFactory = patternMatcherFactory();
+		final PatternMatcherFactory patternMatcherFactory = patternMatcherFactory();
 
-		ValidationConfigurer validationConfigurer = new ValidationConfigurer();
-		this.configureEditableValidation(validationConfigurer);
-		List<ValidationConfig> validationConfigs = validationConfigurer.getValidationConfigs();
+		final ValidationConfigurer validationConfigurer = new ValidationConfigurer();
+		configureEditableValidation(validationConfigurer);
+		final List<ValidationConfig> validationConfigs = validationConfigurer.getValidationConfigs();
 
-		Map<ValidationTarget, List<IValidation>> validationsData = new LinkedHashMap<ValidationTarget, List<IValidation>>();
+		final Map<ValidationTarget, List<IValidation>> validationsData = new LinkedHashMap<ValidationTarget, List<IValidation>>();
 
-		for (ValidationConfig validationConfig : validationConfigs) {
+		for (final ValidationConfig validationConfig : validationConfigs) {
 
-			String urlPattern = validationConfig.getUrlPattern();
-			EditableValidationConfigurer editableValidationConfigurer = validationConfig
-					.getEditableValidationConfigurer();
-			boolean useDefaultRules = editableValidationConfigurer.isDefaultRules();
-			List<String> selectedRules = editableValidationConfigurer.getRules();
-			List<String> selectedParams = editableValidationConfigurer.getParameters();
+			final String urlPattern = validationConfig.getUrlPattern();
+			final EditableValidationConfigurer editableValidationConfigurer = validationConfig.getEditableValidationConfigurer();
+			final boolean useDefaultRules = editableValidationConfigurer.isDefaultRules();
+			final List<String> selectedRules = editableValidationConfigurer.getRules();
+			final List<String> selectedParams = editableValidationConfigurer.getParameters();
 
 			// Add selected rules
-			List<IValidation> activeRules = new ArrayList<IValidation>();
-			for (String ruleName : selectedRules) {
+			final List<IValidation> activeRules = new ArrayList<IValidation>();
+			for (final String ruleName : selectedRules) {
 
-				IValidation val = customRules.get(ruleName);
+				final IValidation val = customRules.get(ruleName);
 				if (val == null) {
 					throw new BeanInitializationException("Rule with name '" + ruleName + "' not registered.");
 				}
@@ -440,14 +440,14 @@ public abstract class AbstractHdivWebSecurityConfiguration {
 			}
 
 			// Create ValidationTarget object
-			ValidationTarget target = new ValidationTarget();
+			final ValidationTarget target = new ValidationTarget();
 			if (urlPattern != null) {
-				PatternMatcher urlMatcher = patternMatcherFactory.getPatternMatcher(urlPattern);
+				final PatternMatcher urlMatcher = patternMatcherFactory.getPatternMatcher(urlPattern);
 				target.setUrl(urlMatcher);
 			}
-			List<PatternMatcher> paramMatchers = new ArrayList<PatternMatcher>();
-			for (String param : selectedParams) {
-				PatternMatcher matcher = patternMatcherFactory.getPatternMatcher(param);
+			final List<PatternMatcher> paramMatchers = new ArrayList<PatternMatcher>();
+			for (final String param : selectedParams) {
+				final PatternMatcher matcher = patternMatcherFactory.getPatternMatcher(param);
 				paramMatchers.add(matcher);
 			}
 			target.setParams(paramMatchers);
