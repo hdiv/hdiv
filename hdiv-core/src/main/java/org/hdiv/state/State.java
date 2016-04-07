@@ -23,10 +23,11 @@ import java.util.List;
 
 import org.hdiv.exception.HDIVException;
 import org.hdiv.util.Constants;
+import org.hdiv.util.Method;
 
 /**
  * Data structure to store all data related with one request (parameters, parameter values, ...)
- * 
+ *
  * @author Roberto Velasco
  */
 public class State implements IState, Serializable {
@@ -70,7 +71,7 @@ public class State implements IState, Serializable {
 	/**
 	 * Flag to initialize the lists
 	 */
-	private boolean parametersInitialized = false;
+	private boolean parametersInitialized;
 
 	/**
 	 * Required parameters to be able to do a correct request with this state. We consider required parameters all of
@@ -83,52 +84,51 @@ public class State implements IState, Serializable {
 	 * <p>
 	 * Null value is equivalent to GET.
 	 */
-	private String method;
+	private Method method;
 
 	public State() {
-
 	}
 
-	public State(int id) {
+	public State(final int id) {
 		this.id = id;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.hdiv.state.IState#getParameters()
 	 */
 	public List<IParameter> getParameters() {
-		return this.parameters;
+		return parameters;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.hdiv.state.IState#addParameter(org.hdiv.state.IParameter)
 	 */
-	public void addParameter(IParameter parameter) {
+	public void addParameter(final IParameter parameter) {
 		if (!parametersInitialized) {
 			parametersInitialized = true;
-			this.parameters = new ArrayList<IParameter>(PARAMETERS_LIST_SIZE);
-			this.requiredParams = new ArrayList<String>(PARAMETERS_LIST_SIZE);
+			parameters = new ArrayList<IParameter>(PARAMETERS_LIST_SIZE);
+			requiredParams = new ArrayList<String>(PARAMETERS_LIST_SIZE);
 		}
 
 		if (parameter.isActionParam()) {
-			this.requiredParams.add(parameter.getName());
+			requiredParams.add(parameter.getName());
 		}
 
-		this.parameters.add(parameter);
+		parameters.add(parameter);
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.hdiv.state.IState#getParameter(java.lang.String)
 	 */
-	public IParameter getParameter(String key) {
+	public IParameter getParameter(final String key) {
 		if (parameters != null) {
-			for (IParameter parameter : parameters) {
+			for (final IParameter parameter : parameters) {
 				if (parameter.getName().equalsIgnoreCase(key)) {
 					return parameter;
 				}
@@ -140,46 +140,46 @@ public class State implements IState, Serializable {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.hdiv.state.IState#getAction()
 	 */
 	public String getAction() {
-		return this.action;
+		return action;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.hdiv.state.IState#setAction(java.lang.String)
 	 */
-	public void setAction(String action) {
+	public void setAction(final String action) {
 		this.action = action;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.hdiv.state.IState#getParams()
 	 */
 	public String getParams() {
-		if (this.params == null) {
+		if (params == null) {
 			return null;
 		}
 
 		try {
 			return new String(params, Constants.ENCODING_UTF_8);
 		}
-		catch (UnsupportedEncodingException e) {
+		catch (final UnsupportedEncodingException e) {
 			throw new HDIVException("Error converting parameters to String", e);
 		}
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.hdiv.state.IState#setParams(java.lang.String)
 	 */
-	public void setParams(String params) {
+	public void setParams(final String params) {
 		try {
 			if (params != null) {
 				this.params = params.getBytes(Constants.ENCODING_UTF_8);
@@ -188,14 +188,14 @@ public class State implements IState, Serializable {
 				this.params = null;
 			}
 		}
-		catch (UnsupportedEncodingException e) {
+		catch (final UnsupportedEncodingException e) {
 			throw new HDIVException("Error converting action to byte array", e);
 		}
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.hdiv.state.IState#getId()
 	 */
 	public int getId() {
@@ -204,13 +204,12 @@ public class State implements IState, Serializable {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.hdiv.state.IState#getRequiredParams()
 	 */
-	@SuppressWarnings("unchecked")
 	public List<String> getRequiredParams() {
 		if (!parametersInitialized) {
-			return Collections.EMPTY_LIST;
+			return Collections.emptyList();
 		}
 
 		return requiredParams;
@@ -218,67 +217,58 @@ public class State implements IState, Serializable {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.hdiv.state.IState#getPageId()
 	 */
 	public int getPageId() {
-		return this.pageId;
+		return pageId;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.hdiv.state.IState#setPageId(int)
 	 */
-	public void setPageId(int pageId) {
+	public void setPageId(final int pageId) {
 		this.pageId = pageId;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.hdiv.state.IState#getMethod()
 	 */
-	public String getMethod() {
-		if (this.method == null) {
-			return "GET";
-		}
-		return method;
+	public final Method getMethod() {
+		return method != null ? method : Method.GET;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.hdiv.state.IState#setMethod(java.lang.String)
 	 */
-	public void setMethod(String method) {
-		if (method == null) {
-			this.method = method;
-		}
-		if (method.equalsIgnoreCase("GET")) {
-			this.method = null;
-		}
-		this.method = method.toUpperCase();
+	public void setMethod(final Method method) {
+		this.method = method;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.hdiv.state.IState#existParameter(java.lang.String)
 	 */
-	public boolean existParameter(String key) {
+	public boolean existParameter(final String key) {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public String toString() {
-		StringBuffer sb = new StringBuffer();
-		sb.append("id: ").append(this.id);
-		sb.append("action: ").append(this.action);
-		sb.append("parameters: ").append(this.parameters);
-		sb.append("params: ").append(this.params);
-		sb.append("requiredParams: ").append(this.requiredParams);
-		sb.append("method: ").append(this.method == null ? "GET" : this.method);
+		final StringBuilder sb = new StringBuilder(32);
+		sb.append("id: ").append(id);
+		sb.append("action: ").append(action);
+		sb.append("parameters: ").append(parameters);
+		sb.append("params: ").append(params);
+		sb.append("requiredParams: ").append(requiredParams);
+		sb.append("method: ").append(method == null ? "GET" : method);
 		return super.toString();
 	}
 
