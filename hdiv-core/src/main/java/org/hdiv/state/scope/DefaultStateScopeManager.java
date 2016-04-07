@@ -19,7 +19,7 @@ import java.util.List;
 
 /**
  * Default implementation of {@link StateScopeManager}.
- * 
+ *
  * @since 2.1.7
  */
 public class DefaultStateScopeManager implements StateScopeManager {
@@ -27,27 +27,25 @@ public class DefaultStateScopeManager implements StateScopeManager {
 	/**
 	 * Available {@link StateScope} implementations.
 	 */
-	private List<StateScope> stateScopes;
+	private final StateScope[] stateScopes;
 
-	public DefaultStateScopeManager(List<StateScope> stateScopes) {
-		this.stateScopes = stateScopes;
+	public DefaultStateScopeManager(final List<StateScope> stateScopes) {
+		this.stateScopes = stateScopes.toArray(new StateScope[stateScopes.size()]);
 	}
 
-	public StateScope getStateScope(String stateId) {
-
-		for (StateScope stateScope : stateScopes) {
-			if (stateScope.isScopeState(stateId)) {
-				return stateScope;
+	public StateScope getStateScope(final String stateId) {
+		for (int i = 0; i < stateScopes.length; i++) {
+			if (stateScopes[i].isScopeState(stateId)) {
+				return stateScopes[i];
 			}
 		}
 		return null;
 	}
 
-	public StateScope getStateScopeByName(String scopeName) {
-
-		for (StateScope stateScope : stateScopes) {
-			if (stateScope.getScopeName().equals(scopeName)) {
-				return stateScope;
+	public StateScope getStateScopeByName(final String scopeName) {
+		for (int i = 0; i < stateScopes.length; i++) {
+			if (stateScopes[i].getScopeName().equals(scopeName)) {
+				return stateScopes[i];
 			}
 		}
 		return null;
