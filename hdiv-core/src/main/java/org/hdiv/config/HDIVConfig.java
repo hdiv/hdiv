@@ -17,6 +17,7 @@ package org.hdiv.config;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,6 +29,7 @@ import org.hdiv.regex.PatternMatcher;
 import org.hdiv.regex.PatternMatcherFactory;
 import org.hdiv.state.IPage;
 import org.hdiv.util.Constants;
+import org.hdiv.util.Method;
 import org.hdiv.validator.EditableDataValidationProvider;
 
 /**
@@ -58,7 +60,7 @@ public class HDIVConfig implements Serializable {
 	 * List with the pages that will not be Treated by the HDIV filter. The init pages are initialized by the Spring
 	 * factory.
 	 */
-	protected List<StartPage> startPages = new ArrayList<StartPage>();
+	protected StartPage[] startPages = new StartPage[0];
 
 	/**
 	 * List with the parameters that will not be validated by the HDIV filter. The init parameters are initialized by
@@ -186,7 +188,7 @@ public class HDIVConfig implements Serializable {
 	/**
 	 * @param strategy the strategy to set
 	 */
-	public void setStrategy(Strategy strategy) {
+	public void setStrategy(final Strategy strategy) {
 		this.strategy = strategy;
 	}
 
@@ -196,14 +198,25 @@ public class HDIVConfig implements Serializable {
 	 * @param parameter Parameter name
 	 * @return True if <code>parameter</code> is an init parameter. False otherwise.
 	 */
-	public boolean isStartParameter(String parameter) {
+	public boolean isStartParameter(final String parameter) {
 
-		for (PatternMatcher matcher : this.startParameters) {
+		for (final PatternMatcher matcher : startParameters) {
 			if (matcher.matches(parameter)) {
 				return true;
 			}
 		}
 		return false;
+	}
+
+	private void addStartPage(final StartPage page) {
+		final List<StartPage> pages = new ArrayList<StartPage>(Arrays.asList(startPages));
+		pages.add(page);
+		startPages = pages.toArray(new StartPage[pages.size()]);
+	}
+
+	@Deprecated
+	public final boolean isStartPage(final String target, final String method) {
+		return isStartPage(target, Method.secureValueOf(method));
 	}
 
 	/**
@@ -213,21 +226,13 @@ public class HDIVConfig implements Serializable {
 	 * @param method request method (get,post...)
 	 * @return True if <code>target</code> is an init action. False otherwise.
 	 */
-	public boolean isStartPage(String target, String method) {
-
-		if (method != null) {
-			method = method.toUpperCase();
-		}
-
-		for (StartPage startPage : this.startPages) {
-
-			PatternMatcher m = startPage.getCompiledPattern();
+	public boolean isStartPage(final String target, final Method method) {
+		for (int i = 0; i < startPages.length; i++) {
+			final StartPage startPage = startPages[i];
+			final PatternMatcher m = startPage.compiledPattern;
 
 			if (m.matches(target)) {
-				if (startPage.isAnyMethod()) {
-					return true;
-				}
-				else if (startPage.getMethod().equalsIgnoreCase(method)) {
+				if (startPage.isAnyMethod() || startPage.method == method) {
 					return true;
 				}
 			}
@@ -237,33 +242,33 @@ public class HDIVConfig implements Serializable {
 
 	public boolean hasExtensionToExclude(String path) {
 
-		if (this.excludedURLExtensions == null) {
+		if (excludedURLExtensions == null) {
+			return false;
+		}
+		final int pos = path.indexOf('?');
+		if (pos > 0) {
+			path = path.substring(0, pos);
+		}
+
+		if (path.length() == 0) {
 			return false;
 		}
 
-		if (path.indexOf("?") > 0) {
-			path = path.substring(0, path.indexOf("?"));
-		}
-
-		if (path.equals("")) {
+		if (path.charAt(path.length() - 1) == '/') {
 			return false;
 		}
 
-		if (path.equals("/") || path.charAt(path.length() - 1) == '/') {
-			return false;
-		}
-
-		int pound = path.indexOf("#");
+		final int pound = path.indexOf('#');
 		if (pound >= 0) {
 			path = path.substring(0, pound);
 		}
 
-		for (String extension : this.excludedURLExtensions) {
-			if (path.endsWith(extension)) {
+		final int size = excludedURLExtensions.size();
+		for (int i = 0; i < size; i++) {
+			if (path.endsWith(excludedURLExtensions.get(i))) {
 				return true;
 			}
 		}
-
 		return false;
 	}
 
@@ -274,11 +279,11 @@ public class HDIVConfig implements Serializable {
 	 * @param paramName parameter name to check
 	 * @return boolean
 	 */
-	public boolean isParameterWithoutConfidentiality(HttpServletRequest request, String paramName) {
+	public boolean isParameterWithoutConfidentiality(final HttpServletRequest request, final String paramName) {
 
-		HttpSession session = request.getSession();
+		final HttpSession session = request.getSession();
 		if (session != null) {
-			String modifyHdivStateParameterName = (String) session.getAttribute(Constants.MODIFY_STATE_HDIV_PARAMETER);
+			final String modifyHdivStateParameterName = (String) session.getAttribute(Constants.MODIFY_STATE_HDIV_PARAMETER);
 			if (modifyHdivStateParameterName != null && modifyHdivStateParameterName.equals(paramName)) {
 				return true;
 			}
@@ -294,21 +299,21 @@ public class HDIVConfig implements Serializable {
 	 * @param parameter parameter name
 	 * @return True if it is parameter that needs no validation. False otherwise.
 	 */
-	public boolean isParameterWithoutValidation(String action, String parameter) {
+	public boolean isParameterWithoutValidation(final String action, final String parameter) {
 
 		if (action == null) {
 			return false;
 		}
 
-		if (this.paramsWithoutValidation == null) {
+		if (paramsWithoutValidation == null) {
 			return false;
 		}
 
-		for (PatternMatcher matcher : this.paramsWithoutValidation.keySet()) {
+		for (final PatternMatcher matcher : paramsWithoutValidation.keySet()) {
 
 			if (matcher.matches(action)) {
 
-				for (PatternMatcher paramMatcher : this.paramsWithoutValidation.get(matcher)) {
+				for (final PatternMatcher paramMatcher : paramsWithoutValidation.get(matcher)) {
 
 					if (paramMatcher.matches(parameter)) {
 						return true;
@@ -325,11 +330,11 @@ public class HDIVConfig implements Serializable {
 	 * @param url url path
 	 * @return Scope name or null if it is not a long-living page
 	 */
-	public String isLongLivingPages(String url) {
+	public String isLongLivingPages(final String url) {
 
-		for (Map.Entry<PatternMatcher, String> page : this.longLivingPages.entrySet()) {
+		for (final Map.Entry<PatternMatcher, String> page : longLivingPages.entrySet()) {
 
-			PatternMatcher m = page.getKey();
+			final PatternMatcher m = page.getKey();
 
 			if (m.matches(url)) {
 				return page.getValue();
@@ -346,9 +351,9 @@ public class HDIVConfig implements Serializable {
 	 * state identifier parameter
 	 * @return True if <code>parameter</code> doesn't need HDIV validation.
 	 */
-	public boolean needValidation(String parameter, String hdivParameter) {
+	public boolean needValidation(final String parameter, final String hdivParameter) {
 
-		if (this.isStartParameter(parameter) || parameter.equals(hdivParameter)) {
+		if (isStartParameter(parameter) || parameter.equals(hdivParameter)) {
 			return false;
 		}
 		return true;
@@ -365,8 +370,8 @@ public class HDIVConfig implements Serializable {
 		}
 		this.errorPage = errorPage;
 		if (errorPage != null) {
-			PatternMatcher matcher = this.patternMatcherFactory.getPatternMatcher(errorPage);
-			this.startPages.add(new StartPage(null, matcher));
+			final PatternMatcher matcher = patternMatcherFactory.getPatternMatcher(errorPage);
+			addStartPage(new StartPage((Method) null, matcher));
 		}
 	}
 
@@ -380,8 +385,8 @@ public class HDIVConfig implements Serializable {
 		}
 		this.sessionExpiredLoginPage = sessionExpiredLoginPage;
 		if (sessionExpiredLoginPage != null) {
-			PatternMatcher matcher = this.patternMatcherFactory.getPatternMatcher(sessionExpiredLoginPage);
-			this.startPages.add(new StartPage(null, matcher));
+			final PatternMatcher matcher = patternMatcherFactory.getPatternMatcher(sessionExpiredLoginPage);
+			addStartPage(new StartPage((Method) null, matcher));
 		}
 	}
 
@@ -395,8 +400,8 @@ public class HDIVConfig implements Serializable {
 		}
 		this.sessionExpiredHomePage = sessionExpiredHomePage;
 		if (sessionExpiredHomePage != null) {
-			PatternMatcher matcher = this.patternMatcherFactory.getPatternMatcher(sessionExpiredHomePage);
-			this.startPages.add(new StartPage(null, matcher));
+			final PatternMatcher matcher = patternMatcherFactory.getPatternMatcher(sessionExpiredHomePage);
+			addStartPage(new StartPage((Method) null, matcher));
 		}
 	}
 
@@ -404,19 +409,19 @@ public class HDIVConfig implements Serializable {
 		return confidentiality;
 	}
 
-	public void setConfidentiality(boolean confidentiality) {
+	public void setConfidentiality(final boolean confidentiality) {
 		this.confidentiality = confidentiality;
 	}
 
-	public void setParamsWithoutValidation(Map<String, List<String>> paramsWithoutValidation) {
+	public void setParamsWithoutValidation(final Map<String, List<String>> paramsWithoutValidation) {
 		this.paramsWithoutValidation = new HashMap<PatternMatcher, List<PatternMatcher>>();
-		for (String url : paramsWithoutValidation.keySet()) {
+		for (final String url : paramsWithoutValidation.keySet()) {
 
-			PatternMatcher matcher = this.patternMatcherFactory.getPatternMatcher(url);
-			List<PatternMatcher> paramMatchers = new ArrayList<PatternMatcher>();
+			final PatternMatcher matcher = patternMatcherFactory.getPatternMatcher(url);
+			final List<PatternMatcher> paramMatchers = new ArrayList<PatternMatcher>();
 
-			for (String param : paramsWithoutValidation.get(url)) {
-				PatternMatcher paramMatcher = this.patternMatcherFactory.getPatternMatcher(param);
+			for (final String param : paramsWithoutValidation.get(url)) {
+				final PatternMatcher paramMatcher = patternMatcherFactory.getPatternMatcher(param);
 				paramMatchers.add(paramMatcher);
 			}
 			this.paramsWithoutValidation.put(matcher, paramMatchers);
@@ -428,13 +433,13 @@ public class HDIVConfig implements Serializable {
 	 * 
 	 * @param userStartPages list of start pages defined by the user
 	 */
-	public void setUserStartPages(List<StartPage> userStartPages) {
+	public void setUserStartPages(final List<StartPage> userStartPages) {
 
-		for (StartPage startPage : userStartPages) {
+		for (final StartPage startPage : userStartPages) {
 
-			PatternMatcher matcher = this.patternMatcherFactory.getPatternMatcher(startPage.getPattern());
+			final PatternMatcher matcher = patternMatcherFactory.getPatternMatcher(startPage.getPattern());
 			startPage.setCompiledPattern(matcher);
-			this.startPages.add(startPage);
+			addStartPage(startPage);
 
 		}
 	}
@@ -444,10 +449,10 @@ public class HDIVConfig implements Serializable {
 	 * 
 	 * @param userStartParameters list of init parameters defined by the user
 	 */
-	public void setUserStartParameters(List<String> userStartParameters) {
+	public void setUserStartParameters(final List<String> userStartParameters) {
 
-		for (String useStartParameter : userStartParameters) {
-			this.startParameters.add(this.patternMatcherFactory.getPatternMatcher(useStartParameter));
+		for (final String useStartParameter : userStartParameters) {
+			startParameters.add(patternMatcherFactory.getPatternMatcher(useStartParameter));
 		}
 	}
 
@@ -455,13 +460,13 @@ public class HDIVConfig implements Serializable {
 	 * @return Returns true if cookies' confidentiality is activated.
 	 */
 	public boolean isCookiesConfidentialityActivated() {
-		return (this.avoidCookiesConfidentiality == false);
+		return (avoidCookiesConfidentiality == false);
 	}
 
 	/**
 	 * @param avoidCookiesConfidentiality the avoidCookiesConfidentiality to set
 	 */
-	public void setAvoidCookiesConfidentiality(boolean avoidCookiesConfidentiality) {
+	public void setAvoidCookiesConfidentiality(final boolean avoidCookiesConfidentiality) {
 		this.avoidCookiesConfidentiality = avoidCookiesConfidentiality;
 	}
 
@@ -469,13 +474,13 @@ public class HDIVConfig implements Serializable {
 	 * @return Returns true if cookies' integrity is activated.
 	 */
 	public boolean isCookiesIntegrityActivated() {
-		return (this.avoidCookiesIntegrity == false);
+		return (avoidCookiesIntegrity == false);
 	}
 
 	/**
 	 * @param avoidCookiesIntegrity the avoidCookiesIntegrity to set
 	 */
-	public void setAvoidCookiesIntegrity(boolean avoidCookiesIntegrity) {
+	public void setAvoidCookiesIntegrity(final boolean avoidCookiesIntegrity) {
 		this.avoidCookiesIntegrity = avoidCookiesIntegrity;
 	}
 
@@ -489,7 +494,7 @@ public class HDIVConfig implements Serializable {
 	/**
 	 * @param avoidValidationInUrlsWithoutParams The avoidValidationInUrlsWithoutParams to set.
 	 */
-	public void setAvoidValidationInUrlsWithoutParams(Boolean avoidValidationInUrlsWithoutParams) {
+	public void setAvoidValidationInUrlsWithoutParams(final Boolean avoidValidationInUrlsWithoutParams) {
 		this.avoidValidationInUrlsWithoutParams = avoidValidationInUrlsWithoutParams.booleanValue();
 	}
 
@@ -497,20 +502,20 @@ public class HDIVConfig implements Serializable {
 	 * @param protectedExtensions The protected extensions to set.
 	 * @since HDIV 2.0
 	 */
-	public void setProtectedExtensions(List<String> protectedExtensions) {
+	public void setProtectedExtensions(final List<String> protectedExtensions) {
 
-		this.protectedURLPatterns = new ArrayList<PatternMatcher>();
+		protectedURLPatterns = new ArrayList<PatternMatcher>();
 
-		for (String protectedExtension : protectedExtensions) {
-			this.protectedURLPatterns.add(this.patternMatcherFactory.getPatternMatcher(protectedExtension));
+		for (final String protectedExtension : protectedExtensions) {
+			protectedURLPatterns.add(patternMatcherFactory.getPatternMatcher(protectedExtension));
 		}
 	}
 
-	public void setExcludedExtensions(List<String> excludedExtensions) {
-		if (this.excludedURLExtensions == null) {
-			this.excludedURLExtensions = new ArrayList<String>();
+	public void setExcludedExtensions(final List<String> excludedExtensions) {
+		if (excludedURLExtensions == null) {
+			excludedURLExtensions = new ArrayList<String>();
 		}
-		this.excludedURLExtensions.addAll(excludedExtensions);
+		excludedURLExtensions.addAll(excludedExtensions);
 	}
 
 	/**
@@ -539,7 +544,7 @@ public class HDIVConfig implements Serializable {
 	/**
 	 * @param randomName the randomName to set
 	 */
-	public void setRandomName(boolean randomName) {
+	public void setRandomName(final boolean randomName) {
 		this.randomName = randomName;
 	}
 
@@ -560,7 +565,7 @@ public class HDIVConfig implements Serializable {
 	/**
 	 * @param debugMode the debugMode to set
 	 */
-	public void setDebugMode(boolean debugMode) {
+	public void setDebugMode(final boolean debugMode) {
 		this.debugMode = debugMode;
 	}
 
@@ -574,7 +579,7 @@ public class HDIVConfig implements Serializable {
 	/**
 	 * @param showErrorPageOnEditableValidation the showErrorPageOnEditableValidation to set
 	 */
-	public void setShowErrorPageOnEditableValidation(boolean showErrorPageOnEditableValidation) {
+	public void setShowErrorPageOnEditableValidation(final boolean showErrorPageOnEditableValidation) {
 		this.showErrorPageOnEditableValidation = showErrorPageOnEditableValidation;
 	}
 
@@ -588,14 +593,14 @@ public class HDIVConfig implements Serializable {
 	/**
 	 * @param reuseExistingPageInAjaxRequest the reuseExistingPageInAjaxRequest to set
 	 */
-	public void setReuseExistingPageInAjaxRequest(boolean reuseExistingPageInAjaxRequest) {
+	public void setReuseExistingPageInAjaxRequest(final boolean reuseExistingPageInAjaxRequest) {
 		this.reuseExistingPageInAjaxRequest = reuseExistingPageInAjaxRequest;
 	}
 
 	/**
 	 * @param patternMatcherFactory the patternMatcherFactory to set
 	 */
-	public void setPatternMatcherFactory(PatternMatcherFactory patternMatcherFactory) {
+	public void setPatternMatcherFactory(final PatternMatcherFactory patternMatcherFactory) {
 		this.patternMatcherFactory = patternMatcherFactory;
 	}
 
@@ -609,7 +614,7 @@ public class HDIVConfig implements Serializable {
 	/**
 	 * @param stateParameterName the stateParameterName to set
 	 */
-	public void setStateParameterName(String stateParameterName) {
+	public void setStateParameterName(final String stateParameterName) {
 		this.stateParameterName = stateParameterName;
 	}
 
@@ -623,18 +628,18 @@ public class HDIVConfig implements Serializable {
 	/**
 	 * @param modifyStateParameterName the modifyStateParameterName to set
 	 */
-	public void setModifyStateParameterName(String modifyStateParameterName) {
+	public void setModifyStateParameterName(final String modifyStateParameterName) {
 		this.modifyStateParameterName = modifyStateParameterName;
 	}
 
 	/**
 	 * @param longLivingPages the longLivingPages to set
 	 */
-	public void setLongLivingPages(Map<String, String> longLivingPages) {
+	public void setLongLivingPages(final Map<String, String> longLivingPages) {
 
-		for (Map.Entry<String, String> page : longLivingPages.entrySet()) {
-			PatternMatcher pattern = this.patternMatcherFactory.getPatternMatcher(page.getKey());
-			String scope = page.getValue();
+		for (final Map.Entry<String, String> page : longLivingPages.entrySet()) {
+			final PatternMatcher pattern = patternMatcherFactory.getPatternMatcher(page.getKey());
+			final String scope = page.getValue();
 			this.longLivingPages.put(pattern, scope);
 		}
 	}
@@ -642,7 +647,7 @@ public class HDIVConfig implements Serializable {
 	/**
 	 * @param editableDataValidationProvider the editableDataValidationProvider to set
 	 */
-	public void setEditableDataValidationProvider(EditableDataValidationProvider editableDataValidationProvider) {
+	public void setEditableDataValidationProvider(final EditableDataValidationProvider editableDataValidationProvider) {
 		this.editableDataValidationProvider = editableDataValidationProvider;
 	}
 
@@ -653,25 +658,26 @@ public class HDIVConfig implements Serializable {
 		return editableDataValidationProvider;
 	}
 
+	@Override
 	public String toString() {
-		StringBuffer result = new StringBuffer().append("");
-		result = result.append(" Confidentiality=").append(this.getConfidentiality());
-		result.append(" avoidCookiesIntegrity=").append(this.avoidCookiesIntegrity);
-		result.append(" avoidCookiesConfidentiality=").append(this.avoidCookiesConfidentiality);
-		result.append(" avoidValidationInUrlsWithoutParams=").append(this.avoidValidationInUrlsWithoutParams);
-		result.append(" strategy=").append(this.getStrategy());
-		result.append(" randomName=").append(this.isRandomName());
-		result.append(" errorPage=").append(this.getErrorPage());
-		result.append(" sessionExpiredLoginPage=").append(this.sessionExpiredLoginPage);
-		result.append(" sessionExpiredHomePage=").append(this.sessionExpiredHomePage);
-		result.append(" excludedExtensions=").append(this.excludedURLExtensions);
-		result.append(" protectedExtensions=").append(this.getProtectedURLPatterns());
-		result.append(" startPages=").append(this.startPages);
-		result.append(" startParameters=").append(this.startParameters);
-		result.append(" paramsWithoutValidation=").append(this.paramsWithoutValidation);
-		result.append(" longLivingPages=").append(this.longLivingPages);
-		result.append(" debugMode=").append(this.debugMode);
-		result.append(" showErrorPageOnEditableValidation=").append(this.showErrorPageOnEditableValidation);
+		StringBuilder result = new StringBuilder().append("");
+		result = result.append(" Confidentiality=").append(getConfidentiality());
+		result.append(" avoidCookiesIntegrity=").append(avoidCookiesIntegrity);
+		result.append(" avoidCookiesConfidentiality=").append(avoidCookiesConfidentiality);
+		result.append(" avoidValidationInUrlsWithoutParams=").append(avoidValidationInUrlsWithoutParams);
+		result.append(" strategy=").append(getStrategy());
+		result.append(" randomName=").append(isRandomName());
+		result.append(" errorPage=").append(getErrorPage());
+		result.append(" sessionExpiredLoginPage=").append(sessionExpiredLoginPage);
+		result.append(" sessionExpiredHomePage=").append(sessionExpiredHomePage);
+		result.append(" excludedExtensions=").append(excludedURLExtensions);
+		result.append(" protectedExtensions=").append(getProtectedURLPatterns());
+		result.append(" startPages=").append(startPages);
+		result.append(" startParameters=").append(startParameters);
+		result.append(" paramsWithoutValidation=").append(paramsWithoutValidation);
+		result.append(" longLivingPages=").append(longLivingPages);
+		result.append(" debugMode=").append(debugMode);
+		result.append(" showErrorPageOnEditableValidation=").append(showErrorPageOnEditableValidation);
 
 		return result.toString();
 	}
