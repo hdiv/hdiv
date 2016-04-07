@@ -19,7 +19,7 @@ import java.io.Serializable;
 
 /**
  * A strategy for generating random tokens.
- * 
+ *
  * @author Gorka Vicente
  * @since HDIV 2.0.4
  */
@@ -27,16 +27,16 @@ public interface UidGenerator {
 
 	/**
 	 * Generate a new unique id.
-	 * 
+	 *
 	 * @return a serializable id, guaranteed to be unique in some context
 	 */
-	public Serializable generateUid();
+	Serializable generateUid();
 
 	/**
 	 * Convert the string-encoded uid into its original object form.
-	 * 
+	 *
 	 * @param encodedUid the string encoded uid
 	 * @return the converted uid
 	 */
-	public Serializable parseUid(String encodedUid);
+	Serializable parseUid(String encodedUid);
 }
