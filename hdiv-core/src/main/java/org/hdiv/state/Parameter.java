@@ -22,7 +22,7 @@ import java.util.List;
 
 /**
  * Data structure to store all the values of a parameter
- * 
+ *
  * @author Roberto Velasco
  */
 public class Parameter implements IParameter, Serializable {
@@ -39,18 +39,16 @@ public class Parameter implements IParameter, Serializable {
 
 	}
 
-	public Parameter(String name, String[] values, boolean editable, String editableDataType, boolean actionParam) {
-
+	public Parameter(final String name, final String[] values, final boolean editable, final String editableDataType, final boolean actionParam) {
 		this(name, values[0], editable, editableDataType, actionParam);
-
 		if (values.length > 1) {
 			for (int i = 1; i < values.length; i++) {
-				this.addValue(values[i]);
+				addValue(values[i]);
 			}
 		}
 	}
 
-	public Parameter(String name, String value, boolean editable, String editableDataType, boolean actionParam) {
+	public Parameter(final String name, final String value, final boolean editable, final String editableDataType, final boolean actionParam) {
 		this.name = name;
 		this.value = value;
 		this.editable = editable;
@@ -94,7 +92,7 @@ public class Parameter implements IParameter, Serializable {
 	/**
 	 * Adds the value <code>value</code> to the parameter <code>this</code>.
 	 */
-	public void addValue(String value) {
+	public void addValue(final String value) {
 		if (editable) {
 			return;
 		}
@@ -114,10 +112,10 @@ public class Parameter implements IParameter, Serializable {
 
 	/**
 	 * Checks if parameter has <code>value</code>.
-	 * 
+	 *
 	 * @return True if <code>value</code> exists in the array of values <code>values</code>. False otherwise.
 	 */
-	public boolean existValue(String value) {
+	public boolean existValue(final String value) {
 		if (editable) {
 			return false;
 		}
@@ -127,7 +125,7 @@ public class Parameter implements IParameter, Serializable {
 		}
 
 		for (int i = 0; i < this.values.size(); i++) {
-			String tempValue = values.get(i);
+			final String tempValue = values.get(i);
 			if (tempValue.equalsIgnoreCase(value)) {
 				return true;
 			}
@@ -138,18 +136,18 @@ public class Parameter implements IParameter, Serializable {
 
 	/**
 	 * Checks if the position <code>position</code> exists in the array of values <code>values</code>.
-	 * 
+	 *
 	 * @return True if <code>position</code> is valid position in the array of values <code>values</code>. False
 	 * otherwise.
 	 */
-	public boolean existPosition(int position) {
+	public boolean existPosition(final int position) {
 		return (position == 0) || (values != null && position < values.size());
 	}
 
 	/**
 	 * @return Obtains the value of the position <code>position</code> in the list of values of the parameter.
 	 */
-	public String getValuePosition(int position) {
+	public String getValuePosition(final int position) {
 		return (position == 0 ? this.value : this.values.get(position));
 	}
 
@@ -186,7 +184,7 @@ public class Parameter implements IParameter, Serializable {
 	 * @param editable Modify the editable value of the parameter
 	 * @since 2.1.8
 	 */
-	public void setEditable(boolean editable) {
+	public void setEditable(final boolean editable) {
 		this.editable = editable;
 	}
 
@@ -203,7 +201,7 @@ public class Parameter implements IParameter, Serializable {
 
 	/**
 	 * Indicates if the parameter has been added to the action attribute of a link or form.
-	 * 
+	 *
 	 * @return True if the parameter has been added to the action attribute of a link or form. False in otherwise.
 	 */
 	public boolean isActionParam() {
@@ -213,7 +211,7 @@ public class Parameter implements IParameter, Serializable {
 	/**
 	 * @param actionParam The actionParam to set.
 	 */
-	public void setActionParam(boolean actionParam) {
+	public void setActionParam(final boolean actionParam) {
 		this.actionParam = actionParam;
 	}
 
@@ -224,9 +222,10 @@ public class Parameter implements IParameter, Serializable {
 		return editableDataType;
 	}
 
+	@Override
 	public String toString() {
 
-		StringBuffer result = new StringBuffer();
+		final StringBuilder result = new StringBuilder();
 		result.append(" Parameter:" + this.getName() + " Values:");
 
 		if (values == null) {
@@ -234,7 +233,7 @@ public class Parameter implements IParameter, Serializable {
 		}
 		else {
 			for (int i = 0; i < this.values.size(); i++) {
-				String value = this.values.get(i);
+				final String value = this.values.get(i);
 				result.append(value);
 				if (!(i + 1 == this.values.size())) {
 					result.append(",");

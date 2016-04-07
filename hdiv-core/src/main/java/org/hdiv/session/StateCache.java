@@ -50,7 +50,7 @@ public class StateCache implements IStateCache {
 	/**
 	 * Page identifiers buffer
 	 */
-	private List<Integer> pageIds = new ArrayList<Integer>();
+	private final List<Integer> pageIds = new ArrayList<Integer>();
 
 	/**
 	 * Adds a new page identifier to the cache.
@@ -65,8 +65,8 @@ public class StateCache implements IStateCache {
 	 * @return If the cache has reached its maximum size, less important identifier is returned in order to delete it
 	 * from session. Otherwise, null will be returned.
 	 */
-	public synchronized Integer addPage(int pageId, Integer currentPageId, boolean isRefreshRequest,
-			boolean isAjaxRequest) {
+	public synchronized Integer addPage(final int pageId, final Integer currentPageId, final boolean isRefreshRequest,
+			final boolean isAjaxRequest) {
 
 		if (this.pageIds.contains(pageId)) {
 			// Page id already exist in session
@@ -74,7 +74,7 @@ public class StateCache implements IStateCache {
 
 		}
 		else {
-			Integer removedKey = this.cleanBuffer(currentPageId, isRefreshRequest, isAjaxRequest);
+			final Integer removedKey = this.cleanBuffer(currentPageId, isRefreshRequest, isAjaxRequest);
 			this.pageIds.add(pageId);
 
 			if (log.isDebugEnabled()) {
@@ -97,11 +97,12 @@ public class StateCache implements IStateCache {
 	 * 
 	 * @return Oldest page identifier in the map <code>pageIds</code>. Null in otherwise.
 	 */
-	public Integer cleanBuffer(Integer currentPageId, boolean isRefreshRequest, boolean isAjaxRequest) {
+	private Integer cleanBuffer(final Integer currentPageId, final boolean isRefreshRequest,
+			final boolean isAjaxRequest) {
 
 		Integer removed = null;
 
-		int totalPages = this.pageIds.size();
+		final int totalPages = this.pageIds.size();
 
 		// Remove last page when we know that browser's forward history is empty (See issue #67)
 		if (currentPageId != null && totalPages > 1 && currentPageId == this.pageIds.get(totalPages - 2)
@@ -130,11 +131,12 @@ public class StateCache implements IStateCache {
 		return this.pageIds.size() > 0 ? this.pageIds.get(this.pageIds.size() - 1) : null;
 	}
 
+	@Override
 	public String toString() {
 
-		StringBuffer result = new StringBuffer();
+		final StringBuilder result = new StringBuilder();
 		result.append("[");
-		for (Integer pageId : this.pageIds) {
+		for (final Integer pageId : this.pageIds) {
 			result.append(" " + pageId);
 		}
 		result.append("]");
@@ -151,7 +153,7 @@ public class StateCache implements IStateCache {
 	/**
 	 * @param maxSize The maxSize to set.
 	 */
-	public void setMaxSize(int maxSize) {
+	public void setMaxSize(final int maxSize) {
 		this.maxSize = maxSize;
 	}
 
