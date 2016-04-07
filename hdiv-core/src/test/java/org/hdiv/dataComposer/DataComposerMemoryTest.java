@@ -28,6 +28,7 @@ import org.hdiv.state.IState;
 import org.hdiv.state.StateUtil;
 import org.hdiv.util.Constants;
 import org.hdiv.util.HDIVUtil;
+import org.hdiv.util.Method;
 import org.springframework.mock.web.MockHttpServletRequest;
 
 /**
@@ -46,11 +47,12 @@ public class DataComposerMemoryTest extends AbstractHDIVTestCase {
 	/*
 	 * @see TestCase#setUp()
 	 */
+	@Override
 	protected void onSetUp() throws Exception {
 
-		this.dataComposerFactory = this.getApplicationContext().getBean(DataComposerFactory.class);
-		this.stateUtil = this.getApplicationContext().getBean(StateUtil.class);
-		this.session = this.getApplicationContext().getBean(ISession.class);
+		dataComposerFactory = getApplicationContext().getBean(DataComposerFactory.class);
+		stateUtil = getApplicationContext().getBean(StateUtil.class);
+		session = getApplicationContext().getBean(ISession.class);
 	}
 
 	/**
@@ -58,15 +60,15 @@ public class DataComposerMemoryTest extends AbstractHDIVTestCase {
 	 */
 	public void testComposeSimple() {
 
-		HttpServletRequest request = this.getMockRequest();
-		IDataComposer dataComposer = this.dataComposerFactory.newInstance(request);
+		final HttpServletRequest request = getMockRequest();
+		final IDataComposer dataComposer = dataComposerFactory.newInstance(request);
 		HDIVUtil.setDataComposer(dataComposer, request);
 		assertTrue(dataComposer instanceof DataComposerMemory);
 
 		dataComposer.startPage();
-		dataComposer.beginRequest("GET", "test.do");
+		dataComposer.beginRequest(Method.GET, "test.do");
 
-		boolean confidentiality = this.getConfig().getConfidentiality();
+		final boolean confidentiality = getConfig().getConfidentiality();
 
 		// we add a multiple parameter that will be encoded as 0, 1, 2, ...
 		String result = dataComposer.compose("test.do", "parameter1", "2", false);
@@ -91,79 +93,79 @@ public class DataComposerMemoryTest extends AbstractHDIVTestCase {
 
 	public void testComposeAndRestore() {
 
-		HttpServletRequest request = this.getMockRequest();
-		RequestContext context = this.getRequestContext();
-		IDataComposer dataComposer = this.dataComposerFactory.newInstance(request);
+		final HttpServletRequest request = getMockRequest();
+		final RequestContext context = getRequestContext();
+		final IDataComposer dataComposer = dataComposerFactory.newInstance(request);
 		HDIVUtil.setDataComposer(dataComposer, request);
 
 		dataComposer.startPage();
-		dataComposer.beginRequest("GET", "test.do");
+		dataComposer.beginRequest(Method.GET, "test.do");
 		dataComposer.compose("parameter1", "2", false);
-		String stateId = dataComposer.endRequest();
+		final String stateId = dataComposer.endRequest();
 		dataComposer.endPage();
 
 		assertNotNull(stateId);
 
-		IState state = this.stateUtil.restoreState(context, stateId);
+		final IState state = stateUtil.restoreState(context, stateId);
 
 		assertEquals("test.do", state.getAction());
-		List<String> values = state.getParameter("parameter1").getValues();
+		final List<String> values = state.getParameter("parameter1").getValues();
 		assertEquals(1, values.size());
 		assertEquals("2", values.get(0));
 	}
 
 	public void testComposeAndRestoreUrl() {
 
-		HttpServletRequest request = this.getMockRequest();
-		RequestContext context = this.getRequestContext();
-		IDataComposer dataComposer = this.dataComposerFactory.newInstance(request);
+		final HttpServletRequest request = getMockRequest();
+		final RequestContext context = getRequestContext();
+		final IDataComposer dataComposer = dataComposerFactory.newInstance(request);
 
 		dataComposer.startPage();
-		dataComposer.beginRequest("GET", "test.do");
-		String params = "param1=val1&param2=val2";
-		String processedParams = dataComposer.composeParams(params, "GET", Constants.ENCODING_UTF_8);
+		dataComposer.beginRequest(Method.GET, "test.do");
+		final String params = "param1=val1&param2=val2";
+		final String processedParams = dataComposer.composeParams(params, "GET", Constants.ENCODING_UTF_8);
 		assertEquals("param1=0&param2=0", processedParams);
-		String stateId = dataComposer.endRequest();
+		final String stateId = dataComposer.endRequest();
 		dataComposer.endPage();
 
 		assertNotNull(stateId);
 
-		IState state = this.stateUtil.restoreState(context, stateId);
+		final IState state = stateUtil.restoreState(context, stateId);
 
 		assertEquals("test.do", state.getAction());
-		String stateParams = state.getParams();
+		final String stateParams = state.getParams();
 		assertEquals(params, stateParams);
 	}
 
 	public void testComposeExistingState() {
-		HttpServletRequest request = this.getMockRequest();
-		RequestContext context = this.getRequestContext();
+		final HttpServletRequest request = getMockRequest();
+		final RequestContext context = getRequestContext();
 
-		IDataComposer dataComposer = this.dataComposerFactory.newInstance(request);
+		IDataComposer dataComposer = dataComposerFactory.newInstance(request);
 		HDIVUtil.setDataComposer(dataComposer, request);
 
 		dataComposer.startPage();
-		dataComposer.beginRequest("POST", "test.do");
+		dataComposer.beginRequest(Method.POST, "test.do");
 		dataComposer.compose("parameter1", "2", false);
-		String stateId = dataComposer.endRequest();
+		final String stateId = dataComposer.endRequest();
 		dataComposer.endPage();
 
 		assertNotNull(stateId);
 
 		// New request
-		IState state = this.stateUtil.restoreState(context, stateId);
-		IPage page = this.session.getPage(context, state.getPageId());
-		dataComposer = this.dataComposerFactory.newInstance(request);
+		final IState state = stateUtil.restoreState(context, stateId);
+		final IPage page = session.getPage(context, state.getPageId());
+		dataComposer = dataComposerFactory.newInstance(request);
 		HDIVUtil.setDataComposer(dataComposer, request);
 
 		dataComposer.startPage(page);
 		dataComposer.beginRequest(state);
 		dataComposer.compose("parameter1", "3", false);
-		String stateId2 = dataComposer.endRequest();
+		final String stateId2 = dataComposer.endRequest();
 		dataComposer.endPage();
 
 		assertEquals(stateId, stateId2);
-		IState state2 = this.stateUtil.restoreState(context, stateId2);
+		final IState state2 = stateUtil.restoreState(context, stateId2);
 		assertEquals(state2.getParameter("parameter1").getConfidentialValue(), "1");
 		assertTrue(state2.getParameter("parameter1").existValue("2"));
 		assertTrue(state2.getParameter("parameter1").existValue("3"));
@@ -171,62 +173,62 @@ public class DataComposerMemoryTest extends AbstractHDIVTestCase {
 
 	public void testInnerState() {
 
-		HttpServletRequest request = this.getMockRequest();
-		RequestContext context = this.getRequestContext();
-		IDataComposer dataComposer = this.dataComposerFactory.newInstance(request);
+		final HttpServletRequest request = getMockRequest();
+		final RequestContext context = getRequestContext();
+		final IDataComposer dataComposer = dataComposerFactory.newInstance(request);
 		HDIVUtil.setDataComposer(dataComposer, request);
 
 		dataComposer.startPage();
-		dataComposer.beginRequest("POST", "test.do");
+		dataComposer.beginRequest(Method.POST, "test.do");
 		dataComposer.compose("parameter1", "2", false);
 
 		// Start inner state
-		dataComposer.beginRequest("GET", "testinner.do");
+		dataComposer.beginRequest(Method.GET, "testinner.do");
 		dataComposer.compose("parameter1", "3", false);
-		String stateIdInner = dataComposer.endRequest();
+		final String stateIdInner = dataComposer.endRequest();
 
-		String stateId = dataComposer.endRequest();
+		final String stateId = dataComposer.endRequest();
 		dataComposer.endPage();
 
 		assertNotNull(stateId);
 		assertNotNull(stateIdInner);
 		assertNotSame(stateId, stateIdInner);
 
-		IState state = this.stateUtil.restoreState(context, stateId);
-		IState stateInner = this.stateUtil.restoreState(context, stateIdInner);
-		String action = state.getAction();
-		String actionInner = stateInner.getAction();
+		final IState state = stateUtil.restoreState(context, stateId);
+		final IState stateInner = stateUtil.restoreState(context, stateIdInner);
+		final String action = state.getAction();
+		final String actionInner = stateInner.getAction();
 		assertEquals("test.do", action);
 		assertEquals("testinner.do", actionInner);
 	}
 
 	public void testEscapeHtml() {
 
-		HttpServletRequest request = this.getMockRequest();
-		RequestContext context = this.getRequestContext();
-		IDataComposer dataComposer = this.dataComposerFactory.newInstance(request);
+		final HttpServletRequest request = getMockRequest();
+		final RequestContext context = getRequestContext();
+		final IDataComposer dataComposer = dataComposerFactory.newInstance(request);
 		HDIVUtil.setDataComposer(dataComposer, request);
 
 		dataComposer.startPage();
-		dataComposer.beginRequest("POST", "test.do");
+		dataComposer.beginRequest(Method.POST, "test.do");
 		dataComposer.compose("parameter1", "è-test", false);// not escaped value
 		dataComposer.compose("parameterEscaped", "&egrave;-test", false);// escaped value
-		String stateId = dataComposer.endRequest();
+		final String stateId = dataComposer.endRequest();
 		dataComposer.endPage();
 
 		assertNotNull(stateId);
 
-		IState state = this.stateUtil.restoreState(context, stateId);
+		final IState state = stateUtil.restoreState(context, stateId);
 
 		assertEquals("test.do", state.getAction());
 
-		IParameter param = state.getParameter("parameter1");
-		List<String> values = param.getValues();
+		final IParameter param = state.getParameter("parameter1");
+		final List<String> values = param.getValues();
 		assertEquals(1, values.size());
 		assertEquals("è-test", values.get(0));// escaped value is the same
 
-		IParameter param2 = state.getParameter("parameterEscaped");
-		List<String> values2 = param2.getValues();
+		final IParameter param2 = state.getParameter("parameterEscaped");
+		final List<String> values2 = param2.getValues();
 		assertEquals(1, values2.size());
 		// State stored value is not escaped value, it is the unescaped value
 		assertEquals("è-test", values2.get(0));
@@ -234,39 +236,39 @@ public class DataComposerMemoryTest extends AbstractHDIVTestCase {
 
 	public void testEditableNullValue() {
 
-		HttpServletRequest request = this.getMockRequest();
-		RequestContext context = this.getRequestContext();
-		IDataComposer dataComposer = this.dataComposerFactory.newInstance(request);
+		final HttpServletRequest request = getMockRequest();
+		final RequestContext context = getRequestContext();
+		final IDataComposer dataComposer = dataComposerFactory.newInstance(request);
 		HDIVUtil.setDataComposer(dataComposer, request);
 
 		dataComposer.startPage();
-		dataComposer.beginRequest("POST", "test.do");
+		dataComposer.beginRequest(Method.POST, "test.do");
 		dataComposer.compose("parameter1", "test", true);
-		String stateId = dataComposer.endRequest();
+		final String stateId = dataComposer.endRequest();
 		dataComposer.endPage();
 
 		assertNotNull(stateId);
 
-		IState state = this.stateUtil.restoreState(context, stateId);
+		final IState state = stateUtil.restoreState(context, stateId);
 
 		assertEquals("test.do", state.getAction());
 
-		IParameter param = state.getParameter("parameter1");
-		List<String> values = param.getValues();
+		final IParameter param = state.getParameter("parameter1");
+		final List<String> values = param.getValues();
 		assertEquals(0, values.size());
 	}
 
 	public void testAjax() {
 
-		MockHttpServletRequest request = this.getMockRequest();
-		RequestContext context = this.getRequestContext();
-		IDataComposer dataComposer = this.dataComposerFactory.newInstance(request);
+		final MockHttpServletRequest request = getMockRequest();
+		final RequestContext context = getRequestContext();
+		final IDataComposer dataComposer = dataComposerFactory.newInstance(request);
 		HDIVUtil.setDataComposer(dataComposer, request);
 
 		dataComposer.startPage();
-		dataComposer.beginRequest("POST", "test.do");
+		dataComposer.beginRequest(Method.POST, "test.do");
 		dataComposer.compose("parameter1", "1", false);
-		String stateId = dataComposer.endRequest();
+		final String stateId = dataComposer.endRequest();
 		dataComposer.endPage();
 
 		assertNotNull(stateId);
@@ -274,18 +276,18 @@ public class DataComposerMemoryTest extends AbstractHDIVTestCase {
 		// Ajax request to modify state
 
 		request.addParameter("_MODIFY_HDIV_STATE_", stateId);
-		IDataComposer dataComposer2 = this.dataComposerFactory.newInstance(request);
+		final IDataComposer dataComposer2 = dataComposerFactory.newInstance(request);
 		HDIVUtil.setDataComposer(dataComposer2, request);
 
 		// Add new parameter
 		dataComposer2.compose("parameter2", "2", false);
-		String stateId2 = dataComposer2.endRequest();
+		final String stateId2 = dataComposer2.endRequest();
 		dataComposer2.endPage();
 
 		assertEquals(stateId, stateId2);
 
 		// Restore state
-		IState state = this.stateUtil.restoreState(context, stateId);
+		final IState state = stateUtil.restoreState(context, stateId);
 
 		// State contains both parameters
 		IParameter param = state.getParameter("parameter1");
@@ -298,68 +300,68 @@ public class DataComposerMemoryTest extends AbstractHDIVTestCase {
 	}
 
 	public void testAjaxWithHeaderEnabledAjaxSupport() {
-		this.getConfig().setReuseExistingPageInAjaxRequest(true);
+		getConfig().setReuseExistingPageInAjaxRequest(true);
 
-		HttpServletRequest request = this.getMockRequest();
-		RequestContext context = this.getRequestContext();
-		IDataComposer dataComposer = this.dataComposerFactory.newInstance(request);
+		final HttpServletRequest request = getMockRequest();
+		final RequestContext context = getRequestContext();
+		final IDataComposer dataComposer = dataComposerFactory.newInstance(request);
 		HDIVUtil.setDataComposer(dataComposer, request);
 
 		dataComposer.startPage();
-		dataComposer.beginRequest("GET", "test.do");
+		dataComposer.beginRequest(Method.GET, "test.do");
 		dataComposer.compose("parameter1", "1", false);
-		String stateId = dataComposer.endRequest();
+		final String stateId = dataComposer.endRequest();
 		dataComposer.endPage();
 
 		assertNotNull(stateId);
 
 		// Ajax
-		MockHttpServletRequest ajaxRequest = this.getMockRequest();
+		final MockHttpServletRequest ajaxRequest = getMockRequest();
 		ajaxRequest.addHeader("x-requested-with", "XMLHttpRequest");
 		ajaxRequest.addParameter("_HDIV_STATE_", stateId);
-		IDataComposer ajaxDataComposer = this.dataComposerFactory.newInstance(request);
+		final IDataComposer ajaxDataComposer = dataComposerFactory.newInstance(request);
 		HDIVUtil.setDataComposer(ajaxDataComposer, ajaxRequest);
 
 		// Ajax request to add states
-		ajaxDataComposer.beginRequest("GET", "/test/1");
-		String ajaxStateId = ajaxDataComposer.endRequest();
+		ajaxDataComposer.beginRequest(Method.GET, "/test/1");
+		final String ajaxStateId = ajaxDataComposer.endRequest();
 
 		// Restore states
-		IState state = this.stateUtil.restoreState(context, stateId);
-		IState ajaxState = this.stateUtil.restoreState(context, ajaxStateId);
+		final IState state = stateUtil.restoreState(context, stateId);
+		final IState ajaxState = stateUtil.restoreState(context, ajaxStateId);
 
 		assertEquals(state.getPageId(), ajaxState.getPageId());
 		assertEquals(state.getId() + 1, ajaxState.getId());
 	}
 
 	public void testAjaxWithHeaderDisabledAjaxSupport() {
-		HttpServletRequest request = this.getMockRequest();
-		IDataComposer dataComposer = this.dataComposerFactory.newInstance(request);
+		final HttpServletRequest request = getMockRequest();
+		final IDataComposer dataComposer = dataComposerFactory.newInstance(request);
 		HDIVUtil.setDataComposer(dataComposer, request);
 
 		dataComposer.startPage();
-		dataComposer.beginRequest("GET", "test.do");
+		dataComposer.beginRequest(Method.GET, "test.do");
 		dataComposer.compose("parameter1", "1", false);
-		String stateId = dataComposer.endRequest();
+		final String stateId = dataComposer.endRequest();
 		dataComposer.endPage();
 
 		assertNotNull(stateId);
 
 		// Ajax
-		MockHttpServletRequest ajaxRequest = this.getMockRequest();
-		RequestContext context = this.getRequestContext();
+		final MockHttpServletRequest ajaxRequest = getMockRequest();
+		final RequestContext context = getRequestContext();
 		ajaxRequest.addHeader("x-requested-with", "XMLHttpRequest");
 		ajaxRequest.addParameter("_HDIV_STATE_", stateId);
-		IDataComposer ajaxDataComposer = this.dataComposerFactory.newInstance(request);
+		final IDataComposer ajaxDataComposer = dataComposerFactory.newInstance(request);
 		HDIVUtil.setDataComposer(ajaxDataComposer, ajaxRequest);
 
 		// Ajax request to add states
-		ajaxDataComposer.beginRequest("GET", "/test/1");
-		String ajaxStateId = ajaxDataComposer.endRequest();
+		ajaxDataComposer.beginRequest(Method.GET, "/test/1");
+		final String ajaxStateId = ajaxDataComposer.endRequest();
 
 		// Restore states
-		int pageId = this.stateUtil.restoreState(context, stateId).getPageId();
-		int ajaxPageId = this.stateUtil.restoreState(context, ajaxStateId).getPageId();
+		final int pageId = stateUtil.restoreState(context, stateId).getPageId();
+		final int ajaxPageId = stateUtil.restoreState(context, ajaxStateId).getPageId();
 
 		assertEquals(pageId + 1, ajaxPageId);
 	}
@@ -368,19 +370,19 @@ public class DataComposerMemoryTest extends AbstractHDIVTestCase {
 
 		// Test the validation of a state before processing all page
 
-		MockHttpServletRequest request = this.getMockRequest();
-		RequestContext context = this.getRequestContext();
-		IDataComposer dataComposer = this.dataComposerFactory.newInstance(request);
+		final MockHttpServletRequest request = getMockRequest();
+		final RequestContext context = getRequestContext();
+		final IDataComposer dataComposer = dataComposerFactory.newInstance(request);
 		HDIVUtil.setDataComposer(dataComposer, request);
 
 		dataComposer.startPage();
 
-		dataComposer.beginRequest("POST", "test.do");
-		String result = dataComposer.compose("test.do", "parameter1", "2", false);
+		dataComposer.beginRequest(Method.POST, "test.do");
+		final String result = dataComposer.compose("test.do", "parameter1", "2", false);
 		assertEquals("0", result);
-		String stateId = dataComposer.endRequest();
+		final String stateId = dataComposer.endRequest();
 
-		IState state = this.stateUtil.restoreState(context, stateId);
+		final IState state = stateUtil.restoreState(context, stateId);
 		assertNotNull(state);
 		assertEquals("test.do", state.getAction());
 
@@ -390,34 +392,34 @@ public class DataComposerMemoryTest extends AbstractHDIVTestCase {
 	public void testEncodeFormAction() {
 
 		// No encoded url
-		MockHttpServletRequest request = this.getMockRequest();
-		RequestContext context = this.getRequestContext();
-		IDataComposer dataComposer = this.dataComposerFactory.newInstance(request);
+		final MockHttpServletRequest request = getMockRequest();
+		final RequestContext context = getRequestContext();
+		IDataComposer dataComposer = dataComposerFactory.newInstance(request);
 		HDIVUtil.setDataComposer(dataComposer, request);
 
 		dataComposer.startPage();
-		dataComposer.beginRequest("POST", "test test.do");
+		dataComposer.beginRequest(Method.POST, "test test.do");
 		String stateId = dataComposer.endRequest();
 		dataComposer.endPage();
 
 		assertNotNull(stateId);
 
-		IState state = this.stateUtil.restoreState(context, stateId);
+		IState state = stateUtil.restoreState(context, stateId);
 
 		assertEquals("test test.do", state.getAction());
 
 		// Encoded action url
-		dataComposer = this.dataComposerFactory.newInstance(request);
+		dataComposer = dataComposerFactory.newInstance(request);
 		HDIVUtil.setDataComposer(dataComposer, request);
 
 		dataComposer.startPage();
-		dataComposer.beginRequest("POST", "test%20test.do");
+		dataComposer.beginRequest(Method.POST, "test%20test.do");
 		stateId = dataComposer.endRequest();
 		dataComposer.endPage();
 
 		assertNotNull(stateId);
 
-		state = this.stateUtil.restoreState(context, stateId);
+		state = stateUtil.restoreState(context, stateId);
 
 		// State action value is decoded because we store decoded values only
 		assertEquals("test test.do", state.getAction());

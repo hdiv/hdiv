@@ -18,44 +18,46 @@ package org.hdiv.dataComposer;
 import javax.servlet.http.HttpServletRequest;
 
 import org.hdiv.AbstractHDIVTestCase;
+import org.hdiv.util.Method;
 import org.springframework.mock.web.MockHttpServletRequest;
 
 public class DataComposerFactoryTest extends AbstractHDIVTestCase {
 
 	private DataComposerFactory dataComposerFactory;
 
+	@Override
 	protected void onSetUp() throws Exception {
 
-		this.dataComposerFactory = this.getApplicationContext().getBean(DataComposerFactory.class);
+		dataComposerFactory = getApplicationContext().getBean(DataComposerFactory.class);
 	}
 
 	public void testNewInstance() {
 
-		HttpServletRequest request = this.getMockRequest();
-		IDataComposer dataComposer = this.dataComposerFactory.newInstance(request);
+		final HttpServletRequest request = getMockRequest();
+		final IDataComposer dataComposer = dataComposerFactory.newInstance(request);
 
 		assertTrue(dataComposer instanceof DataComposerMemory);
 	}
 
 	public void testNewInstanceAjax() {
 
-		MockHttpServletRequest request = this.getMockRequest();
+		final MockHttpServletRequest request = getMockRequest();
 
-		IDataComposer dataComposer = this.dataComposerFactory.newInstance(request);
+		IDataComposer dataComposer = dataComposerFactory.newInstance(request);
 
-		dataComposer.beginRequest("GET", "/ajax");
-		String stateId = dataComposer.endRequest();
+		dataComposer.beginRequest(Method.GET, "/ajax");
+		final String stateId = dataComposer.endRequest();
 		dataComposer.endPage();
 
 		// Create other instance
 		request.addParameter("_HDIV_STATE_", stateId);
 		request.addHeader("x-requested-with", "XMLHttpRequest");
-		this.getConfig().setReuseExistingPageInAjaxRequest(true);
+		getConfig().setReuseExistingPageInAjaxRequest(true);
 
-		dataComposer = this.dataComposerFactory.newInstance(request);
+		dataComposer = dataComposerFactory.newInstance(request);
 
-		dataComposer.beginRequest("GET", "/ajax");
-		String stateId2 = dataComposer.endRequest();
+		dataComposer.beginRequest(Method.GET, "/ajax");
+		final String stateId2 = dataComposer.endRequest();
 		dataComposer.endPage();
 
 		assertEquals(getPageId(stateId), getPageId(stateId2));
@@ -63,22 +65,22 @@ public class DataComposerFactoryTest extends AbstractHDIVTestCase {
 
 	public void testNewInstanceAjaxNoParameter() {
 
-		MockHttpServletRequest request = this.getMockRequest();
+		final MockHttpServletRequest request = getMockRequest();
 
-		IDataComposer dataComposer = this.dataComposerFactory.newInstance(request);
+		IDataComposer dataComposer = dataComposerFactory.newInstance(request);
 
-		dataComposer.beginRequest("GET", "/ajax");
-		String stateId = dataComposer.endRequest();
+		dataComposer.beginRequest(Method.GET, "/ajax");
+		final String stateId = dataComposer.endRequest();
 		dataComposer.endPage();
 
 		// Create other instance
 		request.addHeader("x-requested-with", "XMLHttpRequest");
-		this.getConfig().setReuseExistingPageInAjaxRequest(true);
+		getConfig().setReuseExistingPageInAjaxRequest(true);
 
-		dataComposer = this.dataComposerFactory.newInstance(request);
+		dataComposer = dataComposerFactory.newInstance(request);
 
-		dataComposer.beginRequest("GET", "/ajax");
-		String stateId2 = dataComposer.endRequest();
+		dataComposer.beginRequest(Method.GET, "/ajax");
+		final String stateId2 = dataComposer.endRequest();
 		dataComposer.endPage();
 
 		assertFalse(getPageId(stateId) == getPageId(stateId2));
@@ -86,31 +88,31 @@ public class DataComposerFactoryTest extends AbstractHDIVTestCase {
 
 	public void testNewInstancePjax() {
 
-		MockHttpServletRequest request = this.getMockRequest();
+		final MockHttpServletRequest request = getMockRequest();
 
-		IDataComposer dataComposer = this.dataComposerFactory.newInstance(request);
+		IDataComposer dataComposer = dataComposerFactory.newInstance(request);
 
-		dataComposer.beginRequest("GET", "/ajax");
-		String stateId = dataComposer.endRequest();
+		dataComposer.beginRequest(Method.GET, "/ajax");
+		final String stateId = dataComposer.endRequest();
 		dataComposer.endPage();
 
 		// Create other instance
 		request.addParameter("_HDIV_STATE_", stateId);
 		request.addHeader("x-requested-with", "XMLHttpRequest");
 		request.addHeader("X-PJAX", "");
-		this.getConfig().setReuseExistingPageInAjaxRequest(true);
+		getConfig().setReuseExistingPageInAjaxRequest(true);
 
-		dataComposer = this.dataComposerFactory.newInstance(request);
+		dataComposer = dataComposerFactory.newInstance(request);
 
-		dataComposer.beginRequest("GET", "/ajax");
-		String stateId2 = dataComposer.endRequest();
+		dataComposer.beginRequest(Method.GET, "/ajax");
+		final String stateId2 = dataComposer.endRequest();
 		dataComposer.endPage();
 
 		// Next page id is expected
 		assertEquals(getPageId(stateId), Integer.parseInt(getPageId(stateId2)) - 1 + "");
 	}
 
-	protected String getPageId(String stateId) {
+	protected String getPageId(final String stateId) {
 
 		return stateId.substring(0, stateId.indexOf("-"));
 	}
