@@ -177,7 +177,8 @@ public abstract class AbstractDataComposer implements IDataComposer {
 	 * @param isActionParam parameter added in action attribute
 	 * @return Codified value to send to the client
 	 */
-	public String compose(final String parameter, final String value, final boolean editable, final boolean isActionParam) {
+	public String compose(final String parameter, final String value, final boolean editable,
+			final boolean isActionParam) {
 
 		return compose(parameter, value, editable, isActionParam, Constants.ENCODING_UTF_8);
 	}
@@ -194,7 +195,8 @@ public abstract class AbstractDataComposer implements IDataComposer {
 	 * @return Codified value to send to the client
 	 * @since HDIV 1.1
 	 */
-	public String compose(final String parameter, final String value, final boolean editable, final String editableName) {
+	public String compose(final String parameter, final String value, final boolean editable,
+			final String editableName) {
 
 		return compose(parameter, value, editable, editableName, false, null, Constants.ENCODING_UTF_8);
 	}
@@ -212,8 +214,8 @@ public abstract class AbstractDataComposer implements IDataComposer {
 	 * @param charEncoding character encoding
 	 * @return Codified value to send to the client
 	 */
-	public String compose(final String action, final String parameter, final String value, final boolean editable, final boolean isActionParam,
-			final String charEncoding) {
+	public String compose(final String action, final String parameter, final String value, final boolean editable,
+			final boolean isActionParam, final String charEncoding) {
 
 		// Get current IState
 		final IState state = states.peek();
@@ -235,8 +237,8 @@ public abstract class AbstractDataComposer implements IDataComposer {
 	 * @param charEncoding character encoding
 	 * @return Codified value to send to the client
 	 */
-	public String compose(final String parameter, final String value, final boolean editable, final boolean isActionParam,
-			final String charEncoding) {
+	public String compose(final String parameter, final String value, final boolean editable,
+			final boolean isActionParam, final String charEncoding) {
 
 		return compose(parameter, value, editable, null, isActionParam, null, charEncoding);
 	}
@@ -255,8 +257,8 @@ public abstract class AbstractDataComposer implements IDataComposer {
 	 * @return Codified value to send to the client
 	 * @since HDIV 2.1.5
 	 */
-	public String compose(final String parameter, final String value, final boolean editable, final String editableName, final boolean isActionParam,
-			final String method) {
+	public String compose(final String parameter, final String value, final boolean editable, final String editableName,
+			final boolean isActionParam, final Method method) {
 		return compose(parameter, value, editable, editableName, isActionParam, method, Constants.ENCODING_UTF_8);
 	}
 
@@ -265,7 +267,7 @@ public abstract class AbstractDataComposer implements IDataComposer {
 	 *
 	 * @see org.hdiv.dataComposer.IDataComposer#composeParams(java.lang.String, java.lang.String, java.lang.String)
 	 */
-	public String composeParams(String parameters, final String method, final String charEncoding) {
+	public String composeParams(String parameters, final Method method, final String charEncoding) {
 
 		if (parameters == null || parameters.length() == 0) {
 			return null;
@@ -290,7 +292,7 @@ public abstract class AbstractDataComposer implements IDataComposer {
 	 * @param method HTTP method
 	 * @return parameters in query format with confidential values
 	 */
-	protected String applyConfidentialityToParams(String parameters, final String method) {
+	protected String applyConfidentialityToParams(String parameters, final Method method) {
 
 		final Map<String, Integer> pCount = new HashMap<String, Integer>();
 
@@ -342,9 +344,10 @@ public abstract class AbstractDataComposer implements IDataComposer {
 	 * @return Codified value to send to the client
 	 * @since HDIV 2.1.5
 	 */
-	public String composeFormField(final String parameter, final String value, final boolean editable, final String editableName) {
+	public String composeFormField(final String parameter, final String value, final boolean editable,
+			final String editableName) {
 
-		return compose(parameter, value, editable, editableName, false, "POST", Constants.ENCODING_UTF_8);
+		return compose(parameter, value, editable, editableName, false, Method.POST, Constants.ENCODING_UTF_8);
 	}
 
 	/**
@@ -362,20 +365,21 @@ public abstract class AbstractDataComposer implements IDataComposer {
 	 * @return Codified value to send to the client
 	 * @since HDIV 2.1.5
 	 */
-	public String compose(final String parameterName, final String value, final boolean editable, final String editableName,
-			final boolean isActionParam, String method, final String charEncoding) {
+	public String compose(final String parameterName, final String value, final boolean editable,
+			final String editableName, final boolean isActionParam, Method method, final String charEncoding) {
 
 		if (!isRequestStarted()) {
 			// If request not started, do nothing
 			return value;
 		}
 
-		if (method == null || method.length() == 0) {
+		if (method == null) {
 			// Default method is GET
-			method = "GET";
+			method = Method.GET;
 		}
 
-		final IParameter parameter = composeParameter(parameterName, value, editable, editableName, isActionParam, charEncoding);
+		final IParameter parameter = composeParameter(parameterName, value, editable, editableName, isActionParam,
+				charEncoding);
 
 		if (isConfidentialParam(parameterName, method)) {
 			return parameter.getConfidentialValue();
@@ -394,7 +398,7 @@ public abstract class AbstractDataComposer implements IDataComposer {
 	 * @return boolean result
 	 * @since HDIV 2.1.6
 	 */
-	protected boolean isConfidentialParam(final String parameterName, final String method) {
+	protected boolean isConfidentialParam(final String parameterName, final Method method) {
 
 		if (!hdivConfig.getConfidentiality()) {
 			return false;
@@ -449,8 +453,8 @@ public abstract class AbstractDataComposer implements IDataComposer {
 	 * @return Codified value to send to the client
 	 * @since HDIV 1.1
 	 */
-	protected IParameter composeParameter(final String parameterName, final String value, final boolean editable, final String editableDataType,
-			final boolean isActionParam, final String charEncoding) {
+	protected IParameter composeParameter(final String parameterName, final String value, final boolean editable,
+			final String editableDataType, final boolean isActionParam, final String charEncoding) {
 
 		// we decoded value before store it in state.
 		String decodedValue = null;
@@ -472,7 +476,8 @@ public abstract class AbstractDataComposer implements IDataComposer {
 		}
 		else {
 			// create a new parameter and add to the request
-			parameter = createParameter(parameterName, decodedValue, editable, editableDataType, isActionParam, charEncoding);
+			parameter = createParameter(parameterName, decodedValue, editable, editableDataType, isActionParam,
+					charEncoding);
 			state.addParameter(parameter);
 		}
 
@@ -490,8 +495,8 @@ public abstract class AbstractDataComposer implements IDataComposer {
 	 * @param charEncoding character encoding
 	 * @return New IParameter object
 	 */
-	protected IParameter createParameter(final String parameterName, final String decodedValue, final boolean editable, final String editableDataType,
-			final boolean isActionParam, final String charEncoding) {
+	protected IParameter createParameter(final String parameterName, final String decodedValue, final boolean editable,
+			final String editableDataType, final boolean isActionParam, final String charEncoding) {
 		return new Parameter(parameterName, decodedValue, editable, editableDataType, isActionParam);
 	}
 
@@ -510,8 +515,8 @@ public abstract class AbstractDataComposer implements IDataComposer {
 
 		if (!storedParameter.getValues().isEmpty()) {
 
-			final IParameter parameter = composeParameter(newParameter, storedParameter.getValuePosition(0), false, "", false,
-					Constants.ENCODING_UTF_8);
+			final IParameter parameter = composeParameter(newParameter, storedParameter.getValuePosition(0), false, "",
+					false, Constants.ENCODING_UTF_8);
 
 			String currentValue = null;
 			// We check the parameters since the second position because the first

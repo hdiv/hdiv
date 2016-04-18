@@ -27,6 +27,7 @@ import org.hdiv.urlProcessor.FormUrlProcessor;
 import org.hdiv.urlProcessor.LinkUrlProcessor;
 import org.hdiv.util.Constants;
 import org.hdiv.util.HDIVUtil;
+import org.hdiv.util.Method;
 import org.springframework.web.servlet.support.RequestDataValueProcessor;
 
 /**
@@ -80,12 +81,12 @@ public class HdivRequestDataValueProcessor implements RequestDataValueProcessor 
 	 */
 	protected void initNoEditableTypes() {
 
-		this.noEditableTypes.add("checkbox");
-		this.noEditableTypes.add("hidden");
-		this.noEditableTypes.add("option");
-		this.noEditableTypes.add("radio");
-		this.noEditableTypes.add("select");
-		this.noEditableTypes.add("submit");
+		noEditableTypes.add("checkbox");
+		noEditableTypes.add("hidden");
+		noEditableTypes.add("option");
+		noEditableTypes.add("radio");
+		noEditableTypes.add("select");
+		noEditableTypes.add("submit");
 	}
 
 	/**
@@ -109,14 +110,14 @@ public class HdivRequestDataValueProcessor implements RequestDataValueProcessor 
 	 */
 	public String processAction(final HttpServletRequest request, String action, final String method) {
 
-		if (this.innerRequestDataValueProcessor != null) {
-			final String processedAction = this.innerRequestDataValueProcessor.processAction(request, action, method);
+		if (innerRequestDataValueProcessor != null) {
+			final String processedAction = innerRequestDataValueProcessor.processAction(request, action, method);
 			if (processedAction != action) {
 				action = processedAction;
 			}
 		}
 
-		final String result = this.formUrlProcessor.processUrl(request, action, method);
+		final String result = formUrlProcessor.processUrl(request, action, Method.secureValueOf(method));
 		return result;
 	}
 
@@ -129,10 +130,12 @@ public class HdivRequestDataValueProcessor implements RequestDataValueProcessor 
 	 * @param type the type of the field
 	 * @return processed field value
 	 */
-	public String processFormFieldValue(final HttpServletRequest request, final String name, String value, final String type) {
+	public String processFormFieldValue(final HttpServletRequest request, final String name, String value,
+			final String type) {
 
-		if (this.innerRequestDataValueProcessor != null) {
-			final String processedValue = this.innerRequestDataValueProcessor.processFormFieldValue(request, name, value, type);
+		if (innerRequestDataValueProcessor != null) {
+			final String processedValue = innerRequestDataValueProcessor.processFormFieldValue(request, name, value,
+					type);
 			if (processedValue != value) {
 				value = processedValue;
 			}
@@ -170,8 +173,8 @@ public class HdivRequestDataValueProcessor implements RequestDataValueProcessor 
 		final IDataComposer dataComposer = HDIVUtil.getDataComposer(request);
 		final Map<String, String> extraFields = new HashMap<String, String>();
 
-		if (this.innerRequestDataValueProcessor != null) {
-			final Map<String, String> innerExtras = this.innerRequestDataValueProcessor.getExtraHiddenFields(request);
+		if (innerRequestDataValueProcessor != null) {
+			final Map<String, String> innerExtras = innerRequestDataValueProcessor.getExtraHiddenFields(request);
 			if (innerExtras != null) {
 				extraFields.putAll(innerExtras);
 			}
@@ -202,14 +205,14 @@ public class HdivRequestDataValueProcessor implements RequestDataValueProcessor 
 	 */
 	public String processUrl(final HttpServletRequest request, String url) {
 
-		if (this.innerRequestDataValueProcessor != null) {
-			final String processedUrl = this.innerRequestDataValueProcessor.processUrl(request, url);
+		if (innerRequestDataValueProcessor != null) {
+			final String processedUrl = innerRequestDataValueProcessor.processUrl(request, url);
 			if (processedUrl != null) {
 				url = processedUrl;
 			}
 		}
 
-		final String result = this.linkUrlProcessor.processUrl(request, url);
+		final String result = linkUrlProcessor.processUrl(request, url);
 		return result;
 	}
 
@@ -221,7 +224,7 @@ public class HdivRequestDataValueProcessor implements RequestDataValueProcessor 
 	 */
 	protected boolean isEditable(final String type) {
 
-		if (this.noEditableTypes.contains(type)) {
+		if (noEditableTypes.contains(type)) {
 			return false;
 		}
 		return true;

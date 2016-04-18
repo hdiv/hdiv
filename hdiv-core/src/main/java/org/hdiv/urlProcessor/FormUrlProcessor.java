@@ -72,7 +72,8 @@ public class FormUrlProcessor extends AbstractUrlProcessor {
 		if (dataComposer == null) {
 			// IDataComposer not initialized on request, request is out of filter
 			if (log.isDebugEnabled()) {
-				log.debug("IDataComposer not initialized on request. Request doesn't pass through ValidatorFilter, review it's mapping");
+				log.debug(
+						"IDataComposer not initialized on request. Request doesn't pass through ValidatorFilter, review it's mapping");
 			}
 			return url;
 		}
@@ -86,7 +87,8 @@ public class FormUrlProcessor extends AbstractUrlProcessor {
 			request.setAttribute(FORM_STATE_ID, stateId);
 
 			// Process url params
-			final String processedParams = dataComposer.composeParams(urlData.getUrlParams(), method.toString(), Constants.ENCODING_UTF_8);
+			final String processedParams = dataComposer.composeParams(urlData.getUrlParams(), method,
+					Constants.ENCODING_UTF_8);
 			urlData.setUrlParams(processedParams);
 
 			// Action url with confidential values

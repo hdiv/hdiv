@@ -123,7 +123,7 @@ public class DataComposerMemoryTest extends AbstractHDIVTestCase {
 		dataComposer.startPage();
 		dataComposer.beginRequest(Method.GET, "test.do");
 		final String params = "param1=val1&param2=val2";
-		final String processedParams = dataComposer.composeParams(params, "GET", Constants.ENCODING_UTF_8);
+		final String processedParams = dataComposer.composeParams(params, Method.GET, Constants.ENCODING_UTF_8);
 		assertEquals("param1=0&param2=0", processedParams);
 		final String stateId = dataComposer.endRequest();
 		dataComposer.endPage();

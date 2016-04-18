@@ -44,7 +44,7 @@ public class OutputLinkComponentProcessor extends AbstractComponentProcessor {
 
 			String url = component.getValue().toString();
 
-			final UrlData urlData = linkUrlProcessor.createUrlData(url, "GET", request);
+			final UrlData urlData = linkUrlProcessor.createUrlData(url, Method.GET, request);
 			if (linkUrlProcessor.isHdivStateNecessary(urlData)) {
 
 				final boolean hasUIParams = UtilsJsf.hasUIParameterChild(component);
@@ -59,7 +59,8 @@ public class OutputLinkComponentProcessor extends AbstractComponentProcessor {
 				final IDataComposer dataComposer = HDIVUtil.getDataComposer(request);
 				dataComposer.beginRequest(Method.GET, urlData.getUrlWithoutContextPath());
 
-				final String processedParams = dataComposer.composeParams(urlData.getUrlParams(), "GET", Constants.ENCODING_UTF_8);
+				final String processedParams = dataComposer.composeParams(urlData.getUrlParams(), Method.GET,
+						Constants.ENCODING_UTF_8);
 				urlData.setUrlParams(processedParams);
 
 				if (hasUIParams) {
@@ -81,7 +82,8 @@ public class OutputLinkComponentProcessor extends AbstractComponentProcessor {
 					component.setValue(url);
 
 					// Add a children UIParam component with Hdiv's state
-					final UIParameter paramComponent = (UIParameter) context.getApplication().createComponent(UIParameter.COMPONENT_TYPE);
+					final UIParameter paramComponent = (UIParameter) context.getApplication()
+							.createComponent(UIParameter.COMPONENT_TYPE);
 
 					final String hdivParameter = (String) externalContext.getSessionMap().get(Constants.HDIV_PARAMETER);
 

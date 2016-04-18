@@ -493,7 +493,7 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 		final MockHttpServletRequest request = getMockRequest();
 
 		dataComposer.beginRequest(Method.GET, targetName);
-		dataComposer.composeParams("param1=111&amp;param2=Me+%26+You", "GET", "utf-8");
+		dataComposer.composeParams("param1=111&amp;param2=Me+%26+You", Method.GET, "utf-8");
 		final String pageState = dataComposer.endRequest();
 		dataComposer.endPage();
 

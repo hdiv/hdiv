@@ -33,6 +33,7 @@ import org.hdiv.dataComposer.IDataComposer;
 import org.hdiv.exception.HDIVException;
 import org.hdiv.urlProcessor.FormUrlProcessor;
 import org.hdiv.urlProcessor.LinkUrlProcessor;
+import org.hdiv.urlProcessor.UrlData;
 import org.springframework.context.MessageSource;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
@@ -73,6 +74,14 @@ public class HDIVUtil {
 	private static final String CURRENT_PAGE_KEY = "CURRENT_PAGE_KEY";
 
 	public static final Pattern intPattern = Pattern.compile("[0-9]+");
+
+	private static final char[] jsessionLower = ";jsessionid=".toCharArray();
+
+	private static final char[] jsessionUpper = ";JSESSIONID=".toCharArray();
+
+	private static final char[] SEMICOLON = ";".toCharArray();
+
+	private static final char[] QUESTION = "?".toCharArray();
 
 	/* DataComposer */
 
@@ -392,26 +401,63 @@ public class HDIVUtil {
 	 * @return url without sessionId
 	 */
 	public static String stripSession(final String url) {
+		return stripAndFillSessionData(url, null);
+	}
 
-		if (log.isDebugEnabled()) {
-			log.debug("Stripping jsessionid from url " + url);
-		}
-		final StringBuilder u = new StringBuilder(url);
-		int sessionStart;
-
-		while (((sessionStart = u.indexOf(";jsessionid=")) != -1)
-				|| ((sessionStart = u.indexOf(";JSESSIONID=")) != -1)) {
-
-			int sessionEnd = u.indexOf(";", sessionStart + 1);
-			if (sessionEnd == -1) {
-				sessionEnd = u.indexOf("?", sessionStart + 1);
+	public static String stripAndFillSessionData(final String url, final UrlData urldata) {
+		final int pos = url.indexOf(';');
+		if (pos != -1) {
+			final char[] data = url.toCharArray();
+			int sessionStart;
+			if ((sessionStart = indexOf(data, jsessionLower, pos)) != -1
+					|| ((sessionStart = indexOf(data, jsessionUpper, pos)) != -1)) {
+				int sessionEnd = indexOf(data, SEMICOLON, sessionStart + 1);
+				if (sessionEnd == -1) {
+					sessionEnd = indexOf(data, QUESTION, sessionStart + 1);
+				}
+				if (sessionEnd == -1) { // still
+					sessionEnd = data.length;
+				}
+				final int len = sessionEnd - sessionStart;
+				if (len > 0) {
+					if (urldata != null) {
+						urldata.setjSessionId(new String(data, sessionStart + 1, len - 1));
+					}
+					System.arraycopy(data, sessionStart + len, data, sessionStart, data.length - sessionEnd);
+					return new String(data, 0, data.length - len);
+				}
 			}
-			if (sessionEnd == -1) { // still
-				sessionEnd = u.length();
-			}
-			u.delete(sessionStart, sessionEnd);
+
 		}
-		return u.toString();
+		return url;
+	}
+
+	private static int indexOf(final char[] source, final char[] target, final int fromIndex) {
+
+		final char first = target[0];
+		final int max = (source.length - target.length);
+
+		for (int i = 0 + fromIndex; i <= max; i++) {
+			/* Look for first character. */
+			if (source[i] != first) {
+				while (++i <= max && source[i] != first)
+					;
+			}
+
+			/* Found first character, now look at the rest of v2 */
+			if (i <= max) {
+				int j = i + 1;
+				final int end = j + target.length - 1;
+				for (int k = 1; j < end && source[j] == target[k]; j++, k++)
+					;
+
+				if (j == end) {
+					/* Found whole string. */
+					return i;
+				}
+			}
+		}
+		return -1;
 	}
 
 	/**

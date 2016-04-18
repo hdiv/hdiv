@@ -15,9 +15,6 @@
  */
 package org.hdiv.urlProcessor;
 
-import java.io.StringWriter;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -94,7 +91,7 @@ public final class UrlData {
 	 *
 	 * @since 3.0.0
 	 */
-	private List<String> variableNames;
+	private String uriTemplate;
 
 	/**
 	 * Constructor
@@ -106,7 +103,7 @@ public final class UrlData {
 		originalUrl = url;
 		this.method = method;
 		if (!"".equals(url)) {
-			variableNames = new Parser(url).variableNames;
+			parser(url);
 		}
 	}
 
@@ -276,7 +273,7 @@ public final class UrlData {
 	}
 
 	public boolean hasUriTemplate() {
-		return variableNames != null && variableNames.size() > 0;
+		return uriTemplate != null;
 	}
 
 	public String getUrlWithOutUriTemplate() {
@@ -284,47 +281,37 @@ public final class UrlData {
 	}
 
 	public String getUriTemplate() {
-		if (!hasUriTemplate()) {
-			return "";
-		}
-		final StringWriter sw = new StringWriter();
-		sw.append('{');
-		for (int i = 0; i < variableNames.size(); i++) {
-			sw.append(variableNames.get(i));
-		}
-		sw.append('}');
-
-		return sw.toString();
+		return uriTemplate != null ? uriTemplate : "";
 	}
 
-	/**
-	 * Static inner class to parse URI template strings into a matching regular expression.
-	 */
-	private static class Parser {
+	private static final Pattern NAMES_PATTERN = Pattern.compile("\\{([^/]+?)\\}");
 
-		/** Captures URI template variable names. */
-		private static final Pattern NAMES_PATTERN = Pattern.compile("\\{([^/]+?)\\}");
+	private void parser(final String uriTemplate) {
+		Assert.hasText(uriTemplate, "'uriTemplate' must not be null");
+		final Matcher matcher = NAMES_PATTERN.matcher(uriTemplate);
+		final StringBuilder sb = new StringBuilder();
+		sb.append('{');
 
-		private final List<String> variableNames = new ArrayList<String>();
-
-		private Parser(final String uriTemplate) {
-			Assert.hasText(uriTemplate, "'uriTemplate' must not be null");
-			final Matcher matcher = NAMES_PATTERN.matcher(uriTemplate);
-			while (matcher.find()) {
-				final String match = matcher.group(1);
-				final int colonIdx = match.indexOf(':');
-				if (colonIdx == -1) {
-					variableNames.add(match);
+		boolean variable = false;
+		while (matcher.find()) {
+			final String match = matcher.group(1);
+			final int colonIdx = match.indexOf(':');
+			if (colonIdx == -1) {
+				variable = true;
+				sb.append(match);
+			}
+			else {
+				if (colonIdx + 1 == match.length()) {
+					throw new IllegalArgumentException(
+							"No custom regular expression specified after ':' in \"" + match + "\"");
 				}
-				else {
-					if (colonIdx + 1 == match.length()) {
-						throw new IllegalArgumentException("No custom regular expression specified after ':' in \"" + match + "\"");
-					}
-					variableNames.add(match.substring(0, colonIdx));
-				}
+				sb.append(match.substring(0, colonIdx));
 			}
 		}
-
+		if (variable) {
+			sb.append('}');
+			this.uriTemplate = sb.toString();
+		}
 	}
 
 }

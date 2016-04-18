@@ -279,37 +279,25 @@ public abstract class AbstractUrlProcessor {
 	 * @param stateParam hdiv state parameter value
 	 * @return complete url
 	 */
-	public String getProcessedUrlWithHdivState(final HttpServletRequest request, final UrlData urlData, final String stateParam) {
+	public String getProcessedUrlWithHdivState(final HttpServletRequest request, final UrlData urlData,
+			final String stateParam) {
 
 		// obtain url with parameters
-		String url = getParamProcessedUrl(urlData);
+		final StringBuilder sb = getParamProcessedUrl(urlData);
 
 		if (stateParam == null || stateParam.length() <= 0) {
-			return url;
+			return sb.toString();
 		}
 
-		final String separator = (urlData.containsParams()) ? "&" : "?";
+		final char separator = (urlData.containsParams()) ? '&' : '?';
 		final String hdivParameter = (String) request.getSession().getAttribute(Constants.HDIV_PARAMETER);
 
-		final StringBuilder sb = new StringBuilder();
-		sb.append(url).append(separator).append(hdivParameter).append('=').append(stateParam);
-		sb.append(urlData.getUriTemplate().replace("?", "&"));
+		sb.append(separator).append(hdivParameter).append('=').append(stateParam);
+		sb.append(urlData.getUriTemplate().replace('?', '&'));
 
-		url = appendAnchor(sb.toString(), urlData.getAnchor());
+		appendAnchor(sb, urlData.getAnchor());
 
-		return url;
-	}
-
-	/**
-	 * Generate Query String with all parameters.
-	 *
-	 * @param urlData url data object
-	 * @return complete query string
-	 */
-	protected void appendParamsQueryString(final StringBuilder sb, final UrlData urlData) {
-		if (urlData.getUrlParams() != null) {
-			sb.append('?').append(urlData.getUrlParams());
-		}
+		return sb.toString();
 	}
 
 	/**
@@ -318,7 +306,7 @@ public abstract class AbstractUrlProcessor {
 	 * @param urlData url data object
 	 * @return complete url
 	 */
-	public String getParamProcessedUrl(final UrlData urlData) {
+	private StringBuilder getParamProcessedUrl(final UrlData urlData) {
 
 		final StringBuilder sb = new StringBuilder();
 		if (urlData.getServer() != null) {
@@ -330,10 +318,11 @@ public abstract class AbstractUrlProcessor {
 		if (urlData.getjSessionId() != null) {
 			sb.append(';').append(urlData.getjSessionId());
 		}
+		if (urlData.getUrlParams() != null) {
+			sb.append('?').append(urlData.getUrlParams());
+		}
 
-		appendParamsQueryString(sb, urlData);
-
-		return sb.toString();
+		return sb;
 	}
 
 	/**
@@ -344,10 +333,10 @@ public abstract class AbstractUrlProcessor {
 	 */
 	public String getProcessedUrl(final UrlData urlData) {
 
-		String url = getParamProcessedUrl(urlData);
+		final StringBuilder url = getParamProcessedUrl(urlData);
 
-		url = appendAnchor(url, urlData.getAnchor());
-		return url;
+		appendAnchor(url, urlData.getAnchor());
+		return url.toString();
 	}
 
 	/**
@@ -357,14 +346,11 @@ public abstract class AbstractUrlProcessor {
 	 * @param anchor anchor
 	 * @return url with the anchor
 	 */
-	protected String appendAnchor(String url, final String anchor) {
+	protected void appendAnchor(final StringBuilder url, final String anchor) {
 		if (anchor != null) {
 			// it could be ""
-			final StringBuilder sb = new StringBuilder(url);
-			sb.append("#").append(anchor);
-			url = sb.toString();
+			url.append("#").append(anchor);
 		}
-		return url;
 	}
 
 	/**
@@ -568,7 +554,8 @@ public abstract class AbstractUrlProcessor {
 
 		if (url.startsWith("..")) {
 			final Stack<String> stack = new Stack<String>();
-			final String localUri = originalRequestUri.substring(originalRequestUri.indexOf('/'), originalRequestUri.lastIndexOf('/'));
+			final String localUri = originalRequestUri.substring(originalRequestUri.indexOf('/'),
+					originalRequestUri.lastIndexOf('/'));
 			final StringTokenizer localUriParts = new StringTokenizer(localUri.replace('\\', '/'), "/");
 			while (localUriParts.hasMoreTokens()) {
 				final String part = localUriParts.nextToken();
@@ -607,28 +594,8 @@ public abstract class AbstractUrlProcessor {
 	 * @param urlData current url data
 	 * @return url without sessionId
 	 */
-	protected String stripSession(final String url, final UrlData urlData) {
-
-		if (url.contains(Constants.JSESSIONID) || url.contains(Constants.JSESSIONID_LC)) {
-
-			int last = url.length();
-			final int pos = url.indexOf('?');
-			if (pos != -1) {
-				last = pos;
-			}
-			final String jSessionId = url.substring(url.indexOf(';') + 1, last);
-			urlData.setjSessionId(jSessionId);
-
-			if (log.isDebugEnabled()) {
-				log.debug("jSessionId value: " + jSessionId);
-			}
-
-			return HDIVUtil.stripSession(url);
-		}
-		else {
-			return url;
-		}
-
+	public static String stripSession(final String url, final UrlData urlData) {
+		return HDIVUtil.stripAndFillSessionData(url, urlData);
 	}
 
 	/**
