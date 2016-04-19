@@ -69,17 +69,6 @@ public class State implements IState, Serializable {
 	private int pageId;
 
 	/**
-	 * Flag to initialize the lists
-	 */
-	private boolean parametersInitialized;
-
-	/**
-	 * Required parameters to be able to do a correct request with this state. We consider required parameters all of
-	 * the parameters that can be sent via GET or those that are added to the name of an action.
-	 */
-	private List<String> requiredParams;
-
-	/**
 	 * HTTP method for this state.
 	 * <p>
 	 * Null value is equivalent to GET.
@@ -108,16 +97,9 @@ public class State implements IState, Serializable {
 	 * @see org.hdiv.state.IState#addParameter(org.hdiv.state.IParameter)
 	 */
 	public void addParameter(final IParameter parameter) {
-		if (!parametersInitialized) {
-			parametersInitialized = true;
+		if (parameters == null) {
 			parameters = new ArrayList<IParameter>(PARAMETERS_LIST_SIZE);
-			requiredParams = new ArrayList<String>(PARAMETERS_LIST_SIZE);
 		}
-
-		if (parameter.isActionParam()) {
-			requiredParams.add(parameter.getName());
-		}
-
 		parameters.add(parameter);
 	}
 
@@ -202,17 +184,24 @@ public class State implements IState, Serializable {
 		return id;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see org.hdiv.state.IState#getRequiredParams()
+	/**
+	 * Required parameters to be able to do a correct request with this state. We consider required parameters all of
+	 * the parameters that can be sent via GET or those that are added to the name of an action.
 	 */
 	public List<String> getRequiredParams() {
-		if (!parametersInitialized) {
+		if (parameters == null) {
 			return Collections.emptyList();
 		}
+		else {
+			final List<String> requiredParams = new ArrayList<String>(parameters.size());
+			for (final IParameter parameter : parameters) {
+				if (parameter.isActionParam()) {
+					requiredParams.add(parameter.getName());
+				}
+			}
+			return requiredParams;
+		}
 
-		return requiredParams;
 	}
 
 	/*
@@ -267,8 +256,8 @@ public class State implements IState, Serializable {
 		sb.append("action: ").append(action);
 		sb.append("parameters: ").append(parameters);
 		sb.append("params: ").append(params);
-		sb.append("requiredParams: ").append(requiredParams);
-		sb.append("method: ").append(method == null ? "GET" : method);
+		sb.append("requiredParams: ").append(getRequiredParams());
+		sb.append("method: ").append(method == null ? Method.GET : method);
 		return super.toString();
 	}
 
