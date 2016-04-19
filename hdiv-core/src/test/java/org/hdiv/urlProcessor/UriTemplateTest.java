@@ -53,7 +53,16 @@ public class UriTemplateTest extends AbstractHDIVTestCase {
 	public void testGetProcessedUrlWithHdivState() {
 		final UrlData urlData = linkUrlProcessor.createUrlData(url, Method.GET, getMockRequest());
 		final String stateParam = "1-12-123123123123";
-		final String urlProcessed = linkUrlProcessor.getProcessedUrlWithHdivState(getMockRequest(), urlData, stateParam);
-		assertEquals(urlWithoutUriTemplate + "?_HDIV_STATE_=" + stateParam + uriTemplate.replace("?", "&"), urlProcessed);
+		final String urlProcessed = linkUrlProcessor.getProcessedUrlWithHdivState(getMockRequest(), urlData,
+				stateParam);
+		assertEquals(urlWithoutUriTemplate + "?_HDIV_STATE_=" + stateParam + uriTemplate.replace("?", "&"),
+				urlProcessed);
+	}
+
+	public void testJSURLData() {
+		UrlData data = new UrlData("javascript:myMethod()", Method.GET);
+		assertEquals(true, data.isJS());
+		data = new UrlData("hhhhhhhhhh:myMethod()", Method.GET);
+		assertEquals(false, data.isJS());
 	}
 }
