@@ -26,8 +26,6 @@ import java.util.StringTokenizer;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.hdiv.config.HDIVConfig;
 import org.hdiv.regex.PatternMatcher;
 import org.hdiv.util.Constants;
@@ -45,11 +43,6 @@ import org.springframework.web.util.HtmlUtils;
 public abstract class AbstractUrlProcessor {
 
 	/**
-	 * Commons Logging instance.
-	 */
-	private static final Log log = LogFactory.getLog(AbstractUrlProcessor.class);
-
-	/**
 	 * Hdiv configuration.
 	 */
 	protected HDIVConfig config;
@@ -57,6 +50,18 @@ public abstract class AbstractUrlProcessor {
 	@Deprecated
 	public final UrlData createUrlData(final String url, final String method, final HttpServletRequest request) {
 		return createUrlData(url, Method.secureValueOf(method), request);
+	}
+
+	protected final String processAnchorAndParameters(String url, final UrlData urlData,
+			final HttpServletRequest request) {
+		url = urlData.findAnchor(url);
+		// Remove parameters
+		final int paramInit = url.indexOf('?');
+		if (paramInit > -1) {
+			urlData.setUrlParams(removeStateParameter(request, url.substring(paramInit + 1)));
+			url = url.substring(0, paramInit);
+		}
+		return url;
 	}
 
 	/**
@@ -77,26 +82,7 @@ public abstract class AbstractUrlProcessor {
 		if (urlData.hasUriTemplate()) {
 			url = urlData.getUrlWithOutUriTemplate();
 		}
-
-		// Extract the anchor
-		final int pos = url.indexOf('#');
-		if (pos >= 0) {
-			final String anchor = url.substring(pos + 1);
-			urlData.setAnchor(anchor);
-
-			url = url.substring(0, pos);
-		}
-
-		// Remove parameters
-		final int paramInit = url.indexOf('?');
-		if (paramInit > -1) {
-			String urlParams = url.substring(paramInit + 1);
-			urlParams = removeStateParameter(request, urlParams);
-			urlData.setUrlParams(urlParams);
-
-			url = url.substring(0, paramInit);
-
-		}
+		url = processAnchorAndParameters(url, urlData, request);
 
 		// Extract protocol, domain and server if exist
 		final String serverUrl = getServerFromUrl(url);
@@ -283,7 +269,7 @@ public abstract class AbstractUrlProcessor {
 			final String stateParam) {
 
 		// obtain url with parameters
-		final StringBuilder sb = getParamProcessedUrl(urlData);
+		final StringBuilder sb = urlData.getParamProcessedUrl();
 
 		if (stateParam == null || stateParam.length() <= 0) {
 			return sb.toString();
@@ -296,33 +282,7 @@ public abstract class AbstractUrlProcessor {
 		sb.append(urlData.getUriTemplate().replace('?', '&'));
 
 		appendAnchor(sb, urlData.getAnchor());
-
 		return sb.toString();
-	}
-
-	/**
-	 * Generate a url with all parameters.
-	 *
-	 * @param urlData url data object
-	 * @return complete url
-	 */
-	private StringBuilder getParamProcessedUrl(final UrlData urlData) {
-
-		final StringBuilder sb = new StringBuilder();
-		if (urlData.getServer() != null) {
-			sb.append(urlData.getServer());
-		}
-		sb.append(urlData.getContextPathRelativeUrl());
-
-		// Add jSessionId
-		if (urlData.getjSessionId() != null) {
-			sb.append(';').append(urlData.getjSessionId());
-		}
-		if (urlData.getUrlParams() != null) {
-			sb.append('?').append(urlData.getUrlParams());
-		}
-
-		return sb;
 	}
 
 	/**
@@ -333,7 +293,7 @@ public abstract class AbstractUrlProcessor {
 	 */
 	public String getProcessedUrl(final UrlData urlData) {
 
-		final StringBuilder url = getParamProcessedUrl(urlData);
+		final StringBuilder url = urlData.getParamProcessedUrl();
 
 		appendAnchor(url, urlData.getAnchor());
 		return url.toString();
@@ -349,7 +309,7 @@ public abstract class AbstractUrlProcessor {
 	protected void appendAnchor(final StringBuilder url, final String anchor) {
 		if (anchor != null) {
 			// it could be ""
-			url.append("#").append(anchor);
+			url.append('#').append(anchor);
 		}
 	}
 
@@ -361,7 +321,7 @@ public abstract class AbstractUrlProcessor {
 	 */
 	public boolean isHdivStateNecessary(final UrlData urlData) {
 
-		if (urlData.getOriginalUrl().toLowerCase().startsWith("javascript:")) {
+		if (urlData.isJS()) {
 			return false;
 		}
 
@@ -409,7 +369,8 @@ public abstract class AbstractUrlProcessor {
 
 			final String contextPath = request.getContextPath();
 
-			if (url.startsWith(contextPath + "/") || url.equals(contextPath)) {
+			if (url.startsWith(contextPath)
+					&& (url.length() == contextPath.length() || url.charAt(contextPath.length()) == '/')) {
 				// http://localhost:8080/APP/... or
 				// http://localhost:8080/APP
 				return true;
@@ -422,7 +383,8 @@ public abstract class AbstractUrlProcessor {
 
 			final String contextPath = request.getContextPath();
 
-			if (url.startsWith(contextPath + "/") || url.equals(contextPath)) {
+			if (url.startsWith(contextPath)
+					&& (url.length() == contextPath.length() || url.charAt(contextPath.length()) == '/')) {
 				// url of type /APP/... or /APP
 				return true;
 			}

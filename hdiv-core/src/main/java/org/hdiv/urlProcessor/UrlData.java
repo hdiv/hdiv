@@ -93,6 +93,8 @@ public final class UrlData {
 	 */
 	private String uriTemplate;
 
+	private final boolean uriTemplateSupported;
+
 	/**
 	 * Constructor
 	 *
@@ -100,9 +102,20 @@ public final class UrlData {
 	 * @param method Http method.
 	 */
 	public UrlData(final String url, final Method method) {
+		this(url, method, false);
+	}
+
+	/**
+	 * Constructor
+	 *
+	 * @param url Original url
+	 * @param method Http method.
+	 */
+	public UrlData(final String url, final Method method, final boolean uriTemplateSupported) {
 		originalUrl = url;
 		this.method = method;
-		if (!"".equals(url)) {
+		this.uriTemplateSupported = uriTemplateSupported;
+		if (!uriTemplateSupported && !"".equals(url)) {
 			parser(url);
 		}
 	}
@@ -126,23 +139,27 @@ public final class UrlData {
 	}
 
 	/**
-	 * @return the originalUrl
-	 */
-	public String getOriginalUrl() {
-		return originalUrl;
-	}
-
-	/**
 	 * @return the anchor
 	 */
 	public String getAnchor() {
 		return anchor;
 	}
 
+	public String findAnchor(final String url) {
+		final int pos = url.indexOf('#');
+		if (pos >= 0) {
+			final String anchor = url.substring(pos + 1);
+			setAnchor(anchor);
+
+			return url.substring(0, pos);
+		}
+		return url;
+	}
+
 	/**
 	 * @param anchor the anchor to set
 	 */
-	public void setAnchor(final String anchor) {
+	private void setAnchor(final String anchor) {
 		this.anchor = anchor;
 	}
 
@@ -273,6 +290,9 @@ public final class UrlData {
 	}
 
 	public boolean hasUriTemplate() {
+		if (uriTemplateSupported) {
+			throw new UnsupportedOperationException();
+		}
 		return uriTemplate != null;
 	}
 
@@ -284,13 +304,36 @@ public final class UrlData {
 		return uriTemplate != null ? uriTemplate : "";
 	}
 
+	/**
+	 * Generate a url with all parameters.
+	 *
+	 * @param urlData url data object
+	 * @return complete url
+	 */
+	StringBuilder getParamProcessedUrl() {
+		final StringBuilder sb = new StringBuilder(128);
+		if (server != null) {
+			sb.append(server);
+		}
+		sb.append(contextPathRelativeUrl);
+
+		// Add jSessionId
+		if (jSessionId != null) {
+			sb.append(';').append(jSessionId);
+		}
+		if (urlParams != null) {
+			sb.append('?').append(urlParams);
+		}
+
+		return sb;
+	}
+
 	private static final Pattern NAMES_PATTERN = Pattern.compile("\\{([^/]+?)\\}");
 
 	private void parser(final String uriTemplate) {
 		Assert.hasText(uriTemplate, "'uriTemplate' must not be null");
 		final Matcher matcher = NAMES_PATTERN.matcher(uriTemplate);
-		final StringBuilder sb = new StringBuilder();
-		sb.append('{');
+		StringBuilder sb = null;
 
 		boolean variable = false;
 		while (matcher.find()) {
@@ -298,12 +341,20 @@ public final class UrlData {
 			final int colonIdx = match.indexOf(':');
 			if (colonIdx == -1) {
 				variable = true;
+				if (sb == null) {
+					sb = new StringBuilder();
+					sb.append('{');
+				}
 				sb.append(match);
 			}
 			else {
 				if (colonIdx + 1 == match.length()) {
 					throw new IllegalArgumentException(
 							"No custom regular expression specified after ':' in \"" + match + "\"");
+				}
+				if (sb == null) {
+					sb = new StringBuilder();
+					sb.append('{');
 				}
 				sb.append(match.substring(0, colonIdx));
 			}
@@ -312,6 +363,10 @@ public final class UrlData {
 			sb.append('}');
 			this.uriTemplate = sb.toString();
 		}
+	}
+
+	public boolean isJS() {
+		return originalUrl.charAt(10) == ':' && originalUrl.toLowerCase().startsWith("javascript:");
 	}
 
 }

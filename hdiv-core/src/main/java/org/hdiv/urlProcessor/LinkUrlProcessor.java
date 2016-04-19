@@ -73,8 +73,7 @@ public class LinkUrlProcessor extends AbstractUrlProcessor {
 			// the url needs protection
 			dataComposer.beginRequest(Method.GET, urlData.getUrlWithoutContextPath());
 
-			final String processedParams = dataComposer.composeParams(urlData.getUrlParams(), Method.GET, encoding);
-			urlData.setUrlParams(processedParams);
+			urlData.setUrlParams(dataComposer.composeParams(urlData.getUrlParams(), Method.GET, encoding));
 
 			// Hdiv state param value
 			final String stateParam = dataComposer.endRequest();
