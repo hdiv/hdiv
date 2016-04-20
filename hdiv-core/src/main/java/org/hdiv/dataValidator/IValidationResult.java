@@ -34,6 +34,7 @@ public interface IValidationResult {
 	public void setLegal(boolean legal);
 
 	/**
+	 * @param <T> This describes the return type
 	 * @return Returns the result.
 	 */
 	public <T> T getResult();

@@ -81,7 +81,7 @@ public class StartPage implements Serializable {
 
 	/**
 	 * Returns the compiled pattern
-	 * @return
+	 * @return Pattern matcher for the pattern
 	 */
 	public PatternMatcher getCompiledPattern() {
 		return compiledPattern;

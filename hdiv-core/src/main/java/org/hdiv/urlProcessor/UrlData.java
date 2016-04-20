@@ -110,12 +110,13 @@ public final class UrlData {
 	 *
 	 * @param url Original url
 	 * @param method Http method.
+	 * @param uriTemplateSupported true if templates are supported
 	 */
 	public UrlData(final String url, final Method method, final boolean uriTemplateSupported) {
 		originalUrl = url;
 		this.method = method;
 		this.uriTemplateSupported = uriTemplateSupported;
-		if (!uriTemplateSupported && !"".equals(url)) {
+		if (uriTemplateSupported && !"".equals(url)) {
 			parser(url);
 		}
 	}

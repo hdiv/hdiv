@@ -77,9 +77,9 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 
 		HttpSession session = context.getRequest().getSession();
 
-		PageIdGenerator pageIdGenerator = (PageIdGenerator) session.getAttribute(this.pageIdGeneratorName);
+		PageIdGenerator pageIdGenerator = (PageIdGenerator) session.getAttribute(pageIdGeneratorName);
 		if (pageIdGenerator == null) {
-			pageIdGenerator = this.beanFactory.getBean(PageIdGenerator.class);
+			pageIdGenerator = beanFactory.getBean(PageIdGenerator.class);
 		}
 		if (pageIdGenerator == null) {
 			throw new HDIVException("session.nopageidgenerator");
@@ -92,7 +92,7 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 			throw new HDIVException("Incorrect PageId generated [" + id + "]. PageId must be greater than 0.");
 		}
 
-		session.setAttribute(this.pageIdGeneratorName, pageIdGenerator);
+		session.setAttribute(pageIdGeneratorName, pageIdGenerator);
 
 		return id;
 
@@ -108,7 +108,7 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 	 */
 	public IPage getPage(final RequestContext context, final int pageId) {
 		try {
-			return this.getPageFromSession(context, pageId);
+			return getPageFromSession(context, pageId);
 
 		}
 		catch (final IllegalStateException e) {
@@ -121,7 +121,6 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 	 * reached the maximum size allowed, the oldest page is deleted from the session and from the cache itself.
 	 * 
 	 * @param context Context holder for request-specific state.
-	 * @param pageId Page identifier
 	 * @param newPage Page with all the information about states
 	 * @param isPartial If is a partial page
 	 */
@@ -132,13 +131,13 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 
 		boolean isAjaxRequest = false;
 
-		IStateCache cache = this.getStateCache(session);
+		IStateCache cache = getStateCache(session);
 
 		// Get current request page identifier. Null if no state
 		Integer currentPage = HDIVUtil.getCurrentPageId(request);
 
 		Integer lastPageId = cache.getLastPageId();
-		IPage lastPage = lastPageId == null ? null : this.getPage(context, lastPageId);
+		IPage lastPage = lastPageId == null ? null : getPage(context, lastPageId);
 
 		boolean isRefreshRequest = newPage != null && lastPage != null && newPage.getParentStateId() != null
 				&& lastPage.getParentStateId() != null && newPage.getParentStateId().equals(lastPage.getParentStateId());
@@ -157,17 +156,17 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 		// stored for the longest time
 		if (removedPageId != null) {
 
-			this.removePageFromSession(context, removedPageId);
+			removePageFromSession(context, removedPageId);
 		}
 
 		// we update page identifier cache in session
-		this.saveStateCache(session, cache);
+		saveStateCache(session, cache);
 
 		// we add a new page in session
-		this.addPageToSession(context, newPage, isPartial);
+		addPageToSession(context, newPage, isPartial);
 
 		// log cache content
-		this.logCacheContent(context, cache);
+		logCacheContent(context, cache);
 	}
 
 	/**
@@ -184,7 +183,6 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 	 * It adds a partial page to the user session.
 	 * 
 	 * @param context Context holder for request-specific state.
-	 * @param pageId Page identifier
 	 * @param page Page with all the information about states
 	 */
 	public void addPartialPage(final RequestContext context, final IPage page) {
@@ -203,7 +201,7 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 
 		HttpSession session = context.getRequest().getSession();
 
-		IStateCache cache = this.getStateCache(session);
+		IStateCache cache = getStateCache(session);
 		if (log.isDebugEnabled()) {
 			log.debug("Cache pages before finished pages are deleted:" + cache.toString());
 		}
@@ -213,10 +211,10 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 		for (int i = 0; i < pageIds.size(); i++) {
 
 			Integer pageId = pageIds.get(i);
-			IPage currentPage = this.getPageFromSession(context, pageId);
+			IPage currentPage = getPageFromSession(context, pageId);
 			if ((currentPage != null) && conversationId.equalsIgnoreCase(currentPage.getFlowId())) {
 
-				this.removePageFromSession(context, pageId);
+				removePageFromSession(context, pageId);
 				pageIds.remove(i);
 				i--;
 			}
@@ -237,7 +235,7 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 	public IState getState(final RequestContext context, final int pageId, final int stateId) {
 
 		try {
-			IPage currentPage = this.getPage(context, pageId);
+			IPage currentPage = getPage(context, pageId);
 			return currentPage.getState(stateId);
 
 		}
@@ -318,10 +316,10 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 	 */
 	protected IStateCache getStateCache(final HttpSession session) {
 
-		IStateCache cache = (IStateCache) session.getAttribute(this.cacheName);
+		IStateCache cache = (IStateCache) session.getAttribute(cacheName);
 		if (cache == null) {
-			cache = this.createStateCacheInstance();
-			session.setAttribute(this.cacheName, cache);
+			cache = createStateCacheInstance();
+			session.setAttribute(cacheName, cache);
 		}
 
 		return cache;
@@ -336,7 +334,7 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 	 */
 	protected void saveStateCache(final HttpSession session, final IStateCache stateCache) {
 
-		session.setAttribute(this.cacheName, stateCache);
+		session.setAttribute(cacheName, stateCache);
 	}
 
 	/**
@@ -347,7 +345,7 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 	 */
 	protected IStateCache createStateCacheInstance() {
 
-		IStateCache cache = this.beanFactory.getBean(IStateCache.class);
+		IStateCache cache = beanFactory.getBean(IStateCache.class);
 		return cache;
 	}
 
@@ -363,7 +361,7 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 				List<Integer> ids = cache.getPageIds();
 				StringBuilder sb = new StringBuilder();
 				for (final Integer id : ids) {
-					IPage page = this.getPage(context, id);
+					IPage page = getPage(context, id);
 					String parentPage = null;
 					if (page != null) {
 						parentPage = page.getParentStateId();

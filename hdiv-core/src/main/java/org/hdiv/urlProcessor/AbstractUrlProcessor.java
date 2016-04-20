@@ -69,6 +69,7 @@ public abstract class AbstractUrlProcessor {
 	 *
 	 * @param url original url
 	 * @param method Http method
+	 * @param hdivParameter Parameter for HDIV State
 	 * @param request {@link HttpServletRequest} object
 	 * @return new instance of {@link UrlData}
 	 */
@@ -138,7 +139,7 @@ public abstract class AbstractUrlProcessor {
 	/**
 	 * Remove _HDIV_STATE_ parameter if it exist.
 	 *
-	 * @param request {@link HttpServletRequest} object
+	 * @param hdivParameter HDIV state parameter name
 	 * @param params parameters string
 	 * @return parameters string without state id
 	 */
@@ -277,7 +278,7 @@ public abstract class AbstractUrlProcessor {
 	/**
 	 * Generate a url with all parameters and include hdiv state parameter.
 	 *
-	 * @param request {@link HttpServletRequest} object
+	 * @param hdivParameter HDIV parameter name
 	 * @param urlData url data object
 	 * @param stateParam hdiv state parameter value
 	 * @return complete url
@@ -319,7 +320,6 @@ public abstract class AbstractUrlProcessor {
 	 *
 	 * @param url url
 	 * @param anchor anchor
-	 * @return url with the anchor
 	 */
 	protected void appendAnchor(final StringBuilder url, final String anchor) {
 		if (anchor != null) {
@@ -366,7 +366,8 @@ public abstract class AbstractUrlProcessor {
 	/**
 	 * Detects if the url points to this application
 	 *
-	 * @param request {@link HttpServletRequest} object
+	 * @param serverName Server name
+	 * @param contextPath contextPath
 	 * @param url request url
 	 * @param urlData url data
 	 * @return is internal?
@@ -435,7 +436,7 @@ public abstract class AbstractUrlProcessor {
 	 * @param urlData url data object
 	 * @return is excluded or not
 	 */
-	protected boolean hasExtensionToExclude(UrlData urlData) {
+	protected boolean hasExtensionToExclude(final UrlData urlData) {
 		String contextPathRelativeUrl = urlData.getContextPathRelativeUrl();
 		if (contextPathRelativeUrl.charAt(contextPathRelativeUrl.length() - 1) == '/') {
 			return false;
@@ -469,7 +470,7 @@ public abstract class AbstractUrlProcessor {
 	/**
 	 * Composes the url starting with context path. Removes any relative url.
 	 *
-	 * @param request {@link HttpServletRequest} object
+	 * @param baseUrl base URL
 	 * @param url url
 	 * @return url starting with context path
 	 */
