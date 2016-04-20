@@ -85,7 +85,7 @@ public class HdivWebSecurityConfigurationSupportTest {
 
 	@Test
 	public void config() {
-		final HDIVConfig config = configuration.hdivConfig();
+		HDIVConfig config = configuration.hdivConfig();
 		assertNotNull(config);
 
 		assertEquals(true, config.isDebugMode());
@@ -98,7 +98,7 @@ public class HdivWebSecurityConfigurationSupportTest {
 
 	@Test
 	public void exclusions() {
-		final HDIVConfig config = configuration.hdivConfig();
+		HDIVConfig config = configuration.hdivConfig();
 		assertNotNull(config);
 
 		assertEquals(true, config.isStartPage("/attacks/view.html", (Method) null));
@@ -119,7 +119,7 @@ public class HdivWebSecurityConfigurationSupportTest {
 
 	@Test
 	public void longLivingPages() {
-		final HDIVConfig config = configuration.hdivConfig();
+		HDIVConfig config = configuration.hdivConfig();
 		assertNotNull(config);
 
 		assertEquals("app", config.isLongLivingPages("/longLiving/sample.html"));

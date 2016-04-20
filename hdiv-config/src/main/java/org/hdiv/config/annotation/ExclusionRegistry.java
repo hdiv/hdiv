@@ -61,7 +61,7 @@ public class ExclusionRegistry {
 	 */
 	public UrlExclusionRegistration addUrlExclusions(final String... urlPatterns) {
 		Assert.notEmpty(urlPatterns, "Url patterns are required");
-		final UrlExclusionRegistration registration = new UrlExclusionRegistration(urlPatterns);
+		UrlExclusionRegistration registration = new UrlExclusionRegistration(urlPatterns);
 		urlRegistrations.add(registration);
 		return registration;
 	}
@@ -79,18 +79,18 @@ public class ExclusionRegistry {
 	 */
 	public ParamExclusionRegistration addParamExclusions(final String... parameterPatterns) {
 		Assert.notEmpty(parameterPatterns, "Parameter patterns are required");
-		final ParamExclusionRegistration registration = new ParamExclusionRegistration(Arrays.asList(parameterPatterns));
+		ParamExclusionRegistration registration = new ParamExclusionRegistration(Arrays.asList(parameterPatterns));
 		paramRegistrations.add(registration);
 		return registration;
 	}
 
 	protected List<StartPage> getUrlExclusions() {
 
-		final List<StartPage> allStartPages = new ArrayList<StartPage>();
+		List<StartPage> allStartPages = new ArrayList<StartPage>();
 
-		for (final UrlExclusionRegistration regitration : urlRegistrations) {
-			final List<StartPage> startPages = regitration.getExclusions();
-			for (final StartPage sp : startPages) {
+		for (UrlExclusionRegistration regitration : urlRegistrations) {
+			List<StartPage> startPages = regitration.getExclusions();
+			for (StartPage sp : startPages) {
 				// Compile Pattern
 				sp.setCompiledPattern(patternMatcherFactory.getPatternMatcher(sp.getPattern()));
 				allStartPages.add(sp);
@@ -101,10 +101,10 @@ public class ExclusionRegistry {
 
 	protected List<String> getParamExclusions() {
 
-		final List<String> paramExclusions = new ArrayList<String>();
+		List<String> paramExclusions = new ArrayList<String>();
 
-		for (final ParamExclusionRegistration regitration : paramRegistrations) {
-			final String urlPattern = regitration.getUrlPattern();
+		for (ParamExclusionRegistration regitration : paramRegistrations) {
+			String urlPattern = regitration.getUrlPattern();
 			if (urlPattern == null) {
 				paramExclusions.addAll(regitration.getParameterPatterns());
 			}
@@ -114,10 +114,10 @@ public class ExclusionRegistry {
 
 	protected Map<String, List<String>> getParamExclusionsForUrl() {
 
-		final Map<String, List<String>> paramExclusions = new HashMap<String, List<String>>();
+		Map<String, List<String>> paramExclusions = new HashMap<String, List<String>>();
 
-		for (final ParamExclusionRegistration regitration : paramRegistrations) {
-			final String urlPattern = regitration.getUrlPattern();
+		for (ParamExclusionRegistration regitration : paramRegistrations) {
+			String urlPattern = regitration.getUrlPattern();
 			if (urlPattern != null) {
 				paramExclusions.put(urlPattern, regitration.getParameterPatterns());
 			}
