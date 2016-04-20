@@ -93,7 +93,7 @@ public final class UrlData {
 	 */
 	private String uriTemplate;
 
-	private final boolean uriTemplateSupported;
+	private final boolean uriTemplateNotSupported;
 
 	/**
 	 * Constructor
@@ -110,13 +110,13 @@ public final class UrlData {
 	 *
 	 * @param url Original url
 	 * @param method Http method.
-	 * @param uriTemplateSupported true if templates are supported
+	 * @param uriTemplateNotSupported true if templates are NOT supported
 	 */
-	public UrlData(final String url, final Method method, final boolean uriTemplateSupported) {
+	public UrlData(final String url, final Method method, final boolean uriTemplateNotSupported) {
 		originalUrl = url;
 		this.method = method;
-		this.uriTemplateSupported = uriTemplateSupported;
-		if (uriTemplateSupported && !"".equals(url)) {
+		this.uriTemplateNotSupported = uriTemplateNotSupported;
+		if (uriTemplateNotSupported && !"".equals(url)) {
 			parser(url);
 		}
 	}
@@ -291,7 +291,7 @@ public final class UrlData {
 	}
 
 	public boolean hasUriTemplate() {
-		if (uriTemplateSupported) {
+		if (uriTemplateNotSupported) {
 			throw new UnsupportedOperationException();
 		}
 		return uriTemplate != null;
