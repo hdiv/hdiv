@@ -130,10 +130,10 @@ public class DataComposerMemory extends AbstractDataComposer {
 		try {
 			action = URLDecoder.decode(action, Constants.ENCODING_UTF_8);
 		}
-		catch (final UnsupportedEncodingException e) {
+		catch (UnsupportedEncodingException e) {
 			throw new HDIVException(Constants.ENCODING_UTF_8 + " enconding not supported.", e);
 		}
-		catch (final IllegalArgumentException e) {
+		catch (IllegalArgumentException e) {
 			// Some decoding errors throw IllegalArgumentException
 		}
 		return beginRequest(createNewState(page.getNextStateId(), method, action));
@@ -148,7 +148,7 @@ public class DataComposerMemory extends AbstractDataComposer {
 	 * @return new {@link IState} instance.
 	 */
 	protected IState createNewState(final int stateId, final Method method, final String action) {
-		final IState state = new State(stateId);
+		IState state = new State(stateId);
 		state.setAction(action);
 		state.setMethod(method);
 		return state;
@@ -170,7 +170,7 @@ public class DataComposerMemory extends AbstractDataComposer {
 
 	protected String toId(final IState state) {
 		// 11-0-C1EF82C48A86DE9BB907F37454998CC3
-		final StringBuilder sb = new StringBuilder(40);
+		StringBuilder sb = new StringBuilder(40);
 		sb.append(page.getId()).append(DASH).append(state.getId()).append(DASH).append(getStateSuffix(state.getMethod()));
 		return sb.toString();
 	}
@@ -184,10 +184,10 @@ public class DataComposerMemory extends AbstractDataComposer {
 	 */
 	public String endRequest() {
 
-		final IState state = getStates().pop();
+		IState state = getStates().pop();
 
 		// Add to scope
-		final StateScope stateScope = stateScopeManager.getStateScopeByName(getCurrentScope());
+		StateScope stateScope = stateScopeManager.getStateScopeByName(getCurrentScope());
 		if (stateScope != null) {
 			// Its custom Scope
 			return stateScope.addState(context, state, getStateSuffix(state.getMethod()));

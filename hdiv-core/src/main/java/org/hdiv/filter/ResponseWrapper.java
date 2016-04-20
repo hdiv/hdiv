@@ -100,7 +100,7 @@ public class ResponseWrapper extends HttpServletResponseWrapper {
 			this.cookies.clear();
 			this.removeCookiesFromSession();
 
-			final List<String> parseValues = this.parseCookieString(value);
+			List<String> parseValues = this.parseCookieString(value);
 
 			if (this.confidentiality && !this.avoidCookiesConfidentiality) {
 				confidentialValue = this.replaceOriginalValues(parseValues, value);
@@ -124,7 +124,7 @@ public class ResponseWrapper extends HttpServletResponseWrapper {
 
 		if (name.equalsIgnoreCase(SET_COOKIE)) {
 
-			final List<String> parseValues = this.parseCookieString(value);
+			List<String> parseValues = this.parseCookieString(value);
 
 			if (this.confidentiality && !this.avoidCookiesConfidentiality) {
 				confidentialValue = this.replaceOriginalValues(parseValues, value);
@@ -143,7 +143,7 @@ public class ResponseWrapper extends HttpServletResponseWrapper {
 	 */
 	protected String replaceOriginalValues(final List<String> values, String value) {
 
-		for (final String currentValue : values) {
+		for (String currentValue : values) {
 			value = value.replaceFirst("=" + currentValue, "=0");
 		}
 
@@ -173,14 +173,14 @@ public class ResponseWrapper extends HttpServletResponseWrapper {
 		cookieString = cookieString.trim();
 
 		// Cookie fields are separated by ';'
-		final StringTokenizer tokens = new StringTokenizer(cookieString, ";");
+		StringTokenizer tokens = new StringTokenizer(cookieString, ";");
 
 		while (tokens.hasMoreTokens()) {
 			// field name is separated from value by '='
-			final StringTokenizer t = new StringTokenizer(tokens.nextToken(), "=");
-			final String name = t.nextToken().trim();
+			StringTokenizer t = new StringTokenizer(tokens.nextToken(), "=");
+			String name = t.nextToken().trim();
 			if (t.hasMoreTokens()) {
-				final String value = t.nextToken().trim();
+				String value = t.nextToken().trim();
 				this.cookies.put(name, new SavedCookie(name, value));
 				values.add(value);
 			}
@@ -213,10 +213,10 @@ public class ResponseWrapper extends HttpServletResponseWrapper {
 	@SuppressWarnings("unchecked")
 	protected void updateSessionCookies() {
 
-		final HttpSession session = this.request.getSession();
+		HttpSession session = this.request.getSession();
 		if (session != null) {
 
-			final Map<String, SavedCookie> sessionOriginalCookies = (Map<String, SavedCookie>) session
+			Map<String, SavedCookie> sessionOriginalCookies = (Map<String, SavedCookie>) session
 					.getAttribute(Constants.HDIV_COOKIES_KEY);
 
 			if (sessionOriginalCookies != null && sessionOriginalCookies.size() > 0) {
@@ -236,7 +236,7 @@ public class ResponseWrapper extends HttpServletResponseWrapper {
 	 */
 	protected void removeCookiesFromSession() {
 
-		final HttpSession session = this.request.getSession();
+		HttpSession session = this.request.getSession();
 		if (session != null) {
 			session.removeAttribute(Constants.HDIV_COOKIES_KEY);
 		}

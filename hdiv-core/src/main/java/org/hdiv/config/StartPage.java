@@ -120,7 +120,7 @@ public class StartPage implements Serializable {
 		if (getClass() != obj.getClass()) {
 			return false;
 		}
-		final StartPage other = (StartPage) obj;
+		StartPage other = (StartPage) obj;
 		if (method == null) {
 			if (other.method != null) {
 				return false;

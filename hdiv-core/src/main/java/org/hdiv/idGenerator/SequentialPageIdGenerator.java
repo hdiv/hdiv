@@ -54,7 +54,7 @@ public class SequentialPageIdGenerator implements PageIdGenerator {
 	 * @return valor sequencer initial value
 	 */
 	protected int generateInitialPageId() {
-		final Random r = new Random();
+		Random r = new Random();
 		return r.nextInt(20);
 	}
 

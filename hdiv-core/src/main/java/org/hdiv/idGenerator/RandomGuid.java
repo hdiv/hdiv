@@ -117,9 +117,9 @@ final class RandomGuid {
 	// @formatter:on
 
 	private static String getHexString(final byte[] bytes) {
-		final char[] hexChars = new char[bytes.length * 2];
+		char[] hexChars = new char[bytes.length * 2];
 		for (int j = 0; j < bytes.length; j++) {
-			final int v = (bytes[j] & 0xFF) << 1;
+			int v = (bytes[j] & 0xFF) << 1;
 			hexChars[j * 2] = BYTE2HEX[v];
 			hexChars[j * 2 + 1] = BYTE2HEX[v + 1];
 		}
@@ -133,12 +133,12 @@ final class RandomGuid {
 	 */
 	static {
 		secureRandom = new SecureRandom();
-		final long secureInitializer = secureRandom.nextLong();
+		long secureInitializer = secureRandom.nextLong();
 		random = new Random(secureInitializer);
 		try {
 			id = InetAddress.getLocalHost().toString() + ":";
 		}
-		catch (final UnknownHostException e) {
+		catch (UnknownHostException e) {
 			throw new RuntimeException(e);
 		}
 	}
@@ -157,7 +157,7 @@ final class RandomGuid {
 	 */
 	public static String getRandomGuid(final boolean secure) {
 		MessageDigest md5 = null;
-		final StringBuilder sbValueBeforeMD5 = new StringBuilder(32);
+		StringBuilder sbValueBeforeMD5 = new StringBuilder(32);
 
 		try {
 			md5 = MessageDigest.getInstance("MD5");

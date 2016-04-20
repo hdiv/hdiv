@@ -200,7 +200,7 @@ public class HDIVConfig implements Serializable {
 	 */
 	public boolean isStartParameter(final String parameter) {
 
-		for (final PatternMatcher matcher : startParameters) {
+		for (PatternMatcher matcher : startParameters) {
 			if (matcher.matches(parameter)) {
 				return true;
 			}
@@ -209,7 +209,7 @@ public class HDIVConfig implements Serializable {
 	}
 
 	private void addStartPage(final StartPage page) {
-		final List<StartPage> pages = new ArrayList<StartPage>(Arrays.asList(startPages));
+		List<StartPage> pages = new ArrayList<StartPage>(Arrays.asList(startPages));
 		pages.add(page);
 		startPages = pages.toArray(new StartPage[pages.size()]);
 	}
@@ -228,8 +228,8 @@ public class HDIVConfig implements Serializable {
 	 */
 	public boolean isStartPage(final String target, final Method method) {
 		for (int i = 0; i < startPages.length; i++) {
-			final StartPage startPage = startPages[i];
-			final PatternMatcher m = startPage.compiledPattern;
+			StartPage startPage = startPages[i];
+			PatternMatcher m = startPage.compiledPattern;
 
 			if (m.matches(target)) {
 				if (startPage.isAnyMethod() || startPage.method == method) {
@@ -245,7 +245,7 @@ public class HDIVConfig implements Serializable {
 		if (excludedURLExtensions == null) {
 			return false;
 		}
-		final int pos = path.indexOf('?');
+		int pos = path.indexOf('?');
 		if (pos > 0) {
 			path = path.substring(0, pos);
 		}
@@ -258,12 +258,12 @@ public class HDIVConfig implements Serializable {
 			return false;
 		}
 
-		final int pound = path.indexOf('#');
+		int pound = path.indexOf('#');
 		if (pound >= 0) {
 			path = path.substring(0, pound);
 		}
 
-		final int size = excludedURLExtensions.size();
+		int size = excludedURLExtensions.size();
 		for (int i = 0; i < size; i++) {
 			if (path.endsWith(excludedURLExtensions.get(i))) {
 				return true;
@@ -281,9 +281,9 @@ public class HDIVConfig implements Serializable {
 	 */
 	public boolean isParameterWithoutConfidentiality(final HttpServletRequest request, final String paramName) {
 
-		final HttpSession session = request.getSession();
+		HttpSession session = request.getSession();
 		if (session != null) {
-			final String modifyHdivStateParameterName = (String) session.getAttribute(Constants.MODIFY_STATE_HDIV_PARAMETER);
+			String modifyHdivStateParameterName = (String) session.getAttribute(Constants.MODIFY_STATE_HDIV_PARAMETER);
 			if (modifyHdivStateParameterName != null && modifyHdivStateParameterName.equals(paramName)) {
 				return true;
 			}
@@ -309,11 +309,11 @@ public class HDIVConfig implements Serializable {
 			return false;
 		}
 
-		for (final PatternMatcher matcher : paramsWithoutValidation.keySet()) {
+		for (PatternMatcher matcher : paramsWithoutValidation.keySet()) {
 
 			if (matcher.matches(action)) {
 
-				for (final PatternMatcher paramMatcher : paramsWithoutValidation.get(matcher)) {
+				for (PatternMatcher paramMatcher : paramsWithoutValidation.get(matcher)) {
 
 					if (paramMatcher.matches(parameter)) {
 						return true;
@@ -332,9 +332,9 @@ public class HDIVConfig implements Serializable {
 	 */
 	public String isLongLivingPages(final String url) {
 
-		for (final Map.Entry<PatternMatcher, String> page : longLivingPages.entrySet()) {
+		for (Map.Entry<PatternMatcher, String> page : longLivingPages.entrySet()) {
 
-			final PatternMatcher m = page.getKey();
+			PatternMatcher m = page.getKey();
 
 			if (m.matches(url)) {
 				return page.getValue();
@@ -370,7 +370,7 @@ public class HDIVConfig implements Serializable {
 		}
 		this.errorPage = errorPage;
 		if (errorPage != null) {
-			final PatternMatcher matcher = patternMatcherFactory.getPatternMatcher(errorPage);
+			PatternMatcher matcher = patternMatcherFactory.getPatternMatcher(errorPage);
 			addStartPage(new StartPage((Method) null, matcher));
 		}
 	}
@@ -385,7 +385,7 @@ public class HDIVConfig implements Serializable {
 		}
 		this.sessionExpiredLoginPage = sessionExpiredLoginPage;
 		if (sessionExpiredLoginPage != null) {
-			final PatternMatcher matcher = patternMatcherFactory.getPatternMatcher(sessionExpiredLoginPage);
+			PatternMatcher matcher = patternMatcherFactory.getPatternMatcher(sessionExpiredLoginPage);
 			addStartPage(new StartPage((Method) null, matcher));
 		}
 	}
@@ -400,7 +400,7 @@ public class HDIVConfig implements Serializable {
 		}
 		this.sessionExpiredHomePage = sessionExpiredHomePage;
 		if (sessionExpiredHomePage != null) {
-			final PatternMatcher matcher = patternMatcherFactory.getPatternMatcher(sessionExpiredHomePage);
+			PatternMatcher matcher = patternMatcherFactory.getPatternMatcher(sessionExpiredHomePage);
 			addStartPage(new StartPage((Method) null, matcher));
 		}
 	}
@@ -415,13 +415,13 @@ public class HDIVConfig implements Serializable {
 
 	public void setParamsWithoutValidation(final Map<String, List<String>> paramsWithoutValidation) {
 		this.paramsWithoutValidation = new HashMap<PatternMatcher, List<PatternMatcher>>();
-		for (final String url : paramsWithoutValidation.keySet()) {
+		for (String url : paramsWithoutValidation.keySet()) {
 
-			final PatternMatcher matcher = patternMatcherFactory.getPatternMatcher(url);
-			final List<PatternMatcher> paramMatchers = new ArrayList<PatternMatcher>();
+			PatternMatcher matcher = patternMatcherFactory.getPatternMatcher(url);
+			List<PatternMatcher> paramMatchers = new ArrayList<PatternMatcher>();
 
-			for (final String param : paramsWithoutValidation.get(url)) {
-				final PatternMatcher paramMatcher = patternMatcherFactory.getPatternMatcher(param);
+			for (String param : paramsWithoutValidation.get(url)) {
+				PatternMatcher paramMatcher = patternMatcherFactory.getPatternMatcher(param);
 				paramMatchers.add(paramMatcher);
 			}
 			this.paramsWithoutValidation.put(matcher, paramMatchers);
@@ -435,9 +435,9 @@ public class HDIVConfig implements Serializable {
 	 */
 	public void setUserStartPages(final List<StartPage> userStartPages) {
 
-		for (final StartPage startPage : userStartPages) {
+		for (StartPage startPage : userStartPages) {
 
-			final PatternMatcher matcher = patternMatcherFactory.getPatternMatcher(startPage.getPattern());
+			PatternMatcher matcher = patternMatcherFactory.getPatternMatcher(startPage.getPattern());
 			startPage.setCompiledPattern(matcher);
 			addStartPage(startPage);
 
@@ -451,7 +451,7 @@ public class HDIVConfig implements Serializable {
 	 */
 	public void setUserStartParameters(final List<String> userStartParameters) {
 
-		for (final String useStartParameter : userStartParameters) {
+		for (String useStartParameter : userStartParameters) {
 			startParameters.add(patternMatcherFactory.getPatternMatcher(useStartParameter));
 		}
 	}
@@ -506,7 +506,7 @@ public class HDIVConfig implements Serializable {
 
 		protectedURLPatterns = new ArrayList<PatternMatcher>();
 
-		for (final String protectedExtension : protectedExtensions) {
+		for (String protectedExtension : protectedExtensions) {
 			protectedURLPatterns.add(patternMatcherFactory.getPatternMatcher(protectedExtension));
 		}
 	}
@@ -637,9 +637,9 @@ public class HDIVConfig implements Serializable {
 	 */
 	public void setLongLivingPages(final Map<String, String> longLivingPages) {
 
-		for (final Map.Entry<String, String> page : longLivingPages.entrySet()) {
-			final PatternMatcher pattern = patternMatcherFactory.getPatternMatcher(page.getKey());
-			final String scope = page.getValue();
+		for (Map.Entry<String, String> page : longLivingPages.entrySet()) {
+			PatternMatcher pattern = patternMatcherFactory.getPatternMatcher(page.getKey());
+			String scope = page.getValue();
 			this.longLivingPages.put(pattern, scope);
 		}
 	}

@@ -60,7 +60,7 @@ public class DefaultPatternMatcher implements PatternMatcher, Serializable {
 
 	protected boolean execPattern(final String input) {
 
-		final Matcher matcher = pattern.matcher(input);
+		Matcher matcher = pattern.matcher(input);
 		return matcher.matches();
 	}
 
@@ -97,7 +97,7 @@ public class DefaultPatternMatcher implements PatternMatcher, Serializable {
 		if (getClass() != obj.getClass()) {
 			return false;
 		}
-		final DefaultPatternMatcher other = (DefaultPatternMatcher) obj;
+		DefaultPatternMatcher other = (DefaultPatternMatcher) obj;
 		if (regex == null) {
 			if (other.regex != null) {
 				return false;

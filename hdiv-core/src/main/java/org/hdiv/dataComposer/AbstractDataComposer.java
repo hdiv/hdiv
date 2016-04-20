@@ -218,7 +218,7 @@ public abstract class AbstractDataComposer implements IDataComposer {
 			final boolean isActionParam, final String charEncoding) {
 
 		// Get current IState
-		final IState state = states.peek();
+		IState state = states.peek();
 		if (state.getAction() != null && state.getAction().trim().length() == 0) {
 			state.setAction(action);
 		}
@@ -274,7 +274,7 @@ public abstract class AbstractDataComposer implements IDataComposer {
 		}
 
 		// Get current IState
-		final IState state = states.peek();
+		IState state = states.peek();
 		state.setParams(parameters);
 
 		if (hdivConfig.getConfidentiality()) {
@@ -294,7 +294,7 @@ public abstract class AbstractDataComposer implements IDataComposer {
 	 */
 	protected String applyConfidentialityToParams(String parameters, final Method method) {
 
-		final Map<String, Integer> pCount = new HashMap<String, Integer>();
+		Map<String, Integer> pCount = new HashMap<String, Integer>();
 
 		parameters = parameters.replaceAll("&amp;", "&");
 		String newParameters = parameters;
@@ -303,15 +303,15 @@ public abstract class AbstractDataComposer implements IDataComposer {
 		int beginIndex = 0;
 		int endIndex = parameters.indexOf('&') > 0 ? parameters.indexOf('&') : parameters.length();
 		do {
-			final String param = parameters.substring(beginIndex, endIndex);
+			String param = parameters.substring(beginIndex, endIndex);
 			int index = param.indexOf('=');
 			index = index < 0 ? param.length() : index;
-			final String name = param.substring(0, index);
+			String name = param.substring(0, index);
 
 			if (isConfidentialParam(name, method)) {
 				// Parameter is not a start parameter
-				final Integer count = pCount.get(name);
-				final int num = (count == null) ? 0 : count + 1;
+				Integer count = pCount.get(name);
+				int num = (count == null) ? 0 : count + 1;
 				pCount.put(name, num);
 
 				// Replace parameter with confidential values
@@ -378,7 +378,7 @@ public abstract class AbstractDataComposer implements IDataComposer {
 			method = Method.GET;
 		}
 
-		final IParameter parameter = composeParameter(parameterName, value, editable, editableName, isActionParam,
+		IParameter parameter = composeParameter(parameterName, value, editable, editableName, isActionParam,
 				charEncoding);
 
 		if (isConfidentialParam(parameterName, method)) {
@@ -428,7 +428,7 @@ public abstract class AbstractDataComposer implements IDataComposer {
 	 * @since HDIV 2.0.6
 	 */
 	protected boolean isUserDefinedNonValidationParameter(final String parameter) {
-		final String action = states.peek().getAction();
+		String action = states.peek().getAction();
 
 		if (hdivConfig.isParameterWithoutValidation(action, parameter)) {
 
@@ -463,7 +463,7 @@ public abstract class AbstractDataComposer implements IDataComposer {
 		}
 
 		// Get current IState
-		final IState state = states.peek();
+		IState state = states.peek();
 
 		IParameter parameter = state.getParameter(parameterName);
 		if (parameter != null) {
@@ -510,12 +510,12 @@ public abstract class AbstractDataComposer implements IDataComposer {
 	public void mergeParameters(final String oldParameter, final String newParameter) {
 
 		// Get current IState
-		final IState state = states.peek();
-		final IParameter storedParameter = state.getParameter(oldParameter);
+		IState state = states.peek();
+		IParameter storedParameter = state.getParameter(oldParameter);
 
 		if (!storedParameter.getValues().isEmpty()) {
 
-			final IParameter parameter = composeParameter(newParameter, storedParameter.getValuePosition(0), false, "",
+			IParameter parameter = composeParameter(newParameter, storedParameter.getValuePosition(0), false, "",
 					false, Constants.ENCODING_UTF_8);
 
 			String currentValue = null;
@@ -557,10 +557,10 @@ public abstract class AbstractDataComposer implements IDataComposer {
 		try {
 			decodedValue = URLDecoder.decode(value, charEncoding);
 		}
-		catch (final UnsupportedEncodingException e) {
+		catch (UnsupportedEncodingException e) {
 			decodedValue = value;
 		}
-		catch (final IllegalArgumentException e) {
+		catch (IllegalArgumentException e) {
 			decodedValue = value;
 		}
 

@@ -54,13 +54,13 @@ public class DataValidator implements IDataValidator {
 	public IValidationResult validate(final HttpServletRequest request, final String value, final String target,
 			final String parameter, final IParameter stateParameter, final String[] actionParamValues) {
 
-		final boolean confidentiality = config.getConfidentiality();
-		final boolean noConfidentiality = config.isParameterWithoutConfidentiality(request, parameter);
+		boolean confidentiality = config.getConfidentiality();
+		boolean noConfidentiality = config.isParameterWithoutConfidentiality(request, parameter);
 		if (log.isDebugEnabled() && noConfidentiality) {
 			log.debug("Parameter [" + parameter + "] is ParameterWithoutConfidentiality.");
 		}
 
-		final IValidationResult result = new ValidationResult();
+		IValidationResult result = new ValidationResult();
 
 		// TODO include here checking that there are no more values. Currently done in the helper
 
@@ -99,7 +99,7 @@ public class DataValidator implements IDataValidator {
 			}
 
 			// Confidentiality assures that data is int value
-			final int position = Integer.parseInt(value);
+			int position = Integer.parseInt(value);
 
 			if (stateParameter != null) {
 
@@ -139,8 +139,8 @@ public class DataValidator implements IDataValidator {
 	 * @return Returns true if <code>data</code> is a number. False in otherwise.
 	 */
 	protected boolean isInt(final String data) {
-		final Pattern p = HDIVUtil.intPattern;
-		final Matcher m = p.matcher(data);
+		Pattern p = HDIVUtil.intPattern;
+		Matcher m = p.matcher(data);
 		return m.matches();
 	}
 

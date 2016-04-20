@@ -91,10 +91,10 @@ public class ValidatorHelperResult {
 
 	@Override
 	public String toString() {
-		final StringBuilder b = new StringBuilder();
+		StringBuilder b = new StringBuilder();
 		b.append("Valid: ").append(this.valid).append(", ");
 		if (this.errors != null) {
-			for (final ValidatorError error : errors) {
+			for (ValidatorError error : errors) {
 				b.append(" Errorcode: ").append(error.toString());
 			}
 		}

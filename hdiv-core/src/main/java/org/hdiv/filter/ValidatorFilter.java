@@ -105,13 +105,13 @@ public class ValidatorFilter extends OncePerRequestFilter {
 
 		if (this.hdivConfig == null) {
 			synchronized (this) {
-				final ServletContext servletContext = getServletContext();
-				final WebApplicationContext context = HDIVUtil.findWebApplicationContext(servletContext);
+				ServletContext servletContext = getServletContext();
+				WebApplicationContext context = HDIVUtil.findWebApplicationContext(servletContext);
 
 				this.hdivConfig = context.getBean(HDIVConfig.class);
 				this.validationHelper = context.getBean(IValidationHelper.class);
 
-				final String[] names = context.getBeanNamesForType(IMultipartConfig.class);
+				String[] names = context.getBeanNamesForType(IMultipartConfig.class);
 				if (names.length > 1) {
 					throw new HDIVException("More than one bean of type 'multipartConfig' is defined.");
 				}
@@ -151,8 +151,8 @@ public class ValidatorFilter extends OncePerRequestFilter {
 		// Initialize request scoped data
 		this.requestInitializer.initRequest(request, response);
 
-		final RequestWrapper requestWrapper = this.requestInitializer.createRequestWrapper(request, response);
-		final ResponseWrapper responseWrapper = this.requestInitializer.createResponseWrapper(request, response);
+		RequestWrapper requestWrapper = this.requestInitializer.createRequestWrapper(request, response);
+		ResponseWrapper responseWrapper = this.requestInitializer.createResponseWrapper(request, response);
 
 		HttpServletRequest multipartProcessedRequest = requestWrapper;
 
@@ -179,7 +179,7 @@ public class ValidatorFilter extends OncePerRequestFilter {
 					isMultipartProcessed = true;
 
 				}
-				catch (final HdivMultipartException e) {
+				catch (HdivMultipartException e) {
 					request.setAttribute(IMultipartConfig.FILEUPLOAD_EXCEPTION, e);
 					isMultipartException = true;
 					legal = true;
@@ -196,7 +196,7 @@ public class ValidatorFilter extends OncePerRequestFilter {
 			}
 
 			// All errors, integrity and editable validation
-			final List<ValidatorError> errors = result == null ? null : result.getErrors();
+			List<ValidatorError> errors = result == null ? null : result.getErrors();
 
 			boolean hasEditableError = false;
 			if (errors != null && !errors.isEmpty()) {
@@ -221,13 +221,13 @@ public class ValidatorFilter extends OncePerRequestFilter {
 			}
 
 		}
-		catch (final HDIVException e) {
+		catch (HDIVException e) {
 			if (log.isErrorEnabled()) {
 				log.error("Exception in request validation", e);
 			}
 			// Show error page
 			if (!this.hdivConfig.isDebugMode()) {
-				final List<ValidatorError> errors = Collections
+				List<ValidatorError> errors = Collections
 						.singletonList(new ValidatorError(HDIVErrorCodes.INTERNAL_ERROR));
 				this.errorHandler.handleValidatorError(multipartProcessedRequest, responseWrapper, errors);
 			}
@@ -283,12 +283,12 @@ public class ValidatorFilter extends OncePerRequestFilter {
 	 */
 	protected void completeErrorData(final HttpServletRequest request, final List<ValidatorError> errors) {
 
-		final String localIp = this.getUserLocalIP(request);
-		final String remoteIp = request.getRemoteAddr();
-		final String userName = this.userData.getUsername(request);
+		String localIp = this.getUserLocalIP(request);
+		String remoteIp = request.getRemoteAddr();
+		String userName = this.userData.getUsername(request);
 
-		final String contextPath = request.getContextPath();
-		for (final ValidatorError error : errors) {
+		String contextPath = request.getContextPath();
+		for (ValidatorError error : errors) {
 
 			error.setLocalIp(localIp);
 			error.setRemoteIp(remoteIp);
@@ -330,7 +330,7 @@ public class ValidatorFilter extends OncePerRequestFilter {
 	 */
 	protected void logValidationErrors(final HttpServletRequest request, final List<ValidatorError> errors) {
 
-		for (final ValidatorError error : errors) {
+		for (ValidatorError error : errors) {
 			// Log the error
 			this.logger.log(error);
 		}
@@ -344,11 +344,11 @@ public class ValidatorFilter extends OncePerRequestFilter {
 	 * @param errors all validation errors
 	 * @return true if there is a editable validation error
 	 */
-	protected boolean processEditableValidationErrors(final HttpServletRequest request,
-			final List<ValidatorError> errors) {
+	protected boolean processEditableValidationErrors(HttpServletRequest request,
+			List<ValidatorError> errors) {
 
-		final List<ValidatorError> editableErrors = new ArrayList<ValidatorError>();
-		for (final ValidatorError error : errors) {
+		List<ValidatorError> editableErrors = new ArrayList<ValidatorError>();
+		for (ValidatorError error : errors) {
 			if (HDIVErrorCodes.EDITABLE_VALIDATION_ERROR.equals(error.getType())) {
 				editableErrors.add(error);
 			}

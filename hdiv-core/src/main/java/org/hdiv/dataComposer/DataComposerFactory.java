@@ -87,10 +87,10 @@ public class DataComposerFactory {
 	 */
 	public IDataComposer newInstance(final HttpServletRequest request) {
 
-		final RequestContext context = new RequestContext(request);
+		RequestContext context = new RequestContext(request);
 
 		if (config.getStrategy() == Strategy.MEMORY) {
-			final DataComposerMemory composer = new DataComposerMemory(context);
+			DataComposerMemory composer = new DataComposerMemory(context);
 			composer.setHdivConfig(config);
 			composer.setSession(session);
 			composer.setUidGenerator(uidGenerator);
@@ -113,18 +113,18 @@ public class DataComposerFactory {
 	 */
 	protected void initDataComposer(final IDataComposer dataComposer, final RequestContext context) {
 
-		final HttpServletRequest request = context.getRequest();
-		final String hdivStateParamName = HDIVUtil.getHDIVParameter(request);
-		final String hdivState = request.getParameter(hdivStateParamName);
+		HttpServletRequest request = context.getRequest();
+		String hdivStateParamName = HDIVUtil.getHDIVParameter(request);
+		String hdivState = request.getParameter(hdivStateParamName);
 
-		final String preState = getModifyStateParameterValue(dataComposer, request);
+		String preState = getModifyStateParameterValue(dataComposer, request);
 
 		if (preState != null && preState.length() > 0) {
 
 			// We are modifying an existing state, preload dataComposer with it
-			final IState state = stateUtil.restoreState(context, preState);
+			IState state = stateUtil.restoreState(context, preState);
 			if (state.getPageId() > 0) {
-				final IPage page = session.getPage(context, state.getPageId());
+				IPage page = session.getPage(context, state.getPageId());
 				if (page != null) {
 					dataComposer.startPage(page);
 				}
@@ -137,9 +137,9 @@ public class DataComposerFactory {
 		else if (reuseExistingPage(request)) {
 
 			if (hdivState != null && hdivState.length() > 0) {
-				final IState state = stateUtil.restoreState(context, hdivState);
+				IState state = stateUtil.restoreState(context, hdivState);
 				if (state.getPageId() > 0) {
-					final IPage page = session.getPage(context, state.getPageId());
+					IPage page = session.getPage(context, state.getPageId());
 					dataComposer.startPage(page);
 				}
 				else {
@@ -155,8 +155,8 @@ public class DataComposerFactory {
 		}
 
 		// Detect if request url is configured as a long living page
-		final String url = request.getRequestURI().substring(request.getContextPath().length());
-		final String scope = config.isLongLivingPages(url);
+		String url = request.getRequestURI().substring(request.getContextPath().length());
+		String scope = config.isLongLivingPages(url);
 		if (scope != null) {
 			dataComposer.startScope(scope);
 		}
@@ -171,8 +171,8 @@ public class DataComposerFactory {
 	 */
 	protected String getModifyStateParameterValue(final IDataComposer dataComposer, final HttpServletRequest request) {
 
-		final String paramName = (String) request.getSession().getAttribute(Constants.MODIFY_STATE_HDIV_PARAMETER);
-		final String preState = paramName != null ? request.getParameter(paramName) : null;
+		String paramName = (String) request.getSession().getAttribute(Constants.MODIFY_STATE_HDIV_PARAMETER);
+		String preState = paramName != null ? request.getParameter(paramName) : null;
 		return preState;
 	}
 
@@ -204,9 +204,9 @@ public class DataComposerFactory {
 	 */
 	protected boolean isAjaxRequest(final HttpServletRequest request) {
 
-		final String xRequestedWithValue = request.getHeader("x-requested-with");
+		String xRequestedWithValue = request.getHeader("x-requested-with");
 
-		final boolean isAjaxRequest = (xRequestedWithValue != null)
+		boolean isAjaxRequest = (xRequestedWithValue != null)
 				? "XMLHttpRequest".equalsIgnoreCase(xRequestedWithValue) : false;
 
 		request.setAttribute(Constants.AJAX_REQUEST, isAjaxRequest);
@@ -216,8 +216,8 @@ public class DataComposerFactory {
 
 	protected boolean excludePageReuseInAjax(final HttpServletRequest request) {
 
-		for (final String header : excludePageReuseHeaders) {
-			final String headerValue = request.getHeader(header);
+		for (String header : excludePageReuseHeaders) {
+			String headerValue = request.getHeader(header);
 			if (headerValue != null) {
 				return true;
 			}

@@ -40,6 +40,6 @@ public interface PatternMatcher {
 	 * Obtain the pattern used to find
 	 * @return pattern to find
 	 */
-	public String getPattern();
+	String getPattern();
 
 }
