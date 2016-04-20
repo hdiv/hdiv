@@ -58,7 +58,7 @@ public class LinkUrlProcessor extends AbstractUrlProcessor {
 	 */
 	public String processUrl(final HttpServletRequest request, String url, final String encoding) {
 
-		final IDataComposer dataComposer = HDIVUtil.getDataComposer(request);
+		IDataComposer dataComposer = HDIVUtil.getDataComposer(request);
 		if (dataComposer == null) {
 			// IDataComposer not initialized on request, request is out of filter
 			if (log.isDebugEnabled()) {
@@ -67,8 +67,8 @@ public class LinkUrlProcessor extends AbstractUrlProcessor {
 			}
 			return url;
 		}
-		final String hdivParameter = HDIVUtil.getHDIVParameter(request);
-		final UrlData urlData = createUrlData(url, Method.GET, hdivParameter, request);
+		String hdivParameter = HDIVUtil.getHDIVParameter(request);
+		UrlData urlData = createUrlData(url, Method.GET, hdivParameter, request);
 		if (isHdivStateNecessary(urlData)) {
 			// the url needs protection
 			dataComposer.beginRequest(Method.GET, urlData.getUrlWithoutContextPath());
@@ -76,7 +76,7 @@ public class LinkUrlProcessor extends AbstractUrlProcessor {
 			urlData.setUrlParams(dataComposer.composeParams(urlData.getUrlParams(), Method.GET, encoding));
 
 			// Hdiv state param value
-			final String stateParam = dataComposer.endRequest();
+			String stateParam = dataComposer.endRequest();
 			// Url with confidential values and hdiv state param
 
 			url = getProcessedUrlWithHdivState(hdivParameter, urlData, stateParam);

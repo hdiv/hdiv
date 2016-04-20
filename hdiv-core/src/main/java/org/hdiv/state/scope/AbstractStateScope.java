@@ -41,7 +41,7 @@ public abstract class AbstractStateScope implements StateScope {
 			cache = new ScopedStateCache();
 		}
 
-		final String stateId = cache.addState(state, token);
+		String stateId = cache.addState(state, token);
 
 		setStateCache(context, cache);
 
@@ -50,19 +50,19 @@ public abstract class AbstractStateScope implements StateScope {
 
 	public IState restoreState(final RequestContext context, final int stateId) {
 
-		final ScopedStateCache cache = getStateCache(context);
+		ScopedStateCache cache = getStateCache(context);
 		return cache == null ? null : cache.getState(stateId);
 	}
 
 	public String getStateToken(final RequestContext context, final int stateId) {
 
-		final ScopedStateCache cache = getStateCache(context);
+		ScopedStateCache cache = getStateCache(context);
 		return cache == null ? null : cache.getStateToken(stateId);
 	}
 
 	public boolean isScopeState(final String stateId) {
 
-		final int stateIndex = stateId.indexOf('-');
+		int stateIndex = stateId.indexOf('-');
 		return stateIndex > 0 && stateId.substring(0, stateIndex).equals(getScopePrefix());
 	}
 

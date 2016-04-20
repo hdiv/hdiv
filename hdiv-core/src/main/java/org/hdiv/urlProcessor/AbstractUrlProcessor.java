@@ -100,17 +100,17 @@ public abstract class AbstractUrlProcessor {
 		url = stripSession(url, urlData);
 
 		// Calculate contextPath beginning url
-		final String contextPathRelativeUrl = getContextPathRelative(baseURL, url);
+		String contextPathRelativeUrl = getContextPathRelative(baseURL, url);
 		urlData.setContextPathRelativeUrl(contextPathRelativeUrl);
 
 		// Detect if the url points to current app
-		final boolean internal = isInternalUrl(serverName, contextPath, contextPathRelativeUrl, urlData);
+		boolean internal = isInternalUrl(serverName, contextPath, contextPathRelativeUrl, urlData);
 		urlData.setInternal(internal);
 
 		// Calculate url without the context path for later processing
 		if (internal) {
 			// Remove contextPath
-			final String urlWithoutContextPath = contextPathRelativeUrl.substring(contextPath.length());
+			String urlWithoutContextPath = contextPathRelativeUrl.substring(contextPath.length());
 			urlData.setUrlWithoutContextPath(urlWithoutContextPath);
 		}
 
@@ -149,7 +149,7 @@ public abstract class AbstractUrlProcessor {
 			return params;
 		}
 
-		final int start = params.indexOf(hdivParameter);
+		int start = params.indexOf(hdivParameter);
 		if (start > 0 && params.charAt(start - 1) != '?' && params.charAt(start - 1) != '&') {
 			return params;
 		}
@@ -181,20 +181,20 @@ public abstract class AbstractUrlProcessor {
 	 */
 	public Map<String, String[]> getUrlParamsAsMap(final HttpServletRequest request, final String urlParams) {
 
-		final Map<String, String[]> params = new LinkedHashMap<String, String[]>();
+		Map<String, String[]> params = new LinkedHashMap<String, String[]>();
 
 		if (urlParams == null) {
 			return params;
 		}
 
-		final String value = urlParams.replaceAll("&amp;", "&");
+		String value = urlParams.replaceAll("&amp;", "&");
 
-		final String hdivParameter = HDIVUtil.getHDIVParameter(request);
+		String hdivParameter = HDIVUtil.getHDIVParameter(request);
 
-		final StringTokenizer st = new StringTokenizer(value, "&");
+		StringTokenizer st = new StringTokenizer(value, "&");
 		while (st.hasMoreTokens()) {
-			final String token = st.nextToken();
-			final int index = token.indexOf('=');
+			String token = st.nextToken();
+			int index = token.indexOf('=');
 			String param = "";
 			String val = "";
 			if (index > -1) {
@@ -216,7 +216,7 @@ public abstract class AbstractUrlProcessor {
 					values = new String[] { val };
 				}
 				else {
-					final int l = values.length;
+					int l = values.length;
 					values = Arrays.copyOf(values, l + 1);
 					values[l] = val;
 				}
@@ -287,13 +287,13 @@ public abstract class AbstractUrlProcessor {
 			final String stateParam) {
 
 		// obtain url with parameters
-		final StringBuilder sb = urlData.getParamProcessedUrl();
+		StringBuilder sb = urlData.getParamProcessedUrl();
 
 		if (stateParam == null || stateParam.length() <= 0) {
 			return sb.toString();
 		}
 
-		final char separator = (urlData.containsParams()) ? '&' : '?';
+		char separator = (urlData.containsParams()) ? '&' : '?';
 
 		sb.append(separator).append(hdivParameter).append('=').append(stateParam);
 		sb.append(urlData.getUriTemplate().replace('?', '&'));
@@ -310,7 +310,7 @@ public abstract class AbstractUrlProcessor {
 	 */
 	public String getProcessedUrl(final UrlData urlData) {
 
-		final StringBuilder url = urlData.getParamProcessedUrl();
+		StringBuilder url = urlData.getParamProcessedUrl();
 
 		appendAnchor(url, urlData.getAnchor());
 		return url.toString();
@@ -346,7 +346,7 @@ public abstract class AbstractUrlProcessor {
 			return false;
 		}
 
-		final boolean startPage = isStartPage(urlData);
+		boolean startPage = isStartPage(urlData);
 		if (startPage) {
 			return false;
 		}
@@ -355,7 +355,7 @@ public abstract class AbstractUrlProcessor {
 			return false;
 		}
 
-		final boolean validateParamLessUrls = config.isValidationInUrlsWithoutParamsActivated();
+		boolean validateParamLessUrls = config.isValidationInUrlsWithoutParamsActivated();
 		// if url is a link (or a GET method form) and has not got parameters, we do not have to include HDIV's state
 		if (urlData.isGetMethod() && !validateParamLessUrls && !urlData.containsParams()) {
 			return false;
@@ -422,7 +422,7 @@ public abstract class AbstractUrlProcessor {
 
 		final int pos = url.indexOf("://");
 		if (pos > 0) {
-			final int posicion = url.indexOf("/", pos + 3);
+			int posicion = url.indexOf("/", pos + 3);
 			if (posicion > 0) {
 				url = url.substring(0, posicion);
 				return url;
@@ -440,13 +440,13 @@ public abstract class AbstractUrlProcessor {
 	 * @param urlData url data object
 	 * @return is excluded or not
 	 */
-	protected boolean hasExtensionToExclude(final UrlData urlData) {
-		final String contextPathRelativeUrl = urlData.getContextPathRelativeUrl();
+	protected boolean hasExtensionToExclude(UrlData urlData) {
+		String contextPathRelativeUrl = urlData.getContextPathRelativeUrl();
 		if (contextPathRelativeUrl.charAt(contextPathRelativeUrl.length() - 1) == '/') {
 			return false;
 		}
 
-		final List<String> excludedExtensions = config.getExcludedURLExtensions();
+		List<String> excludedExtensions = config.getExcludedURLExtensions();
 
 		if (excludedExtensions != null) {
 			for (int i = 0; i < excludedExtensions.size(); i++) {
@@ -460,9 +460,9 @@ public abstract class AbstractUrlProcessor {
 		if (contextPathRelativeUrl.endsWith(".jsp")) {
 			return false;
 		}
-		final List<PatternMatcher> protectedExtension = config.getProtectedURLPatterns();
+		List<PatternMatcher> protectedExtension = config.getProtectedURLPatterns();
 		for (int i = 0; protectedExtension != null && i < protectedExtension.size(); i++) {
-			final PatternMatcher extensionPattern = protectedExtension.get(i);
+			PatternMatcher extensionPattern = protectedExtension.get(i);
 			if (extensionPattern.matches(contextPathRelativeUrl)) {
 				return false;
 			}
@@ -513,18 +513,18 @@ public abstract class AbstractUrlProcessor {
 		String urlWithoutRelativePath = url;
 
 		if (url.startsWith("..")) {
-			final Stack<String> stack = new Stack<String>();
-			final String localUri = originalRequestUri.substring(originalRequestUri.indexOf('/'),
+			Stack<String> stack = new Stack<String>();
+			String localUri = originalRequestUri.substring(originalRequestUri.indexOf('/'),
 					originalRequestUri.lastIndexOf('/'));
-			final StringTokenizer localUriParts = new StringTokenizer(localUri.replace('\\', '/'), "/");
+			StringTokenizer localUriParts = new StringTokenizer(localUri.replace('\\', '/'), "/");
 			while (localUriParts.hasMoreTokens()) {
-				final String part = localUriParts.nextToken();
+				String part = localUriParts.nextToken();
 				stack.push(part);
 			}
 
-			final StringTokenizer pathParts = new StringTokenizer(url.replace('\\', '/'), "/");
+			StringTokenizer pathParts = new StringTokenizer(url.replace('\\', '/'), "/");
 			while (pathParts.hasMoreTokens()) {
-				final String part = pathParts.nextToken();
+				String part = pathParts.nextToken();
 
 				if (!part.equals(".")) {
 					if (part.equals("..")) {
@@ -536,7 +536,7 @@ public abstract class AbstractUrlProcessor {
 				}
 			}
 
-			final StringBuilder flatPathBuffer = new StringBuilder();
+			StringBuilder flatPathBuffer = new StringBuilder();
 			for (int i = 0; i < stack.size(); i++) {
 				flatPathBuffer.append('/').append(stack.elementAt(i));
 			}

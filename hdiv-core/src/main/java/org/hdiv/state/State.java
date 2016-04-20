@@ -110,7 +110,7 @@ public class State implements IState, Serializable {
 	 */
 	public IParameter getParameter(final String key) {
 		if (parameters != null) {
-			for (final IParameter parameter : parameters) {
+			for (IParameter parameter : parameters) {
 				if (parameter.getName().equalsIgnoreCase(key)) {
 					return parameter;
 				}
@@ -170,7 +170,7 @@ public class State implements IState, Serializable {
 				this.params = null;
 			}
 		}
-		catch (final UnsupportedEncodingException e) {
+		catch (UnsupportedEncodingException e) {
 			throw new HDIVException("Error converting action to byte array", e);
 		}
 	}
@@ -193,8 +193,8 @@ public class State implements IState, Serializable {
 			return Collections.emptyList();
 		}
 		else {
-			final List<String> requiredParams = new ArrayList<String>(parameters.size());
-			for (final IParameter parameter : parameters) {
+			List<String> requiredParams = new ArrayList<String>(parameters.size());
+			for (IParameter parameter : parameters) {
 				if (parameter.isActionParam()) {
 					requiredParams.add(parameter.getName());
 				}

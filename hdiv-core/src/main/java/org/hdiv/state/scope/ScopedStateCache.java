@@ -41,13 +41,13 @@ public class ScopedStateCache implements Serializable {
 
 	public String addState(final IState state, final String token) {
 
-		final Integer previousStateId = this.existEqualState(state);
+		Integer previousStateId = this.existEqualState(state);
 		if (previousStateId != null) {
-			final StateAndToken previousState = states.get(previousStateId);
+			StateAndToken previousState = states.get(previousStateId);
 			return previousStateId + "-" + previousState.getToken();
 		}
 
-		final int id = this.index.getAndIncrement();
+		int id = this.index.getAndIncrement();
 		states.put(id, new StateAndToken(state, token));
 
 		return id + "-" + token;
@@ -55,20 +55,20 @@ public class ScopedStateCache implements Serializable {
 
 	public IState getState(final int stateId) {
 
-		final StateAndToken st = states.get(stateId);
+		StateAndToken st = states.get(stateId);
 		return st == null ? null : st.getState();
 	}
 
 	public String getStateToken(final int stateId) {
 
-		final StateAndToken st = states.get(stateId);
+		StateAndToken st = states.get(stateId);
 		return st == null ? null : st.getToken();
 	}
 
 	protected Integer existEqualState(final IState state) {
 
-		for (final Entry<Integer, StateAndToken> entry : states.entrySet()) {
-			final IState cacheState = entry.getValue().getState();
+		for (Entry<Integer, StateAndToken> entry : states.entrySet()) {
+			IState cacheState = entry.getValue().getState();
 
 			if (this.areEqualStates(cacheState, state)) {
 				return entry.getKey();
@@ -91,8 +91,8 @@ public class ScopedStateCache implements Serializable {
 		}
 
 		// Same Parameters
-		final Collection<IParameter> params1 = state1.getParameters();
-		final Collection<IParameter> params2 = state2.getParameters();
+		Collection<IParameter> params1 = state1.getParameters();
+		Collection<IParameter> params2 = state2.getParameters();
 		if (params1 != null && params2 == null) {
 			return false;
 		}
@@ -103,10 +103,10 @@ public class ScopedStateCache implements Serializable {
 			if (params1.size() != params2.size()) {
 				return false;
 			}
-			for (final IParameter param1 : params1) {
+			for (IParameter param1 : params1) {
 
 				boolean exist = false;
-				for (final IParameter param2 : params2) {
+				for (IParameter param2 : params2) {
 					if (this.areEqualParameters(param1, param2)) {
 						exist = true;
 					}
@@ -117,8 +117,8 @@ public class ScopedStateCache implements Serializable {
 			}
 		}
 
-		final String parameters1 = state1.getParams();
-		final String parameters2 = state2.getParams();
+		String parameters1 = state1.getParams();
+		String parameters2 = state2.getParams();
 		if (parameters1 != null && parameters2 == null) {
 			return false;
 		}
@@ -132,8 +132,8 @@ public class ScopedStateCache implements Serializable {
 		}
 
 		// Same required Parameters
-		final List<String> requiredParams1 = state1.getRequiredParams();
-		final List<String> requiredParams2 = state2.getRequiredParams();
+		List<String> requiredParams1 = state1.getRequiredParams();
+		List<String> requiredParams2 = state2.getRequiredParams();
 		if (requiredParams1 != null && requiredParams2 == null) {
 			return false;
 		}
@@ -144,7 +144,7 @@ public class ScopedStateCache implements Serializable {
 			if (requiredParams1.size() != requiredParams2.size()) {
 				return false;
 			}
-			for (final String requiredParam : requiredParams1) {
+			for (String requiredParam : requiredParams1) {
 				if (!requiredParams2.contains(requiredParam)) {
 					return false;
 				}
@@ -165,11 +165,11 @@ public class ScopedStateCache implements Serializable {
 		if (param1.isEditable() != param2.isEditable()) {
 			return false;
 		}
-		final List<String> values = param2.getValues();
+		List<String> values = param2.getValues();
 		if (values.size() != param1.getValues().size()) {
 			return false;
 		}
-		for (final String paramValue : values) {
+		for (String paramValue : values) {
 			if (!param1.existValue(paramValue)) {
 				return false;
 			}

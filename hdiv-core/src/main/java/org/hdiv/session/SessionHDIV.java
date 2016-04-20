@@ -75,7 +75,7 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 	 */
 	public int getPageId(final RequestContext context) {
 
-		final HttpSession session = context.getRequest().getSession();
+		HttpSession session = context.getRequest().getSession();
 
 		PageIdGenerator pageIdGenerator = (PageIdGenerator) session.getAttribute(this.pageIdGeneratorName);
 		if (pageIdGenerator == null) {
@@ -85,7 +85,7 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 			throw new HDIVException("session.nopageidgenerator");
 		}
 
-		final int id = pageIdGenerator.getNextPageId();
+		int id = pageIdGenerator.getNextPageId();
 
 		// PageId must be greater than 0
 		if (id <= 0) {
@@ -126,32 +126,32 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 	 * @param isPartial If is a partial page
 	 */
 	protected void addPage(final RequestContext context, final IPage newPage, final boolean isPartial) {
-		final int pageId = newPage.getId();
-		final HttpServletRequest request = context.getRequest();
-		final HttpSession session = request.getSession();
+		int pageId = newPage.getId();
+		HttpServletRequest request = context.getRequest();
+		HttpSession session = request.getSession();
 
 		boolean isAjaxRequest = false;
 
-		final IStateCache cache = this.getStateCache(session);
+		IStateCache cache = this.getStateCache(session);
 
 		// Get current request page identifier. Null if no state
-		final Integer currentPage = HDIVUtil.getCurrentPageId(request);
+		Integer currentPage = HDIVUtil.getCurrentPageId(request);
 
-		final Integer lastPageId = cache.getLastPageId();
-		final IPage lastPage = lastPageId == null ? null : this.getPage(context, lastPageId);
+		Integer lastPageId = cache.getLastPageId();
+		IPage lastPage = lastPageId == null ? null : this.getPage(context, lastPageId);
 
-		final boolean isRefreshRequest = newPage != null && lastPage != null && newPage.getParentStateId() != null
+		boolean isRefreshRequest = newPage != null && lastPage != null && newPage.getParentStateId() != null
 				&& lastPage.getParentStateId() != null
 				&& newPage.getParentStateId().equals(lastPage.getParentStateId());
 
 		// Check if is an Ajax request.
-		final Object isAjaxRequestObject = request.getAttribute(Constants.AJAX_REQUEST);
+		Object isAjaxRequestObject = request.getAttribute(Constants.AJAX_REQUEST);
 
 		if (isAjaxRequestObject != null) {
 			isAjaxRequest = (Boolean) isAjaxRequestObject;
 		}
 
-		final Integer removedPageId = cache.addPage(pageId, currentPage, isRefreshRequest, isAjaxRequest);
+		Integer removedPageId = cache.addPage(pageId, currentPage, isRefreshRequest, isAjaxRequest);
 
 		// if it returns a page identifier it is because the cache has reached
 		// the maximum size and therefore we must delete the page which has been
@@ -202,19 +202,19 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 	 */
 	public void removeEndedPages(final RequestContext context, final String conversationId) {
 
-		final HttpSession session = context.getRequest().getSession();
+		HttpSession session = context.getRequest().getSession();
 
-		final IStateCache cache = this.getStateCache(session);
+		IStateCache cache = this.getStateCache(session);
 		if (log.isDebugEnabled()) {
 			log.debug("Cache pages before finished pages are deleted:" + cache.toString());
 		}
 
-		final List<Integer> pageIds = cache.getPageIds();
+		List<Integer> pageIds = cache.getPageIds();
 
 		for (int i = 0; i < pageIds.size(); i++) {
 
-			final Integer pageId = pageIds.get(i);
-			final IPage currentPage = this.getPageFromSession(context, pageId);
+			Integer pageId = pageIds.get(i);
+			IPage currentPage = this.getPageFromSession(context, pageId);
 			if ((currentPage != null) && conversationId.equalsIgnoreCase(currentPage.getFlowId())) {
 
 				this.removePageFromSession(context, pageId);
@@ -238,7 +238,7 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 	public IState getState(final RequestContext context, final int pageId, final int stateId) {
 
 		try {
-			final IPage currentPage = this.getPage(context, pageId);
+			IPage currentPage = this.getPage(context, pageId);
 			return currentPage.getState(stateId);
 
 		}
@@ -261,7 +261,7 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 			log.debug("Getting page with id:" + pageId);
 		}
 
-		final HttpSession session = context.getSession();
+		HttpSession session = context.getSession();
 		return (IPage) session.getAttribute(PAGE_ID_KEY_PREFIX + pageId);
 	}
 
@@ -276,7 +276,7 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 	 */
 	protected void addPageToSession(final RequestContext context, final IPage page, final boolean isPartial) {
 
-		final HttpSession session = context.getSession();
+		HttpSession session = context.getSession();
 		session.setAttribute(PAGE_ID_KEY_PREFIX + page.getId(), page);
 
 		if (log.isDebugEnabled()) {
@@ -293,7 +293,7 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 	 */
 	protected void removePageFromSession(final RequestContext context, final int pageId) {
 
-		final HttpSession session = context.getSession();
+		HttpSession session = context.getSession();
 		session.removeAttribute(PAGE_ID_KEY_PREFIX + pageId);
 
 		if (log.isDebugEnabled()) {
@@ -348,7 +348,7 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 	 */
 	protected IStateCache createStateCacheInstance() {
 
-		final IStateCache cache = this.beanFactory.getBean(IStateCache.class);
+		IStateCache cache = this.beanFactory.getBean(IStateCache.class);
 		return cache;
 	}
 
@@ -361,10 +361,10 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 	protected void logCacheContent(final RequestContext context, final IStateCache cache) {
 		if (log.isTraceEnabled()) {
 			synchronized (cache) {
-				final List<Integer> ids = cache.getPageIds();
-				final StringBuilder sb = new StringBuilder();
+				List<Integer> ids = cache.getPageIds();
+				StringBuilder sb = new StringBuilder();
 				for (final Integer id : ids) {
-					final IPage page = this.getPage(context, id);
+					IPage page = this.getPage(context, id);
 					String parentPage = null;
 					if (page != null) {
 						parentPage = page.getParentStateId();

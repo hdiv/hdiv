@@ -120,8 +120,8 @@ public class StateUtil {
 		IState restoredState = null;
 
 		// Extract pageId and stateId from the state identifier
-		final int firstSeparator = requestState.indexOf('-');
-		final int lastSeparator = requestState.lastIndexOf('-');
+		int firstSeparator = requestState.indexOf('-');
+		int lastSeparator = requestState.lastIndexOf('-');
 		if (firstSeparator == -1 || lastSeparator == -1) {
 			throw new HDIVException(HDIVErrorCodes.HDIV_PARAMETER_INCORRECT_VALUE);
 		}
@@ -132,7 +132,7 @@ public class StateUtil {
 			pId = requestState.substring(0, firstSeparator);
 			sId = requestState.substring(firstSeparator + 1, lastSeparator);
 		}
-		catch (final StringIndexOutOfBoundsException e) {
+		catch (StringIndexOutOfBoundsException e) {
 			throw new HDIVException(HDIVErrorCodes.HDIV_PARAMETER_INCORRECT_VALUE, e);
 		}
 
@@ -140,12 +140,12 @@ public class StateUtil {
 		try {
 			stateId = Integer.parseInt(sId);
 		}
-		catch (final NumberFormatException e) {
+		catch (NumberFormatException e) {
 			throw new HDIVException(HDIVErrorCodes.HDIV_PARAMETER_INCORRECT_VALUE, e);
 		}
 
 		// Obtain State from a StateScopes
-		final StateScope stateScope = stateScopeManager.getStateScope(requestState);
+		StateScope stateScope = stateScopeManager.getStateScope(requestState);
 
 		if (stateScope != null) {
 			restoredState = stateScope.restoreState(context, stateId);
@@ -160,7 +160,7 @@ public class StateUtil {
 		try {
 			pageId = Integer.parseInt(pId);
 		}
-		catch (final NumberFormatException e) {
+		catch (NumberFormatException e) {
 			throw new HDIVException(HDIVErrorCodes.HDIV_PARAMETER_INCORRECT_VALUE, e);
 		}
 

@@ -125,7 +125,7 @@ public class Parameter implements IParameter, Serializable {
 		}
 
 		for (int i = 0; i < this.values.size(); i++) {
-			final String tempValue = values.get(i);
+			String tempValue = values.get(i);
 			if (tempValue.equalsIgnoreCase(value)) {
 				return true;
 			}
@@ -225,7 +225,7 @@ public class Parameter implements IParameter, Serializable {
 	@Override
 	public String toString() {
 
-		final StringBuilder result = new StringBuilder();
+		StringBuilder result = new StringBuilder();
 		result.append(" Parameter:" + this.getName() + " Values:");
 
 		if (values == null) {
@@ -233,7 +233,7 @@ public class Parameter implements IParameter, Serializable {
 		}
 		else {
 			for (int i = 0; i < this.values.size(); i++) {
-				final String value = this.values.get(i);
+				String value = this.values.get(i);
 				result.append(value);
 				if (!(i + 1 == this.values.size())) {
 					result.append(",");

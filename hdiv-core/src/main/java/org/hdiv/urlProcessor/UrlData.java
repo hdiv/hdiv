@@ -146,9 +146,9 @@ public final class UrlData {
 	}
 
 	public String findAnchor(final String url) {
-		final int pos = url.indexOf('#');
+		int pos = url.indexOf('#');
 		if (pos >= 0) {
-			final String anchor = url.substring(pos + 1);
+			String anchor = url.substring(pos + 1);
 			setAnchor(anchor);
 
 			return url.substring(0, pos);

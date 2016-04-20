@@ -47,7 +47,7 @@ public class LongLivingStatesTag extends TagSupport {
 	@Override
 	public int doStartTag() throws JspException {
 
-		final IDataComposer dataComposer = HDIVUtil.getDataComposer(pageContext.getRequest());
+		IDataComposer dataComposer = HDIVUtil.getDataComposer(pageContext.getRequest());
 
 		String scope = (String) getValue("scope");
 		if (scope == null) {

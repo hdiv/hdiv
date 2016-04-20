@@ -74,7 +74,7 @@ public class StateCache implements IStateCache {
 
 		}
 		else {
-			final Integer removedKey = this.cleanBuffer(currentPageId, isRefreshRequest, isAjaxRequest);
+			Integer removedKey = this.cleanBuffer(currentPageId, isRefreshRequest, isAjaxRequest);
 			this.pageIds.add(pageId);
 
 			if (log.isDebugEnabled()) {
@@ -102,7 +102,7 @@ public class StateCache implements IStateCache {
 
 		Integer removed = null;
 
-		final int totalPages = this.pageIds.size();
+		int totalPages = this.pageIds.size();
 
 		// Remove last page when we know that browser's forward history is empty (See issue #67)
 		if (currentPageId != null && totalPages > 1 && currentPageId == this.pageIds.get(totalPages - 2)
@@ -134,9 +134,9 @@ public class StateCache implements IStateCache {
 	@Override
 	public String toString() {
 
-		final StringBuilder result = new StringBuilder();
+		StringBuilder result = new StringBuilder();
 		result.append("[");
-		for (final Integer pageId : this.pageIds) {
+		for (Integer pageId : this.pageIds) {
 			result.append(" " + pageId);
 		}
 		result.append("]");

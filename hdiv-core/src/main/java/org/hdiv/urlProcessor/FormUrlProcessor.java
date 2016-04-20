@@ -68,7 +68,7 @@ public class FormUrlProcessor extends AbstractUrlProcessor {
 			method = Method.POST;
 		}
 
-		final IDataComposer dataComposer = HDIVUtil.getDataComposer(request);
+		IDataComposer dataComposer = HDIVUtil.getDataComposer(request);
 		if (dataComposer == null) {
 			// IDataComposer not initialized on request, request is out of filter
 			if (log.isDebugEnabled()) {
@@ -77,17 +77,17 @@ public class FormUrlProcessor extends AbstractUrlProcessor {
 			}
 			return url;
 		}
-		final String hdivParameter = HDIVUtil.getHDIVParameter(request);
-		final UrlData urlData = createUrlData(url, method, hdivParameter, request);
+		String hdivParameter = HDIVUtil.getHDIVParameter(request);
+		UrlData urlData = createUrlData(url, method, hdivParameter, request);
 		if (isHdivStateNecessary(urlData)) {
 			// the url needs protection
-			final String stateId = dataComposer.beginRequest(method, urlData.getUrlWithoutContextPath());
+			String stateId = dataComposer.beginRequest(method, urlData.getUrlWithoutContextPath());
 
 			// Publish the state in request to make it accessible on jsp
 			request.setAttribute(FORM_STATE_ID, stateId);
 
 			// Process url params
-			final String processedParams = dataComposer.composeParams(urlData.getUrlParams(), method,
+			String processedParams = dataComposer.composeParams(urlData.getUrlParams(), method,
 					Constants.ENCODING_UTF_8);
 			urlData.setUrlParams(processedParams);
 

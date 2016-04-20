@@ -89,12 +89,12 @@ public class CipherTag extends TagSupport {
 	@Override
 	public int doStartTag() throws JspException {
 
-		final IDataComposer dataComposer = HDIVUtil.getDataComposer(pageContext.getRequest());
+		IDataComposer dataComposer = HDIVUtil.getDataComposer(pageContext.getRequest());
 
-		final String action = (String) getValue("action");
-		final String parameter = (String) getValue("parameter");
-		final String value = (String) getValue("value");
-		final String var = (String) getValue("var");
+		String action = (String) getValue("action");
+		String parameter = (String) getValue("parameter");
+		String value = (String) getValue("value");
+		String var = (String) getValue("var");
 
 		String cipheredValue;
 		if (action != null) {
@@ -110,11 +110,11 @@ public class CipherTag extends TagSupport {
 				pageContext.setAttribute(var, cipheredValue);
 			}
 			else {
-				final JspWriter out = pageContext.getOut();
+				JspWriter out = pageContext.getOut();
 				out.print(cipheredValue);
 			}
 		}
-		catch (final IOException e) {
+		catch (IOException e) {
 			throw new JspException("Error:" + e.getMessage(), e);
 		}
 

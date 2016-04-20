@@ -104,8 +104,8 @@ public class Page implements IPage, Serializable {
 	 * @param state State that represents all the data that composes a possible request.
 	 */
 	public void addState(final IState state) {
-		final int id = state.getId();
-		final int size = states.size();
+		int id = state.getId();
+		int size = states.size();
 		if (size < id) {
 			// There are empty positions before id, fill with null values
 			for (int i = size; i < id; i++) {
@@ -278,10 +278,10 @@ public class Page implements IPage, Serializable {
 	@Override
 	public String toString() {
 
-		final StringBuilder result = new StringBuilder();
+		StringBuilder result = new StringBuilder();
 		result.append("Page:").append(id).append(' ');
 
-		for (final IState state : states) {
+		for (IState state : states) {
 			result.append(" ").append(state.toString());
 		}
 

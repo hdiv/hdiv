@@ -37,13 +37,13 @@ public class BasicUrlProcessor extends AbstractUrlProcessor {
 	 */
 	public BasicUrlData createBasicUrlData(String url, final HttpServletRequest request) {
 
-		final BasicUrlData urlData = new BasicUrlData();
+		BasicUrlData urlData = new BasicUrlData();
 
 		// Remove parameters
-		final int paramInit = url.indexOf('?');
+		int paramInit = url.indexOf('?');
 		if (paramInit > -1) {
-			final String urlParams = url.substring(paramInit + 1);
-			final Map<String, String[]> ulrParamsMap = this.getUrlParamsAsMap(request, urlParams);
+			String urlParams = url.substring(paramInit + 1);
+			Map<String, String[]> ulrParamsMap = this.getUrlParamsAsMap(request, urlParams);
 			urlData.setUrlParams(ulrParamsMap);
 			url = url.substring(0, paramInit);
 		}
