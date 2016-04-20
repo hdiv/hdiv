@@ -15,7 +15,6 @@
  */
 package org.hdiv.state;
 
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.logging.Log;
@@ -106,10 +105,7 @@ public class StateUtil {
 	 * @return True if strategy is memory. False in otherwise.
 	 */
 	public boolean isMemoryStrategy(final String value) {
-
-		final Matcher m = memoryPattern.matcher(value);
-
-		return (m.matches() ? true : config.getStrategy().equals(Strategy.MEMORY));
+		return config.getStrategy() == Strategy.MEMORY || memoryPattern.matcher(value).matches();
 	}
 
 	/**
