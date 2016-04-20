@@ -77,8 +77,8 @@ public class EditableValidationsBeanDefinitionParser extends AbstractSingleBeanD
 	 * org.springframework.beans.factory.xml.ParserContext)
 	 */
 	@Override
-	protected String resolveId(final Element element, final AbstractBeanDefinition definition,
-			final ParserContext parserContext) throws BeanDefinitionStoreException {
+	protected String resolveId(final Element element, final AbstractBeanDefinition definition, final ParserContext parserContext)
+			throws BeanDefinitionStoreException {
 
 		return EDITABLE_VALIDATION_PROVIDER_BEAN_NAME;
 	}
@@ -146,16 +146,14 @@ public class EditableValidationsBeanDefinitionParser extends AbstractSingleBeanD
 		}
 	}
 
-	protected RuntimeBeanReference createValidationRepository(final Element element, final Object source,
-			final ParserContext parserContext, final Map<ValidationTargetData, List<String>> validationsData,
-			final List<IValidation> defaultValidations) {
+	protected RuntimeBeanReference createValidationRepository(final Element element, final Object source, final ParserContext parserContext,
+			final Map<ValidationTargetData, List<String>> validationsData, final List<IValidation> defaultValidations) {
 
 		RootBeanDefinition bean = new RootBeanDefinition(ValidationRepositoryFactoryBean.class);
 		bean.setSource(source);
 		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
 
-		RuntimeBeanReference beanRef = new RuntimeBeanReference(
-				ConfigBeanDefinitionParser.PATTERN_MATCHER_FACTORY_NAME);
+		RuntimeBeanReference beanRef = new RuntimeBeanReference(ConfigBeanDefinitionParser.PATTERN_MATCHER_FACTORY_NAME);
 		bean.getPropertyValues().addPropertyValue("patternMatcherFactory", beanRef);
 		bean.getPropertyValues().addPropertyValue("defaultValidations", defaultValidations);
 		bean.getPropertyValues().addPropertyValue("validationsData", validationsData);
@@ -237,8 +235,7 @@ public class EditableValidationsBeanDefinitionParser extends AbstractSingleBeanD
 	 * @param parserContext xml parser context
 	 * @return default validations
 	 */
-	protected List<IValidation> createDefaultEditableValidations(final Element element,
-			final ParserContext parserContext) {
+	protected List<IValidation> createDefaultEditableValidations(final Element element, final ParserContext parserContext) {
 
 		// Load validations from xml
 		DefaultValidationParser parser = new DefaultValidationParser();
@@ -273,8 +270,7 @@ public class EditableValidationsBeanDefinitionParser extends AbstractSingleBeanD
 		return defaultValidations;
 	}
 
-	protected RootBeanDefinition createValidator(final Element element, final Object source,
-			final ParserContext parserContext) {
+	protected RootBeanDefinition createValidator(final Element element, final Object source, final ParserContext parserContext) {
 		RootBeanDefinition bean = new RootBeanDefinition(EditableParameterValidator.class);
 		bean.setSource(source);
 		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);

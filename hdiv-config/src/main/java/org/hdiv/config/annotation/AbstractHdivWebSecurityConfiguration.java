@@ -418,8 +418,7 @@ public abstract class AbstractHdivWebSecurityConfiguration {
 		for (ValidationConfig validationConfig : validationConfigs) {
 
 			String urlPattern = validationConfig.getUrlPattern();
-			EditableValidationConfigurer editableValidationConfigurer = validationConfig
-					.getEditableValidationConfigurer();
+			EditableValidationConfigurer editableValidationConfigurer = validationConfig.getEditableValidationConfigurer();
 			boolean useDefaultRules = editableValidationConfigurer.isDefaultRules();
 			List<String> selectedRules = editableValidationConfigurer.getRules();
 			List<String> selectedParams = editableValidationConfigurer.getParameters();

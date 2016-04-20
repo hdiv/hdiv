@@ -31,15 +31,13 @@ import org.springframework.util.MultiValueMap;
  */
 public class OnFrameworkCondition implements ConfigurationCondition {
 
-	protected final boolean springMvcModulePresent = ClassUtils.isPresent(
-			"org.hdiv.web.servlet.support.HdivRequestDataValueProcessor", OnFrameworkCondition.class.getClassLoader());
-
-	protected final boolean grailsModulePresent = ClassUtils.isPresent(
-			"org.hdiv.web.servlet.support.GrailsHdivRequestDataValueProcessor",
+	protected final boolean springMvcModulePresent = ClassUtils.isPresent("org.hdiv.web.servlet.support.HdivRequestDataValueProcessor",
 			OnFrameworkCondition.class.getClassLoader());
 
-	protected final boolean grailsPresent = ClassUtils.isPresent(
-			"org.codehaus.groovy.grails.web.servlet.GrailsDispatcherServlet",
+	protected final boolean grailsModulePresent = ClassUtils.isPresent("org.hdiv.web.servlet.support.GrailsHdivRequestDataValueProcessor",
+			OnFrameworkCondition.class.getClassLoader());
+
+	protected final boolean grailsPresent = ClassUtils.isPresent("org.codehaus.groovy.grails.web.servlet.GrailsDispatcherServlet",
 			OnFrameworkCondition.class.getClassLoader());
 
 	protected final boolean jsfPresent = ClassUtils.isPresent("javax.faces.webapp.FacesServlet",
@@ -51,9 +49,8 @@ public class OnFrameworkCondition implements ConfigurationCondition {
 	protected final boolean struts1ModulePresent = ClassUtils.isPresent("org.hdiv.action.HDIVRequestProcessor",
 			OnFrameworkCondition.class.getClassLoader());
 
-	protected final boolean thymeleafModulePresent = ClassUtils.isPresent(
-			"org.hdiv.web.servlet.support.ThymeleafHdivRequestDataValueProcessor",
-			OnFrameworkCondition.class.getClassLoader());
+	protected final boolean thymeleafModulePresent = ClassUtils
+			.isPresent("org.hdiv.web.servlet.support.ThymeleafHdivRequestDataValueProcessor", OnFrameworkCondition.class.getClassLoader());
 
 	public ConfigurationPhase getConfigurationPhase() {
 		return ConfigurationPhase.PARSE_CONFIGURATION;
@@ -61,8 +58,7 @@ public class OnFrameworkCondition implements ConfigurationCondition {
 
 	public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {
 
-		MultiValueMap<String, Object> attributes = metadata.getAllAnnotationAttributes(
-				ConditionalOnFramework.class.getName(), true);
+		MultiValueMap<String, Object> attributes = metadata.getAllAnnotationAttributes(ConditionalOnFramework.class.getName(), true);
 
 		List<Object> values = attributes.get("value");
 		Assert.notEmpty(values);

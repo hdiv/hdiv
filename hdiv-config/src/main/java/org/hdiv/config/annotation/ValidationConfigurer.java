@@ -43,7 +43,7 @@ public class ValidationConfigurer {
 		EditableValidationConfigurer editableValidationConfigurer = validationConfig.getEditableValidationConfigurer();
 		return editableValidationConfigurer;
 	}
-	
+
 	/**
 	 * Add an editable validation for a url pattern.
 	 * 
@@ -71,7 +71,7 @@ public class ValidationConfigurer {
 
 		public ValidationConfig() {
 		}
-		
+
 		public ValidationConfig(String urlPattern) {
 			this.urlPattern = urlPattern;
 		}
