@@ -33,20 +33,20 @@ public class DataComposerFactoryTest extends AbstractHDIVTestCase {
 
 	public void testNewInstance() {
 
-		final HttpServletRequest request = getMockRequest();
-		final IDataComposer dataComposer = dataComposerFactory.newInstance(request);
+		HttpServletRequest request = getMockRequest();
+		IDataComposer dataComposer = dataComposerFactory.newInstance(request);
 
 		assertTrue(dataComposer instanceof DataComposerMemory);
 	}
 
 	public void testNewInstanceAjax() {
 
-		final MockHttpServletRequest request = getMockRequest();
+		MockHttpServletRequest request = getMockRequest();
 
 		IDataComposer dataComposer = dataComposerFactory.newInstance(request);
 
 		dataComposer.beginRequest(Method.GET, "/ajax");
-		final String stateId = dataComposer.endRequest();
+		String stateId = dataComposer.endRequest();
 		dataComposer.endPage();
 
 		// Create other instance
@@ -57,7 +57,7 @@ public class DataComposerFactoryTest extends AbstractHDIVTestCase {
 		dataComposer = dataComposerFactory.newInstance(request);
 
 		dataComposer.beginRequest(Method.GET, "/ajax");
-		final String stateId2 = dataComposer.endRequest();
+		String stateId2 = dataComposer.endRequest();
 		dataComposer.endPage();
 
 		assertEquals(getPageId(stateId), getPageId(stateId2));
@@ -65,12 +65,12 @@ public class DataComposerFactoryTest extends AbstractHDIVTestCase {
 
 	public void testNewInstanceAjaxNoParameter() {
 
-		final MockHttpServletRequest request = getMockRequest();
+		MockHttpServletRequest request = getMockRequest();
 
 		IDataComposer dataComposer = dataComposerFactory.newInstance(request);
 
 		dataComposer.beginRequest(Method.GET, "/ajax");
-		final String stateId = dataComposer.endRequest();
+		String stateId = dataComposer.endRequest();
 		dataComposer.endPage();
 
 		// Create other instance
@@ -80,7 +80,7 @@ public class DataComposerFactoryTest extends AbstractHDIVTestCase {
 		dataComposer = dataComposerFactory.newInstance(request);
 
 		dataComposer.beginRequest(Method.GET, "/ajax");
-		final String stateId2 = dataComposer.endRequest();
+		String stateId2 = dataComposer.endRequest();
 		dataComposer.endPage();
 
 		assertFalse(getPageId(stateId) == getPageId(stateId2));
@@ -88,12 +88,12 @@ public class DataComposerFactoryTest extends AbstractHDIVTestCase {
 
 	public void testNewInstancePjax() {
 
-		final MockHttpServletRequest request = getMockRequest();
+		MockHttpServletRequest request = getMockRequest();
 
 		IDataComposer dataComposer = dataComposerFactory.newInstance(request);
 
 		dataComposer.beginRequest(Method.GET, "/ajax");
-		final String stateId = dataComposer.endRequest();
+		String stateId = dataComposer.endRequest();
 		dataComposer.endPage();
 
 		// Create other instance
@@ -105,14 +105,14 @@ public class DataComposerFactoryTest extends AbstractHDIVTestCase {
 		dataComposer = dataComposerFactory.newInstance(request);
 
 		dataComposer.beginRequest(Method.GET, "/ajax");
-		final String stateId2 = dataComposer.endRequest();
+		String stateId2 = dataComposer.endRequest();
 		dataComposer.endPage();
 
 		// Next page id is expected
 		assertEquals(getPageId(stateId), Integer.parseInt(getPageId(stateId2)) - 1 + "");
 	}
 
-	protected String getPageId(final String stateId) {
+	protected String getPageId(String stateId) {
 
 		return stateId.substring(0, stateId.indexOf("-"));
 	}

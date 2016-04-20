@@ -48,7 +48,7 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 
 	private boolean confidentiality;
 
-	private final String targetName = "/path/testAction.do";
+	private String targetName = "/path/testAction.do";
 
 	@Override
 	protected void onSetUp() throws Exception {
@@ -57,8 +57,8 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 		helper = getApplicationContext().getBean(IValidationHelper.class);
 		confidentiality = getConfig().getConfidentiality();
 
-		final DataComposerFactory dataComposerFactory = getApplicationContext().getBean(DataComposerFactory.class);
-		final HttpServletRequest request = getMockRequest();
+		DataComposerFactory dataComposerFactory = getApplicationContext().getBean(DataComposerFactory.class);
+		HttpServletRequest request = getMockRequest();
 		dataComposer = dataComposerFactory.newInstance(request);
 		HDIVUtil.setDataComposer(dataComposer, request);
 		dataComposer.startPage();
@@ -69,17 +69,17 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 	 */
 	public void testValidateHasOnlyHDIVParameter() {
 
-		final MockHttpServletRequest request = getMockRequest();
+		MockHttpServletRequest request = getMockRequest();
 
 		dataComposer.beginRequest(Method.GET, targetName);
 
-		final String pageState = dataComposer.endRequest();
+		String pageState = dataComposer.endRequest();
 		dataComposer.endPage();
 
 		request.addParameter(hdivParameter, pageState);
 
-		final RequestWrapper requestWrapper = new RequestWrapper(request);
-		final boolean result = helper.validate(requestWrapper).isValid();
+		RequestWrapper requestWrapper = new RequestWrapper(request);
+		boolean result = helper.validate(requestWrapper).isValid();
 		assertTrue(result);
 	}
 
@@ -88,18 +88,18 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 	 */
 	public void testValidateHasActionIsStartPage() {
 
-		final MockHttpServletRequest request = getMockRequest();
+		MockHttpServletRequest request = getMockRequest();
 
 		dataComposer.beginRequest(Method.GET, targetName);
 		request.setRequestURI("/testing.do");
 
-		final String pageState = dataComposer.endRequest();
+		String pageState = dataComposer.endRequest();
 		dataComposer.endPage();
 
 		request.addParameter(hdivParameter, pageState);
 
-		final RequestWrapper requestWrapper = new RequestWrapper(request);
-		final ValidatorHelperResult result = helper.validate(requestWrapper);
+		RequestWrapper requestWrapper = new RequestWrapper(request);
+		ValidatorHelperResult result = helper.validate(requestWrapper);
 		assertTrue(result.isValid());
 		assertEquals(result, ValidatorHelperResult.VALIDATION_NOT_REQUIRED);
 	}
@@ -109,17 +109,17 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 	 */
 	public void testValidateHasOneStartParameter() {
 
-		final MockHttpServletRequest request = getMockRequest();
+		MockHttpServletRequest request = getMockRequest();
 
 		dataComposer.beginRequest(Method.GET, targetName);
-		final String pageState = dataComposer.endRequest();
+		String pageState = dataComposer.endRequest();
 		dataComposer.endPage();
 
 		request.addParameter("testingInitParameter", "0");
 		request.addParameter(hdivParameter, pageState);
 
-		final RequestWrapper requestWrapper = new RequestWrapper(request);
-		final ValidatorHelperResult result = helper.validate(requestWrapper);
+		RequestWrapper requestWrapper = new RequestWrapper(request);
+		ValidatorHelperResult result = helper.validate(requestWrapper);
 		assertTrue(result.isValid());
 		assertEquals(result, ValidatorHelperResult.VALID);
 	}
@@ -129,20 +129,20 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 	 */
 	public void testValidateHasOneNotEditableOneParameter() {
 
-		final MockHttpServletRequest request = getMockRequest();
+		MockHttpServletRequest request = getMockRequest();
 
 		dataComposer.beginRequest(Method.GET, targetName);
 		dataComposer.compose("param1", "value1", false);
 
-		final String pageState = dataComposer.endRequest();
+		String pageState = dataComposer.endRequest();
 		dataComposer.endPage();
 
 		request.addParameter(hdivParameter, pageState);
 
-		final String value = (confidentiality) ? "0" : "value1";
+		String value = (confidentiality) ? "0" : "value1";
 		request.addParameter("param1", value);
 
-		final RequestWrapper requestWrapper = new RequestWrapper(request);
+		RequestWrapper requestWrapper = new RequestWrapper(request);
 		assertTrue(helper.validate(requestWrapper).isValid());
 	}
 
@@ -151,13 +151,13 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 	 */
 	public void testValidateHasOneNotEditableMultivalueParameter() {
 
-		final MockHttpServletRequest request = getMockRequest();
+		MockHttpServletRequest request = getMockRequest();
 
 		dataComposer.beginRequest(Method.GET, targetName);
 		dataComposer.compose("param1", "value1", false);
 		dataComposer.compose("param1", "value2", false);
 
-		final String pageState = dataComposer.endRequest();
+		String pageState = dataComposer.endRequest();
 		dataComposer.endPage();
 
 		request.addParameter(hdivParameter, pageState);
@@ -168,7 +168,7 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 		value = (confidentiality) ? "1" : "value2";
 		request.addParameter("param1", value);
 
-		final RequestWrapper requestWrapper = new RequestWrapper(request);
+		RequestWrapper requestWrapper = new RequestWrapper(request);
 		assertTrue(helper.validate(requestWrapper).isValid());
 	}
 
@@ -177,14 +177,14 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 	 */
 	public void testValidateHasMultiValue() {
 
-		final MockHttpServletRequest request = getMockRequest();
+		MockHttpServletRequest request = getMockRequest();
 
 		dataComposer.beginRequest(Method.GET, targetName);
 		dataComposer.compose("param1", "value1", false);
 		dataComposer.compose("param1", "value2", false);
 		dataComposer.compose("param2", "value3", false);
 
-		final String pageState = dataComposer.endRequest();
+		String pageState = dataComposer.endRequest();
 
 		request.addParameter(hdivParameter, pageState);
 
@@ -198,7 +198,7 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 		request.addParameter("param2", value);
 
 		dataComposer.endPage();
-		final RequestWrapper requestWrapper = new RequestWrapper(request);
+		RequestWrapper requestWrapper = new RequestWrapper(request);
 		assertTrue(helper.validate(requestWrapper).isValid());
 	}
 
@@ -208,21 +208,21 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 	 */
 	public void testValidateHasOneStartParameterOneNotEditableParameter() {
 
-		final MockHttpServletRequest request = getMockRequest();
+		MockHttpServletRequest request = getMockRequest();
 
 		dataComposer.beginRequest(Method.GET, targetName);
 		dataComposer.compose("param1", "value1", false);
 
-		final String pageState = dataComposer.endRequest();
+		String pageState = dataComposer.endRequest();
 		dataComposer.endPage();
 
-		final String value = (confidentiality) ? "0" : "value1";
+		String value = (confidentiality) ? "0" : "value1";
 		request.addParameter("param1", value);
 
 		request.addParameter("testingInitParameter", "0");
 		request.addParameter(hdivParameter, pageState);
 
-		final RequestWrapper requestWrapper = new RequestWrapper(request);
+		RequestWrapper requestWrapper = new RequestWrapper(request);
 		assertTrue(helper.validate(requestWrapper).isValid());
 	}
 
@@ -232,7 +232,7 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 	 */
 	public void testValidateHasOneParameterNotEditableMultivalueIndexOutOfBound() {
 
-		final MockHttpServletRequest request = getMockRequest();
+		MockHttpServletRequest request = getMockRequest();
 
 		dataComposer.beginRequest(Method.GET, targetName);
 
@@ -241,14 +241,14 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 			dataComposer.compose("param1", "value1", false);
 			dataComposer.compose("param1", "value2", false);
 
-			final String pageState = dataComposer.endRequest();
+			String pageState = dataComposer.endRequest();
 			dataComposer.endPage();
 
 			request.addParameter(hdivParameter, pageState);
 			request.addParameter("param1", "0");
 			request.addParameter("param1", "2");
 
-			final RequestWrapper requestWrapper = new RequestWrapper(request);
+			RequestWrapper requestWrapper = new RequestWrapper(request);
 			assertTrue(!helper.validate(requestWrapper).isValid());
 		}
 		assertTrue(true);
@@ -260,12 +260,12 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 	 */
 	public void testValidateHasInvalidNumberOfParameters() {
 
-		final MockHttpServletRequest request = getMockRequest();
+		MockHttpServletRequest request = getMockRequest();
 
 		dataComposer.beginRequest(Method.GET, targetName);
 		dataComposer.compose("param1", "value1", false);
 
-		final String pageState = dataComposer.endRequest();
+		String pageState = dataComposer.endRequest();
 		dataComposer.endPage();
 
 		String value = (confidentiality) ? "0" : "value1";
@@ -276,7 +276,7 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 
 		request.addParameter(hdivParameter, pageState);
 
-		final RequestWrapper requestWrapper = new RequestWrapper(request);
+		RequestWrapper requestWrapper = new RequestWrapper(request);
 		assertTrue(!helper.validate(requestWrapper).isValid());
 	}
 
@@ -286,13 +286,13 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 	 */
 	public void testValidateHasRepeatedValues() {
 
-		final MockHttpServletRequest request = getMockRequest();
+		MockHttpServletRequest request = getMockRequest();
 
 		dataComposer.beginRequest(Method.GET, targetName);
 		dataComposer.compose("param1", "value1", false);
 		dataComposer.compose("param1", "value2", false);
 
-		final String pageState = dataComposer.endRequest();
+		String pageState = dataComposer.endRequest();
 		dataComposer.endPage();
 
 		String value = (confidentiality) ? "0" : "value1";
@@ -303,7 +303,7 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 
 		request.addParameter(hdivParameter, pageState);
 
-		final RequestWrapper requestWrapper = new RequestWrapper(request);
+		RequestWrapper requestWrapper = new RequestWrapper(request);
 		assertTrue(!helper.validate(requestWrapper).isValid());
 	}
 
@@ -312,7 +312,7 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 	 */
 	public void testValidateHasOnlyOneParameterNotEditableIndexOutOfBound() {
 
-		final MockHttpServletRequest request = getMockRequest();
+		MockHttpServletRequest request = getMockRequest();
 
 		dataComposer.beginRequest(Method.GET, targetName);
 
@@ -320,13 +320,13 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 
 			dataComposer.compose("param1", "value1", false);
 
-			final String pageState = dataComposer.endRequest();
+			String pageState = dataComposer.endRequest();
 			dataComposer.endPage();
 
 			request.addParameter(hdivParameter, pageState);
 			request.addParameter("param1", "1");
 
-			final RequestWrapper requestWrapper = new RequestWrapper(request);
+			RequestWrapper requestWrapper = new RequestWrapper(request);
 			assertTrue(!helper.validate(requestWrapper).isValid());
 		}
 		assertTrue(true);
@@ -338,52 +338,52 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 	 */
 	public void testValidateHasMemoryWrongStateIndetifier() {
 
-		final MockHttpServletRequest request = getMockRequest();
+		MockHttpServletRequest request = getMockRequest();
 
 		dataComposer.beginRequest(Method.GET, targetName);
 		dataComposer.compose("param1", "value1", false);
 
 		// page identifier is incorrect
-		final String pageState = "1-1";
+		String pageState = "1-1";
 
 		request.addParameter(hdivParameter, pageState);
 
-		final String value = (confidentiality) ? "0" : "value1";
+		String value = (confidentiality) ? "0" : "value1";
 		request.addParameter("param1", value);
 
 		dataComposer.endPage();
 
 		boolean result = true;
 		try {
-			final RequestWrapper requestWrapper = new RequestWrapper(request);
+			RequestWrapper requestWrapper = new RequestWrapper(request);
 			result = helper.validate(requestWrapper).isValid();
 			assertFalse(result);
 		}
-		catch (final Exception e) {
+		catch (Exception e) {
 			assertTrue(true);
 		}
 	}
 
 	public void testEditableParameterValidation() {
 
-		final MockHttpServletRequest request = getMockRequest();
+		MockHttpServletRequest request = getMockRequest();
 		request.setMethod("POST");
 
 		dataComposer.beginRequest(Method.POST, targetName);
 		dataComposer.compose("paramName", "", true, "text");
 
-		final String pageState = dataComposer.endRequest();
+		String pageState = dataComposer.endRequest();
 		dataComposer.endPage();
 
 		request.addParameter(hdivParameter, pageState);
 		request.addParameter("paramName", "<script>storeCookie()</script>");
 
-		final RequestWrapper requestWrapper = new RequestWrapper(request);
-		final ValidatorHelperResult result = helper.validate(requestWrapper);
+		RequestWrapper requestWrapper = new RequestWrapper(request);
+		ValidatorHelperResult result = helper.validate(requestWrapper);
 		assertFalse(result.isValid());
 
 		// Editable errors
-		final List<ValidatorError> errors = result.getErrors();
+		List<ValidatorError> errors = result.getErrors();
 		assertEquals(1, errors.size());
 		assertEquals(HDIVErrorCodes.EDITABLE_VALIDATION_ERROR, errors.get(0).getType());
 	}
@@ -392,20 +392,20 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 
 		getConfig().setShowErrorPageOnEditableValidation(true);
 
-		final MockHttpServletRequest request = getMockRequest();
+		MockHttpServletRequest request = getMockRequest();
 		request.setMethod("POST");
 
 		dataComposer.beginRequest(Method.POST, targetName);
 		dataComposer.compose("paramName", "", true, "text");
 
-		final String pageState = dataComposer.endRequest();
+		String pageState = dataComposer.endRequest();
 		dataComposer.endPage();
 
 		request.addParameter(hdivParameter, pageState);
 		request.addParameter("paramName", "<script>storeCookie()</script>");
 
-		final RequestWrapper requestWrapper = new RequestWrapper(request);
-		final boolean result = helper.validate(requestWrapper).isValid();
+		RequestWrapper requestWrapper = new RequestWrapper(request);
+		boolean result = helper.validate(requestWrapper).isValid();
 		assertFalse(result);
 
 	}
@@ -415,17 +415,17 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 	 */
 	public void testValidateCookiesIntegrity() {
 
-		final MockHttpServletRequest request = getMockRequest();
+		MockHttpServletRequest request = getMockRequest();
 		RequestWrapper requestWrapper = new RequestWrapper(request);
 
-		final MockHttpServletResponse response = new MockHttpServletResponse();
-		final ResponseWrapper responseWrapper = new ResponseWrapper(request, response);
+		MockHttpServletResponse response = new MockHttpServletResponse();
+		ResponseWrapper responseWrapper = new ResponseWrapper(request, response);
 
 		responseWrapper.addCookie(new Cookie("name", "value"));
 
 		dataComposer.beginRequest(Method.GET, targetName);
 		dataComposer.compose("param1", "value1", false);
-		final String pageState = dataComposer.endRequest();
+		String pageState = dataComposer.endRequest();
 		assertNotNull(pageState);
 		request.addParameter(hdivParameter, pageState);
 
@@ -435,91 +435,91 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 		request.setCookies(new Cookie[] { new Cookie("name", "changedValue") });
 
 		requestWrapper = new RequestWrapper(request);
-		final boolean result = helper.validate(requestWrapper).isValid();
+		boolean result = helper.validate(requestWrapper).isValid();
 		assertFalse(result);
 	}
 
 	public void testValidateWhitespace() {
 
-		final MockHttpServletRequest request = getMockRequest();
+		MockHttpServletRequest request = getMockRequest();
 		request.setMethod("POST");
 
 		dataComposer.beginRequest(Method.POST, "/path/test Action.do");
-		final String pageState = dataComposer.endRequest();
+		String pageState = dataComposer.endRequest();
 		dataComposer.endPage();
 
 		request.setRequestURI("/path/test%20Action.do");
 		request.addParameter(hdivParameter, pageState);
 
-		final RequestWrapper requestWrapper = new RequestWrapper(request);
+		RequestWrapper requestWrapper = new RequestWrapper(request);
 		assertTrue(helper.validate(requestWrapper).isValid());
 	}
 
 	public void testValidateEncoded() {
 
-		final MockHttpServletRequest request = getMockRequest();
+		MockHttpServletRequest request = getMockRequest();
 		request.setMethod("POST");
 
 		dataComposer.beginRequest(Method.POST, "/path/test%20Action.do");
-		final String pageState = dataComposer.endRequest();
+		String pageState = dataComposer.endRequest();
 		dataComposer.endPage();
 
 		request.setRequestURI("/path/test%20Action.do");
 		request.addParameter(hdivParameter, pageState);
 
-		final RequestWrapper requestWrapper = new RequestWrapper(request);
+		RequestWrapper requestWrapper = new RequestWrapper(request);
 		assertTrue(helper.validate(requestWrapper).isValid());
 	}
 
 	public void testValidateLongConfidencialValue() {
 
-		final MockHttpServletRequest request = getMockRequest();
+		MockHttpServletRequest request = getMockRequest();
 
 		dataComposer.beginRequest(Method.GET, targetName);
 		dataComposer.compose("param", "value", false);
-		final String pageState = dataComposer.endRequest();
+		String pageState = dataComposer.endRequest();
 		dataComposer.endPage();
 
 		request.addParameter(hdivParameter, pageState);
 		request.addParameter("param", "99999999999999999999");
 
-		final RequestWrapper requestWrapper = new RequestWrapper(request);
-		final boolean result = helper.validate(requestWrapper).isValid();
+		RequestWrapper requestWrapper = new RequestWrapper(request);
+		boolean result = helper.validate(requestWrapper).isValid();
 		assertFalse(result);
 	}
 
 	public void testParamWithAmpersand() {
 
-		final MockHttpServletRequest request = getMockRequest();
+		MockHttpServletRequest request = getMockRequest();
 
 		dataComposer.beginRequest(Method.GET, targetName);
 		dataComposer.composeParams("param1=111&amp;param2=Me+%26+You", Method.GET, "utf-8");
-		final String pageState = dataComposer.endRequest();
+		String pageState = dataComposer.endRequest();
 		dataComposer.endPage();
 
 		request.addParameter(hdivParameter, pageState);
 		request.addParameter("param1", "0");
 		request.addParameter("param2", "0");
 
-		final RequestWrapper requestWrapper = new RequestWrapper(request);
-		final boolean result = helper.validate(requestWrapper).isValid();
+		RequestWrapper requestWrapper = new RequestWrapper(request);
+		boolean result = helper.validate(requestWrapper).isValid();
 		assertTrue(result);
 
-		final String param1Value = requestWrapper.getParameter("param1");
+		String param1Value = requestWrapper.getParameter("param1");
 		assertEquals("111", param1Value);
 
-		final String param2Value = requestWrapper.getParameter("param2");
+		String param2Value = requestWrapper.getParameter("param2");
 		assertEquals("Me & You", param2Value);
 
 	}
 
 	public void testValidateLongLiving() {
 
-		final MockHttpServletRequest request = getMockRequest();
+		MockHttpServletRequest request = getMockRequest();
 
 		dataComposer.startScope("app");
 		dataComposer.beginRequest(Method.GET, targetName);
-		final String pageState = dataComposer.endRequest();
+		String pageState = dataComposer.endRequest();
 		dataComposer.endScope();
 		dataComposer.endPage();
 
@@ -527,25 +527,25 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 
 		request.addParameter(hdivParameter, pageState);
 
-		final RequestWrapper requestWrapper = new RequestWrapper(request);
-		final boolean result = helper.validate(requestWrapper).isValid();
+		RequestWrapper requestWrapper = new RequestWrapper(request);
+		boolean result = helper.validate(requestWrapper).isValid();
 		assertTrue(result);
 	}
 
 	public void testEncodeFormAction() throws UnsupportedEncodingException {
 
-		final MockHttpServletRequest request = getMockRequest();
+		MockHttpServletRequest request = getMockRequest();
 
-		final String url = "/sample/TESTÑ/edit";
+		String url = "/sample/TESTÑ/edit";
 
 		// Escaped value is passed by Spring MVC for example
-		final String escaped = HtmlUtils.htmlEscape(url);
+		String escaped = HtmlUtils.htmlEscape(url);
 		// Encoded value is what browser sends
-		final String encoded = URLEncoder.encode(url, "utf-8");
+		String encoded = URLEncoder.encode(url, "utf-8");
 
 		dataComposer.startPage();
 		dataComposer.beginRequest(Method.POST, escaped);
-		final String stateId = dataComposer.endRequest();
+		String stateId = dataComposer.endRequest();
 		dataComposer.endPage();
 
 		request.setRequestURI(encoded);
@@ -554,21 +554,21 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 
 		request.addParameter(hdivParameter, stateId);
 
-		final RequestWrapper requestWrapper = new RequestWrapper(request);
-		final boolean result = helper.validate(requestWrapper).isValid();
+		RequestWrapper requestWrapper = new RequestWrapper(request);
+		boolean result = helper.validate(requestWrapper).isValid();
 		assertTrue(result);
 	}
 
 	public void testFormActionWithWhitespace() throws UnsupportedEncodingException {
 
-		final MockHttpServletRequest request = getMockRequest();
+		MockHttpServletRequest request = getMockRequest();
 
-		final String url = "/sample/TEST TEST/edit";
-		final String urlRequest = "/sample/TEST%20TEST/edit";
+		String url = "/sample/TEST TEST/edit";
+		String urlRequest = "/sample/TEST%20TEST/edit";
 
 		dataComposer.startPage();
 		dataComposer.beginRequest(Method.POST, url);
-		final String stateId = dataComposer.endRequest();
+		String stateId = dataComposer.endRequest();
 		dataComposer.endPage();
 
 		request.setRequestURI(urlRequest);
@@ -577,8 +577,8 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 
 		request.addParameter(hdivParameter, stateId);
 
-		final RequestWrapper requestWrapper = new RequestWrapper(request);
-		final boolean result = helper.validate(requestWrapper).isValid();
+		RequestWrapper requestWrapper = new RequestWrapper(request);
+		boolean result = helper.validate(requestWrapper).isValid();
 		assertTrue(result);
 	}
 }

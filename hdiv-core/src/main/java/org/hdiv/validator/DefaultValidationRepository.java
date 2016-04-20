@@ -51,18 +51,18 @@ public class DefaultValidationRepository implements ValidationRepository, Serial
 	 */
 	public List<IValidation> findValidations(final String url, final String parameter) {
 
-		for (final Entry<ValidationTarget, List<IValidation>> entry : this.validations.entrySet()) {
-			final ValidationTarget target = entry.getKey();
-			final PatternMatcher urlMatcher = target.getUrl();
+		for (Entry<ValidationTarget, List<IValidation>> entry : this.validations.entrySet()) {
+			ValidationTarget target = entry.getKey();
+			PatternMatcher urlMatcher = target.getUrl();
 
 			// Null URL is equivalent to all URLs.
 			if (urlMatcher == null || urlMatcher.matches(url)) {
 
-				final List<PatternMatcher> paramMatchers = target.getParams();
+				List<PatternMatcher> paramMatchers = target.getParams();
 				boolean paramMatch = false;
 
 				if (paramMatchers != null && paramMatchers.size() > 0) {
-					for (final PatternMatcher paramMatcher : paramMatchers) {
+					for (PatternMatcher paramMatcher : paramMatchers) {
 						if (paramMatcher.matches(parameter)) {
 							paramMatch = true;
 							break;

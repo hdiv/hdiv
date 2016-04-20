@@ -103,18 +103,18 @@ public class Validation implements IValidation, Serializable {
 		}
 
 		// we validate all the values for the parameter
-		for (final String value : values) {
+		for (String value : values) {
 
 			if (this.acceptedPattern != null) {
 
-				final Matcher m = this.acceptedPattern.matcher(value);
+				Matcher m = this.acceptedPattern.matcher(value);
 				if (!m.matches()) {
 					return false;
 				}
 			}
 			if (this.rejectedPattern != null) {
 
-				final Matcher m = this.rejectedPattern.matcher(value);
+				Matcher m = this.rejectedPattern.matcher(value);
 				if (m.matches()) {
 					return false;
 				}

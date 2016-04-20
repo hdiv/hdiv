@@ -41,15 +41,15 @@ public class AjaxTest extends AbstractHDIVTestCase {
 
 		getConfig().setReuseExistingPageInAjaxRequest(false);
 
-		final MockHttpServletRequest request = getMockRequest();
-		final RequestContext context = getRequestContext();
-		final IDataComposer dataComposer = dataComposerFactory.newInstance(request);
+		MockHttpServletRequest request = getMockRequest();
+		RequestContext context = getRequestContext();
+		IDataComposer dataComposer = dataComposerFactory.newInstance(request);
 		HDIVUtil.setDataComposer(dataComposer, request);
 
 		dataComposer.startPage();
 		dataComposer.beginRequest(Method.GET, "test.do");
 		dataComposer.compose("parameter1", "1", false);
-		final String stateId = dataComposer.endRequest();
+		String stateId = dataComposer.endRequest();
 		dataComposer.endPage();
 
 		assertNotNull(stateId);
@@ -58,31 +58,31 @@ public class AjaxTest extends AbstractHDIVTestCase {
 		request.addHeader("x-requested-with", "XMLHttpRequest");
 
 		// DataComposer1
-		final IDataComposer dataComposer1 = dataComposerFactory.newInstance(request);
+		IDataComposer dataComposer1 = dataComposerFactory.newInstance(request);
 		HDIVUtil.setDataComposer(dataComposer1, request);
 
 		dataComposer1.beginRequest(Method.GET, "test.do");
 		// Add new parameter
 		dataComposer1.compose("parameter2", "2", false);
-		final String stateId1 = dataComposer1.endRequest();
+		String stateId1 = dataComposer1.endRequest();
 		dataComposer1.endPage();
 
 		assertEquals(Integer.parseInt(getPageId(stateId)), Integer.parseInt(getPageId(stateId1)) - 1);
 
 		// DataComposer2
-		final IDataComposer dataComposer2 = dataComposerFactory.newInstance(request);
+		IDataComposer dataComposer2 = dataComposerFactory.newInstance(request);
 		HDIVUtil.setDataComposer(dataComposer2, request);
 
 		dataComposer2.beginRequest(Method.GET, "test.do");
 		// Add new parameter
 		dataComposer2.compose("parameter3", "3", false);
-		final String stateId2 = dataComposer2.endRequest();
+		String stateId2 = dataComposer2.endRequest();
 		dataComposer2.endPage();
 
 		assertEquals(Integer.parseInt(getPageId(stateId)), Integer.parseInt(getPageId(stateId2)) - 2);
 
-		final int sId1 = getStateId(stateId1);
-		final int sId2 = getStateId(stateId2);
+		int sId1 = getStateId(stateId1);
+		int sId2 = getStateId(stateId2);
 
 		assertEquals(sId1, sId2);
 		// Restore state
@@ -106,15 +106,15 @@ public class AjaxTest extends AbstractHDIVTestCase {
 
 		getConfig().setReuseExistingPageInAjaxRequest(true);
 
-		final MockHttpServletRequest request = getMockRequest();
-		final RequestContext context = getRequestContext();
-		final IDataComposer dataComposer = dataComposerFactory.newInstance(request);
+		MockHttpServletRequest request = getMockRequest();
+		RequestContext context = getRequestContext();
+		IDataComposer dataComposer = dataComposerFactory.newInstance(request);
 		HDIVUtil.setDataComposer(dataComposer, request);
 
 		dataComposer.startPage();
 		dataComposer.beginRequest(Method.GET, "test.do");
 		dataComposer.compose("parameter1", "1", false);
-		final String stateId = dataComposer.endRequest();
+		String stateId = dataComposer.endRequest();
 		dataComposer.endPage();
 
 		assertNotNull(stateId);
@@ -123,31 +123,31 @@ public class AjaxTest extends AbstractHDIVTestCase {
 		request.addHeader("x-requested-with", "XMLHttpRequest");
 
 		// DataComposer1
-		final IDataComposer dataComposer1 = dataComposerFactory.newInstance(request);
+		IDataComposer dataComposer1 = dataComposerFactory.newInstance(request);
 		HDIVUtil.setDataComposer(dataComposer1, request);
 
 		dataComposer1.beginRequest(Method.GET, "test.do");
 		// Add new parameter
 		dataComposer1.compose("parameter2", "2", false);
-		final String stateId1 = dataComposer1.endRequest();
+		String stateId1 = dataComposer1.endRequest();
 		dataComposer1.endPage();
 
 		assertEquals(getPageId(stateId), getPageId(stateId1));
 
 		// DataComposer2
-		final IDataComposer dataComposer2 = dataComposerFactory.newInstance(request);
+		IDataComposer dataComposer2 = dataComposerFactory.newInstance(request);
 		HDIVUtil.setDataComposer(dataComposer2, request);
 
 		dataComposer2.beginRequest(Method.GET, "test.do");
 		// Add new parameter
 		dataComposer2.compose("parameter3", "3", false);
-		final String stateId2 = dataComposer2.endRequest();
+		String stateId2 = dataComposer2.endRequest();
 		dataComposer2.endPage();
 
 		assertEquals(getPageId(stateId), getPageId(stateId2));
 
-		final int sId1 = getStateId(stateId1);
-		final int sId2 = getStateId(stateId2);
+		int sId1 = getStateId(stateId1);
+		int sId2 = getStateId(stateId2);
 
 		assertEquals(sId1 + 1, sId2);
 		// Restore state
@@ -171,15 +171,15 @@ public class AjaxTest extends AbstractHDIVTestCase {
 
 		getConfig().setReuseExistingPageInAjaxRequest(true);
 
-		final MockHttpServletRequest request = getMockRequest();
-		final RequestContext context = getRequestContext();
-		final IDataComposer dataComposer = dataComposerFactory.newInstance(request);
+		MockHttpServletRequest request = getMockRequest();
+		RequestContext context = getRequestContext();
+		IDataComposer dataComposer = dataComposerFactory.newInstance(request);
 		HDIVUtil.setDataComposer(dataComposer, request);
 
 		dataComposer.startPage();
 		dataComposer.beginRequest(Method.POST, "test.do");
 		dataComposer.compose("parameter1", "1", false);
-		final String stateId = dataComposer.endRequest();
+		String stateId = dataComposer.endRequest();
 		dataComposer.endPage();
 
 		assertNotNull(stateId);
@@ -188,15 +188,15 @@ public class AjaxTest extends AbstractHDIVTestCase {
 		request.addHeader("x-requested-with", "XMLHttpRequest");
 
 		// Create two dataComposers concurrently
-		final IDataComposer dataComposer1 = dataComposerFactory.newInstance(request);
-		final IDataComposer dataComposer2 = dataComposerFactory.newInstance(request);
+		IDataComposer dataComposer1 = dataComposerFactory.newInstance(request);
+		IDataComposer dataComposer2 = dataComposerFactory.newInstance(request);
 		HDIVUtil.setDataComposer(dataComposer1, request);
 
 		// DataComposer1
 		dataComposer1.beginRequest(Method.GET, "test.do");
 		// Add new parameter
 		dataComposer1.compose("parameter2", "2", false);
-		final String stateId1 = dataComposer1.endRequest();
+		String stateId1 = dataComposer1.endRequest();
 		dataComposer1.endPage();
 
 		assertEquals(getPageId(stateId), getPageId(stateId1));
@@ -207,13 +207,13 @@ public class AjaxTest extends AbstractHDIVTestCase {
 		dataComposer2.beginRequest(Method.GET, "test.do");
 		// Add new parameter
 		dataComposer2.compose("parameter3", "3", false);
-		final String stateId2 = dataComposer2.endRequest();
+		String stateId2 = dataComposer2.endRequest();
 		dataComposer2.endPage();
 
 		assertEquals(getPageId(stateId), getPageId(stateId2));
 
-		final int sId1 = getStateId(stateId1);
-		final int sId2 = getStateId(stateId2);
+		int sId1 = getStateId(stateId1);
+		int sId2 = getStateId(stateId2);
 
 		assertEquals(sId1 + 1, sId2);
 		// Restore state
@@ -233,14 +233,14 @@ public class AjaxTest extends AbstractHDIVTestCase {
 		assertEquals("3", val);
 	}
 
-	public String getPageId(final String stateId) {
+	public String getPageId(String stateId) {
 
 		return stateId.substring(0, stateId.indexOf("-"));
 	}
 
-	public int getStateId(final String stateId) {
+	public int getStateId(String stateId) {
 
-		final String state = stateId.substring(stateId.indexOf("-") + 1, stateId.indexOf("-", stateId.indexOf("-") + 1));
+		String state = stateId.substring(stateId.indexOf("-") + 1, stateId.indexOf("-", stateId.indexOf("-") + 1));
 		return Integer.parseInt(state);
 	}
 }

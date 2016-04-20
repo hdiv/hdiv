@@ -111,13 +111,13 @@ public class HdivRequestDataValueProcessor implements RequestDataValueProcessor 
 	public String processAction(final HttpServletRequest request, String action, final String method) {
 
 		if (innerRequestDataValueProcessor != null) {
-			final String processedAction = innerRequestDataValueProcessor.processAction(request, action, method);
+			String processedAction = innerRequestDataValueProcessor.processAction(request, action, method);
 			if (processedAction != action) {
 				action = processedAction;
 			}
 		}
 
-		final String result = formUrlProcessor.processUrl(request, action, Method.secureValueOf(method));
+		String result = formUrlProcessor.processUrl(request, action, Method.secureValueOf(method));
 		return result;
 	}
 
@@ -134,7 +134,7 @@ public class HdivRequestDataValueProcessor implements RequestDataValueProcessor 
 			final String type) {
 
 		if (innerRequestDataValueProcessor != null) {
-			final String processedValue = innerRequestDataValueProcessor.processFormFieldValue(request, name, value,
+			String processedValue = innerRequestDataValueProcessor.processFormFieldValue(request, name, value,
 					type);
 			if (processedValue != value) {
 				value = processedValue;
@@ -145,7 +145,7 @@ public class HdivRequestDataValueProcessor implements RequestDataValueProcessor 
 			return value;
 		}
 
-		final IDataComposer dataComposer = HDIVUtil.getDataComposer(request);
+		IDataComposer dataComposer = HDIVUtil.getDataComposer(request);
 
 		if (dataComposer == null || dataComposer.isRequestStarted() == false) {
 			return value;
@@ -156,7 +156,7 @@ public class HdivRequestDataValueProcessor implements RequestDataValueProcessor 
 			return value;
 		}
 		else {
-			final String result = dataComposer.composeFormField(name, value, false, type);
+			String result = dataComposer.composeFormField(name, value, false, type);
 			return result;
 		}
 
@@ -170,11 +170,11 @@ public class HdivRequestDataValueProcessor implements RequestDataValueProcessor 
 	 */
 	public Map<String, String> getExtraHiddenFields(final HttpServletRequest request) {
 
-		final IDataComposer dataComposer = HDIVUtil.getDataComposer(request);
-		final Map<String, String> extraFields = new HashMap<String, String>();
+		IDataComposer dataComposer = HDIVUtil.getDataComposer(request);
+		Map<String, String> extraFields = new HashMap<String, String>();
 
 		if (innerRequestDataValueProcessor != null) {
-			final Map<String, String> innerExtras = innerRequestDataValueProcessor.getExtraHiddenFields(request);
+			Map<String, String> innerExtras = innerRequestDataValueProcessor.getExtraHiddenFields(request);
 			if (innerExtras != null) {
 				extraFields.putAll(innerExtras);
 			}
@@ -184,10 +184,10 @@ public class HdivRequestDataValueProcessor implements RequestDataValueProcessor 
 			return extraFields;
 		}
 
-		final String requestId = dataComposer.endRequest();
+		String requestId = dataComposer.endRequest();
 
 		if (requestId != null && requestId.length() > 0) {
-			final String hdivStateParam = (String) request.getSession().getAttribute(Constants.HDIV_PARAMETER);
+			String hdivStateParam = (String) request.getSession().getAttribute(Constants.HDIV_PARAMETER);
 			extraFields.put(hdivStateParam, requestId);
 
 			// Publish the state in request to make it accessible on jsp
@@ -203,16 +203,16 @@ public class HdivRequestDataValueProcessor implements RequestDataValueProcessor 
 	 * @param url link url
 	 * @return processed url
 	 */
-	public String processUrl(final HttpServletRequest request, String url) {
+	public String processUrl(HttpServletRequest request, String url) {
 
 		if (innerRequestDataValueProcessor != null) {
-			final String processedUrl = innerRequestDataValueProcessor.processUrl(request, url);
+			String processedUrl = innerRequestDataValueProcessor.processUrl(request, url);
 			if (processedUrl != null) {
 				url = processedUrl;
 			}
 		}
 
-		final String result = linkUrlProcessor.processUrl(request, url);
+		String result = linkUrlProcessor.processUrl(request, url);
 		return result;
 	}
 
@@ -222,7 +222,7 @@ public class HdivRequestDataValueProcessor implements RequestDataValueProcessor 
 	 * @param type field type
 	 * @return editable
 	 */
-	protected boolean isEditable(final String type) {
+	protected boolean isEditable(String type) {
 
 		if (noEditableTypes.contains(type)) {
 			return false;

@@ -42,11 +42,11 @@ public class DataValidatorTest extends AbstractHDIVTestCase {
 	 */
 	public void testValidateDataIsNotInt() {
 
-		final HttpServletRequest request = this.getMockRequest();
+		HttpServletRequest request = this.getMockRequest();
 
-		final IParameter param1 = new Parameter("param1", "value1", false, null, false);
+		IParameter param1 = new Parameter("param1", "value1", false, null, false);
 
-		final IValidationResult result = dataValidator.validate(request, "dataIsNotInt", "simpleAction", "param1",
+		IValidationResult result = dataValidator.validate(request, "dataIsNotInt", "simpleAction", "param1",
 				param1, null);
 		assertFalse(result.getLegal());
 	}
@@ -72,11 +72,11 @@ public class DataValidatorTest extends AbstractHDIVTestCase {
 	 */
 	public void testValidatePositionDoesNotExist() {
 
-		final HttpServletRequest request = this.getMockRequest();
+		HttpServletRequest request = this.getMockRequest();
 
-		final IParameter param1 = new Parameter("param1", "value1", false, null, false);
+		IParameter param1 = new Parameter("param1", "value1", false, null, false);
 
-		final IValidationResult result = dataValidator.validate(request, "1", "simpleAction", "param1", param1, null);
+		IValidationResult result = dataValidator.validate(request, "1", "simpleAction", "param1", param1, null);
 		assertFalse(result.getLegal());
 	}
 
@@ -85,13 +85,13 @@ public class DataValidatorTest extends AbstractHDIVTestCase {
 	 */
 	public void testValidateCorrectData() {
 
-		final HttpServletRequest request = this.getMockRequest();
+		HttpServletRequest request = this.getMockRequest();
 
-		final IParameter param1 = new Parameter("param1", "value1", false, null, false);
+		IParameter param1 = new Parameter("param1", "value1", false, null, false);
 
-		final boolean confidentiality = this.getConfig().getConfidentiality();
-		final String value = (confidentiality) ? "0" : "value1";
-		final IValidationResult result = dataValidator.validate(request, value, "simpleAction", "param1", param1, null);
+		boolean confidentiality = this.getConfig().getConfidentiality();
+		String value = (confidentiality) ? "0" : "value1";
+		IValidationResult result = dataValidator.validate(request, value, "simpleAction", "param1", param1, null);
 
 		assertEquals(result.getResult(), "value1");
 		assertTrue(result.getLegal());
@@ -99,13 +99,13 @@ public class DataValidatorTest extends AbstractHDIVTestCase {
 
 	public void testValidateActionParams() {
 
-		final HttpServletRequest request = this.getMockRequest();
+		HttpServletRequest request = this.getMockRequest();
 
-		final String[] values = new String[] { "value1" };
+		String[] values = new String[] { "value1" };
 
-		final boolean confidentiality = this.getConfig().getConfidentiality();
-		final String value = (confidentiality) ? "0" : "value1";
-		final IValidationResult result = dataValidator.validate(request, value, "simpleAction", "param1", null, values);
+		boolean confidentiality = this.getConfig().getConfidentiality();
+		String value = (confidentiality) ? "0" : "value1";
+		IValidationResult result = dataValidator.validate(request, value, "simpleAction", "param1", null, values);
 
 		assertEquals(result.getResult(), "value1");
 		assertTrue(result.getLegal());

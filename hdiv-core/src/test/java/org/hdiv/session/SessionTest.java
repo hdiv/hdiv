@@ -40,22 +40,22 @@ public class SessionTest extends AbstractHDIVTestCase {
 
 	public void testGetPageId() {
 
-		final RequestContext context = this.getRequestContext();
+		RequestContext context = this.getRequestContext();
 
-		final int pageId = session.getPageId(context);
+		int pageId = session.getPageId(context);
 
 		assertTrue(pageId > 0);
 	}
 
 	public void testAddPage() {
 
-		final RequestContext context = this.getRequestContext();
+		RequestContext context = this.getRequestContext();
 
-		final IPage page = new Page(20);
+		IPage page = new Page(20);
 
-		final IState state = new State(0);
+		IState state = new State(0);
 		state.setAction("/action");
-		final IParameter param = new Parameter("name", "value", false, null, true);
+		IParameter param = new Parameter("name", "value", false, null, true);
 		state.addParameter(param);
 		page.addState(state);
 
@@ -65,20 +65,20 @@ public class SessionTest extends AbstractHDIVTestCase {
 
 	public void testGetState() {
 
-		final RequestContext context = this.getRequestContext();
+		RequestContext context = this.getRequestContext();
 
-		final IPage page = new Page(20);
+		IPage page = new Page(20);
 
-		final IState state = new State(0);
+		IState state = new State(0);
 		state.setAction("/action");
-		final IParameter param = new Parameter("name", "value", false, null, true);
+		IParameter param = new Parameter("name", "value", false, null, true);
 		state.addParameter(param);
 		page.addState(state);
 
 		session.addPage(context, page);
 
 		// Restore state
-		final IState restored = session.getState(context, 20, 0);
+		IState restored = session.getState(context, 20, 0);
 
 		assertNotNull(restored);
 		assertEquals(state, restored);
@@ -86,20 +86,20 @@ public class SessionTest extends AbstractHDIVTestCase {
 
 	public void testGetPage() {
 
-		final RequestContext context = this.getRequestContext();
+		RequestContext context = this.getRequestContext();
 
-		final IPage page = new Page(20);
+		IPage page = new Page(20);
 
-		final IState state = new State(0);
+		IState state = new State(0);
 		state.setAction("/action");
-		final IParameter param = new Parameter("name", "value", false, null, true);
+		IParameter param = new Parameter("name", "value", false, null, true);
 		state.addParameter(param);
 		page.addState(state);
 
 		session.addPage(context, page);
 
 		// Restore page
-		final IPage restored = session.getPage(context, 20);
+		IPage restored = session.getPage(context, 20);
 
 		assertNotNull(restored);
 		assertEquals(page, restored);
@@ -107,7 +107,7 @@ public class SessionTest extends AbstractHDIVTestCase {
 
 	public void testPageRefresh() {
 
-		final RequestContext context = this.getRequestContext();
+		RequestContext context = this.getRequestContext();
 
 		// First page
 		IPage page = new Page(20);

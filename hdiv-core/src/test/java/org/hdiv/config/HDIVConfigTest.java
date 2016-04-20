@@ -28,7 +28,7 @@ public class HDIVConfigTest extends AbstractHDIVTestCase {
 
 	public void testIsStartPage() {
 
-		final HDIVConfig config = getConfig();
+		HDIVConfig config = getConfig();
 
 		// method not defined
 		boolean result = config.isStartPage("/testing.do", (Method) null);
@@ -54,7 +54,7 @@ public class HDIVConfigTest extends AbstractHDIVTestCase {
 
 	public void testIsParameterWithoutValidation() {
 
-		final HDIVConfig config = getConfig();
+		HDIVConfig config = getConfig();
 
 		boolean result = config.isParameterWithoutValidation("/path/testAction.do", "testingInitParameter");
 		assertTrue(result);
@@ -65,8 +65,8 @@ public class HDIVConfigTest extends AbstractHDIVTestCase {
 
 	public void testAreEditableParameterValuesValid() {
 
-		final HDIVConfig config = getConfig();
-		final EditableDataValidationProvider provider = config.getEditableDataValidationProvider();
+		HDIVConfig config = getConfig();
+		EditableDataValidationProvider provider = config.getEditableDataValidationProvider();
 		EditableDataValidationResult result = provider.validate("inicio.html", "one", new String[] { "noProblem" }, "text");
 		assertTrue(result.isValid());
 
@@ -76,7 +76,7 @@ public class HDIVConfigTest extends AbstractHDIVTestCase {
 
 	public void testExcludedExtensions() {
 
-		final HDIVConfig config = getConfig();
+		HDIVConfig config = getConfig();
 
 		boolean result = config.hasExtensionToExclude("/assets/run.js");
 		assertTrue(result);
@@ -87,7 +87,7 @@ public class HDIVConfigTest extends AbstractHDIVTestCase {
 
 	public void testIsLongLivingPages() {
 
-		final HDIVConfig config = getConfig();
+		HDIVConfig config = getConfig();
 
 		assertEquals("app", config.isLongLivingPages("/scopedPage/app.html"));
 		assertEquals("app", config.isLongLivingPages("/scopedPage/appScoped/test"));

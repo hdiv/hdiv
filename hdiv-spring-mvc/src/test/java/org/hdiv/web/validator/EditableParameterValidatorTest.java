@@ -51,32 +51,32 @@ public class EditableParameterValidatorTest extends AbstractHDIVTestCase {
 		hdivParameter = getConfig().getStateParameterName();
 		helper = getApplicationContext().getBean(IValidationHelper.class);
 
-		final DataComposerFactory dataComposerFactory = (DataComposerFactory) getApplicationContext().getBean("dataComposerFactory");
-		final HttpServletRequest request = getMockRequest();
+		DataComposerFactory dataComposerFactory = (DataComposerFactory) getApplicationContext().getBean("dataComposerFactory");
+		HttpServletRequest request = getMockRequest();
 		dataComposer = dataComposerFactory.newInstance(request);
 		dataComposer.startPage();
 	}
 
 	public void testEditableValidator() {
 
-		final MockHttpServletRequest request = getMockRequest();
+		MockHttpServletRequest request = getMockRequest();
 		request.setMethod("POST");
 
 		dataComposer.beginRequest(Method.POST, targetName);
 		dataComposer.compose("paramName", "", true, "text");
 
-		final String pageState = dataComposer.endRequest();
+		String pageState = dataComposer.endRequest();
 		dataComposer.endPage();
 
 		request.addParameter(hdivParameter, pageState);
 		request.addParameter("paramName", "<script>storeCookie()</script>");
 
-		final RequestWrapper requestWrapper = new RequestWrapper(request);
-		final ValidatorHelperResult result = helper.validate(requestWrapper);
+		RequestWrapper requestWrapper = new RequestWrapper(request);
+		ValidatorHelperResult result = helper.validate(requestWrapper);
 		assertFalse(result.isValid());
 
 		// Editable errors in request?
-		final List<ValidatorError> validationErrors = result.getErrors();
+		List<ValidatorError> validationErrors = result.getErrors();
 		requestWrapper.setAttribute(Constants.EDITABLE_PARAMETER_ERROR, validationErrors);
 		assertEquals(1, validationErrors.size());
 
@@ -84,8 +84,8 @@ public class EditableParameterValidatorTest extends AbstractHDIVTestCase {
 		RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(requestWrapper));
 
 		// New Editable instance
-		final EditableParameterValidator validator = new EditableParameterValidator();
-		final Errors errors = new MapBindingResult(new HashMap<String, String>(), "");
+		EditableParameterValidator validator = new EditableParameterValidator();
+		Errors errors = new MapBindingResult(new HashMap<String, String>(), "");
 		assertFalse(errors.hasErrors());
 
 		// move errors to Errors instance

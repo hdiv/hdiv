@@ -124,7 +124,7 @@ public class HDIVUtil {
 	 */
 	public static String getRequestURI(final HttpServletRequest request) {
 
-		final String requestURI = (String) request.getAttribute(REQUESTURI_REQUEST_KEY);
+		String requestURI = (String) request.getAttribute(REQUESTURI_REQUEST_KEY);
 		if (requestURI == null) {
 			throw new HDIVException("RequestURI has not been initialized in request.");
 		}
@@ -176,7 +176,7 @@ public class HDIVUtil {
 	 * @return IApplication object
 	 */
 	public static IApplication getApplication(final ServletContext servletContext) {
-		final IApplication app = (IApplication) servletContext.getAttribute(APPLICATION_SERVLETCONTEXT_KEY);
+		IApplication app = (IApplication) servletContext.getAttribute(APPLICATION_SERVLETCONTEXT_KEY);
 		if (app == null) {
 			throw new HDIVException("IApplication has not been initialized in servlet context");
 		}
@@ -203,7 +203,7 @@ public class HDIVUtil {
 	 */
 	public static HDIVConfig getHDIVConfig(final ServletContext servletContext) {
 
-		final HDIVConfig hdivConfig = (HDIVConfig) servletContext.getAttribute(HDIVCONFIG_SERVLETCONTEXT_KEY);
+		HDIVConfig hdivConfig = (HDIVConfig) servletContext.getAttribute(HDIVCONFIG_SERVLETCONTEXT_KEY);
 		if (hdivConfig == null) {
 			throw new HDIVException("HDIVConfig has not been initialized in servlet context");
 		}
@@ -230,7 +230,7 @@ public class HDIVUtil {
 	 * @return {@link LinkUrlProcessor} instance
 	 */
 	public static LinkUrlProcessor getLinkUrlProcessor(final ServletContext servletContext) {
-		final LinkUrlProcessor urlProcessor = (LinkUrlProcessor) servletContext
+		LinkUrlProcessor urlProcessor = (LinkUrlProcessor) servletContext
 				.getAttribute(LINKURLPROCESSOR_SERVLETCONTEXT_KEY);
 		if (urlProcessor == null) {
 			throw new HDIVException("LinkUrlProcessor has not been initialized in servlet context");
@@ -255,7 +255,7 @@ public class HDIVUtil {
 	 * @return {@link FormUrlProcessor} instance
 	 */
 	public static FormUrlProcessor getFormUrlProcessor(final ServletContext servletContext) {
-		final FormUrlProcessor urlProcessor = (FormUrlProcessor) servletContext
+		FormUrlProcessor urlProcessor = (FormUrlProcessor) servletContext
 				.getAttribute(FORMURLPROCESSOR_SERVLETCONTEXT_KEY);
 		if (urlProcessor == null) {
 			throw new HDIVException("FormUrlProcessor has not been initialized in servlet context");
@@ -371,7 +371,7 @@ public class HDIVUtil {
 	 */
 	public static String getMessage(final HttpServletRequest request, final String key, final String o,
 			final Locale userLocale) {
-		final String resolvedMessage = HDIVUtil.getMessageSource(request).getMessage(key, new String[] { o },
+		String resolvedMessage = HDIVUtil.getMessageSource(request).getMessage(key, new String[] { o },
 				userLocale);
 		log.debug(resolvedMessage);
 		return resolvedMessage;
@@ -387,7 +387,7 @@ public class HDIVUtil {
 	 */
 	public static String createRandomToken(final int n) {
 
-		final Random r = new Random();
+		Random r = new Random();
 		int i = r.nextInt(n);
 		if (i == 0) {
 			i = 1;
@@ -438,8 +438,8 @@ public class HDIVUtil {
 
 	private static int indexOf(final char[] source, final char[] target, final int fromIndex) {
 
-		final char first = target[0];
-		final int max = (source.length - target.length);
+		char first = target[0];
+		int max = (source.length - target.length);
 
 		for (int i = 0 + fromIndex; i <= max; i++) {
 			/* Look for first character. */
@@ -451,7 +451,7 @@ public class HDIVUtil {
 			/* Found first character, now look at the rest of v2 */
 			if (i <= max) {
 				int j = i + 1;
-				final int end = j + target.length - 1;
+				int end = j + target.length - 1;
 				for (int k = 1; j < end && source[j] == target[k]; j++, k++)
 					;
 
@@ -502,10 +502,10 @@ public class HDIVUtil {
 	public static WebApplicationContext findWebApplicationContext(final ServletContext sc) {
 		WebApplicationContext wac = WebApplicationContextUtils.getWebApplicationContext(sc);
 		if (wac == null) {
-			final Enumeration<String> attrNames = sc.getAttributeNames();
+			Enumeration<String> attrNames = sc.getAttributeNames();
 			while (attrNames.hasMoreElements()) {
-				final String attrName = attrNames.nextElement();
-				final Object attrValue = sc.getAttribute(attrName);
+				String attrName = attrNames.nextElement();
+				Object attrValue = sc.getAttribute(attrName);
 				if (attrValue instanceof WebApplicationContext) {
 					if (wac != null) {
 						throw new IllegalStateException("No unique WebApplicationContext found: more than one "

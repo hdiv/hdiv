@@ -46,16 +46,16 @@ public class ScopesTest extends AbstractHDIVTestCase {
 
 	public void testScopeDifferent() {
 
-		final HttpServletRequest request = getMockRequest();
-		final String url = "/testAction.do";
-		final String url2 = "/otherAction.do";
+		HttpServletRequest request = getMockRequest();
+		String url = "/testAction.do";
+		String url2 = "/otherAction.do";
 
-		final IDataComposer dataComposer = HDIVUtil.getDataComposer(request);
+		IDataComposer dataComposer = HDIVUtil.getDataComposer(request);
 		dataComposer.startScope("app");
 
-		final String result1 = linkUrlProcessor.processUrl(request, url);
+		String result1 = linkUrlProcessor.processUrl(request, url);
 
-		final String result2 = linkUrlProcessor.processUrl(request, url2);
+		String result2 = linkUrlProcessor.processUrl(request, url2);
 
 		// States are different
 		assertFalse(getState(result1).equals(getState(result2)));
@@ -63,15 +63,15 @@ public class ScopesTest extends AbstractHDIVTestCase {
 
 	public void testScopeSame() {
 
-		final HttpServletRequest request = getMockRequest();
-		final String url = "/testAction.do";
+		HttpServletRequest request = getMockRequest();
+		String url = "/testAction.do";
 
-		final IDataComposer dataComposer = HDIVUtil.getDataComposer(request);
+		IDataComposer dataComposer = HDIVUtil.getDataComposer(request);
 		dataComposer.startScope("app");
 
-		final String result1 = linkUrlProcessor.processUrl(request, url);
+		String result1 = linkUrlProcessor.processUrl(request, url);
 
-		final String result2 = linkUrlProcessor.processUrl(request, url);
+		String result2 = linkUrlProcessor.processUrl(request, url);
 
 		// States are equal
 		assertTrue(getState(result1).equals(getState(result2)));
@@ -79,16 +79,16 @@ public class ScopesTest extends AbstractHDIVTestCase {
 
 	public void testScopeDifferentParams() {
 
-		final HttpServletRequest request = getMockRequest();
-		final String url = "/testAction.do?param=value";
-		final String url2 = "/testAction.do?other=value";
+		HttpServletRequest request = getMockRequest();
+		String url = "/testAction.do?param=value";
+		String url2 = "/testAction.do?other=value";
 
-		final IDataComposer dataComposer = HDIVUtil.getDataComposer(request);
+		IDataComposer dataComposer = HDIVUtil.getDataComposer(request);
 		dataComposer.startScope("app");
 
-		final String result1 = linkUrlProcessor.processUrl(request, url);
+		String result1 = linkUrlProcessor.processUrl(request, url);
 
-		final String result2 = linkUrlProcessor.processUrl(request, url2);
+		String result2 = linkUrlProcessor.processUrl(request, url2);
 
 		// States are different
 		assertFalse(getState(result1).equals(getState(result2)));
@@ -96,15 +96,15 @@ public class ScopesTest extends AbstractHDIVTestCase {
 
 	public void testScopeSameParams() {
 
-		final HttpServletRequest request = getMockRequest();
-		final String url = "/testAction.do?param=value";
+		HttpServletRequest request = getMockRequest();
+		String url = "/testAction.do?param=value";
 
-		final IDataComposer dataComposer = HDIVUtil.getDataComposer(request);
+		IDataComposer dataComposer = HDIVUtil.getDataComposer(request);
 		dataComposer.startScope("app");
 
-		final String result1 = linkUrlProcessor.processUrl(request, url);
+		String result1 = linkUrlProcessor.processUrl(request, url);
 
-		final String result2 = linkUrlProcessor.processUrl(request, url);
+		String result2 = linkUrlProcessor.processUrl(request, url);
 
 		// States are equal
 		assertTrue(getState(result1).equals(getState(result2)));
@@ -112,11 +112,11 @@ public class ScopesTest extends AbstractHDIVTestCase {
 
 	public void testScopedPage() {
 
-		final MockHttpServletRequest request = getMockRequest();
-		final RequestContext context = getRequestContext();
+		MockHttpServletRequest request = getMockRequest();
+		RequestContext context = getRequestContext();
 		// Put a uri that is configured as a scoped page
 		request.setRequestURI("/scopedPage/user.html");
-		final IDataComposer dataComposer = dataComposerFactory.newInstance(request);
+		IDataComposer dataComposer = dataComposerFactory.newInstance(request);
 		HDIVUtil.setDataComposer(dataComposer, request);
 		assertTrue(dataComposer instanceof DataComposerMemory);
 
@@ -124,14 +124,14 @@ public class ScopesTest extends AbstractHDIVTestCase {
 		dataComposer.beginRequest(Method.POST, "test.do");
 		dataComposer.compose("test.do", "parameter1", "2", false);
 		dataComposer.compose("test.do", "parameter1", "2", false);
-		final String stateId = dataComposer.endRequest();
+		String stateId = dataComposer.endRequest();
 
 		assertTrue(stateId.startsWith("U-"));
 
-		final StateScope scope = stateScopeManager.getStateScope(stateId);
+		StateScope scope = stateScopeManager.getStateScope(stateId);
 		assertEquals("user-session", scope.getScopeName());
-		final int id = Integer.parseInt(stateId.substring(stateId.indexOf("-") + 1, stateId.indexOf("-") + 2));
-		final IState state = scope.restoreState(context, id);
+		int id = Integer.parseInt(stateId.substring(stateId.indexOf("-") + 1, stateId.indexOf("-") + 2));
+		IState state = scope.restoreState(context, id);
 		assertEquals("test.do", state.getAction());
 
 	}

@@ -37,10 +37,10 @@ public class FormUrlProcessorTest extends AbstractHDIVTestCase {
 
 	public void testProcessAction() {
 
-		final HttpServletRequest request = getMockRequest();
-		final String action = "/testAction.do";
+		HttpServletRequest request = getMockRequest();
+		String action = "/testAction.do";
 
-		final String result = formUrlProcessor.processUrl(request, action);
+		String result = formUrlProcessor.processUrl(request, action);
 
 		// Post urls are not modified
 		assertEquals(action, result);
@@ -48,10 +48,10 @@ public class FormUrlProcessorTest extends AbstractHDIVTestCase {
 
 	public void testProcessActionGetMethod() {
 
-		final HttpServletRequest request = getMockRequest();
-		final String action = "/testAction.do";
+		HttpServletRequest request = getMockRequest();
+		String action = "/testAction.do";
 
-		final String result = formUrlProcessor.processUrl(request, action, Method.GET);
+		String result = formUrlProcessor.processUrl(request, action, Method.GET);
 
 		// Post urls are not modified
 		assertEquals(action, result);
@@ -59,42 +59,42 @@ public class FormUrlProcessorTest extends AbstractHDIVTestCase {
 
 	public void testProcessActionWithParam() {
 
-		final HttpServletRequest request = getMockRequest();
-		final String action = "/testAction.do?params=value";
+		HttpServletRequest request = getMockRequest();
+		String action = "/testAction.do?params=value";
 
-		final String result = formUrlProcessor.processUrl(request, action);
+		String result = formUrlProcessor.processUrl(request, action);
 
 		assertEquals("/testAction.do?params=0", result);
 	}
 
 	public void testProcessActionParamWithoutValue() {
 
-		final HttpServletRequest request = getMockRequest();
-		final String action = "/testAction.do?params";
+		HttpServletRequest request = getMockRequest();
+		String action = "/testAction.do?params";
 
-		final String result = formUrlProcessor.processUrl(request, action);
+		String result = formUrlProcessor.processUrl(request, action);
 
 		assertEquals("/testAction.do?params=0", result);
 	}
 
 	public void testProcessActionComplete() {
 
-		final HttpServletRequest request = getMockRequest();
-		final IDataComposer dataComposer = dataComposerFactory.newInstance(request);
+		HttpServletRequest request = getMockRequest();
+		IDataComposer dataComposer = dataComposerFactory.newInstance(request);
 		HDIVUtil.setDataComposer(dataComposer, request);
 		dataComposer.startPage();
 
-		final String action = "/testAction.do";
+		String action = "/testAction.do";
 
-		final String result = formUrlProcessor.processUrl(request, action);
+		String result = formUrlProcessor.processUrl(request, action);
 
 		// Post urls are not modified
 		assertEquals(action, result);
 
-		final String val = dataComposer.compose("param", "value", false);
+		String val = dataComposer.compose("param", "value", false);
 		assertEquals("0", val);
 
-		final String requestId = dataComposer.endRequest();
+		String requestId = dataComposer.endRequest();
 
 		assertNotNull(requestId);
 		assertTrue(requestId.length() > 0);
@@ -102,7 +102,7 @@ public class FormUrlProcessorTest extends AbstractHDIVTestCase {
 
 	public void testProcessActionStartPage() {
 
-		final HttpServletRequest request = getMockRequest();
+		HttpServletRequest request = getMockRequest();
 
 		String action = "/testing.do?params=value";// is a startPage
 		String result = formUrlProcessor.processUrl(request, action);
@@ -119,10 +119,10 @@ public class FormUrlProcessorTest extends AbstractHDIVTestCase {
 
 	public void testProcessMultiValueParam() {
 
-		final HttpServletRequest request = getMockRequest();
-		final String url = "/testAction.do?name=X&name=Y&name=Z";
+		HttpServletRequest request = getMockRequest();
+		String url = "/testAction.do?name=X&name=Y&name=Z";
 
-		final String result = formUrlProcessor.processUrl(request, url);
+		String result = formUrlProcessor.processUrl(request, url);
 
 		assertTrue(result.startsWith("/testAction.do?name=0&name=1&name=2"));
 
@@ -130,12 +130,12 @@ public class FormUrlProcessorTest extends AbstractHDIVTestCase {
 
 	public void testProcessMultiValueParamConfidentialityFalse() {
 
-		final HttpServletRequest request = getMockRequest();
-		final boolean conf = getConfig().getConfidentiality();
+		HttpServletRequest request = getMockRequest();
+		boolean conf = getConfig().getConfidentiality();
 		getConfig().setConfidentiality(false);
-		final String url = "/testAction.do?name=X&name=Y&name=Z";
+		String url = "/testAction.do?name=X&name=Y&name=Z";
 
-		final String result = formUrlProcessor.processUrl(request, url);
+		String result = formUrlProcessor.processUrl(request, url);
 
 		assertTrue(result.startsWith("/testAction.do?name=X&name=Y&name=Z"));
 
@@ -144,36 +144,36 @@ public class FormUrlProcessorTest extends AbstractHDIVTestCase {
 
 	public void testProcessActionJsessionId() {
 
-		final HttpServletRequest request = getMockRequest();
-		final String url = "/testAction.do;jsessionid=67CFB560B6EC2677D51814A2A2B16B24";
+		HttpServletRequest request = getMockRequest();
+		String url = "/testAction.do;jsessionid=67CFB560B6EC2677D51814A2A2B16B24";
 
-		final String result = formUrlProcessor.processUrl(request, url);
+		String result = formUrlProcessor.processUrl(request, url);
 
 		assertEquals(result, url);
 	}
 
 	public void testProcessActionJsessionIdParam() {
 
-		final HttpServletRequest request = getMockRequest();
-		final String url = "/testAction.do;jsessionid=67CFB560B6EC2677D51814A2A2B16B24?params=0";
+		HttpServletRequest request = getMockRequest();
+		String url = "/testAction.do;jsessionid=67CFB560B6EC2677D51814A2A2B16B24?params=0";
 
-		final String result = formUrlProcessor.processUrl(request, url);
+		String result = formUrlProcessor.processUrl(request, url);
 
 		assertEquals(result, url);
 	}
 
 	public void testProcessActionJsessionStartPage() {
 
-		final HttpServletRequest request = getMockRequest();
+		HttpServletRequest request = getMockRequest();
 
-		final String url = "/testing.do;jsessionid=67CFB560B6EC2677D51814A2A2B16B24"; // is a startPage
-		final String result = formUrlProcessor.processUrl(request, url);
+		String url = "/testing.do;jsessionid=67CFB560B6EC2677D51814A2A2B16B24"; // is a startPage
+		String result = formUrlProcessor.processUrl(request, url);
 		assertEquals(url, result);
 	}
 
 	public void testProcessActionWithStateId() {
 
-		final HttpServletRequest request = getMockRequest();
+		HttpServletRequest request = getMockRequest();
 
 		String url = "/formAction.do?_HDIV_STATE_=11-11-1234567890";
 		String result = formUrlProcessor.processUrl(request, url);

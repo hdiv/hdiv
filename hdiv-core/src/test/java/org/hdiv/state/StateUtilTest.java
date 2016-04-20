@@ -44,20 +44,20 @@ public class StateUtilTest extends AbstractHDIVTestCase {
 
 	public void testRestore() {
 
-		final HttpServletRequest request = getMockRequest();
-		final RequestContext context = getRequestContext();
-		final IDataComposer dataComposer = dataComposerFactory.newInstance(request);
+		HttpServletRequest request = getMockRequest();
+		RequestContext context = getRequestContext();
+		IDataComposer dataComposer = dataComposerFactory.newInstance(request);
 		HDIVUtil.setDataComposer(dataComposer, request);
 
 		dataComposer.startPage();
 		dataComposer.beginRequest(Method.GET, "test.do");
 		dataComposer.compose("parameter1", "2", false);
-		final String stateId = dataComposer.endRequest();
+		String stateId = dataComposer.endRequest();
 		dataComposer.endPage();
 
 		assertNotNull(stateId);
 
-		final IState restored = stateUtil.restoreState(context, stateId);
+		IState restored = stateUtil.restoreState(context, stateId);
 
 		assertNotNull(restored);
 		assertEquals(restored.getAction(), "test.do");
@@ -66,17 +66,17 @@ public class StateUtilTest extends AbstractHDIVTestCase {
 
 	public void testRestoreIncorrectStateId() {
 
-		final HttpServletRequest request = getMockRequest();
-		final RequestContext context = getRequestContext();
-		final IDataComposer dataComposer = dataComposerFactory.newInstance(request);
+		HttpServletRequest request = getMockRequest();
+		RequestContext context = getRequestContext();
+		IDataComposer dataComposer = dataComposerFactory.newInstance(request);
 		HDIVUtil.setDataComposer(dataComposer, request);
 
 		try {
-			final IState restored = stateUtil.restoreState(context, "1111-");
+			IState restored = stateUtil.restoreState(context, "1111-");
 			assertNull(restored);
 			fail();
 		}
-		catch (final HDIVException e) {
+		catch (HDIVException e) {
 			assertTrue(true);
 
 		}
@@ -84,35 +84,35 @@ public class StateUtilTest extends AbstractHDIVTestCase {
 
 	public void testIsMemoryStrategy() {
 
-		final HttpServletRequest request = getMockRequest();
-		final IDataComposer dataComposer = dataComposerFactory.newInstance(request);
+		HttpServletRequest request = getMockRequest();
+		IDataComposer dataComposer = dataComposerFactory.newInstance(request);
 
 		HDIVUtil.setDataComposer(dataComposer, request);
 
 		// memory strategy in conf and bad formatted stateId
-		final boolean result = stateUtil.isMemoryStrategy("1111");
+		boolean result = stateUtil.isMemoryStrategy("1111");
 		assertTrue(result);
 	}
 
 	public void testLongLivingApp() {
 
-		final HttpServletRequest request = getMockRequest();
-		final RequestContext context = getRequestContext();
-		final IDataComposer dataComposer = dataComposerFactory.newInstance(request);
+		HttpServletRequest request = getMockRequest();
+		RequestContext context = getRequestContext();
+		IDataComposer dataComposer = dataComposerFactory.newInstance(request);
 		HDIVUtil.setDataComposer(dataComposer, request);
 
 		dataComposer.startPage();
 		dataComposer.startScope("app");
 		dataComposer.beginRequest(Method.GET, "test.do");
 		dataComposer.compose("parameter1", "2", false);
-		final String stateId = dataComposer.endRequest();
+		String stateId = dataComposer.endRequest();
 		dataComposer.endScope();
 		dataComposer.endPage();
 
 		assertNotNull(stateId);
 		assertTrue(stateId.startsWith("A-"));
 
-		final IState restored = stateUtil.restoreState(context, stateId);
+		IState restored = stateUtil.restoreState(context, stateId);
 
 		assertNotNull(restored);
 		assertEquals(restored.getAction(), "test.do");
@@ -121,23 +121,23 @@ public class StateUtilTest extends AbstractHDIVTestCase {
 
 	public void testLongLivingUser() {
 
-		final HttpServletRequest request = getMockRequest();
-		final RequestContext context = getRequestContext();
-		final IDataComposer dataComposer = dataComposerFactory.newInstance(request);
+		HttpServletRequest request = getMockRequest();
+		RequestContext context = getRequestContext();
+		IDataComposer dataComposer = dataComposerFactory.newInstance(request);
 		HDIVUtil.setDataComposer(dataComposer, request);
 
 		dataComposer.startPage();
 		dataComposer.startScope("user-session");
 		dataComposer.beginRequest(Method.GET, "test.do");
 		dataComposer.compose("parameter1", "2", false);
-		final String stateId = dataComposer.endRequest();
+		String stateId = dataComposer.endRequest();
 		dataComposer.endScope();
 		dataComposer.endPage();
 
 		assertNotNull(stateId);
 		assertTrue(stateId.startsWith("U-"));
 
-		final IState restored = stateUtil.restoreState(context, stateId);
+		IState restored = stateUtil.restoreState(context, stateId);
 
 		assertNotNull(restored);
 		assertEquals(restored.getAction(), "test.do");

@@ -41,17 +41,17 @@ public class StateCacheTest extends AbstractHDIVTestCase {
 	public void testAddPage() {
 
 		// cache's maximum size is defined using the Spring factory.
-		final IStateCache cache = this.getApplicationContext().getBean(IStateCache.class);
+		IStateCache cache = this.getApplicationContext().getBean(IStateCache.class);
 
-		final IPage page1 = new Page(1);
-		final IPage page2 = new Page(2);
-		final IPage page3 = new Page(3);
+		IPage page1 = new Page(1);
+		IPage page2 = new Page(2);
+		IPage page3 = new Page(3);
 
-		final IState state1 = new State(0);
-		final IState state2 = new State(0);
-		final IState state3 = new State(0);
+		IState state1 = new State(0);
+		IState state2 = new State(0);
+		IState state3 = new State(0);
 
-		final int currentPageid = -1;
+		int currentPageid = -1;
 
 		page1.addState(state1);
 		cache.addPage(1, currentPageid, false, false);
@@ -64,7 +64,7 @@ public class StateCacheTest extends AbstractHDIVTestCase {
 
 		log.info("cache:" + cache.toString());
 
-		final List<Integer> ids = cache.getPageIds();
+		List<Integer> ids = cache.getPageIds();
 		assertEquals(3, ids.size());
 		assertEquals((Integer) 1, ids.get(0));
 		assertEquals((Integer) 2, ids.get(1));
@@ -74,15 +74,15 @@ public class StateCacheTest extends AbstractHDIVTestCase {
 	public void testPageReflesh() {
 
 		// cache's maximum size is defined using the Spring factory.
-		final IStateCache cache = this.getApplicationContext().getBean(IStateCache.class);
+		IStateCache cache = this.getApplicationContext().getBean(IStateCache.class);
 
-		final IPage page1 = new Page(1);
-		final IPage page2 = new Page(2);
-		final IPage page3 = new Page(3);
+		IPage page1 = new Page(1);
+		IPage page2 = new Page(2);
+		IPage page3 = new Page(3);
 
-		final IState state1 = new State(0);
-		final IState state2 = new State(0);
-		final IState state3 = new State(0);
+		IState state1 = new State(0);
+		IState state2 = new State(0);
+		IState state3 = new State(0);
 
 		int currentPageid = -1;
 
@@ -101,7 +101,7 @@ public class StateCacheTest extends AbstractHDIVTestCase {
 		cache.addPage(3, currentPageid, true, false);
 		assertEquals(2, cache.getPageIds().size());// Size is 2 instead of 3
 
-		final List<Integer> ids = cache.getPageIds();
+		List<Integer> ids = cache.getPageIds();
 		assertEquals((Integer) 1, ids.get(0));
 		assertEquals((Integer) 3, ids.get(1));
 	}
