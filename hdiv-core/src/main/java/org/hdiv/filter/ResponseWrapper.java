@@ -216,8 +216,7 @@ public class ResponseWrapper extends HttpServletResponseWrapper {
 		HttpSession session = this.request.getSession();
 		if (session != null) {
 
-			Map<String, SavedCookie> sessionOriginalCookies = (Map<String, SavedCookie>) session
-					.getAttribute(Constants.HDIV_COOKIES_KEY);
+			Map<String, SavedCookie> sessionOriginalCookies = (Map<String, SavedCookie>) session.getAttribute(Constants.HDIV_COOKIES_KEY);
 
 			if (sessionOriginalCookies != null && sessionOriginalCookies.size() > 0) {
 

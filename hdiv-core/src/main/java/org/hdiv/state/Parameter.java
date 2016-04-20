@@ -39,7 +39,8 @@ public class Parameter implements IParameter, Serializable {
 
 	}
 
-	public Parameter(final String name, final String[] values, final boolean editable, final String editableDataType, final boolean actionParam) {
+	public Parameter(final String name, final String[] values, final boolean editable, final String editableDataType,
+			final boolean actionParam) {
 		this(name, values[0], editable, editableDataType, actionParam);
 		if (values.length > 1) {
 			for (int i = 1; i < values.length; i++) {
@@ -48,7 +49,8 @@ public class Parameter implements IParameter, Serializable {
 		}
 	}
 
-	public Parameter(final String name, final String value, final boolean editable, final String editableDataType, final boolean actionParam) {
+	public Parameter(final String name, final String value, final boolean editable, final String editableDataType,
+			final boolean actionParam) {
 		this.name = name;
 		this.value = value;
 		this.editable = editable;

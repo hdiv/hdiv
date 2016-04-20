@@ -230,8 +230,7 @@ public class HDIVUtil {
 	 * @return {@link LinkUrlProcessor} instance
 	 */
 	public static LinkUrlProcessor getLinkUrlProcessor(final ServletContext servletContext) {
-		LinkUrlProcessor urlProcessor = (LinkUrlProcessor) servletContext
-				.getAttribute(LINKURLPROCESSOR_SERVLETCONTEXT_KEY);
+		LinkUrlProcessor urlProcessor = (LinkUrlProcessor) servletContext.getAttribute(LINKURLPROCESSOR_SERVLETCONTEXT_KEY);
 		if (urlProcessor == null) {
 			throw new HDIVException("LinkUrlProcessor has not been initialized in servlet context");
 		}
@@ -255,8 +254,7 @@ public class HDIVUtil {
 	 * @return {@link FormUrlProcessor} instance
 	 */
 	public static FormUrlProcessor getFormUrlProcessor(final ServletContext servletContext) {
-		FormUrlProcessor urlProcessor = (FormUrlProcessor) servletContext
-				.getAttribute(FORMURLPROCESSOR_SERVLETCONTEXT_KEY);
+		FormUrlProcessor urlProcessor = (FormUrlProcessor) servletContext.getAttribute(FORMURLPROCESSOR_SERVLETCONTEXT_KEY);
 		if (urlProcessor == null) {
 			throw new HDIVException("FormUrlProcessor has not been initialized in servlet context");
 		}
@@ -369,10 +367,8 @@ public class HDIVUtil {
 	 * @param userLocale locale
 	 * @return The resolved message
 	 */
-	public static String getMessage(final HttpServletRequest request, final String key, final String o,
-			final Locale userLocale) {
-		String resolvedMessage = HDIVUtil.getMessageSource(request).getMessage(key, new String[] { o },
-				userLocale);
+	public static String getMessage(final HttpServletRequest request, final String key, final String o, final Locale userLocale) {
+		String resolvedMessage = HDIVUtil.getMessageSource(request).getMessage(key, new String[] { o }, userLocale);
 		log.debug(resolvedMessage);
 		return resolvedMessage;
 	}
@@ -413,8 +409,7 @@ public class HDIVUtil {
 		if (pos != -1) {
 			final char[] data = url.toCharArray();
 			int sessionStart;
-			if ((sessionStart = indexOf(data, jsessionLower, pos)) != -1
-					|| ((sessionStart = indexOf(data, jsessionUpper, pos)) != -1)) {
+			if ((sessionStart = indexOf(data, jsessionLower, pos)) != -1 || ((sessionStart = indexOf(data, jsessionUpper, pos)) != -1)) {
 				int sessionEnd = indexOf(data, SEMICOLON, sessionStart + 1);
 				if (sessionEnd == -1) {
 					sessionEnd = indexOf(data, QUESTION, sessionStart + 1);

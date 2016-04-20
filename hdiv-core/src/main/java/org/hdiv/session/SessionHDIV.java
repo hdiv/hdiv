@@ -141,8 +141,7 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 		IPage lastPage = lastPageId == null ? null : this.getPage(context, lastPageId);
 
 		boolean isRefreshRequest = newPage != null && lastPage != null && newPage.getParentStateId() != null
-				&& lastPage.getParentStateId() != null
-				&& newPage.getParentStateId().equals(lastPage.getParentStateId());
+				&& lastPage.getParentStateId() != null && newPage.getParentStateId().equals(lastPage.getParentStateId());
 
 		// Check if is an Ajax request.
 		Object isAjaxRequestObject = request.getAttribute(Constants.AJAX_REQUEST);

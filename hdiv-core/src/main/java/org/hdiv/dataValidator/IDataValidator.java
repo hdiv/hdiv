@@ -46,8 +46,8 @@ public interface IDataValidator {
 	 * @return object that represents the result of the validation process for the parameter <code>parameter</code> and
 	 * the value <code>data</code>.
 	 */
-	public IValidationResult validate(HttpServletRequest request, String value, String target, String parameter,
-			IParameter stateParameter, String[] actionParamValues);
+	public IValidationResult validate(HttpServletRequest request, String value, String target, String parameter, IParameter stateParameter,
+			String[] actionParamValues);
 	// TODO merge stateParameter and actionParamValues parameters
 
 }

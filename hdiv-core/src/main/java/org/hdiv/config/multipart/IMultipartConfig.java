@@ -45,8 +45,7 @@ public interface IMultipartConfig {
 	 * @return multipart processed request
 	 * @throws HdivMultipartException if an unrecoverable error occurs.
 	 */
-	HttpServletRequest handleMultipartRequest(RequestWrapper request, ServletContext servletContext)
-			throws HdivMultipartException;
+	HttpServletRequest handleMultipartRequest(RequestWrapper request, ServletContext servletContext) throws HdivMultipartException;
 
 	/**
 	 * Cleanup any resources used for the multipart handling, like a storage for the uploaded files.

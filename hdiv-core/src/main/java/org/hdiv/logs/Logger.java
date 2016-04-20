@@ -53,9 +53,8 @@ public class Logger {
 	 */
 	public void log(ValidatorError error) {
 
-		this.log(error.getType(), error.getTarget(), error.getParameterName(), error.getParameterValue(),
-				error.getOriginalParameterValue(), error.getLocalIp(), error.getRemoteIp(), error.getUserName(),
-				error.getValidationRuleName());
+		this.log(error.getType(), error.getTarget(), error.getParameterName(), error.getParameterValue(), error.getOriginalParameterValue(),
+				error.getLocalIp(), error.getRemoteIp(), error.getUserName(), error.getValidationRuleName());
 	}
 
 	/**
@@ -72,11 +71,11 @@ public class Logger {
 	 * @param validationRuleName In an attack of type 'EDITABLE_VALIDATION_ERROR', contains the name of the rule that
 	 * rejected the value
 	 */
-	protected void log(String type, String target, String parameterName, String parameterValue,
-			String originalParameterValue, String localIp, String remoteIp, String userName, String validationRuleName) {
+	protected void log(String type, String target, String parameterName, String parameterValue, String originalParameterValue,
+			String localIp, String remoteIp, String userName, String validationRuleName) {
 
-		String formatedData = this.format(type, target, parameterName, parameterValue, originalParameterValue, localIp,
-				remoteIp, userName, validationRuleName);
+		String formatedData = this.format(type, target, parameterName, parameterValue, originalParameterValue, localIp, remoteIp, userName,
+				validationRuleName);
 		log.info(formatedData);
 	}
 
@@ -101,8 +100,8 @@ public class Logger {
 	 * 
 	 * @return String Formatted text with the attach.
 	 */
-	protected String format(String type, String target, String parameterName, String parameterValue,
-			String originalParameterValue, String localIp, String remoteIp, String userName, String validationRuleName) {
+	protected String format(String type, String target, String parameterName, String parameterValue, String originalParameterValue,
+			String localIp, String remoteIp, String userName, String validationRuleName) {
 
 		StringBuilder buffer = new StringBuilder();
 		buffer.append(type);

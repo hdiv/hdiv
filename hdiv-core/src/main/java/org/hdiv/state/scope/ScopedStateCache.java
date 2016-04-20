@@ -182,6 +182,7 @@ public class ScopedStateCache implements Serializable {
 		private static final long serialVersionUID = -7927456168851506372L;
 
 		private final IState state;
+
 		private final String token;
 
 		public StateAndToken(final IState state, final String token) {

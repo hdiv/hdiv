@@ -206,8 +206,7 @@ public class DataComposerFactory {
 
 		String xRequestedWithValue = request.getHeader("x-requested-with");
 
-		boolean isAjaxRequest = (xRequestedWithValue != null)
-				? "XMLHttpRequest".equalsIgnoreCase(xRequestedWithValue) : false;
+		boolean isAjaxRequest = (xRequestedWithValue != null) ? "XMLHttpRequest".equalsIgnoreCase(xRequestedWithValue) : false;
 
 		request.setAttribute(Constants.AJAX_REQUEST, isAjaxRequest);
 

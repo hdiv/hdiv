@@ -61,8 +61,8 @@ public class SavedCookie implements Serializable {
 	 * @param secure Cookie secure boolean value
 	 * @param version Cookie version number
 	 */
-	public SavedCookie(final String name, final String value, final String comment, final String domain, final int maxAge, final String path,
-			final boolean secure, final int version) {
+	public SavedCookie(final String name, final String value, final String comment, final String domain, final int maxAge,
+			final String path, final boolean secure, final int version) {
 
 		this.name = name;
 		this.value = value;
@@ -81,8 +81,8 @@ public class SavedCookie implements Serializable {
 	 */
 	public SavedCookie(final Cookie cookie) {
 
-		this(cookie.getName(), cookie.getValue(), cookie.getComment(), cookie.getDomain(), cookie.getMaxAge(), cookie
-				.getPath(), cookie.getSecure(), cookie.getVersion());
+		this(cookie.getName(), cookie.getValue(), cookie.getComment(), cookie.getDomain(), cookie.getMaxAge(), cookie.getPath(),
+				cookie.getSecure(), cookie.getVersion());
 	}
 
 	/**

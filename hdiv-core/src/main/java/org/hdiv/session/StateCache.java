@@ -97,16 +97,15 @@ public class StateCache implements IStateCache {
 	 * 
 	 * @return Oldest page identifier in the map <code>pageIds</code>. Null in otherwise.
 	 */
-	private Integer cleanBuffer(final Integer currentPageId, final boolean isRefreshRequest,
-			final boolean isAjaxRequest) {
+	private Integer cleanBuffer(final Integer currentPageId, final boolean isRefreshRequest, final boolean isAjaxRequest) {
 
 		Integer removed = null;
 
 		int totalPages = this.pageIds.size();
 
 		// Remove last page when we know that browser's forward history is empty (See issue #67)
-		if (currentPageId != null && totalPages > 1 && currentPageId == this.pageIds.get(totalPages - 2)
-				&& isRefreshRequest && !isAjaxRequest) {
+		if (currentPageId != null && totalPages > 1 && currentPageId == this.pageIds.get(totalPages - 2) && isRefreshRequest
+				&& !isAjaxRequest) {
 			removed = this.pageIds.remove(totalPages - 1);
 		}
 

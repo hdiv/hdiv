@@ -76,7 +76,8 @@ public class InitListener implements ServletContextListener, HttpSessionListener
 		}
 		else {
 			if (log.isWarnEnabled()) {
-				log.warn("Hdiv's InitListener is registered before Spring's ContextLoaderListener. It must be after ContextLoaderListener.");
+				log.warn(
+						"Hdiv's InitListener is registered before Spring's ContextLoaderListener. It must be after ContextLoaderListener.");
 			}
 		}
 	}

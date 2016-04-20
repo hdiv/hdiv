@@ -49,8 +49,8 @@ public abstract class AbstractUrlProcessor {
 
 	@Deprecated
 	public final UrlData createUrlData(final String url, final String method, final HttpServletRequest request) {
-		return createUrlData(url, Method.secureValueOf(method),
-				(String) request.getSession().getAttribute(Constants.HDIV_PARAMETER), request);
+		return createUrlData(url, Method.secureValueOf(method), (String) request.getSession().getAttribute(Constants.HDIV_PARAMETER),
+				request);
 	}
 
 	protected final String processAnchorAndParameters(String url, final UrlData urlData, final String hdivParameter) {
@@ -72,8 +72,7 @@ public abstract class AbstractUrlProcessor {
 	 * @param request {@link HttpServletRequest} object
 	 * @return new instance of {@link UrlData}
 	 */
-	public UrlData createUrlData(String url, final Method method, final String hdivParameter,
-			final HttpServletRequest request) {
+	public UrlData createUrlData(String url, final Method method, final String hdivParameter, final HttpServletRequest request) {
 
 		Assert.notNull(config);
 		final String contextPath = request.getContextPath();
@@ -283,8 +282,7 @@ public abstract class AbstractUrlProcessor {
 	 * @param stateParam hdiv state parameter value
 	 * @return complete url
 	 */
-	public String getProcessedUrlWithHdivState(final String hdivParameter, final UrlData urlData,
-			final String stateParam) {
+	public String getProcessedUrlWithHdivState(final String hdivParameter, final UrlData urlData, final String stateParam) {
 
 		// obtain url with parameters
 		StringBuilder sb = urlData.getParamProcessedUrl();
@@ -373,8 +371,7 @@ public abstract class AbstractUrlProcessor {
 	 * @param urlData url data
 	 * @return is internal?
 	 */
-	protected boolean isInternalUrl(final String serverName, final String contextPath, final String url,
-			final UrlData urlData) {
+	protected boolean isInternalUrl(final String serverName, final String contextPath, final String url, final UrlData urlData) {
 
 		if (urlData.getServer() != null) {
 			// URL is absolute: http://...
@@ -384,8 +381,7 @@ public abstract class AbstractUrlProcessor {
 				return false;
 			}
 
-			if (url.startsWith(contextPath)
-					&& (url.length() == contextPath.length() || url.charAt(contextPath.length()) == '/')) {
+			if (url.startsWith(contextPath) && (url.length() == contextPath.length() || url.charAt(contextPath.length()) == '/')) {
 				// http://localhost:8080/APP/... or
 				// http://localhost:8080/APP
 				return true;
@@ -396,8 +392,7 @@ public abstract class AbstractUrlProcessor {
 		}
 		else {
 
-			if (url.startsWith(contextPath)
-					&& (url.length() == contextPath.length() || url.charAt(contextPath.length()) == '/')) {
+			if (url.startsWith(contextPath) && (url.length() == contextPath.length() || url.charAt(contextPath.length()) == '/')) {
 				// url of type /APP/... or /APP
 				return true;
 			}
@@ -514,8 +509,7 @@ public abstract class AbstractUrlProcessor {
 
 		if (url.startsWith("..")) {
 			Stack<String> stack = new Stack<String>();
-			String localUri = originalRequestUri.substring(originalRequestUri.indexOf('/'),
-					originalRequestUri.lastIndexOf('/'));
+			String localUri = originalRequestUri.substring(originalRequestUri.indexOf('/'), originalRequestUri.lastIndexOf('/'));
 			StringTokenizer localUriParts = new StringTokenizer(localUri.replace('\\', '/'), "/");
 			while (localUriParts.hasMoreTokens()) {
 				String part = localUriParts.nextToken();

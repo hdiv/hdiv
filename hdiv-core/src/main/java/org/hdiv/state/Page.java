@@ -288,5 +288,4 @@ public class Page implements IPage, Serializable {
 		return result.toString();
 	}
 
-
 }

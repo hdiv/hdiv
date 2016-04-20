@@ -142,8 +142,8 @@ public class ValidatorFilter extends OncePerRequestFilter {
 	 * javax.servlet.FilterChain)
 	 */
 	@Override
-	protected void doFilterInternal(final HttpServletRequest request, final HttpServletResponse response,
-			final FilterChain filterChain) throws ServletException, IOException {
+	protected void doFilterInternal(final HttpServletRequest request, final HttpServletResponse response, final FilterChain filterChain)
+			throws ServletException, IOException {
 
 		// Initialize dependencies
 		this.initDependencies();
@@ -170,12 +170,10 @@ public class ValidatorFilter extends OncePerRequestFilter {
 				try {
 
 					if (this.multipartConfig == null) {
-						throw new RuntimeException(
-								"No 'multipartConfig' configured. It is required for multipart requests.");
+						throw new RuntimeException("No 'multipartConfig' configured. It is required for multipart requests.");
 					}
 
-					multipartProcessedRequest = this.multipartConfig.handleMultipartRequest(requestWrapper,
-							super.getServletContext());
+					multipartProcessedRequest = this.multipartConfig.handleMultipartRequest(requestWrapper, super.getServletContext());
 					isMultipartProcessed = true;
 
 				}
@@ -209,8 +207,7 @@ public class ValidatorFilter extends OncePerRequestFilter {
 				hasEditableError = this.processEditableValidationErrors(multipartProcessedRequest, errors);
 			}
 
-			if (legal || this.hdivConfig.isDebugMode()
-					|| (hasEditableError && !this.hdivConfig.isShowErrorPageOnEditableValidation())) {
+			if (legal || this.hdivConfig.isDebugMode() || (hasEditableError && !this.hdivConfig.isShowErrorPageOnEditableValidation())) {
 
 				processRequest(multipartProcessedRequest, responseWrapper, filterChain);
 			}
@@ -227,8 +224,7 @@ public class ValidatorFilter extends OncePerRequestFilter {
 			}
 			// Show error page
 			if (!this.hdivConfig.isDebugMode()) {
-				List<ValidatorError> errors = Collections
-						.singletonList(new ValidatorError(HDIVErrorCodes.INTERNAL_ERROR));
+				List<ValidatorError> errors = Collections.singletonList(new ValidatorError(HDIVErrorCodes.INTERNAL_ERROR));
 				this.errorHandler.handleValidatorError(multipartProcessedRequest, responseWrapper, errors);
 			}
 		}
@@ -344,8 +340,7 @@ public class ValidatorFilter extends OncePerRequestFilter {
 	 * @param errors all validation errors
 	 * @return true if there is a editable validation error
 	 */
-	protected boolean processEditableValidationErrors(HttpServletRequest request,
-			List<ValidatorError> errors) {
+	protected boolean processEditableValidationErrors(HttpServletRequest request, List<ValidatorError> errors) {
 
 		List<ValidatorError> editableErrors = new ArrayList<ValidatorError>();
 		for (ValidatorError error : errors) {

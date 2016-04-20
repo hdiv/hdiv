@@ -51,8 +51,8 @@ public class DataValidator implements IDataValidator {
 	 * @see org.hdiv.dataValidator.IDataValidator#validate(javax.servlet.http.HttpServletRequest, java.lang.String,
 	 * java.lang.String, java.lang.String, org.hdiv.state.IParameter, java.lang.String[])
 	 */
-	public IValidationResult validate(final HttpServletRequest request, final String value, final String target,
-			final String parameter, final IParameter stateParameter, final String[] actionParamValues) {
+	public IValidationResult validate(final HttpServletRequest request, final String value, final String target, final String parameter,
+			final IParameter stateParameter, final String[] actionParamValues) {
 
 		boolean confidentiality = config.getConfidentiality();
 		boolean noConfidentiality = config.isParameterWithoutConfidentiality(request, parameter);

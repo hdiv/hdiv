@@ -94,8 +94,8 @@ public interface IDataComposer {
 	 * @return Codified value to send to the client
 	 * @since HDIV 2.1.5
 	 */
-	String compose(String parameter, String value, boolean editable, String editableName, boolean isActionParam,
-			Method method, String charEncoding);
+	String compose(String parameter, String value, boolean editable, String editableName, boolean isActionParam, Method method,
+			String charEncoding);
 
 	/**
 	 * Compose parameters in request query format. For example: <code>param1=val1&amp;param2=val2</code>
@@ -137,8 +137,7 @@ public interface IDataComposer {
 	 * @param charEncoding character encoding
 	 * @return Codified value to send to the client
 	 */
-	String compose(String action, String parameter, String value, boolean editable, boolean isActionParam,
-			String charEncoding);
+	String compose(String action, String parameter, String value, boolean editable, boolean isActionParam, String charEncoding);
 
 	/**
 	 * It is called by each request or form of the html page sent back by the server.

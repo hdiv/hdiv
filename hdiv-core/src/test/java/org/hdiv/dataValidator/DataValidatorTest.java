@@ -46,8 +46,7 @@ public class DataValidatorTest extends AbstractHDIVTestCase {
 
 		IParameter param1 = new Parameter("param1", "value1", false, null, false);
 
-		IValidationResult result = dataValidator.validate(request, "dataIsNotInt", "simpleAction", "param1",
-				param1, null);
+		IValidationResult result = dataValidator.validate(request, "dataIsNotInt", "simpleAction", "param1", param1, null);
 		assertFalse(result.getLegal());
 	}
 

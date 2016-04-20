@@ -99,8 +99,7 @@ public abstract class AbstractHDIVTestCase extends TestCase {
 		XmlWebApplicationContext webApplicationContext = new XmlWebApplicationContext();
 		webApplicationContext.setServletContext(servletContext);
 		webApplicationContext.setConfigLocations(files);
-		servletContext.setAttribute(WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE,
-				webApplicationContext);
+		servletContext.setAttribute(WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE, webApplicationContext);
 		// Create beans
 		webApplicationContext.refresh();
 
@@ -122,8 +121,7 @@ public abstract class AbstractHDIVTestCase extends TestCase {
 		// Init Request scoped data
 		RequestInitializer requestInitializer = this.applicationContext.getBean(RequestInitializer.class);
 		requestInitializer.initRequest(request, response);
-		DataComposerFactory dataComposerFactory = (DataComposerFactory) this.applicationContext
-				.getBean(DataComposerFactory.class);
+		DataComposerFactory dataComposerFactory = (DataComposerFactory) this.applicationContext.getBean(DataComposerFactory.class);
 		IDataComposer dataComposer = dataComposerFactory.newInstance(request);
 		HDIVUtil.setDataComposer(dataComposer, request);
 
@@ -147,7 +145,7 @@ public abstract class AbstractHDIVTestCase extends TestCase {
 	 * @throws Exception
 	 */
 	protected void preSetUp() throws Exception {
-		
+
 	}
 
 	/**
@@ -156,7 +154,7 @@ public abstract class AbstractHDIVTestCase extends TestCase {
 	 * @throws Exception
 	 */
 	protected void onTearDown() throws Exception {
-		
+
 	}
 
 	/**
@@ -165,7 +163,7 @@ public abstract class AbstractHDIVTestCase extends TestCase {
 	 * @throws Exception
 	 */
 	protected void preTearDown() throws Exception {
-		
+
 	}
 
 	@Override
@@ -232,8 +230,7 @@ public abstract class AbstractHDIVTestCase extends TestCase {
 	/**
 	 * Set the configuration files
 	 * 
-	 * @param files
-	 *            configuration files
+	 * @param files configuration files
 	 */
 	protected void setFiles(String[] files) {
 		this.files = files;

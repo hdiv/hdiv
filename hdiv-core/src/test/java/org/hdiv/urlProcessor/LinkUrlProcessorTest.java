@@ -273,8 +273,7 @@ public class LinkUrlProcessorTest extends AbstractHDIVTestCase {
 
 		String result = this.linkUrlProcessor.processUrl(request, url);
 
-		assertTrue(result
-				.startsWith("/testAction.do;jsessionid=67CFB560B6EC2677D51814A2A2B16B24?params=0&_HDIV_STATE_"));
+		assertTrue(result.startsWith("/testAction.do;jsessionid=67CFB560B6EC2677D51814A2A2B16B24?params=0&_HDIV_STATE_"));
 	}
 
 	public void testProcessActionJsessionStartPage() {
@@ -311,8 +310,7 @@ public class LinkUrlProcessorTest extends AbstractHDIVTestCase {
 
 		String url = "/probando.do?stringArray=Value+1&amp;stringArray=Value+2&amp;stringArray=Value+3&amp;floatProperty=444.0&amp;intProperty=555";
 		String result = this.linkUrlProcessor.processUrl(request, url);
-		assertTrue(result
-				.startsWith("/probando.do?stringArray=0&stringArray=1&stringArray=2&floatProperty=0&intProperty=0&_HDIV_STATE_"));
+		assertTrue(result.startsWith("/probando.do?stringArray=0&stringArray=1&stringArray=2&floatProperty=0&intProperty=0&_HDIV_STATE_"));
 	}
 
 	public void testJavaScriptLinks() {

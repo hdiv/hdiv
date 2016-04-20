@@ -349,8 +349,7 @@ public final class UrlData {
 			}
 			else {
 				if (colonIdx + 1 == match.length()) {
-					throw new IllegalArgumentException(
-							"No custom regular expression specified after ':' in \"" + match + "\"");
+					throw new IllegalArgumentException("No custom regular expression specified after ':' in \"" + match + "\"");
 				}
 				if (sb == null) {
 					sb = new StringBuilder();

@@ -195,10 +195,8 @@ public class Validation implements IValidation, Serializable {
 		StringBuilder result = new StringBuilder().append("");
 		result = result.append(" name=").append(this.getName());
 		result = result.append(" componentType=").append(this.getComponentType());
-		result = result.append(" acceptedPattern=").append(
-				this.acceptedPattern == null ? "" : this.acceptedPattern.toString());
-		result = result.append(" rejectedPattern=").append(
-				this.rejectedPattern == null ? "" : this.rejectedPattern.toString());
+		result = result.append(" acceptedPattern=").append(this.acceptedPattern == null ? "" : this.acceptedPattern.toString());
+		result = result.append(" rejectedPattern=").append(this.rejectedPattern == null ? "" : this.rejectedPattern.toString());
 		result = result.append(" defaultValidation=").append(this.defaultValidation);
 		return result.toString();
 

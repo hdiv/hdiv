@@ -50,8 +50,8 @@ public class ValidatorHelperRequestTest extends AbstractHDIVTestCase {
 		tempStateValues.add("10");
 		tempStateValues.add("20");
 
-		ValidatorHelperResult actualResult = ((ValidatorHelperRequest) helper).hasNonConfidentialIncorrectValues(
-				targetName, parameter, values, tempStateValues);
+		ValidatorHelperResult actualResult = ((ValidatorHelperRequest) helper).hasNonConfidentialIncorrectValues(targetName, parameter,
+				values, tempStateValues);
 		assertFalse(actualResult.isValid());
 		assertEquals(HDIVErrorCodes.REPEATED_VALUES, actualResult.getErrors().get(0).getType());
 	}
@@ -69,8 +69,8 @@ public class ValidatorHelperRequestTest extends AbstractHDIVTestCase {
 		tempStateValues.add("10");
 		tempStateValues.add("20");
 
-		ValidatorHelperResult actualResult = ((ValidatorHelperRequest) helper).hasNonConfidentialIncorrectValues(
-				targetName, parameter, values, tempStateValues);
+		ValidatorHelperResult actualResult = ((ValidatorHelperRequest) helper).hasNonConfidentialIncorrectValues(targetName, parameter,
+				values, tempStateValues);
 		assertFalse(actualResult.isValid());
 		assertEquals(HDIVErrorCodes.REPEATED_VALUES, actualResult.getErrors().get(0).getType());
 	}
@@ -88,8 +88,8 @@ public class ValidatorHelperRequestTest extends AbstractHDIVTestCase {
 		tempStateValues.add("10");
 		tempStateValues.add("20");
 
-		ValidatorHelperResult actualResult = ((ValidatorHelperRequest) helper).hasNonConfidentialIncorrectValues(
-				targetName, parameter, values, tempStateValues);
+		ValidatorHelperResult actualResult = ((ValidatorHelperRequest) helper).hasNonConfidentialIncorrectValues(targetName, parameter,
+				values, tempStateValues);
 		assertFalse(actualResult.isValid());
 		assertEquals(HDIVErrorCodes.REPEATED_VALUES, actualResult.getErrors().get(0).getType());
 	}
@@ -107,8 +107,8 @@ public class ValidatorHelperRequestTest extends AbstractHDIVTestCase {
 		tempStateValues.add("10");
 		tempStateValues.add("20");
 
-		ValidatorHelperResult actualResult = ((ValidatorHelperRequest) helper).hasNonConfidentialIncorrectValues(
-				targetName, parameter, values, tempStateValues);
+		ValidatorHelperResult actualResult = ((ValidatorHelperRequest) helper).hasNonConfidentialIncorrectValues(targetName, parameter,
+				values, tempStateValues);
 		assertFalse(actualResult.isValid());
 		assertEquals(HDIVErrorCodes.REPEATED_VALUES, actualResult.getErrors().get(0).getType());
 	}
@@ -126,8 +126,8 @@ public class ValidatorHelperRequestTest extends AbstractHDIVTestCase {
 		tempStateValues.add("10");
 		tempStateValues.add("20");
 
-		ValidatorHelperResult actualResult = ((ValidatorHelperRequest) helper).hasNonConfidentialIncorrectValues(
-				targetName, parameter, values, tempStateValues);
+		ValidatorHelperResult actualResult = ((ValidatorHelperRequest) helper).hasNonConfidentialIncorrectValues(targetName, parameter,
+				values, tempStateValues);
 		assertFalse(actualResult.isValid());
 		assertEquals(HDIVErrorCodes.REPEATED_VALUES, actualResult.getErrors().get(0).getType());
 	}
@@ -145,8 +145,8 @@ public class ValidatorHelperRequestTest extends AbstractHDIVTestCase {
 		tempStateValues.add("10");
 		tempStateValues.add("20");
 
-		ValidatorHelperResult actualResult = ((ValidatorHelperRequest) helper).hasNonConfidentialIncorrectValues(
-				targetName, parameter, values, tempStateValues);
+		ValidatorHelperResult actualResult = ((ValidatorHelperRequest) helper).hasNonConfidentialIncorrectValues(targetName, parameter,
+				values, tempStateValues);
 		assertFalse(actualResult.isValid());
 		assertEquals(HDIVErrorCodes.REPEATED_VALUES, actualResult.getErrors().get(0).getType());
 	}
@@ -164,8 +164,8 @@ public class ValidatorHelperRequestTest extends AbstractHDIVTestCase {
 		tempStateValues.add("10");
 		tempStateValues.add("20");
 
-		ValidatorHelperResult actualResult = ((ValidatorHelperRequest) helper).hasNonConfidentialIncorrectValues(
-				targetName, parameter, values, tempStateValues);
+		ValidatorHelperResult actualResult = ((ValidatorHelperRequest) helper).hasNonConfidentialIncorrectValues(targetName, parameter,
+				values, tempStateValues);
 		assertFalse(actualResult.isValid());
 		assertEquals(HDIVErrorCodes.PARAMETER_VALUE_INCORRECT, actualResult.getErrors().get(0).getType());
 	}
@@ -183,8 +183,8 @@ public class ValidatorHelperRequestTest extends AbstractHDIVTestCase {
 		tempStateValues.add("10");
 		tempStateValues.add("20");
 
-		ValidatorHelperResult actualResult = ((ValidatorHelperRequest) helper).hasNonConfidentialIncorrectValues(
-				targetName, parameter, values, tempStateValues);
+		ValidatorHelperResult actualResult = ((ValidatorHelperRequest) helper).hasNonConfidentialIncorrectValues(targetName, parameter,
+				values, tempStateValues);
 		assertFalse(actualResult.isValid());
 		assertEquals(HDIVErrorCodes.PARAMETER_VALUE_INCORRECT, actualResult.getErrors().get(0).getType());
 	}
@@ -202,8 +202,8 @@ public class ValidatorHelperRequestTest extends AbstractHDIVTestCase {
 		tempStateValues.add("10");
 		tempStateValues.add("20");
 
-		ValidatorHelperResult actualResult = ((ValidatorHelperRequest) helper).hasNonConfidentialIncorrectValues(
-				targetName, parameter, values, tempStateValues);
+		ValidatorHelperResult actualResult = ((ValidatorHelperRequest) helper).hasNonConfidentialIncorrectValues(targetName, parameter,
+				values, tempStateValues);
 		assertFalse(actualResult.isValid());
 		assertEquals(HDIVErrorCodes.PARAMETER_VALUE_INCORRECT, actualResult.getErrors().get(0).getType());
 	}
