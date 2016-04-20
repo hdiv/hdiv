@@ -285,6 +285,10 @@ public class HDIVUtil {
 		return (Integer) request.getAttribute(CURRENT_PAGE_KEY);
 	}
 
+	public static String getHDIVParameter(final HttpServletRequest request) {
+		return (String) request.getSession().getAttribute(Constants.HDIV_PARAMETER);
+	}
+
 	/**
 	 * Set the CurrentPageId
 	 *

@@ -43,8 +43,8 @@ public class OutputLinkComponentProcessor extends AbstractComponentProcessor {
 			final HttpServletRequest request = (HttpServletRequest) externalContext.getRequest();
 
 			String url = component.getValue().toString();
-
-			final UrlData urlData = linkUrlProcessor.createUrlData(url, Method.GET, request);
+			final String hdivParameter = HDIVUtil.getHDIVParameter(request);
+			final UrlData urlData = linkUrlProcessor.createUrlData(url, Method.GET, hdivParameter, request);
 			if (linkUrlProcessor.isHdivStateNecessary(urlData)) {
 
 				final boolean hasUIParams = UtilsJsf.hasUIParameterChild(component);
@@ -85,8 +85,6 @@ public class OutputLinkComponentProcessor extends AbstractComponentProcessor {
 					final UIParameter paramComponent = (UIParameter) context.getApplication()
 							.createComponent(UIParameter.COMPONENT_TYPE);
 
-					final String hdivParameter = (String) externalContext.getSessionMap().get(Constants.HDIV_PARAMETER);
-
 					paramComponent.setName(hdivParameter);
 					paramComponent.setValue(stateParam);
 					component.getChildren().add(paramComponent);
@@ -96,7 +94,7 @@ public class OutputLinkComponentProcessor extends AbstractComponentProcessor {
 					final String stateParam = dataComposer.endRequest();
 
 					// Add state directly in the outputLink's value
-					url = linkUrlProcessor.getProcessedUrlWithHdivState(request, urlData, stateParam);
+					url = linkUrlProcessor.getProcessedUrlWithHdivState(hdivParameter, urlData, stateParam);
 					component.setValue(url);
 				}
 			}

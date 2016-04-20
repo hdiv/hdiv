@@ -67,8 +67,8 @@ public class LinkUrlProcessor extends AbstractUrlProcessor {
 			}
 			return url;
 		}
-
-		final UrlData urlData = createUrlData(url, Method.GET, request);
+		final String hdivParameter = HDIVUtil.getHDIVParameter(request);
+		final UrlData urlData = createUrlData(url, Method.GET, hdivParameter, request);
 		if (isHdivStateNecessary(urlData)) {
 			// the url needs protection
 			dataComposer.beginRequest(Method.GET, urlData.getUrlWithoutContextPath());
@@ -78,7 +78,8 @@ public class LinkUrlProcessor extends AbstractUrlProcessor {
 			// Hdiv state param value
 			final String stateParam = dataComposer.endRequest();
 			// Url with confidential values and hdiv state param
-			url = getProcessedUrlWithHdivState(request, urlData, stateParam);
+
+			url = getProcessedUrlWithHdivState(hdivParameter, urlData, stateParam);
 		}
 
 		return url;

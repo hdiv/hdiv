@@ -77,8 +77,8 @@ public class FormUrlProcessor extends AbstractUrlProcessor {
 			}
 			return url;
 		}
-
-		final UrlData urlData = createUrlData(url, method, request);
+		final String hdivParameter = HDIVUtil.getHDIVParameter(request);
+		final UrlData urlData = createUrlData(url, method, hdivParameter, request);
 		if (isHdivStateNecessary(urlData)) {
 			// the url needs protection
 			final String stateId = dataComposer.beginRequest(method, urlData.getUrlWithoutContextPath());

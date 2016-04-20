@@ -16,6 +16,7 @@
 package org.hdiv.urlProcessor;
 
 import org.hdiv.AbstractHDIVTestCase;
+import org.hdiv.util.HDIVUtil;
 import org.hdiv.util.Method;
 
 public class UriTemplateTest extends AbstractHDIVTestCase {
@@ -36,25 +37,30 @@ public class UriTemplateTest extends AbstractHDIVTestCase {
 		url = urlWithoutUriTemplate + uriTemplate;
 	}
 
+	private UrlData create(final String url) {
+		return linkUrlProcessor.createUrlData(url, Method.GET, HDIVUtil.getHDIVParameter(getMockRequest()),
+				getMockRequest());
+	}
+
 	public void testCreateUrlDataSimple() {
-		final UrlData urlData = linkUrlProcessor.createUrlData(urlWithoutUriTemplate, Method.GET, getMockRequest());
+		final UrlData urlData = create(urlWithoutUriTemplate);
 		assertEquals(false, urlData.hasUriTemplate());
 		assertEquals(urlWithoutUriTemplate, urlData.getUrlWithOutUriTemplate());
 		assertEquals("", urlData.getUriTemplate());
 	}
 
 	public void testCreateUrlDataWithUriTemplate() {
-		final UrlData urlData = linkUrlProcessor.createUrlData(url, Method.GET, getMockRequest());
+		final UrlData urlData = create(url);
 		assertEquals(true, urlData.hasUriTemplate());
 		assertEquals(urlWithoutUriTemplate, urlData.getUrlWithOutUriTemplate());
 		assertEquals(uriTemplate, urlData.getUriTemplate());
 	}
 
 	public void testGetProcessedUrlWithHdivState() {
-		final UrlData urlData = linkUrlProcessor.createUrlData(url, Method.GET, getMockRequest());
+		final UrlData urlData = create(url);
 		final String stateParam = "1-12-123123123123";
-		final String urlProcessed = linkUrlProcessor.getProcessedUrlWithHdivState(getMockRequest(), urlData,
-				stateParam);
+		final String urlProcessed = linkUrlProcessor
+				.getProcessedUrlWithHdivState(HDIVUtil.getHDIVParameter(getMockRequest()), urlData, stateParam);
 		assertEquals(urlWithoutUriTemplate + "?_HDIV_STATE_=" + stateParam + uriTemplate.replace("?", "&"),
 				urlProcessed);
 	}
