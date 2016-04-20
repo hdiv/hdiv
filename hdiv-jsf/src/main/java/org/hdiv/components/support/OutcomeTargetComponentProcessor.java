@@ -40,15 +40,15 @@ public class OutcomeTargetComponentProcessor extends AbstractComponentProcessor 
 	public void processOutcomeTargetLinkComponent(final FacesContext context, final UIOutcomeTarget component) {
 
 		try {
-			final ExternalContext externalContext = context.getExternalContext();
-			final HttpServletRequest request = (HttpServletRequest) externalContext.getRequest();
+			ExternalContext externalContext = context.getExternalContext();
+			HttpServletRequest request = (HttpServletRequest) externalContext.getRequest();
 
-			final String url = helper.getUrl(context, component);
-			final String hdivParameter = HDIVUtil.getHDIVParameter(request);
-			final UrlData urlData = linkUrlProcessor.createUrlData(url, Method.GET, hdivParameter, request);
+			String url = helper.getUrl(context, component);
+			String hdivParameter = HDIVUtil.getHDIVParameter(request);
+			UrlData urlData = linkUrlProcessor.createUrlData(url, Method.GET, hdivParameter, request);
 			if (linkUrlProcessor.isHdivStateNecessary(urlData)) {
 
-				final boolean hasUIParams = UtilsJsf.hasUIParameterChild(component);
+				boolean hasUIParams = UtilsJsf.hasUIParameterChild(component);
 
 				// if url hasn't got parameters, we do not have to include HDIV's state
 				if (!config.isValidationInUrlsWithoutParamsActivated() && !urlData.containsParams() && !hasUIParams) {
@@ -57,24 +57,24 @@ public class OutcomeTargetComponentProcessor extends AbstractComponentProcessor 
 					return;
 				}
 
-				final IDataComposer dataComposer = HDIVUtil.getDataComposer(request);
+				IDataComposer dataComposer = HDIVUtil.getDataComposer(request);
 				dataComposer.beginRequest(Method.GET, urlData.getUrlWithoutContextPath());
 
-				final String processedParams = dataComposer.composeParams(urlData.getUrlParams(), Method.GET,
+				String processedParams = dataComposer.composeParams(urlData.getUrlParams(), Method.GET,
 						Constants.ENCODING_UTF_8);
 				urlData.setUrlParams(processedParams);
 
-				final String stateParam = dataComposer.endRequest();
+				String stateParam = dataComposer.endRequest();
 
 				// Add a children UIParam component with HDIV state
-				final UIParameter paramComponent = (UIParameter) context.getApplication()
+				UIParameter paramComponent = (UIParameter) context.getApplication()
 						.createComponent(UIParameter.COMPONENT_TYPE);
 				paramComponent.setName(hdivParameter);
 				paramComponent.setValue(stateParam);
 				component.getChildren().add(paramComponent);
 			}
 		}
-		catch (final FacesException e) {
+		catch (FacesException e) {
 			log.error("Error in OutcomeTargetComponentProcessor.processOutcomeTargetLinkComponent: " + e.getMessage());
 			throw e;
 		}

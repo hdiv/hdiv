@@ -68,19 +68,19 @@ public class DefaultValidationParser extends DefaultHandler {
 	public void readDefaultValidations(final String filePath) {
 
 		try {
-			final ClassLoader classLoader = DefaultValidationParser.class.getClassLoader();
-			final InputStream is = classLoader.getResourceAsStream(filePath);
-			final SAXParserFactory spf = SAXParserFactory.newInstance();
-			final SAXParser sp = spf.newSAXParser();
+			ClassLoader classLoader = DefaultValidationParser.class.getClassLoader();
+			InputStream is = classLoader.getResourceAsStream(filePath);
+			SAXParserFactory spf = SAXParserFactory.newInstance();
+			SAXParser sp = spf.newSAXParser();
 			sp.parse(is, this);
 		}
-		catch (final ParserConfigurationException e) {
+		catch (ParserConfigurationException e) {
 			throw new HDIVException(e.getMessage(), e);
 		}
-		catch (final SAXException e) {
+		catch (SAXException e) {
 			throw new HDIVException(e.getMessage(), e);
 		}
-		catch (final IOException e) {
+		catch (IOException e) {
 			throw new HDIVException(e.getMessage(), e);
 		}
 	}
@@ -90,7 +90,7 @@ public class DefaultValidationParser extends DefaultHandler {
 
 		if ("validation".equals(qName)) {
 			this.validation = new HashMap<ValidationParam, String>();
-			final String id = attributes.getValue("id");
+			String id = attributes.getValue("id");
 			this.validation.put(ValidationParam.ID, id);
 			this.validations.add(this.validation);
 		}
@@ -98,7 +98,7 @@ public class DefaultValidationParser extends DefaultHandler {
 
 	@Override
 	public void characters(final char[] ch, final int start, final int length) throws SAXException {
-		final String val = new String(ch, start, length).trim();
+		String val = new String(ch, start, length).trim();
 		if (val.length() > 0) {
 			this.validation.put(ValidationParam.REGEX, val);
 		}

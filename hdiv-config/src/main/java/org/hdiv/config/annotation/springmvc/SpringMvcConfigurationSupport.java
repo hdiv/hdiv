@@ -59,7 +59,7 @@ public class SpringMvcConfigurationSupport {
 	@Bean(name = ConfigBeanDefinitionParser.REQUEST_DATA_VALUE_PROCESSOR_BEAN_NAME)
 	public RequestDataValueProcessor requestDataValueProcessor() {
 
-		final HdivRequestDataValueProcessor dataValueProcessor = new HdivRequestDataValueProcessor();
+		HdivRequestDataValueProcessor dataValueProcessor = new HdivRequestDataValueProcessor();
 		dataValueProcessor.setFormUrlProcessor(this.formUrlProcessor);
 		dataValueProcessor.setLinkUrlProcessor(this.linkUrlProcessor);
 
@@ -72,7 +72,7 @@ public class SpringMvcConfigurationSupport {
 	@Bean(name = EditableValidationsBeanDefinitionParser.EDITABLE_VALIDATOR_BEAN_NAME)
 	public Validator editableParameterValidator() {
 
-		final EditableParameterValidator validator = new EditableParameterValidator();
+		EditableParameterValidator validator = new EditableParameterValidator();
 		if (jsr303Present) {
 			validator.setInnerValidator(editableLocalValidatorFactoryBean());
 		}
