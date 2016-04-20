@@ -21,7 +21,7 @@ import java.util.regex.Pattern;
 
 /**
  * {@link PatternMatcher} implementation based on java {@link Pattern}.
- * 
+ *
  * @since 2.1.6
  */
 public class DefaultPatternMatcher implements PatternMatcher, Serializable {
@@ -31,39 +31,34 @@ public class DefaultPatternMatcher implements PatternMatcher, Serializable {
 	/**
 	 * Original regular expression
 	 */
-	protected String regex;
+	protected final String regex;
 
 	/**
 	 * Compiled {@link Pattern}
 	 */
-	protected Pattern pattern;
+	protected final Pattern pattern;
 
 	/**
 	 * Constructor that compiles the regular expression.
-	 * 
+	 *
 	 * @param regex java regular expression
 	 */
-	public DefaultPatternMatcher(String regex) {
+	public DefaultPatternMatcher(final String regex) {
 		this.regex = regex;
-		this.compilePattern(regex);
+		pattern = Pattern.compile(regex);
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.hdiv.regex.PatternMatcher#matches(java.lang.String)
 	 */
-	public boolean matches(String input) {
+	public boolean matches(final String input) {
 
-		return this.execPattern(input);
+		return execPattern(input);
 	}
 
-	protected void compilePattern(String regex) {
-
-		this.pattern = Pattern.compile(regex);
-	}
-
-	protected boolean execPattern(String input) {
+	protected boolean execPattern(final String input) {
 
 		Matcher matcher = pattern.matcher(input);
 		return matcher.matches();
@@ -75,7 +70,7 @@ public class DefaultPatternMatcher implements PatternMatcher, Serializable {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
@@ -88,11 +83,11 @@ public class DefaultPatternMatcher implements PatternMatcher, Serializable {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(final Object obj) {
 		if (this == obj) {
 			return true;
 		}
@@ -116,7 +111,7 @@ public class DefaultPatternMatcher implements PatternMatcher, Serializable {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#toString()
 	 */
 	@Override

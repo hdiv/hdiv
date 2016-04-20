@@ -25,7 +25,7 @@ import org.hdiv.dataComposer.IDataComposer;
 import org.hdiv.util.HDIVUtil;
 
 /**
- * Tag to cipher data without using a framework tag.
+ * Tag to cipher data without using a framework tag.f
  * <p>
  * Being "hdiv" the identifier used to reference HDIV tag library, the format of the tag will be as follows:
  * <code>&lt;hdiv:cipher action="a1" parameter="p1" value="v1" /&gt;</code>.
@@ -33,7 +33,7 @@ import org.hdiv.util.HDIVUtil;
  * <p>
  * The result will be an encoded value that only HDIV can interpret.
  * </p>
- * 
+ *
  * @author Gorka Vicente
  * @since HDIV 2.0.6
  */
@@ -47,55 +47,54 @@ public class CipherTag extends TagSupport {
 
 	/**
 	 * Sets the action <code>action</code> defined in the tag.
-	 * 
+	 *
 	 * @param action Action
 	 */
-	public void setAction(String action) {
-		this.setValue("action", action);
+	public void setAction(final String action) {
+		setValue("action", action);
 	}
 
 	/**
 	 * Sets the parameter <code>parameter</code> defined in the tag.
-	 * 
+	 *
 	 * @param parameter Parameter
 	 */
-	public void setParameter(String parameter) {
-		this.setValue("parameter", parameter);
+	public void setParameter(final String parameter) {
+		setValue("parameter", parameter);
 	}
 
 	/**
 	 * Sets the value <code>value</code> defined in the tag.
-	 * 
+	 *
 	 * @param value Value
 	 */
-	public void setValue(String value) {
-		this.setValue("value", value);
+	public void setValue(final String value) {
+		setValue("value", value);
 	}
 
 	/**
 	 * Sets the value <code>var</code> defined in the tag.
-	 * 
+	 *
 	 * @param var Variable
 	 */
-	public void setVar(String var) {
-		this.setValue("var", var);
+	public void setVar(final String var) {
+		setValue("var", var);
 	}
 
 	/**
 	 * Process the start of this tag.
-	 * 
+	 *
 	 * @throws JspException If the attributes passed to the tag are incorrect, an exception will be thrown.
 	 */
 	@Override
 	public int doStartTag() throws JspException {
 
-		IDataComposer dataComposer = (IDataComposer) this.pageContext.getRequest().getAttribute(
-				HDIVUtil.DATACOMPOSER_REQUEST_KEY);
+		IDataComposer dataComposer = HDIVUtil.getDataComposer(pageContext.getRequest());
 
-		String action = (String) this.getValue("action");
-		String parameter = (String) this.getValue("parameter");
-		String value = (String) this.getValue("value");
-		String var = (String) this.getValue("var");
+		String action = (String) getValue("action");
+		String parameter = (String) getValue("parameter");
+		String value = (String) getValue("value");
+		String var = (String) getValue("var");
 
 		String cipheredValue;
 		if (action != null) {
@@ -111,7 +110,7 @@ public class CipherTag extends TagSupport {
 				pageContext.setAttribute(var, cipheredValue);
 			}
 			else {
-				JspWriter out = this.pageContext.getOut();
+				JspWriter out = pageContext.getOut();
 				out.print(cipheredValue);
 			}
 		}

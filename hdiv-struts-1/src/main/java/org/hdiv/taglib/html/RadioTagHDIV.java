@@ -66,7 +66,7 @@ public class RadioTagHDIV extends RadioTag {
 		IDataComposer dataComposer = HDIVUtil.getDataComposer(request);
 		cipheredValue = dataComposer.composeFormField(preparedName, serverValue, false, null);
 
-		StringBuffer results = new StringBuffer("<input type=\"radio\"");
+		StringBuilder results = new StringBuilder("<input type=\"radio\"");
 
 		renderAttribute(results, "name", preparedName);
 		renderAttribute(results, "accesskey", accesskey);
@@ -84,10 +84,10 @@ public class RadioTagHDIV extends RadioTag {
 	}
 
 	/**
-	 * Prepares an attribute if the value is not null, appending it to the the given StringBuffer.
-	 * @param handlers The StringBuffer that output will be appended to.
+	 * Prepares an attribute if the value is not null, appending it to the the given StringBuilder.
+	 * @param handlers The StringBuilder that output will be appended to.
 	 */
-	protected void renderAttribute(StringBuffer handlers, String name, Object value) {
+	protected void renderAttribute(StringBuilder handlers, String name, Object value) {
 
 		if (value != null) {
 			handlers.append(" ");

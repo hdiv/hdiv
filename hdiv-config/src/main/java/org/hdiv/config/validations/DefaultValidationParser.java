@@ -33,7 +33,7 @@ import org.xml.sax.helpers.DefaultHandler;
 
 /**
  * SAX parser to read default editable validations xml file.
- * 
+ *
  * @author Gotzon Illarramendi
  */
 public class DefaultValidationParser extends DefaultHandler {
@@ -46,12 +46,12 @@ public class DefaultValidationParser extends DefaultHandler {
 	/**
 	 * List with processed validations.
 	 */
-	private List<Map<String, String>> validations = new ArrayList<Map<String, String>>();
+	private final List<Map<ValidationParam, String>> validations = new ArrayList<Map<ValidationParam, String>>();
 
 	/**
 	 * Current Validation data.
 	 */
-	private Map<String, String> validation = null;
+	private Map<ValidationParam, String> validation = null;
 
 	/**
 	 * Read xml file from the default path.
@@ -62,10 +62,10 @@ public class DefaultValidationParser extends DefaultHandler {
 
 	/**
 	 * Read xml file from the given path.
-	 * 
+	 *
 	 * @param filePath xml file path
 	 */
-	public void readDefaultValidations(String filePath) {
+	public void readDefaultValidations(final String filePath) {
 
 		try {
 			ClassLoader classLoader = DefaultValidationParser.class.getClassLoader();
@@ -85,36 +85,34 @@ public class DefaultValidationParser extends DefaultHandler {
 		}
 	}
 
-	public void startElement(String uri, String localName, String qName, Attributes attributes) {
+	@Override
+	public void startElement(final String uri, final String localName, final String qName, final Attributes attributes) {
 
-		if (qName != null && qName.equals("validation")) {
-			this.validation = new HashMap<String, String>();
+		if ("validation".equals(qName)) {
+			this.validation = new HashMap<ValidationParam, String>();
 			String id = attributes.getValue("id");
-			this.validation.put("id", id);
+			this.validation.put(ValidationParam.ID, id);
+			this.validations.add(this.validation);
 		}
 	}
 
-	public void endElement(String uri, String localName, String qName) throws SAXException {
-
-		if (qName != null && qName.equals("validation")) {
-			if (this.validation != null) {
-				this.validations.add(this.validation);
-			}
-		}
-	}
-
-	public void characters(char[] ch, int start, int length) throws SAXException {
+	@Override
+	public void characters(final char[] ch, final int start, final int length) throws SAXException {
 		String val = new String(ch, start, length).trim();
 		if (val.length() > 0) {
-			this.validation.put("regex", val);
+			this.validation.put(ValidationParam.REGEX, val);
 		}
 	}
 
 	/**
 	 * @return the validations
 	 */
-	public List<Map<String, String>> getValidations() {
+	public List<Map<ValidationParam, String>> getValidations() {
 		return validations;
+	}
+
+	public enum ValidationParam {
+		ID, REGEX
 	}
 
 }

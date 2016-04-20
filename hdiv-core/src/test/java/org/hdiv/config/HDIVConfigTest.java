@@ -16,11 +16,13 @@
 package org.hdiv.config;
 
 import org.hdiv.AbstractHDIVTestCase;
+import org.hdiv.util.Method;
 import org.hdiv.validator.EditableDataValidationProvider;
 import org.hdiv.validator.EditableDataValidationResult;
 
 public class HDIVConfigTest extends AbstractHDIVTestCase {
 
+	@Override
 	protected void onSetUp() throws Exception {
 	}
 
@@ -29,23 +31,23 @@ public class HDIVConfigTest extends AbstractHDIVTestCase {
 		HDIVConfig config = getConfig();
 
 		// method not defined
-		boolean result = config.isStartPage("/testing.do", null);
+		boolean result = config.isStartPage("/testing.do", (Method) null);
 		assertEquals(true, result);
 
-		result = config.isStartPage("/testing.do", "get");
+		result = config.isStartPage("/testing.do", Method.GET);
 		assertEquals(true, result);
 
-		result = config.isStartPage("/testing.do", "post");
+		result = config.isStartPage("/testing.do", Method.POST);
 		assertEquals(true, result);
 
 		// method = get
-		result = config.isStartPage("/onlyget.do", null);
+		result = config.isStartPage("/onlyget.do", (Method) null);
 		assertEquals(false, result);
 
-		result = config.isStartPage("/onlyget.do", "get");
+		result = config.isStartPage("/onlyget.do", Method.GET);
 		assertEquals(true, result);
 
-		result = config.isStartPage("/onlyget.do", "post");
+		result = config.isStartPage("/onlyget.do", Method.POST);
 		assertEquals(false, result);
 
 	}
@@ -65,8 +67,7 @@ public class HDIVConfigTest extends AbstractHDIVTestCase {
 
 		HDIVConfig config = getConfig();
 		EditableDataValidationProvider provider = config.getEditableDataValidationProvider();
-		EditableDataValidationResult result = provider.validate("inicio.html", "one", new String[] { "noProblem" },
-				"text");
+		EditableDataValidationResult result = provider.validate("inicio.html", "one", new String[] { "noProblem" }, "text");
 		assertTrue(result.isValid());
 
 		result = provider.validate("inicio.html", "one", new String[] { "XSS <script>" }, "text");

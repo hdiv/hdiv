@@ -16,6 +16,8 @@
 package org.hdiv.urlProcessor;
 
 import org.hdiv.AbstractHDIVTestCase;
+import org.hdiv.util.HDIVUtil;
+import org.hdiv.util.Method;
 
 public class UriTemplateTest extends AbstractHDIVTestCase {
 
@@ -29,31 +31,42 @@ public class UriTemplateTest extends AbstractHDIVTestCase {
 
 	@Override
 	protected void onSetUp() throws Exception {
-		this.linkUrlProcessor = this.getApplicationContext().getBean(LinkUrlProcessor.class);
+		linkUrlProcessor = getApplicationContext().getBean(LinkUrlProcessor.class);
 		urlWithoutUriTemplate = "/testAction.do";
 		uriTemplate = "{?filter, projection, search}";
 		url = urlWithoutUriTemplate + uriTemplate;
 	}
 
+	private UrlData create(final String url) {
+		return linkUrlProcessor.createUrlData(url, Method.GET, HDIVUtil.getHDIVParameter(getMockRequest()), getMockRequest());
+	}
+
 	public void testCreateUrlDataSimple() {
-		UrlData urlData = linkUrlProcessor.createUrlData(urlWithoutUriTemplate, "GET", getMockRequest());
+		UrlData urlData = create(urlWithoutUriTemplate);
 		assertEquals(false, urlData.hasUriTemplate());
 		assertEquals(urlWithoutUriTemplate, urlData.getUrlWithOutUriTemplate());
 		assertEquals("", urlData.getUriTemplate());
 	}
 
 	public void testCreateUrlDataWithUriTemplate() {
-		UrlData urlData = linkUrlProcessor.createUrlData(url, "GET", getMockRequest());
+		UrlData urlData = create(url);
 		assertEquals(true, urlData.hasUriTemplate());
 		assertEquals(urlWithoutUriTemplate, urlData.getUrlWithOutUriTemplate());
 		assertEquals(uriTemplate, urlData.getUriTemplate());
 	}
 
 	public void testGetProcessedUrlWithHdivState() {
-		UrlData urlData = linkUrlProcessor.createUrlData(url, "GET", getMockRequest());
+		UrlData urlData = create(url);
 		String stateParam = "1-12-123123123123";
-		String urlProcessed = linkUrlProcessor.getProcessedUrlWithHdivState(getMockRequest(), urlData, stateParam);
-		assertEquals(urlWithoutUriTemplate + "?_HDIV_STATE_=" + stateParam + uriTemplate.replace("?", "&"),
-				urlProcessed);
+		String urlProcessed = linkUrlProcessor.getProcessedUrlWithHdivState(HDIVUtil.getHDIVParameter(getMockRequest()), urlData,
+				stateParam);
+		assertEquals(urlWithoutUriTemplate + "?_HDIV_STATE_=" + stateParam + uriTemplate.replace("?", "&"), urlProcessed);
+	}
+
+	public void testJSURLData() {
+		UrlData data = new UrlData("javascript:myMethod()", Method.GET);
+		assertEquals(true, data.isJS());
+		data = new UrlData("hhhhhhhhhh:myMethod()", Method.GET);
+		assertEquals(false, data.isJS());
 	}
 }

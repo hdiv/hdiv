@@ -17,7 +17,8 @@ package org.hdiv.dataComposer;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.util.Stack;
+import java.util.ArrayDeque;
+import java.util.Deque;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -29,6 +30,7 @@ import org.hdiv.state.State;
 import org.hdiv.state.scope.StateScope;
 import org.hdiv.state.scope.StateScopeManager;
 import org.hdiv.util.Constants;
+import org.hdiv.util.Method;
 
 /**
  * <p>
@@ -39,7 +41,7 @@ import org.hdiv.util.Constants;
  * <p>
  * Non editable values are hidden to the client, guaranteeing <b>confidentiality</b>
  * </p>
- * 
+ *
  * @see org.hdiv.dataComposer.AbstractDataComposer
  * @see org.hdiv.dataComposer.IDataComposer
  * @author Roberto Velasco
@@ -59,76 +61,72 @@ public class DataComposerMemory extends AbstractDataComposer {
 	/**
 	 * Stack to store existing scopes, active and inactive
 	 */
-	protected Stack<String> scopeStack;
+	protected Deque<String> scopeStack;
 
-	public DataComposerMemory(RequestContext requestContext) {
+	public DataComposerMemory(final RequestContext requestContext) {
 		super(requestContext);
 	}
 
 	/**
 	 * DataComposer initialization with new stack to store all states of the page <code>page</code>.
 	 */
+	@Override
 	public void init() {
 		super.init();
-		this.scopeStack = new Stack<String>();
+		scopeStack = new ArrayDeque<String>();
 		// Add default scope
-		this.scopeStack.push("page");
+		scopeStack.push("page");
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.hdiv.dataComposer.IDataComposer#startScope(java.lang.String)
 	 */
-	public void startScope(String scope) {
-
-		this.scopeStack.push(scope);
+	public void startScope(final String scope) {
+		scopeStack.push(scope);
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.hdiv.dataComposer.IDataComposer#endScope()
 	 */
 	public void endScope() {
-
-		this.scopeStack.pop();
+		scopeStack.pop();
 	}
 
 	/**
 	 * Return current active Scope
-	 * 
+	 *
 	 * @return Scope name
 	 */
 	protected String getCurrentScope() {
-
-		return this.scopeStack.peek();
+		return scopeStack.peek();
 	}
 
 	/**
 	 * It is called by each request or form existing in the page returned by the server. It creates a new state to store
 	 * all the parameters and values of the request or form.
-	 * 
+	 *
 	 * @return state id for this request
 	 */
-	public String beginRequest() {
-
-		return this.beginRequest(null, "");
+	public final String beginRequest() {
+		return beginRequest(null, "");
 	}
 
 	/**
 	 * It is called in the pre-processing stage of each request or form existing in the page returned by the server, as
 	 * long as the destiny of the request is an action. It creates a new state to store all the parameters and values of
 	 * the request or form.
-	 * 
+	 *
 	 * @param method HTTP method of the request.
 	 * @param action action name
 	 * @return state id for this request
-	 * 
+	 *
 	 * @see org.hdiv.dataComposer.DataComposerMemory#beginRequest()
 	 */
-	public String beginRequest(String method, String action) {
-
+	public String beginRequest(final Method method, String action) {
 		try {
 			action = URLDecoder.decode(action, Constants.ENCODING_UTF_8);
 		}
@@ -138,110 +136,99 @@ public class DataComposerMemory extends AbstractDataComposer {
 		catch (IllegalArgumentException e) {
 			// Some decoding errors throw IllegalArgumentException
 		}
-
-		// Create new IState
-		int stateId = this.getPage().getNextStateId();
-		IState state = this.createNewState(stateId, method, action);
-
-		return this.beginRequest(state);
+		return beginRequest(createNewState(page.getNextStateId(), method, action));
 	}
 
 	/**
 	 * Create new {@link IState} instance.
-	 * 
+	 *
 	 * @param stateId Identifier for the new {@link IState}
 	 * @param method HTTP method of the request.
 	 * @param action action name
 	 * @return new {@link IState} instance.
 	 */
-	protected IState createNewState(int stateId, String method, String action) {
-
+	protected IState createNewState(final int stateId, final Method method, final String action) {
 		IState state = new State(stateId);
 		state.setAction(action);
 		state.setMethod(method);
 		return state;
 	}
 
-	public String beginRequest(IState state) {
-
-		this.getStatesStack().push(state);
+	public String beginRequest(final IState state) {
+		getStates().push(state);
 
 		// Add to scope
-		String currentScope = this.getCurrentScope();
-		StateScope stateScope = this.stateScopeManager.getStateScopeByName(currentScope);
+		final StateScope stateScope = stateScopeManager.getStateScopeByName(getCurrentScope());
 		if (stateScope != null) {
 			// Its custom scope Scope
 			// TODO can't return the state id
 			// We can't know the id before compose all parameters
 			return null;
 		}
+		return toId(state);
+	}
 
-		String id = this.getPage().getName() + DASH + state.getId() + DASH + this.getStateSuffix(state.getMethod());
-		return id;
+	protected String toId(final IState state) {
+		// 11-0-C1EF82C48A86DE9BB907F37454998CC3
+		StringBuilder sb = new StringBuilder(40);
+		sb.append(page.getId()).append(DASH).append(state.getId()).append(DASH).append(getStateSuffix(state.getMethod()));
+		return sb.toString();
 	}
 
 	/**
 	 * It is called in the pre-processing stage of each request or form existing in the page returned by the server. It
 	 * adds the state of the treated request or form to the page <code>page</code> and returns and identifier composed
 	 * by the page identifier and the state identifier.
-	 * 
+	 *
 	 * @return Identifier composed by the page identifier and the state identifier.
 	 */
 	public String endRequest() {
 
-		IState state = this.getStatesStack().pop();
+		IState state = getStates().pop();
 
 		// Add to scope
-		String currentScope = this.getCurrentScope();
-		StateScope stateScope = this.stateScopeManager.getStateScopeByName(currentScope);
+		StateScope stateScope = stateScopeManager.getStateScopeByName(getCurrentScope());
 		if (stateScope != null) {
 			// Its custom Scope
-			String stateId = stateScope.addState(this.context, state, this.getStateSuffix(state.getMethod()));
-			return stateId;
+			return stateScope.addState(context, state, getStateSuffix(state.getMethod()));
 		}
 
 		// Add to page scope
-		IPage page = this.getPage();
 		state.setPageId(page.getId());
 		page.addState(state);
 
 		// Save Page in session if this is the first state to add
-		boolean firstState = page.getStatesCount() == 1;
-		if (firstState) {
-
-			super.session.addPartialPage(this.context, page.getId(), page);
+		if (page.getStatesCount() == 1) {
+			session.addPartialPage(context, page);
 		}
 
-		String id = this.getPage().getId() + DASH + state.getId() + DASH + this.getStateSuffix(state.getMethod());
-		return id;
+		return toId(state);
 	}
 
 	/**
 	 * It is called in the pre-processing stage of each user request assigning a new page identifier to the page.
 	 */
 	public void startPage() {
-
-		this.initPage();
+		initPage();
 	}
 
 	/**
 	 * It is called in the pre-processing stage of each user request assigning a new page identifier to the page with
 	 * its parent state id.
 	 */
-	public void startPage(String parentStateId) {
-
-		this.initPage(parentStateId);
+	public void startPage(final String parentStateId) {
+		initPage(parentStateId);
 	}
 
 	/**
 	 * It is called in the pre-processing stage of each user request. Create a new {@link IPage} based on an existing
 	 * page.
-	 * 
+	 *
 	 * @param existingPage other IPage
 	 */
-	public void startPage(IPage existingPage) {
+	public void startPage(final IPage existingPage) {
 		existingPage.markAsReused();
-		this.setPage(existingPage);
+		setPage(existingPage);
 	}
 
 	/**
@@ -250,15 +237,14 @@ public class DataComposerMemory extends AbstractDataComposer {
 	 */
 	public void endPage() {
 
-		if (this.isRequestStarted()) {
+		if (isRequestStarted()) {
 			// A request is started but not ended
-			this.endRequest();
+			endRequest();
 		}
 
-		IPage page = this.getPage();
 		if (page.getStatesCount() > 0) {
 			// The page has states, update them in session
-			super.session.addPage(this.context, page.getId(), page);
+			session.addPage(context, page);
 		}
 		else {
 			if (log.isDebugEnabled()) {
@@ -271,7 +257,7 @@ public class DataComposerMemory extends AbstractDataComposer {
 	/**
 	 * @param stateScopeManager the stateScopeManager to set
 	 */
-	public void setStateScopeManager(StateScopeManager stateScopeManager) {
+	public void setStateScopeManager(final StateScopeManager stateScopeManager) {
 		this.stateScopeManager = stateScopeManager;
 	}
 

@@ -47,41 +47,42 @@ import org.hdiv.util.HDIVUtil;
  * <li>Specify no <code>value</code> attribute, and the nested body content of this tag will be used as the value to be
  * returned.</li>
  * </ul>
- * 
+ *
  * @author Gorka Vicente
  * @see org.apache.struts.taglib.html.MultiboxTag
  */
 public class MultiboxTagHDIV extends MultiboxTag {
 
-	/**
-	 * Universal version identifier. Deserialization uses this number to ensure that a loaded class corresponds exactly
-	 * to a serialized object.
-	 */
-	private static final long serialVersionUID = -3943308978040613425L;
+    /**
+     * Universal version identifier. Deserialization uses this number to ensure that a loaded class corresponds exactly
+     * to a serialized object.
+     */
+    private static final long serialVersionUID = -3943308978040613425L;
 
-	/**
-	 * Render the value element
-	 * 
-	 * @param results The StringBuffer that output will be appended to.
-	 * @see org.hdiv.dataComposer.IDataComposer#composeFormField(String, String, boolean, String)
-	 */
-	protected String prepareValue(StringBuffer results) throws JspException {
+    /**
+     * Render the value element
+     *
+     * @param results The StringBuilder that output will be appended to.
+     * @see org.hdiv.dataComposer.IDataComposer#composeFormField(String, String, boolean, String)
+     */
+    @Override
+    protected String prepareValue(final StringBuffer results) throws JspException {
 
-		String value = (this.value == null) ? this.constant : this.value;
-		if (value == null) {
-			JspException e = new JspException(messages.getMessage("multiboxTag.value"));
-			pageContext.setAttribute(Globals.EXCEPTION_KEY, e, PageContext.REQUEST_SCOPE);
-			throw e;
-		}
+        final String value = (this.value == null) ? this.constant : this.value;
+        if (value == null) {
+            final JspException e = new JspException(messages.getMessage("multiboxTag.value"));
+            pageContext.setAttribute(Globals.EXCEPTION_KEY, e, PageContext.REQUEST_SCOPE);
+            throw e;
+        }
 
-		HttpServletRequest request = (HttpServletRequest) this.pageContext.getRequest();
-		IDataComposer dataComposer = HDIVUtil.getDataComposer(request);
-		String cipheredValue = dataComposer.composeFormField(property, value, false, null);
+        final HttpServletRequest request = (HttpServletRequest) this.pageContext.getRequest();
+        final IDataComposer dataComposer = HDIVUtil.getDataComposer(request);
+        final String cipheredValue = dataComposer.composeFormField(property, value, false, null);
 
-		prepareAttribute(results, "value", TagUtils.getInstance().filter(cipheredValue));
+        prepareAttribute(results, "value", TagUtils.getInstance().filter(cipheredValue));
 
-		// returns unciphered value to check selected options
-		return value;
-	}
+        // returns unciphered value to check selected options
+        return value;
+    }
 
 }

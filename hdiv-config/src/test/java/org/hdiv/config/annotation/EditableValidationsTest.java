@@ -76,8 +76,7 @@ public class EditableValidationsTest {
 		assertNotNull(config);
 
 		EditableDataValidationProvider provider = config.getEditableDataValidationProvider();
-		EditableDataValidationResult result = provider.validate("/insecure/action", "parameter",
-				new String[] { "<script>" }, "text");
+		EditableDataValidationResult result = provider.validate("/insecure/action", "parameter", new String[] { "<script>" }, "text");
 		assertTrue(result.isValid());
 
 		result = provider.validate("/secureParam/action", "param1", new String[] { "<script>" }, "text");
@@ -91,8 +90,7 @@ public class EditableValidationsTest {
 	public void editableValidationsOrder() {
 		assertNotNull(validationRepository);
 
-		Map<ValidationTarget, List<IValidation>> vals = ((DefaultValidationRepository) validationRepository)
-				.getValidations();
+		Map<ValidationTarget, List<IValidation>> vals = ((DefaultValidationRepository) validationRepository).getValidations();
 
 		assertEquals(4, vals.size());
 

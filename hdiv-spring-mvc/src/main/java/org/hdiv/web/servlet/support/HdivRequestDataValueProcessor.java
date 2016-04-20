@@ -27,6 +27,7 @@ import org.hdiv.urlProcessor.FormUrlProcessor;
 import org.hdiv.urlProcessor.LinkUrlProcessor;
 import org.hdiv.util.Constants;
 import org.hdiv.util.HDIVUtil;
+import org.hdiv.util.Method;
 import org.springframework.web.servlet.support.RequestDataValueProcessor;
 
 /**
@@ -80,12 +81,12 @@ public class HdivRequestDataValueProcessor implements RequestDataValueProcessor 
 	 */
 	protected void initNoEditableTypes() {
 
-		this.noEditableTypes.add("checkbox");
-		this.noEditableTypes.add("hidden");
-		this.noEditableTypes.add("option");
-		this.noEditableTypes.add("radio");
-		this.noEditableTypes.add("select");
-		this.noEditableTypes.add("submit");
+		noEditableTypes.add("checkbox");
+		noEditableTypes.add("hidden");
+		noEditableTypes.add("option");
+		noEditableTypes.add("radio");
+		noEditableTypes.add("select");
+		noEditableTypes.add("submit");
 	}
 
 	/**
@@ -95,7 +96,7 @@ public class HdivRequestDataValueProcessor implements RequestDataValueProcessor 
 	 * @param action form action url
 	 * @return processed action url
 	 */
-	public String processAction(HttpServletRequest request, String action) {
+	public String processAction(final HttpServletRequest request, final String action) {
 		return this.processAction(request, action, "POST");
 	}
 
@@ -107,16 +108,16 @@ public class HdivRequestDataValueProcessor implements RequestDataValueProcessor 
 	 * @param method form submit method
 	 * @return processed action url
 	 */
-	public String processAction(HttpServletRequest request, String action, String method) {
+	public String processAction(final HttpServletRequest request, String action, final String method) {
 
-		if (this.innerRequestDataValueProcessor != null) {
-			String processedAction = this.innerRequestDataValueProcessor.processAction(request, action, method);
+		if (innerRequestDataValueProcessor != null) {
+			String processedAction = innerRequestDataValueProcessor.processAction(request, action, method);
 			if (processedAction != action) {
 				action = processedAction;
 			}
 		}
 
-		String result = this.formUrlProcessor.processUrl(request, action, method);
+		String result = formUrlProcessor.processUrl(request, action, Method.secureValueOf(method));
 		return result;
 	}
 
@@ -129,10 +130,11 @@ public class HdivRequestDataValueProcessor implements RequestDataValueProcessor 
 	 * @param type the type of the field
 	 * @return processed field value
 	 */
-	public String processFormFieldValue(HttpServletRequest request, String name, String value, String type) {
+	public String processFormFieldValue(final HttpServletRequest request, final String name, String value,
+			final String type) {
 
-		if (this.innerRequestDataValueProcessor != null) {
-			String processedValue = this.innerRequestDataValueProcessor.processFormFieldValue(request, name, value,
+		if (innerRequestDataValueProcessor != null) {
+			String processedValue = innerRequestDataValueProcessor.processFormFieldValue(request, name, value,
 					type);
 			if (processedValue != value) {
 				value = processedValue;
@@ -143,7 +145,7 @@ public class HdivRequestDataValueProcessor implements RequestDataValueProcessor 
 			return value;
 		}
 
-		IDataComposer dataComposer = (IDataComposer) request.getAttribute(HDIVUtil.DATACOMPOSER_REQUEST_KEY);
+		IDataComposer dataComposer = HDIVUtil.getDataComposer(request);
 
 		if (dataComposer == null || dataComposer.isRequestStarted() == false) {
 			return value;
@@ -166,13 +168,13 @@ public class HdivRequestDataValueProcessor implements RequestDataValueProcessor 
 	 * @param request request object
 	 * @return hidden field name/value
 	 */
-	public Map<String, String> getExtraHiddenFields(HttpServletRequest request) {
+	public Map<String, String> getExtraHiddenFields(final HttpServletRequest request) {
 
-		IDataComposer dataComposer = (IDataComposer) request.getAttribute(HDIVUtil.DATACOMPOSER_REQUEST_KEY);
+		IDataComposer dataComposer = HDIVUtil.getDataComposer(request);
 		Map<String, String> extraFields = new HashMap<String, String>();
 
-		if (this.innerRequestDataValueProcessor != null) {
-			Map<String, String> innerExtras = this.innerRequestDataValueProcessor.getExtraHiddenFields(request);
+		if (innerRequestDataValueProcessor != null) {
+			Map<String, String> innerExtras = innerRequestDataValueProcessor.getExtraHiddenFields(request);
 			if (innerExtras != null) {
 				extraFields.putAll(innerExtras);
 			}
@@ -203,14 +205,14 @@ public class HdivRequestDataValueProcessor implements RequestDataValueProcessor 
 	 */
 	public String processUrl(HttpServletRequest request, String url) {
 
-		if (this.innerRequestDataValueProcessor != null) {
-			String processedUrl = this.innerRequestDataValueProcessor.processUrl(request, url);
+		if (innerRequestDataValueProcessor != null) {
+			String processedUrl = innerRequestDataValueProcessor.processUrl(request, url);
 			if (processedUrl != null) {
 				url = processedUrl;
 			}
 		}
 
-		String result = this.linkUrlProcessor.processUrl(request, url);
+		String result = linkUrlProcessor.processUrl(request, url);
 		return result;
 	}
 
@@ -222,7 +224,7 @@ public class HdivRequestDataValueProcessor implements RequestDataValueProcessor 
 	 */
 	protected boolean isEditable(String type) {
 
-		if (this.noEditableTypes.contains(type)) {
+		if (noEditableTypes.contains(type)) {
 			return false;
 		}
 		return true;
@@ -231,21 +233,21 @@ public class HdivRequestDataValueProcessor implements RequestDataValueProcessor 
 	/**
 	 * @param linkUrlProcessor the linkUrlProcessor to set
 	 */
-	public void setLinkUrlProcessor(LinkUrlProcessor linkUrlProcessor) {
+	public void setLinkUrlProcessor(final LinkUrlProcessor linkUrlProcessor) {
 		this.linkUrlProcessor = linkUrlProcessor;
 	}
 
 	/**
 	 * @param formUrlProcessor the formUrlProcessor to set
 	 */
-	public void setFormUrlProcessor(FormUrlProcessor formUrlProcessor) {
+	public void setFormUrlProcessor(final FormUrlProcessor formUrlProcessor) {
 		this.formUrlProcessor = formUrlProcessor;
 	}
 
 	/**
 	 * @param innerRequestDataValueProcessor the innerRequestDataValueProcessor to set
 	 */
-	public void setInnerRequestDataValueProcessor(RequestDataValueProcessor innerRequestDataValueProcessor) {
+	public void setInnerRequestDataValueProcessor(final RequestDataValueProcessor innerRequestDataValueProcessor) {
 		this.innerRequestDataValueProcessor = innerRequestDataValueProcessor;
 	}
 

@@ -23,6 +23,7 @@ import org.hdiv.AbstractJsfHDIVTestCase;
 import org.hdiv.dataComposer.DataComposerFactory;
 import org.hdiv.dataComposer.IDataComposer;
 import org.hdiv.util.HDIVUtil;
+import org.hdiv.util.Method;
 import org.springframework.mock.web.MockHttpServletRequest;
 
 public class LifecycleTest extends AbstractJsfHDIVTestCase {
@@ -31,17 +32,17 @@ public class LifecycleTest extends AbstractJsfHDIVTestCase {
 
 	private String hdivParameter;
 
-	private String targetName = "/path/testAction.do";;
+	private final String targetName = "/path/testAction.do";
 
 	@Override
 	protected void innerSetUp() throws Exception {
 
-		this.hdivParameter = this.getConfig().getStateParameterName();
+		hdivParameter = getConfig().getStateParameterName();
 
-		DataComposerFactory dataComposerFactory = this.getApplicationContext().getBean(DataComposerFactory.class);
-		HttpServletRequest request = this.getMockRequest();
-		this.dataComposer = dataComposerFactory.newInstance(request);
-		HDIVUtil.setDataComposer(this.dataComposer, request);
+		DataComposerFactory dataComposerFactory = getApplicationContext().getBean(DataComposerFactory.class);
+		HttpServletRequest request = getMockRequest();
+		dataComposer = dataComposerFactory.newInstance(request);
+		HDIVUtil.setDataComposer(dataComposer, request);
 
 	}
 
@@ -52,7 +53,7 @@ public class LifecycleTest extends AbstractJsfHDIVTestCase {
 			// MockExternalContext throws an UnsupportedOperationException on redirect
 
 			// Run PhaseaListeners
-			this.runLifecycle();
+			runLifecycle();
 
 			assertFalse(false);
 		}
@@ -65,18 +66,18 @@ public class LifecycleTest extends AbstractJsfHDIVTestCase {
 	public void testCorrectRequest() {
 
 		// Create state
-		MockHttpServletRequest request = this.getMockRequest();
+		MockHttpServletRequest request = getMockRequest();
 
-		this.dataComposer.startPage();
+		dataComposer.startPage();
 
-		this.dataComposer.beginRequest("GET", this.targetName);
-		String pageState = this.dataComposer.endRequest();
-		this.dataComposer.endPage();
+		dataComposer.beginRequest(Method.GET, targetName);
+		String pageState = dataComposer.endRequest();
+		dataComposer.endPage();
 
 		request.addParameter(hdivParameter, pageState);
 
 		// Run PhaseaListeners
-		this.runLifecycle();
+		runLifecycle();
 
 		assertTrue(true);
 	}

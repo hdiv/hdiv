@@ -114,8 +114,7 @@ public class HdivWebSecurityTest {
 	public void validations() {
 		assertNotNull(validationRepository);
 
-		Map<ValidationTarget, List<IValidation>> validations = ((DefaultValidationRepository) validationRepository)
-				.getValidations();
+		Map<ValidationTarget, List<IValidation>> validations = ((DefaultValidationRepository) validationRepository).getValidations();
 
 		assertEquals(2, validations.size());
 

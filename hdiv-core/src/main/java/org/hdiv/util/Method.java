@@ -13,28 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.hdiv.idGenerator;
-
-import java.io.Serializable;
-import java.util.concurrent.atomic.AtomicLong;
+package org.hdiv.util;
 
 /**
- * This implementation uses a sequence number to generate unique ids. <b>Only for testing</b>
- * 
- * @author Gotzon Illarramendi
- * @since HDIV 2.1.0
+ * Class containing valid HTTP Method
  */
-public class SequentialUidGenerator implements UidGenerator {
+public enum Method {
+	GET, POST, PATCH, PUT, DELETE, OTHER;
 
-	private final AtomicLong seq = new AtomicLong(0);
-
-	public Serializable generateUid() {
-		return seq.getAndIncrement();
-	}
-
-	public Serializable parseUid(final String encodedUid) {
-
-		return encodedUid;
+	public static Method secureValueOf(final String value) {
+		try {
+			if (value == null) {
+				return null;
+			}
+			return valueOf(value.toUpperCase());
+		}
+		catch (final IllegalArgumentException e) {
+			return null;
+		}
 	}
 
 }

@@ -30,6 +30,7 @@ public class DataValidatorTest extends AbstractHDIVTestCase {
 
 	protected IDataValidator dataValidator;
 
+	@Override
 	protected void onSetUp() throws Exception {
 
 		this.dataValidator = this.getApplicationContext().getBean(IDataValidator.class);
@@ -45,8 +46,7 @@ public class DataValidatorTest extends AbstractHDIVTestCase {
 
 		IParameter param1 = new Parameter("param1", "value1", false, null, false);
 
-		IValidationResult result = dataValidator.validate(request, "dataIsNotInt", "simpleAction", "param1", param1,
-				null);
+		IValidationResult result = dataValidator.validate(request, "dataIsNotInt", "simpleAction", "param1", param1, null);
 		assertFalse(result.getLegal());
 	}
 
@@ -92,7 +92,7 @@ public class DataValidatorTest extends AbstractHDIVTestCase {
 		String value = (confidentiality) ? "0" : "value1";
 		IValidationResult result = dataValidator.validate(request, value, "simpleAction", "param1", param1, null);
 
-		assertEquals(((String) result.getResult()), "value1");
+		assertEquals(result.getResult(), "value1");
 		assertTrue(result.getLegal());
 	}
 
@@ -106,7 +106,7 @@ public class DataValidatorTest extends AbstractHDIVTestCase {
 		String value = (confidentiality) ? "0" : "value1";
 		IValidationResult result = dataValidator.validate(request, value, "simpleAction", "param1", null, values);
 
-		assertEquals(((String) result.getResult()), "value1");
+		assertEquals(result.getResult(), "value1");
 		assertTrue(result.getLegal());
 	}
 }

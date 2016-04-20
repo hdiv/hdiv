@@ -17,7 +17,7 @@ package org.hdiv.validator;
 
 /**
  * Contains the result of a {@link EditableDataValidationProvider} invoke.
- * 
+ *
  * @since HDIV 2.1.10
  */
 public class EditableDataValidationResult {
@@ -25,29 +25,29 @@ public class EditableDataValidationResult {
 	/**
 	 * Constant valid result.
 	 */
-	public static final EditableDataValidationResult VALID = new EditableDataValidationResult(true);
+	public static final EditableDataValidationResult VALID = new EditableDataValidationResult();
 
 	/**
 	 * Constant valid result for parameters that do not require validation.
 	 * @since HDIV 3.0.0
 	 */
-	public static final EditableDataValidationResult VALIDATION_NOT_REQUIRED = new EditableDataValidationResult(true);
+	public static final EditableDataValidationResult VALIDATION_NOT_REQUIRED = new EditableDataValidationResult();
 
 	/**
 	 * Validation result. True if validation is success.
 	 */
-	protected boolean valid;
+	private final boolean valid;
 
 	/**
 	 * If the validation isn't success, contains the identifier of the validation that rejects the value.
 	 */
-	protected String validationId;
+	private final String validationId;
 
-	public EditableDataValidationResult(boolean valid) {
-		this.valid = valid;
+	public EditableDataValidationResult() {
+		this(true, null);
 	}
 
-	public EditableDataValidationResult(boolean valid, String validationId) {
+	public EditableDataValidationResult(final boolean valid, final String validationId) {
 		this.valid = valid;
 		this.validationId = validationId;
 	}

@@ -34,6 +34,7 @@ public class StateCacheTest extends AbstractHDIVTestCase {
 
 	private static final Log log = LogFactory.getLog(StateCacheTest.class);
 
+	@Override
 	protected void onSetUp() throws Exception {
 	}
 
@@ -42,9 +43,9 @@ public class StateCacheTest extends AbstractHDIVTestCase {
 		// cache's maximum size is defined using the Spring factory.
 		IStateCache cache = this.getApplicationContext().getBean(IStateCache.class);
 
-		IPage page1 = new Page();
-		IPage page2 = new Page();
-		IPage page3 = new Page();
+		IPage page1 = new Page(1);
+		IPage page2 = new Page(2);
+		IPage page3 = new Page(3);
 
 		IState state1 = new State(0);
 		IState state2 = new State(0);
@@ -53,15 +54,12 @@ public class StateCacheTest extends AbstractHDIVTestCase {
 		int currentPageid = -1;
 
 		page1.addState(state1);
-		page1.setId(1);
 		cache.addPage(1, currentPageid, false, false);
 
 		page2.addState(state2);
-		page2.setId(2);
 		cache.addPage(2, currentPageid, false, false);
 
 		page3.addState(state3);
-		page3.setId(3);
 		cache.addPage(3, currentPageid, false, false);
 
 		log.info("cache:" + cache.toString());
@@ -78,9 +76,9 @@ public class StateCacheTest extends AbstractHDIVTestCase {
 		// cache's maximum size is defined using the Spring factory.
 		IStateCache cache = this.getApplicationContext().getBean(IStateCache.class);
 
-		IPage page1 = new Page();
-		IPage page2 = new Page();
-		IPage page3 = new Page();
+		IPage page1 = new Page(1);
+		IPage page2 = new Page(2);
+		IPage page3 = new Page(3);
 
 		IState state1 = new State(0);
 		IState state2 = new State(0);
@@ -89,12 +87,10 @@ public class StateCacheTest extends AbstractHDIVTestCase {
 		int currentPageid = -1;
 
 		page1.addState(state1);
-		page1.setId(1);
 		cache.addPage(1, currentPageid, false, false);
 		assertEquals(1, cache.getPageIds().size());
 
 		page2.addState(state2);
-		page2.setId(2);
 		cache.addPage(2, currentPageid, false, false);
 		assertEquals(2, cache.getPageIds().size());
 
@@ -102,7 +98,6 @@ public class StateCacheTest extends AbstractHDIVTestCase {
 		currentPageid = 1;
 
 		page3.addState(state3);
-		page3.setId(3);
 		cache.addPage(3, currentPageid, true, false);
 		assertEquals(2, cache.getPageIds().size());// Size is 2 instead of 3
 

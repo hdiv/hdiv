@@ -36,7 +36,7 @@ import org.springframework.web.servlet.support.RequestDataValueProcessor;
 
 /**
  * Contains the configuration beans for Spring MVC framework support.
- * 
+ *
  * @since 2.1.7
  */
 @Configuration
@@ -81,15 +81,11 @@ public class SpringMvcConfigurationSupport {
 
 	@Bean
 	public LocalValidatorFactoryBean editableLocalValidatorFactoryBean() {
-
-		LocalValidatorFactoryBean localValidatorFactoryBean = new LocalValidatorFactoryBean();
-		return localValidatorFactoryBean;
+		return new LocalValidatorFactoryBean();
 	}
 
 	@Bean
 	public IMultipartConfig securityMultipartConfig() {
-
-		IMultipartConfig multipartConfig = new SpringMVCMultipartConfig();
-		return multipartConfig;
+		return new SpringMVCMultipartConfig();
 	}
 }

@@ -18,8 +18,6 @@ package org.hdiv.taglib.html;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.JspException;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.struts.taglib.TagUtils;
 import org.hdiv.urlProcessor.LinkUrlProcessor;
 import org.hdiv.util.HDIVUtil;
@@ -32,7 +30,7 @@ import org.hdiv.util.HDIVUtil;
  * <code>frameborder</code>, and <code>longdesc</code> are supported. The frame <code>name</code> attribute is rendered
  * based on the <code>frameName</code> property. Note that the value of <code>longdesc</code> is intended to be a URI,
  * but currently no rewriting is supported. The attribute is set directly from the property value.
- * 
+ *
  * @author Gorka Vicente
  * @see org.apache.struts.taglib.html.FrameTag
  * @see org.apache.struts.taglib.html.LinkTag
@@ -44,11 +42,6 @@ public class FrameTagHDIV extends LinkTagHDIV {
 	 * to a serialized object.
 	 */
 	private static final long serialVersionUID = -376718532211972980L;
-
-	/**
-	 * Commons logging instance
-	 */
-	private static final Log log = LogFactory.getLog(FrameTagHDIV.class);
 
 	/**
 	 * The frameborder attribute that should be rendered (1, 0).
@@ -88,83 +81,84 @@ public class FrameTagHDIV extends LinkTagHDIV {
 	protected LinkUrlProcessor linkUrlProcessor;
 
 	public String getFrameborder() {
-		return (this.frameborder);
+		return (frameborder);
 	}
 
-	public void setFrameborder(String frameborder) {
+	public void setFrameborder(final String frameborder) {
 		this.frameborder = frameborder;
 	}
 
 	public String getFrameName() {
-		return (this.frameName);
+		return (frameName);
 	}
 
-	public void setFrameName(String frameName) {
+	public void setFrameName(final String frameName) {
 		this.frameName = frameName;
 	}
 
 	public String getLongdesc() {
-		return (this.longdesc);
+		return (longdesc);
 	}
 
-	public void setLongdesc(String longdesc) {
+	public void setLongdesc(final String longdesc) {
 		this.longdesc = longdesc;
 	}
 
 	public Integer getMarginheight() {
-		return (this.marginheight);
+		return (marginheight);
 	}
 
-	public void setMarginheight(Integer marginheight) {
+	public void setMarginheight(final Integer marginheight) {
 		this.marginheight = marginheight;
 	}
 
 	public Integer getMarginwidth() {
-		return (this.marginwidth);
+		return (marginwidth);
 	}
 
-	public void setMarginwidth(Integer marginwidth) {
+	public void setMarginwidth(final Integer marginwidth) {
 		this.marginwidth = marginwidth;
 	}
 
 	public boolean getNoresize() {
-		return (this.noresize);
+		return (noresize);
 	}
 
-	public void setNoresize(boolean noresize) {
+	public void setNoresize(final boolean noresize) {
 		this.noresize = noresize;
 	}
 
 	public String getScrolling() {
-		return (this.scrolling);
+		return (scrolling);
 	}
 
-	public void setScrolling(String scrolling) {
+	public void setScrolling(final String scrolling) {
 		this.scrolling = scrolling;
 	}
 
 	/**
 	 * Render the appropriately encoded URI.
-	 * 
+	 *
 	 * @exception JspException if a JSP exception has occurred
 	 * @see org.hdiv.urlProcessor.LinkUrlProcessor
 	 */
+	@Override
 	public int doStartTag() throws JspException {
 
-		HttpServletRequest request = (HttpServletRequest) pageContext.getRequest();
+		final HttpServletRequest request = (HttpServletRequest) pageContext.getRequest();
 
 		// return the complete URL to which this hyperlink will direct the user.
-		String url = calculateURL();
+		final String url = calculateURL();
 
 		// Print this element to our output writer
-		StringBuffer results = new StringBuffer("<frame ");
+		final StringBuffer results = new StringBuffer("<frame ");
 		results.append("src=\"");
 
 		// Call to Hdiv LinkUrlProcessor
-		if (this.linkUrlProcessor == null) {
-			this.linkUrlProcessor = HDIVUtil.getLinkUrlProcessor(request.getSession().getServletContext());
+		if (linkUrlProcessor == null) {
+			linkUrlProcessor = HDIVUtil.getLinkUrlProcessor(request.getSession().getServletContext());
 		}
-		String urlWithHDIVParameter = linkUrlProcessor.processUrl(request, url);
+		final String urlWithHDIVParameter = linkUrlProcessor.processUrl(request, url);
 
 		results.append(urlWithHDIVParameter);
 
@@ -193,9 +187,10 @@ public class FrameTagHDIV extends LinkTagHDIV {
 
 	/**
 	 * Ignore the end of this tag.
-	 * 
+	 *
 	 * @exception JspException if a JSP exception has occurred
 	 */
+	@Override
 	public int doEndTag() throws JspException {
 
 		return (EVAL_PAGE);
@@ -204,6 +199,7 @@ public class FrameTagHDIV extends LinkTagHDIV {
 	/**
 	 * Release any acquired resources.
 	 */
+	@Override
 	public void release() {
 
 		super.release();

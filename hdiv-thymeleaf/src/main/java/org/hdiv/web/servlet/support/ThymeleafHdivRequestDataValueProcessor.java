@@ -39,9 +39,9 @@ import org.springframework.web.servlet.support.RequestDataValueProcessor;
 public class ThymeleafHdivRequestDataValueProcessor extends HdivRequestDataValueProcessor {
 
 	@Override
-	public String processAction(HttpServletRequest request, String action, String method) {
+	public String processAction(final HttpServletRequest request, final String action, final String method) {
 
-		IDataComposer dataComposer = (IDataComposer) request.getAttribute(HDIVUtil.DATACOMPOSER_REQUEST_KEY);
+		IDataComposer dataComposer = HDIVUtil.getDataComposer(request);
 
 		if (dataComposer != null && dataComposer.isRequestStarted()) {
 			// End with the last form
@@ -52,9 +52,10 @@ public class ThymeleafHdivRequestDataValueProcessor extends HdivRequestDataValue
 		return super.processAction(request, action, method);
 	}
 
-	public Map<String, String> getExtraHiddenFields(HttpServletRequest request) {
+	@Override
+	public Map<String, String> getExtraHiddenFields(final HttpServletRequest request) {
 
-		IDataComposer dataComposer = (IDataComposer) request.getAttribute(HDIVUtil.DATACOMPOSER_REQUEST_KEY);
+		IDataComposer dataComposer = HDIVUtil.getDataComposer(request);
 		Map<String, String> extraFields = new HashMap<String, String>();
 
 		if (this.innerRequestDataValueProcessor != null) {

@@ -33,7 +33,7 @@ import org.hdiv.util.Constants;
 
 /**
  * A wrapper for HTTP servlet response.
- * 
+ *
  * @author Gorka Vicente
  * @see javax.servlet.http.HttpServletResponseWrapper
  * @since HDIV 1.1
@@ -71,31 +71,28 @@ public class ResponseWrapper extends HttpServletResponseWrapper {
 
 	/**
 	 * Constructs a response object wrapping the given response.
-	 * 
+	 *
 	 * @param request HttpServletRequest instance
 	 * @param originalResponse response
 	 */
-	public ResponseWrapper(HttpServletRequest request, HttpServletResponse originalResponse) {
+	public ResponseWrapper(final HttpServletRequest request, final HttpServletResponse originalResponse) {
 
 		super(originalResponse);
 
 		this.request = request;
-
-		if (log.isDebugEnabled()) {
-			log.debug("New ResponseWrapper instance.");
-		}
+		log.debug("New ResponseWrapper instance.");
 	}
 
 	/**
 	 * The default behavior of this method is to return setHeader(String name, String value) on the wrapped response
 	 * object.
-	 * 
+	 *
 	 * @param name the name of the header
 	 * @param value the header value
 	 * @see javax.servlet.http.HttpServletResponseWrapper#setHeader(java.lang.String, java.lang.String)
 	 */
 	@Override
-	public void setHeader(String name, String value) {
+	public void setHeader(final String name, final String value) {
 
 		String confidentialValue = value;
 
@@ -115,13 +112,13 @@ public class ResponseWrapper extends HttpServletResponseWrapper {
 	/**
 	 * The default behavior of this method is to return addHeader(String name, String value) on the wrapped response
 	 * object.
-	 * 
+	 *
 	 * @param name the name of the header
 	 * @param value the header value
 	 * @see javax.servlet.http.HttpServletResponseWrapper#addHeader(java.lang.String, java.lang.String)
 	 */
 	@Override
-	public void addHeader(String name, String value) {
+	public void addHeader(final String name, final String value) {
 
 		String confidentialValue = value;
 
@@ -139,12 +136,12 @@ public class ResponseWrapper extends HttpServletResponseWrapper {
 
 	/**
 	 * Replaces cookies' original values by relative values in order to provide confidentiality.
-	 * 
+	 *
 	 * @param values List of the original values to be replaced
 	 * @param value Original value of the cookie to be added
 	 * @return Confidential values for the cookies
 	 */
-	protected String replaceOriginalValues(List<String> values, String value) {
+	protected String replaceOriginalValues(final List<String> values, String value) {
 
 		for (String currentValue : values) {
 			value = value.replaceFirst("=" + currentValue, "=0");
@@ -156,6 +153,7 @@ public class ResponseWrapper extends HttpServletResponseWrapper {
 	/**
 	 * Resets the response.
 	 */
+	@Override
 	public void reset() {
 
 		super.reset();
@@ -165,13 +163,13 @@ public class ResponseWrapper extends HttpServletResponseWrapper {
 
 	/**
 	 * Parses an http cookie request header and append a keyword/value pair to <code>cookies</code> map.
-	 * 
+	 *
 	 * @param cookieString value assigned to Set-Cookie attribute
 	 * @return Cookie list
 	 */
 	protected List<String> parseCookieString(String cookieString) {
 
-		List<String> values = new ArrayList<String>();
+		final List<String> values = new ArrayList<String>();
 		cookieString = cookieString.trim();
 
 		// Cookie fields are separated by ';'
@@ -193,16 +191,13 @@ public class ResponseWrapper extends HttpServletResponseWrapper {
 
 	/**
 	 * Adds the specified cookie to the response. It can be called multiple times to set more than one cookie.
-	 * 
+	 *
 	 * @param cookie The <code>Cookie</code> to return to the client
 	 * @see javax.servlet.http.HttpServletResponse#addCookie
 	 */
 	@Override
-	public void addCookie(Cookie cookie) {
-
-		SavedCookie savedCookie = new SavedCookie(cookie);
-
-		this.cookies.put(savedCookie.getName(), savedCookie);
+	public void addCookie(final Cookie cookie) {
+		this.cookies.put(cookie.getName(), new SavedCookie(cookie));
 		this.updateSessionCookies();
 
 		if (this.confidentiality && !this.avoidCookiesConfidentiality) {
@@ -221,8 +216,7 @@ public class ResponseWrapper extends HttpServletResponseWrapper {
 		HttpSession session = this.request.getSession();
 		if (session != null) {
 
-			Map<String, SavedCookie> sessionOriginalCookies = (Map<String, SavedCookie>) session
-					.getAttribute(Constants.HDIV_COOKIES_KEY);
+			Map<String, SavedCookie> sessionOriginalCookies = (Map<String, SavedCookie>) session.getAttribute(Constants.HDIV_COOKIES_KEY);
 
 			if (sessionOriginalCookies != null && sessionOriginalCookies.size() > 0) {
 
@@ -249,7 +243,7 @@ public class ResponseWrapper extends HttpServletResponseWrapper {
 
 	/**
 	 * Obtains all the cookies added by the application.
-	 * 
+	 *
 	 * @return cookies added by the application
 	 */
 	public Map<String, SavedCookie> getCookies() {
@@ -259,14 +253,14 @@ public class ResponseWrapper extends HttpServletResponseWrapper {
 	/**
 	 * @param confidentiality the confidentiality to set
 	 */
-	public void setConfidentiality(boolean confidentiality) {
+	public void setConfidentiality(final boolean confidentiality) {
 		this.confidentiality = confidentiality;
 	}
 
 	/**
 	 * @param avoidCookiesConfidentiality the avoidCookiesConfidentiality to set
 	 */
-	public void setAvoidCookiesConfidentiality(boolean avoidCookiesConfidentiality) {
+	public void setAvoidCookiesConfidentiality(final boolean avoidCookiesConfidentiality) {
 		this.avoidCookiesConfidentiality = avoidCookiesConfidentiality;
 	}
 

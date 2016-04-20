@@ -22,6 +22,7 @@ import org.apache.commons.logging.LogFactory;
 import org.hdiv.dataComposer.IDataComposer;
 import org.hdiv.util.Constants;
 import org.hdiv.util.HDIVUtil;
+import org.hdiv.util.Method;
 
 /**
  * UrlProcessor for link and redirect urls.
@@ -42,7 +43,7 @@ public class LinkUrlProcessor extends AbstractUrlProcessor {
 	 * @param url url to process
 	 * @return processed url
 	 */
-	public String processUrl(HttpServletRequest request, String url) {
+	public String processUrl(final HttpServletRequest request, final String url) {
 		// Default encoding UTF-8
 		return this.processUrl(request, url, Constants.ENCODING_UTF_8);
 	}
@@ -55,7 +56,7 @@ public class LinkUrlProcessor extends AbstractUrlProcessor {
 	 * @param encoding char encoding
 	 * @return processed url
 	 */
-	public String processUrl(HttpServletRequest request, String url, String encoding) {
+	public String processUrl(final HttpServletRequest request, String url, final String encoding) {
 
 		IDataComposer dataComposer = HDIVUtil.getDataComposer(request);
 		if (dataComposer == null) {
@@ -65,19 +66,19 @@ public class LinkUrlProcessor extends AbstractUrlProcessor {
 			}
 			return url;
 		}
-
-		UrlData urlData = this.createUrlData(url, "GET", request);
-		if (this.isHdivStateNecessary(urlData)) {
+		String hdivParameter = HDIVUtil.getHDIVParameter(request);
+		UrlData urlData = createUrlData(url, Method.GET, hdivParameter, request);
+		if (isHdivStateNecessary(urlData)) {
 			// the url needs protection
-			dataComposer.beginRequest("GET", urlData.getUrlWithoutContextPath());
+			dataComposer.beginRequest(Method.GET, urlData.getUrlWithoutContextPath());
 
-			String processedParams = dataComposer.composeParams(urlData.getUrlParams(), "GET", encoding);
-			urlData.setUrlParams(processedParams);
+			urlData.setUrlParams(dataComposer.composeParams(urlData.getUrlParams(), Method.GET, encoding));
 
 			// Hdiv state param value
 			String stateParam = dataComposer.endRequest();
 			// Url with confidential values and hdiv state param
-			url = this.getProcessedUrlWithHdivState(request, urlData, stateParam);
+
+			url = getProcessedUrlWithHdivState(hdivParameter, urlData, stateParam);
 		}
 
 		return url;

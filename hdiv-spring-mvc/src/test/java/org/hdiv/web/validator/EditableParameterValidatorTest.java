@@ -28,6 +28,7 @@ import org.hdiv.filter.RequestWrapper;
 import org.hdiv.filter.ValidatorError;
 import org.hdiv.filter.ValidatorHelperResult;
 import org.hdiv.util.Constants;
+import org.hdiv.util.Method;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.validation.Errors;
 import org.springframework.validation.MapBindingResult;
@@ -42,30 +43,30 @@ public class EditableParameterValidatorTest extends AbstractHDIVTestCase {
 
 	private String hdivParameter;
 
-	private String targetName = "/path/testAction.do";;
+	private final String targetName = "/path/testAction.do";;
 
+	@Override
 	protected void onSetUp() throws Exception {
 
-		this.hdivParameter = this.getConfig().getStateParameterName();
-		this.helper = (IValidationHelper) this.getApplicationContext().getBean(IValidationHelper.class);
+		hdivParameter = getConfig().getStateParameterName();
+		helper = getApplicationContext().getBean(IValidationHelper.class);
 
-		DataComposerFactory dataComposerFactory = (DataComposerFactory) this.getApplicationContext().getBean(
-				"dataComposerFactory");
-		HttpServletRequest request = this.getMockRequest();
-		this.dataComposer = dataComposerFactory.newInstance(request);
-		this.dataComposer.startPage();
+		DataComposerFactory dataComposerFactory = (DataComposerFactory) getApplicationContext().getBean("dataComposerFactory");
+		HttpServletRequest request = getMockRequest();
+		dataComposer = dataComposerFactory.newInstance(request);
+		dataComposer.startPage();
 	}
 
 	public void testEditableValidator() {
 
-		MockHttpServletRequest request = this.getMockRequest();
+		MockHttpServletRequest request = getMockRequest();
 		request.setMethod("POST");
 
-		this.dataComposer.beginRequest("POST", this.targetName);
-		this.dataComposer.compose("paramName", "", true, "text");
+		dataComposer.beginRequest(Method.POST, targetName);
+		dataComposer.compose("paramName", "", true, "text");
 
-		String pageState = this.dataComposer.endRequest();
-		this.dataComposer.endPage();
+		String pageState = dataComposer.endRequest();
+		dataComposer.endPage();
 
 		request.addParameter(hdivParameter, pageState);
 		request.addParameter("paramName", "<script>storeCookie()</script>");

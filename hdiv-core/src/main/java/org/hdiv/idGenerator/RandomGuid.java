@@ -17,11 +17,11 @@ package org.hdiv.idGenerator;
 
 /*
  * RandomGUID from http://www.javaexchange.com/aboutRandomGUID.html
- * 
+ *
  * @version 1.2.1 11/05/02 @author Marc A. Mnich
- * 
+ *
  * From www.JavaExchange.com, Open Software licensing
- * 
+ *
  * 11/05/02 -- Performance enhancement from Mike Dubman. Moved InetAddr.getLocal
  * to static block. Mike has measured a 10 fold improvement in run time.
  * 01/29/02 -- Bug fix: Improper seeding of nonsecure Random object caused
@@ -83,19 +83,48 @@ import java.util.Random;
  * <p>
  * I believe that it is important that the algorithm for generating random GUIDs be open for inspection and
  * modification. This class is free for all uses.
- * 
+ *
  * @version 1.2.1 11/05/02
  * @author Marc A. Mnich
  */
-public class RandomGuid {
+final class RandomGuid {
 
-	private static Random random;
+	private static final Random random;
 
-	private static SecureRandom secureRandom;
+	private static final SecureRandom secureRandom;
 
-	private static String id;
+	private static final String id;
 
-	private String guid;
+	// @formatter:off
+	 private static final char[] BYTE2HEX=(
+			    "000102030405060708090A0B0C0D0E0F"+
+			    "101112131415161718191A1B1C1D1E1F"+
+			    "202122232425262728292A2B2C2D2E2F"+
+			    "303132333435363738393A3B3C3D3E3F"+
+			    "404142434445464748494A4B4C4D4E4F"+
+			    "505152535455565758595A5B5C5D5E5F"+
+			    "606162636465666768696A6B6C6D6E6F"+
+			    "707172737475767778797A7B7C7D7E7F"+
+			    "808182838485868788898A8B8C8D8E8F"+
+			    "909192939495969798999A9B9C9D9E9F"+
+			    "A0A1A2A3A4A5A6A7A8A9AAABACADAEAF"+
+			    "B0B1B2B3B4B5B6B7B8B9BABBBCBDBEBF"+
+			    "C0C1C2C3C4C5C6C7C8C9CACBCCCDCECF"+
+			    "D0D1D2D3D4D5D6D7D8D9DADBDCDDDEDF"+
+			    "E0E1E2E3E4E5E6E7E8E9EAEBECEDEEEF"+
+			    "F0F1F2F3F4F5F6F7F8F9FAFBFCFDFEFF").toCharArray();
+			   ; 
+	// @formatter:on
+
+	private static String getHexString(final byte[] bytes) {
+		char[] hexChars = new char[bytes.length * 2];
+		for (int j = 0; j < bytes.length; j++) {
+			int v = (bytes[j] & 0xFF) << 1;
+			hexChars[j * 2] = BYTE2HEX[v];
+			hexChars[j * 2 + 1] = BYTE2HEX[v + 1];
+		}
+		return new String(hexChars);
+	}
 
 	/*
 	 * Static block to take care of one time secureRandom seed. It takes a few seconds to initialize SecureRandom. You
@@ -107,7 +136,7 @@ public class RandomGuid {
 		long secureInitializer = secureRandom.nextLong();
 		random = new Random(secureInitializer);
 		try {
-			id = InetAddress.getLocalHost().toString();
+			id = InetAddress.getLocalHost().toString() + ":";
 		}
 		catch (UnknownHostException e) {
 			throw new RuntimeException(e);
@@ -118,36 +147,24 @@ public class RandomGuid {
 	 * Default constructor. With no specification of security option, this constructor defaults to lower security, high
 	 * performance.
 	 */
-	public RandomGuid() {
-		getRandomGuid(false);
+	private RandomGuid() {
 	}
 
 	/**
-	 * Constructor with security option. Setting secure true enables each random number generated to be
+	 * Method to generate the random GUID. Setting secure true enables each random number generated to be
 	 * cryptographically strong. Secure false defaults to the standard Random function seeded with a single
 	 * cryptographically strong random number.
-	 * 
-	 * @param secure see method doc
 	 */
-	public RandomGuid(boolean secure) {
-		getRandomGuid(secure);
-	}
-
-	/**
-	 * Method to generate the random GUID.
-	 */
-	private void getRandomGuid(boolean secure) {
+	public static String getRandomGuid(final boolean secure) {
 		MessageDigest md5 = null;
-		StringBuffer sbValueBeforeMD5 = new StringBuffer();
+		StringBuilder sbValueBeforeMD5 = new StringBuilder(32);
 
 		try {
 			md5 = MessageDigest.getInstance("MD5");
 		}
-		catch (NoSuchAlgorithmException e) {
+		catch (final NoSuchAlgorithmException e) {
 			throw new RuntimeException(e);
 		}
-
-		long time = System.currentTimeMillis();
 		long rand = 0;
 
 		if (secure) {
@@ -157,37 +174,16 @@ public class RandomGuid {
 			rand = random.nextLong();
 		}
 
-		// This StringBuffer can be a long as you need; the MD5
+		// This StringBuilder can be a long as you need; the MD5
 		// hash will always return 128 bits. You can change
 		// the seed to include anything you want here.
 		// You could even stream a file through the MD5 making
 		// the odds of guessing it at least as great as that
 		// of guessing the contents of the file!
-		sbValueBeforeMD5.append(id);
-		sbValueBeforeMD5.append(":");
-		sbValueBeforeMD5.append(Long.toString(time));
-		sbValueBeforeMD5.append(":");
-		sbValueBeforeMD5.append(Long.toString(rand));
+		sbValueBeforeMD5.append(id).append(System.currentTimeMillis()).append(':').append(rand);
+		md5.update(sbValueBeforeMD5.toString().getBytes());
 
-		String valueBeforeMD5 = sbValueBeforeMD5.toString();
-		md5.update(valueBeforeMD5.getBytes());
-
-		byte[] array = md5.digest();
-		StringBuffer sb = new StringBuffer();
-		for (int j = 0; j < array.length; ++j) {
-			int b = array[j] & 0xFF;
-			if (b < 0x10) {
-				sb.append('0');
-			}
-			sb.append(Integer.toHexString(b));
-		}
-		guid = sb.toString();
+		return getHexString(md5.digest());
 	}
 
-	/**
-	 * Convert to the standard format for GUID (Useful for SQL Server UniqueIdentifiers, etc).
-	 */
-	public String toString() {
-		return guid.toUpperCase();
-	}
 }

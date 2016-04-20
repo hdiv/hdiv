@@ -22,7 +22,7 @@ import org.hdiv.regex.PatternMatcher;
 
 /**
  * Identifier for an unique editable validation target.
- * 
+ *
  * @since HDIV 2.1.10
  */
 public class ValidationTarget implements Serializable {
@@ -39,14 +39,11 @@ public class ValidationTarget implements Serializable {
 	 */
 	private List<PatternMatcher> params;
 
-	public ValidationTarget() {
-	}
-
 	public PatternMatcher getUrl() {
 		return url;
 	}
 
-	public void setUrl(PatternMatcher url) {
+	public void setUrl(final PatternMatcher url) {
 		this.url = url;
 	}
 
@@ -54,7 +51,7 @@ public class ValidationTarget implements Serializable {
 		return params;
 	}
 
-	public void setParams(List<PatternMatcher> params) {
+	public void setParams(final List<PatternMatcher> params) {
 		this.params = params;
 	}
 

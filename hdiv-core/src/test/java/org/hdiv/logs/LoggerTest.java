@@ -25,8 +25,9 @@ public class LoggerTest extends AbstractHDIVTestCase {
 
 	private Logger logger;
 
-	private MockAppender mockAppender = new MockAppender();
+	private final MockAppender mockAppender = new MockAppender();
 
+	@Override
 	protected void onSetUp() throws Exception {
 		this.logger = super.getApplicationContext().getBean(Logger.class);
 
@@ -45,13 +46,12 @@ public class LoggerTest extends AbstractHDIVTestCase {
 
 	public void testLog() {
 
-		ValidatorError error = new ValidatorError("type", "target", "parameterName", "parameterValue", "originalValue",
-				"127.0.0.1", "127.0.0.1", "anonymous", "ruleName");
+		ValidatorError error = new ValidatorError("type", "target", "parameterName", "parameterValue", "originalValue", "127.0.0.1",
+				"127.0.0.1", "anonymous", "ruleName");
 		logger.log(error);
 
 		String msg = mockAppender.getMessage();
-		assertEquals("type;target;parameterName;parameterValue;originalValue;127.0.0.1;127.0.0.1;anonymous;ruleName",
-				msg);
+		assertEquals("type;target;parameterName;parameterValue;originalValue;127.0.0.1;127.0.0.1;anonymous;ruleName", msg);
 	}
 
 	/**
@@ -69,7 +69,7 @@ public class LoggerTest extends AbstractHDIVTestCase {
 		}
 
 		@Override
-		protected void append(LoggingEvent event) {
+		protected void append(final LoggingEvent event) {
 			this.message = event.getMessage().toString();
 		}
 

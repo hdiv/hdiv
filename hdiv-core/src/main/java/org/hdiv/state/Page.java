@@ -20,9 +20,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.hdiv.util.Method;
+
 /**
  * Data structure to store states of a page.
- * 
+ *
  * @author Roberto Velasco
  */
 public class Page implements IPage, Serializable {
@@ -50,14 +52,14 @@ public class Page implements IPage, Serializable {
 
 	/**
 	 * Unique random token. Used only for links.
-	 * 
+	 *
 	 * @since HDIV 2.0.4
 	 */
 	protected String randomToken;
 
 	/**
 	 * Unique random token. Used only for forms with PATCH, POST, PUT or DELETE methods.
-	 * 
+	 *
 	 * @since 2.1.7
 	 */
 	protected String formRandomToken;
@@ -69,115 +71,110 @@ public class Page implements IPage, Serializable {
 
 	/**
 	 * Sequential counter to generate state ids.
-	 * 
+	 *
 	 * @since 2.1.11
 	 */
 	protected int stateIdCounter;
 
 	/**
 	 * True if this page is reused. The most common case is in an Ajax request.
-	 * 
+	 *
 	 * @since 2.1.11
 	 */
-	protected Boolean isReused;
+	protected boolean isReused;
 
 	/**
 	 * Parent's state id
-	 * 
+	 *
 	 * @since 2.1.13
 	 */
 	protected String parentStateId;
 
+	@Deprecated
+	public Page() {
+	}
+
+	public Page(final int id) {
+		this.id = id;
+	}
+
 	/**
 	 * Adds a new state to the page <code>this</code>.
-	 * 
+	 *
 	 * @param state State that represents all the data that composes a possible request.
 	 */
-	public void addState(IState state) {
+	public void addState(final IState state) {
 		int id = state.getId();
-		if (this.states.size() < id) {
+		int size = states.size();
+		if (size < id) {
 			// There are empty positions before id, fill with null values
-			for (int i = this.states.size(); i < id; i++) {
-				this.states.add(i, null);
+			for (int i = size; i < id; i++) {
+				states.add(i, null);
 			}
-			this.states.add(id, state);
+			states.add(id, state);
 
 		}
-		else if (this.states.size() > id) {
+		else if (size > id) {
 			// overwrite existing position
-			this.states.set(id, state);
+			states.set(id, state);
 
 		}
 		else {
 			// list size == id
-			this.states.add(id, state);
+			states.add(id, state);
 		}
 	}
 
 	/**
 	 * Checks if exists a state with the given identifier <code>id</code>.
-	 * 
+	 *
 	 * @param id State identifier
 	 */
-	public boolean existState(int id) {
-		return this.states.get(id) != null;
+	public boolean existState(final int id) {
+		return getState(id) != null;
 	}
 
 	/**
 	 * Returns the state with the given identifier <code>id</code> from the map of states
-	 * 
+	 *
 	 * @param id State identifier
 	 * @return IState State with the identifier <code>id</code>.
 	 */
-	public IState getState(int id) {
-		return this.states.get(id);
-	}
-
-	/**
-	 * @return Returns the page name.
-	 */
-	public String getName() {
-		return this.id + "";
+	public IState getState(final int id) {
+		return states.get(id);
 	}
 
 	/**
 	 * @return Returns the page id.
 	 */
 	public int getId() {
-		return this.id;
-	}
-
-	/**
-	 * @param id The page id to set.
-	 */
-	public void setId(int id) {
-		this.id = id;
+		return id;
 	}
 
 	/**
 	 * @return Returns the page states.
 	 */
-	public Collection<? extends Object> getStates() {
+	public Collection<? extends IState> getStates() {
 		return states;
 	}
 
 	public int getNextStateId() {
 
-		if (isReused != null && isReused) {
+		if (isReused) {
 			// We have to synchronize reused Pages due to concurrency problems
 			synchronized (this) {
-				return this.stateIdCounter++;
+				return stateIdCounter++;
 			}
 		}
-		return this.stateIdCounter++;
+		return stateIdCounter++;
 	}
 
 	public void markAsReused() {
-		this.isReused = true;
+		isReused = true;
 	}
 
 	public boolean isReused() {
-		return this.isReused == null ? false : this.isReused;
+		return isReused;
 	}
 
 	/**
@@ -189,7 +186,7 @@ public class Page implements IPage, Serializable {
 
 	/**
 	 * Returns the unique id of flow.
-	 * 
+	 *
 	 * @return the flow id
 	 */
 	public String getFlowId() {
@@ -199,21 +196,21 @@ public class Page implements IPage, Serializable {
 	/**
 	 * @param flowId the flowId to set
 	 */
-	public void setFlowId(String flowId) {
+	public void setFlowId(final String flowId) {
 		this.flowId = flowId;
 	}
 
 	/**
 	 * Returns the corresponding token for the given HTTP method.
-	 * 
+	 *
 	 * @param method HTTP method
 	 * @return the randomToken
 	 * @since HDIV 2.1.7
 	 */
-	public String getRandomToken(String method) {
+	public String getRandomToken(final Method method) {
 
-		if (this.isFormMethod(method)) {
-			return this.formRandomToken;
+		if (isFormMethod(method)) {
+			return formRandomToken;
 		}
 		else {
 			return randomToken;
@@ -225,9 +222,9 @@ public class Page implements IPage, Serializable {
 	 * @param method HTTP method
 	 * @since HDIV 2.1.7
 	 */
-	public void setRandomToken(String randomToken, String method) {
-		if (this.isFormMethod(method)) {
-			this.formRandomToken = randomToken;
+	public void setRandomToken(final String randomToken, final Method method) {
+		if (isFormMethod(method)) {
+			formRandomToken = randomToken;
 		}
 		else {
 			this.randomToken = randomToken;
@@ -238,17 +235,12 @@ public class Page implements IPage, Serializable {
 	 * @param method HTTP method
 	 * @return true if method is POST, PATCH, PUT or DELETE, false otherwise.
 	 */
-	protected boolean isFormMethod(String method) {
-		if (method == null) {
+	protected final boolean isFormMethod(final Method method) {
+		if (method == null || method == Method.GET) {
 			// GET equivalent
 			return false;
 		}
-		method = method.toUpperCase();
-		if (method.equals("GET")) {
-			return false;
-		}
-		if (method.equals("POST") || method.equals("PATCH") || method.equals("PUT") || method.equals("DELETE")) {
-
+		if (method == Method.POST || method == Method.PATCH || method == Method.PUT || method == Method.DELETE) {
 			return true;
 		}
 		// Otherwise
@@ -265,14 +257,14 @@ public class Page implements IPage, Serializable {
 	/**
 	 * @param size the size to set
 	 */
-	public void setSize(long size) {
+	public void setSize(final long size) {
 		this.size = size;
 	}
 
 	/**
 	 * @param parentStateId the parentStateId to set
 	 */
-	public void setParentStateId(String parentStateId) {
+	public void setParentStateId(final String parentStateId) {
 		this.parentStateId = parentStateId;
 	}
 
@@ -280,16 +272,17 @@ public class Page implements IPage, Serializable {
 	 * @return the parentStateId
 	 */
 	public String getParentStateId() {
-		return this.parentStateId;
+		return parentStateId;
 	}
 
+	@Override
 	public String toString() {
 
-		StringBuffer result = new StringBuffer();
-		result.append("Page:" + this.id + " ");
+		StringBuilder result = new StringBuilder();
+		result.append("Page:").append(id).append(' ');
 
 		for (IState state : states) {
-			result.append(" " + state.toString());
+			result.append(" ").append(state.toString());
 		}
 
 		return result.toString();

@@ -23,24 +23,24 @@ import org.hdiv.state.IState;
 
 /**
  * UrlProcessor implementation for {@link IState} restore and URL validation purpose method.
- * 
+ *
  * @since 2.1.7
  */
 public class BasicUrlProcessor extends AbstractUrlProcessor {
 
 	/**
 	 * Create {@link UrlData} instance only with the ContextPath relative url and parameters in a Map.
-	 * 
+	 *
 	 * @param url original url, must be context relative
 	 * @param request {@link HttpServletRequest} object
 	 * @return new instance of {@link BasicUrlData}
 	 */
-	public BasicUrlData createBasicUrlData(String url, HttpServletRequest request) {
+	public BasicUrlData createBasicUrlData(String url, final HttpServletRequest request) {
 
 		BasicUrlData urlData = new BasicUrlData();
 
 		// Remove parameters
-		int paramInit = url.indexOf("?");
+		int paramInit = url.indexOf('?');
 		if (paramInit > -1) {
 			String urlParams = url.substring(paramInit + 1);
 			Map<String, String[]> ulrParamsMap = this.getUrlParamsAsMap(request, urlParams);
@@ -55,15 +55,13 @@ public class BasicUrlProcessor extends AbstractUrlProcessor {
 
 	/**
 	 * Creates {@link BasicUrlData} instance with contextPath relative URL and parameters processed.
-	 * 
+	 *
 	 * @param request {@link HttpServletRequest} object
 	 * @param url URL to process
 	 * @return {@link BasicUrlData} instance
 	 */
-	public BasicUrlData processUrl(HttpServletRequest request, String url) {
-
-		BasicUrlData urlData = this.createBasicUrlData(url, request);
-		return urlData;
+	public BasicUrlData processUrl(final HttpServletRequest request, final String url) {
+		return createBasicUrlData(url, request);
 	}
 
 }

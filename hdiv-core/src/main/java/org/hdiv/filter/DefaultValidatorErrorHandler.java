@@ -54,8 +54,7 @@ public class DefaultValidatorErrorHandler implements ValidatorErrorHandler {
 	 * @param errors Validation errors
 	 * @since 2.1.13
 	 */
-	public void handleValidatorError(HttpServletRequest request, HttpServletResponse response,
-			List<ValidatorError> errors) {
+	public void handleValidatorError(HttpServletRequest request, HttpServletResponse response, List<ValidatorError> errors) {
 
 		HttpSession session = request.getSession(false);
 
@@ -180,8 +179,8 @@ public class DefaultValidatorErrorHandler implements ValidatorErrorHandler {
 			response.setContentType("text/html");
 			PrintWriter out = response.getWriter();
 
-			List<ValidatorError> editableErrors = (List<ValidatorError>) request.getSession().getAttribute(
-					Constants.EDITABLE_PARAMETER_ERROR);
+			List<ValidatorError> editableErrors = (List<ValidatorError>) request.getSession()
+					.getAttribute(Constants.EDITABLE_PARAMETER_ERROR);
 			request.getSession().removeAttribute(Constants.EDITABLE_PARAMETER_ERROR);
 
 			this.errorPageWritter.writetErrorPage(out, editableErrors);

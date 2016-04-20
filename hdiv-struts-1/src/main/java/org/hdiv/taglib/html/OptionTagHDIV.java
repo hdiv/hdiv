@@ -116,7 +116,7 @@ public class OptionTagHDIV extends OptionTag {
 	 */
 	protected String renderOptionElement() throws JspException {
 
-		StringBuffer results = new StringBuffer("<option value=\"");
+		StringBuilder results = new StringBuilder("<option value=\"");
 
 		if (filter) {
 			results.append(TagUtils.getInstance().filter(this.value));
@@ -165,11 +165,11 @@ public class OptionTagHDIV extends OptionTag {
 	}
 
 	/**
-	 * Prepares an attribute if the value is not null, appending it to the the given StringBuffer.
+	 * Prepares an attribute if the value is not null, appending it to the the given StringBuilder.
 	 * 
-	 * @param handlers The StringBuffer that output will be appended to.
+	 * @param handlers The StringBuilder that output will be appended to.
 	 */
-	protected void renderAttribute(StringBuffer handlers, String name, Object value) {
+	protected void renderAttribute(StringBuilder handlers, String name, Object value) {
 
 		if (value != null) {
 			handlers.append(" ");

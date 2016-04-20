@@ -202,8 +202,8 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 		String cookieHeader = super.getHeader(name);
 		if (name.equalsIgnoreCase(COOKIE) && this.confidentiality && this.cookiesConfidentiality) {
 
-			Map<String, SavedCookie> sessionCookies = (Map<String, SavedCookie>) super.getSession().getAttribute(
-					Constants.HDIV_COOKIES_KEY);
+			Map<String, SavedCookie> sessionCookies = (Map<String, SavedCookie>) super.getSession()
+					.getAttribute(Constants.HDIV_COOKIES_KEY);
 
 			if (sessionCookies != null) {
 				return this.replaceCookieString(cookieHeader, sessionCookies);
@@ -229,8 +229,8 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 		if (name.equalsIgnoreCase(COOKIE) && this.confidentiality && this.cookiesConfidentiality) {
 
 			Vector<String> values = new Vector<String>();
-			Map<String, SavedCookie> sessionCookies = (Map<String, SavedCookie>) super.getSession().getAttribute(
-					Constants.HDIV_COOKIES_KEY);
+			Map<String, SavedCookie> sessionCookies = (Map<String, SavedCookie>) super.getSession()
+					.getAttribute(Constants.HDIV_COOKIES_KEY);
 
 			if (sessionCookies != null) {
 				while (headerValues.hasMoreElements()) {
@@ -319,8 +319,7 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 	}
 
 	@Override
-	public AsyncContext startAsync(ServletRequest servletRequest, ServletResponse servletResponse)
-			throws IllegalStateException {
+	public AsyncContext startAsync(ServletRequest servletRequest, ServletResponse servletResponse) throws IllegalStateException {
 		this.isAsyncRequest = true;
 		return super.startAsync(servletRequest, servletResponse);
 	}

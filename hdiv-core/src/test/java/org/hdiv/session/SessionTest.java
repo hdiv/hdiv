@@ -32,6 +32,7 @@ public class SessionTest extends AbstractHDIVTestCase {
 
 	private ISession session;
 
+	@Override
 	protected void onSetUp() throws Exception {
 
 		this.session = this.getApplicationContext().getBean(ISession.class);
@@ -50,8 +51,7 @@ public class SessionTest extends AbstractHDIVTestCase {
 
 		RequestContext context = this.getRequestContext();
 
-		IPage page = new Page();
-		page.setId(20);
+		IPage page = new Page(20);
 
 		IState state = new State(0);
 		state.setAction("/action");
@@ -59,7 +59,7 @@ public class SessionTest extends AbstractHDIVTestCase {
 		state.addParameter(param);
 		page.addState(state);
 
-		session.addPage(context, 20, page);
+		session.addPage(context, page);
 
 	}
 
@@ -67,8 +67,7 @@ public class SessionTest extends AbstractHDIVTestCase {
 
 		RequestContext context = this.getRequestContext();
 
-		IPage page = new Page();
-		page.setId(20);
+		IPage page = new Page(20);
 
 		IState state = new State(0);
 		state.setAction("/action");
@@ -76,7 +75,7 @@ public class SessionTest extends AbstractHDIVTestCase {
 		state.addParameter(param);
 		page.addState(state);
 
-		session.addPage(context, 20, page);
+		session.addPage(context, page);
 
 		// Restore state
 		IState restored = session.getState(context, 20, 0);
@@ -89,8 +88,7 @@ public class SessionTest extends AbstractHDIVTestCase {
 
 		RequestContext context = this.getRequestContext();
 
-		IPage page = new Page();
-		page.setId(20);
+		IPage page = new Page(20);
 
 		IState state = new State(0);
 		state.setAction("/action");
@@ -98,7 +96,7 @@ public class SessionTest extends AbstractHDIVTestCase {
 		state.addParameter(param);
 		page.addState(state);
 
-		session.addPage(context, 20, page);
+		session.addPage(context, page);
 
 		// Restore page
 		IPage restored = session.getPage(context, 20);
@@ -112,29 +110,27 @@ public class SessionTest extends AbstractHDIVTestCase {
 		RequestContext context = this.getRequestContext();
 
 		// First page
-		IPage page = new Page();
-		page.setId(20);
+		IPage page = new Page(20);
 
 		IState state = new State(0);
 		state.setAction("/action");
 		page.addState(state);
 
-		session.addPage(context, 20, page);
+		session.addPage(context, page);
 
 		IStateCache cache = (IStateCache) this.getMockRequest().getSession().getAttribute(Constants.STATE_CACHE_NAME);
 		List<Integer> ids = cache.getPageIds();
 		assertEquals(1, ids.size());
 
 		// Second page
-		page = new Page();
-		page.setId(21);
+		page = new Page(21);
 
 		state = new State(0);
 		state.setAction("/action");
 		page.addState(state);
 		page.setParentStateId("14-0-E3E5BA9F9AC0DEA35BBE14189510600E");
 
-		session.addPage(context, 21, page);
+		session.addPage(context, page);
 
 		cache = (IStateCache) this.getMockRequest().getSession().getAttribute(Constants.STATE_CACHE_NAME);
 		ids = cache.getPageIds();
@@ -144,8 +140,7 @@ public class SessionTest extends AbstractHDIVTestCase {
 		HDIVUtil.setCurrentPageId(20, this.getMockRequest());
 
 		// Third page
-		page = new Page();
-		page.setId(22);
+		page = new Page(22);
 
 		// Same parent state id because a refresh has been performed
 		page.setParentStateId("14-0-E3E5BA9F9AC0DEA35BBE14189510600E");
@@ -154,7 +149,7 @@ public class SessionTest extends AbstractHDIVTestCase {
 		state.setAction("/action");
 		page.addState(state);
 
-		session.addPage(context, 22, page);
+		session.addPage(context, page);
 
 		cache = (IStateCache) this.getMockRequest().getSession().getAttribute(Constants.STATE_CACHE_NAME);
 		ids = cache.getPageIds();

@@ -24,7 +24,7 @@ import org.springframework.context.annotation.Configuration;
 
 /**
  * Contains the configuration beans for Struts1 framework support.
- * 
+ *
  * @since 2.1.7
  */
 @Configuration
@@ -33,8 +33,6 @@ public class Struts1ConfigurationSupport {
 
 	@Bean
 	public IMultipartConfig securityMultipartConfig() {
-
-		IMultipartConfig multipartConfig = new StrutsMultipartConfig();
-		return multipartConfig;
+		return new StrutsMultipartConfig();
 	}
 }

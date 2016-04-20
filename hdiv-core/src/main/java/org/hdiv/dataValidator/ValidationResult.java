@@ -45,21 +45,22 @@ public class ValidationResult implements IValidationResult {
 	/**
 	 * @param legal The legal to set.
 	 */
-	public void setLegal(boolean legal) {
+	public void setLegal(final boolean legal) {
 		this.legal = legal;
 	}
 
 	/**
 	 * @return Returns the result.
 	 */
-	public Object getResult() {
-		return result;
+	@SuppressWarnings("unchecked")
+	public <T> T getResult() {
+		return (T) result;
 	}
 
 	/**
 	 * @param result The result to set.
 	 */
-	public void setResult(Object result) {
+	public void setResult(final Object result) {
 		this.result = result;
 	}
 
@@ -73,7 +74,7 @@ public class ValidationResult implements IValidationResult {
 	/**
 	 * @param expectedValue The expectedValue to set.
 	 */
-	public void setExpectedValue(String expectedValue) {
+	public void setExpectedValue(final String expectedValue) {
 		this.expectedValue = expectedValue;
 	}
 }

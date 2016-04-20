@@ -31,8 +31,8 @@ import org.springframework.util.ClassUtils;
  */
 public class UserData implements IUserData {
 
-	private final boolean springSecurityPresent = ClassUtils.isPresent(
-			"org.springframework.security.core.context.SecurityContextHolder", UserData.class.getClassLoader());
+	private final boolean springSecurityPresent = ClassUtils.isPresent("org.springframework.security.core.context.SecurityContextHolder",
+			UserData.class.getClassLoader());
 
 	public String getUsername(HttpServletRequest request) {
 

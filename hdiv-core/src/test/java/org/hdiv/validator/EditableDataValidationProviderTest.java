@@ -51,8 +51,7 @@ public class EditableDataValidationProviderTest extends AbstractHDIVTestCase {
 
 	public void testEditableParamValidatorOrder() {
 
-		Map<ValidationTarget, List<IValidation>> validations = ((DefaultValidationRepository) this.validationRepository)
-				.getValidations();
+		Map<ValidationTarget, List<IValidation>> validations = ((DefaultValidationRepository) this.validationRepository).getValidations();
 		assertEquals(4, validations.size());
 
 		Object[] ptrs = validations.keySet().toArray();

@@ -206,7 +206,7 @@ public class HDIVRequestProcessor extends RequestProcessor {
 	public String createMessageError(String paramValues) {
 
 		String[] values = paramValues.split(",");
-		StringBuffer printedValue = new StringBuffer();
+		StringBuilder printedValue = new StringBuilder();
 
 		for (int i = 0; i < values.length; i++) {
 

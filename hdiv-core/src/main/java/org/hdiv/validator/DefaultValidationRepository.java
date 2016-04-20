@@ -16,15 +16,16 @@
 package org.hdiv.validator;
 
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.hdiv.regex.PatternMatcher;
 
 /**
  * Validation rules container based in validations defined in hdiv-config.xml file.
- * 
+ *
  * @since HDIV 2.1.10
  */
 public class DefaultValidationRepository implements ValidationRepository, Serializable {
@@ -43,15 +44,15 @@ public class DefaultValidationRepository implements ValidationRepository, Serial
 
 	/**
 	 * Returns the validation rules for a concrete url and parameter name.
-	 * 
+	 *
 	 * @param url request url
 	 * @param parameter parameter name
 	 * @return Selected validations
 	 */
-	public List<IValidation> findValidations(String url, String parameter) {
+	public List<IValidation> findValidations(final String url, final String parameter) {
 
-		for (ValidationTarget target : this.validations.keySet()) {
-
+		for (Entry<ValidationTarget, List<IValidation>> entry : this.validations.entrySet()) {
+			ValidationTarget target = entry.getKey();
 			PatternMatcher urlMatcher = target.getUrl();
 
 			// Null URL is equivalent to all URLs.
@@ -74,16 +75,16 @@ public class DefaultValidationRepository implements ValidationRepository, Serial
 
 				if (paramMatch) {
 
-					return this.validations.get(target);
+					return entry.getValue();
 				}
 			}
 		}
-		return new ArrayList<IValidation>();
+		return Collections.emptyList();
 	}
 
 	/**
 	 * Returns default validation rules.
-	 * 
+	 *
 	 * @return Default validations
 	 */
 	public List<IValidation> findDefaultValidations() {
@@ -93,7 +94,7 @@ public class DefaultValidationRepository implements ValidationRepository, Serial
 	/**
 	 * @param validations the validations to set
 	 */
-	public void setValidations(Map<ValidationTarget, List<IValidation>> validations) {
+	public void setValidations(final Map<ValidationTarget, List<IValidation>> validations) {
 		this.validations = validations;
 	}
 
@@ -114,7 +115,7 @@ public class DefaultValidationRepository implements ValidationRepository, Serial
 	/**
 	 * @param defaultValidations the defaultValidations to set
 	 */
-	public void setDefaultValidations(List<IValidation> defaultValidations) {
+	public void setDefaultValidations(final List<IValidation> defaultValidations) {
 		this.defaultValidations = defaultValidations;
 	}
 

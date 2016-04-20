@@ -22,10 +22,11 @@ import org.apache.commons.logging.LogFactory;
 import org.hdiv.dataComposer.IDataComposer;
 import org.hdiv.util.Constants;
 import org.hdiv.util.HDIVUtil;
+import org.hdiv.util.Method;
 
 /**
  * UrlProcessor for form action urls.
- * 
+ *
  * @author Gotzon Illarramendi
  */
 public class FormUrlProcessor extends AbstractUrlProcessor {
@@ -39,28 +40,32 @@ public class FormUrlProcessor extends AbstractUrlProcessor {
 
 	/**
 	 * Process form action url to add hdiv state if it is necessary.
-	 * 
+	 *
 	 * @param request {@link HttpServletRequest} object
 	 * @param url url to process
 	 * @return processed url
 	 */
-	public String processUrl(HttpServletRequest request, String url) {
+	public String processUrl(final HttpServletRequest request, final String url) {
+		return processUrl(request, url, Method.POST);
+	}
 
-		return this.processUrl(request, url, "POST");
+	@Deprecated
+	public final String processUrl(final HttpServletRequest request, final String url, final String method) {
+		return processUrl(request, url, Method.secureValueOf(method));
 	}
 
 	/**
 	 * Process form action url to add hdiv state if it is necessary.
-	 * 
+	 *
 	 * @param request {@link HttpServletRequest} object
 	 * @param url url to process
 	 * @param method form submit method
 	 * @return processed url
 	 */
-	public String processUrl(HttpServletRequest request, String url, String method) {
+	public String processUrl(final HttpServletRequest request, String url, Method method) {
 
 		if (method == null) {
-			method = "POST";
+			method = Method.POST;
 		}
 
 		IDataComposer dataComposer = HDIVUtil.getDataComposer(request);
@@ -71,9 +76,9 @@ public class FormUrlProcessor extends AbstractUrlProcessor {
 			}
 			return url;
 		}
-
-		UrlData urlData = this.createUrlData(url, method, request);
-		if (this.isHdivStateNecessary(urlData)) {
+		String hdivParameter = HDIVUtil.getHDIVParameter(request);
+		UrlData urlData = createUrlData(url, method, hdivParameter, request);
+		if (isHdivStateNecessary(urlData)) {
 			// the url needs protection
 			String stateId = dataComposer.beginRequest(method, urlData.getUrlWithoutContextPath());
 
@@ -81,12 +86,11 @@ public class FormUrlProcessor extends AbstractUrlProcessor {
 			request.setAttribute(FORM_STATE_ID, stateId);
 
 			// Process url params
-			String processedParams = dataComposer.composeParams(urlData.getUrlParams(), method,
-					Constants.ENCODING_UTF_8);
+			String processedParams = dataComposer.composeParams(urlData.getUrlParams(), method, Constants.ENCODING_UTF_8);
 			urlData.setUrlParams(processedParams);
 
 			// Action url with confidential values
-			url = this.getProcessedUrl(urlData);
+			url = getProcessedUrl(urlData);
 		}
 
 		return url;

@@ -17,7 +17,7 @@ package org.hdiv.state.scope;
 
 /**
  * Different type of {@link StateScope} and their names.
- * 
+ *
  * @since 2.1.7
  */
 public enum StateScopeType {
@@ -45,14 +45,14 @@ public enum StateScopeType {
 	/**
 	 * Scope name used for the configuration.
 	 */
-	private String name;
+	private final String name;
 
 	/**
 	 * Prefix code used at state id creation.
 	 */
-	private String prefix;
+	private final String prefix;
 
-	StateScopeType(String name, String prefix) {
+	StateScopeType(final String name, final String prefix) {
 		this.name = name;
 		this.prefix = prefix;
 	}

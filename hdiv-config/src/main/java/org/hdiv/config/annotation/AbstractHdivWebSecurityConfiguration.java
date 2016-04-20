@@ -28,6 +28,7 @@ import org.hdiv.config.annotation.ValidationConfigurer.ValidationConfig;
 import org.hdiv.config.annotation.ValidationConfigurer.ValidationConfig.EditableValidationConfigurer;
 import org.hdiv.config.annotation.builders.SecurityConfigBuilder;
 import org.hdiv.config.validations.DefaultValidationParser;
+import org.hdiv.config.validations.DefaultValidationParser.ValidationParam;
 import org.hdiv.dataComposer.DataComposerFactory;
 import org.hdiv.dataValidator.DataValidator;
 import org.hdiv.dataValidator.IDataValidator;
@@ -79,68 +80,68 @@ import org.springframework.context.annotation.Scope;
 
 /**
  * Main abstract class for {@link Configuration} support. Creates all internal bean instances.
- * 
+ *
  * @since 3.0.0
  */
 public abstract class AbstractHdivWebSecurityConfiguration {
 
 	/**
 	 * Override this method to configure HDIV
-	 * 
+	 *
 	 * @param securityConfigBuilder {@link SecurityConfigBuilder} instance
 	 * @see SecurityConfigBuilder
 	 */
-	protected void configure(SecurityConfigBuilder securityConfigBuilder) {
+	protected void configure(final SecurityConfigBuilder securityConfigBuilder) {
 	}
 
 	/**
 	 * Override this method to add exclusions to the validation process.
-	 * 
+	 *
 	 * @param registry {@link ExclusionRegistry} instance
 	 * @see ExclusionRegistry
 	 */
-	protected void addExclusions(ExclusionRegistry registry) {
+	protected void addExclusions(final ExclusionRegistry registry) {
 	}
 
 	/**
 	 * Override this method to add long living pages to the application.
-	 * 
+	 *
 	 * @param registry {@link LongLivingPagesRegistry} instance
 	 * @see LongLivingPagesRegistry
 	 */
-	protected void addLongLivingPages(LongLivingPagesRegistry registry) {
+	protected void addLongLivingPages(final LongLivingPagesRegistry registry) {
 	}
 
 	/**
 	 * Override this method to add editable validation rules.
-	 * 
+	 *
 	 * @param registry {@link RuleRegistry} instance
 	 * @see RuleRegistry
 	 */
-	protected void addRules(RuleRegistry registry) {
+	protected void addRules(final RuleRegistry registry) {
 	}
 
 	/**
 	 * Override this method to add editable validations to the application.
-	 * 
+	 *
 	 * @param validationConfigurer {@link ValidationConfigurer} instance
 	 * @see ValidationConfigurer
 	 */
-	protected void configureEditableValidation(ValidationConfigurer validationConfigurer) {
+	protected void configureEditableValidation(final ValidationConfigurer validationConfigurer) {
 	}
 
 	@Bean
 	public HDIVConfig hdivConfig() {
 
-		SecurityConfigBuilder securityConfigBuilder = this.securityConfigBuilder();
-		this.configure(securityConfigBuilder);
+		SecurityConfigBuilder securityConfigBuilder = securityConfigBuilder();
+		configure(securityConfigBuilder);
 
 		HDIVConfig config = securityConfigBuilder.build();
 		config.setEditableDataValidationProvider(editableDataValidationProvider());
 
 		// User configured exclusions
 		ExclusionRegistry exclusionRegistry = new ExclusionRegistry(patternMatcherFactory());
-		this.addExclusions(exclusionRegistry);
+		addExclusions(exclusionRegistry);
 		// Start Pages
 		List<StartPage> exclusions = exclusionRegistry.getUrlExclusions();
 		config.setUserStartPages(exclusions);
@@ -153,7 +154,7 @@ public abstract class AbstractHdivWebSecurityConfiguration {
 
 		// Long living pages
 		LongLivingPagesRegistry longLivingPagesRegistry = new LongLivingPagesRegistry();
-		this.addLongLivingPages(longLivingPagesRegistry);
+		addLongLivingPages(longLivingPagesRegistry);
 		Map<String, String> longLivingPages = longLivingPagesRegistry.getLongLivingPages();
 		config.setLongLivingPages(longLivingPages);
 
@@ -222,7 +223,7 @@ public abstract class AbstractHdivWebSecurityConfiguration {
 	@Scope(BeanDefinition.SCOPE_PROTOTYPE)
 	public IStateCache stateCache() {
 
-		SecurityConfigBuilder builder = this.securityConfigBuilder();
+		SecurityConfigBuilder builder = securityConfigBuilder();
 		int maxPagesPerSession = builder.getMaxPagesPerSession();
 
 		StateCache stateCache = new StateCache();
@@ -375,14 +376,14 @@ public abstract class AbstractHdivWebSecurityConfiguration {
 		// Load validations from xml
 		DefaultValidationParser parser = new DefaultValidationParser();
 		parser.readDefaultValidations();
-		List<Map<String, String>> validations = parser.getValidations();
+		List<Map<ValidationParam, String>> validations = parser.getValidations();
 
 		List<IValidation> defaultRules = new ArrayList<IValidation>();
 
-		for (Map<String, String> validation : validations) {
+		for (Map<ValidationParam, String> validation : validations) {
 			// Map contains validation id and regex extracted from the xml
-			String id = validation.get("id");
-			String regex = validation.get("regex");
+			String id = validation.get(ValidationParam.ID);
+			String regex = validation.get(ValidationParam.REGEX);
 
 			// Create bean for the validation
 			Validation validationBean = new Validation();
@@ -398,18 +399,18 @@ public abstract class AbstractHdivWebSecurityConfiguration {
 	protected Map<String, IValidation> getCustomRules() {
 
 		RuleRegistry registry = new RuleRegistry();
-		this.addRules(registry);
+		addRules(registry);
 		Map<String, IValidation> customRules = registry.getRules();
 		return customRules;
 	}
 
-	protected Map<ValidationTarget, List<IValidation>> getValidationsData(List<IValidation> defaultRules,
-			Map<String, IValidation> customRules) {
+	protected Map<ValidationTarget, List<IValidation>> getValidationsData(final List<IValidation> defaultRules,
+			final Map<String, IValidation> customRules) {
 
 		PatternMatcherFactory patternMatcherFactory = patternMatcherFactory();
 
 		ValidationConfigurer validationConfigurer = new ValidationConfigurer();
-		this.configureEditableValidation(validationConfigurer);
+		configureEditableValidation(validationConfigurer);
 		List<ValidationConfig> validationConfigs = validationConfigurer.getValidationConfigs();
 
 		Map<ValidationTarget, List<IValidation>> validationsData = new LinkedHashMap<ValidationTarget, List<IValidation>>();
@@ -417,8 +418,7 @@ public abstract class AbstractHdivWebSecurityConfiguration {
 		for (ValidationConfig validationConfig : validationConfigs) {
 
 			String urlPattern = validationConfig.getUrlPattern();
-			EditableValidationConfigurer editableValidationConfigurer = validationConfig
-					.getEditableValidationConfigurer();
+			EditableValidationConfigurer editableValidationConfigurer = validationConfig.getEditableValidationConfigurer();
 			boolean useDefaultRules = editableValidationConfigurer.isDefaultRules();
 			List<String> selectedRules = editableValidationConfigurer.getRules();
 			List<String> selectedParams = editableValidationConfigurer.getParameters();
