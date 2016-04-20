@@ -116,7 +116,7 @@ public final class UrlData {
 		originalUrl = url;
 		this.method = method;
 		this.uriTemplateNotSupported = uriTemplateNotSupported;
-		if (uriTemplateNotSupported && !"".equals(url)) {
+		if (!uriTemplateNotSupported && !"".equals(url)) {
 			parser(url);
 		}
 	}
