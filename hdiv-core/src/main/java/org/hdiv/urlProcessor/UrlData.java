@@ -366,7 +366,7 @@ public final class UrlData {
 	}
 
 	public boolean isJS() {
-		return originalUrl.charAt(10) == ':' && originalUrl.toLowerCase().startsWith("javascript:");
+		return originalUrl.length() > 10 && originalUrl.charAt(10) == ':' && originalUrl.toLowerCase().startsWith("javascript:");
 	}
 
 }
