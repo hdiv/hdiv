@@ -66,7 +66,7 @@ public class LinkUrlProcessor extends AbstractUrlProcessor {
 			}
 			return url;
 		}
-		String hdivParameter = HDIVUtil.getHDIVParameter(request);
+		String hdivParameter = HDIVUtil.getHdivStateParameterName(request);
 		UrlData urlData = createUrlData(url, Method.GET, hdivParameter, request);
 		if (isHdivStateNecessary(urlData)) {
 			// the url needs protection

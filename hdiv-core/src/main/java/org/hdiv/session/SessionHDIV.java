@@ -32,9 +32,10 @@ import org.hdiv.util.HDIVErrorCodes;
 import org.hdiv.util.HDIVUtil;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
+import org.springframework.util.Assert;
 
 /**
- * A custom wrapper for http session request that returns a wrapped http session.
+ * Facade to access to attributes in {@link HttpSession}.
  * 
  * @author Roberto Velasco
  */
@@ -347,6 +348,46 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 
 		IStateCache cache = beanFactory.getBean(IStateCache.class);
 		return cache;
+	}
+
+	public String getAttribute(RequestContext context, String name) {
+		Assert.notNull(context);
+		Assert.notNull(name);
+
+		return (String) context.getSession().getAttribute(name);
+	}
+
+	@SuppressWarnings("unchecked")
+	public <T> T getAttribute(RequestContext context, String name, Class<T> requiredType) {
+		Assert.notNull(context);
+		Assert.notNull(name);
+		Assert.notNull(requiredType);
+
+		Object result = context.getSession().getAttribute(name);
+		if (result == null) {
+			return null;
+		}
+		else if (requiredType.isInstance(result)) {
+			return (T) result;
+		}
+		else {
+			throw new IllegalArgumentException("Attibute with name '" + name + "' is not of required type "
+					+ requiredType.getCanonicalName());
+		}
+	}
+
+	public void setAttribute(RequestContext context, String name, Object value) {
+		Assert.notNull(context);
+		Assert.notNull(name);
+
+		context.getSession().setAttribute(name, value);
+	}
+
+	public void removeAttribute(RequestContext context, String name) {
+		Assert.notNull(context);
+		Assert.notNull(name);
+
+		context.getSession().removeAttribute(name);
 	}
 
 	/**

@@ -33,7 +33,10 @@ import javax.servlet.http.HttpServletRequestWrapper;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.hdiv.context.RequestContext;
+import org.hdiv.session.ISession;
 import org.hdiv.util.Constants;
+import org.springframework.util.Assert;
 
 /**
  * A wrapper for HTTP servlet request.
@@ -97,13 +100,25 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 	protected boolean isAsyncRequest = false;
 
 	/**
+	 * Session object wrapper.
+	 */
+	protected ISession session;
+
+	/**
+	 * Request context data.
+	 */
+	protected RequestContext requestContext = new RequestContext(this);
+
+	/**
 	 * Constructs a request object wrapping the given request.
 	 * 
 	 * @param servletRequest request
 	 */
-	public RequestWrapper(HttpServletRequest servletRequest) {
+	public RequestWrapper(final HttpServletRequest servletRequest) {
 
 		super(servletRequest);
+
+		Assert.notNull(servletRequest);
 
 		if (log.isDebugEnabled()) {
 			log.debug("New RequestWrapper instance.");
@@ -117,20 +132,20 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 	 * @param parameter the name of the parameter whose value is requested
 	 */
 	@Override
-	public String[] getParameterValues(String parameter) {
+	public String[] getParameterValues(final String parameter) {
 
 		// non validated parameters are obtained from the original request
-		if (!this.parameters.containsKey(parameter)) {
+		if (!parameters.containsKey(parameter)) {
 			return super.getParameterValues(parameter);
 		}
 
-		Object data = this.parameters.get(parameter);
+		Object data = parameters.get(parameter);
 
 		if (data.getClass().isArray()) {
 			return (String[]) data;
 		}
 		else {
-			String[] array = this.parameters.get(parameter);
+			String[] array = parameters.get(parameter);
 			return array;
 		}
 	}
@@ -142,21 +157,21 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 	 * @param parameter name of the parameter
 	 */
 	@Override
-	public String getParameter(String parameter) {
+	public String getParameter(final String parameter) {
 
 		// non validated parameters are obtained from the original request
-		if (!this.parameters.containsKey(parameter)) {
+		if (!parameters.containsKey(parameter)) {
 			return super.getParameter(parameter);
 		}
 
-		Object data = this.parameters.get(parameter);
+		Object data = parameters.get(parameter);
 
 		if (data.getClass().isArray()) {
 			String[] array = (String[]) data;
 			return array[0];
 		}
 		else {
-			String[] values = this.parameters.get(parameter);
+			String[] values = parameters.get(parameter);
 			return values.length > 0 ? values[0] : null;
 		}
 	}
@@ -170,7 +185,7 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 
 		Enumeration<String> baseParams = super.getParameterNames();
 
-		if (!this.isMultipart) {
+		if (!isMultipart) {
 			return baseParams;
 		}
 
@@ -180,7 +195,7 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 			list.add(baseParams.nextElement());
 		}
 
-		Collection<String> multipartParams = this.parameters.keySet();
+		Collection<String> multipartParams = parameters.keySet();
 
 		list.addAll(multipartParams);
 
@@ -197,16 +212,15 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 	 */
 	@Override
 	@SuppressWarnings("unchecked")
-	public String getHeader(String name) {
+	public String getHeader(final String name) {
 
 		String cookieHeader = super.getHeader(name);
-		if (name.equalsIgnoreCase(COOKIE) && this.confidentiality && this.cookiesConfidentiality) {
+		if (name.equalsIgnoreCase(COOKIE) && confidentiality && cookiesConfidentiality) {
 
-			Map<String, SavedCookie> sessionCookies = (Map<String, SavedCookie>) super.getSession()
-					.getAttribute(Constants.HDIV_COOKIES_KEY);
+			Map<String, SavedCookie> sessionCookies = session.getAttribute(requestContext, Constants.HDIV_COOKIES_KEY, Map.class);
 
 			if (sessionCookies != null) {
-				return this.replaceCookieString(cookieHeader, sessionCookies);
+				return replaceCookieString(cookieHeader, sessionCookies);
 			}
 		}
 		return cookieHeader;
@@ -222,20 +236,19 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 	 */
 	@Override
 	@SuppressWarnings("unchecked")
-	public Enumeration<String> getHeaders(String name) {
+	public Enumeration<String> getHeaders(final String name) {
 
 		Enumeration<String> headerValues = super.getHeaders(name);
 
-		if (name.equalsIgnoreCase(COOKIE) && this.confidentiality && this.cookiesConfidentiality) {
+		if (name.equalsIgnoreCase(COOKIE) && confidentiality && cookiesConfidentiality) {
 
 			Vector<String> values = new Vector<String>();
-			Map<String, SavedCookie> sessionCookies = (Map<String, SavedCookie>) super.getSession()
-					.getAttribute(Constants.HDIV_COOKIES_KEY);
+			Map<String, SavedCookie> sessionCookies = session.getAttribute(requestContext, Constants.HDIV_COOKIES_KEY, Map.class);
 
 			if (sessionCookies != null) {
 				while (headerValues.hasMoreElements()) {
-					String element = (String) headerValues.nextElement();
-					String replaced = this.replaceCookieString(element, sessionCookies);
+					String element = headerValues.nextElement();
+					String replaced = replaceCookieString(element, sessionCookies);
 					values.add(replaced);
 				}
 			}
@@ -255,7 +268,7 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 	 * @return cookie request header with replaced values
 	 * @since HDIV 1.1.1
 	 */
-	protected String replaceCookieString(String cookieHeader, Map<String, SavedCookie> sessionCookies) {
+	protected String replaceCookieString(final String cookieHeader, final Map<String, SavedCookie> sessionCookies) {
 
 		String header = cookieHeader.trim();
 
@@ -288,12 +301,12 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 	 * @param name parameter name
 	 * @param value value
 	 */
-	public void addParameter(String name, String[] value) {
+	public void addParameter(final String name, final String[] value) {
 
-		this.parameters.put(name, value);
+		parameters.put(name, value);
 
-		if (this.isMultipart) {
-			this.addTextParameter(name, value);
+		if (isMultipart) {
+			addTextParameter(name, value);
 		}
 	}
 
@@ -307,20 +320,21 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 	public Map<String, String[]> getParameterMap() {
 
 		Map<String, String[]> map = new HashMap<String, String[]>(super.getRequest().getParameterMap());
-		map.putAll(this.parameters);
+		map.putAll(parameters);
 
 		return map;
 	}
 
 	@Override
 	public AsyncContext startAsync() throws IllegalStateException {
-		this.isAsyncRequest = true;
+		isAsyncRequest = true;
 		return super.startAsync();
 	}
 
 	@Override
-	public AsyncContext startAsync(ServletRequest servletRequest, ServletResponse servletResponse) throws IllegalStateException {
-		this.isAsyncRequest = true;
+	public AsyncContext startAsync(final ServletRequest servletRequest, final ServletResponse servletResponse)
+			throws IllegalStateException {
+		isAsyncRequest = true;
 		return super.startAsync(servletRequest, servletResponse);
 	}
 
@@ -330,7 +344,7 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 	 * @return The text request parameters.
 	 */
 	public Map<String, Object> getTextElements() {
-		return this.elementsText;
+		return elementsText;
 	}
 
 	/**
@@ -339,7 +353,7 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 	 * @return The file request parameters.
 	 */
 	public Map<String, Object> getFileElements() {
-		return this.elementsFile;
+		return elementsFile;
 	}
 
 	/**
@@ -348,8 +362,8 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 	 * @param name text parameter name
 	 * @param value text parameter value
 	 */
-	public void addTextParameter(String name, Object value) {
-		this.elementsText.put(name, value);
+	public void addTextParameter(final String name, final Object value) {
+		elementsText.put(name, value);
 	}
 
 	/**
@@ -358,8 +372,8 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 	 * @param name file name
 	 * @param values file values
 	 */
-	public void addFileItem(String name, Object values) {
-		this.elementsFile.put(name, values);
+	public void addFileItem(final String name, final Object values) {
+		elementsFile.put(name, values);
 	}
 
 	/**
@@ -367,8 +381,8 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 	 * 
 	 * @param parameter new parameter name
 	 */
-	public void addEditableParameter(String parameter) {
-		this.editableParameters.add(parameter);
+	public void addEditableParameter(final String parameter) {
+		editableParameters.add(parameter);
 	}
 
 	/**
@@ -377,8 +391,8 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 	 * @param parameter parameter name
 	 * @return boolean
 	 */
-	public boolean isEditableParameter(String parameter) {
-		return this.editableParameters.contains(parameter);
+	public boolean isEditableParameter(final String parameter) {
+		return editableParameters.contains(parameter);
 	}
 
 	/**
@@ -393,22 +407,29 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 	 * 
 	 * @param isMultipart true if it is multipart
 	 */
-	public void setMultipart(boolean isMultipart) {
+	public void setMultipart(final boolean isMultipart) {
 		this.isMultipart = isMultipart;
 	}
 
 	/**
 	 * @param cookiesConfidentiality The cookiesConfidentiality to set.
 	 */
-	public void setCookiesConfidentiality(boolean cookiesConfidentiality) {
+	public void setCookiesConfidentiality(final boolean cookiesConfidentiality) {
 		this.cookiesConfidentiality = cookiesConfidentiality;
 	}
 
 	/**
 	 * @param confidentiality The confidentiality to set.
 	 */
-	public void setConfidentiality(boolean confidentiality) {
+	public void setConfidentiality(final boolean confidentiality) {
 		this.confidentiality = confidentiality;
+	}
+
+	/**
+	 * @param session the session to set
+	 */
+	public void setSession(final ISession session) {
+		this.session = session;
 	}
 
 }

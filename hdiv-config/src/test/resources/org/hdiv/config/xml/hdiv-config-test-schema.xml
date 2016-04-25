@@ -19,12 +19,14 @@ http://www.hdiv.org/schema/hdiv http://www.hdiv.org/schema/hdiv/hdiv.xsd">
 
 	<hdiv:editableValidations registerDefaults="true">
 		<hdiv:validationRule url="a" enableDefaults="false"></hdiv:validationRule>
-		<hdiv:validationRule url="b" parameters="param1, param2, param3" enableDefaults="false">id1</hdiv:validationRule>
-		<hdiv:validationRule url="c"> 
+		<hdiv:validationRule url="b" parameters="param1, param2, param3"
+			enableDefaults="false">id1</hdiv:validationRule>
+		<hdiv:validationRule url="c">
 			id2,
 			id3
-		 </hdiv:validationRule>
-		 <hdiv:validationRule parameters="param4, param5" enableDefaults="false">id3</hdiv:validationRule>
+		</hdiv:validationRule>
+		<hdiv:validationRule parameters="param4, param5"
+			enableDefaults="false">id3</hdiv:validationRule>
 	</hdiv:editableValidations>
 
 	<hdiv:config confidentiality="true" avoidCookiesIntegrity="true"
@@ -32,18 +34,23 @@ http://www.hdiv.org/schema/hdiv http://www.hdiv.org/schema/hdiv/hdiv.xsd">
 		randomName="true" strategy="memory" maxPagesPerSession="20"
 		avoidCookiesConfidentiality="true" avoidValidationInUrlsWithoutParams="true"
 		debugMode="true" userData="testUserData"
-		showErrorPageOnEditableValidation="true" reuseExistingPageInAjaxRequest="true">
-		<hdiv:sessionExpired loginPage="/login.html" homePage="/"/>
+		showErrorPageOnEditableValidation="true"
+		reuseExistingPageInAjaxRequest="true">
+		<hdiv:sessionExpired loginPage="/login.html"
+			homePage="/" />
 		<hdiv:startPages>page1,page2</hdiv:startPages>
-		<hdiv:startPages method="get">/onlyGet.html</hdiv:startPages>
+		<hdiv:startPages method="get">/onlyGet.html
+		</hdiv:startPages>
 		<hdiv:startParameters>parameter1,parameter2</hdiv:startParameters>
 		<hdiv:paramsWithoutValidation>
 			<hdiv:mapping url="/page1" parameters="param1,param2" />
 			<hdiv:mapping url="/page2" parameters="param3,param4" />
 		</hdiv:paramsWithoutValidation>
 		<hdiv:longLivingPages>/default.html</hdiv:longLivingPages>
-		<hdiv:longLivingPages scope="app">/app.html</hdiv:longLivingPages>
-		<hdiv:longLivingPages scope="user-session">/user.html</hdiv:longLivingPages>
+		<hdiv:longLivingPages scope="app">/app.html
+		</hdiv:longLivingPages>
+		<hdiv:longLivingPages scope="user-session">/user.html
+		</hdiv:longLivingPages>
 	</hdiv:config>
 
 	<bean id="testUserData" class="org.hdiv.config.xml.TestUserData"></bean>

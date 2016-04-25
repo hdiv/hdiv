@@ -189,7 +189,7 @@ public abstract class AbstractUrlProcessor {
 
 		String value = urlParams.replaceAll("&amp;", "&");
 
-		String hdivParameter = HDIVUtil.getHDIVParameter(request);
+		String hdivParameter = HDIVUtil.getHdivStateParameterName(request);
 
 		StringTokenizer st = new StringTokenizer(value, "&");
 		while (st.hasMoreTokens()) {
@@ -291,7 +291,6 @@ public abstract class AbstractUrlProcessor {
 		if (stateParam == null || stateParam.length() <= 0) {
 			return sb.toString();
 		}
-
 		char separator = (urlData.containsParams()) ? '&' : '?';
 
 		sb.append(separator).append(hdivParameter).append('=').append(stateParam);

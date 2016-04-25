@@ -53,6 +53,7 @@
 	<!-- Initializers -->
 	<bean id="requestInitializer" class="org.hdiv.init.DefaultRequestInitializer">
 		<property name="config" ref="config" />
+		<property name="session" ref="sessionHDIV" />
 	</bean>
 	<bean id="servletContextInitializer" class="org.hdiv.init.DefaultServletContextInitializer">
 		<property name="config" ref="config" />
@@ -103,7 +104,9 @@
 			</list>
 		</constructor-arg>
 	</bean>
-	<bean id="userSessionStateScope" class="org.hdiv.state.scope.UserSessionStateScope" />
+	<bean id="userSessionStateScope" class="org.hdiv.state.scope.UserSessionStateScope">
+		<property name="session" ref="sessionHDIV" />
+	</bean>
 	<bean id="appStateScope" class="org.hdiv.state.scope.AppStateScope" />
 
 </beans>

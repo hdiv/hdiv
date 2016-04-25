@@ -15,13 +15,15 @@
  */
 package org.hdiv.session;
 
+import javax.servlet.http.HttpSession;
+
 import org.hdiv.context.RequestContext;
 import org.hdiv.state.IPage;
 import org.hdiv.state.IState;
 
 /**
- * A custom wrapper for Http session request that returns a wrapped Http session.
- *
+ * Facade to access to attributes in {@link HttpSession}.
+ * 
  * @author Roberto Velasco
  */
 public interface ISession {
@@ -90,4 +92,39 @@ public interface ISession {
 	 */
 	IPage getPage(RequestContext context, int pageId);
 
+	/**
+	 * Get an attribute from session.
+	 * @param context Context holder for request-specific state.
+	 * @param name Attribute name.
+	 * @return Attribute value or null if the attribute doesn't exist.
+	 * @since HDIV 3.0.1
+	 */
+	public String getAttribute(RequestContext context, String name);
+
+	/**
+	 * Get an attribute from session.
+	 * @param context Context holder for request-specific state.
+	 * @param name Attribute name.
+	 * @param requiredType Type of the attribute.
+	 * @return Attribute value or null if the attribute doesn't exist.
+	 * @since HDIV 3.0.1
+	 */
+	public <T> T getAttribute(RequestContext context, String name, Class<T> requiredType);
+
+	/**
+	 * Set an attribute value in session.
+	 * @param context Context holder for request-specific state.
+	 * @param name Attribute name.
+	 * @param value Attribute value.
+	 * @since HDIV 3.0.1
+	 */
+	public void setAttribute(RequestContext context, String name, Object value);
+
+	/**
+	 * Remove an attribute from session.
+	 * @param context Context holder for request-specific state.
+	 * @param name Attribute name.
+	 * @since HDIV 3.0.1
+	 */
+	public void removeAttribute(RequestContext context, String name);
 }

@@ -43,7 +43,7 @@ public class OutputLinkComponentProcessor extends AbstractComponentProcessor {
 			HttpServletRequest request = (HttpServletRequest) externalContext.getRequest();
 
 			String url = component.getValue().toString();
-			String hdivParameter = HDIVUtil.getHDIVParameter(request);
+			String hdivParameter = HDIVUtil.getHdivStateParameterName(request);
 			UrlData urlData = linkUrlProcessor.createUrlData(url, Method.GET, hdivParameter, request);
 			if (linkUrlProcessor.isHdivStateNecessary(urlData)) {
 
@@ -59,8 +59,7 @@ public class OutputLinkComponentProcessor extends AbstractComponentProcessor {
 				IDataComposer dataComposer = HDIVUtil.getDataComposer(request);
 				dataComposer.beginRequest(Method.GET, urlData.getUrlWithoutContextPath());
 
-				String processedParams = dataComposer.composeParams(urlData.getUrlParams(), Method.GET,
-						Constants.ENCODING_UTF_8);
+				String processedParams = dataComposer.composeParams(urlData.getUrlParams(), Method.GET, Constants.ENCODING_UTF_8);
 				urlData.setUrlParams(processedParams);
 
 				if (hasUIParams) {
@@ -82,8 +81,7 @@ public class OutputLinkComponentProcessor extends AbstractComponentProcessor {
 					component.setValue(url);
 
 					// Add a children UIParam component with Hdiv's state
-					UIParameter paramComponent = (UIParameter) context.getApplication()
-							.createComponent(UIParameter.COMPONENT_TYPE);
+					UIParameter paramComponent = (UIParameter) context.getApplication().createComponent(UIParameter.COMPONENT_TYPE);
 
 					paramComponent.setName(hdivParameter);
 					paramComponent.setValue(stateParam);

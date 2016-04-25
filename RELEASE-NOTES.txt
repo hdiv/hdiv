@@ -2,6 +2,10 @@ HDIV CHANGELOG
 ==============
 http://www.hdiv.org
 
+Release 3.0.1
+==================================
+ * Add new methods to ISession to get/set/remove session attributes.
+
 Release 3.0.0
 ==================================
  * Remove Cipher and Hash strategies.
