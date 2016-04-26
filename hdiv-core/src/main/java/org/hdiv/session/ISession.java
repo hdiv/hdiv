@@ -52,14 +52,7 @@ public interface ISession {
 	@Deprecated
 	void addPartialPage(RequestContext context, int pageId, IPage page);
 
-	/**
-	 * Deletes from session the data related to the finished flows. This means a memory consumption optimization because
-	 * useless objects of type <code>IPage</code> are deleted.
-	 *
-	 * @param context Context holder for request-specific state.
-	 * @param conversationId finished flow identifier
-	 * @since HDIV 2.0.3
-	 */
+	@Deprecated
 	void removeEndedPages(RequestContext context, String conversationId);
 
 	/**
