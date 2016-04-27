@@ -7,7 +7,7 @@
 	<artifactId>hdiv</artifactId>
 	<packaging>pom</packaging>
 	<name>HDIV Parent</name>
-	<version>3.1.0-SNAPSHOT</version>
+	<version>3.1.0</version>
 	<url>http://www.hdiv.org</url>
 	<description>Web Application Security Framework</description>
 
@@ -61,13 +61,6 @@
 	</developers>
 
 	<build>
-		<extensions>
-			<extension>
-				<groupId>org.apache.maven.wagon</groupId>
-				<artifactId>wagon-ssh-external</artifactId>
-				<version>1.0-beta-5</version>
-			</extension>
-		</extensions>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
