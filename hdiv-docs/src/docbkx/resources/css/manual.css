@@ -14,17 +14,17 @@ body {
 
 code {
 	font-size: 16px;
-	font-family: Consolas,"Liberation Mono",Courier,monospace;
+	font-family: Consolas, "Liberation Mono", Courier, monospace;
 	color: #6D180B;
 }
 
 :not(pre)>code {
-    background-color: #F2F2F2;
-    border: 1px solid #CCCCCC;
-    border-radius: 4px;
-    padding: 1px 3px 0;
-    text-shadow: none;
-    white-space: nowrap;
+	background-color: #F2F2F2;
+	border: 1px solid #CCCCCC;
+	border-radius: 4px;
+	padding: 1px 3px 0;
+	text-shadow: none;
+	white-space: nowrap;
 }
 
 body>*:first-child {
@@ -40,7 +40,7 @@ hr {
 	background: #CCCCCC;
 }
 
-h1,h2,h3,h4,h5,h6 {
+h1, h2, h3, h4, h5, h6 {
 	color: #000000;
 	cursor: text;
 	font-weight: bold;
@@ -53,23 +53,23 @@ h1 {
 	margin: 50px 0 30px;
 }
 
-h1,h1 code {
+h1, h1 code {
 	font-size: 32px;
 }
 
-h2,h2 code {
+h2, h2 code {
 	font-size: 24px;
 }
 
-h3,h3 code {
+h3, h3 code {
 	font-size: 20px;
 }
 
-h4,h1 code,h5,h5 code,h6,h6 code {
+h4, h1 code, h5, h5 code, h6, h6 code {
 	font-size: 18px;
 }
 
-div.book,div.chapter,div.appendix,div.part,div.preface {
+div.book, div.chapter, div.appendix, div.part, div.preface {
 	min-width: 300px;
 	max-width: 1200px;
 	margin: 0 auto;
@@ -96,7 +96,7 @@ p.copyright {
 	line-height: 1;
 }
 
-div.titlepage+p,div.titlepage+p {
+div.titlepage+p, div.titlepage+p {
 	margin-top: 0;
 }
 
@@ -115,7 +115,7 @@ p {
 	text-align: left;
 }
 
-ul,ol {
+ul, ol {
 	padding-left: 30px;
 }
 
@@ -180,7 +180,7 @@ table th {
 	font-weight: bold;
 }
 
-table th,table td {
+table th, table td {
 	border: 1px solid #CCCCCC !important;
 	padding: 6px 13px;
 }
@@ -197,13 +197,13 @@ div.table-contents td p {
 	margin: 0;
 }
 
-div.important *,div.note *,div.tip *,div.warning *,div.navheader *,div.navfooter *,div.calloutlist *
-	{
+div.important *, div.note *, div.tip *, div.warning *, div.navheader *,
+	div.navfooter *, div.calloutlist * {
 	border: none !important;
 	background: none !important;
 }
 
-div.calloutlist p,div.calloutlist td {
+div.calloutlist p, div.calloutlist td {
 	padding: 0;
 	margin: 0;
 }
@@ -213,7 +213,7 @@ div.calloutlist>table>tbody>tr>td:first-child {
 	width: 30px !important;
 }
 
-div.important,div.note,div.tip,div.warning {
+div.important, div.note, div.tip, div.warning {
 	margin-left: 40px !important;
 	margin-right: 20px !important;
 	margin-top: 10px;
@@ -224,7 +224,7 @@ div.toc {
 	line-height: 1.1;
 }
 
-dl,dt {
+dl, dt {
 	margin-top: 1px;
 	margin-bottom: 0;
 }

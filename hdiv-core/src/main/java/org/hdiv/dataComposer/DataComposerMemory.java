@@ -194,7 +194,6 @@ public class DataComposerMemory extends AbstractDataComposer {
 		}
 
 		// Add to page scope
-		state.setPageId(page.getId());
 		page.addState(state);
 
 		// Save Page in session if this is the first state to add

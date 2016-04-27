@@ -27,7 +27,6 @@ import org.hdiv.dataComposer.IDataComposer;
 import org.hdiv.state.IParameter;
 import org.hdiv.state.IState;
 import org.hdiv.state.StateUtil;
-import org.hdiv.util.Constants;
 import org.hdiv.util.HDIVUtil;
 
 public class ThymeleafHdivRequestDataValueProcessorTest extends AbstractHDIVTestCase {
@@ -145,7 +144,7 @@ public class ThymeleafHdivRequestDataValueProcessorTest extends AbstractHDIVTest
 
 		assertNotNull(extraParams);
 		assertTrue(extraParams.size() == 1);
-		String hdivStateParam = (String) request.getSession().getAttribute(Constants.HDIV_PARAMETER);
+		String hdivStateParam = HDIVUtil.getHdivStateParameterName(request);
 		String stateValue = extraParams.get(hdivStateParam);
 		assertNotNull(stateValue);
 

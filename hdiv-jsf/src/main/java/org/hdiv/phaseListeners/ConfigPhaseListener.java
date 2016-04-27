@@ -22,7 +22,6 @@ import javax.faces.event.PhaseEvent;
 import javax.faces.event.PhaseId;
 import javax.faces.event.PhaseListener;
 import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.logging.Log;
@@ -142,8 +141,7 @@ public class ConfigPhaseListener implements PhaseListener {
 	private void checkSupportedFeatures(FacesContext context) {
 
 		ExternalContext externalContext = context.getExternalContext();
-		HttpServletRequest request = (HttpServletRequest) externalContext.getRequest();
-		ServletContext servletContext = request.getSession().getServletContext();
+		ServletContext servletContext = (ServletContext) externalContext.getContext();
 
 		HDIVConfig config = HDIVUtil.getHDIVConfig(servletContext);
 

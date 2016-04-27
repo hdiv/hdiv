@@ -267,7 +267,9 @@ public abstract class AbstractHdivWebSecurityConfiguration {
 
 	@Bean
 	public UserSessionStateScope userSessionStateScope() {
-		return new UserSessionStateScope();
+		UserSessionStateScope scope = new UserSessionStateScope();
+		scope.setSession(securitySession());
+		return scope;
 	}
 
 	@Bean
@@ -305,6 +307,7 @@ public abstract class AbstractHdivWebSecurityConfiguration {
 	public RequestInitializer securityRequestInitializer() {
 		DefaultRequestInitializer requestInitializer = new DefaultRequestInitializer();
 		requestInitializer.setConfig(hdivConfig());
+		requestInitializer.setSession(securitySession());
 		return requestInitializer;
 	}
 

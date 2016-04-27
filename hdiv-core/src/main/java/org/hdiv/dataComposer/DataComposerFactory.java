@@ -114,7 +114,9 @@ public class DataComposerFactory {
 	protected void initDataComposer(final IDataComposer dataComposer, final RequestContext context) {
 
 		HttpServletRequest request = context.getRequest();
-		String hdivStateParamName = HDIVUtil.getHDIVParameter(request);
+
+		String hdivStateParamName = HDIVUtil.getHdivStateParameterName(request);
+
 		String hdivState = request.getParameter(hdivStateParamName);
 
 		String preState = getModifyStateParameterValue(dataComposer, request);
@@ -122,9 +124,10 @@ public class DataComposerFactory {
 		if (preState != null && preState.length() > 0) {
 
 			// We are modifying an existing state, preload dataComposer with it
+			int pageId = stateUtil.getPageId(preState);
 			IState state = stateUtil.restoreState(context, preState);
-			if (state.getPageId() > 0) {
-				IPage page = session.getPage(context, state.getPageId());
+			if (pageId > 0) {
+				IPage page = session.getPage(context, pageId);
 				if (page != null) {
 					dataComposer.startPage(page);
 				}
@@ -137,9 +140,9 @@ public class DataComposerFactory {
 		else if (reuseExistingPage(request)) {
 
 			if (hdivState != null && hdivState.length() > 0) {
-				IState state = stateUtil.restoreState(context, hdivState);
-				if (state.getPageId() > 0) {
-					IPage page = session.getPage(context, state.getPageId());
+				int pageId = stateUtil.getPageId(hdivState);
+				if (pageId > 0) {
+					IPage page = session.getPage(context, pageId);
 					dataComposer.startPage(page);
 				}
 				else {
@@ -171,7 +174,7 @@ public class DataComposerFactory {
 	 */
 	protected String getModifyStateParameterValue(final IDataComposer dataComposer, final HttpServletRequest request) {
 
-		String paramName = (String) request.getSession().getAttribute(Constants.MODIFY_STATE_HDIV_PARAMETER);
+		String paramName = HDIVUtil.getModifyHdivStateParameterName(request);
 		String preState = paramName != null ? request.getParameter(paramName) : null;
 		return preState;
 	}

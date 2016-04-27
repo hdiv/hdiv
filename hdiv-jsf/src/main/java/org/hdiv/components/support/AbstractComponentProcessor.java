@@ -21,10 +21,11 @@ import java.util.List;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIParameter;
 import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletRequest;
 
 import org.hdiv.config.HDIVConfig;
 import org.hdiv.urlProcessor.LinkUrlProcessor;
-import org.hdiv.util.Constants;
+import org.hdiv.util.HDIVUtil;
 
 public abstract class AbstractComponentProcessor {
 
@@ -35,7 +36,8 @@ public abstract class AbstractComponentProcessor {
 	public void removeHdivStateUIParameter(FacesContext context, UIComponent component) {
 
 		// Remove the component with the HDIV state, we don't want to store it in the state
-		String hdivParameter = (String) context.getExternalContext().getSessionMap().get(Constants.HDIV_PARAMETER);
+		HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
+		String hdivParameter = HDIVUtil.getHdivStateParameterName(request);
 
 		// First we add to a list the components to remove
 		// The list used by MyFaces has a problem with the iterator

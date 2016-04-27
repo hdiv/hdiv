@@ -64,18 +64,25 @@
 				<para>
 					<emphasis role="bold">Editable Data Validation</emphasis>
 					:
-					Editable validation is the data that comes from <code>textbox</code> and
-					<code>textarea</code> fields within a form. In other words,
+					Editable validation is the data that comes from
+					<code>textbox</code>
+					and
+					<code>textarea</code>
+					fields within a form. In other words,
 					it is new data that
-					comes from the client side and by default it is untrusted data.
+					comes from
+					the client side and by default it is untrusted data.
 					HDIV
-					eliminates to a large extent, the
+					eliminates
+					to a large extent, the
 					risk originated by
 					Cross-site
-					scripting (XSS) and
+					scripting (XSS)
+					and
 					SQL Injection attacks using generic
 					validations
-					applied at application level.
+					applied at
+					application level.
 				</para>
 			</listitem>
 			<listitem>
@@ -94,9 +101,11 @@
 					<code>http://www.host.com?data1=12</code>
 					is
 					replaced by
-					<code>http://www.host.com?data1=0</code>, guaranteeing
+					<code>http://www.host.com?data1=0</code>
+					, guaranteeing
 					confidentiality of the
-					values representing database identifiers.
+					values representing database
+					identifiers.
 				</para>
 			</listitem>
 			<listitem>
@@ -135,7 +144,8 @@
 					: the source of the problem of sql injection
 					risk is based on SQL
 					queries with are not been parameterized
-					(without <code>PreparedStatement</code>
+					(without
+					<code>PreparedStatement</code>
 					in Java
 					environments). First of all
 					HDIV
@@ -155,7 +165,8 @@
 					form
 					elements. It is important to note that
 					even using a
-					<code>PreparedStatement</code>,
+					<code>PreparedStatement</code>
+					,
 					if the query is based on untrusted data
 					generated
 					previously at the
@@ -164,11 +175,13 @@
 					ID of an item within a
 					list) a SQL
 					injection
-					risk is possible.
+					risk is
+					possible.
 
 					In
 					addition HDIV implements an internal
-					system that detects SQL
+					system that detects
+					SQL
 					Injection
 					risks within source-code.
 				</para>

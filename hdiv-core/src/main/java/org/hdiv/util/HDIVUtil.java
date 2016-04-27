@@ -283,10 +283,6 @@ public class HDIVUtil {
 		return (Integer) request.getAttribute(CURRENT_PAGE_KEY);
 	}
 
-	public static String getHDIVParameter(final HttpServletRequest request) {
-		return (String) request.getSession().getAttribute(Constants.HDIV_PARAMETER);
-	}
-
 	/**
 	 * Set the CurrentPageId
 	 *
@@ -371,6 +367,50 @@ public class HDIVUtil {
 		String resolvedMessage = HDIVUtil.getMessageSource(request).getMessage(key, new String[] { o }, userLocale);
 		log.debug(resolvedMessage);
 		return resolvedMessage;
+	}
+
+	/**
+	 * Get Hdiv state parameter name from request.
+	 * @param request HttpServletRequest object
+	 * @return Parameter name
+	 * @since 3.0.1
+	 */
+	public static String getHdivStateParameterName(HttpServletRequest request) {
+
+		return (String) request.getAttribute(Constants.HDIV_PARAMETER);
+	}
+
+	/**
+	 * Set Hdiv state parameter name in request.
+	 * @param request HttpServletRequest object
+	 * @param parameterName The name of the parameter
+	 * @since 3.0.1
+	 */
+	public static void setHdivStateParameterName(HttpServletRequest request, String parameterName) {
+
+		request.setAttribute(Constants.HDIV_PARAMETER, parameterName);
+	}
+
+	/**
+	 * Get Hdiv state modification parameter name from request.
+	 * @param request HttpServletRequest object
+	 * @return Parameter name
+	 * @since 3.0.1
+	 */
+	public static String getModifyHdivStateParameterName(HttpServletRequest request) {
+
+		return (String) request.getAttribute(Constants.MODIFY_STATE_HDIV_PARAMETER);
+	}
+
+	/**
+	 * Set Hdiv state modification parameter name in request.
+	 * @param request HttpServletRequest object
+	 * @param parameterName The name of the parameter
+	 * @since 3.0.1
+	 */
+	public static void setModifyHdivStateParameterName(HttpServletRequest request, String parameterName) {
+
+		request.setAttribute(Constants.MODIFY_STATE_HDIV_PARAMETER, parameterName);
 	}
 
 	/**

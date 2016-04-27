@@ -23,9 +23,10 @@ import javax.faces.component.UIComponent;
 import javax.faces.component.UIData;
 import javax.faces.component.UIParameter;
 import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletRequest;
 
-import org.hdiv.util.Constants;
 import org.hdiv.util.ConstantsJsf;
+import org.hdiv.util.HDIVUtil;
 import org.hdiv.util.UtilsJsf;
 
 /**
@@ -74,7 +75,8 @@ public class UIParameterExtension extends UIParameter {
 	public void encodeBegin(FacesContext context) throws IOException {
 
 		// HDIV parameter name
-		String hdivParameter = (String) context.getExternalContext().getSessionMap().get(Constants.HDIV_PARAMETER);
+		HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
+		String hdivParameter = HDIVUtil.getHdivStateParameterName(request);
 
 		String name = this.getName();
 		if (name != null && name.equals(hdivParameter)) {

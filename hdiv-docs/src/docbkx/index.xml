@@ -56,8 +56,10 @@
 		</authorgroup>
 
 		<legalnotice>
-			<para>			
-			The HDIV Framework is released under version 2.0 of the <link xl:href="http://www.apache.org/licenses/LICENSE-2.0">Apache License</link>.
+			<para>
+				The HDIV Framework is released under version 2.0 of the
+				<link xl:href="http://www.apache.org/licenses/LICENSE-2.0">Apache License</link>
+				.
 			</para>
 		</legalnotice>
 	</info>

@@ -19,8 +19,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.hdiv.config.HDIVConfig;
+import org.hdiv.context.RequestContext;
 import org.hdiv.filter.RequestWrapper;
 import org.hdiv.filter.ResponseWrapper;
+import org.hdiv.session.ISession;
+import org.hdiv.util.Constants;
 import org.hdiv.util.HDIVUtil;
 
 /**
@@ -36,7 +39,21 @@ public class DefaultRequestInitializer implements RequestInitializer {
 	 */
 	protected HDIVConfig config;
 
+	/**
+	 * Session object manager.
+	 */
+	protected ISession session;
+
 	public void initRequest(HttpServletRequest request, HttpServletResponse response) {
+
+		RequestContext context = new RequestContext(request);
+
+		// Store session scoped data into request
+		String stateParameterName = this.session.getAttribute(context, Constants.HDIV_PARAMETER);
+		String modifyStateParameterName = this.session.getAttribute(context, Constants.MODIFY_STATE_HDIV_PARAMETER);
+
+		HDIVUtil.setHdivStateParameterName(request, stateParameterName);
+		HDIVUtil.setModifyHdivStateParameterName(request, modifyStateParameterName);
 
 		// Store request original request uri
 		HDIVUtil.setRequestURI(request.getRequestURI(), request);
@@ -49,6 +66,7 @@ public class DefaultRequestInitializer implements RequestInitializer {
 		RequestWrapper requestWrapper = new RequestWrapper(request);
 		requestWrapper.setConfidentiality(this.config.getConfidentiality());
 		requestWrapper.setCookiesConfidentiality(this.config.isCookiesConfidentialityActivated());
+		requestWrapper.setSession(this.session);
 
 		return requestWrapper;
 	}
@@ -57,6 +75,7 @@ public class DefaultRequestInitializer implements RequestInitializer {
 		ResponseWrapper responseWrapper = new ResponseWrapper(request, response);
 		responseWrapper.setConfidentiality(this.config.getConfidentiality());
 		responseWrapper.setAvoidCookiesConfidentiality(!this.config.isCookiesConfidentialityActivated());
+		responseWrapper.setSession(this.session);
 
 		return responseWrapper;
 	}
@@ -66,6 +85,13 @@ public class DefaultRequestInitializer implements RequestInitializer {
 	 */
 	public void setConfig(HDIVConfig config) {
 		this.config = config;
+	}
+
+	/**
+	 * @param session the session to set
+	 */
+	public void setSession(ISession session) {
+		this.session = session;
 	}
 
 }

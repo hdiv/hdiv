@@ -157,4 +157,53 @@ public class SessionTest extends AbstractHDIVTestCase {
 
 	}
 
+	public void testAttributes() {
+
+		RequestContext context = super.getRequestContext();
+		String name = "attr";
+		String value = "value";
+
+		String result = this.session.getAttribute(context, name);
+		assertNull(result);
+
+		this.session.setAttribute(context, name, value);
+		result = this.session.getAttribute(context, name);
+		assertNotNull(result);
+		assertEquals(value, result);
+
+		this.session.removeAttribute(context, name);
+		result = this.session.getAttribute(context, name);
+		assertNull(result);
+
+	}
+
+	public void testTypedAttributes() {
+
+		RequestContext context = super.getRequestContext();
+		String name = "attr";
+
+		Test1Bean result = this.session.getAttribute(context, name, Test1Bean.class);
+		assertNull(result);
+
+		Test1Bean bean = new Test1Bean();
+		this.session.setAttribute(context, name, bean);
+		Test1Bean res = this.session.getAttribute(context, name, Test1Bean.class);
+		assertNotNull(res);
+		assertEquals(bean, res);
+
+		try {
+			this.session.getAttribute(context, name, Test2Bean.class);
+			fail();
+		}
+		catch (IllegalArgumentException e) {
+		}
+
+	}
+
+	class Test1Bean {
+	}
+
+	class Test2Bean {
+	}
+
 }

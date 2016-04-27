@@ -25,11 +25,13 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
-import javax.servlet.http.HttpSession;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.hdiv.context.RequestContext;
+import org.hdiv.session.ISession;
 import org.hdiv.util.Constants;
+import org.springframework.util.Assert;
 
 /**
  * A wrapper for HTTP servlet response.
@@ -67,7 +69,15 @@ public class ResponseWrapper extends HttpServletResponseWrapper {
 	 */
 	protected boolean avoidCookiesConfidentiality;
 
-	protected HttpServletRequest request;
+	/**
+	 * Request context data.
+	 */
+	protected RequestContext requestContext;
+
+	/**
+	 * Session object wrapper.
+	 */
+	protected ISession session;
 
 	/**
 	 * Constructs a response object wrapping the given response.
@@ -79,8 +89,15 @@ public class ResponseWrapper extends HttpServletResponseWrapper {
 
 		super(originalResponse);
 
-		this.request = request;
-		log.debug("New ResponseWrapper instance.");
+
+		Assert.notNull(request);
+		Assert.notNull(originalResponse);
+
+		this.requestContext = new RequestContext(request);
+
+		if (log.isDebugEnabled()) {
+			log.debug("New ResponseWrapper instance.");
+		}
 	}
 
 	/**
@@ -213,20 +230,18 @@ public class ResponseWrapper extends HttpServletResponseWrapper {
 	@SuppressWarnings("unchecked")
 	protected void updateSessionCookies() {
 
-		HttpSession session = this.request.getSession();
-		if (session != null) {
+		Map<String, SavedCookie> sessionOriginalCookies = this.session.getAttribute(this.requestContext,
+				Constants.HDIV_COOKIES_KEY, Map.class);
 
-			Map<String, SavedCookie> sessionOriginalCookies = (Map<String, SavedCookie>) session.getAttribute(Constants.HDIV_COOKIES_KEY);
+		if (sessionOriginalCookies != null && sessionOriginalCookies.size() > 0) {
 
-			if (sessionOriginalCookies != null && sessionOriginalCookies.size() > 0) {
 
-				sessionOriginalCookies.putAll(this.cookies);
-				session.setAttribute(Constants.HDIV_COOKIES_KEY, sessionOriginalCookies);
+			sessionOriginalCookies.putAll(this.cookies);
+			this.session.setAttribute(this.requestContext, Constants.HDIV_COOKIES_KEY, sessionOriginalCookies);
 
-			}
-			else {
-				session.setAttribute(Constants.HDIV_COOKIES_KEY, this.cookies);
-			}
+		}
+		else {
+			this.session.setAttribute(this.requestContext, Constants.HDIV_COOKIES_KEY, this.cookies);
 		}
 	}
 
@@ -235,10 +250,7 @@ public class ResponseWrapper extends HttpServletResponseWrapper {
 	 */
 	protected void removeCookiesFromSession() {
 
-		HttpSession session = this.request.getSession();
-		if (session != null) {
-			session.removeAttribute(Constants.HDIV_COOKIES_KEY);
-		}
+		this.session.removeAttribute(this.requestContext, Constants.HDIV_COOKIES_KEY);
 	}
 
 	/**
@@ -262,6 +274,13 @@ public class ResponseWrapper extends HttpServletResponseWrapper {
 	 */
 	public void setAvoidCookiesConfidentiality(final boolean avoidCookiesConfidentiality) {
 		this.avoidCookiesConfidentiality = avoidCookiesConfidentiality;
+	}
+
+	/**
+	 * @param session the session to set
+	 */
+	public void setSession(ISession session) {
+		this.session = session;
 	}
 
 }

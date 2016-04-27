@@ -72,6 +72,19 @@ public class StateUtil {
 		log.debug("StateUtil instance created.");
 	}
 
+	public int getPageId(final String requestState) {
+		// Obtain State from a StateScopes
+		StateScope stateScope = stateScopeManager.getStateScope(requestState);
+		if (stateScope != null) {
+			return 0;
+		}
+		int firstSeparator = requestState.indexOf('-');
+		if (firstSeparator == -1) {
+			throw new HDIVException(HDIVErrorCodes.HDIV_PARAMETER_INCORRECT_VALUE);
+		}
+		return Integer.parseInt(requestState.substring(0, firstSeparator));
+	}
+
 	/**
 	 * Restore state data from <code>request</code>. State restore from memory can be done using an identifier or or
 	 * using the serialized data received in the request.
