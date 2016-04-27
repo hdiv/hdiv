@@ -62,16 +62,6 @@ public interface IState {
 	int getId();
 
 	/**
-	 * @return Returns the page identifier which the state <code>this</code> belongs to.
-	 */
-	int getPageId();
-
-	/**
-	 * @param pageId The pageId to set.
-	 */
-	void setPageId(int pageId);
-
-	/**
 	 * Checks if exists a parameter with the given identifier <code>key</code>.
 	 *
 	 * @param key parameter identifier

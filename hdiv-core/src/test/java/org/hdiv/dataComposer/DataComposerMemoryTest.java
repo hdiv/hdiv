@@ -153,8 +153,9 @@ public class DataComposerMemoryTest extends AbstractHDIVTestCase {
 		assertNotNull(stateId);
 
 		// New request
+		int pageId = stateUtil.getPageId(stateId);
 		IState state = stateUtil.restoreState(context, stateId);
-		IPage page = session.getPage(context, state.getPageId());
+		IPage page = session.getPage(context, pageId);
 		dataComposer = dataComposerFactory.newInstance(request);
 		HDIVUtil.setDataComposer(dataComposer, request);
 
@@ -327,10 +328,12 @@ public class DataComposerMemoryTest extends AbstractHDIVTestCase {
 		String ajaxStateId = ajaxDataComposer.endRequest();
 
 		// Restore states
+		int pageId = stateUtil.getPageId(stateId);
 		IState state = stateUtil.restoreState(context, stateId);
+		int ajaxPageId = stateUtil.getPageId(ajaxStateId);
 		IState ajaxState = stateUtil.restoreState(context, ajaxStateId);
 
-		assertEquals(state.getPageId(), ajaxState.getPageId());
+		assertEquals(pageId, ajaxPageId);
 		assertEquals(state.getId() + 1, ajaxState.getId());
 	}
 
@@ -360,8 +363,8 @@ public class DataComposerMemoryTest extends AbstractHDIVTestCase {
 		String ajaxStateId = ajaxDataComposer.endRequest();
 
 		// Restore states
-		int pageId = stateUtil.restoreState(context, stateId).getPageId();
-		int ajaxPageId = stateUtil.restoreState(context, ajaxStateId).getPageId();
+		int pageId = stateUtil.getPageId(stateId);
+		int ajaxPageId = stateUtil.getPageId(ajaxStateId);
 
 		assertEquals(pageId + 1, ajaxPageId);
 	}

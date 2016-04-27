@@ -64,11 +64,6 @@ public class State implements IState, Serializable {
 	private int id;
 
 	/**
-	 * Page identifier which the state <code>this</code> belongs to
-	 */
-	private int pageId;
-
-	/**
 	 * HTTP method for this state.
 	 * <p>
 	 * Null value is equivalent to GET.
@@ -202,24 +197,6 @@ public class State implements IState, Serializable {
 			return requiredParams;
 		}
 
-	}
-
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see org.hdiv.state.IState#getPageId()
-	 */
-	public int getPageId() {
-		return pageId;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see org.hdiv.state.IState#setPageId(int)
-	 */
-	public void setPageId(final int pageId) {
-		this.pageId = pageId;
 	}
 
 	/*

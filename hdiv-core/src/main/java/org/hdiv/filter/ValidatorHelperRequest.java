@@ -606,11 +606,11 @@ public class ValidatorHelperRequest implements IValidationHelper {
 		}
 
 		try {
-
+			int pageId = stateUtil.getPageId(requestState);
 			IState state = stateUtil.restoreState(new RequestContext(request), requestState);
 
 			// Save current page id in request
-			HDIVUtil.setCurrentPageId(state.getPageId(), request);
+			HDIVUtil.setCurrentPageId(pageId, request);
 
 			if (stateUtil.isMemoryStrategy(requestState)) {
 
