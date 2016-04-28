@@ -67,7 +67,7 @@ public class Page implements IPage, Serializable {
 	/**
 	 * Page size.
 	 */
-	protected long size;
+	protected transient int size;
 
 	/**
 	 * Sequential counter to generate state ids.
@@ -250,14 +250,14 @@ public class Page implements IPage, Serializable {
 	/**
 	 * @return the size
 	 */
-	public long getSize() {
+	public int getSize() {
 		return size;
 	}
 
 	/**
 	 * @param size the size to set
 	 */
-	public void setSize(final long size) {
+	public void setSize(final int size) {
 		this.size = size;
 	}
 
