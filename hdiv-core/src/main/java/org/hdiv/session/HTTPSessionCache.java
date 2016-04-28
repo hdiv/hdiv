@@ -1,5 +1,5 @@
 /**
- * Copyright 2005-2015 hdiv.org
+ * Copyright 2005-2016 hdiv.org
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,6 +28,11 @@ import org.hdiv.util.Constants;
 import org.hdiv.util.HDIVUtil;
 import org.springframework.beans.factory.BeanFactory;
 
+/**
+ * Session cache handler
+ * @author Ander Ruiz
+ *
+ */
 public class HTTPSessionCache {
 
 	/**

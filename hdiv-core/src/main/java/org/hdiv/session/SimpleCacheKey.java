@@ -1,5 +1,5 @@
 /**
- * Copyright 2005-2015 hdiv.org
+ * Copyright 2005-2016 hdiv.org
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,11 @@ package org.hdiv.session;
 
 import org.hdiv.context.RequestContext;
 
+/**
+ * Cache key to index the pages
+ * @author Ander Ruiz
+ *
+ */
 public class SimpleCacheKey {
 
 	private RequestContext context;
