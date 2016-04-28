@@ -125,7 +125,7 @@ public abstract class AbstractDataComposer implements IDataComposer {
 	 * @param parentStateId Parent state id
 	 */
 	public void initPage(final String parentStateId) {
-		page = new Page(session.getPageId(context));
+		setPage(new Page(session.getPageId(context)));
 		page.setParentStateId(parentStateId);
 	}
 
