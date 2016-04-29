@@ -30,6 +30,7 @@ import org.hdiv.state.IPage;
 import org.hdiv.state.IState;
 import org.hdiv.state.StateUtil;
 import org.hdiv.state.scope.StateScopeManager;
+import org.hdiv.state.scope.StateScopeType;
 import org.hdiv.util.Constants;
 import org.hdiv.util.HDIVUtil;
 
@@ -159,7 +160,7 @@ public class DataComposerFactory {
 
 		// Detect if request url is configured as a long living page
 		String url = request.getRequestURI().substring(request.getContextPath().length());
-		String scope = config.isLongLivingPages(url);
+		StateScopeType scope = config.isLongLivingPages(url);
 		if (scope != null) {
 			dataComposer.startScope(scope);
 		}

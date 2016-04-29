@@ -17,6 +17,7 @@ package org.hdiv.dataComposer;
 
 import org.hdiv.state.IPage;
 import org.hdiv.state.IState;
+import org.hdiv.state.scope.StateScopeType;
 import org.hdiv.util.Method;
 
 /**
@@ -209,7 +210,7 @@ public interface IDataComposer {
 	 * @param scope Scope name
 	 * @since 2.1.7
 	 */
-	void startScope(String scope);
+	void startScope(StateScopeType scope);
 
 	/**
 	 * End existing Scope area.
@@ -242,4 +243,6 @@ public interface IDataComposer {
 	 * @since HDIV 2.1.0
 	 */
 	boolean isRequestStarted();
+
+	StringBuilder getBuilder();
 }

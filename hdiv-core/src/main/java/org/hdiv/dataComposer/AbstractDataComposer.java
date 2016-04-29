@@ -86,7 +86,7 @@ public abstract class AbstractDataComposer implements IDataComposer {
 	/**
 	 * States stack to store all states of the page <code>page</code>
 	 */
-	private Deque<IState> states;
+	Deque<IState> states;
 
 	/**
 	 * HDIV configuration object.
@@ -97,6 +97,8 @@ public abstract class AbstractDataComposer implements IDataComposer {
 	 * Context holder for request-specific state.
 	 */
 	protected RequestContext context;
+
+	private final StringBuilder sb = new StringBuilder(128);
 
 	public AbstractDataComposer(final RequestContext context) {
 		this.context = context;
@@ -638,4 +640,7 @@ public abstract class AbstractDataComposer implements IDataComposer {
 		this.hdivConfig = hdivConfig;
 	}
 
+	public StringBuilder getBuilder() {
+		return sb;
+	}
 }

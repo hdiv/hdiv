@@ -29,6 +29,7 @@ import org.hdiv.state.IState;
 import org.hdiv.state.State;
 import org.hdiv.state.scope.StateScope;
 import org.hdiv.state.scope.StateScopeManager;
+import org.hdiv.state.scope.StateScopeType;
 import org.hdiv.util.Constants;
 import org.hdiv.util.Method;
 
@@ -61,7 +62,9 @@ public class DataComposerMemory extends AbstractDataComposer {
 	/**
 	 * Stack to store existing scopes, active and inactive
 	 */
-	protected Deque<String> scopeStack;
+	protected Deque<StateScopeType> scopeStack;
+
+	protected StateScope stateScope;
 
 	public DataComposerMemory(final RequestContext requestContext) {
 		super(requestContext);
@@ -73,9 +76,9 @@ public class DataComposerMemory extends AbstractDataComposer {
 	@Override
 	public void init() {
 		super.init();
-		scopeStack = new ArrayDeque<String>();
+		scopeStack = new ArrayDeque<StateScopeType>();
 		// Add default scope
-		scopeStack.push("page");
+		startScope(StateScopeType.PAGE);
 	}
 
 	/*
@@ -83,8 +86,9 @@ public class DataComposerMemory extends AbstractDataComposer {
 	 *
 	 * @see org.hdiv.dataComposer.IDataComposer#startScope(java.lang.String)
 	 */
-	public void startScope(final String scope) {
+	public void startScope(final StateScopeType scope) {
 		scopeStack.push(scope);
+		stateScope = getStateScope();
 	}
 
 	/*
@@ -94,15 +98,7 @@ public class DataComposerMemory extends AbstractDataComposer {
 	 */
 	public void endScope() {
 		scopeStack.pop();
-	}
-
-	/**
-	 * Return current active Scope
-	 *
-	 * @return Scope name
-	 */
-	protected String getCurrentScope() {
-		return scopeStack.peek();
+		stateScope = getStateScope();
 	}
 
 	/**
@@ -154,11 +150,18 @@ public class DataComposerMemory extends AbstractDataComposer {
 		return state;
 	}
 
+	private final StateScope getStateScope() {
+		StateScopeType type = scopeStack.peek();
+		if (type != StateScopeType.PAGE) {
+			return stateScopeManager.getStateScope(type);
+		}
+		return null;
+	}
+
 	public String beginRequest(final IState state) {
-		getStates().push(state);
+		states.push(state);
 
 		// Add to scope
-		final StateScope stateScope = stateScopeManager.getStateScopeByName(getCurrentScope());
 		if (stateScope != null) {
 			// Its custom scope Scope
 			// TODO can't return the state id
@@ -184,10 +187,9 @@ public class DataComposerMemory extends AbstractDataComposer {
 	 */
 	public String endRequest() {
 
-		IState state = getStates().pop();
+		IState state = states.pop();
 
 		// Add to scope
-		StateScope stateScope = stateScopeManager.getStateScopeByName(getCurrentScope());
 		if (stateScope != null) {
 			// Its custom Scope
 			return stateScope.addState(context, state, getStateSuffix(state.getMethod()));
