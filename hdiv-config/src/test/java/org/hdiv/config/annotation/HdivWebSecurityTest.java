@@ -47,7 +47,7 @@ public class HdivWebSecurityTest {
 	static class ContextConfiguration extends HdivWebSecurityConfigurerAdapter {
 
 		@Override
-		public void addExclusions(ExclusionRegistry registry) {
+		public void addExclusions(final ExclusionRegistry registry) {
 
 			registry.addUrlExclusions("/", "/login.html", "/logout.html").method("GET");
 			registry.addUrlExclusions("/j_spring_security_check").method("POST");
@@ -58,21 +58,21 @@ public class HdivWebSecurityTest {
 		}
 
 		@Override
-		public void addLongLivingPages(LongLivingPagesRegistry registry) {
+		public void addLongLivingPages(final LongLivingPagesRegistry registry) {
 
 			registry.addLongLivingPages("/longLivingPage.html", "/longLiving/.*").scope(StateScopeType.APP);
 			registry.addLongLivingPages("/longLivingPageApp.html");
 		}
 
 		@Override
-		public void addRules(RuleRegistry registry) {
+		public void addRules(final RuleRegistry registry) {
 
 			registry.addRule("safeText").acceptedPattern("^[a-zA-Z0-9@.\\-_]*$");
 		}
 
 		// @formatter:off
 		@Override
-		public void configureEditableValidation(ValidationConfigurer validationConfigurer) {
+		public void configureEditableValidation(final ValidationConfigurer validationConfigurer) {
 
 			validationConfigurer
 				.addValidation("/secure/.*")
@@ -84,7 +84,7 @@ public class HdivWebSecurityTest {
 		}
 
 		@Override
-		public void configure(SecurityConfigBuilder builder) {
+		public void configure(final SecurityConfigBuilder builder) {
 
 			builder
 				.sessionExpired()
@@ -118,26 +118,26 @@ public class HdivWebSecurityTest {
 
 		assertEquals(2, validations.size());
 
-		List<IValidation> urlValidations = this.getValidations(validations, "/secure/.*");
+		List<IValidation> urlValidations = getValidations(validations, "/secure/.*");
 		assertEquals(1, urlValidations.size()); // Only safetext
-		ValidationTarget target = this.getTarget(validations, "/secure/.*");
+		ValidationTarget target = getTarget(validations, "/secure/.*");
 		assertEquals(2, target.getParams().size());
 
-		urlValidations = this.getValidations(validations, "/safetext/.*");
+		urlValidations = getValidations(validations, "/safetext/.*");
 		assertEquals(6, urlValidations.size());// Defaults
-		target = this.getTarget(validations, "/safetext/.*");
+		target = getTarget(validations, "/safetext/.*");
 		assertEquals(0, target.getParams().size());
 	}
 
 	@Test
 	public void addLongLivingPages() {
 
-		assertEquals("app", config.isLongLivingPages("/longLiving/sample.html"));
-		assertEquals("user-session", config.isLongLivingPages("/longLivingPageApp.html"));
+		assertEquals(StateScopeType.APP, config.isLongLivingPages("/longLiving/sample.html"));
+		assertEquals(StateScopeType.USER_SESSION, config.isLongLivingPages("/longLivingPageApp.html"));
 		assertEquals(null, config.isLongLivingPages("/noLongLiving.html"));
 	}
 
-	protected List<IValidation> getValidations(Map<ValidationTarget, List<IValidation>> validations, String pattern) {
+	protected List<IValidation> getValidations(final Map<ValidationTarget, List<IValidation>> validations, final String pattern) {
 
 		for (ValidationTarget target : validations.keySet()) {
 			if (target.getUrl().matches(pattern)) {
@@ -147,7 +147,7 @@ public class HdivWebSecurityTest {
 		return null;
 	}
 
-	protected ValidationTarget getTarget(Map<ValidationTarget, List<IValidation>> validations, String pattern) {
+	protected ValidationTarget getTarget(final Map<ValidationTarget, List<IValidation>> validations, final String pattern) {
 
 		for (ValidationTarget target : validations.keySet()) {
 			if (target.getUrl().matches(pattern)) {

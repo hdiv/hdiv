@@ -40,7 +40,12 @@ public enum StateScopeType {
 	 * States stored in this scope are shared by all the users of the application.
 	 * </p>
 	 */
-	APP("app", "A");
+	APP("app", "A"),
+
+	/**
+	 * Normal page
+	 */
+	PAGE("page", "");
 
 	/**
 	 * Scope name used for the configuration.
@@ -69,6 +74,15 @@ public enum StateScopeType {
 	 */
 	public String getPrefix() {
 		return prefix;
+	}
+
+	public static StateScopeType byName(final String name) {
+		for (StateScopeType type : values()) {
+			if (type.name.equals(name)) {
+				return type;
+			}
+		}
+		return null;
 	}
 
 }

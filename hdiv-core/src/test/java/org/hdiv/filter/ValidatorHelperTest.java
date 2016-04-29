@@ -27,6 +27,7 @@ import org.hdiv.AbstractHDIVTestCase;
 import org.hdiv.dataComposer.DataComposerFactory;
 import org.hdiv.dataComposer.IDataComposer;
 import org.hdiv.init.RequestInitializer;
+import org.hdiv.state.scope.StateScopeType;
 import org.hdiv.util.HDIVErrorCodes;
 import org.hdiv.util.HDIVUtil;
 import org.hdiv.util.Method;
@@ -505,7 +506,7 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 
 		MockHttpServletRequest request = getMockRequest();
 
-		dataComposer.startScope("app");
+		dataComposer.startScope(StateScopeType.APP);
 		dataComposer.beginRequest(Method.GET, targetName);
 		String pageState = dataComposer.endRequest();
 		dataComposer.endScope();

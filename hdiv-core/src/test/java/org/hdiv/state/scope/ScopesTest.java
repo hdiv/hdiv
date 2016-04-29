@@ -51,7 +51,7 @@ public class ScopesTest extends AbstractHDIVTestCase {
 		String url2 = "/otherAction.do";
 
 		IDataComposer dataComposer = HDIVUtil.getDataComposer(request);
-		dataComposer.startScope("app");
+		dataComposer.startScope(StateScopeType.APP);
 
 		String result1 = linkUrlProcessor.processUrl(request, url);
 
@@ -67,7 +67,7 @@ public class ScopesTest extends AbstractHDIVTestCase {
 		String url = "/testAction.do";
 
 		IDataComposer dataComposer = HDIVUtil.getDataComposer(request);
-		dataComposer.startScope("app");
+		dataComposer.startScope(StateScopeType.APP);
 
 		String result1 = linkUrlProcessor.processUrl(request, url);
 
@@ -84,7 +84,7 @@ public class ScopesTest extends AbstractHDIVTestCase {
 		String url2 = "/testAction.do?other=value";
 
 		IDataComposer dataComposer = HDIVUtil.getDataComposer(request);
-		dataComposer.startScope("app");
+		dataComposer.startScope(StateScopeType.APP);
 
 		String result1 = linkUrlProcessor.processUrl(request, url);
 
@@ -100,7 +100,7 @@ public class ScopesTest extends AbstractHDIVTestCase {
 		String url = "/testAction.do?param=value";
 
 		IDataComposer dataComposer = HDIVUtil.getDataComposer(request);
-		dataComposer.startScope("app");
+		dataComposer.startScope(StateScopeType.APP);
 
 		String result1 = linkUrlProcessor.processUrl(request, url);
 
@@ -129,7 +129,7 @@ public class ScopesTest extends AbstractHDIVTestCase {
 		assertTrue(stateId.startsWith("U-"));
 
 		StateScope scope = stateScopeManager.getStateScope(stateId);
-		assertEquals("user-session", scope.getScopeName());
+		assertEquals("user-session", scope.getScopeType().getName());
 		int id = Integer.parseInt(stateId.substring(stateId.indexOf("-") + 1, stateId.indexOf("-") + 2));
 		IState state = scope.restoreState(context, id);
 		assertEquals("test.do", state.getAction());

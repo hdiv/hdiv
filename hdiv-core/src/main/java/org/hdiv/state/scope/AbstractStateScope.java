@@ -27,11 +27,11 @@ public abstract class AbstractStateScope implements StateScope {
 
 	private final String preffix;
 
-	private final String name;
+	private final StateScopeType type;
 
 	protected AbstractStateScope(final StateScopeType type) {
 		preffix = type.getPrefix();
-		name = type.getName();
+		this.type = type;
 	}
 
 	public String addState(final RequestContext context, final IState state, final String token) {
@@ -70,8 +70,8 @@ public abstract class AbstractStateScope implements StateScope {
 		return preffix;
 	}
 
-	public String getScopeName() {
-		return name;
+	public StateScopeType getScopeType() {
+		return type;
 	}
 
 	protected abstract ScopedStateCache getStateCache(RequestContext context);

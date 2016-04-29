@@ -26,14 +26,15 @@ public class AppStateScopeTest extends AbstractHDIVTestCase {
 
 	private AppStateScope stateScope;
 
+	@Override
 	protected void onSetUp() throws Exception {
 
-		this.stateScope = this.getApplicationContext().getBean(AppStateScope.class);
+		stateScope = getApplicationContext().getBean(AppStateScope.class);
 	}
 
 	public void testConf() {
 
-		String scopeName = stateScope.getScopeName();
+		String scopeName = stateScope.getScopeType().getName();
 		assertEquals("app", scopeName);
 
 		String scopePrefix = stateScope.getScopePrefix();
@@ -44,35 +45,35 @@ public class AppStateScopeTest extends AbstractHDIVTestCase {
 
 	public void testAddState() {
 
-		RequestContext context = this.getRequestContext();
+		RequestContext context = getRequestContext();
 
 		IState state = new State(0);
 		state.setAction("/action");
 
-		this.stateScope.addState(context, state, "token");
+		stateScope.addState(context, state, "token");
 
-		IState state2 = this.stateScope.restoreState(context, 0);
+		IState state2 = stateScope.restoreState(context, 0);
 
 		assertEquals(state, state2);
 	}
 
 	public void testAddSameActionState() {
 
-		RequestContext context = this.getRequestContext();
+		RequestContext context = getRequestContext();
 
 		IState state = new State(0);
 		state.setAction("/action");
 		IParameter param = new Parameter("uno", "value", false, null, false);
 		state.addParameter(param);
 
-		String id = this.stateScope.addState(context, state, "token");
+		String id = stateScope.addState(context, state, "token");
 
 		IState state2 = new State(1);
 		state2.setAction("/action");
 		IParameter param2 = new Parameter("uno", "value", false, null, false);
 		state2.addParameter(param2);
 
-		String id2 = this.stateScope.addState(context, state2, "token");
+		String id2 = stateScope.addState(context, state2, "token");
 
 		assertEquals(id, id2);
 	}

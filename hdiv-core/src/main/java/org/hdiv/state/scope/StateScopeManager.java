@@ -36,5 +36,5 @@ public interface StateScopeManager {
 	 * @param scopeName The name of the scope
 	 * @return the corresponding {@link StateScope} or null
 	 */
-	StateScope getStateScopeByName(String scopeName);
+	StateScope getStateScope(StateScopeType scopeName);
 }

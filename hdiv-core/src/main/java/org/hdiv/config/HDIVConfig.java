@@ -27,6 +27,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.hdiv.regex.PatternMatcher;
 import org.hdiv.regex.PatternMatcherFactory;
 import org.hdiv.state.IPage;
+import org.hdiv.state.scope.StateScopeType;
 import org.hdiv.util.HDIVUtil;
 import org.hdiv.util.Method;
 import org.hdiv.validator.EditableDataValidationProvider;
@@ -326,14 +327,14 @@ public class HDIVConfig implements Serializable {
 	 * @param url url path
 	 * @return Scope name or null if it is not a long-living page
 	 */
-	public String isLongLivingPages(final String url) {
+	public StateScopeType isLongLivingPages(final String url) {
 
 		for (Map.Entry<PatternMatcher, String> page : longLivingPages.entrySet()) {
 
 			PatternMatcher m = page.getKey();
 
 			if (m.matches(url)) {
-				return page.getValue();
+				return StateScopeType.byName(page.getValue());
 			}
 		}
 		return null;

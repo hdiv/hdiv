@@ -36,7 +36,7 @@ public interface StateScope {
 
 	String getStateToken(RequestContext context, int stateId);
 
-	String getScopeName();
+	StateScopeType getScopeType();
 
 	boolean isScopeState(String stateId);
 }

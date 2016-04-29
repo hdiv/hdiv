@@ -42,9 +42,9 @@ public class DefaultStateScopeManager implements StateScopeManager {
 		return null;
 	}
 
-	public StateScope getStateScopeByName(final String scopeName) {
+	public StateScope getStateScope(final StateScopeType scopeType) {
 		for (int i = 0; i < stateScopes.length; i++) {
-			if (stateScopes[i].getScopeName().equals(scopeName)) {
+			if (stateScopes[i].getScopeType() == scopeType) {
 				return stateScopes[i];
 			}
 		}

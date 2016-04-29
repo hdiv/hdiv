@@ -22,6 +22,7 @@ import org.hdiv.context.RequestContext;
 import org.hdiv.dataComposer.DataComposerFactory;
 import org.hdiv.dataComposer.IDataComposer;
 import org.hdiv.exception.HDIVException;
+import org.hdiv.state.scope.StateScopeType;
 import org.hdiv.util.HDIVUtil;
 import org.hdiv.util.Method;
 
@@ -102,7 +103,7 @@ public class StateUtilTest extends AbstractHDIVTestCase {
 		HDIVUtil.setDataComposer(dataComposer, request);
 
 		dataComposer.startPage();
-		dataComposer.startScope("app");
+		dataComposer.startScope(StateScopeType.APP);
 		dataComposer.beginRequest(Method.GET, "test.do");
 		dataComposer.compose("parameter1", "2", false);
 		String stateId = dataComposer.endRequest();
@@ -127,7 +128,7 @@ public class StateUtilTest extends AbstractHDIVTestCase {
 		HDIVUtil.setDataComposer(dataComposer, request);
 
 		dataComposer.startPage();
-		dataComposer.startScope("user-session");
+		dataComposer.startScope(StateScopeType.USER_SESSION);
 		dataComposer.beginRequest(Method.GET, "test.do");
 		dataComposer.compose("parameter1", "2", false);
 		String stateId = dataComposer.endRequest();

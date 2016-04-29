@@ -49,10 +49,10 @@ public class LongLivingStatesTag extends TagSupport {
 
 		IDataComposer dataComposer = HDIVUtil.getDataComposer(pageContext.getRequest());
 
-		String scope = (String) getValue("scope");
+		StateScopeType scope = StateScopeType.byName((String) getValue("scope"));
 		if (scope == null) {
 			// Default scope
-			scope = StateScopeType.USER_SESSION.getName();
+			scope = StateScopeType.USER_SESSION;
 		}
 
 		dataComposer.startScope(scope);

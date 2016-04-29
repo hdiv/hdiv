@@ -18,8 +18,6 @@ package org.hdiv.config.xml;
 import java.util.List;
 import java.util.Map;
 
-import junit.framework.TestCase;
-
 import org.hdiv.config.HDIVConfig;
 import org.hdiv.logs.IUserData;
 import org.hdiv.regex.DefaultPatternMatcher;
@@ -27,6 +25,7 @@ import org.hdiv.regex.PatternMatcher;
 import org.hdiv.session.StateCache;
 import org.hdiv.state.scope.StateScope;
 import org.hdiv.state.scope.StateScopeManager;
+import org.hdiv.state.scope.StateScopeType;
 import org.hdiv.validator.DefaultValidationRepository;
 import org.hdiv.validator.EditableDataValidationProvider;
 import org.hdiv.validator.EditableDataValidationResult;
@@ -39,6 +38,8 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.security.web.servlet.support.csrf.CsrfRequestDataValueProcessor;
 import org.springframework.web.servlet.support.RequestDataValueProcessor;
 
+import junit.framework.TestCase;
+
 public class CustomSchemaTest extends TestCase {
 
 	private ApplicationContext context;
@@ -46,23 +47,23 @@ public class CustomSchemaTest extends TestCase {
 	@Override
 	protected void setUp() throws Exception {
 
-		this.context = new ClassPathXmlApplicationContext("org/hdiv/config/xml/hdiv-config-test-schema.xml");
+		context = new ClassPathXmlApplicationContext("org/hdiv/config/xml/hdiv-config-test-schema.xml");
 	}
 
 	public void testSchema() {
 
-		Validation validation = (Validation) this.context.getBean("id1");
+		Validation validation = (Validation) context.getBean("id1");
 		assertNotNull(validation);
 		System.out.println(validation.toString());
 		System.out.println("-----------------------");
 
-		HDIVConfig hdivConfig = this.context.getBean(HDIVConfig.class);
+		HDIVConfig hdivConfig = context.getBean(HDIVConfig.class);
 		assertNotNull(hdivConfig);
 		System.out.println(hdivConfig.toString());
 		System.out.println("-----------------------");
 		assertTrue(hdivConfig.isShowErrorPageOnEditableValidation());
 
-		EditableDataValidationProvider validationProvider = this.context.getBean(EditableDataValidationProvider.class);
+		EditableDataValidationProvider validationProvider = context.getBean(EditableDataValidationProvider.class);
 		assertNotNull(validationProvider);
 		System.out.println(validationProvider.toString());
 
@@ -70,7 +71,7 @@ public class CustomSchemaTest extends TestCase {
 
 	public void testStartPages() {
 
-		HDIVConfig hdivConfig = this.context.getBean(HDIVConfig.class);
+		HDIVConfig hdivConfig = context.getBean(HDIVConfig.class);
 		assertNotNull(hdivConfig);
 
 		boolean result = hdivConfig.isStartPage("/onlyGet.html", "get");
@@ -82,7 +83,7 @@ public class CustomSchemaTest extends TestCase {
 
 	public void testExpiredSession() {
 
-		HDIVConfig hdivConfig = this.context.getBean(HDIVConfig.class);
+		HDIVConfig hdivConfig = context.getBean(HDIVConfig.class);
 		assertNotNull(hdivConfig);
 
 		String result = hdivConfig.getSessionExpiredLoginPage();
@@ -92,10 +93,10 @@ public class CustomSchemaTest extends TestCase {
 
 	public void testNames() {
 
-		HDIVConfig hdivConfig = this.context.getBean(HDIVConfig.class);
+		HDIVConfig hdivConfig = context.getBean(HDIVConfig.class);
 		assertNotNull(hdivConfig);
 
-		String[] names = this.context.getBeanDefinitionNames();
+		String[] names = context.getBeanDefinitionNames();
 		for (int i = 0; i < names.length; i++) {
 			String name = names[i];
 			System.out.println(name);
@@ -105,14 +106,14 @@ public class CustomSchemaTest extends TestCase {
 
 	public void testStateCache() {
 
-		StateCache stateCache = this.context.getBean(StateCache.class);
+		StateCache stateCache = context.getBean(StateCache.class);
 		assertNotNull(stateCache);
 
 	}
 
 	public void testUserData() {
 
-		IUserData userData = (IUserData) this.context.getBean(ConfigBeanDefinitionParser.USER_DATA_NAME);
+		IUserData userData = (IUserData) context.getBean(ConfigBeanDefinitionParser.USER_DATA_NAME);
 		assertNotNull(userData);
 		assertTrue(userData instanceof TestUserData);
 
@@ -120,21 +121,21 @@ public class CustomSchemaTest extends TestCase {
 
 	public void testEditableValidations() {
 
-		DefaultValidationRepository validationRepository = this.context.getBean(DefaultValidationRepository.class);
+		DefaultValidationRepository validationRepository = context.getBean(DefaultValidationRepository.class);
 		assertNotNull(validationRepository);
 
 		Map<ValidationTarget, List<IValidation>> validations = validationRepository.getValidations();
 		assertEquals(4, validations.size());
 
 		// First url
-		List<IValidation> vals = this.getValidations(validations, "a");
-		ValidationTarget target = this.getTarget(validations, "a");
+		List<IValidation> vals = getValidations(validations, "a");
+		ValidationTarget target = getTarget(validations, "a");
 		assertEquals(0, vals.size());
 		assertNull(target.getParams());
 
 		// Second url
-		vals = this.getValidations(validations, "b");
-		target = this.getTarget(validations, "b");
+		vals = getValidations(validations, "b");
+		target = getTarget(validations, "b");
 		List<PatternMatcher> params = target.getParams();
 		assertEquals(3, params.size());
 		assertEquals(new DefaultPatternMatcher("param1"), params.get(0));
@@ -148,8 +149,8 @@ public class CustomSchemaTest extends TestCase {
 		assertFalse(val.isDefaultValidation());
 
 		// Third url
-		vals = this.getValidations(validations, "c");
-		target = this.getTarget(validations, "c");
+		vals = getValidations(validations, "c");
+		target = getTarget(validations, "c");
 		assertNull(target.getParams());
 		assertEquals(8, vals.size());
 		// 2 custom rule + 6 default rules
@@ -163,8 +164,8 @@ public class CustomSchemaTest extends TestCase {
 		assertTrue(val.isDefaultValidation());
 
 		// Fourth url
-		vals = this.getValidations(validations, null);
-		target = this.getTarget(validations, null);
+		vals = getValidations(validations, null);
+		target = getTarget(validations, null);
 		params = target.getParams();
 		assertEquals(2, params.size());
 		assertEquals(new DefaultPatternMatcher("param4"), params.get(0));
@@ -179,7 +180,7 @@ public class CustomSchemaTest extends TestCase {
 
 	public void testEditableValidationsOrder() {
 
-		DefaultValidationRepository validationRepository = this.context.getBean(DefaultValidationRepository.class);
+		DefaultValidationRepository validationRepository = context.getBean(DefaultValidationRepository.class);
 		assertNotNull(validationRepository);
 
 		Map<ValidationTarget, List<IValidation>> validations = validationRepository.getValidations();
@@ -200,7 +201,7 @@ public class CustomSchemaTest extends TestCase {
 
 	public void testEditableValidationsParams() {
 
-		HDIVConfig config = this.context.getBean(HDIVConfig.class);
+		HDIVConfig config = context.getBean(HDIVConfig.class);
 
 		// param1
 		String url = "b";
@@ -228,7 +229,7 @@ public class CustomSchemaTest extends TestCase {
 
 	public void testReuseExistingPageInAjaxRequest() {
 
-		HDIVConfig hdivConfig = this.context.getBean(HDIVConfig.class);
+		HDIVConfig hdivConfig = context.getBean(HDIVConfig.class);
 		assertNotNull(hdivConfig);
 
 		assertEquals(true, hdivConfig.isReuseExistingPageInAjaxRequest());
@@ -237,7 +238,7 @@ public class CustomSchemaTest extends TestCase {
 
 	public void testRequestDataValueProcessor() {
 
-		HdivRequestDataValueProcessor processor = this.context.getBean(HdivRequestDataValueProcessor.class);
+		HdivRequestDataValueProcessor processor = context.getBean(HdivRequestDataValueProcessor.class);
 		assertNotNull(processor);
 
 		// Spring security 'CsrfRequestDataValueProcessor' as inner processor.
@@ -249,11 +250,11 @@ public class CustomSchemaTest extends TestCase {
 
 	public void testStateScopeManager() {
 
-		StateScopeManager scopeManager = this.context.getBean(StateScopeManager.class);
+		StateScopeManager scopeManager = context.getBean(StateScopeManager.class);
 		assertNotNull(scopeManager);
 
-		StateScope appScope = scopeManager.getStateScopeByName("app");
-		StateScope sessionScope = scopeManager.getStateScopeByName("user-session");
+		StateScope appScope = scopeManager.getStateScope(StateScopeType.APP);
+		StateScope sessionScope = scopeManager.getStateScope(StateScopeType.USER_SESSION);
 
 		assertNotNull(appScope);
 		assertNotNull(sessionScope);
@@ -261,23 +262,23 @@ public class CustomSchemaTest extends TestCase {
 
 	public void testIsLongLivingPages() {
 
-		HDIVConfig hdivConfig = this.context.getBean(HDIVConfig.class);
+		HDIVConfig hdivConfig = context.getBean(HDIVConfig.class);
 		assertNotNull(hdivConfig);
 
-		String result = hdivConfig.isLongLivingPages("/default.html");
-		assertEquals("user-session", result);
+		StateScopeType result = hdivConfig.isLongLivingPages("/default.html");
+		assertEquals(StateScopeType.USER_SESSION, result);
 
 		result = hdivConfig.isLongLivingPages("/user.html");
-		assertEquals("user-session", result);
+		assertEquals(StateScopeType.USER_SESSION, result);
 
 		result = hdivConfig.isLongLivingPages("/app.html");
-		assertEquals("app", result);
+		assertEquals(StateScopeType.APP, result);
 
 		result = hdivConfig.isLongLivingPages("/other.html");
 		assertNull(result);
 	}
 
-	protected List<IValidation> getValidations(Map<ValidationTarget, List<IValidation>> validations, String pattern) {
+	protected List<IValidation> getValidations(final Map<ValidationTarget, List<IValidation>> validations, final String pattern) {
 
 		for (ValidationTarget target : validations.keySet()) {
 			PatternMatcher urlPattern = target.getUrl();
@@ -293,7 +294,7 @@ public class CustomSchemaTest extends TestCase {
 		return null;
 	}
 
-	protected ValidationTarget getTarget(Map<ValidationTarget, List<IValidation>> validations, String pattern) {
+	protected ValidationTarget getTarget(final Map<ValidationTarget, List<IValidation>> validations, final String pattern) {
 
 		for (ValidationTarget target : validations.keySet()) {
 			PatternMatcher urlPattern = target.getUrl();

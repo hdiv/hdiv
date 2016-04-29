@@ -122,8 +122,8 @@ public class HdivWebSecurityConfigurationSupportTest {
 		HDIVConfig config = configuration.hdivConfig();
 		assertNotNull(config);
 
-		assertEquals("app", config.isLongLivingPages("/longLiving/sample.html"));
-		assertEquals("user-session", config.isLongLivingPages("/longLivingPageApp.html"));
+		assertEquals(StateScopeType.APP, config.isLongLivingPages("/longLiving/sample.html"));
+		assertEquals(StateScopeType.USER_SESSION, config.isLongLivingPages("/longLivingPageApp.html"));
 		assertEquals(null, config.isLongLivingPages("/noLongLiving.html"));
 	}
 

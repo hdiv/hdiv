@@ -16,6 +16,7 @@
 package org.hdiv.config;
 
 import org.hdiv.AbstractHDIVTestCase;
+import org.hdiv.state.scope.StateScopeType;
 import org.hdiv.util.Method;
 import org.hdiv.validator.EditableDataValidationProvider;
 import org.hdiv.validator.EditableDataValidationResult;
@@ -89,10 +90,10 @@ public class HDIVConfigTest extends AbstractHDIVTestCase {
 
 		HDIVConfig config = getConfig();
 
-		assertEquals("app", config.isLongLivingPages("/scopedPage/app.html"));
-		assertEquals("app", config.isLongLivingPages("/scopedPage/appScoped/test"));
-		assertEquals("user-session", config.isLongLivingPages("/scopedPage/user.html"));
-		assertEquals("user-session", config.isLongLivingPages("/scopedPage/userScoped/test"));
+		assertEquals(StateScopeType.APP, config.isLongLivingPages("/scopedPage/app.html"));
+		assertEquals(StateScopeType.APP, config.isLongLivingPages("/scopedPage/appScoped/test"));
+		assertEquals(StateScopeType.USER_SESSION, config.isLongLivingPages("/scopedPage/user.html"));
+		assertEquals(StateScopeType.USER_SESSION, config.isLongLivingPages("/scopedPage/userScoped/test"));
 
 		assertEquals(null, config.isLongLivingPages("/"));
 		assertEquals(null, config.isLongLivingPages("/scopedPage/appScoped"));

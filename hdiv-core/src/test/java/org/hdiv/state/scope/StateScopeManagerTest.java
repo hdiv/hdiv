@@ -21,20 +21,21 @@ public class StateScopeManagerTest extends AbstractHDIVTestCase {
 
 	private StateScopeManager stateScopeManager;
 
+	@Override
 	protected void onSetUp() throws Exception {
 
-		this.stateScopeManager = this.getApplicationContext().getBean(StateScopeManager.class);
+		stateScopeManager = getApplicationContext().getBean(StateScopeManager.class);
 	}
 
 	public void testScope() {
 
-		StateScope scope = this.stateScopeManager.getStateScopeByName("app");
-		assertEquals("app", scope.getScopeName());
+		StateScope scope = stateScopeManager.getStateScope(StateScopeType.APP);
+		assertEquals("app", scope.getScopeType().getName());
 
-		scope = this.stateScopeManager.getStateScopeByName("user-session");
-		assertEquals("user-session", scope.getScopeName());
+		scope = stateScopeManager.getStateScope(StateScopeType.USER_SESSION);
+		assertEquals("user-session", scope.getScopeType().getName());
 
-		scope = this.stateScopeManager.getStateScopeByName("");
+		scope = stateScopeManager.getStateScope(StateScopeType.PAGE);
 		assertNull(scope);
 	}
 
