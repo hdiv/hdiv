@@ -207,9 +207,9 @@ public class Page implements IPage, Serializable {
 	 * @return the randomToken
 	 * @since HDIV 2.1.7
 	 */
-	public String getRandomToken(final Method method) {
+	public final String getRandomToken(final Method method) {
 
-		if (isFormMethod(method)) {
+		if (method != null && method.isForm) {
 			return formRandomToken;
 		}
 		else {
@@ -223,28 +223,12 @@ public class Page implements IPage, Serializable {
 	 * @since HDIV 2.1.7
 	 */
 	public void setRandomToken(final String randomToken, final Method method) {
-		if (isFormMethod(method)) {
+		if (method != null && method.isForm) {
 			formRandomToken = randomToken;
 		}
 		else {
 			this.randomToken = randomToken;
 		}
-	}
-
-	/**
-	 * @param method HTTP method
-	 * @return true if method is POST, PATCH, PUT or DELETE, false otherwise.
-	 */
-	protected final boolean isFormMethod(final Method method) {
-		if (method == null || method == Method.GET) {
-			// GET equivalent
-			return false;
-		}
-		if (method == Method.POST || method == Method.PATCH || method == Method.PUT || method == Method.DELETE) {
-			return true;
-		}
-		// Otherwise
-		return false;
 	}
 
 	/**

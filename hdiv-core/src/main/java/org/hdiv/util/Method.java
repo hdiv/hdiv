@@ -19,7 +19,13 @@ package org.hdiv.util;
  * Class containing valid HTTP Method
  */
 public enum Method {
-	GET, POST, PATCH, PUT, DELETE, OTHER;
+	GET(false), POST(true), PATCH(true), PUT(true), DELETE(true);
+
+	public final boolean isForm;
+
+	Method(final boolean isForm) {
+		this.isForm = isForm;
+	}
 
 	public static Method secureValueOf(final String value) {
 		try {
