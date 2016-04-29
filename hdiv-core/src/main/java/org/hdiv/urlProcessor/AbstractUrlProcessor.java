@@ -19,7 +19,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 import java.util.StringTokenizer;
@@ -27,11 +26,9 @@ import java.util.StringTokenizer;
 import javax.servlet.http.HttpServletRequest;
 
 import org.hdiv.config.HDIVConfig;
-import org.hdiv.regex.PatternMatcher;
 import org.hdiv.util.Constants;
 import org.hdiv.util.HDIVUtil;
 import org.hdiv.util.Method;
-import org.springframework.util.Assert;
 import org.springframework.web.util.HtmlUtils;
 
 /**
@@ -53,7 +50,7 @@ public abstract class AbstractUrlProcessor {
 				request);
 	}
 
-	protected final String processAnchorAndParameters(String url, final UrlData urlData, final String hdivParameter) {
+	protected static final String processAnchorAndParameters(String url, final UrlDataImpl urlData, final String hdivParameter) {
 		url = urlData.findAnchor(url);
 		// Remove parameters
 		final int paramInit = url.indexOf('?');
@@ -75,11 +72,10 @@ public abstract class AbstractUrlProcessor {
 	 */
 	public UrlData createUrlData(String url, final Method method, final String hdivParameter, final HttpServletRequest request) {
 
-		Assert.notNull(config);
 		final String contextPath = request.getContextPath();
 		final String serverName = request.getServerName();
 		final String baseURL = getBaseURL(request);
-		final UrlData urlData = new UrlData(url, method);
+		final UrlDataImpl urlData = new UrlDataImpl(url, method);
 
 		// Remove URi template params
 		if (urlData.hasUriTemplate()) {
@@ -118,7 +114,7 @@ public abstract class AbstractUrlProcessor {
 
 	}
 
-	protected final String getBaseURL(final HttpServletRequest request) {
+	protected static final String getBaseURL(final HttpServletRequest request) {
 		// Base url defined by <base> tag in some frameworks
 		String baseUrl = HDIVUtil.getBaseURL(request);
 		if (baseUrl != null) {
@@ -143,7 +139,7 @@ public abstract class AbstractUrlProcessor {
 	 * @param params parameters string
 	 * @return parameters string without state id
 	 */
-	protected final String removeStateParameter(final String hdivParameter, final String params) {
+	protected static final String removeStateParameter(final String hdivParameter, final String params) {
 
 		if (params == null || !params.contains(hdivParameter)) {
 			return params;
@@ -263,19 +259,6 @@ public abstract class AbstractUrlProcessor {
 	}
 
 	/**
-	 * Determines if the url is a startPage
-	 *
-	 * @param urlData {@link UrlData} object with url info.
-	 *
-	 * @return boolean is startPage?
-	 */
-	protected boolean isStartPage(final UrlData urlData) {
-
-		// If this is a start page, don't compose
-		return config.isStartPage(urlData.getUrlWithoutContextPath(), urlData.getMethod());
-	}
-
-	/**
 	 * Generate a url with all parameters and include hdiv state parameter.
 	 *
 	 * @param hdivParameter HDIV parameter name
@@ -283,21 +266,9 @@ public abstract class AbstractUrlProcessor {
 	 * @param stateParam hdiv state parameter value
 	 * @return complete url
 	 */
-	public String getProcessedUrlWithHdivState(final String hdivParameter, final UrlData urlData, final String stateParam) {
-
-		// obtain url with parameters
-		StringBuilder sb = urlData.getParamProcessedUrl();
-
-		if (stateParam == null || stateParam.length() <= 0) {
-			return sb.toString();
-		}
-		char separator = (urlData.containsParams()) ? '&' : '?';
-
-		sb.append(separator).append(hdivParameter).append('=').append(stateParam);
-		sb.append(urlData.getUriTemplate().replace('?', '&'));
-
-		appendAnchor(sb, urlData.getAnchor());
-		return sb.toString();
+	public String getProcessedUrlWithHdivState(final StringBuilder sb, final String hdivParameter, final UrlData urlData,
+			final String stateParam) {
+		return urlData.getProcessedUrlWithHdivState(sb, hdivParameter, stateParam);
 	}
 
 	/**
@@ -306,60 +277,8 @@ public abstract class AbstractUrlProcessor {
 	 * @param urlData url data object
 	 * @return complete url
 	 */
-	public String getProcessedUrl(final UrlData urlData) {
-
-		StringBuilder url = urlData.getParamProcessedUrl();
-
-		appendAnchor(url, urlData.getAnchor());
-		return url.toString();
-	}
-
-	/**
-	 * Append anchor to url if constains any.
-	 *
-	 * @param url url
-	 * @param anchor anchor
-	 */
-	protected void appendAnchor(final StringBuilder url, final String anchor) {
-		if (anchor != null) {
-			// it could be ""
-			url.append('#').append(anchor);
-		}
-	}
-
-	/**
-	 * Determines if Hdiv state is necessary for the url.
-	 *
-	 * @param urlData url data object
-	 * @return is necessary?
-	 */
-	public boolean isHdivStateNecessary(final UrlData urlData) {
-
-		if (urlData.isJS()) {
-			return false;
-		}
-
-		if (!urlData.isInternal()) {
-			return false;
-		}
-
-		boolean startPage = isStartPage(urlData);
-		if (startPage) {
-			return false;
-		}
-
-		if (hasExtensionToExclude(urlData)) {
-			return false;
-		}
-
-		boolean validateParamLessUrls = config.isValidationInUrlsWithoutParamsActivated();
-		// if url is a link (or a GET method form) and has not got parameters, we do not have to include HDIV's state
-		if (urlData.isGetMethod() && !validateParamLessUrls && !urlData.containsParams()) {
-			return false;
-		}
-
-		return true;
-
+	public String getProcessedUrl(final StringBuilder sb, final UrlData urlData) {
+		return urlData.getProcessedUrl(sb);
 	}
 
 	/**
@@ -371,7 +290,8 @@ public abstract class AbstractUrlProcessor {
 	 * @param urlData url data
 	 * @return is internal?
 	 */
-	protected boolean isInternalUrl(final String serverName, final String contextPath, final String url, final UrlData urlData) {
+	protected static final boolean isInternalUrl(final String serverName, final String contextPath, final String url,
+			final UrlDataImpl urlData) {
 
 		if (urlData.getServer() != null) {
 			// URL is absolute: http://...
@@ -413,7 +333,7 @@ public abstract class AbstractUrlProcessor {
 	 * @param url absolute url
 	 * @return url protocol, domain and port
 	 */
-	protected String getServerFromUrl(String url) {
+	protected static String getServerFromUrl(String url) {
 
 		final int pos = url.indexOf("://");
 		if (pos > 0) {
@@ -430,50 +350,13 @@ public abstract class AbstractUrlProcessor {
 	}
 
 	/**
-	 * Determines if the url contains a extension to exclude for Hdiv state inclusion.
-	 *
-	 * @param urlData url data object
-	 * @return is excluded or not
-	 */
-	protected boolean hasExtensionToExclude(final UrlData urlData) {
-		String contextPathRelativeUrl = urlData.getContextPathRelativeUrl();
-		if (contextPathRelativeUrl.charAt(contextPathRelativeUrl.length() - 1) == '/') {
-			return false;
-		}
-
-		List<String> excludedExtensions = config.getExcludedURLExtensions();
-
-		if (excludedExtensions != null) {
-			for (int i = 0; i < excludedExtensions.size(); i++) {
-				if (contextPathRelativeUrl.endsWith(excludedExtensions.get(i))) {
-					return true;
-				}
-			}
-		}
-
-		// jsp is always protected
-		if (contextPathRelativeUrl.endsWith(".jsp")) {
-			return false;
-		}
-		List<PatternMatcher> protectedExtension = config.getProtectedURLPatterns();
-		for (int i = 0; protectedExtension != null && i < protectedExtension.size(); i++) {
-			PatternMatcher extensionPattern = protectedExtension.get(i);
-			if (extensionPattern.matches(contextPathRelativeUrl)) {
-				return false;
-			}
-		}
-
-		return (contextPathRelativeUrl.charAt(0) != '/') && (contextPathRelativeUrl.indexOf('.') == -1);
-	}
-
-	/**
 	 * Composes the url starting with context path. Removes any relative url.
 	 *
 	 * @param baseUrl base URL
 	 * @param url url
 	 * @return url starting with context path
 	 */
-	protected final String getContextPathRelative(final String baseUrl, final String url) {
+	protected static final String getContextPathRelative(final String baseUrl, final String url) {
 
 		String returnValue;
 
@@ -503,7 +386,7 @@ public abstract class AbstractUrlProcessor {
 	 * @param originalRequestUri originalRequestUri
 	 * @return returns URL without relative paths.
 	 */
-	protected String removeRelativePaths(final String url, final String originalRequestUri) {
+	protected static String removeRelativePaths(final String url, final String originalRequestUri) {
 
 		String urlWithoutRelativePath = url;
 
@@ -548,7 +431,7 @@ public abstract class AbstractUrlProcessor {
 	 * @param urlData current url data
 	 * @return url without sessionId
 	 */
-	public static String stripSession(final String url, final UrlData urlData) {
+	public static final String stripSession(final String url, final UrlDataImpl urlData) {
 		return HDIVUtil.stripAndFillSessionData(url, urlData);
 	}
 

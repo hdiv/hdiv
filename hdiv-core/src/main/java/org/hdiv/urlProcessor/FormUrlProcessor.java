@@ -78,7 +78,7 @@ public class FormUrlProcessor extends AbstractUrlProcessor {
 		}
 		String hdivParameter = HDIVUtil.getHdivStateParameterName(request);
 		UrlData urlData = createUrlData(url, method, hdivParameter, request);
-		if (isHdivStateNecessary(urlData)) {
+		if (urlData.isHdivStateNecessary(config)) {
 			// the url needs protection
 			String stateId = dataComposer.beginRequest(method, urlData.getUrlWithoutContextPath());
 
@@ -87,10 +87,10 @@ public class FormUrlProcessor extends AbstractUrlProcessor {
 
 			// Process url params
 			String processedParams = dataComposer.composeParams(urlData.getUrlParams(), method, Constants.ENCODING_UTF_8);
-			urlData.setUrlParams(processedParams);
+			urlData.setComposedUrlParams(processedParams);
 
 			// Action url with confidential values
-			url = getProcessedUrl(urlData);
+			url = getProcessedUrl(dataComposer.getBuilder(), urlData);
 		}
 
 		return url;

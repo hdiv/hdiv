@@ -37,19 +37,20 @@ public class UriTemplateTest extends AbstractHDIVTestCase {
 		url = urlWithoutUriTemplate + uriTemplate;
 	}
 
-	private UrlData create(final String url) {
-		return linkUrlProcessor.createUrlData(url, Method.GET, HDIVUtil.getHdivStateParameterName(getMockRequest()), getMockRequest());
+	private UrlDataImpl create(final String url) {
+		return (UrlDataImpl) linkUrlProcessor.createUrlData(url, Method.GET, HDIVUtil.getHdivStateParameterName(getMockRequest()),
+				getMockRequest());
 	}
 
 	public void testCreateUrlDataSimple() {
-		UrlData urlData = create(urlWithoutUriTemplate);
+		UrlDataImpl urlData = create(urlWithoutUriTemplate);
 		assertEquals(false, urlData.hasUriTemplate());
 		assertEquals(urlWithoutUriTemplate, urlData.getUrlWithOutUriTemplate());
 		assertEquals("", urlData.getUriTemplate());
 	}
 
 	public void testCreateUrlDataWithUriTemplate() {
-		UrlData urlData = create(url);
+		UrlDataImpl urlData = create(url);
 		assertEquals(true, urlData.hasUriTemplate());
 		assertEquals(urlWithoutUriTemplate, urlData.getUrlWithOutUriTemplate());
 		assertEquals(uriTemplate, urlData.getUriTemplate());
@@ -58,15 +59,15 @@ public class UriTemplateTest extends AbstractHDIVTestCase {
 	public void testGetProcessedUrlWithHdivState() {
 		UrlData urlData = create(url);
 		String stateParam = "1-12-123123123123";
-		String urlProcessed = linkUrlProcessor.getProcessedUrlWithHdivState(HDIVUtil.getHdivStateParameterName(getMockRequest()), urlData,
-				stateParam);
+		String urlProcessed = linkUrlProcessor.getProcessedUrlWithHdivState(new StringBuilder(),
+				HDIVUtil.getHdivStateParameterName(getMockRequest()), urlData, stateParam);
 		assertEquals(urlWithoutUriTemplate + "?_HDIV_STATE_=" + stateParam + uriTemplate.replace("?", "&"), urlProcessed);
 	}
 
 	public void testJSURLData() {
-		UrlData data = new UrlData("javascript:myMethod()", Method.GET);
+		UrlDataImpl data = new UrlDataImpl("javascript:myMethod()", Method.GET);
 		assertEquals(true, data.isJS());
-		data = new UrlData("hhhhhhhhhh:myMethod()", Method.GET);
+		data = new UrlDataImpl("hhhhhhhhhh:myMethod()", Method.GET);
 		assertEquals(false, data.isJS());
 	}
 }

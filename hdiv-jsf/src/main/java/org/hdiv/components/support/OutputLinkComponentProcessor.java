@@ -45,7 +45,7 @@ public class OutputLinkComponentProcessor extends AbstractComponentProcessor {
 			String url = component.getValue().toString();
 			String hdivParameter = HDIVUtil.getHdivStateParameterName(request);
 			UrlData urlData = linkUrlProcessor.createUrlData(url, Method.GET, hdivParameter, request);
-			if (linkUrlProcessor.isHdivStateNecessary(urlData)) {
+			if (urlData.isHdivStateNecessary(config)) {
 
 				boolean hasUIParams = UtilsJsf.hasUIParameterChild(component);
 
@@ -59,8 +59,7 @@ public class OutputLinkComponentProcessor extends AbstractComponentProcessor {
 				IDataComposer dataComposer = HDIVUtil.getDataComposer(request);
 				dataComposer.beginRequest(Method.GET, urlData.getUrlWithoutContextPath());
 
-				String processedParams = dataComposer.composeParams(urlData.getUrlParams(), Method.GET, Constants.ENCODING_UTF_8);
-				urlData.setUrlParams(processedParams);
+				urlData.setComposedUrlParams(dataComposer.composeParams(urlData.getUrlParams(), Method.GET, Constants.ENCODING_UTF_8));
 
 				if (hasUIParams) {
 
@@ -76,7 +75,7 @@ public class OutputLinkComponentProcessor extends AbstractComponentProcessor {
 
 					String stateParam = dataComposer.endRequest();
 
-					url = linkUrlProcessor.getProcessedUrl(urlData);
+					url = linkUrlProcessor.getProcessedUrl(dataComposer.getBuilder(), urlData);
 
 					component.setValue(url);
 
@@ -92,7 +91,7 @@ public class OutputLinkComponentProcessor extends AbstractComponentProcessor {
 					String stateParam = dataComposer.endRequest();
 
 					// Add state directly in the outputLink's value
-					url = linkUrlProcessor.getProcessedUrlWithHdivState(hdivParameter, urlData, stateParam);
+					url = linkUrlProcessor.getProcessedUrlWithHdivState(dataComposer.getBuilder(), hdivParameter, urlData, stateParam);
 					component.setValue(url);
 				}
 			}

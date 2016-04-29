@@ -15,7 +15,7 @@
  */
 package org.hdiv.util;
 
-import org.hdiv.urlProcessor.UrlData;
+import org.hdiv.urlProcessor.UrlDataImpl;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -25,7 +25,7 @@ public class HDIVUtilTest {
 	public void testProcessActionJsessionId() {
 
 		final String url = "/testAction.do;jsessionid=67CFB560B6EC2677D51814A2A2B16B24";
-		final UrlData data = new UrlData(url, Method.GET);
+		final UrlDataImpl data = new UrlDataImpl(url, Method.GET);
 		Assert.assertEquals("/testAction.do", HDIVUtil.stripAndFillSessionData(url, data));
 		Assert.assertEquals("jsessionid=67CFB560B6EC2677D51814A2A2B16B24", data.getjSessionId());
 	}
@@ -33,7 +33,7 @@ public class HDIVUtilTest {
 	@Test
 	public void testProcessActionJsessionIdParam() {
 		final String url = "/testAction.do;jsessionid=67CFB560B6EC2677D51814A2A2B16B24?params=1";
-		final UrlData data = new UrlData(url, Method.GET);
+		final UrlDataImpl data = new UrlDataImpl(url, Method.GET);
 		Assert.assertEquals("/testAction.do?params=1", HDIVUtil.stripAndFillSessionData(url, data));
 		Assert.assertEquals("jsessionid=67CFB560B6EC2677D51814A2A2B16B24", data.getjSessionId());
 
@@ -43,7 +43,7 @@ public class HDIVUtilTest {
 	public void testProcessActionJsessionStartPage() {
 
 		final String url = "/testing.do;jsessionid=67CFB560B6EC2677D51814A2A2B16B24"; // is a startPage
-		final UrlData data = new UrlData(url, Method.GET);
+		final UrlDataImpl data = new UrlDataImpl(url, Method.GET);
 		Assert.assertEquals("/testing.do", HDIVUtil.stripAndFillSessionData(url, data));
 		Assert.assertEquals("jsessionid=67CFB560B6EC2677D51814A2A2B16B24", data.getjSessionId());
 	}

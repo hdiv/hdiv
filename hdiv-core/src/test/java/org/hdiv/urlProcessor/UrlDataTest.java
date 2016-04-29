@@ -23,9 +23,9 @@ public class UrlDataTest {
 
 	@Test
 	public void testShortURLIsJS() {
-		UrlData data = new UrlData("short", Method.GET);
+		UrlDataImpl data = new UrlDataImpl("short", Method.GET);
 		Assert.assertFalse(data.isJS());
-		data = new UrlData("javascript:", Method.GET);
+		data = new UrlDataImpl("javascript:", Method.GET);
 		Assert.assertTrue(data.isJS());
 	}
 

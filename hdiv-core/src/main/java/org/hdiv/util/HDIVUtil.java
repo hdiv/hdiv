@@ -33,7 +33,7 @@ import org.hdiv.dataComposer.IDataComposer;
 import org.hdiv.exception.HDIVException;
 import org.hdiv.urlProcessor.FormUrlProcessor;
 import org.hdiv.urlProcessor.LinkUrlProcessor;
-import org.hdiv.urlProcessor.UrlData;
+import org.hdiv.urlProcessor.UrlDataImpl;
 import org.springframework.context.MessageSource;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
@@ -151,9 +151,7 @@ public class HDIVUtil {
 	 * @return String
 	 */
 	public static String getBaseURL(final ServletRequest request) {
-
-		final String baseURL = (String) request.getAttribute(BASEURL_REQUEST_KEY);
-		return baseURL;
+		return (String) request.getAttribute(BASEURL_REQUEST_KEY);
 	}
 
 	/**
@@ -375,7 +373,7 @@ public class HDIVUtil {
 	 * @return Parameter name
 	 * @since 3.0.1
 	 */
-	public static String getHdivStateParameterName(HttpServletRequest request) {
+	public static String getHdivStateParameterName(final HttpServletRequest request) {
 
 		return (String) request.getAttribute(Constants.HDIV_PARAMETER);
 	}
@@ -386,7 +384,7 @@ public class HDIVUtil {
 	 * @param parameterName The name of the parameter
 	 * @since 3.0.1
 	 */
-	public static void setHdivStateParameterName(HttpServletRequest request, String parameterName) {
+	public static void setHdivStateParameterName(final HttpServletRequest request, final String parameterName) {
 
 		request.setAttribute(Constants.HDIV_PARAMETER, parameterName);
 	}
@@ -397,7 +395,7 @@ public class HDIVUtil {
 	 * @return Parameter name
 	 * @since 3.0.1
 	 */
-	public static String getModifyHdivStateParameterName(HttpServletRequest request) {
+	public static String getModifyHdivStateParameterName(final HttpServletRequest request) {
 
 		return (String) request.getAttribute(Constants.MODIFY_STATE_HDIV_PARAMETER);
 	}
@@ -408,7 +406,7 @@ public class HDIVUtil {
 	 * @param parameterName The name of the parameter
 	 * @since 3.0.1
 	 */
-	public static void setModifyHdivStateParameterName(HttpServletRequest request, String parameterName) {
+	public static void setModifyHdivStateParameterName(final HttpServletRequest request, final String parameterName) {
 
 		request.setAttribute(Constants.MODIFY_STATE_HDIV_PARAMETER, parameterName);
 	}
@@ -444,7 +442,7 @@ public class HDIVUtil {
 		return stripAndFillSessionData(url, null);
 	}
 
-	public static String stripAndFillSessionData(final String url, final UrlData urldata) {
+	public static String stripAndFillSessionData(final String url, final UrlDataImpl urldata) {
 		final int pos = url.indexOf(';');
 		if (pos != -1) {
 			final char[] data = url.toCharArray();
@@ -479,16 +477,17 @@ public class HDIVUtil {
 		for (int i = 0 + fromIndex; i <= max; i++) {
 			/* Look for first character. */
 			if (source[i] != first) {
-				while (++i <= max && source[i] != first)
-					;
+				while (++i <= max && source[i] != first) {
+				}
 			}
 
 			/* Found first character, now look at the rest of v2 */
 			if (i <= max) {
 				int j = i + 1;
 				int end = j + target.length - 1;
-				for (int k = 1; j < end && source[j] == target[k]; j++, k++)
+				for (int k = 1; j < end && source[j] == target[k]; j++, k++) {
 					;
+				}
 
 				if (j == end) {
 					/* Found whole string. */
