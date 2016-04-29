@@ -265,7 +265,7 @@ public abstract class AbstractDataComposer implements IDataComposer {
 	 *
 	 * @see org.hdiv.dataComposer.IDataComposer#composeParams(java.lang.String, java.lang.String, java.lang.String)
 	 */
-	public String composeParams(String parameters, final Method method, final String charEncoding) {
+	public final String composeParams(String parameters, final Method method, final String charEncoding) {
 
 		if (parameters == null || parameters.length() == 0) {
 			return null;
@@ -318,7 +318,7 @@ public abstract class AbstractDataComposer implements IDataComposer {
 
 			// Update indexes
 			beginIndex = endIndex + 1;
-			endIndex = parameters.indexOf("&", endIndex + 1);
+			endIndex = parameters.indexOf('&', endIndex + 1);
 			if (endIndex < 0) {
 				endIndex = parameters.length();
 			}
