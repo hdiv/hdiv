@@ -649,8 +649,8 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	 */
 	protected boolean validateHDIVSuffix(final HttpServletRequest request, final String value, final IState restoredState) {
 
-		int firstSeparator = value.indexOf('-');
-		int lastSeparator = value.lastIndexOf('-');
+		int firstSeparator = value.indexOf(Constants.STATE_ID_SEPARATOR);
+		int lastSeparator = value.lastIndexOf(Constants.STATE_ID_SEPARATOR);
 
 		if (firstSeparator == -1) {
 

@@ -17,6 +17,7 @@ package org.hdiv.state.scope;
 
 import org.hdiv.context.RequestContext;
 import org.hdiv.state.IState;
+import org.hdiv.util.Constants;
 
 /**
  * Common code for {@link StateScope} implementation.
@@ -45,7 +46,7 @@ public abstract class AbstractStateScope implements StateScope {
 
 		setStateCache(context, cache);
 
-		return new StringBuilder().append(preffix).append('-').append(stateId).toString();
+		return new StringBuilder().append(preffix).append(Constants.STATE_ID_SEPARATOR).append(stateId).toString();
 	}
 
 	public IState restoreState(final RequestContext context, final int stateId) {
@@ -62,7 +63,7 @@ public abstract class AbstractStateScope implements StateScope {
 
 	public boolean isScopeState(final String stateId) {
 
-		int stateIndex = stateId.indexOf('-');
+		int stateIndex = stateId.indexOf(Constants.STATE_ID_SEPARATOR);
 		return stateIndex > 0 && stateId.substring(0, stateIndex).equals(getScopePrefix());
 	}
 

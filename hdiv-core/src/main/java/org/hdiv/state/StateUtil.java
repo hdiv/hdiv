@@ -26,6 +26,7 @@ import org.hdiv.exception.HDIVException;
 import org.hdiv.session.ISession;
 import org.hdiv.state.scope.StateScope;
 import org.hdiv.state.scope.StateScopeManager;
+import org.hdiv.util.Constants;
 import org.hdiv.util.HDIVErrorCodes;
 
 /**
@@ -78,7 +79,7 @@ public class StateUtil {
 		if (stateScope != null) {
 			return 0;
 		}
-		int firstSeparator = requestState.indexOf('-');
+		int firstSeparator = requestState.indexOf(Constants.STATE_ID_SEPARATOR);
 		if (firstSeparator == -1) {
 			throw new HDIVException(HDIVErrorCodes.HDIV_PARAMETER_INCORRECT_VALUE);
 		}
@@ -133,8 +134,8 @@ public class StateUtil {
 		IState restoredState = null;
 
 		// Extract pageId and stateId from the state identifier
-		int firstSeparator = requestState.indexOf('-');
-		int lastSeparator = requestState.lastIndexOf('-');
+		int firstSeparator = requestState.indexOf(Constants.STATE_ID_SEPARATOR);
+		int lastSeparator = requestState.lastIndexOf(Constants.STATE_ID_SEPARATOR);
 		if (firstSeparator == -1 || lastSeparator == -1) {
 			throw new HDIVException(HDIVErrorCodes.HDIV_PARAMETER_INCORRECT_VALUE);
 		}

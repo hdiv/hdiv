@@ -66,7 +66,7 @@ public abstract class AbstractDataComposer implements IDataComposer {
 	/**
 	 * Dash character
 	 */
-	public static final char DASH = '-';
+	public static final char DASH = Constants.STATE_ID_SEPARATOR;
 
 	/**
 	 * Http session wrapper

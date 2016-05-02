@@ -51,7 +51,7 @@ public class ScopedStateCache implements Serializable {
 		int id = index.getAndIncrement();
 		states.put(id, new StateAndToken(state, token));
 
-		return id + Constants.STATE_ID_SEPARATOR + token;
+		return Integer.toString(id) + Constants.STATE_ID_SEPARATOR + token;
 	}
 
 	public IState getState(final int stateId) {
