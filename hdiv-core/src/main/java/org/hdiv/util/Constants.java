@@ -107,4 +107,11 @@ public class Constants {
 	 */
 	public static final String AJAX_REQUEST = "org.hdiv.ajaxrequest";
 
+	/**
+	 * Common separator for state IDs
+	 * 
+	 * @since 3.2.0
+	 */
+	public static final char STATE_ID_SEPARATOR = '-';
+
 }

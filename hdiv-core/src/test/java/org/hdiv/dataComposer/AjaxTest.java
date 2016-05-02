@@ -20,6 +20,7 @@ import org.hdiv.context.RequestContext;
 import org.hdiv.state.IParameter;
 import org.hdiv.state.IState;
 import org.hdiv.state.StateUtil;
+import org.hdiv.util.Constants;
 import org.hdiv.util.HDIVUtil;
 import org.hdiv.util.Method;
 import org.springframework.mock.web.MockHttpServletRequest;
@@ -233,14 +234,15 @@ public class AjaxTest extends AbstractHDIVTestCase {
 		assertEquals("3", val);
 	}
 
-	public String getPageId(String stateId) {
+	public String getPageId(final String stateId) {
 
-		return stateId.substring(0, stateId.indexOf("-"));
+		return stateId.substring(0, stateId.indexOf(Constants.STATE_ID_SEPARATOR));
 	}
 
-	public int getStateId(String stateId) {
+	public int getStateId(final String stateId) {
 
-		String state = stateId.substring(stateId.indexOf("-") + 1, stateId.indexOf("-", stateId.indexOf("-") + 1));
+		String state = stateId.substring(stateId.indexOf(Constants.STATE_ID_SEPARATOR) + 1,
+				stateId.indexOf(Constants.STATE_ID_SEPARATOR, stateId.indexOf(Constants.STATE_ID_SEPARATOR) + 1));
 		return Integer.parseInt(state);
 	}
 }

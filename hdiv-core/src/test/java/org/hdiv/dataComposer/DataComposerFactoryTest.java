@@ -18,6 +18,7 @@ package org.hdiv.dataComposer;
 import javax.servlet.http.HttpServletRequest;
 
 import org.hdiv.AbstractHDIVTestCase;
+import org.hdiv.util.Constants;
 import org.hdiv.util.Method;
 import org.springframework.mock.web.MockHttpServletRequest;
 
@@ -112,9 +113,9 @@ public class DataComposerFactoryTest extends AbstractHDIVTestCase {
 		assertEquals(getPageId(stateId), Integer.parseInt(getPageId(stateId2)) - 1 + "");
 	}
 
-	protected String getPageId(String stateId) {
+	protected String getPageId(final String stateId) {
 
-		return stateId.substring(0, stateId.indexOf("-"));
+		return stateId.substring(0, stateId.indexOf(Constants.STATE_ID_SEPARATOR));
 	}
 
 }

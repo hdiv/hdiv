@@ -25,6 +25,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.hdiv.state.IParameter;
 import org.hdiv.state.IState;
+import org.hdiv.util.Constants;
 
 /**
  * Cache than manages scoped states for a specific type of {@link StateScope}.
@@ -41,16 +42,16 @@ public class ScopedStateCache implements Serializable {
 
 	public String addState(final IState state, final String token) {
 
-		Integer previousStateId = this.existEqualState(state);
+		Integer previousStateId = existEqualState(state);
 		if (previousStateId != null) {
 			StateAndToken previousState = states.get(previousStateId);
-			return previousStateId + "-" + previousState.getToken();
+			return previousStateId + Constants.STATE_ID_SEPARATOR + previousState.getToken();
 		}
 
-		int id = this.index.getAndIncrement();
+		int id = index.getAndIncrement();
 		states.put(id, new StateAndToken(state, token));
 
-		return id + "-" + token;
+		return id + Constants.STATE_ID_SEPARATOR + token;
 	}
 
 	public IState getState(final int stateId) {
@@ -70,7 +71,7 @@ public class ScopedStateCache implements Serializable {
 		for (Entry<Integer, StateAndToken> entry : states.entrySet()) {
 			IState cacheState = entry.getValue().getState();
 
-			if (this.areEqualStates(cacheState, state)) {
+			if (areEqualStates(cacheState, state)) {
 				return entry.getKey();
 			}
 		}
@@ -107,7 +108,7 @@ public class ScopedStateCache implements Serializable {
 
 				boolean exist = false;
 				for (IParameter param2 : params2) {
-					if (this.areEqualParameters(param1, param2)) {
+					if (areEqualParameters(param1, param2)) {
 						exist = true;
 					}
 				}
