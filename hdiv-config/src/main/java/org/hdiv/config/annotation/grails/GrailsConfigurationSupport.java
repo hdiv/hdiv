@@ -17,15 +17,11 @@ package org.hdiv.config.annotation.grails;
 
 import org.hdiv.config.annotation.condition.ConditionalOnFramework;
 import org.hdiv.config.annotation.condition.SupportedFramework;
-import org.hdiv.config.xml.ConfigBeanDefinitionParser;
-import org.hdiv.urlProcessor.FormUrlProcessor;
-import org.hdiv.urlProcessor.LinkUrlProcessor;
+import org.hdiv.config.annotation.configuration.ConfigTools;
 import org.hdiv.web.servlet.support.GrailsHdivRequestDataValueProcessor;
-import org.hdiv.web.servlet.support.HdivRequestDataValueProcessor;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.support.BeanDefinitionRegistryPostProcessor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.support.RequestDataValueProcessor;
 
 /**
  * Contains the configuration beans for Grails framework support.
@@ -36,18 +32,9 @@ import org.springframework.web.servlet.support.RequestDataValueProcessor;
 @ConditionalOnFramework(SupportedFramework.GRAILS)
 public class GrailsConfigurationSupport {
 
-	@Autowired
-	protected FormUrlProcessor formUrlProcessor;
-
-	@Autowired
-	protected LinkUrlProcessor linkUrlProcessor;
-
-	@Bean(name = ConfigBeanDefinitionParser.REQUEST_DATA_VALUE_PROCESSOR_BEAN_NAME)
-	public RequestDataValueProcessor requestDataValueProcessor() {
-
-		HdivRequestDataValueProcessor dataValueProcessor = new GrailsHdivRequestDataValueProcessor();
-		dataValueProcessor.setFormUrlProcessor(this.formUrlProcessor);
-		dataValueProcessor.setLinkUrlProcessor(this.linkUrlProcessor);
-		return dataValueProcessor;
+	@Bean
+	public static BeanDefinitionRegistryPostProcessor requestDataValueProcessorPostProcessor() {
+		return ConfigTools.requestDataValueProcessorPostProcessor(GrailsHdivRequestDataValueProcessor.class);
 	}
+
 }
