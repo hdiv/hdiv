@@ -24,7 +24,7 @@ import org.hdiv.dataComposer.DataComposerMemory;
 import org.hdiv.dataComposer.IDataComposer;
 import org.hdiv.state.IState;
 import org.hdiv.urlProcessor.LinkUrlProcessor;
-import org.hdiv.util.Constants;
+import org.hdiv.util.HDIVStateUtils;
 import org.hdiv.util.HDIVUtil;
 import org.hdiv.util.Method;
 import org.springframework.mock.web.MockHttpServletRequest;
@@ -131,8 +131,7 @@ public class ScopesTest extends AbstractHDIVTestCase {
 
 		StateScope scope = stateScopeManager.getStateScope(stateId);
 		assertEquals("user-session", scope.getScopeType().getName());
-		int id = Integer.parseInt(
-				stateId.substring(stateId.indexOf(Constants.STATE_ID_SEPARATOR) + 1, stateId.indexOf(Constants.STATE_ID_SEPARATOR) + 2));
+		int id = HDIVStateUtils.getStateId(stateId);
 		IState state = scope.restoreState(context, id);
 		assertEquals("test.do", state.getAction());
 

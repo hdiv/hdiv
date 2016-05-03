@@ -31,6 +31,7 @@ import org.hdiv.state.scope.StateScope;
 import org.hdiv.state.scope.StateScopeManager;
 import org.hdiv.state.scope.StateScopeType;
 import org.hdiv.util.Constants;
+import org.hdiv.util.HDIVStateUtils;
 import org.hdiv.util.Method;
 
 /**
@@ -172,10 +173,7 @@ public class DataComposerMemory extends AbstractDataComposer {
 	}
 
 	protected String toId(final IState state) {
-		// 11-0-C1EF82C48A86DE9BB907F37454998CC3
-		StringBuilder sb = new StringBuilder(40);
-		sb.append(page.getId()).append(DASH).append(state.getId()).append(DASH).append(getStateSuffix(state.getMethod()));
-		return sb.toString();
+		return HDIVStateUtils.encode(page.getId(), state.getId(), getStateSuffix(state.getMethod()));
 	}
 
 	/**

@@ -18,7 +18,7 @@ package org.hdiv.dataComposer;
 import javax.servlet.http.HttpServletRequest;
 
 import org.hdiv.AbstractHDIVTestCase;
-import org.hdiv.util.Constants;
+import org.hdiv.util.HDIVStateUtils;
 import org.hdiv.util.Method;
 import org.springframework.mock.web.MockHttpServletRequest;
 
@@ -61,7 +61,7 @@ public class DataComposerFactoryTest extends AbstractHDIVTestCase {
 		String stateId2 = dataComposer.endRequest();
 		dataComposer.endPage();
 
-		assertEquals(getPageId(stateId), getPageId(stateId2));
+		assertEquals(HDIVStateUtils.getPageId(stateId), HDIVStateUtils.getPageId(stateId2));
 	}
 
 	public void testNewInstanceAjaxNoParameter() {
@@ -84,7 +84,7 @@ public class DataComposerFactoryTest extends AbstractHDIVTestCase {
 		String stateId2 = dataComposer.endRequest();
 		dataComposer.endPage();
 
-		assertFalse(getPageId(stateId) == getPageId(stateId2));
+		assertFalse(HDIVStateUtils.getPageId(stateId) == HDIVStateUtils.getPageId(stateId2));
 	}
 
 	public void testNewInstancePjax() {
@@ -110,12 +110,7 @@ public class DataComposerFactoryTest extends AbstractHDIVTestCase {
 		dataComposer.endPage();
 
 		// Next page id is expected
-		assertEquals(getPageId(stateId), Integer.parseInt(getPageId(stateId2)) - 1 + "");
-	}
-
-	protected String getPageId(final String stateId) {
-
-		return stateId.substring(0, stateId.indexOf(Constants.STATE_ID_SEPARATOR));
+		assertEquals(HDIVStateUtils.getPageId(stateId), HDIVStateUtils.getPageId(stateId2) - 1);
 	}
 
 }

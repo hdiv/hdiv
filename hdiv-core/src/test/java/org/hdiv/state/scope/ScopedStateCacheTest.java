@@ -18,7 +18,7 @@ package org.hdiv.state.scope;
 import org.hdiv.AbstractHDIVTestCase;
 import org.hdiv.state.IState;
 import org.hdiv.state.State;
-import org.hdiv.util.Constants;
+import org.hdiv.util.HDIVStateUtils;
 
 public class ScopedStateCacheTest extends AbstractHDIVTestCase {
 
@@ -37,8 +37,7 @@ public class ScopedStateCacheTest extends AbstractHDIVTestCase {
 		String stateId = cache.addState(state, token);
 		assertNotNull(stateId);
 
-		String id = stateId.substring(0, stateId.indexOf(Constants.STATE_ID_SEPARATOR));
-		IState restored = cache.getState(Integer.parseInt(id));
+		IState restored = cache.getState(HDIVStateUtils.getStateFromScoped(stateId));
 
 		assertEquals(state, restored);
 

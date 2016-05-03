@@ -114,4 +114,11 @@ public class Constants {
 	 */
 	public static final char STATE_ID_SEPARATOR = '-';
 
+	/**
+	 * Common separator for state IDs
+	 * 
+	 * @since 3.2.0
+	 */
+	static final String STATE_ID_STR_SEPARATOR = Character.toString(STATE_ID_SEPARATOR);
+
 }

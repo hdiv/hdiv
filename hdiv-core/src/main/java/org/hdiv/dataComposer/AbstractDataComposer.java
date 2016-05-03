@@ -64,11 +64,6 @@ public abstract class AbstractDataComposer implements IDataComposer {
 	private static final Log log = LogFactory.getLog(AbstractDataComposer.class);
 
 	/**
-	 * Dash character
-	 */
-	public static final char DASH = Constants.STATE_ID_SEPARATOR;
-
-	/**
 	 * Http session wrapper
 	 */
 	protected ISession session;

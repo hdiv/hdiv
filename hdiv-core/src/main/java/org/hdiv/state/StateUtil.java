@@ -28,6 +28,7 @@ import org.hdiv.state.scope.StateScope;
 import org.hdiv.state.scope.StateScopeManager;
 import org.hdiv.util.Constants;
 import org.hdiv.util.HDIVErrorCodes;
+import org.hdiv.util.HDIVStateUtils;
 
 /**
  * Class containing utility methods for state.
@@ -79,11 +80,7 @@ public class StateUtil {
 		if (stateScope != null) {
 			return 0;
 		}
-		int firstSeparator = requestState.indexOf(Constants.STATE_ID_SEPARATOR);
-		if (firstSeparator == -1) {
-			throw new HDIVException(HDIVErrorCodes.HDIV_PARAMETER_INCORRECT_VALUE);
-		}
-		return Integer.parseInt(requestState.substring(0, firstSeparator));
+		return HDIVStateUtils.getPageId(requestState);
 	}
 
 	/**

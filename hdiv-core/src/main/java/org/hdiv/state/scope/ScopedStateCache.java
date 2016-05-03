@@ -25,7 +25,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.hdiv.state.IParameter;
 import org.hdiv.state.IState;
-import org.hdiv.util.Constants;
+import org.hdiv.util.HDIVStateUtils;
 
 /**
  * Cache than manages scoped states for a specific type of {@link StateScope}.
@@ -45,13 +45,13 @@ public class ScopedStateCache implements Serializable {
 		Integer previousStateId = existEqualState(state);
 		if (previousStateId != null) {
 			StateAndToken previousState = states.get(previousStateId);
-			return previousStateId + Constants.STATE_ID_SEPARATOR + previousState.getToken();
+			return HDIVStateUtils.getScopedState(previousStateId, previousState.getToken());
 		}
 
 		int id = index.getAndIncrement();
 		states.put(id, new StateAndToken(state, token));
 
-		return Integer.toString(id) + Constants.STATE_ID_SEPARATOR + token;
+		return HDIVStateUtils.getScopedState(id, token);
 	}
 
 	public IState getState(final int stateId) {

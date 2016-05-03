@@ -20,7 +20,7 @@ import org.hdiv.context.RequestContext;
 import org.hdiv.state.IParameter;
 import org.hdiv.state.IState;
 import org.hdiv.state.StateUtil;
-import org.hdiv.util.Constants;
+import org.hdiv.util.HDIVStateUtils;
 import org.hdiv.util.HDIVUtil;
 import org.hdiv.util.Method;
 import org.springframework.mock.web.MockHttpServletRequest;
@@ -68,7 +68,7 @@ public class AjaxTest extends AbstractHDIVTestCase {
 		String stateId1 = dataComposer1.endRequest();
 		dataComposer1.endPage();
 
-		assertEquals(Integer.parseInt(getPageId(stateId)), Integer.parseInt(getPageId(stateId1)) - 1);
+		assertEquals(getPageId(stateId), getPageId(stateId1) - 1);
 
 		// DataComposer2
 		IDataComposer dataComposer2 = dataComposerFactory.newInstance(request);
@@ -80,7 +80,7 @@ public class AjaxTest extends AbstractHDIVTestCase {
 		String stateId2 = dataComposer2.endRequest();
 		dataComposer2.endPage();
 
-		assertEquals(Integer.parseInt(getPageId(stateId)), Integer.parseInt(getPageId(stateId2)) - 2);
+		assertEquals(getPageId(stateId), getPageId(stateId2) - 2);
 
 		int sId1 = getStateId(stateId1);
 		int sId2 = getStateId(stateId2);
@@ -234,15 +234,11 @@ public class AjaxTest extends AbstractHDIVTestCase {
 		assertEquals("3", val);
 	}
 
-	public String getPageId(final String stateId) {
-
-		return stateId.substring(0, stateId.indexOf(Constants.STATE_ID_SEPARATOR));
+	public int getPageId(final String stateId) {
+		return HDIVStateUtils.getPageId(stateId);
 	}
 
 	public int getStateId(final String stateId) {
-
-		String state = stateId.substring(stateId.indexOf(Constants.STATE_ID_SEPARATOR) + 1,
-				stateId.indexOf(Constants.STATE_ID_SEPARATOR, stateId.indexOf(Constants.STATE_ID_SEPARATOR) + 1));
-		return Integer.parseInt(state);
+		return HDIVStateUtils.getStateId(stateId);
 	}
 }
