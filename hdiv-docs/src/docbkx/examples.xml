@@ -7,9 +7,9 @@
         http://www.w3.org/1999/xlink http://www.docbook.org/xml/5.0/xsd/xlink.xsd">
 	<title>Examples</title>
 	<para>
-		There are several examples in the HDIV GitHub 
+		There are several examples in the Hdiv GitHub 
 		<link xl:href="https://github.com/hdiv">site</link> to show how
-		to apply HDIV to different target technologies.
+		to apply Hdiv to different target technologies.
 		These are the steps to
 		follow (download, installation and configuration)
 		for each sample application:
@@ -22,7 +22,7 @@
 			is the sample application that shows the
 			integration of
 			Spring Mvc
-			and HDIV.
+			and Hdiv.
 			Follow the steps below in order
 			to test the application:
 		</para>
@@ -43,7 +43,7 @@ mvn tomcat:run
 			integration
 			of
 			Spring Mvc, Thymeleaf
-			and HDIV.
+			and Hdiv.
 			Follow these steps below in order
 			to test
 			the application:
@@ -64,7 +64,7 @@ mvn tomcat7:run
 			is the reference sample application that shows the integration
 			of
 			Grails and
-			HDIV.
+			Hdiv.
 			Follow the steps below in order to test
 			the
 			application:
@@ -83,7 +83,7 @@ mvn tomcat:run
 		<para>
 			<link xl:href="https://github.com/hdiv/hdiv-struts-examples">hdiv-struts-example</link>
 			is the reference application that shows the integration
-			of Struts 1.3.8 and HDIV.
+			of Struts 1.3.8 and Hdiv.
 		</para>
 
 		<programlisting>
@@ -119,9 +119,9 @@ mvn tomcat:run
 	<section xml:id="examples-struts2">
 		<title>Struts 2</title>
 		<para>
-			Struts 2 and HDIV integration reference application is included
+			Struts 2 and Hdiv integration reference application is included
 			within
-			<link xl:href="http://hdiv.org/download/examples/2.0/hdiv-2.0.4-struts-2.0.x-examples.zip">HDIV 2.0.4</link>
+			<link xl:href="http://hdiv.org/download/examples/2.0/hdiv-2.0.4-struts-2.0.x-examples.zip">Hdiv 2.0.4</link>
 			examples.
 			To test the application follow these steps:
 		</para>
@@ -135,9 +135,9 @@ mvn tomcat:run
 	</section>
 
 	<para>
-		Note that all the examples are also available within HDIV
+		Note that all the examples are also available within Hdiv
 		distributions at
-		<link xl:href="http://hdiv.org/download/examples/">HDIV
+		<link xl:href="http://hdiv.org/download/examples/">Hdiv
 		</link>
 		and
 		<link xl:href="https://github.com/hdiv">GitHub </link>
