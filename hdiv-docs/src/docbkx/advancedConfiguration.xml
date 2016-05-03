@@ -8,27 +8,23 @@
 	<title>Advanced Configuration</title>
 	<para>
 		In addition to the configuration options presented in the chapter
-		above, HDIV offers more advanced options to cover all user needs.
+		above, Hdiv offers more advanced options to cover all user needs.
 	</para>
 
 	<section xml:id="advancedConfiguration-startparameters">
 		<title>Start Parameters</title>
 
 		<para>
-			By default the HDIV filter does not allow any request parameter
-			that
-			has not been registered previously by HDIV.
-			In some cases
-			parameters
+			By default the Hdiv filter does not allow any request parameter that
+			has not been registered previously by Hdiv.
+			In some cases parameters
 			are not created on the server side or they have a random
 			value, in which case they are incorporated as parameter
-			names for
-			which HDIV makes no kind of validation.
+			names for which Hdiv makes no kind of validation.
 		</para>
 		<para>
 			The following shows the configuration code to define a
-			start
-			parameter.
+			start parameter.
 			<programlisting language="xml">
 <![CDATA[
 <hdiv:config>
@@ -59,8 +55,7 @@ public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
 		<para>
 			In the examples above, the parameter is not validated in all the
 			application. If we want to prevent validation in some pages,
-			there is
-			another configuration option.
+			there is another configuration option.
 		</para>
 
 		<para>
@@ -98,22 +93,17 @@ public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
 	<section xml:id="advancedConfiguration-sessionexpiration">
 		<title>Session expiration</title>
 		<para>
-			When a user makes a request to an expired web session, HDIV
-			adds the
-			possibility of redirecting the user to the
-			<code>loginPage</code>
-			instead of
-			showing HDIV error pages.
+			When a user makes a request to an expired web session, Hdiv
+			adds the option of redirecting the user to the <code>loginPage</code> instead of
+			showing Hdiv error pages.
 		</para>
 		<para>
 			If the web session has not expired but the page's state has been
-			removed from session, the user is redirected to the
-			<code>homePage</code>
-			to continue
+			removed from the session, the user is redirected to the <code>homePage</code> to continue
 			browsing without showing the error page.
 		</para>
 		<para>
-			In this case the following can be use:
+			In this case the following can be used:
 		</para>
 		<programlisting language="xml">
 <![CDATA[
@@ -146,7 +136,7 @@ public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
 		<title>Execution strategy</title>
 
 		<para>
-			HDIV has only one strategy:
+			Hdiv has only one strategy:
 		</para>
 
 		<itemizedlist>
@@ -160,8 +150,7 @@ public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
 					with the state stored in the
 					session, an extra
 					parameter
-					<code>_HDIV_STATE_</code>
-					is added to each request.
+					<code>_HDIV_STATE_</code> is added to each request.
 					This parameter contains
 					the identifier
 					which allows access to
@@ -182,17 +171,14 @@ public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
 	<section xml:id="advancedConfiguration-confidentiality">
 		<title>Confidentiality</title>
 		<para>
-			HDIV guarantees the confidentiality of data. Usually
-			data sent to
-			the client has key information for
+			Hdiv guarantees the confidentiality of data. Usually
+			data sent to the client has key information for
 			attackers,
-			such as database registry
-			identifiers, column or table
+			such as database registry identifiers, column or table
 			names, web
 			directories, etc.
-			All these
-			values are hidden by HDIV to
-			avoid there
+			All these values are hidden by Hdiv to
+			avoid their
 			malicious use.
 		</para>
 		<para>
@@ -208,8 +194,7 @@ public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
 		<para>
 			By default
 			confidentiality
-			is activated (true value) but can be
-			switched off in the configuration file:
+			is activated (true value) but can be switched off in the configuration file:
 		</para>
 		<programlisting language="xml">
  					<![CDATA[
@@ -258,24 +243,20 @@ grails {
 	<section xml:id="advancedConfiguration-errorpage">
 		<title>Error page</title>
 		<para>
-			When HDIV detects a malicious request it redirects the user to
+			When Hdiv detects a malicious request it redirects the user to
 			the error page.
 		</para>
 		<para>
 			It is important to note that when the possible attack is
-			related
-			only to
+			related only to 
 			editable data, the user is not redirected to the
 			error page
 			and the
-			error is
-			displayed within the original form.
+			error is displayed within the original form.
 		</para>
 		<para>
-			For HDIV 2.1.7 and later versions, custom error page
-			configuration is not
-			mandatory. If it is not configured, a default
-			error page is shown.
+			For Hdiv 2.1.7 and later versions, custom error page configuration is not
+			mandatory. If it is not configured, a default error page is shown.
 		</para>
 		<para>
 			In the
@@ -326,11 +307,9 @@ public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
 	<section xml:id="advancedConfiguration-cache">
 		<title>Cache configuration</title>
 		<para>
-			When HDIV is executing using the memory strategy, the amount of
-			memory stored within
+			When Hdiv is executing using the memory strategy, the amount of memory stored within
 			the HttpSession should be limited.
-			By default, the
-			cache size is 5 so HDIV stores all the data
+			By default, the cache size is 5 so Hdiv stores all the data
 			related to
 			the last 5 pages
 			visited by the user. This means that if
@@ -338,23 +317,20 @@ public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
 			previous 5 pages, and uses a link or
 			button, it is a
 			valid request for
-			HDIV.
+			Hdiv.
 		</para>
 		<para>
 			If it is necessary to reduce the memory
 			consumption
-			to improve the
-			app
+			to improve the app
 			scalability, it is good practice to
 			reduce the default value.
-			But if
-			you need to increase back button support to more
-			than 5 pages,
-			increase the default value.
+			But if you need to increase back button support to more
+			than 5 pages, increase the default value.
 		</para>
 		<para>
 			It is possible to overwrite this
-			attribute within HDIV config:
+			attribute within Hdiv config:
 		</para>
 		<programlisting language="xml">
  					<![CDATA[
@@ -402,9 +378,9 @@ grails {
 	<section xml:id="advancedConfiguration-cookies">
 		<title>Cookies</title>
 		<para>
-			By default HDIV validates cookie integrity and confidentiality.
+			By default Hdiv validates cookie integrity and confidentiality.
 			It is possible to disable these features
-			within HDIV configuration.
+			within Hdiv configuration.
 		</para>
 		<para>
 			Here we define
@@ -435,13 +411,13 @@ public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
 		</para>
 
 		<para>
-			For Grails users using HDIV plugin:
+			For Grails users using Hdiv plugin:
 		</para>
 		<programlisting language="xml">
  					<![CDATA[
 grails {
     plugin {
-        hdiv {
+        Hdiv {
             config {
                 avoidCookiesIntegrity='true'
                 avoidCookiesConfidentiality='true'
@@ -458,7 +434,7 @@ grails {
 		<para>
 			In addition to start pages configuration and the url mapping
 			defined by
-			HDIV Filter, HDIV allows validation exclusion of some
+			Hdiv Filter, Hdiv allows validation exclusion of some
 			extensions.
 			Equally, it is possible to include other
 			extensions.
@@ -470,7 +446,7 @@ grails {
 ]]></programlisting>
 
 		<para>
-			For Grails users using HDIV plugin:
+			For Grails users using Hdiv plugin:
 		</para>
 		<programlisting language="xml">
  					<![CDATA[
@@ -491,15 +467,15 @@ grails {
 	<section xml:id="advancedConfiguration-debugmode">
 		<title>Debug mode</title>
 		<para>
-			A debug execution mode is offered in order to apply HDIV in
+			A debug execution mode is offered in order to apply Hdiv in
 			production environments without any functional or integration
-			problems. In other words HDIV
+			problems. In other words Hdiv
 			processes and validates all the requests
 			but does not change the original request execution, only logging the
 			possible attack but without stopping it.
 		</para>
 		<para>
-			It is possible to configure this option from HDIV configuration:
+			It is possible to configure this option from Hdiv configuration:
 		</para>
 		<programlisting language="xml">
  					<![CDATA[
@@ -547,16 +523,15 @@ grails {
 	<section xml:id="advancedConfiguration-logger">
 		<title>Logger</title>
 		<para>
-			HDIV has a logger that prints all attacks
+			Hdiv has a logger that prints all attacks
 			detected in a file,
 			helping system administrators to check all attacks on
 			the application.
 
-			HDIV uses the Commons Logging API, which
-			can be configured to work
-			with an underlaying log system, for example, Log4j or Java Logging.
+			Hdiv uses the Commons Logging API, which
+			can be configured to work with an underlaying log system, for example, Log4j or Java Logging.
 
-			Attacks detected are logged by HDIV in a file.
+			Attacks detected are logged by Hdiv in a file.
 		</para>
 
 		<programlisting language="">
@@ -583,11 +558,10 @@ log4j.logger.org.hdiv=INFO,R
 ]]></programlisting>
 
 		<para>
-			The configuration avobe logs attack information in the
+			The configuration above logs attack information in the
 			<code>c:/hdiv.log</code>
 			file, following the format defined in the
-			<code>log4j.appender.R.layout.ConversionPattern</code>
-			property:
+			<code>log4j.appender.R.layout.ConversionPattern</code> property:
 		</para>
 		<itemizedlist>
 			<listitem>
@@ -623,10 +597,9 @@ log4j.logger.org.hdiv=INFO,R
 		</itemizedlist>
 		<para>
 			Log4j documentation can be checked for
-			different log message
-			formats.
+			different log message formats.
 
-			Log messages written by HDIV have
+			Log messages written by Hdiv have
 			the following format:
 		</para>
 		<programlisting language="">
@@ -635,16 +608,14 @@ log4j.logger.org.hdiv=INFO,R
 ]]></programlisting>
 
 		<para>
-			[attack type]: Type of attack detected by HDIV. Possible
-			values
-			are:
+			[attack type]: Type of attack detected by Hdiv. Possible
+			values are:
 		</para>
 		<itemizedlist>
 			<listitem>
 				<para>
 					<code>INVALID_ACTION</code>
-					: The action or url received in the request does not match the one
-					expected.
+					: The action or url received in the request does not match the one expected.
 				</para>
 			</listitem>
 			<listitem>
@@ -683,26 +654,25 @@ log4j.logger.org.hdiv=INFO,R
 			<listitem>
 				<para>
 					<code>INVALID_CONFIDENTIAL_VALUE</code>
-					: Incorrect parameter value received if confidentiality is
-					activated.
+					: Incorrect parameter value received if confidentiality is activated.
 				</para>
 			</listitem>
 			<listitem>
 				<para>
 					<code>HDIV_PARAMETER_DOES_NOT_EXIST</code>
-					: The HDIV parameter has not been received in the request.
+					: The Hdiv parameter has not been received in the request.
 				</para>
 			</listitem>
 			<listitem>
 				<para>
 					<code>INVALID_HDIV_PARAMETER_VALUE</code>
-					: The HDIV parameter has an incorrect value.
+					: The Hdiv parameter has an incorrect value.
 				</para>
 			</listitem>
 			<listitem>
 				<para>
 					<code>INVALID_PAGE_ID</code>
-					: The HDIV parameter has an incorrect page identifier.
+					: The Hdiv parameter has an incorrect page identifier.
 				</para>
 			</listitem>
 			<listitem>
@@ -729,32 +699,26 @@ log4j.logger.org.hdiv=INFO,R
 			[parameterValue]: parameter value submitted by the user.
 		</para>
 		<para>
-			[originalParameterValue]: original parameter value if it has
-			been manipulated by the user.
+			[originalParameterValue]: original parameter value if it has been manipulated by the user.
 		</para>
 		<para>
-			[userLocalIP]: IP address if the request has been made through a
-			Proxy.
+			[userLocalIP]: IP address if the request has been made through a Proxy.
 		</para>
 		<para>
 			[IP]: IP address the request was made from.
 		</para>
 		<para>
 			[userId]: User identifier. Each web application gets
-			user ID in a
-			different way. This is why the IUserData
+			user ID in a different way. This is why the IUserData
 			interface
-			has been created.
-			This interface allows
+			has been created. This interface allows 
 			implementation of specific system to get user ID.
 		</para>
 		<para>
-			[validationRuleName]: If the log is related to an editable
-			value, this field contains the validation rule that has stopped the
-			request.
+			[validationRuleName]: If the log is related to an editable value, this field contains the validation rule that has stopped the request.
 		</para>
 		<para>
-			Some examples of attacks detected by HDIV:
+			Some examples of attacks detected by Hdiv:
 		</para>
 		<programlisting language="">
 	<![CDATA[
@@ -764,18 +728,12 @@ log4j.logger.org.hdiv=INFO,R
 2013-09-22 11:15:00,411 [http-80-Processor25] INFO – INVALID_PARAMETER_NAME;action1;param5;value2;188.15.1.25;201.166.24.12;45652146M
 ]]></programlisting>
 		<para>
-			Finally, HDIV includes user ID within the log files.
-			To modify the
-			default setting it is possible to create a
-			class that implements the
-			<code>IUserData</code>
-			interface.
+			Finally, Hdiv includes user ID within the log files.
+			To modify the default setting it is possible to create a
+			class that implements the <code>IUserData</code> interface.
 
-			It is possible to enable this in the HDIV config file
-			defining the name of the bean that
-			implements the
-			<code>IUserData</code>
-			interface:
+			It is possible to enable this in the Hdiv config file defining the name of the bean that
+			implements the <code>IUserData</code> interface:
 		</para>
 		<programlisting language="xml">
  					<![CDATA[
@@ -784,8 +742,7 @@ log4j.logger.org.hdiv=INFO,R
 ]]></programlisting>
 		<para>
 			If you are a Grails user, it is enabled within
-			plugin
-			configuration:
+			plugin configuration:
 		</para>
 		<programlisting language="xml">
  					<![CDATA[
@@ -805,13 +762,12 @@ grails {
 	<section xml:id="advancedConfiguration-avoidValidationInUrlsWithoutParams">
 		<title>Avoid validation in urls without parameters</title>
 		<para>
-			HDIV provides a configuration option to disable protection of
+			Hdiv provides a configuration option to disable protection of
 			those urls without parameters, delegating this task to
-			Spring Security
-			or another access protection system.
+			Spring Security or another access protection system.
 		</para>
 		<para>
-			It is possible to enable this option in the HDIV config file:
+			It is possible to enable this option in the Hdiv config file:
 		</para>
 		<programlisting language="xml">
  					<![CDATA[
@@ -839,8 +795,7 @@ public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
 
 		<para>
 			If you are a Grails user, it is enabled within
-			plugin
-			configuration:
+			plugin configuration:
 		</para>
 		<programlisting language="xml">
  					<![CDATA[
@@ -865,20 +820,13 @@ grails {
 			expire.
 		</para>
 		<para>
-			There is a
-			<code>scope</code>
-			attribute to configure if the states are
-			stored in user session (
-			<code>user-session</code>
-			scope) or servlet context
-			(
-			<code>app</code>
-			scope). In the second case, the states are shared by all
-			users of the
-			application.
+			There is a <code>scope</code> attribute to configure if the states are
+			stored in user session (<code>user-session</code> scope) or servlet context
+			(<code>app</code> scope). In the second case, the states are shared by all
+			users of the application.
 		</para>
 		<para>
-			It is possible to configure this option in the HDIV config file:
+			It is possible to configure this option in the Hdiv config file:
 		</para>
 		<programlisting language="xml">
  					<![CDATA[
@@ -925,9 +873,9 @@ grails {
 	</section>
 
 	<section xml:id="advancedConfiguration-randomName">
-		<title>Random name HDIV parameter</title>
+		<title>Random name Hdiv parameter</title>
 		<para>
-			_HDIV_STATE_ is the default name of the HDIV parameter.
+			_HDIV_STATE_ is the default name of the Hdiv parameter.
 		</para>
 		<para>
 			There is a configuration option to enable the subtitution of the
@@ -935,7 +883,7 @@ grails {
 			random string is generated and used as the parameter name.
 		</para>
 		<para>
-			It is possible to configure this option in the HDIV config file:
+			It is possible to configure this option in the Hdiv config file:
 		</para>
 		<programlisting language="xml">
  					<![CDATA[
@@ -983,31 +931,25 @@ grails {
 	<section xml:id="advancedConfiguration-reuseExistingPageInAjaxRequest">
 		<title>Reuse existing page in Ajax request</title>
 		<para>
-			If this option is enabled, ajax requests do not create a new
-			page
-			in session (in Memory strategy). New form and link states are
-			stored
+			If this option is enabled, ajax requests do not create a new page
+			in session (in Memory strategy). New form and link states are stored
 			in the current page.
 		</para>
 		<para>
 			This option is recommended when Ajax is used to show dialog or
-			tab content and to prevent HDIV state expiration.
+			tab content and to prevent Hdiv state expiration.
 		</para>
 		<para>
-			To detect if a request is an Ajax request,
-			<code>X-Requested-With</code>
+			To detect if a request is an Ajax request, <code>X-Requested-With</code>
 			header is used. It is submitted by all major JavaScript libraries.
 		</para>
 		<para>
-			If you want to avoid this feature in a especific
-			request, you can send
-			<code>X-HDIV-EXCLUDE-PAGE-REUSE</code>
-			header in the
-			Ajax request, and it will disable page reusing for that
-			request.
+			If you want to avoid this feature in a specific
+			request, you can send <code>X-HDIV-EXCLUDE-PAGE-REUSE</code> header in the
+			Ajax request, and it will disable page reusing for that request.
 		</para>
 		<para>
-			It is possible to configure this option in HDIV config file:
+			It is possible to configure this option in Hdiv config file:
 		</para>
 		<programlisting language="xml">
  					<![CDATA[
@@ -1056,16 +998,14 @@ grails {
 		<title>Show error page on editable validation error</title>
 		<para>
 			By default, editable validation errors are shown as
-			general
-			validation errors.
+			general validation errors.
 		</para>
 		<para>
 			If this option is enabled,
-			the user is redirected to the error
-			page and the request is not executed.
+			the user is redirected to the error page and the request is not executed.
 		</para>
 		<para>
-			It is possible to configure this option in HDIV config file:
+			It is possible to configure this option in Hdiv config file:
 		</para>
 		<programlisting language="xml">
  					<![CDATA[

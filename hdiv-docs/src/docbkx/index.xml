@@ -6,13 +6,13 @@
         http://docbook.org/ns/docbook http://www.docbook.org/xml/5.0/xsd/docbook.xsd
         http://www.w3.org/1999/xlink http://www.docbook.org/xml/5.0/xsd/xlink.xsd">
 	<info>
-		<title>HDIV Reference Documentation</title>
+		<title>Hdiv Reference Documentation</title>
 		<abstract>
-			<para>HDIV Reference Documentation. Avoid OWASP Top 10 risks in your
+			<para>Hdiv Reference Documentation. Avoid OWASP Top 10 risks in your
 				application: XSS, CSRF, Parameter Tampering, among others.
 			</para>
 		</abstract>
-		<productname>HDIV</productname>
+		<productname>Hdiv</productname>
 
 		<releaseinfo>_project_version_</releaseinfo>
 
@@ -56,10 +56,8 @@
 		</authorgroup>
 
 		<legalnotice>
-			<para>
-				The HDIV Framework is released under version 2.0 of the
-				<link xl:href="http://www.apache.org/licenses/LICENSE-2.0">Apache License</link>
-				.
+			<para>			
+			The Hdiv Framework is released under version 2.0 of the <link xl:href="http://www.apache.org/licenses/LICENSE-2.0">Apache License</link>.
 			</para>
 		</legalnotice>
 	</info>
