@@ -85,13 +85,28 @@ public interface IState {
 	void setParams(String params);
 
 	/**
-	 * @return HTTP method
-	 */
-	Method getMethod();
-
-	/**
 	 * @param method HTTP method for this request
 	 */
 	void setMethod(Method method);
+
+	/**
+	 * Returns true if a method is valid for this state
+	 * @param method
+	 * @return
+	 */
+	boolean contains(Method method);
+
+	/**
+	 * Returns if two states are equivalent
+	 * @param state
+	 * @return
+	 */
+	boolean isEquivalent(IState state);
+
+	/**
+	 * Returns the type of random token
+	 * @return
+	 */
+	RandomTokenType getTokenType();
 
 }

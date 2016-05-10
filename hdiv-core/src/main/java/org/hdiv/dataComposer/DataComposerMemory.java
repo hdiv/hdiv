@@ -173,7 +173,7 @@ public class DataComposerMemory extends AbstractDataComposer {
 	}
 
 	protected String toId(final IState state) {
-		return HDIVStateUtils.encode(page.getId(), state.getId(), getStateSuffix(state.getMethod()));
+		return HDIVStateUtils.encode(page.getId(), state.getId(), getStateSuffix(state.getTokenType()));
 	}
 
 	/**
@@ -190,7 +190,7 @@ public class DataComposerMemory extends AbstractDataComposer {
 		// Add to scope
 		if (stateScope != null) {
 			// Its custom Scope
-			return stateScope.addState(context, state, getStateSuffix(state.getMethod()));
+			return stateScope.addState(context, state, getStateSuffix(state.getTokenType()));
 		}
 
 		// Add to page scope

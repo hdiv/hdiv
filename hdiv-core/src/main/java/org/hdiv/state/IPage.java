@@ -17,8 +17,6 @@ package org.hdiv.state;
 
 import java.util.Collection;
 
-import org.hdiv.util.Method;
-
 public interface IPage {
 
 	/**
@@ -97,14 +95,14 @@ public interface IPage {
 	 * @return the randomToken
 	 * @since HDIV 2.1.7
 	 */
-	String getRandomToken(Method method);
+	String getRandomToken(RandomTokenType method);
 
 	/**
 	 * @param randomToken the randomToken to set
 	 * @param method HTTP method
 	 * @since HDIV 2.1.7
 	 */
-	void setRandomToken(String randomToken, Method method);
+	void setRandomToken(String randomToken, RandomTokenType method);
 
 	/**
 	 * @param parentStateId the parentStateId to set

@@ -13,30 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.hdiv.util;
+package org.hdiv.state;
 
-/**
- * Class containing valid HTTP Method
- */
-public enum Method {
-	GET(false), HEAD(false), POST(true), PATCH(true), PUT(true), DELETE(true);
-
-	public final boolean isForm;
-
-	Method(final boolean isForm) {
-		this.isForm = isForm;
-	}
-
-	public static Method secureValueOf(final String value) {
-		try {
-			if (value == null) {
-				return null;
-			}
-			return valueOf(value.toUpperCase());
-		}
-		catch (final IllegalArgumentException e) {
-			return null;
-		}
-	}
-
+public enum RandomTokenType {
+	LINK, FORM
 }

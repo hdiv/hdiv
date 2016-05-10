@@ -20,8 +20,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.hdiv.util.Method;
-
 /**
  * Data structure to store states of a page.
  *
@@ -207,9 +205,9 @@ public class Page implements IPage, Serializable {
 	 * @return the randomToken
 	 * @since HDIV 2.1.7
 	 */
-	public final String getRandomToken(final Method method) {
+	public final String getRandomToken(final RandomTokenType type) {
 
-		if (method != null && method.isForm) {
+		if (type == RandomTokenType.FORM) {
 			return formRandomToken;
 		}
 		else {
@@ -222,8 +220,8 @@ public class Page implements IPage, Serializable {
 	 * @param method HTTP method
 	 * @since HDIV 2.1.7
 	 */
-	public void setRandomToken(final String randomToken, final Method method) {
-		if (method != null && method.isForm) {
+	public void setRandomToken(final String randomToken, final RandomTokenType type) {
+		if (type == RandomTokenType.FORM) {
 			formRandomToken = randomToken;
 		}
 		else {

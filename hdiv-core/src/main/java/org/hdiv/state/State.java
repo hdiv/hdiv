@@ -18,6 +18,7 @@ package org.hdiv.state;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -29,6 +30,10 @@ import org.hdiv.util.Method;
  * Data structure to store all data related with one request (parameters, parameter values, ...)
  *
  * @author Roberto Velasco
+ */
+/**
+ * @author anderruiz
+ *
  */
 public class State implements IState, Serializable {
 
@@ -69,6 +74,11 @@ public class State implements IState, Serializable {
 	 * Null value is equivalent to GET.
 	 */
 	private Method method;
+
+	/**
+	 * Type of token to be used with this state
+	 */
+	private RandomTokenType tokenType = RandomTokenType.LINK;
 
 	public State() {
 	}
@@ -199,11 +209,10 @@ public class State implements IState, Serializable {
 
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see org.hdiv.state.IState#getMethod()
-	 */
+	public boolean contains(final Method method) {
+		return getMethod().equals(method);
+	}
+
 	public final Method getMethod() {
 		return method != null ? method : Method.GET;
 	}
@@ -215,6 +224,9 @@ public class State implements IState, Serializable {
 	 */
 	public void setMethod(final Method method) {
 		this.method = method;
+		if (method.isForm) {
+			tokenType = RandomTokenType.FORM;
+		}
 	}
 
 	/*
@@ -236,6 +248,112 @@ public class State implements IState, Serializable {
 		sb.append("requiredParams: ").append(getRequiredParams());
 		sb.append("method: ").append(method == null ? Method.GET : method);
 		return super.toString();
+	}
+
+	public boolean isEquivalent(final IState state) {
+		// Same action
+		if (!(getAction().equals(state.getAction()))) {
+			return false;
+		}
+
+		// Same method
+		if (!(getMethod().equals(((State) state).getMethod()))) {
+			return false;
+		}
+
+		// Same Parameters
+		Collection<IParameter> params1 = getParameters();
+		Collection<IParameter> params2 = state.getParameters();
+		if (params1 != null && params2 == null) {
+			return false;
+		}
+		else if (params1 == null && params2 != null) {
+			return false;
+		}
+		else if (params1 != null && params2 != null) {
+			if (params1.size() != params2.size()) {
+				return false;
+			}
+			for (IParameter param1 : params1) {
+
+				boolean exist = false;
+				for (IParameter param2 : params2) {
+					if (areEqualParameters(param1, param2)) {
+						exist = true;
+					}
+				}
+				if (!exist) {
+					return false;
+				}
+			}
+		}
+
+		String parameters1 = getParams();
+		String parameters2 = state.getParams();
+		if (parameters1 != null && parameters2 == null) {
+			return false;
+		}
+		else if (parameters1 == null && parameters2 != null) {
+			return false;
+		}
+		else if (parameters1 != null && parameters2 != null) {
+			if (!parameters1.equals(parameters2)) {
+				return false;
+			}
+		}
+
+		// Same required Parameters
+		List<String> requiredParams1 = getRequiredParams();
+		List<String> requiredParams2 = state.getRequiredParams();
+		if (requiredParams1 != null && requiredParams2 == null) {
+			return false;
+		}
+		else if (requiredParams1 == null && requiredParams2 != null) {
+			return false;
+		}
+		else if (requiredParams1 != null && requiredParams2 != null) {
+			if (requiredParams1.size() != requiredParams2.size()) {
+				return false;
+			}
+			for (String requiredParam : requiredParams1) {
+				if (!requiredParams2.contains(requiredParam)) {
+					return false;
+				}
+			}
+		}
+
+		return true;
+	}
+
+	protected boolean areEqualParameters(final IParameter param1, final IParameter param2) {
+
+		if (!param1.getName().equals(param2.getName())) {
+			return false;
+		}
+		if (param1.isActionParam() != param2.isActionParam()) {
+			return false;
+		}
+		if (param1.isEditable() != param2.isEditable()) {
+			return false;
+		}
+		List<String> values = param2.getValues();
+		if (values.size() != param1.getValues().size()) {
+			return false;
+		}
+		for (String paramValue : values) {
+			if (!param1.existValue(paramValue)) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	public RandomTokenType getTokenType() {
+		return tokenType;
+	}
+
+	protected void setTokenType(final RandomTokenType tokenType) {
+		this.tokenType = tokenType;
 	}
 
 }

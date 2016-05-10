@@ -33,6 +33,7 @@ import org.hdiv.state.IParameter;
 import org.hdiv.state.IState;
 import org.hdiv.state.Page;
 import org.hdiv.state.Parameter;
+import org.hdiv.state.RandomTokenType;
 import org.hdiv.util.Constants;
 import org.hdiv.util.Method;
 import org.springframework.web.util.HtmlUtils;
@@ -586,16 +587,16 @@ public abstract class AbstractDataComposer implements IDataComposer {
 	/**
 	 * Obtains the suffix to add to the _HDIV_STATE_ parameter in the memory strategy.
 	 *
-	 * @param method HTTP method
+	 * @param type Random token type
 	 *
 	 * @return Returns suffix added to the _HDIV_STATE_ parameter.
 	 * @since 2.1.7
 	 */
-	protected final String getStateSuffix(final Method method) {
-		String randomToken = page.getRandomToken(method);
+	protected final String getStateSuffix(final RandomTokenType type) {
+		String randomToken = page.getRandomToken(type);
 		if (randomToken == null) {
 			randomToken = uidGenerator.generateUid().toString();
-			page.setRandomToken(randomToken, method);
+			page.setRandomToken(randomToken, type);
 		}
 		return randomToken;
 	}

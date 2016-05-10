@@ -703,7 +703,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 				throw new HDIVException(HDIVErrorCodes.PAGE_ID_INCORRECT);
 			}
 
-			return currentPage.getRandomToken(restoredState.getMethod()).equals(requestSuffix);
+			return currentPage.getRandomToken(restoredState.getTokenType()).equals(requestSuffix);
 
 		}
 		catch (final IndexOutOfBoundsException e) {
