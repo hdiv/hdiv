@@ -6,6 +6,10 @@ Release 3.2.0
 ==================================
  * Add new methods to ISession to get/set/remove session attributes.
 
+Release 3.1.1
+==================================
+ * Fix spring-security 4.0.x support bug
+
 Release 3.1.0
 ==================================
  * Performance improvements.
