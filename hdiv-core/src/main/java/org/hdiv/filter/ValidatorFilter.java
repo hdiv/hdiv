@@ -103,30 +103,30 @@ public class ValidatorFilter extends OncePerRequestFilter {
 	 */
 	protected void initDependencies() {
 
-		if (this.hdivConfig == null) {
+		if (hdivConfig == null) {
 			synchronized (this) {
 				ServletContext servletContext = getServletContext();
 				WebApplicationContext context = HDIVUtil.findWebApplicationContext(servletContext);
 
-				this.hdivConfig = context.getBean(HDIVConfig.class);
-				this.validationHelper = context.getBean(IValidationHelper.class);
+				hdivConfig = context.getBean(HDIVConfig.class);
+				validationHelper = context.getBean(IValidationHelper.class);
 
 				String[] names = context.getBeanNamesForType(IMultipartConfig.class);
 				if (names.length > 1) {
 					throw new HDIVException("More than one bean of type 'multipartConfig' is defined.");
 				}
 				if (names.length == 1) {
-					this.multipartConfig = context.getBean(IMultipartConfig.class);
+					multipartConfig = context.getBean(IMultipartConfig.class);
 				}
 				else {
 					// For applications without Multipart requests
-					this.multipartConfig = null;
+					multipartConfig = null;
 				}
 
-				this.userData = context.getBean(IUserData.class);
-				this.logger = context.getBean(Logger.class);
-				this.errorHandler = context.getBean(ValidatorErrorHandler.class);
-				this.requestInitializer = context.getBean(RequestInitializer.class);
+				userData = context.getBean(IUserData.class);
+				logger = context.getBean(Logger.class);
+				errorHandler = context.getBean(ValidatorErrorHandler.class);
+				requestInitializer = context.getBean(RequestInitializer.class);
 			}
 		}
 	}
@@ -146,13 +146,13 @@ public class ValidatorFilter extends OncePerRequestFilter {
 			throws ServletException, IOException {
 
 		// Initialize dependencies
-		this.initDependencies();
+		initDependencies();
 
 		// Initialize request scoped data
-		this.requestInitializer.initRequest(request, response);
+		requestInitializer.initRequest(request, response);
 
-		RequestWrapper requestWrapper = this.requestInitializer.createRequestWrapper(request, response);
-		ResponseWrapper responseWrapper = this.requestInitializer.createResponseWrapper(request, response);
+		RequestWrapper requestWrapper = requestInitializer.createRequestWrapper(request, response);
+		ResponseWrapper responseWrapper = requestInitializer.createResponseWrapper(request, response);
 
 		HttpServletRequest multipartProcessedRequest = requestWrapper;
 
@@ -163,17 +163,17 @@ public class ValidatorFilter extends OncePerRequestFilter {
 			boolean legal = false;
 			boolean isMultipartException = false;
 
-			if (this.isMultipartContent(request.getContentType())) {
+			if (isMultipartContent(request.getContentType())) {
 
 				requestWrapper.setMultipart(true);
 
 				try {
 
-					if (this.multipartConfig == null) {
+					if (multipartConfig == null) {
 						throw new RuntimeException("No 'multipartConfig' configured. It is required for multipart requests.");
 					}
 
-					multipartProcessedRequest = this.multipartConfig.handleMultipartRequest(requestWrapper, super.getServletContext());
+					multipartProcessedRequest = multipartConfig.handleMultipartRequest(requestWrapper, super.getServletContext());
 					isMultipartProcessed = true;
 
 				}
@@ -186,7 +186,7 @@ public class ValidatorFilter extends OncePerRequestFilter {
 
 			ValidatorHelperResult result = null;
 			if (!isMultipartException) {
-				result = this.validationHelper.validate(multipartProcessedRequest);
+				result = validationHelper.validate(multipartProcessedRequest);
 				legal = result.isValid();
 
 				// Store validation result in request
@@ -199,44 +199,54 @@ public class ValidatorFilter extends OncePerRequestFilter {
 			boolean hasEditableError = false;
 			if (errors != null && !errors.isEmpty()) {
 				// Complete error data
-				this.completeErrorData(multipartProcessedRequest, errors);
+				completeErrorData(multipartProcessedRequest, errors);
 
 				// Log the errors
-				this.logValidationErrors(multipartProcessedRequest, errors);
+				logValidationErrors(multipartProcessedRequest, errors);
 
-				hasEditableError = this.processEditableValidationErrors(multipartProcessedRequest, errors);
+				hasEditableError = processEditableValidationErrors(multipartProcessedRequest, errors);
 			}
 
-			if (legal || this.hdivConfig.isDebugMode() || (hasEditableError && !this.hdivConfig.isShowErrorPageOnEditableValidation())) {
+			if (legal || hdivConfig.isDebugMode() || (hasEditableError && !hdivConfig.isShowErrorPageOnEditableValidation())) {
 
 				processRequest(multipartProcessedRequest, responseWrapper, filterChain);
 			}
 			else {
 
 				// Call to ValidatorErrorHandler
-				this.errorHandler.handleValidatorError(multipartProcessedRequest, responseWrapper, errors);
+				errorHandler.handleValidatorError(multipartProcessedRequest, responseWrapper, errors);
 			}
 
 		}
-		catch (HDIVException e) {
-			if (log.isErrorEnabled()) {
-				log.error("Exception in request validation", e);
-			}
-			// Show error page
-			if (!this.hdivConfig.isDebugMode()) {
-				List<ValidatorError> errors = Collections.singletonList(new ValidatorError(HDIVErrorCodes.INTERNAL_ERROR));
-				this.errorHandler.handleValidatorError(multipartProcessedRequest, responseWrapper, errors);
+		catch (Exception e) {
+
+			Throwable hdivException = e;
+			do {
+				if (!(hdivException instanceof HDIVException)) {
+					hdivException = hdivException.getCause();
+				}
+			} while (hdivException != null && !(hdivException instanceof HDIVException));
+			if (hdivException instanceof HDIVException) {
+				if (log.isErrorEnabled()) {
+					log.error("Exception in request validation", hdivException);
+				}
+				// Show error page
+				if (!hdivConfig.isDebugMode()) {
+					List<ValidatorError> errors = Collections
+							.singletonList(new ValidatorError(hdivException.getMessage(), request.getRequestURI()));
+					errorHandler.handleValidatorError(multipartProcessedRequest, responseWrapper, errors);
+				}
 			}
 		}
 		finally {
 
 			if (isMultipartProcessed) {
 				// Cleanup multipart
-				this.multipartConfig.cleanupMultipart(multipartProcessedRequest);
+				multipartConfig.cleanupMultipart(multipartProcessedRequest);
 			}
 
 			// Destroy request scoped data
-			this.requestInitializer.endRequest(multipartProcessedRequest, responseWrapper);
+			requestInitializer.endRequest(multipartProcessedRequest, responseWrapper);
 		}
 	}
 
@@ -262,12 +272,12 @@ public class ValidatorFilter extends OncePerRequestFilter {
 	protected void processRequest(final HttpServletRequest requestWrapper, final ResponseWrapper responseWrapper,
 			final FilterChain filterChain) throws IOException, ServletException {
 
-		this.validationHelper.startPage(requestWrapper);
+		validationHelper.startPage(requestWrapper);
 		try {
 			filterChain.doFilter(requestWrapper, responseWrapper);
 		}
 		finally {
-			this.validationHelper.endPage(requestWrapper);
+			validationHelper.endPage(requestWrapper);
 		}
 	}
 
@@ -279,9 +289,9 @@ public class ValidatorFilter extends OncePerRequestFilter {
 	 */
 	protected void completeErrorData(final HttpServletRequest request, final List<ValidatorError> errors) {
 
-		String localIp = this.getUserLocalIP(request);
+		String localIp = getUserLocalIP(request);
 		String remoteIp = request.getRemoteAddr();
-		String userName = this.userData.getUsername(request);
+		String userName = userData.getUsername(request);
 
 		String contextPath = request.getContextPath();
 		for (ValidatorError error : errors) {
@@ -328,7 +338,7 @@ public class ValidatorFilter extends OncePerRequestFilter {
 
 		for (ValidatorError error : errors) {
 			// Log the error
-			this.logger.log(error);
+			logger.log(error);
 		}
 
 	}
@@ -340,7 +350,7 @@ public class ValidatorFilter extends OncePerRequestFilter {
 	 * @param errors all validation errors
 	 * @return true if there is a editable validation error
 	 */
-	protected boolean processEditableValidationErrors(HttpServletRequest request, List<ValidatorError> errors) {
+	protected boolean processEditableValidationErrors(final HttpServletRequest request, final List<ValidatorError> errors) {
 
 		List<ValidatorError> editableErrors = new ArrayList<ValidatorError>();
 		for (ValidatorError error : errors) {
@@ -348,12 +358,12 @@ public class ValidatorFilter extends OncePerRequestFilter {
 				editableErrors.add(error);
 			}
 		}
-		if (!editableErrors.isEmpty() && !this.hdivConfig.isDebugMode()) {
+		if (!editableErrors.isEmpty() && !hdivConfig.isDebugMode()) {
 
 			// Put the errors on request to be accessible from the Web framework
 			request.setAttribute(Constants.EDITABLE_PARAMETER_ERROR, editableErrors);
 
-			if (this.hdivConfig.isShowErrorPageOnEditableValidation()) {
+			if (hdivConfig.isShowErrorPageOnEditableValidation()) {
 				// Redirect to error page
 				// Put errors in session to be accessible from error page
 				request.getSession().setAttribute(Constants.EDITABLE_PARAMETER_ERROR, editableErrors);
