@@ -42,8 +42,8 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 /**
- * An unique filter exists within HDIV. This filter has two responsibilities: initialize and validate. In fact, the
- * actual validation is not implemented in this class, it is delegated to ValidatorHelper.
+ * An unique filter exists within HDIV. This filter has two responsibilities: initialize and validate. In fact, the actual validation is not
+ * implemented in this class, it is delegated to ValidatorHelper.
  *
  * @author Roberto Velasco
  * @author Gorka Vicente
@@ -132,14 +132,13 @@ public class ValidatorFilter extends OncePerRequestFilter {
 	}
 
 	/**
-	 * Called by the container each time a request/response pair is passed through the chain due to a client request for
-	 * a resource at the end of the chain.
+	 * Called by the container each time a request/response pair is passed through the chain due to a client request for a resource at the
+	 * end of the chain.
 	 *
 	 * @param request request object
 	 * @param response response object
 	 * @param filterChain filter chain
-	 * @see javax.servlet.Filter#doFilter(javax.servlet.ServletRequest, javax.servlet.ServletResponse,
-	 * javax.servlet.FilterChain)
+	 * @see javax.servlet.Filter#doFilter(javax.servlet.ServletRequest, javax.servlet.ServletResponse, javax.servlet.FilterChain)
 	 */
 	@Override
 	protected void doFilterInternal(final HttpServletRequest request, final HttpServletResponse response, final FilterChain filterChain)
@@ -236,6 +235,9 @@ public class ValidatorFilter extends OncePerRequestFilter {
 							.singletonList(new ValidatorError(hdivException.getMessage(), request.getRequestURI()));
 					errorHandler.handleValidatorError(multipartProcessedRequest, responseWrapper, errors);
 				}
+			}
+			else {
+				throw new RuntimeException(e);
 			}
 		}
 		finally {
