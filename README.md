@@ -5,7 +5,7 @@ Hdiv is a leading provider of open source software for real-time, self-protected
 
 Official Site: [http://hdivsecurity.com](http://hdivsecurity.com)
 
-Documentation: [http://hdivsecurity/http://hdivsecurity.com/technical-documentation/doc.html](Technical documentation)
+Documentation: [http://hdivsecurity.com/technical-documentation/doc.html](Technical documentation)
 
 Wiki: [https://github.com/hdiv/hdiv/wiki](https://github.com/hdiv/hdiv/wiki)
 
