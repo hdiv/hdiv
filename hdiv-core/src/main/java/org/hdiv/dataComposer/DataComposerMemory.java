@@ -36,9 +36,9 @@ import org.hdiv.util.Method;
 
 /**
  * <p>
- * It generates the states of each page by storing them in the user session. To be able to associate the request state
- * with the state stored in session, an extra parameter is added to each request, containing the state identifier which
- * makes possible to get the state of the user session.
+ * It generates the states of each page by storing them in the user session. To be able to associate the request state with the state stored
+ * in session, an extra parameter is added to each request, containing the state identifier which makes possible to get the state of the
+ * user session.
  * </p>
  * <p>
  * Non editable values are hidden to the client, guaranteeing <b>confidentiality</b>
@@ -103,8 +103,8 @@ public class DataComposerMemory extends AbstractDataComposer {
 	}
 
 	/**
-	 * It is called by each request or form existing in the page returned by the server. It creates a new state to store
-	 * all the parameters and values of the request or form.
+	 * It is called by each request or form existing in the page returned by the server. It creates a new state to store all the parameters
+	 * and values of the request or form.
 	 *
 	 * @return state id for this request
 	 */
@@ -113,9 +113,8 @@ public class DataComposerMemory extends AbstractDataComposer {
 	}
 
 	/**
-	 * It is called in the pre-processing stage of each request or form existing in the page returned by the server, as
-	 * long as the destiny of the request is an action. It creates a new state to store all the parameters and values of
-	 * the request or form.
+	 * It is called in the pre-processing stage of each request or form existing in the page returned by the server, as long as the destiny
+	 * of the request is an action. It creates a new state to store all the parameters and values of the request or form.
 	 *
 	 * @param method HTTP method of the request.
 	 * @param action action name
@@ -177,9 +176,9 @@ public class DataComposerMemory extends AbstractDataComposer {
 	}
 
 	/**
-	 * It is called in the pre-processing stage of each request or form existing in the page returned by the server. It
-	 * adds the state of the treated request or form to the page <code>page</code> and returns and identifier composed
-	 * by the page identifier and the state identifier.
+	 * It is called in the pre-processing stage of each request or form existing in the page returned by the server. It adds the state of
+	 * the treated request or form to the page <code>page</code> and returns and identifier composed by the page identifier and the state
+	 * identifier.
 	 *
 	 * @return Identifier composed by the page identifier and the state identifier.
 	 */
@@ -212,16 +211,14 @@ public class DataComposerMemory extends AbstractDataComposer {
 	}
 
 	/**
-	 * It is called in the pre-processing stage of each user request assigning a new page identifier to the page with
-	 * its parent state id.
+	 * It is called in the pre-processing stage of each user request assigning a new page identifier to the page with its parent state id.
 	 */
 	public void startPage(final String parentStateId) {
 		initPage(parentStateId);
 	}
 
 	/**
-	 * It is called in the pre-processing stage of each user request. Create a new {@link IPage} based on an existing
-	 * page.
+	 * It is called in the pre-processing stage of each user request. Create a new {@link IPage} based on an existing page.
 	 *
 	 * @param existingPage other IPage
 	 */
@@ -231,8 +228,8 @@ public class DataComposerMemory extends AbstractDataComposer {
 	}
 
 	/**
-	 * This method is called in the pre-processing stage of each user request to add an IPage object, which represents
-	 * the page to show by the server, with all its states to the user session.
+	 * This method is called in the pre-processing stage of each user request to add an IPage object, which represents the page to show by
+	 * the server, with all its states to the user session.
 	 */
 	public void endPage() {
 
