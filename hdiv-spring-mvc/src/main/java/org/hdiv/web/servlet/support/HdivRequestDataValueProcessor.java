@@ -41,8 +41,7 @@ public class HdivRequestDataValueProcessor implements RequestDataValueProcessor 
 	protected FormUrlProcessor formUrlProcessor;
 
 	/**
-	 * Inner delegate {@link RequestDataValueProcessor} implementation. Only works with Spring greater or equal to
-	 * 4.0.0.
+	 * Inner delegate {@link RequestDataValueProcessor} implementation. Only works with Spring greater or equal to 4.0.0.
 	 */
 	protected RequestDataValueProcessor innerRequestDataValueProcessor;
 
@@ -96,7 +95,7 @@ public class HdivRequestDataValueProcessor implements RequestDataValueProcessor 
 	 * @return processed action url
 	 */
 	public String processAction(final HttpServletRequest request, final String action) {
-		return this.processAction(request, action, "POST");
+		return this.processAction(request, action, Method.POST.toString());
 	}
 
 	/**
@@ -129,12 +128,10 @@ public class HdivRequestDataValueProcessor implements RequestDataValueProcessor 
 	 * @param type the type of the field
 	 * @return processed field value
 	 */
-	public String processFormFieldValue(final HttpServletRequest request, final String name, String value,
-			final String type) {
+	public String processFormFieldValue(final HttpServletRequest request, final String name, String value, final String type) {
 
 		if (innerRequestDataValueProcessor != null) {
-			String processedValue = innerRequestDataValueProcessor.processFormFieldValue(request, name, value,
-					type);
+			String processedValue = innerRequestDataValueProcessor.processFormFieldValue(request, name, value, type);
 			if (processedValue != value) {
 				value = processedValue;
 			}
@@ -204,7 +201,7 @@ public class HdivRequestDataValueProcessor implements RequestDataValueProcessor 
 	 * @param url link url
 	 * @return processed url
 	 */
-	public String processUrl(HttpServletRequest request, String url) {
+	public String processUrl(final HttpServletRequest request, String url) {
 
 		if (innerRequestDataValueProcessor != null) {
 			String processedUrl = innerRequestDataValueProcessor.processUrl(request, url);
@@ -223,7 +220,7 @@ public class HdivRequestDataValueProcessor implements RequestDataValueProcessor 
 	 * @param type field type
 	 * @return editable
 	 */
-	protected boolean isEditable(String type) {
+	protected boolean isEditable(final String type) {
 
 		if (noEditableTypes.contains(type)) {
 			return false;
