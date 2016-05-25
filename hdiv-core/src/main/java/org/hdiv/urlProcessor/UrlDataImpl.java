@@ -364,7 +364,7 @@ public class UrlDataImpl implements UrlData {
 	/**
 	 * Generate final url with all parameters and anchor.
 	 *
-	 * @param urlData url data object
+	 * @param url Generating url
 	 * @return complete url
 	 */
 	public String getProcessedUrl(final StringBuilder url) {

@@ -91,17 +91,18 @@ public interface ISession {
 	 * @return Attribute value or null if the attribute doesn't exist.
 	 * @since HDIV 3.0.1
 	 */
-	public String getAttribute(RequestContext context, String name);
+	String getAttribute(RequestContext context, String name);
 
 	/**
 	 * Get an attribute from session.
 	 * @param context Context holder for request-specific state.
 	 * @param name Attribute name.
 	 * @param requiredType Type of the attribute.
+	 * @param <T> Return type
 	 * @return Attribute value or null if the attribute doesn't exist.
 	 * @since HDIV 3.0.1
 	 */
-	public <T> T getAttribute(RequestContext context, String name, Class<T> requiredType);
+	<T> T getAttribute(RequestContext context, String name, Class<T> requiredType);
 
 	/**
 	 * Set an attribute value in session.
@@ -110,7 +111,7 @@ public interface ISession {
 	 * @param value Attribute value.
 	 * @since HDIV 3.0.1
 	 */
-	public void setAttribute(RequestContext context, String name, Object value);
+	void setAttribute(RequestContext context, String name, Object value);
 
 	/**
 	 * Remove an attribute from session.
@@ -118,5 +119,5 @@ public interface ISession {
 	 * @param name Attribute name.
 	 * @since HDIV 3.0.1
 	 */
-	public void removeAttribute(RequestContext context, String name);
+	void removeAttribute(RequestContext context, String name);
 }
