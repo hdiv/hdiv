@@ -23,13 +23,12 @@ import org.hdiv.urlProcessor.LinkUrlProcessor;
 import org.hdiv.util.HDIVUtil;
 
 /**
- * Generate an HTML <code>&lt;frame&gt;</code> tag with similar capabilities as those the <code>&lt;html:link&gt;</code>
- * tag provides for hyperlink elements. The <code>src</code> element is rendered using the same technique that
- * {@link LinkTagHDIV} uses to render the <code>href</code> attribute of a hyperlink. Additionall, the HTML 4.0 frame
- * tag attributes <code>noresize</code>, <code>scrolling</code>, <code>marginheight</code>, <code>marginwidth</code>,
- * <code>frameborder</code>, and <code>longdesc</code> are supported. The frame <code>name</code> attribute is rendered
- * based on the <code>frameName</code> property. Note that the value of <code>longdesc</code> is intended to be a URI,
- * but currently no rewriting is supported. The attribute is set directly from the property value.
+ * Generate an HTML <code>&lt;frame&gt;</code> tag with similar capabilities as those the <code>&lt;html:link&gt;</code> tag provides for
+ * hyperlink elements. The <code>src</code> element is rendered using the same technique that {@link LinkTagHDIV} uses to render the
+ * <code>href</code> attribute of a hyperlink. Additionall, the HTML 4.0 frame tag attributes <code>noresize</code>, <code>scrolling</code>,
+ * <code>marginheight</code>, <code>marginwidth</code>, <code>frameborder</code>, and <code>longdesc</code> are supported. The frame
+ * <code>name</code> attribute is rendered based on the <code>frameName</code> property. Note that the value of <code>longdesc</code> is
+ * intended to be a URI, but currently no rewriting is supported. The attribute is set directly from the property value.
  *
  * @author Gorka Vicente
  * @see org.apache.struts.taglib.html.FrameTag
@@ -38,8 +37,8 @@ import org.hdiv.util.HDIVUtil;
 public class FrameTagHDIV extends LinkTagHDIV {
 
 	/**
-	 * Universal version identifier. Deserialization uses this number to ensure that a loaded class corresponds exactly
-	 * to a serialized object.
+	 * Universal version identifier. Deserialization uses this number to ensure that a loaded class corresponds exactly to a serialized
+	 * object.
 	 */
 	private static final long serialVersionUID = -376718532211972980L;
 

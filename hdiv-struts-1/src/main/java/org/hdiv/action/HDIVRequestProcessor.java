@@ -53,23 +53,21 @@ public class HDIVRequestProcessor extends RequestProcessor {
 	private static final String EDITABLE_PARAMETER_ERROR = Constants.EDITABLE_PARAMETER_ERROR;
 
 	/**
-	 * Property that contains the error message to be shown by Struts when the value of the editable parameter is not
-	 * valid.
+	 * Property that contains the error message to be shown by Struts when the value of the editable parameter is not valid.
 	 */
 	private static final String HDIV_EDITABLE_ERROR = Constants.HDIV_EDITABLE_ERROR_KEY;
 
 	/**
-	 * Property that contains the error message to be shown by Struts when the value of the editable password parameter
-	 * is not valid.
+	 * Property that contains the error message to be shown by Struts when the value of the editable password parameter is not valid.
 	 */
 	private static final String HDIV_EDITABLE_PASSWORD_ERROR = Constants.HDIV_EDITABLE_PASSWORD_ERROR_KEY;
 
 	/**
 	 * <p>
 	 * If this request was not cancelled, and the request's {@link ActionMapping} has not disabled validation, call the
-	 * <code>validate</code> method of the specified {@link ActionForm}, and forward to the input path if there were any
-	 * errors. Return <code>true</code> if we should continue processing, or <code>false</code> if we have already
-	 * forwarded control back to the input form.
+	 * <code>validate</code> method of the specified {@link ActionForm}, and forward to the input path if there were any errors. Return
+	 * <code>true</code> if we should continue processing, or <code>false</code> if we have already forwarded control back to the input
+	 * form.
 	 * </p>
 	 * 
 	 * @param request The servlet request we are processing
@@ -80,8 +78,8 @@ public class HDIVRequestProcessor extends RequestProcessor {
 	 * @exception ServletException if a servlet exception occurs
 	 * @exception InvalidCancelException if a cancellation is attempted without the proper action configuration
 	 */
-	protected boolean processValidate(HttpServletRequest request, HttpServletResponse response, ActionForm form,
-			ActionMapping mapping) throws IOException, ServletException, InvalidCancelException {
+	protected boolean processValidate(HttpServletRequest request, HttpServletResponse response, ActionForm form, ActionMapping mapping)
+			throws IOException, ServletException, InvalidCancelException {
 
 		if (form == null) {
 			return (true);
@@ -140,8 +138,7 @@ public class HDIVRequestProcessor extends RequestProcessor {
 			if (log.isTraceEnabled()) {
 				log.trace("  Validation failed but no input form available");
 			}
-			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
-					getInternal().getMessage("noInput", mapping.getPath()));
+			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, getInternal().getMessage("noInput", mapping.getPath()));
 			return (false);
 		}
 
@@ -230,8 +227,8 @@ public class HDIVRequestProcessor extends RequestProcessor {
 
 	/**
 	 * <p>
-	 * Forward or redirect to the specified destination, by the specified mechanism. This method uses a
-	 * <code>ForwardConfig</code> object instead an <code>ActionForward</code>.
+	 * Forward or redirect to the specified destination, by the specified mechanism. This method uses a <code>ForwardConfig</code> object
+	 * instead an <code>ActionForward</code>.
 	 * </p>
 	 *
 	 * @param request The servlet request we are processing

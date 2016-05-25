@@ -21,13 +21,13 @@ import org.apache.strutsel.taglib.utils.EvalHelper;
 import org.hdiv.taglib.html.MultiboxTagHDIV;
 
 /**
- * Tag for input fields of type "checkbox". This differs from CheckboxTag because it assumes that the underlying
- * property is an array getter (of any supported primitive type, or String), and the checkbox is initialized to
- * "checked" if the value listed for the "value" attribute is present in the values returned by the property getter.
+ * Tag for input fields of type "checkbox". This differs from CheckboxTag because it assumes that the underlying property is an array getter
+ * (of any supported primitive type, or String), and the checkbox is initialized to "checked" if the value listed for the "value" attribute
+ * is present in the values returned by the property getter.
  * <p>
- * This class is a subclass of the class <code>org.hdiv.taglib.html.MultiboxTagHDIV</code> which provides most of the
- * described functionality. This subclass allows all attribute values to be specified as expressions utilizing the
- * JavaServer Pages Standard Library expression language.
+ * This class is a subclass of the class <code>org.hdiv.taglib.html.MultiboxTagHDIV</code> which provides most of the described
+ * functionality. This subclass allows all attribute values to be specified as expressions utilizing the JavaServer Pages Standard Library
+ * expression language.
  * 
  * @author Gorka Vicente
  * @since HDIV 2.0

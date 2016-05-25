@@ -28,10 +28,9 @@ import org.hdiv.util.Constants;
 import org.hdiv.util.HDIVUtil;
 
 /**
- * Renders an HTML <b>&lt;form&gt;</b> element whose contents are described by the body content of this tag. The form
- * implicitly interacts with the specified request scope or session scope bean to populate the input fields with the
- * current property values from the bean. The form bean is located, and created if necessary, based on the form bean
- * specification for the associated ActionMapping.
+ * Renders an HTML <b>&lt;form&gt;</b> element whose contents are described by the body content of this tag. The form implicitly interacts
+ * with the specified request scope or session scope bean to populate the input fields with the current property values from the bean. The
+ * form bean is located, and created if necessary, based on the form bean specification for the associated ActionMapping.
  *
  * @author Aritz Rabadan
  * @author Gorka Vicente
@@ -39,99 +38,99 @@ import org.hdiv.util.HDIVUtil;
  */
 public class FormTagHDIV extends FormTag {
 
-    /**
-     * Universal version identifier. Deserialization uses this number to ensure that a loaded class corresponds exactly
-     * to a serialized object.
-     */
-    private static final long serialVersionUID = 5073853465806606664L;
+	/**
+	 * Universal version identifier. Deserialization uses this number to ensure that a loaded class corresponds exactly to a serialized
+	 * object.
+	 */
+	private static final long serialVersionUID = 5073853465806606664L;
 
-    protected FormUrlProcessor formUrlProcessor;
+	protected FormUrlProcessor formUrlProcessor;
 
-    /**
-     * Renders the action attribute
-     * @see org.hdiv.dataComposer.IDataComposer
-     * @see org.hdiv.urlProcessor.FormUrlProcessor
-     */
-    protected void renderAction(final StringBuilder results) {
+	/**
+	 * Renders the action attribute
+	 * @see org.hdiv.dataComposer.IDataComposer
+	 * @see org.hdiv.urlProcessor.FormUrlProcessor
+	 */
+	protected void renderAction(final StringBuilder results) {
 
-        final HttpServletResponse response = (HttpServletResponse) this.pageContext.getResponse();
-        final HttpServletRequest request = (HttpServletRequest) this.pageContext.getRequest();
+		final HttpServletResponse response = (HttpServletResponse) this.pageContext.getResponse();
+		final HttpServletRequest request = (HttpServletRequest) this.pageContext.getRequest();
 
-        final String calcAction = (this.action == null ? this.getPostbackAction() : this.action);
+		final String calcAction = (this.action == null ? this.getPostbackAction() : this.action);
 
-        final String url = response.encodeURL(TagUtils.getInstance().getActionMappingURL(calcAction, this.pageContext));
+		final String url = response.encodeURL(TagUtils.getInstance().getActionMappingURL(calcAction, this.pageContext));
 
-        // Call to Hdiv FormUrlProcessor
-        if (this.formUrlProcessor == null) {
-            this.formUrlProcessor = HDIVUtil.getFormUrlProcessor(request.getSession().getServletContext());
-        }
-        final String encodedURL = formUrlProcessor.processUrl(request, url);
+		// Call to Hdiv FormUrlProcessor
+		if (this.formUrlProcessor == null) {
+			this.formUrlProcessor = HDIVUtil.getFormUrlProcessor(request.getSession().getServletContext());
+		}
+		final String encodedURL = formUrlProcessor.processUrl(request, url);
 
-        results.append(" action=\"");
-        results.append(encodedURL);
-        results.append("\"");
-    }
+		results.append(" action=\"");
+		results.append(encodedURL);
+		results.append("\"");
+	}
 
-    /**
-     * @return If the action is not specified returns the original request uri.
-     */
-    public String getPostbackAction() {
-        final HttpServletRequest request = (HttpServletRequest) pageContext.getRequest();
-        String tempPostbackAction = (String) request.getAttribute(Globals.ORIGINAL_URI_KEY);
+	/**
+	 * @return If the action is not specified returns the original request uri.
+	 */
+	public String getPostbackAction() {
+		final HttpServletRequest request = (HttpServletRequest) pageContext.getRequest();
+		String tempPostbackAction = (String) request.getAttribute(Globals.ORIGINAL_URI_KEY);
 
-        final String prefix = moduleConfig.getPrefix();
-        if (tempPostbackAction != null && prefix.length() > 0 && tempPostbackAction.startsWith(prefix)) {
-            tempPostbackAction = tempPostbackAction.substring(prefix.length());
-        }
-        return tempPostbackAction;
-    }
+		final String prefix = moduleConfig.getPrefix();
+		if (tempPostbackAction != null && prefix.length() > 0 && tempPostbackAction.startsWith(prefix)) {
+			tempPostbackAction = tempPostbackAction.substring(prefix.length());
+		}
+		return tempPostbackAction;
+	}
 
-    /**
-     * Render the end of this form adding HDIV parameter if strategy is cipher or hash.
-     * @exception JspException if a JSP exception has occurred
-     */
-    @Override
-    public int doEndTag() throws JspException {
+	/**
+	 * Render the end of this form adding HDIV parameter if strategy is cipher or hash.
+	 * @exception JspException if a JSP exception has occurred
+	 */
+	@Override
+	public int doEndTag() throws JspException {
 
-        this.addHDIVParameter();
-        return super.doEndTag();
-    }
+		this.addHDIVParameter();
+		return super.doEndTag();
+	}
 
-    /**
-     * Adds HDIV state as parameter.
-     */
-    protected void addHDIVParameter() throws JspException {
+	/**
+	 * Adds HDIV state as parameter.
+	 */
+	protected void addHDIVParameter() throws JspException {
 
-        final HttpServletRequest request = (HttpServletRequest) this.pageContext.getRequest();
-        final IDataComposer dataComposer = HDIVUtil.getDataComposer(request);
-        if (!dataComposer.isRequestStarted()) {
-            return;
-        }
-        final String requestId = dataComposer.endRequest();
+		final HttpServletRequest request = (HttpServletRequest) this.pageContext.getRequest();
+		final IDataComposer dataComposer = HDIVUtil.getDataComposer(request);
+		if (!dataComposer.isRequestStarted()) {
+			return;
+		}
+		final String requestId = dataComposer.endRequest();
 
-        if (requestId.length() > 0) {
-            final String hdivParameter = HDIVUtil.getHdivStateParameterName(request);
-            TagUtils.getInstance().write(pageContext, this.generateHiddenTag(hdivParameter, requestId));
-        }
-    }
+		if (requestId.length() > 0) {
+			final String hdivParameter = HDIVUtil.getHdivStateParameterName(request);
+			TagUtils.getInstance().write(pageContext, this.generateHiddenTag(hdivParameter, requestId));
+		}
+	}
 
-    /**
-     * Renders an HTML <b>&lt;input&gt;</b> element of type hidden.
-     *
-     * @param name hidden parameter name
-     * @param requestId request identification
-     * @return HTML <b>&lt;input&gt;</b> element of type hidden
-     */
-    private String generateHiddenTag(final String name, final String requestId) {
+	/**
+	 * Renders an HTML <b>&lt;input&gt;</b> element of type hidden.
+	 *
+	 * @param name hidden parameter name
+	 * @param requestId request identification
+	 * @return HTML <b>&lt;input&gt;</b> element of type hidden
+	 */
+	private String generateHiddenTag(final String name, final String requestId) {
 
-        final StringBuffer hdivParameter = new StringBuffer(32);
+		final StringBuffer hdivParameter = new StringBuffer(32);
 
-        hdivParameter.append("<input type=\"hidden\"");
-        renderAttribute(hdivParameter, "name", name);
-        renderAttribute(hdivParameter, "value", requestId);
-        hdivParameter.append(">\n");
+		hdivParameter.append("<input type=\"hidden\"");
+		renderAttribute(hdivParameter, "name", name);
+		renderAttribute(hdivParameter, "value", requestId);
+		hdivParameter.append(">\n");
 
-        return hdivParameter.toString();
-    }
+		return hdivParameter.toString();
+	}
 
 }

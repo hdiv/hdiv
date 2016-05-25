@@ -35,14 +35,13 @@ public interface IValidationHelper {
 	void init();
 
 	/**
-	 * Checks if the values of the parameters received in the request <code>request</code> are valid. These values are
-	 * valid if and only if the noneditable parameters haven't been modified.<br>
+	 * Checks if the values of the parameters received in the request <code>request</code> are valid. These values are valid if and only if
+	 * the noneditable parameters haven't been modified.<br>
 	 *
 	 * @param request HTTP servlet request
-	 * @return {@link ValidatorHelperResult} with true value If all the parameter values of the request
-	 * <code>request</code> pass the the HDIV validation. False, otherwise.
-	 * @throws HDIVException If the request doesn't pass the HDIV validation an exception is thrown explaining the cause
-	 * of the error.
+	 * @return {@link ValidatorHelperResult} with true value If all the parameter values of the request <code>request</code> pass the the
+	 * HDIV validation. False, otherwise.
+	 * @throws HDIVException If the request doesn't pass the HDIV validation an exception is thrown explaining the cause of the error.
 	 */
 	ValidatorHelperResult validate(HttpServletRequest request);
 

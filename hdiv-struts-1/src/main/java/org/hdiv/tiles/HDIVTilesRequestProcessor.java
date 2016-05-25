@@ -43,22 +43,19 @@ import org.hdiv.util.HDIVUtil;
 
 /**
  * <p>
- * <strong>RequestProcessor</strong> contains the processing logic that the Struts controller servlet performs as it
- * receives each servlet request from the container.
+ * <strong>RequestProcessor</strong> contains the processing logic that the Struts controller servlet performs as it receives each servlet
+ * request from the container.
  * </p>
  * <p>
- * This processor subclasses the Struts RequestProcessor in order to intercept calls to forward or include. When such
- * calls are done, the Tiles processor checks if the specified URI is a definition name. If true, the definition is
- * retrieved and included. If false, the original URI is included or a forward is performed.
+ * This processor subclasses the Struts RequestProcessor in order to intercept calls to forward or include. When such calls are done, the
+ * Tiles processor checks if the specified URI is a definition name. If true, the definition is retrieved and included. If false, the
+ * original URI is included or a forward is performed.
  * <p>
  * Actually, catching is done by overloading the following methods:
  * <ul>
- * <li>
- * {@link #processForwardConfig(HttpServletRequest,HttpServletResponse,ForwardConfig)}</li>
- * <li>
- * {@link #internalModuleRelativeForward(String, HttpServletRequest , HttpServletResponse)}</li>
- * <li>
- * {@link #internalModuleRelativeInclude(String, HttpServletRequest , HttpServletResponse)}</li>
+ * <li>{@link #processForwardConfig(HttpServletRequest,HttpServletResponse,ForwardConfig)}</li>
+ * <li>{@link #internalModuleRelativeForward(String, HttpServletRequest , HttpServletResponse)}</li>
+ * <li>{@link #internalModuleRelativeInclude(String, HttpServletRequest , HttpServletResponse)}</li>
  * </ul>
  * </p>
  * 
@@ -74,23 +71,21 @@ public class HDIVTilesRequestProcessor extends TilesRequestProcessor {
 	private static final String EDITABLE_PARAMETER_ERROR = Constants.EDITABLE_PARAMETER_ERROR;
 
 	/**
-	 * Property that contains the error message to be shown by Struts when the value of the editable parameter is not
-	 * valid.
+	 * Property that contains the error message to be shown by Struts when the value of the editable parameter is not valid.
 	 */
 	private static final String HDIV_EDITABLE_ERROR = Constants.HDIV_EDITABLE_ERROR_KEY;
 
 	/**
-	 * Property that contains the error message to be shown by Struts when the value of the editable password parameter
-	 * is not valid.
+	 * Property that contains the error message to be shown by Struts when the value of the editable password parameter is not valid.
 	 */
 	private static final String HDIV_EDITABLE_PASSWORD_ERROR = Constants.HDIV_EDITABLE_PASSWORD_ERROR_KEY;
 
 	/**
 	 * <p>
 	 * If this request was not cancelled, and the request's {@link ActionMapping} has not disabled validation, call the
-	 * <code>validate</code> method of the specified {@link ActionForm}, and forward to the input path if there were any
-	 * errors. Return <code>true</code> if we should continue processing, or <code>false</code> if we have already
-	 * forwarded control back to the input form.
+	 * <code>validate</code> method of the specified {@link ActionForm}, and forward to the input path if there were any errors. Return
+	 * <code>true</code> if we should continue processing, or <code>false</code> if we have already forwarded control back to the input
+	 * form.
 	 * </p>
 	 * 
 	 * @param request The servlet request we are processing
@@ -101,8 +96,8 @@ public class HDIVTilesRequestProcessor extends TilesRequestProcessor {
 	 * @exception ServletException if a servlet exception occurs
 	 * @exception InvalidCancelException if a cancellation is attempted without the proper action configuration
 	 */
-	protected boolean processValidate(HttpServletRequest request, HttpServletResponse response, ActionForm form,
-			ActionMapping mapping) throws IOException, ServletException, InvalidCancelException {
+	protected boolean processValidate(HttpServletRequest request, HttpServletResponse response, ActionForm form, ActionMapping mapping)
+			throws IOException, ServletException, InvalidCancelException {
 
 		if (form == null) {
 			return (true);
@@ -161,8 +156,7 @@ public class HDIVTilesRequestProcessor extends TilesRequestProcessor {
 			if (log.isTraceEnabled()) {
 				log.trace("  Validation failed but no input form available");
 			}
-			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
-					getInternal().getMessage("noInput", mapping.getPath()));
+			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, getInternal().getMessage("noInput", mapping.getPath()));
 			return (false);
 		}
 
@@ -250,10 +244,9 @@ public class HDIVTilesRequestProcessor extends TilesRequestProcessor {
 	}
 
 	/**
-	 * Overloaded method from Struts' RequestProcessor. Forward or redirect to the specified destination by the
-	 * specified mechanism. This method catches the Struts' actionForward call. It checks if the actionForward is done
-	 * on a Tiles definition name. If true, process the definition and insert it. If false, call the original parent's
-	 * method.
+	 * Overloaded method from Struts' RequestProcessor. Forward or redirect to the specified destination by the specified mechanism. This
+	 * method catches the Struts' actionForward call. It checks if the actionForward is done on a Tiles definition name. If true, process
+	 * the definition and insert it. If false, call the original parent's method.
 	 * 
 	 * @param request The servlet request we are processing.
 	 * @param response The servlet response we are creating.
@@ -325,24 +318,20 @@ public class HDIVTilesRequestProcessor extends TilesRequestProcessor {
 	}
 
 	/**
-	 * Do a forward using request dispatcher. Uri is a valid uri. If response has already been commited, do an include
-	 * instead.
+	 * Do a forward using request dispatcher. Uri is a valid uri. If response has already been commited, do an include instead.
 	 * 
 	 * @param uri Uri or Definition name to forward.
 	 * @param request Current page request.
 	 * @param response Current page response.
 	 */
-	protected void doForward(String uri, HttpServletRequest request, HttpServletResponse response) throws IOException,
-			ServletException {
+	protected void doForward(String uri, HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 
 		RequestWrapper requestWrapper = HDIVUtil.getNativeRequest(request, RequestWrapper.class);
 		if (requestWrapper != null) {
 
-			LinkUrlProcessor linkUrlProcessorForForward = HDIVUtil.getLinkUrlProcessor(request.getSession()
-					.getServletContext());
+			LinkUrlProcessor linkUrlProcessorForForward = HDIVUtil.getLinkUrlProcessor(request.getSession().getServletContext());
 			UrlData urlData = linkUrlProcessorForForward.createUrlData(uri, "GET", request);
-			Map<String, String[]> urlParamsAsMap = linkUrlProcessorForForward.getUrlParamsAsMap(request,
-					urlData.getUrlParams());
+			Map<String, String[]> urlParamsAsMap = linkUrlProcessorForForward.getUrlParamsAsMap(request, urlData.getUrlParams());
 			for (Map.Entry<String, String[]> entry : urlParamsAsMap.entrySet()) {
 				requestWrapper.addParameter(entry.getKey(), entry.getValue());
 			}
@@ -356,8 +345,7 @@ public class HDIVTilesRequestProcessor extends TilesRequestProcessor {
 
 			RequestDispatcher rd = getServletContext().getRequestDispatcher(uri);
 			if (rd == null) {
-				response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
-						getInternal().getMessage("requestDispatcher", uri));
+				response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, getInternal().getMessage("requestDispatcher", uri));
 				return;
 			}
 

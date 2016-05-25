@@ -30,8 +30,8 @@ import org.springframework.util.Assert;
  * Registry to add exclusions to the validation phase.
  * </p>
  * <p>
- * Can contain two types of exclusions, URL and parameter. The first to exclude URLs from validation and the second to
- * exclude parameter names.
+ * Can contain two types of exclusions, URL and parameter. The first to exclude URLs from validation and the second to exclude parameter
+ * names.
  * </p>
  *
  * @since 2.1.7

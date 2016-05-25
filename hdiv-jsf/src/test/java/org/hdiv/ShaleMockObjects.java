@@ -62,10 +62,8 @@ public class ShaleMockObjects {
 
 		// Set up JSF API Objects
 		FactoryFinder.releaseFactories();
-		FactoryFinder
-				.setFactory(FactoryFinder.APPLICATION_FACTORY, "org.apache.shale.test.mock.MockApplicationFactory");
-		FactoryFinder.setFactory(FactoryFinder.FACES_CONTEXT_FACTORY,
-				"org.apache.shale.test.mock.MockFacesContextFactory");
+		FactoryFinder.setFactory(FactoryFinder.APPLICATION_FACTORY, "org.apache.shale.test.mock.MockApplicationFactory");
+		FactoryFinder.setFactory(FactoryFinder.FACES_CONTEXT_FACTORY, "org.apache.shale.test.mock.MockFacesContextFactory");
 		FactoryFinder.setFactory(FactoryFinder.LIFECYCLE_FACTORY, "org.apache.shale.test.mock.MockLifecycleFactory");
 		FactoryFinder.setFactory(FactoryFinder.RENDER_KIT_FACTORY, "org.apache.shale.test.mock.MockRenderKitFactory");
 
@@ -73,20 +71,17 @@ public class ShaleMockObjects {
 		lifecycleFactory = (MockLifecycleFactory) FactoryFinder.getFactory(FactoryFinder.LIFECYCLE_FACTORY);
 		lifecycle = (MockLifecycle) lifecycleFactory.getLifecycle(LifecycleFactory.DEFAULT_LIFECYCLE);
 		facesContextFactory = (MockFacesContextFactory) FactoryFinder.getFactory(FactoryFinder.FACES_CONTEXT_FACTORY);
-		facesContext = (MockFacesContext) facesContextFactory.getFacesContext(servletContext, request, response,
-				lifecycle);
+		facesContext = (MockFacesContext) facesContextFactory.getFacesContext(servletContext, request, response, lifecycle);
 		externalContext = (MockExternalContext) facesContext.getExternalContext();
 		UIViewRoot root = new UIViewRoot();
 		root.setViewId("/viewId");
 		root.setRenderKitId(RenderKitFactory.HTML_BASIC_RENDER_KIT);
 		facesContext.setViewRoot(root);
-		ApplicationFactory applicationFactory = (ApplicationFactory) FactoryFinder
-				.getFactory(FactoryFinder.APPLICATION_FACTORY);
+		ApplicationFactory applicationFactory = (ApplicationFactory) FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
 		application = new MockApplication();
 		applicationFactory.setApplication(application);
 		facesContext.setApplication(application);
-		RenderKitFactory renderKitFactory = (RenderKitFactory) FactoryFinder
-				.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
+		RenderKitFactory renderKitFactory = (RenderKitFactory) FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
 		renderKit = new MockRenderKit();
 		renderKitFactory.addRenderKit(RenderKitFactory.HTML_BASIC_RENDER_KIT, renderKit);
 

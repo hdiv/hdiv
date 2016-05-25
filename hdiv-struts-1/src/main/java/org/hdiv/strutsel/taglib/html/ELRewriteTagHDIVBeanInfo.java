@@ -21,13 +21,13 @@ import java.beans.SimpleBeanInfo;
 import java.util.ArrayList;
 
 /**
- * This is the <code>BeanInfo</code> descriptor for the <code>org.apache.strutsel.taglib.html.ELRewriteTag</code> class.
- * It is needed to override the default mapping of custom tag attribute names to class attribute names.
+ * This is the <code>BeanInfo</code> descriptor for the <code>org.apache.strutsel.taglib.html.ELRewriteTag</code> class. It is needed to
+ * override the default mapping of custom tag attribute names to class attribute names.
  * <p>
- * This is because the value of the unevaluated EL expression has to be kept separately from the evaluated value, which
- * is stored in the base class. This is related to the fact that the JSP compiler can choose to reuse different tag
- * instances if they received the same original attribute values, and the JSP compiler can choose to not re-call the
- * setter methods, because it can assume the same values are already set.
+ * This is because the value of the unevaluated EL expression has to be kept separately from the evaluated value, which is stored in the
+ * base class. This is related to the fact that the JSP compiler can choose to reuse different tag instances if they received the same
+ * original attribute values, and the JSP compiler can choose to not re-call the setter methods, because it can assume the same values are
+ * already set.
  * 
  * @author Gorka Vicente
  * @since HDIV 2.0.4
@@ -121,8 +121,7 @@ public class ELRewriteTagHDIVBeanInfo extends SimpleBeanInfo {
 		}
 
 		try {
-			proplist.add(new PropertyDescriptor("useLocalEncoding", ELRewriteTagHDIV.class, null,
-					"setUseLocalEncodingExpr"));
+			proplist.add(new PropertyDescriptor("useLocalEncoding", ELRewriteTagHDIV.class, null, "setUseLocalEncodingExpr"));
 		}
 		catch (IntrospectionException ex) {
 		}

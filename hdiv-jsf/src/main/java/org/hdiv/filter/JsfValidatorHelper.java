@@ -33,14 +33,11 @@ import org.hdiv.util.UtilsJsf;
  * Differences with core's validation helper:
  * </p>
  * <ul>
- * <li>
- * If it is a JSF request (with JSF state) doesn't do any validation. If it is a HDIV request (with HDIV state)
- * delegates validation to core's validation helper.</li>
- * <li>
- * isTheSameAction() method is overwritten because action checking changes.</li>
- * <li>
- * addParameterToRequest(..) method is overwritten because in the JSF version confidentiality is disabled and
- * RequestWrapper is not used. Consequently, no parameter is added to the request.</li>
+ * <li>If it is a JSF request (with JSF state) doesn't do any validation. If it is a HDIV request (with HDIV state) delegates validation to
+ * core's validation helper.</li>
+ * <li>isTheSameAction() method is overwritten because action checking changes.</li>
+ * <li>addParameterToRequest(..) method is overwritten because in the JSF version confidentiality is disabled and RequestWrapper is not
+ * used. Consequently, no parameter is added to the request.</li>
  * </ul>
  * 
  * @author Gotzon Illarramendi
@@ -92,8 +89,8 @@ public class JsfValidatorHelper extends ValidatorHelperRequest {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.hdiv.filter.ValidatorHelperRequest#isTheSameAction(javax.servlet.http.HttpServletRequest,
-	 * java.lang.String, org.hdiv.state.IState)
+	 * @see org.hdiv.filter.ValidatorHelperRequest#isTheSameAction(javax.servlet.http.HttpServletRequest, java.lang.String,
+	 * org.hdiv.state.IState)
 	 */
 	@Override
 	public ValidatorHelperResult isTheSameAction(HttpServletRequest request, String target, IState state) {
@@ -141,8 +138,8 @@ public class JsfValidatorHelper extends ValidatorHelperRequest {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.hdiv.filter.ValidatorHelperRequest#addParameterToRequest(javax.servlet.http.HttpServletRequest,
-	 * java.lang.String, java.lang.Object)
+	 * @see org.hdiv.filter.ValidatorHelperRequest#addParameterToRequest(javax.servlet.http.HttpServletRequest, java.lang.String,
+	 * java.lang.Object)
 	 */
 	protected void addParameterToRequest(HttpServletRequest request, String name, Object value) {
 		throw new IllegalStateException("Confidentiality is not implemented in JSF.");

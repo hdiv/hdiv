@@ -29,12 +29,11 @@ public interface IDataValidator {
 
 	/**
 	 * <p>
-	 * Checks if the value <code>data</code> sent by the user to the server in the parameter <code>parameter</code> is
-	 * correct or not. The received value is checked with the one stored in the state to decide if it is correct.
+	 * Checks if the value <code>data</code> sent by the user to the server in the parameter <code>parameter</code> is correct or not. The
+	 * received value is checked with the one stored in the state to decide if it is correct.
 	 * </p>
 	 * <p>
-	 * In the memory strategy the state is obtained from the user session, using the state identifier received within
-	 * the request.
+	 * In the memory strategy the state is obtained from the user session, using the state identifier received within the request.
 	 * </p>
 	 * 
 	 * @param request current request
@@ -43,8 +42,8 @@ public interface IDataValidator {
 	 * @param parameter parameter name
 	 * @param stateParameter {@link IParameter} object with parameters data
 	 * @param actionParamValues values for the action parameters
-	 * @return object that represents the result of the validation process for the parameter <code>parameter</code> and
-	 * the value <code>data</code>.
+	 * @return object that represents the result of the validation process for the parameter <code>parameter</code> and the value
+	 * <code>data</code>.
 	 */
 	public IValidationResult validate(HttpServletRequest request, String value, String target, String parameter, IParameter stateParameter,
 			String[] actionParamValues);

@@ -85,22 +85,19 @@ public class LifecycleTest extends AbstractJsfHDIVTestCase {
 	private void runLifecycle() {
 
 		// RESTORE_VIEW phase
-		PhaseEvent event = new PhaseEvent(shaleMockObjects.getFacesContext(), PhaseId.RESTORE_VIEW,
-				shaleMockObjects.getLifecycle());
+		PhaseEvent event = new PhaseEvent(shaleMockObjects.getFacesContext(), PhaseId.RESTORE_VIEW, shaleMockObjects.getLifecycle());
 
 		ConfigPhaseListener conf = new ConfigPhaseListener();
 		conf.beforePhase(event);
 
 		// PROCESS_VALIDATIONS phase
 		ComponentMessagesPhaseListener msg = new ComponentMessagesPhaseListener();
-		event = new PhaseEvent(shaleMockObjects.getFacesContext(), PhaseId.PROCESS_VALIDATIONS,
-				shaleMockObjects.getLifecycle());
+		event = new PhaseEvent(shaleMockObjects.getFacesContext(), PhaseId.PROCESS_VALIDATIONS, shaleMockObjects.getLifecycle());
 		msg.beforePhase(event);
 		msg.afterPhase(event);
 
 		// RENDER_RESPONSE phase
-		event = new PhaseEvent(shaleMockObjects.getFacesContext(), PhaseId.RENDER_RESPONSE,
-				shaleMockObjects.getLifecycle());
+		event = new PhaseEvent(shaleMockObjects.getFacesContext(), PhaseId.RENDER_RESPONSE, shaleMockObjects.getLifecycle());
 		conf.afterPhase(event);
 	}
 

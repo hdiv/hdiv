@@ -28,8 +28,8 @@ import java.util.List;
 public class Page implements IPage, Serializable {
 
 	/**
-	 * Universal version identifier. Deserialization uses this number to ensure that a loaded class corresponds exactly
-	 * to a serialized object.
+	 * Universal version identifier. Deserialization uses this number to ensure that a loaded class corresponds exactly to a serialized
+	 * object.
 	 */
 	private static final long serialVersionUID = -5701140762067196143L;
 
@@ -201,7 +201,7 @@ public class Page implements IPage, Serializable {
 	/**
 	 * Returns the corresponding token for the given HTTP method.
 	 *
-	 * @param method HTTP method
+	 * @param type Token type
 	 * @return the randomToken
 	 * @since HDIV 2.1.7
 	 */
@@ -217,7 +217,7 @@ public class Page implements IPage, Serializable {
 
 	/**
 	 * @param randomToken the randomToken to set
-	 * @param method HTTP method
+	 * @param type Token type
 	 * @since HDIV 2.1.7
 	 */
 	public void setRandomToken(final String randomToken, final RandomTokenType type) {

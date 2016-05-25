@@ -25,8 +25,7 @@ import org.hdiv.urlProcessor.LinkUrlProcessor;
 import org.hdiv.util.HDIVUtil;
 
 /**
- * Perform a forward or redirect to a page that is looked up in the configuration information associated with our
- * application.
+ * Perform a forward or redirect to a page that is looked up in the configuration information associated with our application.
  *
  * @author Gorka Vicente
  * @see org.apache.struts.taglib.logic.ForwardTag
@@ -34,8 +33,8 @@ import org.hdiv.util.HDIVUtil;
 public class ForwardTagHDIV extends ForwardTag {
 
 	/**
-	 * Universal version identifier. Deserialization uses this number to ensure that a loaded class corresponds exactly
-	 * to a serialized object.
+	 * Universal version identifier. Deserialization uses this number to ensure that a loaded class corresponds exactly to a serialized
+	 * object.
 	 */
 	private static final long serialVersionUID = -762185680912315095L;
 

@@ -128,8 +128,7 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 	 * Obtains the state identifier <code>stateId</code> related to the page identifier <code>pageId</code>.
 	 * 
 	 * @param context Context holder for request-specific state.
-	 * @return State identifier <code>stateId</code> throws HDIVException If the state doesn't exist a new HDIV
-	 * exception is thrown.
+	 * @return State identifier <code>stateId</code> throws HDIVException If the state doesn't exist a new HDIV exception is thrown.
 	 */
 	public IState getState(final RequestContext context, final int pageId, final int stateId) {
 		try {
@@ -154,8 +153,8 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 	}
 
 	/**
-	 * Callback that supplies the owning factory to a bean instance. Invoked after population of normal bean properties
-	 * but before an init callback like InitializingBean's afterPropertiesSet or a custom init-method.
+	 * Callback that supplies the owning factory to a bean instance. Invoked after population of normal bean properties but before an init
+	 * callback like InitializingBean's afterPropertiesSet or a custom init-method.
 	 * 
 	 * @param beanFactory owning BeanFactory (may not be null). The bean can immediately call methods on the factory.
 	 */

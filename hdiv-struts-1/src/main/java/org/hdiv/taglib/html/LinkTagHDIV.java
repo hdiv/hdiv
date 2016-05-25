@@ -32,100 +32,99 @@ import org.hdiv.util.HDIVUtil;
  */
 public class LinkTagHDIV extends LinkTag {
 
-    /**
-     * Universal version identifier. Deserialization uses this number to ensure that a loaded class corresponds exactly
-     * to a serialized object.
-     */
-    private static final long serialVersionUID = -376718532211972980L;
+	/**
+	 * Universal version identifier. Deserialization uses this number to ensure that a loaded class corresponds exactly to a serialized
+	 * object.
+	 */
+	private static final long serialVersionUID = -376718532211972980L;
 
-    protected LinkUrlProcessor linkUrlProcessor;
+	protected LinkUrlProcessor linkUrlProcessor;
 
-    /**
-     * Render the end of the hyperlink.
-     *
-     * @exception JspException if a JSP exception has occurred
-     */
-    @Override
-    public int doEndTag() throws JspException {
+	/**
+	 * Render the end of the hyperlink.
+	 *
+	 * @exception JspException if a JSP exception has occurred
+	 */
+	@Override
+	public int doEndTag() throws JspException {
 
-        final HttpServletRequest request = (HttpServletRequest) pageContext.getRequest();
+		final HttpServletRequest request = (HttpServletRequest) pageContext.getRequest();
 
-        // Validate if any specifier was included
-        if ((forward == null) && (href == null) && (page == null) && (action == null)) {
-            return super.doEndTag();
-        }
+		// Validate if any specifier was included
+		if ((forward == null) && (href == null) && (page == null) && (action == null)) {
+			return super.doEndTag();
+		}
 
-        // the value specified in linkname will render a "name" element in the
-        // generated anchor tag
-        if (this.getLinkName() != null) {
-            return super.doEndTag();
-        }
+		// the value specified in linkname will render a "name" element in the
+		// generated anchor tag
+		if (this.getLinkName() != null) {
+			return super.doEndTag();
+		}
 
-        // return the complete URL to which this hyperlink will direct the user.
-        final String url = calculateURL();
+		// return the complete URL to which this hyperlink will direct the user.
+		final String url = calculateURL();
 
-        // Generate the opening anchor element
-        final StringBuilder results = new StringBuilder("<a");
+		// Generate the opening anchor element
+		final StringBuilder results = new StringBuilder("<a");
 
-        // If useLocalEncoding set to true, urlencoding is done on the bytes of
-        // character encoding from ServletResponse#getCharacterEncoding. Use UTF-8
-        // otherwise.
-        String charEncoding = "UTF-8";
-        if (useLocalEncoding) {
-            charEncoding = pageContext.getResponse().getCharacterEncoding();
-        }
+		// If useLocalEncoding set to true, urlencoding is done on the bytes of
+		// character encoding from ServletResponse#getCharacterEncoding. Use UTF-8
+		// otherwise.
+		String charEncoding = "UTF-8";
+		if (useLocalEncoding) {
+			charEncoding = pageContext.getResponse().getCharacterEncoding();
+		}
 
-        // Call to Hdiv LinkUrlProcessor
-        if (this.linkUrlProcessor == null) {
-            this.linkUrlProcessor = HDIVUtil.getLinkUrlProcessor(request.getSession().getServletContext());
-        }
-        final String urlWithHDIVParameter = this.linkUrlProcessor.processUrl(request, url, charEncoding);
+		// Call to Hdiv LinkUrlProcessor
+		if (this.linkUrlProcessor == null) {
+			this.linkUrlProcessor = HDIVUtil.getLinkUrlProcessor(request.getSession().getServletContext());
+		}
+		final String urlWithHDIVParameter = this.linkUrlProcessor.processUrl(request, url, charEncoding);
 
-        renderAttribute(results, "href", urlWithHDIVParameter);
+		renderAttribute(results, "href", urlWithHDIVParameter);
 
-        renderAttribute(results, "target", getTarget());
-        renderAttribute(results, "accesskey", getAccesskey());
-        renderAttribute(results, "tabindex", getTabindex());
+		renderAttribute(results, "target", getTarget());
+		renderAttribute(results, "accesskey", getAccesskey());
+		renderAttribute(results, "tabindex", getTabindex());
 
-        results.append(prepareStyles());
-        results.append(prepareEventHandlers());
-        prepareOtherAttributes(results);
-        results.append(">");
+		results.append(prepareStyles());
+		results.append(prepareEventHandlers());
+		prepareOtherAttributes(results);
+		results.append(">");
 
-        // Prepare the textual content and ending element of this hyperlink
-        if (text != null) {
-            results.append(text);
-        }
-        results.append("</a>");
-        TagUtils.getInstance().write(pageContext, results.toString());
+		// Prepare the textual content and ending element of this hyperlink
+		if (text != null) {
+			results.append(text);
+		}
+		results.append("</a>");
+		TagUtils.getInstance().write(pageContext, results.toString());
 
-        return (EVAL_PAGE);
-    }
+		return (EVAL_PAGE);
+	}
 
-    /**
-     * Prepares an attribute if the <code>value</code> is not null, appending it to the the given StringBuilder
-     * <code>result</code>.
-     *
-     * @param result The StringBuilder that output will be appended to.
-     */
-    private void renderAttribute(final StringBuilder result, final String name, final String value) {
+	/**
+	 * Prepares an attribute if the <code>value</code> is not null, appending it to the the given StringBuilder <code>result</code>.
+	 *
+	 * @param result The StringBuilder that output will be appended to.
+	 */
+	private void renderAttribute(final StringBuilder result, final String name, final String value) {
 
-        if (value != null) {
-            result.append(" ");
-            result.append(name);
-            result.append("=\"");
-            result.append(value);
-            result.append("\"");
-        }
-    }
+		if (value != null) {
+			result.append(" ");
+			result.append(name);
+			result.append("=\"");
+			result.append(value);
+			result.append("\"");
+		}
+	}
 
-    /**
-     * 'Hook' to enable tags to be extended and additional attributes added.
-     *
-     * @param handlers The StringBuilder that output will be appended to.
-     */
-    protected void prepareOtherAttributes(final StringBuilder handlers) {
+	/**
+	 * 'Hook' to enable tags to be extended and additional attributes added.
+	 *
+	 * @param handlers The StringBuilder that output will be appended to.
+	 */
+	protected void prepareOtherAttributes(final StringBuilder handlers) {
 
-    }
+	}
 
 }

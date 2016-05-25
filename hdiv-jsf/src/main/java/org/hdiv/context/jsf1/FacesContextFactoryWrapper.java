@@ -21,8 +21,8 @@ import javax.faces.context.FacesContextFactory;
 import javax.faces.lifecycle.Lifecycle;
 
 /**
- * Wrapper of FacesContextFactory to create new instances of FacesContext. Returns a Hdiv's proprietary FacesContext
- * instance which is a wrapper of the original instance
+ * Wrapper of FacesContextFactory to create new instances of FacesContext. Returns a Hdiv's proprietary FacesContext instance which is a
+ * wrapper of the original instance
  * 
  * @author Gotzon Illarramendi
  */
@@ -46,11 +46,10 @@ public class FacesContextFactoryWrapper extends FacesContextFactory {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see javax.faces.context.FacesContextFactory#getFacesContext(java.lang.Object, java.lang.Object,
-	 * java.lang.Object, javax.faces.lifecycle.Lifecycle)
+	 * @see javax.faces.context.FacesContextFactory#getFacesContext(java.lang.Object, java.lang.Object, java.lang.Object,
+	 * javax.faces.lifecycle.Lifecycle)
 	 */
-	public FacesContext getFacesContext(Object context, Object request, Object response, Lifecycle lifecycle)
-			throws FacesException {
+	public FacesContext getFacesContext(Object context, Object request, Object response, Lifecycle lifecycle) throws FacesException {
 
 		FacesContext original = this.wrapped.getFacesContext(context, request, response, lifecycle);
 		return new HDIVFacesContext(original);

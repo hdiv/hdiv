@@ -40,8 +40,7 @@ public interface IParameter {
 	 *
 	 * @param position Position
 	 *
-	 * @return True if <code>position</code> is valid position in the array of values <code>values</code>. False
-	 * otherwise.
+	 * @return True if <code>position</code> is valid position in the array of values <code>values</code>. False otherwise.
 	 */
 	boolean existPosition(int position);
 

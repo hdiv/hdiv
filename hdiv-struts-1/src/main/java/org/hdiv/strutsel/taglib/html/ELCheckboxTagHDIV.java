@@ -23,9 +23,9 @@ import org.hdiv.taglib.html.CheckboxTagHDIV;
 /**
  * Tag for input fields of type "checkbox".
  * <p>
- * This class is a subclass of the class <code>org.apache.struts.taglib.html.CheckboxTag</code> which provides most of
- * the described functionality. This subclass allows all attribute values to be specified as expressions utilizing the
- * JavaServer Pages Standard Library expression language.
+ * This class is a subclass of the class <code>org.apache.struts.taglib.html.CheckboxTag</code> which provides most of the described
+ * functionality. This subclass allows all attribute values to be specified as expressions utilizing the JavaServer Pages Standard Library
+ * expression language.
  * 
  * @author Gorka Vicente
  * @since HDIV 2.0

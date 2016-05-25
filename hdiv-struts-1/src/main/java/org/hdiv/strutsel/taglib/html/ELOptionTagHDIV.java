@@ -21,12 +21,12 @@ import org.apache.strutsel.taglib.utils.EvalHelper;
 import org.hdiv.taglib.html.OptionTagHDIV;
 
 /**
- * Tag for select options. The body of this tag is presented to the user in the option list, while the value attribute
- * is the value returned to the server if this option is selected.
+ * Tag for select options. The body of this tag is presented to the user in the option list, while the value attribute is the value returned
+ * to the server if this option is selected.
  * <p>
- * This class is a subclass of the class <code>org.hdiv.taglib.html.OptionTagHDIV</code> which provides most of the
- * described functionality. This subclass allows all attribute values to be specified as expressions utilizing the
- * JavaServer Pages Standard Library expression language.
+ * This class is a subclass of the class <code>org.hdiv.taglib.html.OptionTagHDIV</code> which provides most of the described functionality.
+ * This subclass allows all attribute values to be specified as expressions utilizing the JavaServer Pages Standard Library expression
+ * language.
  * 
  * @author Gorka Vicente
  * @since HDIV 2.0

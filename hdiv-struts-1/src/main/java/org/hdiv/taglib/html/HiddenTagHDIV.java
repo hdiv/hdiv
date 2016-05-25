@@ -26,8 +26,8 @@ import org.hdiv.dataComposer.IDataComposer;
 import org.hdiv.util.HDIVUtil;
 
 /**
- * Renders an HTML <b>&lt;input&gt;</b> element of type hidden, populated from the specified value or the specified
- * property of the bean associated with our current form. This tag is only valid when nested inside a form tag body.
+ * Renders an HTML <b>&lt;input&gt;</b> element of type hidden, populated from the specified value or the specified property of the bean
+ * associated with our current form. This tag is only valid when nested inside a form tag body.
  * 
  * @author Gorka Vicente
  * @see org.apache.struts.taglib.html.HiddenTag
@@ -35,8 +35,8 @@ import org.hdiv.util.HDIVUtil;
 public class HiddenTagHDIV extends HiddenTag {
 
 	/**
-	 * Universal version identifier. Deserialization uses this number to ensure that a loaded class corresponds exactly
-	 * to a serialized object.
+	 * Universal version identifier. Deserialization uses this number to ensure that a loaded class corresponds exactly to a serialized
+	 * object.
 	 */
 	private static final long serialVersionUID = 8200582308056745466L;
 
@@ -51,8 +51,7 @@ public class HiddenTagHDIV extends HiddenTag {
 	private String encodedValue = null;
 
 	/**
-	 * Generate the required input tag, followed by the optional rendered text. Support for <code>write</code> property
-	 * since Struts 1.1.
+	 * Generate the required input tag, followed by the optional rendered text. Support for <code>write</code> property since Struts 1.1.
 	 * 
 	 * @exception JspException if a JSP exception has occurred
 	 * @see org.hdiv.dataComposer.IDataComposer#composeFormField(String, String, boolean, String)

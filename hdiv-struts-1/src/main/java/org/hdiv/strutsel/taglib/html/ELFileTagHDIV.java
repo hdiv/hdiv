@@ -23,9 +23,9 @@ import org.hdiv.taglib.html.FileTagHDIV;
 /**
  * Custom tag for input fields of type "file".
  * <p>
- * This class is a subclass of the class <code>org.hdiv.struts.taglib.html.FileTagHDIV</code> which provides most of the
- * described functionality. This subclass allows all attribute values to be specified as expressions utilizing the
- * JavaServer Pages Standard Library expression language.
+ * This class is a subclass of the class <code>org.hdiv.struts.taglib.html.FileTagHDIV</code> which provides most of the described
+ * functionality. This subclass allows all attribute values to be specified as expressions utilizing the JavaServer Pages Standard Library
+ * expression language.
  * 
  * @author Gorka Vicente
  * @since HDIV 2.0

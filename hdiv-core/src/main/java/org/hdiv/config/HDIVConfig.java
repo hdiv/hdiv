@@ -57,14 +57,12 @@ public class HDIVConfig implements Serializable {
 	protected transient PatternMatcherFactory patternMatcherFactory;
 
 	/**
-	 * List with the pages that will not be Treated by the HDIV filter. The init pages are initialized by the Spring
-	 * factory.
+	 * List with the pages that will not be Treated by the HDIV filter. The init pages are initialized by the Spring factory.
 	 */
 	protected StartPage[] startPages = new StartPage[0];
 
 	/**
-	 * List with the parameters that will not be validated by the HDIV filter. The init parameters are initialized by
-	 * the Spring factory.
+	 * List with the parameters that will not be validated by the HDIV filter. The init parameters are initialized by the Spring factory.
 	 */
 	protected List<PatternMatcher> startParameters = new ArrayList<PatternMatcher>();
 
@@ -74,14 +72,14 @@ public class HDIVConfig implements Serializable {
 	protected String errorPage;
 
 	/**
-	 * Url of the error page to which HDIV will redirect the request if it doesn't pass the HDIV validation caused by
-	 * session expiration and the user is not logged in the application.
+	 * Url of the error page to which HDIV will redirect the request if it doesn't pass the HDIV validation caused by session expiration and
+	 * the user is not logged in the application.
 	 */
 	protected String sessionExpiredLoginPage;
 
 	/**
-	 * Url of the error page to which HDIV will redirect the request if it doesn't pass the HDIV validation caused by
-	 * session expiration and the user is logged in the application.
+	 * Url of the error page to which HDIV will redirect the request if it doesn't pass the HDIV validation caused by session expiration and
+	 * the user is logged in the application.
 	 */
 	protected String sessionExpiredHomePage;
 
@@ -111,8 +109,7 @@ public class HDIVConfig implements Serializable {
 	protected boolean avoidCookiesConfidentiality = false;
 
 	/**
-	 * if <code>avoidValidationInUrlsWithoutParams</code> is true, HDIV validation will not be applied in urls without
-	 * parameters.
+	 * if <code>avoidValidationInUrlsWithoutParams</code> is true, HDIV validation will not be applied in urls without parameters.
 	 * 
 	 * @since HDIV 2.1.0
 	 */
@@ -133,8 +130,8 @@ public class HDIVConfig implements Serializable {
 	protected List<String> excludedURLExtensions;
 
 	/**
-	 * HDIV adds an extra parameter to all links and forms. By default this parameter is _HDIV_STATE_. If
-	 * <code>randomName</code> is true a random name is generated instead of default name (_HDIV_STATE_)
+	 * HDIV adds an extra parameter to all links and forms. By default this parameter is _HDIV_STATE_. If <code>randomName</code> is true a
+	 * random name is generated instead of default name (_HDIV_STATE_)
 	 * 
 	 * @since HDIV 2.1.0
 	 */
@@ -289,8 +286,8 @@ public class HDIVConfig implements Serializable {
 	}
 
 	/**
-	 * Checks if the parameter <code>parameter</code> is defined by the user as a no required validation parameter for
-	 * the action <code>action</code>.
+	 * Checks if the parameter <code>parameter</code> is defined by the user as a no required validation parameter for the action
+	 * <code>action</code>.
 	 * 
 	 * @param action action name
 	 * @param parameter parameter name
@@ -344,8 +341,8 @@ public class HDIVConfig implements Serializable {
 	 * Checks if the HDIV validation must be applied to the parameter <code>parameter</code>
 	 * 
 	 * @param parameter Parameter name
-	 * @param hdivParameter Name of the parameter that HDIV will include in the requests or/and forms which contains the
-	 * state identifier parameter
+	 * @param hdivParameter Name of the parameter that HDIV will include in the requests or/and forms which contains the state identifier
+	 * parameter
 	 * @return True if <code>parameter</code> doesn't need HDIV validation.
 	 */
 	public boolean needValidation(final String parameter, final String hdivParameter) {

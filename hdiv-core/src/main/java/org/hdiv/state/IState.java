@@ -23,16 +23,15 @@ import org.hdiv.util.Method;
 public interface IState {
 
 	/**
-	 * Adds a new parameter to the state <code>this</code>. If it is a required parameter <code>parameter</code>, it is
-	 * also added to the required parameters.
+	 * Adds a new parameter to the state <code>this</code>. If it is a required parameter <code>parameter</code>, it is also added to the
+	 * required parameters.
 	 *
 	 * @param parameter The parameter
 	 */
 	void addParameter(IParameter parameter);
 
 	/**
-	 * Returns the parameter that matches the given identifier <code>key</code>. Null is returned if the parameter name
-	 * is not found.
+	 * Returns the parameter that matches the given identifier <code>key</code>. Null is returned if the parameter name is not found.
 	 *
 	 * @param key parameter identifier
 	 * @return IParameter object that matches the given identifier <code>key</code>.

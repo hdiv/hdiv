@@ -28,8 +28,8 @@ import javax.servlet.http.Cookie;
 public class SavedCookie implements Serializable {
 
 	/**
-	 * Universal version identifier. Deserialization uses this number to ensure that a loaded class corresponds exactly
-	 * to a serialized object.
+	 * Universal version identifier. Deserialization uses this number to ensure that a loaded class corresponds exactly to a serialized
+	 * object.
 	 */
 	private static final long serialVersionUID = 4731047668982223493L;
 
@@ -96,8 +96,8 @@ public class SavedCookie implements Serializable {
 	}
 
 	/**
-	 * Compares this Cookie to the specified object. The result is <code>true</code> if and only if the argument is not
-	 * <code>null</code> and is a <code>Cookie</code> object that represents the same sequence of values as this object.
+	 * Compares this Cookie to the specified object. The result is <code>true</code> if and only if the argument is not <code>null</code>
+	 * and is a <code>Cookie</code> object that represents the same sequence of values as this object.
 	 *
 	 * @param c the object to compare this <code>Cookie</code> against.
 	 * @param cookiesConfidentialityActivated cookies' confidentiality indicator

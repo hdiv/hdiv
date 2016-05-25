@@ -60,8 +60,7 @@ public class RedirectExternalContext extends javax.faces.context.ExternalContext
 	public RedirectExternalContext(ExternalContext wrapped) {
 
 		ServletContext servletContext = (ServletContext) wrapped.getContext();
-		this.redirectHelper = WebApplicationContextUtils.getRequiredWebApplicationContext(servletContext).getBean(
-				RedirectHelper.class);
+		this.redirectHelper = WebApplicationContextUtils.getRequiredWebApplicationContext(servletContext).getBean(RedirectHelper.class);
 
 		Assert.notNull(this.redirectHelper);
 
@@ -79,8 +78,8 @@ public class RedirectExternalContext extends javax.faces.context.ExternalContext
 	}
 
 	/**
-	 * If it is an internal redirect (to the application itself) generates the state, stores it in session and adds
-	 * corresponding parameter to url.
+	 * If it is an internal redirect (to the application itself) generates the state, stores it in session and adds corresponding parameter
+	 * to url.
 	 */
 	public void redirect(String url) throws IOException {
 

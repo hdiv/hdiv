@@ -40,8 +40,8 @@ public class RedirectTagHDIV extends RedirectSupportHDIV {
 	private String context_;
 
 	/**
-	 * Constructs a new URLEncodeTag. As with TagSupport, subclasses should not provide other constructors and are
-	 * expected to call the superclass constructor
+	 * Constructs a new URLEncodeTag. As with TagSupport, subclasses should not provide other constructors and are expected to call the
+	 * superclass constructor
 	 */
 	public RedirectTagHDIV() {
 		super();
@@ -89,9 +89,8 @@ public class RedirectTagHDIV extends RedirectSupportHDIV {
 	 */
 	private void evaluateExpressions() throws JspException {
 		/*
-		 * Note: we don't check for type mismatches here; we assume the expression evaluator will return the expected
-		 * type (by virtue of knowledge we give it about what that type is). A ClassCastException here is truly
-		 * unexpected, so we let it propagate up.
+		 * Note: we don't check for type mismatches here; we assume the expression evaluator will return the expected type (by virtue of
+		 * knowledge we give it about what that type is). A ClassCastException here is truly unexpected, so we let it propagate up.
 		 */
 
 		url = (String) ExpressionUtil.evalNotNull("redirect", "url", url_, String.class, this, pageContext);

@@ -41,8 +41,7 @@ public class HtmlInputHiddenValidator implements ComponentValidator {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.hdiv.validators.ComponentValidator#validate(javax.faces.context.FacesContext,
-	 * javax.faces.component.UIComponent)
+	 * @see org.hdiv.validators.ComponentValidator#validate(javax.faces.context.FacesContext, javax.faces.component.UIComponent)
 	 */
 	public ValidationError validate(FacesContext context, UIComponent component) {
 

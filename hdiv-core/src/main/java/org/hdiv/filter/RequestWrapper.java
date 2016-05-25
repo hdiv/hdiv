@@ -88,9 +88,8 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 	protected boolean confidentiality = true;
 
 	/**
-	 * Indicates if cookie confidentiality is applied or not. If the value is <code>true</code> cookie values must not
-	 * be replaced by relative values. If it is <code>false</code> they must be replaced by relative values to provide
-	 * confidentiality.
+	 * Indicates if cookie confidentiality is applied or not. If the value is <code>true</code> cookie values must not be replaced by
+	 * relative values. If it is <code>false</code> they must be replaced by relative values to provide confidentiality.
 	 */
 	protected boolean cookiesConfidentiality;
 
@@ -126,8 +125,8 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 	}
 
 	/**
-	 * Returns an array of String objects containing all of the values the given request parameter has. If the parameter
-	 * has a single value, the array has a length of 1.
+	 * Returns an array of String objects containing all of the values the given request parameter has. If the parameter has a single value,
+	 * the array has a length of 1.
 	 * 
 	 * @param parameter the name of the parameter whose value is requested
 	 */
@@ -151,8 +150,8 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 	}
 
 	/**
-	 * Returns the value of a request parameter as a String. Request parameters are extra information sent with the
-	 * request. For HTTP servlets, parameters are contained in the query string or posted form data.
+	 * Returns the value of a request parameter as a String. Request parameters are extra information sent with the request. For HTTP
+	 * servlets, parameters are contained in the query string or posted form data.
 	 * 
 	 * @param parameter name of the parameter
 	 */
@@ -177,8 +176,8 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 	}
 
 	/**
-	 * Returns the names of the parameters for this request. The enumeration consists of the normal request parameter
-	 * names plus the parameters read from the multipart request.
+	 * Returns the names of the parameters for this request. The enumeration consists of the normal request parameter names plus the
+	 * parameters read from the multipart request.
 	 */
 	@Override
 	public Enumeration<String> getParameterNames() {
@@ -206,8 +205,7 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 	 * Returns the value of the specified request header as a String.
 	 * 
 	 * @param name header name
-	 * @return a String containing the value of the requested header, or null if the request does not have a header of
-	 * that name
+	 * @return a String containing the value of the requested header, or null if the request does not have a header of that name
 	 * @since HDIV 1.1.1
 	 */
 	@Override
@@ -230,8 +228,8 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 	 * Returns all the values of the specified request header as an Enumeration of String objects.
 	 * 
 	 * @param name a String specifying the header name
-	 * @return an Enumeration containing the values of the requested header. If the request does not have any headers of
-	 * that name return an empty enumeration. If the container does not allow access to header information, return null.
+	 * @return an Enumeration containing the values of the requested header. If the request does not have any headers of that name return an
+	 * empty enumeration. If the container does not allow access to header information, return null.
 	 * @since HDIV 1.1.1
 	 */
 	@Override
@@ -311,8 +309,8 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 	}
 
 	/**
-	 * Combines the parameters stored here with those in the underlying request. If parameter values in the underlying
-	 * request take precedence over those stored here.
+	 * Combines the parameters stored here with those in the underlying request. If parameter values in the underlying request take
+	 * precedence over those stored here.
 	 * 
 	 * @since HDIV 1.3
 	 */

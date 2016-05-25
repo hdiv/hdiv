@@ -43,8 +43,8 @@ public class RewriteTagHDIV extends LinkTagHDIV {
 	 */
 	public int doEndTag() throws JspException {
 		// Generate the hyperlink URL
-		Map params = TagUtils.getInstance().computeParameters(pageContext, paramId, paramName, paramProperty,
-				paramScope, name, property, scope, transaction);
+		Map params = TagUtils.getInstance().computeParameters(pageContext, paramId, paramName, paramProperty, paramScope, name, property,
+				scope, transaction);
 
 		// Add parameters collected from the tag's inner body
 		if (!this.parameters.isEmpty()) {
@@ -59,8 +59,8 @@ public class RewriteTagHDIV extends LinkTagHDIV {
 		try {
 			// Note that we're encoding the & character to &amp; in XHTML mode only,
 			// otherwise the & is written as is to work in javascripts.
-			url = TagUtils.getInstance().computeURLWithCharEncoding(pageContext, forward, href, page, action, module,
-					params, anchor, false, this.isXhtml(), useLocalEncoding);
+			url = TagUtils.getInstance().computeURLWithCharEncoding(pageContext, forward, href, page, action, module, params, anchor, false,
+					this.isXhtml(), useLocalEncoding);
 		}
 		catch (MalformedURLException e) {
 			TagUtils.getInstance().saveException(pageContext, e);
@@ -68,8 +68,7 @@ public class RewriteTagHDIV extends LinkTagHDIV {
 		}
 
 		HttpServletRequest request = (HttpServletRequest) pageContext.getRequest();
-		String charEncoding = useLocalEncoding ? charEncoding = pageContext.getResponse().getCharacterEncoding()
-				: "UTF-8";
+		String charEncoding = useLocalEncoding ? charEncoding = pageContext.getResponse().getCharacterEncoding() : "UTF-8";
 
 		// Call to Hdiv LinkUrlProcessor
 		if (this.linkUrlProcessor == null) {

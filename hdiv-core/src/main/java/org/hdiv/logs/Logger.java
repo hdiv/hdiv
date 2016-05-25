@@ -20,12 +20,10 @@ import org.apache.commons.logging.LogFactory;
 import org.hdiv.filter.ValidatorError;
 
 /**
- * Log that shows the attacks detected by HDIV. It includes type of attack and the identity (application user) of the
- * user. Since the way to obtain this user may vary from application to application, an standard interface has been
- * defined to be implemented by each application.
+ * Log that shows the attacks detected by HDIV. It includes type of attack and the identity (application user) of the user. Since the way to
+ * obtain this user may vary from application to application, an standard interface has been defined to be implemented by each application.
  * <p>
- * Log format =
- * type;target;parameterName;parameterValue;[originalParameterValue];userLocalIP;IP;userId;[validationRuleName]
+ * Log format = type;target;parameterName;parameterValue;[originalParameterValue];userLocalIP;IP;userId;[validationRuleName]
  * </p>
  * 
  * @author Roberto Velasco
@@ -46,8 +44,7 @@ public class Logger {
 	}
 
 	/**
-	 * Prints formatted attack produced by the user if the logging level defined in the Web application rate should be
-	 * at least INFO.
+	 * Prints formatted attack produced by the user if the logging level defined in the Web application rate should be at least INFO.
 	 * 
 	 * @param error Validator error data
 	 */
@@ -68,8 +65,7 @@ public class Logger {
 	 * @param localIp user local IP
 	 * @param remoteIp user remote IP
 	 * @param userName user name in application
-	 * @param validationRuleName In an attack of type 'EDITABLE_VALIDATION_ERROR', contains the name of the rule that
-	 * rejected the value
+	 * @param validationRuleName In an attack of type 'EDITABLE_VALIDATION_ERROR', contains the name of the rule that rejected the value
 	 */
 	protected void log(String type, String target, String parameterName, String parameterValue, String originalParameterValue,
 			String localIp, String remoteIp, String userName, String validationRuleName) {
@@ -95,8 +91,7 @@ public class Logger {
 	 * @param localIp user local IP
 	 * @param remoteIp user remote IP
 	 * @param userName user name in application
-	 * @param validationRuleName In an attack of type 'EDITABLE_VALIDATION_ERROR', contains the name of the rule that
-	 * rejected the value
+	 * @param validationRuleName In an attack of type 'EDITABLE_VALIDATION_ERROR', contains the name of the rule that rejected the value
 	 * 
 	 * @return String Formatted text with the attach.
 	 */

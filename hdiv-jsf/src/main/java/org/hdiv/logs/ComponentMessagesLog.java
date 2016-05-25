@@ -58,8 +58,7 @@ public class ComponentMessagesLog {
 	}
 
 	/**
-	 * Searches for validation messages created by the framework itself that show value modification by the user and
-	 * creates logs for them.
+	 * Searches for validation messages created by the framework itself that show value modification by the user and creates logs for them.
 	 * 
 	 * @param facesContext request context
 	 */
@@ -97,8 +96,8 @@ public class ComponentMessagesLog {
 		// or HtmlInputSecret
 		if (clientComponent instanceof UIInput) {
 
-			boolean isTextEditable = (clientComponent instanceof HtmlInputText)
-					|| (clientComponent instanceof HtmlInputTextarea) || (clientComponent instanceof HtmlInputSecret);
+			boolean isTextEditable = (clientComponent instanceof HtmlInputText) || (clientComponent instanceof HtmlInputTextarea)
+					|| (clientComponent instanceof HtmlInputSecret);
 			boolean isUISelectBoolean = clientComponent instanceof UISelectBoolean;
 
 			// If it is UISelectOne or UISelectMany:

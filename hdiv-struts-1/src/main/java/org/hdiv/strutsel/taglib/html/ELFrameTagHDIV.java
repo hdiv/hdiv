@@ -21,19 +21,18 @@ import org.apache.strutsel.taglib.utils.EvalHelper;
 import org.hdiv.taglib.html.FrameTagHDIV;
 
 /**
- * Generate an HTML <code>&lt;frame&gt;</code> tag with similar capabilities as those the <code>&lt;html:link&gt;</code>
- * tag provides for hyperlink elements. The <code>src</code> element is rendered using the same technique that
- * {@link org.hdiv.taglib.html.LinkTagHDIV LinkTagHDIV} uses to render the <code>href</code> attribute of a hyperlink.
- * Additionally, the HTML 4.0 frame tag attributes <code>noresize</code>, <code>scrolling</code>,
- * <code>marginheight</code>, <code>marginwidth</code>, <code>frameborder</code>, and <code>longdesc</code> are
- * supported. The frame <code>name</code> attribute is rendered based on the <code>frameName</code> property.
+ * Generate an HTML <code>&lt;frame&gt;</code> tag with similar capabilities as those the <code>&lt;html:link&gt;</code> tag provides for
+ * hyperlink elements. The <code>src</code> element is rendered using the same technique that {@link org.hdiv.taglib.html.LinkTagHDIV
+ * LinkTagHDIV} uses to render the <code>href</code> attribute of a hyperlink. Additionally, the HTML 4.0 frame tag attributes
+ * <code>noresize</code>, <code>scrolling</code>, <code>marginheight</code>, <code>marginwidth</code>, <code>frameborder</code>, and
+ * <code>longdesc</code> are supported. The frame <code>name</code> attribute is rendered based on the <code>frameName</code> property.
  * <p>
- * Note that the value of <code>longdesc</code> is intended to be a URI, but currently no rewriting is supported. The
- * attribute is set directly from the property value.
+ * Note that the value of <code>longdesc</code> is intended to be a URI, but currently no rewriting is supported. The attribute is set
+ * directly from the property value.
  * <p>
- * This class is a subclass of the class <code>org.hdiv.taglib.html.FrameTagHDIV</code> which provides most of the
- * described functionality. This subclass allows all attribute values to be specified as expressions utilizing the
- * JavaServer Pages Standard Library expression language.
+ * This class is a subclass of the class <code>org.hdiv.taglib.html.FrameTagHDIV</code> which provides most of the described functionality.
+ * This subclass allows all attribute values to be specified as expressions utilizing the JavaServer Pages Standard Library expression
+ * language.
  * 
  * @author Gorka Vicente
  * @since HDIV 2.0

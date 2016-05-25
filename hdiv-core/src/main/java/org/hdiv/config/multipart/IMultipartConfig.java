@@ -29,9 +29,8 @@ import org.hdiv.filter.RequestWrapper;
 public interface IMultipartConfig {
 
 	/**
-	 * This is the ServletRequest attribute that should be set when a multipart request is being read and failed. It's
-	 * the job of the implementation to put this attribute in the request if multipart process failed; in the
-	 * handleRequest(HttpServletRequest) method.
+	 * This is the ServletRequest attribute that should be set when a multipart request is being read and failed. It's the job of the
+	 * implementation to put this attribute in the request if multipart process failed; in the handleRequest(HttpServletRequest) method.
 	 *
 	 * @since HDIV 2.0.1
 	 */

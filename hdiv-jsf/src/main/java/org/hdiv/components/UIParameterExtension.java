@@ -34,8 +34,8 @@ import org.hdiv.util.UtilsJsf;
  * UIParameter component extension
  * </p>
  * <p>
- * This component is used to define the parameters of CommandLink and outputLink. It stores the real values as
- * component's attributes, storing them in the state.
+ * This component is used to define the parameters of CommandLink and outputLink. It stores the real values as component's attributes,
+ * storing them in the state.
  * </p>
  * <p>
  * This data will be used to validate that it matches the data received in the next request.
@@ -87,8 +87,7 @@ public class UIParameterExtension extends UIParameter {
 		else {
 			UIComponent parent = this.getParent();
 			String parentClientId = parent.getClientId(context);
-			Map<String, Object> values = (Map<String, Object>) this.getAttributes()
-					.get(ConstantsJsf.HDIV_ATTRIBUTE_KEY);
+			Map<String, Object> values = (Map<String, Object>) this.getAttributes().get(ConstantsJsf.HDIV_ATTRIBUTE_KEY);
 			if (values == null) {
 				values = new HashMap<String, Object>();
 			}

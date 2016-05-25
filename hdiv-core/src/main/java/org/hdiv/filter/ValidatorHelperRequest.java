@@ -636,7 +636,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	 * Checks if the suffix added in the memory version to all requests in the HDIV parameter is the same as the one stored in session,
 	 * which is the original suffix. So any request using the memory version should keep the suffix unchanged.
 	 *
-	 * @param request HttpServletRequest to validate
+	 * @param context Request context holder
 	 * @param value value received in the HDIV parameter
 	 * @param restoredState restored state
 	 * @return True if the received value of the suffix is valid. False otherwise.
@@ -693,8 +693,6 @@ public class ValidatorHelperRequest implements IValidationHelper {
 				}
 				throw new HDIVException(HDIVErrorCodes.PAGE_ID_INCORRECT);
 			}
-			System.out.println("Type:" + restoredState.getTokenType() + " PToken:"
-					+ currentPage.getRandomToken(restoredState.getTokenType()) + " request:" + requestSuffix);
 			return currentPage.getRandomToken(restoredState.getTokenType()).equals(requestSuffix);
 
 		}

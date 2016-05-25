@@ -19,8 +19,7 @@ import org.codehaus.groovy.grails.validation.Constraint;
 import org.springframework.context.MessageSource;
 import org.springframework.validation.Errors;
 
-public class GrailsEditableParameterValidatorConstraint extends AbstractEditableParameterValidator implements
-		Constraint {
+public class GrailsEditableParameterValidatorConstraint extends AbstractEditableParameterValidator implements Constraint {
 
 	public static final String NAME = "editableValidation";
 
@@ -36,8 +35,8 @@ public class GrailsEditableParameterValidatorConstraint extends AbstractEditable
 			this.enabled = true;
 		}
 		else if (!(parameter instanceof Boolean)) {
-			throw new IllegalArgumentException("Parameter for constraint [" + NAME + "] of property [" + propertyName
-					+ "] of class [" + owningClass + "] must be a boolean value");
+			throw new IllegalArgumentException("Parameter for constraint [" + NAME + "] of property [" + propertyName + "] of class ["
+					+ owningClass + "] must be a boolean value");
 		}
 		else {
 			this.enabled = ((Boolean) parameter).booleanValue();

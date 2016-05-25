@@ -21,14 +21,13 @@ import org.apache.strutsel.taglib.utils.EvalHelper;
 import org.hdiv.taglib.html.OptionsTagHDIV;
 
 /**
- * Tag for creating multiple &lt;select&gt; options from a collection. The associated values displayed to the user may
- * optionally be specified by a second collection, or will be the same as the values themselves. Each collection may be
- * an array of objects, a Collection, an Enumeration, an Iterator, or a Map. <b>NOTE</b> - This tag requires a Java2
- * (JDK 1.2 or later) platform.
+ * Tag for creating multiple &lt;select&gt; options from a collection. The associated values displayed to the user may optionally be
+ * specified by a second collection, or will be the same as the values themselves. Each collection may be an array of objects, a Collection,
+ * an Enumeration, an Iterator, or a Map. <b>NOTE</b> - This tag requires a Java2 (JDK 1.2 or later) platform.
  * <p>
- * This class is a subclass of the class <code>org.hdiv.taglib.html.OptionsTagHDIV</code> which provides most of the
- * described functionality. This subclass allows all attribute values to be specified as expressions utilizing the
- * JavaServer Pages Standard Library expression language.
+ * This class is a subclass of the class <code>org.hdiv.taglib.html.OptionsTagHDIV</code> which provides most of the described
+ * functionality. This subclass allows all attribute values to be specified as expressions utilizing the JavaServer Pages Standard Library
+ * expression language.
  * 
  * @author Gorka Vicente
  * @since HDIV 2.0

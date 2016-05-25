@@ -31,13 +31,13 @@ public class ApplicationHDIV implements IApplication, ApplicationContextAware {
 	private ApplicationContext applicationContext;
 
 	/**
-	 * Return an instance, which may be shared or independent, of the given bean name. This method allows a Spring
-	 * BeanFactory to be used as a replacement for the Singleton or Prototype design pattern.
+	 * Return an instance, which may be shared or independent, of the given bean name. This method allows a Spring BeanFactory to be used as
+	 * a replacement for the Singleton or Prototype design pattern.
 	 * <p>
 	 * Callers may retain references to returned objects in the case of Singleton beans.
 	 * <p>
-	 * Translates aliases back to the corresponding canonical bean name. Will ask the parent factory if the bean cannot
-	 * be found in this factory instance.
+	 * Translates aliases back to the corresponding canonical bean name. Will ask the parent factory if the bean cannot be found in this
+	 * factory instance.
 	 * 
 	 * @param name the name of the bean to return
 	 * @return the instance of the bean
@@ -51,8 +51,7 @@ public class ApplicationHDIV implements IApplication, ApplicationContextAware {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.springframework.context.ApplicationContextAware#setApplicationContext(org.springframework.context.
-	 * ApplicationContext)
+	 * @see org.springframework.context.ApplicationContextAware#setApplicationContext(org.springframework.context. ApplicationContext)
 	 */
 	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
 		this.applicationContext = applicationContext;

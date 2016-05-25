@@ -31,8 +31,8 @@ public class DefaultEditableDataValidationProvider implements EditableDataValida
 
 	/**
 	 * <p>
-	 * Checks if the values <code>values</code> are valid for the editable parameter <code>parameter</code>, using the
-	 * validations defined in the hdiv-config.xml configuration file of Spring.
+	 * Checks if the values <code>values</code> are valid for the editable parameter <code>parameter</code>, using the validations defined
+	 * in the hdiv-config.xml configuration file of Spring.
 	 * </p>
 	 * 
 	 * @param url target url

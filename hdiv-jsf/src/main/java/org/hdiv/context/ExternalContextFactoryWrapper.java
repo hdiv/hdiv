@@ -59,8 +59,7 @@ public class ExternalContextFactoryWrapper extends ExternalContextFactory {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see javax.faces.context.ExternalContextFactory#getExternalContext(java.lang .Object, java.lang.Object,
-	 * java.lang.Object)
+	 * @see javax.faces.context.ExternalContextFactory#getExternalContext(java.lang .Object, java.lang.Object, java.lang.Object)
 	 */
 	public ExternalContext getExternalContext(Object context, Object request, Object response) throws FacesException {
 

@@ -23,8 +23,8 @@ import org.hdiv.dataComposer.IDataComposer;
 import org.hdiv.util.HDIVUtil;
 
 /**
- * Renders an HTML &lt;input&gt; element of type password, populated from the specified value or the specified property
- * of the bean associated with our current form. This tag is only valid when nested inside a form tag body.
+ * Renders an HTML &lt;input&gt; element of type password, populated from the specified value or the specified property of the bean
+ * associated with our current form. This tag is only valid when nested inside a form tag body.
  * 
  * @author Gorka Vicente
  * @see org.apache.struts.taglib.html.PasswordTag
@@ -32,8 +32,8 @@ import org.hdiv.util.HDIVUtil;
 public class PasswordTagHDIV extends PasswordTag {
 
 	/**
-	 * Universal version identifier. Deserialization uses this number to ensure that a loaded class corresponds exactly
-	 * to a serialized object.
+	 * Universal version identifier. Deserialization uses this number to ensure that a loaded class corresponds exactly to a serialized
+	 * object.
 	 */
 	private static final long serialVersionUID = 2968444519972100921L;
 

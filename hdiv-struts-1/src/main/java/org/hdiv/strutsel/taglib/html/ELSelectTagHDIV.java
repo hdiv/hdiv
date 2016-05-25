@@ -21,12 +21,12 @@ import org.apache.strutsel.taglib.utils.EvalHelper;
 import org.hdiv.taglib.html.SelectTagHDIV;
 
 /**
- * Custom tag that represents an HTML select element, associated with a bean property specified by our attributes. This
- * tag must be nested inside a form tag.
+ * Custom tag that represents an HTML select element, associated with a bean property specified by our attributes. This tag must be nested
+ * inside a form tag.
  * <p>
- * This class is a subclass of the class <code>org.hdiv.taglib.html.SelectTagHDIV</code> which provides most of the
- * described functionality. This subclass allows all attribute values to be specified as expressions utilizing the
- * JavaServer Pages Standard Library expression language.
+ * This class is a subclass of the class <code>org.hdiv.taglib.html.SelectTagHDIV</code> which provides most of the described functionality.
+ * This subclass allows all attribute values to be specified as expressions utilizing the JavaServer Pages Standard Library expression
+ * language.
  * 
  * @author Gorka Vicente
  * @since HDIV 2.0

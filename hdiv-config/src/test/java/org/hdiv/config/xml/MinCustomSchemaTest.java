@@ -15,12 +15,12 @@
  */
 package org.hdiv.config.xml;
 
-import junit.framework.TestCase;
-
 import org.hdiv.config.HDIVConfig;
 import org.hdiv.validator.EditableDataValidationProvider;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+import junit.framework.TestCase;
 
 public class MinCustomSchemaTest extends TestCase {
 

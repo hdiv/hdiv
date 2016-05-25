@@ -54,8 +54,7 @@ public class StrutsMultipartConfig extends AbstractMultipartConfig {
 	 * @return multipart processed request
 	 * @throws HdivMultipartException if an unrecoverable error occurs.
 	 */
-	public HttpServletRequest handleMultipartRequest(RequestWrapper request, ServletContext servletContext)
-			throws HdivMultipartException {
+	public HttpServletRequest handleMultipartRequest(RequestWrapper request, ServletContext servletContext) throws HdivMultipartException {
 
 		DiskFileUpload upload = new DiskFileUpload();
 
@@ -112,8 +111,8 @@ public class StrutsMultipartConfig extends AbstractMultipartConfig {
 	}
 
 	/**
-	 * Adds a regular text parameter to the set of text parameters for this request. Handles the case of multiple values
-	 * for the same parameter by using an array for the parameter value.
+	 * Adds a regular text parameter to the set of text parameters for this request. Handles the case of multiple values for the same
+	 * parameter by using an array for the parameter value.
 	 * 
 	 * @param request The request in which the parameter was specified.
 	 * @param item The file item for the parameter to add.

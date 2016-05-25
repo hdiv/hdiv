@@ -274,6 +274,7 @@ public abstract class AbstractUrlProcessor {
 	/**
 	 * Generate final url with all parameters and anchor.
 	 *
+	 * @param sb StringBuilder
 	 * @param urlData url data object
 	 * @return complete url
 	 */

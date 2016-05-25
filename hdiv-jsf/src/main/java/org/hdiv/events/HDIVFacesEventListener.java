@@ -39,8 +39,8 @@ import org.hdiv.validators.EditableValidator;
 
 /**
  * <p>
- * Listener that processes a HDIV event. This class validates the component tree searching for modifications in the
- * values of the non editable data.
+ * Listener that processes a HDIV event. This class validates the component tree searching for modifications in the values of the non
+ * editable data.
  * </p>
  * <p>
  * Validation logic for each type of component is stored in a separate class that implements ComponentValidator.
@@ -212,8 +212,8 @@ public class HDIVFacesEventListener implements FacesListener, StateHolder {
 
 		HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
 
-		ValidatorError errorData = new ValidatorError(error.getErrorKey(), HDIVUtil.getRequestURI(request),
-				error.getErrorParam(), error.getErrorValue());
+		ValidatorError errorData = new ValidatorError(error.getErrorKey(), HDIVUtil.getRequestURI(request), error.getErrorParam(),
+				error.getErrorValue());
 		this.logger.log(errorData);
 	}
 

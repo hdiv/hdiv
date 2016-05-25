@@ -31,8 +31,8 @@ import org.hdiv.util.HDIVUtil;
 public class TextareaTagHDIV extends TextareaTag {
 
 	/**
-	 * Universal version identifier. Deserialization uses this number to ensure that a loaded class corresponds exactly
-	 * to a serialized object.
+	 * Universal version identifier. Deserialization uses this number to ensure that a loaded class corresponds exactly to a serialized
+	 * object.
 	 */
 	private static final long serialVersionUID = -6699085600980777073L;
 
