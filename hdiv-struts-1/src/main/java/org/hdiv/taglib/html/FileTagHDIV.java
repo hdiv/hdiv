@@ -24,12 +24,12 @@ import org.hdiv.util.HDIVUtil;
 
 /**
  * <p>
- * Renders an HTML &lt;input&gt; element of type file, defaulting to the specified value or the specified property of
- * the bean associated with our current form. This tag is only valid when nested inside a form tag body.
+ * Renders an HTML &lt;input&gt; element of type file, defaulting to the specified value or the specified property of the bean associated
+ * with our current form. This tag is only valid when nested inside a form tag body.
  * </p>
  * <p>
- * As with the corresponding HTML &lt;input&gt; element, the enclosing form element must specify "POST" for the
- * <code>method</code> attribute, and "multipart/form-data" for the <code>enctype</code> attribute. For example:
+ * As with the corresponding HTML &lt;input&gt; element, the enclosing form element must specify "POST" for the <code>method</code>
+ * attribute, and "multipart/form-data" for the <code>enctype</code> attribute. For example:
  * </p>
  * 
  * @author Gorka Vicente
@@ -38,8 +38,8 @@ import org.hdiv.util.HDIVUtil;
 public class FileTagHDIV extends FileTag {
 
 	/**
-	 * Universal version identifier. Deserialization uses this number to ensure that a loaded class corresponds exactly
-	 * to a serialized object.
+	 * Universal version identifier. Deserialization uses this number to ensure that a loaded class corresponds exactly to a serialized
+	 * object.
 	 */
 	private static final long serialVersionUID = 850549719352687445L;
 

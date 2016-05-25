@@ -21,8 +21,8 @@ import java.beans.SimpleBeanInfo;
 import java.util.ArrayList;
 
 /**
- * This is the <code>BeanInfo</code> descriptor for the <code>org.hdiv.strutsel.taglib.html.ELFormTagHDIV</code> class.
- * It is needed to override the default mapping of custom tag attribute names to class attribute names.
+ * This is the <code>BeanInfo</code> descriptor for the <code>org.hdiv.strutsel.taglib.html.ELFormTagHDIV</code> class. It is needed to
+ * override the default mapping of custom tag attribute names to class attribute names.
  * 
  * @author Gorka Vicente
  * @since HDIV 2.0

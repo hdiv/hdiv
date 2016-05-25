@@ -65,9 +65,9 @@ public class OutcomeTargetComponentHelper {
 	}
 
 	/**
-	 * Invoke the {@link NavigationHandler} preemptively to resolve a {@link NavigationCase} for the outcome declared on
-	 * the {@link UIOutcomeTarget} component. The current view id is used as the from-view-id when matching navigation
-	 * cases and the from-action is assumed to be null.
+	 * Invoke the {@link NavigationHandler} preemptively to resolve a {@link NavigationCase} for the outcome declared on the
+	 * {@link UIOutcomeTarget} component. The current view id is used as the from-view-id when matching navigation cases and the from-action
+	 * is assumed to be null.
 	 *
 	 * @param context the {@link FacesContext} for the current request
 	 * @param component the target {@link UIComponent}
@@ -108,9 +108,8 @@ public class OutcomeTargetComponentHelper {
 	/**
 	 * <p>
 	 * Resolve the target view id and then delegate to
-	 * {@link ViewHandler#getBookmarkableURL(javax.faces.context.FacesContext, String, java.util.Map, boolean)} to
-	 * produce a redirect URL, which will add the page parameters if necessary and properly prioritizing the parameter
-	 * overrides.
+	 * {@link ViewHandler#getBookmarkableURL(javax.faces.context.FacesContext, String, java.util.Map, boolean)} to produce a redirect URL,
+	 * which will add the page parameters if necessary and properly prioritizing the parameter overrides.
 	 * </p>
 	 *
 	 * @param context the {@link FacesContext} for the current request
@@ -124,8 +123,8 @@ public class OutcomeTargetComponentHelper {
 		String toViewId = navCase.getToViewId(context);
 		Map<String, List<String>> params = getParamOverrides(component);
 		addNavigationParams(navCase, params);
-		return context.getApplication().getViewHandler()
-				.getBookmarkableURL(context, toViewId, params, isIncludeViewParams(component, navCase));
+		return context.getApplication().getViewHandler().getBookmarkableURL(context, toViewId, params,
+				isIncludeViewParams(component, navCase));
 	}
 
 	protected boolean isIncludeViewParams(UIComponent component, NavigationCase navcase) {

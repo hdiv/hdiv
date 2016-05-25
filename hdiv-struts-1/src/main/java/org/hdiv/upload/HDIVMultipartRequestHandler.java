@@ -64,9 +64,8 @@ public class HDIVMultipartRequestHandler extends CommonsMultipartRequestHandler 
 	private Hashtable elementsText;
 
 	/**
-	 * Parses the input stream and partitions the parsed items into a set of form fields and a set of file items. In the
-	 * process, the parsed items are translated from Commons FileUpload <code>FileItem</code> instances to Struts
-	 * <code>FormFile</code> instances.
+	 * Parses the input stream and partitions the parsed items into a set of form fields and a set of file items. In the process, the parsed
+	 * items are translated from Commons FileUpload <code>FileItem</code> instances to Struts <code>FormFile</code> instances.
 	 * 
 	 * @param request The multipart request to be processed.
 	 * @throws ServletException if an unrecoverable error occurs.
@@ -127,8 +126,8 @@ public class HDIVMultipartRequestHandler extends CommonsMultipartRequestHandler 
 	}
 
 	/**
-	 * Adds a regular text parameter to the set of text parameters for this request and also to the list of all
-	 * parameters. Handles the case of multiple values for the same parameter by using an array for the parameter value.
+	 * Adds a regular text parameter to the set of text parameters for this request and also to the list of all parameters. Handles the case
+	 * of multiple values for the same parameter by using an array for the parameter value.
 	 * 
 	 * @param request The request in which the parameter was specified.
 	 * @param name Parameter name.
@@ -210,9 +209,9 @@ public class HDIVMultipartRequestHandler extends CommonsMultipartRequestHandler 
 	// ---------------- Inner Class --------------------
 
 	/**
-	 * This class implements the Struts <code>FormFile</code> interface by wrapping the Commons FileUpload
-	 * <code>FileItem</code> interface. This implementation is <i>read-only</i>; any attempt to modify an instance of
-	 * this class will result in an <code>UnsupportedOperationException</code>.
+	 * This class implements the Struts <code>FormFile</code> interface by wrapping the Commons FileUpload <code>FileItem</code> interface.
+	 * This implementation is <i>read-only</i>; any attempt to modify an instance of this class will result in an
+	 * <code>UnsupportedOperationException</code>.
 	 */
 	static class CommonsFormFile implements FormFile, Serializable {
 
@@ -291,8 +290,8 @@ public class HDIVMultipartRequestHandler extends CommonsMultipartRequestHandler 
 		}
 
 		/**
-		 * Returns the data for this file as a byte array. Note that this may result in excessive memory usage for large
-		 * uploads. The use of the {@link #getInputStream() getInputStream} method is encouraged as an alternative.
+		 * Returns the data for this file as a byte array. Note that this may result in excessive memory usage for large uploads. The use of
+		 * the {@link #getInputStream() getInputStream} method is encouraged as an alternative.
 		 * 
 		 * @return An array of bytes representing the data contained in this form file.
 		 * 
@@ -314,17 +313,17 @@ public class HDIVMultipartRequestHandler extends CommonsMultipartRequestHandler 
 		}
 
 		/**
-		 * Destroy all content for this form file. Implementations should remove any temporary files or any temporary
-		 * file data stored somewhere
+		 * Destroy all content for this form file. Implementations should remove any temporary files or any temporary file data stored
+		 * somewhere
 		 */
 		public void destroy() {
 			fileItem.delete();
 		}
 
 		/**
-		 * Returns the base file name from the supplied file path. On the surface, this would appear to be a trivial
-		 * task. Apparently, however, some Linux JDKs do not implement <code>File.getName()</code> correctly for Windows
-		 * paths, so we attempt to take care of that here.
+		 * Returns the base file name from the supplied file path. On the surface, this would appear to be a trivial task. Apparently,
+		 * however, some Linux JDKs do not implement <code>File.getName()</code> correctly for Windows paths, so we attempt to take care of
+		 * that here.
 		 * 
 		 * @param filePath The full path to the file.
 		 * 

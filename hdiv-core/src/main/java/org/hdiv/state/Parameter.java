@@ -28,8 +28,8 @@ import java.util.List;
 public class Parameter implements IParameter, Serializable {
 
 	/**
-	 * Universal version identifier. Deserialization uses this number to ensure that a loaded class corresponds exactly
-	 * to a serialized object.
+	 * Universal version identifier. Deserialization uses this number to ensure that a loaded class corresponds exactly to a serialized
+	 * object.
 	 */
 	private static final long serialVersionUID = 1390866699507616631L;
 
@@ -73,8 +73,8 @@ public class Parameter implements IParameter, Serializable {
 	/**
 	 * Indicates if the parameter <code>this</code> is editable or not.
 	 * <p>
-	 * A parameter is editable when the user can modify the value or values returned by the server, and it is
-	 * noneditable when the data returned by the server cannot be modified by the user under no circumstance.
+	 * A parameter is editable when the user can modify the value or values returned by the server, and it is noneditable when the data
+	 * returned by the server cannot be modified by the user under no circumstance.
 	 * </p>
 	 */
 	private boolean editable;
@@ -85,9 +85,8 @@ public class Parameter implements IParameter, Serializable {
 	private String editableDataType;
 
 	/**
-	 * Indicates if <code>this</code> is a parameter added in the action atribute of a link or form. If it is
-	 * <code>actionParam</code> ALL the values of this parameter must arrived within the request. If not, it means that
-	 * the user has modified the request on purpose.
+	 * Indicates if <code>this</code> is a parameter added in the action atribute of a link or form. If it is <code>actionParam</code> ALL
+	 * the values of this parameter must arrived within the request. If not, it means that the user has modified the request on purpose.
 	 */
 	private boolean actionParam;
 
@@ -139,8 +138,7 @@ public class Parameter implements IParameter, Serializable {
 	/**
 	 * Checks if the position <code>position</code> exists in the array of values <code>values</code>.
 	 *
-	 * @return True if <code>position</code> is valid position in the array of values <code>values</code>. False
-	 * otherwise.
+	 * @return True if <code>position</code> is valid position in the array of values <code>values</code>. False otherwise.
 	 */
 	public boolean existPosition(final int position) {
 		return (position == 0) || (values != null && position < values.size());

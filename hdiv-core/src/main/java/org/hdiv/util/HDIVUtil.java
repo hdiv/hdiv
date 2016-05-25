@@ -343,8 +343,8 @@ public class HDIVUtil {
 	 *
 	 * @param request ServletRequest object
 	 * @param key the code to lookup up, such as 'calculator.noRateSet'
-	 * @param o Array of arguments that will be filled in for params within the message (params look like "{0}",
-	 * "{1,date}", "{2,time}" within a message), or null if none.
+	 * @param o Array of arguments that will be filled in for params within the message (params look like "{0}", "{1,date}", "{2,time}"
+	 * within a message), or null if none.
 	 * @return The resolved message
 	 */
 	public static String getMessage(final HttpServletRequest request, final String key, final String o) {
@@ -356,8 +356,8 @@ public class HDIVUtil {
 	 *
 	 * @param request ServletRequest object
 	 * @param key the code to lookup up, such as 'calculator.noRateSet'
-	 * @param o Array of arguments that will be filled in for params within the message (params look like "{0}",
-	 * "{1,date}", "{2,time}" within a message), or null if none.
+	 * @param o Array of arguments that will be filled in for params within the message (params look like "{0}", "{1,date}", "{2,time}"
+	 * within a message), or null if none.
 	 * @param userLocale locale
 	 * @return The resolved message
 	 */
@@ -415,8 +415,7 @@ public class HDIVUtil {
 	 * Generates a random number between 0 (inclusive) and n (exclusive).
 	 *
 	 * @param n the bound on the random number to be returned. Must be positive.
-	 * @return Returns a pseudorandom, uniformly distributed int value between 0 (inclusive) and <code>n</code>
-	 * (exclusive).
+	 * @return Returns a pseudorandom, uniformly distributed int value between 0 (inclusive) and <code>n</code> (exclusive).
 	 * @since HDIV 1.1
 	 */
 	public static String createRandomToken(final int n) {
@@ -431,9 +430,8 @@ public class HDIVUtil {
 	}
 
 	/**
-	 * Strips a servlet session ID from <tt>url</tt>. The session ID is encoded as a URL "path parameter" beginning with
-	 * "jsessionid=". We thus remove anything we find between ";jsessionid=" (inclusive) and either EOS or a subsequent
-	 * ';' (exclusive).
+	 * Strips a servlet session ID from <tt>url</tt>. The session ID is encoded as a URL "path parameter" beginning with "jsessionid=". We
+	 * thus remove anything we find between ";jsessionid=" (inclusive) and either EOS or a subsequent ';' (exclusive).
 	 *
 	 * @param url url
 	 * @return url without sessionId
@@ -499,8 +497,7 @@ public class HDIVUtil {
 	}
 
 	/**
-	 * Return an appropriate request object of the specified type, if available, unwrapping the given request as far as
-	 * necessary.
+	 * Return an appropriate request object of the specified type, if available, unwrapping the given request as far as necessary.
 	 *
 	 * @param request the servlet request to introspect
 	 * @param requiredType the desired type of request object
@@ -521,13 +518,13 @@ public class HDIVUtil {
 	}
 
 	/**
-	 * Find a unique {@code WebApplicationContext} for this web app: either the root web app context (preferred) or a
-	 * unique {@code WebApplicationContext} among the registered {@code ServletContext} attributes (typically coming
-	 * from a single {@code DispatcherServlet} in the current web application).
+	 * Find a unique {@code WebApplicationContext} for this web app: either the root web app context (preferred) or a unique
+	 * {@code WebApplicationContext} among the registered {@code ServletContext} attributes (typically coming from a single
+	 * {@code DispatcherServlet} in the current web application).
 	 * <p>
-	 * Note that {@code DispatcherServlet}'s exposure of its context can be controlled through its
-	 * {@code publishContext} property, which is {@code true} by default but can be selectively switched to only publish
-	 * a single context despite multiple {@code DispatcherServlet} registrations in the web app.
+	 * Note that {@code DispatcherServlet}'s exposure of its context can be controlled through its {@code publishContext} property, which is
+	 * {@code true} by default but can be selectively switched to only publish a single context despite multiple {@code DispatcherServlet}
+	 * registrations in the web app.
 	 *
 	 * @param sc ServletContext to find the web application context for
 	 * @return the desired WebApplicationContext for this web app, or {@code null} if none

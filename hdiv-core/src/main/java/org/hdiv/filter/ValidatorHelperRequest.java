@@ -693,8 +693,6 @@ public class ValidatorHelperRequest implements IValidationHelper {
 				}
 				throw new HDIVException(HDIVErrorCodes.PAGE_ID_INCORRECT);
 			}
-			System.out.println("Type:" + restoredState.getTokenType() + " PToken:"
-					+ currentPage.getRandomToken(restoredState.getTokenType()) + " request:" + requestSuffix);
 			return currentPage.getRandomToken(restoredState.getTokenType()).equals(requestSuffix);
 
 		}

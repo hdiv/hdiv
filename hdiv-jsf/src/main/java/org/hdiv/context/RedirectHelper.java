@@ -33,8 +33,8 @@ public class RedirectHelper {
 	private LinkUrlProcessor linkUrlProcessor;
 
 	/**
-	 * Checks that url needs to be securized (points to the application itself) and if so creates HDIV state and adds
-	 * the identifier as a parameter to the url.
+	 * Checks that url needs to be securized (points to the application itself) and if so creates HDIV state and adds the identifier as a
+	 * parameter to the url.
 	 * 
 	 * @param url Url to secure
 	 * @return secured url

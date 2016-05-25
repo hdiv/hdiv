@@ -44,8 +44,8 @@ public abstract class AbstractMultipartConfig implements IMultipartConfig {
 	public static final long DEFAULT_SIZE_MAX = 2 * 1024 * 1024;
 
 	/**
-	 * The default value for the threshold which determines whether an uploaded file will be written to disk or cached
-	 * in memory. The value is equivalent to 250KB.
+	 * The default value for the threshold which determines whether an uploaded file will be written to disk or cached in memory. The value
+	 * is equivalent to 250KB.
 	 */
 	public static final int DEFAULT_SIZE_THRESHOLD = 256 * 1024;
 
@@ -60,10 +60,10 @@ public abstract class AbstractMultipartConfig implements IMultipartConfig {
 	protected String tempDir = null;
 
 	/**
-	 * Converts a size value from a string representation to its numeric value. The string must be of the form nnnm,
-	 * where nnn is an arbitrary decimal value, and m is a multiplier. The multiplier must be one of 'K', 'M' and 'G',
-	 * representing kilobytes, megabytes and gigabytes respectively. If the size value cannot be converted, for example
-	 * due to invalid syntax, the supplied default is returned instead.
+	 * Converts a size value from a string representation to its numeric value. The string must be of the form nnnm, where nnn is an
+	 * arbitrary decimal value, and m is a multiplier. The multiplier must be one of 'K', 'M' and 'G', representing kilobytes, megabytes and
+	 * gigabytes respectively. If the size value cannot be converted, for example due to invalid syntax, the supplied default is returned
+	 * instead.
 	 * 
 	 * @param sizeString The string representation of the size to be converted.
 	 * @param defaultSize The value to be returned if the string is invalid.
@@ -103,11 +103,11 @@ public abstract class AbstractMultipartConfig implements IMultipartConfig {
 	}
 
 	/**
-	 * Returns the path to the temporary directory to be used for uploaded files which are written to disk. The
-	 * directory used is determined from the first of the following to be non-empty.
+	 * Returns the path to the temporary directory to be used for uploaded files which are written to disk. The directory used is determined
+	 * from the first of the following to be non-empty.
 	 * <ol>
-	 * <li>A temp dir explicitly defined using the <code>saveDir</code> attribute of the &lt;multipartConfig&gt; element
-	 * in the Spring config file.</li>
+	 * <li>A temp dir explicitly defined using the <code>saveDir</code> attribute of the &lt;multipartConfig&gt; element in the Spring
+	 * config file.</li>
 	 * <li>The temp dir specified by the <code>javax.servlet.context.tempdir</code> attribute.</li>
 	 * </ol>
 	 * 
@@ -183,8 +183,7 @@ public abstract class AbstractMultipartConfig implements IMultipartConfig {
 	}
 
 	/**
-	 * Returns the maximum allowable size, in bytes, of an uploaded file. The value is obtained from the Spring
-	 * configuration.
+	 * Returns the maximum allowable size, in bytes, of an uploaded file. The value is obtained from the Spring configuration.
 	 * 
 	 * @return The maximum allowable file size, in bytes.
 	 */

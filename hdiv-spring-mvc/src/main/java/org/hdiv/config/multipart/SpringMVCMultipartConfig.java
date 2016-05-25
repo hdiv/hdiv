@@ -58,19 +58,18 @@ public class SpringMVCMultipartConfig implements IMultipartConfig {
 	 * @param servletContext Our ServletContext object
 	 * @throws HdivMultipartException if an unrecoverable error occurs.
 	 */
-	public HttpServletRequest handleMultipartRequest(RequestWrapper request, ServletContext servletContext)
-			throws HdivMultipartException {
+	public HttpServletRequest handleMultipartRequest(RequestWrapper request, ServletContext servletContext) throws HdivMultipartException {
 
 		MultipartResolver multipartResolver = this.lookupMultipartResolver(servletContext);
 
 		if (multipartResolver == null) {
 			return request;
 		}
-		if (!(multipartResolver instanceof HdivCommonsMultipartResolver || multipartResolver instanceof HdivStandardServletMultipartResolver)) {
-			throw new IllegalStateException(
-					"In order to enable HDIV multipart processing, MultipartResolver must be of "
-							+ HdivCommonsMultipartResolver.class.getName() + " or "
-							+ HdivStandardServletMultipartResolver.class.getName() + " type.");
+		if (!(multipartResolver instanceof HdivCommonsMultipartResolver
+				|| multipartResolver instanceof HdivStandardServletMultipartResolver)) {
+			throw new IllegalStateException("In order to enable HDIV multipart processing, MultipartResolver must be of "
+					+ HdivCommonsMultipartResolver.class.getName() + " or " + HdivStandardServletMultipartResolver.class.getName()
+					+ " type.");
 		}
 
 		MultipartHttpServletRequest processedRequest = null;
@@ -137,8 +136,7 @@ public class SpringMVCMultipartConfig implements IMultipartConfig {
 			while (e.hasMoreElements()) {
 				String name = (String) e.nextElement();
 				if (name.startsWith(FrameworkServlet.SERVLET_CONTEXT_PREFIX)) {
-					this.webApplicationContext = WebApplicationContextUtils.getWebApplicationContext(servletContext,
-							name);
+					this.webApplicationContext = WebApplicationContextUtils.getWebApplicationContext(servletContext, name);
 					break;
 				}
 			}

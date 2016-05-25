@@ -27,14 +27,13 @@ import org.hdiv.util.HDIVUtil;
 
 /**
  * <p>
- * Render an HTML <b>&lt;option&gt;</b> element, representing one of the choices for an enclosing <b>&lt;select&gt;</b>
- * element. The text displayed to the user comes from either the body of this tag, or from a message string looked up
- * based on the bundle, locale, and key attributes. The value attribute is the value returned to the server if this
- * option is selected.
+ * Render an HTML <b>&lt;option&gt;</b> element, representing one of the choices for an enclosing <b>&lt;select&gt;</b> element. The text
+ * displayed to the user comes from either the body of this tag, or from a message string looked up based on the bundle, locale, and key
+ * attributes. The value attribute is the value returned to the server if this option is selected.
  * </p>
  * <p>
- * If the value of the corresponding bean property matches the specified value, this option will be marked selected.
- * This tag is only valid when nested inside a <b>&lt;html:select&gt;</b> tag body.
+ * If the value of the corresponding bean property matches the specified value, this option will be marked selected. This tag is only valid
+ * when nested inside a <b>&lt;html:select&gt;</b> tag body.
  * </p>
  * 
  * @author Gorka Vicente
@@ -43,14 +42,13 @@ import org.hdiv.util.HDIVUtil;
 public class OptionTagHDIV extends OptionTag {
 
 	/**
-	 * Universal version identifier. Deserialization uses this number to ensure that a loaded class corresponds exactly
-	 * to a serialized object.
+	 * Universal version identifier. Deserialization uses this number to ensure that a loaded class corresponds exactly to a serialized
+	 * object.
 	 */
 	private static final long serialVersionUID = -8794640501351327833L;
 
 	/**
-	 * The message text to be displayed to the user for this tag if no body text and no key to lookup so display the
-	 * value
+	 * The message text to be displayed to the user for this tag if no body text and no key to lookup so display the value
 	 * 
 	 * @see org.hdiv.dataComposer.IDataComposer#composeFormField(String, String, boolean, String)
 	 */

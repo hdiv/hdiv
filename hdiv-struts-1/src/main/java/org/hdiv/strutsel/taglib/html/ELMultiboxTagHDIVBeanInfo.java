@@ -21,16 +21,16 @@ import java.beans.SimpleBeanInfo;
 import java.util.ArrayList;
 
 /**
- * This is the <code>BeanInfo</code> descriptor for the <code>org.hdiv.strutsel.taglib.html.ELMultiboxTagHDIV</code>
- * class. It is needed to override the default mapping of custom tag attribute names to class attribute names.
+ * This is the <code>BeanInfo</code> descriptor for the <code>org.hdiv.strutsel.taglib.html.ELMultiboxTagHDIV</code> class. It is needed to
+ * override the default mapping of custom tag attribute names to class attribute names.
  * <p>
  * In particular, it provides for the mapping of the custom tag attribute <code>disabled</code> to the instance variable
  * <code>disabledExpr</code>.
  * <p>
- * This is because the value of the unevaluated EL expression has to be kept separately from the evaluated value, which
- * is stored in the base class. This is related to the fact that the JSP compiler can choose to reuse different tag
- * instances if they received the same original attribute values, and the JSP compiler can choose to not re-call the
- * setter methods, because it can assume the same values are already set.
+ * This is because the value of the unevaluated EL expression has to be kept separately from the evaluated value, which is stored in the
+ * base class. This is related to the fact that the JSP compiler can choose to reuse different tag instances if they received the same
+ * original attribute values, and the JSP compiler can choose to not re-call the setter methods, because it can assume the same values are
+ * already set.
  * 
  * @author Gorka Vicente
  * @since HDIV 2.0
@@ -83,8 +83,7 @@ public class ELMultiboxTagHDIVBeanInfo extends SimpleBeanInfo {
 		}
 
 		try {
-			proplist.add(new PropertyDescriptor("errorStyleClass", ELMultiboxTagHDIV.class, null,
-					"setErrorStyleClassExpr"));
+			proplist.add(new PropertyDescriptor("errorStyleClass", ELMultiboxTagHDIV.class, null, "setErrorStyleClassExpr"));
 		}
 		catch (IntrospectionException ex) {
 		}

@@ -104,8 +104,7 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 	public static final String USER_DATA_NAME = IUserData.class.getName();
 
 	/**
-	 * The name of the bean to use to look up in an implementation of {@link RequestDataValueProcessor} has been
-	 * configured.
+	 * The name of the bean to use to look up in an implementation of {@link RequestDataValueProcessor} has been configured.
 	 */
 	public static final String REQUEST_DATA_VALUE_PROCESSOR_BEAN_NAME = "requestDataValueProcessor";
 
@@ -372,8 +371,7 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		return this.registerBean(bean, StateScopeManager.class.getName(), parserContext);
 	}
 
-	protected RuntimeBeanReference createUserSessionStateScope(Element element, Object source,
-			ParserContext parserContext) {
+	protected RuntimeBeanReference createUserSessionStateScope(Element element, Object source, ParserContext parserContext) {
 		RootBeanDefinition bean = new RootBeanDefinition(UserSessionStateScope.class);
 		bean.setSource(source);
 		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);

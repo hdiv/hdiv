@@ -33,8 +33,8 @@ import org.hdiv.util.HDIVUtil;
 public class SubmitTagHDIV extends SubmitTag {
 
 	/**
-	 * Universal version identifier. Deserialization uses this number to ensure that a loaded class corresponds exactly
-	 * to a serialized object.
+	 * Universal version identifier. Deserialization uses this number to ensure that a loaded class corresponds exactly to a serialized
+	 * object.
 	 */
 	private static final long serialVersionUID = 1116605394174886446L;
 

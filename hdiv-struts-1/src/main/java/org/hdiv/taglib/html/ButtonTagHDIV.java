@@ -24,8 +24,8 @@ import org.hdiv.util.HDIVUtil;
 
 /**
  * <p>
- * Renders an HTML &lt;input&gt; element of type <code>button</code>, populated from the specified value or the content
- * of this tag body. This tag is only valid when nested inside a form tag body.
+ * Renders an HTML &lt;input&gt; element of type <code>button</code>, populated from the specified value or the content of this tag body.
+ * This tag is only valid when nested inside a form tag body.
  * </p>
  * <p>
  * If a graphical button is needed (a button with an image), then the <code>image</code> tag is more appropriate.
@@ -37,8 +37,8 @@ import org.hdiv.util.HDIVUtil;
 public class ButtonTagHDIV extends ButtonTag {
 
 	/**
-	 * Universal version identifier. Deserialization uses this number to ensure that a loaded class corresponds exactly
-	 * to a serialized object.
+	 * Universal version identifier. Deserialization uses this number to ensure that a loaded class corresponds exactly to a serialized
+	 * object.
 	 */
 	private static final long serialVersionUID = 5398511484328451925L;
 

@@ -33,14 +33,14 @@ import org.hdiv.taglib.html.HiddenTagHDIV;
 public class NestedHiddenTagHDIV extends HiddenTagHDIV implements NestedNameSupport {
 
 	/**
-	 * Universal version identifier. Deserialization uses this number to ensure that a loaded class corresponds exactly
-	 * to a serialized object.
+	 * Universal version identifier. Deserialization uses this number to ensure that a loaded class corresponds exactly to a serialized
+	 * object.
 	 */
 	private static final long serialVersionUID = 5398511484328451925L;
 
 	/**
-	 * Overriding method of the heart of the matter. Gets the relative property and leaves the rest up to the original
-	 * tag implementation. Sweet.
+	 * Overriding method of the heart of the matter. Gets the relative property and leaves the rest up to the original tag implementation.
+	 * Sweet.
 	 * @return int JSP continuation directive. This is in the hands of the super class.
 	 */
 	public int doStartTag() throws JspException {
@@ -58,8 +58,8 @@ public class NestedHiddenTagHDIV extends HiddenTagHDIV implements NestedNameSupp
 	}
 
 	/**
-	 * Complete the processing of the tag. The nested tags here will restore all the original value for the tag itself
-	 * and the nesting context.
+	 * Complete the processing of the tag. The nested tags here will restore all the original value for the tag itself and the nesting
+	 * context.
 	 * @return int to describe the next step for the JSP processor
 	 * @throws JspException for the bad things JSP's do
 	 */

@@ -111,8 +111,8 @@ public class ConfigPhaseListener implements PhaseListener {
 	}
 
 	/**
-	 * Adds to the state a data unique for the user. This way state becomes something unique for each user. Session id
-	 * is used as this unique data.
+	 * Adds to the state a data unique for the user. This way state becomes something unique for each user. Session id is used as this
+	 * unique data.
 	 * 
 	 * @param facesContext request context
 	 */

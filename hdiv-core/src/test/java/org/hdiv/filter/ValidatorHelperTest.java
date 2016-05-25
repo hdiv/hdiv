@@ -209,8 +209,8 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 	}
 
 	/**
-	 * Validation test with an init parameter and another non-editable parameter. Validation should be correct as the
-	 * resulting values are correct.
+	 * Validation test with an init parameter and another non-editable parameter. Validation should be correct as the resulting values are
+	 * correct.
 	 */
 	public void testValidateHasOneStartParameterOneNotEditableParameter() {
 
@@ -232,8 +232,8 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 	}
 
 	/**
-	 * Validation test for a non-editable multivalue parameter with modified values. Should not pass validation as the
-	 * second value has been modified.
+	 * Validation test for a non-editable multivalue parameter with modified values. Should not pass validation as the second value has been
+	 * modified.
 	 */
 	public void testValidateHasOneParameterNotEditableMultivalueIndexOutOfBound() {
 
@@ -259,8 +259,7 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 	}
 
 	/**
-	 * Validation test with a modified non-editable parameter. More than expected parameters are received, so it should
-	 * not pass validation.
+	 * Validation test with a modified non-editable parameter. More than expected parameters are received, so it should not pass validation.
 	 */
 	public void testValidateHasInvalidNumberOfParameters() {
 
@@ -284,8 +283,7 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 	}
 
 	/**
-	 * Validation test with a non-editable multivalue parameter. repeated values are received, so it should not pass
-	 * validation.
+	 * Validation test with a non-editable multivalue parameter. repeated values are received, so it should not pass validation.
 	 */
 	public void testValidateHasRepeatedValues() {
 
@@ -334,8 +332,8 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 	}
 
 	/**
-	 * Validation test with a wrong page identifier. It should not pass validation as there isn't any state in memory
-	 * which matches this identifier.
+	 * Validation test with a wrong page identifier. It should not pass validation as there isn't any state in memory which matches this
+	 * identifier.
 	 */
 	public void testValidateHasMemoryWrongStateIndetifier() {
 

@@ -36,8 +36,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
  * <p>
  * And original {@link HttpServletRequest} request for parameters and the rest of data.
  */
-public class MultipartHttpServletRequestWrapper extends HttpServletRequestWrapper implements
-		MultipartHttpServletRequest {
+public class MultipartHttpServletRequestWrapper extends HttpServletRequestWrapper implements MultipartHttpServletRequest {
 
 	private MultipartHttpServletRequest innerMultipartHttpServletRequest;
 
@@ -45,8 +44,7 @@ public class MultipartHttpServletRequestWrapper extends HttpServletRequestWrappe
 		super(request);
 	}
 
-	public MultipartHttpServletRequestWrapper(HttpServletRequest request,
-			MultipartHttpServletRequest innerMultipartHttpServletRequest) {
+	public MultipartHttpServletRequestWrapper(HttpServletRequest request, MultipartHttpServletRequest innerMultipartHttpServletRequest) {
 		super(request);
 		Assert.notNull(request);
 		Assert.notNull(innerMultipartHttpServletRequest);

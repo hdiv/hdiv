@@ -21,14 +21,13 @@ import org.apache.struts.taglib.html.BaseTag;
 import org.apache.strutsel.taglib.utils.EvalHelper;
 
 /**
- * Renders an HTML <base> element with an href attribute pointing to the absolute location of the enclosing JSP page.
- * This tag is only valid when nested inside a head tag body. The presence of this tag allows the browser to resolve
- * relative URL's to images, CSS stylesheets and other resources in a manner independent of the URL used to call the
- * ActionServlet.
+ * Renders an HTML <base> element with an href attribute pointing to the absolute location of the enclosing JSP page. This tag is only valid
+ * when nested inside a head tag body. The presence of this tag allows the browser to resolve relative URL's to images, CSS stylesheets and
+ * other resources in a manner independent of the URL used to call the ActionServlet.
  * <p>
- * This class is a subclass of the class <code>org.apache.struts.taglib.html.BaseTag</code> which provides most of the
- * described functionality. This subclass allows all attribute values to be specified as expressions utilizing the
- * JavaServer Pages Standard Library expression language.
+ * This class is a subclass of the class <code>org.apache.struts.taglib.html.BaseTag</code> which provides most of the described
+ * functionality. This subclass allows all attribute values to be specified as expressions utilizing the JavaServer Pages Standard Library
+ * expression language.
  *
  * @version $Rev: 471754 $
  */

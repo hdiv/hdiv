@@ -58,8 +58,7 @@ public class RedirectExternalContext extends ExternalContextWrapper {
 		this.wrapped = wrapped;
 
 		ServletContext servletContext = (ServletContext) wrapped.getContext();
-		this.redirectHelper = WebApplicationContextUtils.getRequiredWebApplicationContext(servletContext).getBean(
-				RedirectHelper.class);
+		this.redirectHelper = WebApplicationContextUtils.getRequiredWebApplicationContext(servletContext).getBean(RedirectHelper.class);
 
 		Assert.notNull(this.redirectHelper);
 	}
@@ -75,8 +74,8 @@ public class RedirectExternalContext extends ExternalContextWrapper {
 	}
 
 	/**
-	 * If it is an internal redirect (to the application itself) it generates the state, stores it in session and adds a
-	 * parameter to the url
+	 * If it is an internal redirect (to the application itself) it generates the state, stores it in session and adds a parameter to the
+	 * url
 	 * 
 	 * @param url url to redirect
 	 */

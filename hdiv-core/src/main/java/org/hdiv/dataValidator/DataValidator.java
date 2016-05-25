@@ -27,8 +27,7 @@ import org.hdiv.state.IParameter;
 import org.hdiv.util.HDIVUtil;
 
 /**
- * Validates that one parameter value or values are correct, besides to replacing the relative values by its real
- * values.
+ * Validates that one parameter value or values are correct, besides to replacing the relative values by its real values.
  *
  * @author Roberto Velasco
  * @author Oscar Ocariz
@@ -48,8 +47,8 @@ public class DataValidator implements IDataValidator {
 	/*
 	 * (non-Javadoc)
 	 *
-	 * @see org.hdiv.dataValidator.IDataValidator#validate(javax.servlet.http.HttpServletRequest, java.lang.String,
-	 * java.lang.String, java.lang.String, org.hdiv.state.IParameter, java.lang.String[])
+	 * @see org.hdiv.dataValidator.IDataValidator#validate(javax.servlet.http.HttpServletRequest, java.lang.String, java.lang.String,
+	 * java.lang.String, org.hdiv.state.IParameter, java.lang.String[])
 	 */
 	public IValidationResult validate(final HttpServletRequest request, final String value, final String target, final String parameter,
 			final IParameter stateParameter, final String[] actionParamValues) {

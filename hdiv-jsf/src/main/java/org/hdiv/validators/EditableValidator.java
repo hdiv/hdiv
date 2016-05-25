@@ -37,8 +37,7 @@ import org.hdiv.validation.ValidationError;
 import org.hdiv.validator.EditableDataValidationResult;
 
 /**
- * Responsible for validating that the parameters coming from an editable component (InputText, Textarea, Secret) are
- * logical
+ * Responsible for validating that the parameters coming from an editable component (InputText, Textarea, Secret) are logical
  * 
  * @author Ugaitz Urien
  */
@@ -52,8 +51,7 @@ public class EditableValidator implements ComponentValidator {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.hdiv.validators.ComponentValidator#validate(javax.faces.context.FacesContext,
-	 * javax.faces.component.UIComponent)
+	 * @see org.hdiv.validators.ComponentValidator#validate(javax.faces.context.FacesContext, javax.faces.component.UIComponent)
 	 */
 	public ValidationError validate(FacesContext context, UIComponent component) {
 
@@ -89,8 +87,8 @@ public class EditableValidator implements ComponentValidator {
 	 * @return result
 	 */
 	protected ValidationError validateComponent(FacesContext context, UIComponent uiComponent) {
-		if ((uiComponent instanceof HtmlInputText) || (uiComponent instanceof HtmlInputTextarea)
-				|| (uiComponent instanceof HtmlInputSecret) || (uiComponent instanceof HtmlInputHidden)) {
+		if ((uiComponent instanceof HtmlInputText) || (uiComponent instanceof HtmlInputTextarea) || (uiComponent instanceof HtmlInputSecret)
+				|| (uiComponent instanceof HtmlInputHidden)) {
 			UIInput inputComponent = (UIInput) uiComponent;
 			return validateInput(context, inputComponent);
 		}
@@ -162,8 +160,8 @@ public class EditableValidator implements ComponentValidator {
 		String targetWithoutContextPath = getTargetWithoutContextPath(request, target);
 
 		String[] content = { (String) contentObj };
-		EditableDataValidationResult result = this.hdivConfig.getEditableDataValidationProvider().validate(
-				targetWithoutContextPath, clientId, content, contentType);
+		EditableDataValidationResult result = this.hdivConfig.getEditableDataValidationProvider().validate(targetWithoutContextPath,
+				clientId, content, contentType);
 		return result.isValid();
 	}
 

@@ -37,8 +37,7 @@ public class DataValidatorTest extends AbstractHDIVTestCase {
 	}
 
 	/**
-	 * Validation test with a noneditable parameter. It should not pass the validation as the received value is not an
-	 * integer.
+	 * Validation test with a noneditable parameter. It should not pass the validation as the received value is not an integer.
 	 */
 	public void testValidateDataIsNotInt() {
 
@@ -66,8 +65,7 @@ public class DataValidatorTest extends AbstractHDIVTestCase {
 	// }
 
 	/**
-	 * Validation test with a noneditable parameter. It should not pass the validation as the received parameter doesn't
-	 * exists.
+	 * Validation test with a noneditable parameter. It should not pass the validation as the received parameter doesn't exists.
 	 */
 	public void testValidatePositionDoesNotExist() {
 

@@ -36,8 +36,7 @@ public class JsfMultipartConfig implements IMultipartConfig {
 	 * @param servletContext Our ServletContext object
 	 * @throws HdivMultipartException if an unrecoverable error occurs.
 	 */
-	public HttpServletRequest handleMultipartRequest(RequestWrapper request, ServletContext servletContext)
-			throws HdivMultipartException {
+	public HttpServletRequest handleMultipartRequest(RequestWrapper request, ServletContext servletContext) throws HdivMultipartException {
 
 		return request;
 	}

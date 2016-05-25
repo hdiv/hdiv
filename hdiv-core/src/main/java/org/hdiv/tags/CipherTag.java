@@ -40,8 +40,8 @@ import org.hdiv.util.HDIVUtil;
 public class CipherTag extends TagSupport {
 
 	/**
-	 * Universal version identifier. Deserialization uses this number to ensure that a loaded class corresponds exactly
-	 * to a serialized object.
+	 * Universal version identifier. Deserialization uses this number to ensure that a loaded class corresponds exactly to a serialized
+	 * object.
 	 */
 	private static final long serialVersionUID = -5223047708438702403L;
 

@@ -35,8 +35,7 @@ public class HdivStandardServletMultipartResolver extends StandardServletMultipa
 	@Override
 	public boolean isMultipart(HttpServletRequest request) {
 
-		HdivMultipartException multipartException = (HdivMultipartException) request
-				.getAttribute(IMultipartConfig.FILEUPLOAD_EXCEPTION);
+		HdivMultipartException multipartException = (HdivMultipartException) request.getAttribute(IMultipartConfig.FILEUPLOAD_EXCEPTION);
 		if (multipartException != null) {
 			Exception orig = multipartException.getOriginal();
 			if (orig instanceof MultipartException) {
@@ -53,8 +52,7 @@ public class HdivStandardServletMultipartResolver extends StandardServletMultipa
 	@Override
 	public MultipartHttpServletRequest resolveMultipart(HttpServletRequest request) throws MultipartException {
 
-		MultipartHttpServletRequest multipartHttpServletRequest = WebUtils.getNativeRequest(request,
-				MultipartHttpServletRequest.class);
+		MultipartHttpServletRequest multipartHttpServletRequest = WebUtils.getNativeRequest(request, MultipartHttpServletRequest.class);
 		if (multipartHttpServletRequest != null) {
 			// Use MultipartHttpServletRequestWrapper to maintain MultipartHttpServletRequest in first place
 			// and obtains parameter values from RequestWrapper, with real values with confidentiality activated

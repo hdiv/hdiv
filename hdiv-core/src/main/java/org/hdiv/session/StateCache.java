@@ -22,8 +22,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
- * It is composed by a data structure limited by a maximum size <code>maxSize</code>. <code>pageIds</code> structure is
- * composed by elements of type IPage (all the possible requests generated in the request processing).
+ * It is composed by a data structure limited by a maximum size <code>maxSize</code>. <code>pageIds</code> structure is composed by elements
+ * of type IPage (all the possible requests generated in the request processing).
  * 
  * @author Roberto Velasco
  */
@@ -37,8 +37,8 @@ public class StateCache implements IStateCache {
 	private static final Log log = LogFactory.getLog(StateCache.class);
 
 	/**
-	 * Universal version identifier. Deserialization uses this number to ensure that a loaded class corresponds exactly
-	 * to a serialized object.
+	 * Universal version identifier. Deserialization uses this number to ensure that a loaded class corresponds exactly to a serialized
+	 * object.
 	 */
 	private static final long serialVersionUID = -386843742684433849L;
 
@@ -62,8 +62,8 @@ public class StateCache implements IStateCache {
 	 * 
 	 * @param isAjaxRequest if request is an ajax request
 	 * 
-	 * @return If the cache has reached its maximum size, less important identifier is returned in order to delete it
-	 * from session. Otherwise, null will be returned.
+	 * @return If the cache has reached its maximum size, less important identifier is returned in order to delete it from session.
+	 * Otherwise, null will be returned.
 	 */
 	public synchronized Integer addPage(final int pageId, final Integer currentPageId, final boolean isRefreshRequest,
 			final boolean isAjaxRequest) {
@@ -86,8 +86,8 @@ public class StateCache implements IStateCache {
 	}
 
 	/**
-	 * If the buffer <code>pageIds</code> has reached its maximum size <code>maxSize</code>, one page is deleted. If
-	 * current page is the last one, the oldest key is removed, otherwise any newer page is removed
+	 * If the buffer <code>pageIds</code> has reached its maximum size <code>maxSize</code>, one page is deleted. If current page is the
+	 * last one, the oldest key is removed, otherwise any newer page is removed
 	 * 
 	 * @param currentPageId page identifier of the current request. It can be null if no state id is present.
 	 * 

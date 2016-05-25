@@ -21,8 +21,8 @@ import javax.faces.context.FacesContext;
 import org.hdiv.validation.ValidationError;
 
 /**
- * The class that implements this interface will handle the validation of a component type. Implementation must be
- * stateless as it is singleton.
+ * The class that implements this interface will handle the validation of a component type. Implementation must be stateless as it is
+ * singleton.
  * 
  * @author Gotzon Illarramendi
  */

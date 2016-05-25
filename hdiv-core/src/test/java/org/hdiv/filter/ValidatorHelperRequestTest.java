@@ -38,8 +38,7 @@ public class ValidatorHelperRequestTest extends AbstractHDIVTestCase {
 	}
 
 	/**
-	 * This method check if hasNonConfidentialIncorrectValues method can receive repeated values in the last 2
-	 * positions.
+	 * This method check if hasNonConfidentialIncorrectValues method can receive repeated values in the last 2 positions.
 	 */
 	public void testHasNonConfidentialIncorrectValues_RepeatedValuesInLastPosition() {
 
@@ -57,8 +56,7 @@ public class ValidatorHelperRequestTest extends AbstractHDIVTestCase {
 	}
 
 	/**
-	 * This method check if hasNonConfidentialIncorrectValues method can receive repeated values in the middle of
-	 * received array values.
+	 * This method check if hasNonConfidentialIncorrectValues method can receive repeated values in the middle of received array values.
 	 */
 	public void testHasNonConfidentialIncorrectValues_RepeatedValuesInTheMiddle() {
 
@@ -76,8 +74,8 @@ public class ValidatorHelperRequestTest extends AbstractHDIVTestCase {
 	}
 
 	/**
-	 * This method check if hasNonConfidentialIncorrectValues method can receive repeated values at first positions of
-	 * received array values.
+	 * This method check if hasNonConfidentialIncorrectValues method can receive repeated values at first positions of received array
+	 * values.
 	 */
 	public void testHasNonConfidentialIncorrectValues_RepeatedValuesAtFirstPositions() {
 
@@ -95,8 +93,7 @@ public class ValidatorHelperRequestTest extends AbstractHDIVTestCase {
 	}
 
 	/**
-	 * This method check if hasNonConfidentialIncorrectValues method can receive repeated values of received array
-	 * values.
+	 * This method check if hasNonConfidentialIncorrectValues method can receive repeated values of received array values.
 	 */
 	public void testHasNonConfidentialIncorrectValues_RepeatedValuesInAnyPosition_1() {
 
@@ -114,8 +111,7 @@ public class ValidatorHelperRequestTest extends AbstractHDIVTestCase {
 	}
 
 	/**
-	 * This method check if hasNonConfidentialIncorrectValues method can receive repeated values of received array
-	 * values.
+	 * This method check if hasNonConfidentialIncorrectValues method can receive repeated values of received array values.
 	 */
 	public void testHasNonConfidentialIncorrectValues_RepeatedValuesInAnyPosition_2() {
 
@@ -133,8 +129,7 @@ public class ValidatorHelperRequestTest extends AbstractHDIVTestCase {
 	}
 
 	/**
-	 * This method check if hasNonConfidentialIncorrectValues method can receive repeated values of received array
-	 * values.
+	 * This method check if hasNonConfidentialIncorrectValues method can receive repeated values of received array values.
 	 */
 	public void testHasNonConfidentialIncorrectValues_RepeatedValuesInAnyPosition_3() {
 
@@ -152,8 +147,8 @@ public class ValidatorHelperRequestTest extends AbstractHDIVTestCase {
 	}
 
 	/**
-	 * This method check that hasNonConfidentialIncorrectValues method returns invalid result when unexpected value is
-	 * received for specific parameter.
+	 * This method check that hasNonConfidentialIncorrectValues method returns invalid result when unexpected value is received for specific
+	 * parameter.
 	 */
 	public void testHasNonConfidentialIncorrectValues_IncorrectParameterValueReceivedInLastPosition() {
 
@@ -171,8 +166,8 @@ public class ValidatorHelperRequestTest extends AbstractHDIVTestCase {
 	}
 
 	/**
-	 * This method check that hasNonConfidentialIncorrectValues method returns invalid result when unexpected value is
-	 * received for specific parameter.
+	 * This method check that hasNonConfidentialIncorrectValues method returns invalid result when unexpected value is received for specific
+	 * parameter.
 	 */
 	public void testHasNonConfidentialIncorrectValues_IncorrectParameterValueReceivedInTheMiddle() {
 
@@ -190,8 +185,8 @@ public class ValidatorHelperRequestTest extends AbstractHDIVTestCase {
 	}
 
 	/**
-	 * This method check that hasNonConfidentialIncorrectValues method returns invalid result when unexpected value is
-	 * received for specific parameter.
+	 * This method check that hasNonConfidentialIncorrectValues method returns invalid result when unexpected value is received for specific
+	 * parameter.
 	 */
 	public void testHasNonConfidentialIncorrectValues_IncorrectParameterValueReceivedAtFirstPosition() {
 

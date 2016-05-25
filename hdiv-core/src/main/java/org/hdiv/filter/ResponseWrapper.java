@@ -63,9 +63,8 @@ public class ResponseWrapper extends HttpServletResponseWrapper {
 	protected boolean confidentiality;
 
 	/**
-	 * Indicates if cookie confidentiality is applied or not. If the value is <code>true</code> cookie values must not
-	 * be replaced by relative values. If it is <code>false</code> they must be replaced by relative values to provide
-	 * confidentiality.
+	 * Indicates if cookie confidentiality is applied or not. If the value is <code>true</code> cookie values must not be replaced by
+	 * relative values. If it is <code>false</code> they must be replaced by relative values to provide confidentiality.
 	 */
 	protected boolean avoidCookiesConfidentiality;
 
@@ -89,7 +88,6 @@ public class ResponseWrapper extends HttpServletResponseWrapper {
 
 		super(originalResponse);
 
-
 		Assert.notNull(request);
 		Assert.notNull(originalResponse);
 
@@ -101,8 +99,7 @@ public class ResponseWrapper extends HttpServletResponseWrapper {
 	}
 
 	/**
-	 * The default behavior of this method is to return setHeader(String name, String value) on the wrapped response
-	 * object.
+	 * The default behavior of this method is to return setHeader(String name, String value) on the wrapped response object.
 	 *
 	 * @param name the name of the header
 	 * @param value the header value
@@ -127,8 +124,7 @@ public class ResponseWrapper extends HttpServletResponseWrapper {
 	}
 
 	/**
-	 * The default behavior of this method is to return addHeader(String name, String value) on the wrapped response
-	 * object.
+	 * The default behavior of this method is to return addHeader(String name, String value) on the wrapped response object.
 	 *
 	 * @param name the name of the header
 	 * @param value the header value
@@ -230,11 +226,10 @@ public class ResponseWrapper extends HttpServletResponseWrapper {
 	@SuppressWarnings("unchecked")
 	protected void updateSessionCookies() {
 
-		Map<String, SavedCookie> sessionOriginalCookies = this.session.getAttribute(this.requestContext,
-				Constants.HDIV_COOKIES_KEY, Map.class);
+		Map<String, SavedCookie> sessionOriginalCookies = this.session.getAttribute(this.requestContext, Constants.HDIV_COOKIES_KEY,
+				Map.class);
 
 		if (sessionOriginalCookies != null && sessionOriginalCookies.size() > 0) {
-
 
 			sessionOriginalCookies.putAll(this.cookies);
 			this.session.setAttribute(this.requestContext, Constants.HDIV_COOKIES_KEY, sessionOriginalCookies);

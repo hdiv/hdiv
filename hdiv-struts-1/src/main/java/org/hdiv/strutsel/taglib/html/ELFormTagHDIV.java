@@ -21,12 +21,11 @@ import org.apache.strutsel.taglib.utils.EvalHelper;
 import org.hdiv.taglib.html.FormTagHDIV;
 
 /**
- * Custom tag that represents an input form, associated with a bean whose properties correspond to the various fields of
- * the form.
+ * Custom tag that represents an input form, associated with a bean whose properties correspond to the various fields of the form.
  * <p>
- * This class is a subclass of the class <code>org.hdiv.taglib.html.FormTagHDIV</code> which provides most of the
- * described functionality. This subclass allows all attribute values to be specified as expressions utilizing the
- * JavaServer Pages Standard Library expression language.
+ * This class is a subclass of the class <code>org.hdiv.taglib.html.FormTagHDIV</code> which provides most of the described functionality.
+ * This subclass allows all attribute values to be specified as expressions utilizing the JavaServer Pages Standard Library expression
+ * language.
  * 
  * @author Gorka Vicente
  * @since HDIV 2.0

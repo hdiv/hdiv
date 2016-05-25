@@ -29,8 +29,8 @@ import org.hdiv.urlProcessor.UrlData;
 import org.hdiv.util.HDIVUtil;
 
 /**
- * This is the tag handler for &lt;tiles:insert&gt;, which includes a template. The tag's body content consists of
- * &lt;tiles:put&gt; tags, which are accessed by &lt;tiles:get&gt; in the template.
+ * This is the tag handler for &lt;tiles:insert&gt;, which includes a template. The tag's body content consists of &lt;tiles:put&gt; tags,
+ * which are accessed by &lt;tiles:get&gt; in the template.
  *
  * @author Gorka Vicente
  * @see org.apache.struts.tiles.taglib.InsertTag
@@ -41,8 +41,8 @@ public class InsertTagHDIV extends InsertTag {
 	private static final long serialVersionUID = -7501549724315338219L;
 
 	/**
-	 * End of Process tag attribute "definition". Overload definition with tag attributes "template" and "role". Then,
-	 * create appropriate tag handler.
+	 * End of Process tag attribute "definition". Overload definition with tag attributes "template" and "role". Then, create appropriate
+	 * tag handler.
 	 * 
 	 * @param definition Definition to process.
 	 * @return Appropriate TagHandler.
@@ -86,11 +86,9 @@ public class InsertTagHDIV extends InsertTag {
 		RequestWrapper requestWrapper = HDIVUtil.getNativeRequest(request, RequestWrapper.class);
 		if (requestWrapper != null) {
 
-			LinkUrlProcessor linkUrlProcessorForForward = HDIVUtil.getLinkUrlProcessor(pageContext.getSession()
-					.getServletContext());
+			LinkUrlProcessor linkUrlProcessorForForward = HDIVUtil.getLinkUrlProcessor(pageContext.getSession().getServletContext());
 			UrlData urlData = linkUrlProcessorForForward.createUrlData(url, "GET", request);
-			Map<String, String[]> urlParamsAsMap = linkUrlProcessorForForward.getUrlParamsAsMap(request,
-					urlData.getUrlParams());
+			Map<String, String[]> urlParamsAsMap = linkUrlProcessorForForward.getUrlParamsAsMap(request, urlData.getUrlParams());
 			for (Map.Entry<String, String[]> entry : urlParamsAsMap.entrySet()) {
 				requestWrapper.addParameter(entry.getKey(), entry.getValue());
 			}
@@ -98,8 +96,7 @@ public class InsertTagHDIV extends InsertTag {
 	}
 
 	/**
-	 * Get instantiated Controller. Return controller denoted by controllerType, or <code>null</code> if controllerType
-	 * is null.
+	 * Get instantiated Controller. Return controller denoted by controllerType, or <code>null</code> if controllerType is null.
 	 * 
 	 * @throws JspException If controller can't be created.
 	 */

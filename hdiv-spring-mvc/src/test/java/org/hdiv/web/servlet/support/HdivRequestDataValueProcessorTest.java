@@ -27,8 +27,7 @@ public class HdivRequestDataValueProcessorTest extends AbstractHDIVTestCase {
 
 	@Override
 	protected void onSetUp() throws Exception {
-		this.dataValueProcessor = (HdivRequestDataValueProcessor) this.getApplicationContext().getBean(
-				"requestDataValueProcessor");
+		this.dataValueProcessor = (HdivRequestDataValueProcessor) this.getApplicationContext().getBean("requestDataValueProcessor");
 
 	}
 

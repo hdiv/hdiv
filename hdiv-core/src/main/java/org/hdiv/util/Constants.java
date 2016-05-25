@@ -84,14 +84,14 @@ public class Constants {
 	public static final String ENCODING_UTF_8 = "UTF-8";
 
 	/**
-	 * Properties key that contains the error message to be shown when the value of the editable parameter is not valid.
-	 * Only used for Editable Validation errors.
+	 * Properties key that contains the error message to be shown when the value of the editable parameter is not valid. Only used for
+	 * Editable Validation errors.
 	 */
 	public static final String HDIV_EDITABLE_ERROR_KEY = "hdiv.editable.error";
 
 	/**
-	 * Properties key that contains the error message to be shown when the value of the editable password parameter is
-	 * not valid. Only used for Editable Validation errors.
+	 * Properties key that contains the error message to be shown when the value of the editable password parameter is not valid. Only used
+	 * for Editable Validation errors.
 	 */
 	public static final String HDIV_EDITABLE_PASSWORD_ERROR_KEY = "hdiv.editable.password.error";
 

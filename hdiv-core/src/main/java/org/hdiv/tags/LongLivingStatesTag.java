@@ -30,8 +30,8 @@ import org.hdiv.util.HDIVUtil;
 public class LongLivingStatesTag extends TagSupport {
 
 	/**
-	 * Universal version identifier. Deserialization uses this number to ensure that a loaded class corresponds exactly
-	 * to a serialized object.
+	 * Universal version identifier. Deserialization uses this number to ensure that a loaded class corresponds exactly to a serialized
+	 * object.
 	 */
 	private static final long serialVersionUID = 4998045113101933843L;
 

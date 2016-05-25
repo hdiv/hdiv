@@ -31,8 +31,8 @@ public interface IStateCache extends Serializable {
 	 * @param isRefreshRequest if the request is a refresh request
 	 * @param isAjaxRequest if the request is an ajax request
 	 *
-	 * @return If the cache has reached its maximum size, less important identifier is returned in order to delete it
-	 * from session. Otherwise, null will be returned.
+	 * @return If the cache has reached its maximum size, less important identifier is returned in order to delete it from session.
+	 * Otherwise, null will be returned.
 	 */
 	Integer addPage(int pageId, Integer currentPageId, boolean isRefreshRequest, boolean isAjaxRequest);
 

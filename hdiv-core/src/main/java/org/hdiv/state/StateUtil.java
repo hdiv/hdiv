@@ -84,8 +84,8 @@ public class StateUtil {
 	}
 
 	/**
-	 * Restore state data from <code>request</code>. State restore from memory can be done using an identifier or or
-	 * using the serialized data received in the request.
+	 * Restore state data from <code>request</code>. State restore from memory can be done using an identifier or or using the serialized
+	 * data received in the request.
 	 *
 	 * @param context Context holder for request-specific state.
 	 * @param requestState String that contains HDIV state received in the request

@@ -24,17 +24,16 @@ import org.hdiv.util.HDIVUtil;
 
 /**
  * <p>
- * Renders an HTML &lt;select&gt; element, associated with a bean property specified by our attributes. This tag is only
- * valid when nested inside a form tag body.
+ * Renders an HTML &lt;select&gt; element, associated with a bean property specified by our attributes. This tag is only valid when nested
+ * inside a form tag body.
  * </p>
  * <p>
- * This tag operates in two modes, depending upon the state of the <code>multiple</code> attribute, which affects the
- * data type of the associated property you should use:
+ * This tag operates in two modes, depending upon the state of the <code>multiple</code> attribute, which affects the data type of the
+ * associated property you should use:
  * </p>
  * <ul>
- * <li> <em>multiple="true" IS NOT selected</em> - The corresponding property should be a scalar value of any supported
- * data type.</li>
- * <li> <em>multiple="true" IS selected</em> - The corresponding property should be an array of any supported data type.</li>
+ * <li><em>multiple="true" IS NOT selected</em> - The corresponding property should be a scalar value of any supported data type.</li>
+ * <li><em>multiple="true" IS selected</em> - The corresponding property should be an array of any supported data type.</li>
  * </ul>
  * 
  * @author Gorka Vicente
@@ -43,8 +42,8 @@ import org.hdiv.util.HDIVUtil;
 public class SelectTagHDIV extends SelectTag {
 
 	/**
-	 * Universal version identifier. Deserialization uses this number to ensure that a loaded class corresponds exactly
-	 * to a serialized object.
+	 * Universal version identifier. Deserialization uses this number to ensure that a loaded class corresponds exactly to a serialized
+	 * object.
 	 */
 	private static final long serialVersionUID = 4042283145963769538L;
 

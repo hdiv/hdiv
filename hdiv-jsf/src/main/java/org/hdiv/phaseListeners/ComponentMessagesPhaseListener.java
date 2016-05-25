@@ -27,8 +27,7 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.jsf.FacesContextUtils;
 
 /**
- * Phase Listener that detects errors thrown by components of type Select (SelectOne or SelectMany) and registers them
- * in the HDIV logger.
+ * Phase Listener that detects errors thrown by components of type Select (SelectOne or SelectMany) and registers them in the HDIV logger.
  * 
  * @author Gotzon Illarramendi
  */

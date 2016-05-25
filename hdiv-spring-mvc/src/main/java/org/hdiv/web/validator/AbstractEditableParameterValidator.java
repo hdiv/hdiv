@@ -45,8 +45,7 @@ public abstract class AbstractEditableParameterValidator {
 			return;
 		}
 
-		List<ValidatorError> validationErrors = (List<ValidatorError>) attr.getAttribute(
-				Constants.EDITABLE_PARAMETER_ERROR, 0);
+		List<ValidatorError> validationErrors = (List<ValidatorError>) attr.getAttribute(Constants.EDITABLE_PARAMETER_ERROR, 0);
 		if (validationErrors != null && validationErrors.size() > 0) {
 
 			for (ValidatorError error : validationErrors) {
@@ -65,8 +64,7 @@ public abstract class AbstractEditableParameterValidator {
 			return;
 		}
 
-		List<ValidatorError> validationErrors = (List<ValidatorError>) attr.getAttribute(
-				Constants.EDITABLE_PARAMETER_ERROR, 0);
+		List<ValidatorError> validationErrors = (List<ValidatorError>) attr.getAttribute(Constants.EDITABLE_PARAMETER_ERROR, 0);
 		if (validationErrors != null && validationErrors.size() > 0) {
 
 			ValidatorError paramError = null;
@@ -91,8 +89,8 @@ public abstract class AbstractEditableParameterValidator {
 		}
 		else {
 			String printedValue = this.createMessageError(paramValues);
-			errors.rejectValue(param, Constants.HDIV_EDITABLE_ERROR_KEY, new String[] { printedValue }, printedValue
-					+ " has not allowed characters");
+			errors.rejectValue(param, Constants.HDIV_EDITABLE_ERROR_KEY, new String[] { printedValue },
+					printedValue + " has not allowed characters");
 		}
 	}
 

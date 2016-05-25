@@ -29,8 +29,8 @@ import org.hdiv.state.IState;
 public interface ISession {
 
 	/**
-	 * It adds a new page to the user session. To do this it adds a new page identifier to the cache and if it has
-	 * reached the maximum size allowed, the oldest page is deleted from the session and from the cache itself.
+	 * It adds a new page to the user session. To do this it adds a new page identifier to the cache and if it has reached the maximum size
+	 * allowed, the oldest page is deleted from the session and from the cache itself.
 	 *
 	 * @param context Context holder for request-specific state.
 	 * @param page Page with all the information about states
@@ -62,8 +62,7 @@ public interface ISession {
 	 * @param pageId Page identifier
 	 * @param stateId State identifier
 	 *
-	 * @return State identifier <code>stateId</code> throws HDIVException If the state doesn't exist a new HDIV
-	 * exception is thrown.
+	 * @return State identifier <code>stateId</code> throws HDIVException If the state doesn't exist a new HDIV exception is thrown.
 	 */
 	IState getState(RequestContext context, int pageId, int stateId);
 

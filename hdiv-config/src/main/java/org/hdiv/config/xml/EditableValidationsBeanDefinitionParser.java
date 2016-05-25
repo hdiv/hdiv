@@ -73,8 +73,7 @@ public class EditableValidationsBeanDefinitionParser extends AbstractSingleBeanD
 	 * (non-Javadoc)
 	 *
 	 * @see org.springframework.beans.factory.xml.AbstractBeanDefinitionParser#resolveId(org.w3c.dom.Element,
-	 * org.springframework.beans.factory.support.AbstractBeanDefinition,
-	 * org.springframework.beans.factory.xml.ParserContext)
+	 * org.springframework.beans.factory.support.AbstractBeanDefinition, org.springframework.beans.factory.xml.ParserContext)
 	 */
 	@Override
 	protected String resolveId(final Element element, final AbstractBeanDefinition definition, final ParserContext parserContext)
@@ -97,8 +96,7 @@ public class EditableValidationsBeanDefinitionParser extends AbstractSingleBeanD
 	 * (non-Javadoc)
 	 *
 	 * @see org.springframework.beans.factory.xml.AbstractSingleBeanDefinitionParser#doParse(org.w3c.dom.Element,
-	 * org.springframework.beans.factory.xml.ParserContext,
-	 * org.springframework.beans.factory.support.BeanDefinitionBuilder)
+	 * org.springframework.beans.factory.xml.ParserContext, org.springframework.beans.factory.support.BeanDefinitionBuilder)
 	 */
 	@Override
 	protected void doParse(final Element element, final ParserContext parserContext, final BeanDefinitionBuilder bean) {

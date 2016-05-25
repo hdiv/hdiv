@@ -16,8 +16,8 @@
 package org.hdiv.exception;
 
 /**
- * Exception thrown when an attack is detected in an <b>immediate</b> component. This exception is thrown in order to
- * stop JSF's default life cycle and show HDIV's error page.
+ * Exception thrown when an attack is detected in an <b>immediate</b> component. This exception is thrown in order to stop JSF's default
+ * life cycle and show HDIV's error page.
  * 
  * @author Gotzon Illarramendi
  */

@@ -24,9 +24,8 @@ import org.hdiv.util.HDIVUtil;
 
 /**
  * <p>
- * Renders an HTML &lt;input&gt; element of type submit. This tag is only valid when nested inside a form tag body.
- * Pressing of this submit button causes the action servlet to bypass calling the associated form bean validate()
- * method. The action is called normally.
+ * Renders an HTML &lt;input&gt; element of type submit. This tag is only valid when nested inside a form tag body. Pressing of this submit
+ * button causes the action servlet to bypass calling the associated form bean validate() method. The action is called normally.
  * </p>
  * 
  * @author Gorka Vicente
@@ -35,8 +34,8 @@ import org.hdiv.util.HDIVUtil;
 public class CancelTagHDIV extends CancelTag {
 
 	/**
-	 * Universal version identifier. Deserialization uses this number to ensure that a loaded class corresponds exactly
-	 * to a serialized object.
+	 * Universal version identifier. Deserialization uses this number to ensure that a loaded class corresponds exactly to a serialized
+	 * object.
 	 */
 	private static final long serialVersionUID = 2674438950379133049L;
 

@@ -35,12 +35,11 @@ public class HDIVUtilJsf {
 
 	public static HDIVFacesEventListener getFacesEventListener(FacesContext facesContext) {
 
-		HDIVFacesEventListener newFacesEventListener = (HDIVFacesEventListener) facesContext.getExternalContext()
-				.getApplicationMap().get(FACESEVENTLISTENER_SERVLETCONTEXT_KEY);
+		HDIVFacesEventListener newFacesEventListener = (HDIVFacesEventListener) facesContext.getExternalContext().getApplicationMap()
+				.get(FACESEVENTLISTENER_SERVLETCONTEXT_KEY);
 
 		if (newFacesEventListener == null) {
-			throw new HDIVException(
-					"HDIVFacesEventListener object has not been initialized correctly in servletContext.");
+			throw new HDIVException("HDIVFacesEventListener object has not been initialized correctly in servletContext.");
 		}
 		else {
 			return newFacesEventListener;
@@ -49,8 +48,7 @@ public class HDIVUtilJsf {
 
 	public static void setFacesEventListener(HDIVFacesEventListener newFacesEventListener, FacesContext facesContext) {
 
-		facesContext.getExternalContext().getApplicationMap()
-				.put(FACESEVENTLISTENER_SERVLETCONTEXT_KEY, newFacesEventListener);
+		facesContext.getExternalContext().getApplicationMap().put(FACESEVENTLISTENER_SERVLETCONTEXT_KEY, newFacesEventListener);
 
 	}
 

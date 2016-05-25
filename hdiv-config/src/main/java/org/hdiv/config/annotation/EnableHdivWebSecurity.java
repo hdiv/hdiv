@@ -27,8 +27,8 @@ import org.springframework.context.annotation.Import;
 
 /**
  * Add this annotation to an {@code @Configuration} class to have the HDIV Security configuration defined in any
- * {@link HdivWebSecurityConfigurer} or more likely by extending the {@link HdivWebSecurityConfigurerAdapter} base class
- * and overriding individual methods:
+ * {@link HdivWebSecurityConfigurer} or more likely by extending the {@link HdivWebSecurityConfigurerAdapter} base class and overriding
+ * individual methods:
  *
  * <pre class="code">
  * &#064;Configuration
