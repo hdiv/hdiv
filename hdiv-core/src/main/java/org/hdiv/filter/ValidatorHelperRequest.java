@@ -435,24 +435,24 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	protected ValidatorHelperResult allRequiredParametersReceived(final HttpServletRequest request, final IState state,
 			final String target) {
 
-		List<String> receivedParameters = state.getRequiredParams();
+		List<String> requiredParameters = state.getRequiredParams();
 
 		Enumeration<?> requestParameters = request.getParameterNames();
 		while (requestParameters.hasMoreElements()) {
 
 			String currentParameter = (String) requestParameters.nextElement();
 
-			receivedParameters.remove(currentParameter);
+			requiredParameters.remove(currentParameter);
 
 			// If multiple parameters are received, it is possible to pass this
 			// verification without checking all the request parameters.
-			if (receivedParameters.isEmpty()) {
+			if (requiredParameters.isEmpty()) {
 				return ValidatorHelperResult.VALID;
 			}
 		}
 
-		if (receivedParameters.size() > 0) {
-			ValidatorError error = new ValidatorError(HDIVErrorCodes.REQUIRED_PARAMETERS, target, receivedParameters.toString());
+		if (requiredParameters.size() > 0) {
+			ValidatorError error = new ValidatorError(HDIVErrorCodes.REQUIRED_PARAMETERS, target, requiredParameters.toString());
 			return new ValidatorHelperResult(error);
 		}
 
