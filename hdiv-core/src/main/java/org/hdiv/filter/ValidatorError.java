@@ -19,6 +19,8 @@ import org.hdiv.util.HDIVErrorCodes;
 
 public class ValidatorError {
 
+	private static boolean debugMode;
+
 	/**
 	 * Error code from {@link HDIVErrorCodes}
 	 */
@@ -64,6 +66,8 @@ public class ValidatorError {
 	 */
 	private final String validationRuleName;
 
+	private StackTraceElement[] stackTrace;
+
 	public ValidatorError(final String type) {
 		this(type, null);
 	}
@@ -102,6 +106,9 @@ public class ValidatorError {
 		this.remoteIp = remoteIp;
 		this.userName = userName;
 		this.validationRuleName = validationRuleName;
+		if (debugMode) {
+			stackTrace = Thread.currentThread().getStackTrace();
+		}
 	}
 
 	/**
@@ -205,6 +212,14 @@ public class ValidatorError {
 		return "ValidatorError [type=" + type + ", target=" + target + ", parameterName=" + parameterName + ", parameterValue="
 				+ parameterValue + ", originalParameterValue=" + originalParameterValue + ", localIp=" + localIp + ", remoteIp=" + remoteIp
 				+ ", userName=" + userName + ", validationRuleName=" + validationRuleName + "]";
+	}
+
+	public static void setDebug(final boolean debugMode) {
+		ValidatorError.debugMode = debugMode;
+	}
+
+	public StackTraceElement[] getStackTrace() {
+		return stackTrace;
 	}
 
 }
