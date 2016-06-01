@@ -33,7 +33,7 @@ public class DefaultErrorPageWritter {
 	 * @param out output to the response
 	 * @param editableErrors existing editable errors to show in error page.
 	 */
-	public void writetErrorPage(PrintWriter out, List<ValidatorError> editableErrors) {
+	public void writetErrorPage(final PrintWriter out, final List<ValidatorError> editableErrors) {
 
 		out.println("<!DOCTYPE html>");
 		out.println("<html>");
@@ -147,7 +147,7 @@ public class DefaultErrorPageWritter {
 		out.println("		</div>");
 		out.println("		<div id=\"errorFooter\">");
 		out.println("			<div id=\"errorFooterColor\"></div>");
-		out.println("			<p>&copy; 2005-2015 hdiv.org</p>");
+		out.println("			<p>&copy; 2005-2016 hdiv.org</p>");
 		out.println("		</div>");
 		out.println("	</div>");
 		out.println("</body>");
