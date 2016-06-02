@@ -33,8 +33,8 @@ import org.hdiv.util.Method;
 public class State implements IState, Serializable {
 
 	/**
-	 * Universal version identifier. Deserialization uses this number to ensure that a loaded class corresponds exactly
-	 * to a serialized object.
+	 * Universal version identifier. Deserialization uses this number to ensure that a loaded class corresponds exactly to a serialized
+	 * object.
 	 */
 	private static final long serialVersionUID = -5179573248448214135L;
 
@@ -74,6 +74,8 @@ public class State implements IState, Serializable {
 	 * Null value is equivalent to GET.
 	 */
 	private Method method;
+
+	private transient IPage page;
 
 	public State() {
 	}
@@ -185,8 +187,8 @@ public class State implements IState, Serializable {
 	}
 
 	/**
-	 * Required parameters to be able to do a correct request with this state. We consider required parameters all of
-	 * the parameters that can be sent via GET or those that are added to the name of an action.
+	 * Required parameters to be able to do a correct request with this state. We consider required parameters all of the parameters that
+	 * can be sent via GET or those that are added to the name of an action.
 	 */
 	public List<String> getRequiredParams() {
 		if (parameters == null) {
@@ -259,6 +261,16 @@ public class State implements IState, Serializable {
 		sb.append("requiredParams: ").append(getRequiredParams());
 		sb.append("method: ").append(method == null ? Method.GET : method);
 		return super.toString();
+	}
+
+	public IPage getPage() {
+		IPage temp = page;
+		page = null;
+		return temp;
+	}
+
+	public void setPage(final IPage page) {
+		this.page = page;
 	}
 
 }

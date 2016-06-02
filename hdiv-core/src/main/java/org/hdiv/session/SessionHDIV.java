@@ -117,8 +117,8 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 	}
 
 	/**
-	 * It adds a new page to the user session. To do this it adds a new page identifier to the cache and if it has
-	 * reached the maximum size allowed, the oldest page is deleted from the session and from the cache itself.
+	 * It adds a new page to the user session. To do this it adds a new page identifier to the cache and if it has reached the maximum size
+	 * allowed, the oldest page is deleted from the session and from the cache itself.
 	 * 
 	 * @param context Context holder for request-specific state.
 	 * @param newPage Page with all the information about states
@@ -190,8 +190,8 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 	}
 
 	/**
-	 * Deletes from session the data related to the finished flows. This means a memory consumption optimization because
-	 * useless objects of type <code>IPage</code> are deleted.
+	 * Deletes from session the data related to the finished flows. This means a memory consumption optimization because useless objects of
+	 * type <code>IPage</code> are deleted.
 	 * 
 	 * @param context Context holder for request-specific state.
 	 * @param conversationId finished flow identifier
@@ -229,14 +229,15 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 	 * Obtains the state identifier <code>stateId</code> related to the page identifier <code>pageId</code>.
 	 * 
 	 * @param context Context holder for request-specific state.
-	 * @return State identifier <code>stateId</code> throws HDIVException If the state doesn't exist a new HDIV
-	 * exception is thrown.
+	 * @return State identifier <code>stateId</code> throws HDIVException If the state doesn't exist a new HDIV exception is thrown.
 	 */
 	public IState getState(final RequestContext context, final int pageId, final int stateId) {
 
 		try {
 			IPage currentPage = getPage(context, pageId);
-			return currentPage.getState(stateId);
+			IState state = currentPage.getState(stateId);
+			state.setPage(currentPage);
+			return state;
 
 		}
 		catch (final Exception e) {
@@ -299,8 +300,8 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 	}
 
 	/**
-	 * Callback that supplies the owning factory to a bean instance. Invoked after population of normal bean properties
-	 * but before an init callback like InitializingBean's afterPropertiesSet or a custom init-method.
+	 * Callback that supplies the owning factory to a bean instance. Invoked after population of normal bean properties but before an init
+	 * callback like InitializingBean's afterPropertiesSet or a custom init-method.
 	 * 
 	 * @param beanFactory owning BeanFactory (may not be null). The bean can immediately call methods on the factory.
 	 */

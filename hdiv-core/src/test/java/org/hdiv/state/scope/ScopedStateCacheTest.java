@@ -28,7 +28,7 @@ public class ScopedStateCacheTest extends AbstractHDIVTestCase {
 
 		ScopedStateCache cache = new ScopedStateCache();
 
-		State state = new State(0);
+		IState state = new State(0);
 		state.setAction("/action");
 		String token = "123456789";
 

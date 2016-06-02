@@ -124,7 +124,10 @@ public class DataComposerFactory {
 			// We are modifying an existing state, preload dataComposer with it
 			IState state = stateUtil.restoreState(context, preState);
 			if (state.getPageId() > 0) {
-				IPage page = session.getPage(context, state.getPageId());
+				IPage page = state.getPage();
+				if (page == null) {
+					page = session.getPage(context, state.getPageId());
+				}
 				if (page != null) {
 					dataComposer.startPage(page);
 				}
@@ -139,7 +142,10 @@ public class DataComposerFactory {
 			if (hdivState != null && hdivState.length() > 0) {
 				IState state = stateUtil.restoreState(context, hdivState);
 				if (state.getPageId() > 0) {
-					IPage page = session.getPage(context, state.getPageId());
+					IPage page = state.getPage();
+					if (page == null) {
+						page = session.getPage(context, state.getPageId());
+					}
 					dataComposer.startPage(page);
 				}
 				else {
