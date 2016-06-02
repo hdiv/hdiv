@@ -235,10 +235,7 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 
 		try {
 			IPage currentPage = getPage(context, pageId);
-			IState state = currentPage.getState(stateId);
-			state.setPage(currentPage);
-			return state;
-
+			return currentPage.getState(stateId);
 		}
 		catch (final Exception e) {
 			throw new HDIVException(HDIVErrorCodes.PAGE_ID_INCORRECT, e);
