@@ -685,7 +685,6 @@ public class ValidatorHelperRequest implements IValidationHelper {
 				throw new HDIVException(HDIVErrorCodes.PAGE_ID_INCORRECT, e);
 			}
 			IPage currentPage = restoredState.getPage();
-			System.out.println("Current page:" + currentPage);
 			if (currentPage == null) {
 				currentPage = session.getPage(context, pageId);
 			}
