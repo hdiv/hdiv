@@ -107,5 +107,9 @@ public interface IState {
 	 * @return
 	 */
 	RandomTokenType getTokenType();
+	
+	IPage getPage();
+
+	void setPage(IPage currentPage);
 
 }

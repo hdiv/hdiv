@@ -79,6 +79,8 @@ public class State implements IState, Serializable {
 	 * Type of token to be used with this state
 	 */
 	private RandomTokenType tokenType = RandomTokenType.LINK;
+	
+	private transient IPage page;
 
 	public State() {
 	}
@@ -354,4 +356,13 @@ public class State implements IState, Serializable {
 		this.tokenType = tokenType;
 	}
 
+	public IPage getPage() {
+		IPage temp = page;
+		page = null;
+		return temp;
+	}
+
+	public void setPage(final IPage page) {
+		this.page = page;
+	}
 }

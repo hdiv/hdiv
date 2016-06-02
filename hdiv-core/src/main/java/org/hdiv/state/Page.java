@@ -129,7 +129,7 @@ public class Page implements IPage, Serializable {
 	 * @param id State identifier
 	 */
 	public boolean existState(final int id) {
-		return getState(id) != null;
+		return states.get(id) != null;
 	}
 
 	/**
@@ -139,7 +139,9 @@ public class Page implements IPage, Serializable {
 	 * @return IState State with the identifier <code>id</code>.
 	 */
 	public IState getState(final int id) {
-		return states.get(id);
+		IState state = states.get(id);
+		state.setPage(this);
+		return state;
 	}
 
 	/**

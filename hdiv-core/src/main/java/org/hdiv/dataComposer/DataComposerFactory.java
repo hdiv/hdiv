@@ -128,7 +128,10 @@ public class DataComposerFactory {
 			int pageId = stateUtil.getPageId(preState);
 			IState state = stateUtil.restoreState(context, preState);
 			if (pageId > 0) {
-				IPage page = session.getPage(context, pageId);
+				IPage page = state.getPage();
+				if (page == null) {
+					page = session.getPage(context, pageId);
+				}
 				if (page != null) {
 					dataComposer.startPage(page);
 				}
