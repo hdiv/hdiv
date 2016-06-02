@@ -112,7 +112,8 @@ public class State implements IState, Serializable {
 	 */
 	public IParameter getParameter(final String key) {
 		if (parameters != null) {
-			for (IParameter parameter : parameters) {
+			for (int i = 0; i < parameters.size(); i++) {
+				IParameter parameter = parameters.get(i);
 				if (parameter.getName().equalsIgnoreCase(key)) {
 					return parameter;
 				}
