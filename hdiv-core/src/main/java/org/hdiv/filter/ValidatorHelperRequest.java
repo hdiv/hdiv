@@ -618,7 +618,9 @@ public class ValidatorHelperRequest implements IValidationHelper {
 
 		}
 		catch (final HDIVException e) {
-
+			if (log.isDebugEnabled()) {
+				log.debug("Exception restoring state target:" + target + " hdivState:" + requestState, e);
+			}
 			if (!hdivConfig.getStrategy().equals(Strategy.MEMORY)) {
 				requestState = null;
 			}
