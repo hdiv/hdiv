@@ -83,6 +83,8 @@ public class HDIVUtil {
 
 	private static final char[] QUESTION = "?".toCharArray();
 
+	private static Random r = new Random();
+
 	/* DataComposer */
 
 	/**
@@ -420,7 +422,6 @@ public class HDIVUtil {
 	 */
 	public static String createRandomToken(final int n) {
 
-		Random r = new Random();
 		int i = r.nextInt(n);
 		if (i == 0) {
 			i = 1;
