@@ -382,6 +382,15 @@ public class HDIVUtil {
 	}
 
 	/**
+	 * Get Hdiv state parameter from request
+	 * @param request HttpServletRequest object
+	 * @return parameter value
+	 */
+	public static String getHdivState(final HttpServletRequest request) {
+		return request.getParameter(getHdivStateParameterName(request));
+	}
+
+	/**
 	 * Set Hdiv state parameter name in request.
 	 * @param request HttpServletRequest object
 	 * @param parameterName The name of the parameter

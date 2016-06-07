@@ -116,9 +116,7 @@ public class DataComposerFactory {
 
 		HttpServletRequest request = context.getRequest();
 
-		String hdivStateParamName = HDIVUtil.getHdivStateParameterName(request);
-
-		String hdivState = request.getParameter(hdivStateParamName);
+		String hdivState = HDIVUtil.getHdivState(request);
 
 		String preState = getModifyStateParameterValue(dataComposer, request);
 
