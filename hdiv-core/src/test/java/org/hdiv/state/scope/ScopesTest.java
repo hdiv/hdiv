@@ -137,9 +137,4 @@ public class ScopesTest extends AbstractHDIVTestCase {
 
 	}
 
-	private String getState(final String url) {
-
-		return url.substring(url.indexOf("_HDIV_STATE_") + 13);
-	}
-
 }

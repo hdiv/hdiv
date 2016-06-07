@@ -245,4 +245,9 @@ public abstract class AbstractHDIVTestCase extends TestCase {
 	protected void setFiles(final String[] files) {
 		this.files = files;
 	}
+
+	protected String getState(final String url) {
+		String value = HDIVUtil.getHdivStateParameterName(getMockRequest()) + "=";
+		return url.substring(url.indexOf(value) + value.length());
+	}
 }
