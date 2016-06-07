@@ -74,11 +74,13 @@ public class Constants {
 	/**
 	 * Session and request attribute for Hdiv state parameter name.
 	 */
+	@Deprecated
 	public static final String HDIV_PARAMETER = "HDIVParameter";
 
 	/**
 	 * Session and request attribute for Modify Hdiv state parameter name.
 	 */
+	@Deprecated
 	public static final String MODIFY_STATE_HDIV_PARAMETER = "modifyHDIVStateParameter";
 
 	public static final String ENCODING_UTF_8 = "UTF-8";

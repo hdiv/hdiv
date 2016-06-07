@@ -46,8 +46,7 @@ public abstract class AbstractUrlProcessor {
 
 	@Deprecated
 	public final UrlData createUrlData(final String url, final String method, final HttpServletRequest request) {
-		return createUrlData(url, Method.secureValueOf(method), (String) request.getSession().getAttribute(Constants.HDIV_PARAMETER),
-				request);
+		return createUrlData(url, Method.secureValueOf(method), HDIVUtil.getHdivStateParameterName(request), request);
 	}
 
 	protected static final String processAnchorAndParameters(String url, final UrlDataImpl urlData, final String hdivParameter) {

@@ -375,6 +375,7 @@ public class HDIVUtil {
 	 * @return Parameter name
 	 * @since 3.0.1
 	 */
+	@SuppressWarnings("deprecation")
 	public static String getHdivStateParameterName(final HttpServletRequest request) {
 
 		return (String) request.getAttribute(Constants.HDIV_PARAMETER);
@@ -386,6 +387,7 @@ public class HDIVUtil {
 	 * @param parameterName The name of the parameter
 	 * @since 3.0.1
 	 */
+	@SuppressWarnings("deprecation")
 	public static void setHdivStateParameterName(final HttpServletRequest request, final String parameterName) {
 
 		request.setAttribute(Constants.HDIV_PARAMETER, parameterName);
@@ -397,6 +399,7 @@ public class HDIVUtil {
 	 * @return Parameter name
 	 * @since 3.0.1
 	 */
+	@SuppressWarnings("deprecation")
 	public static String getModifyHdivStateParameterName(final HttpServletRequest request) {
 
 		return (String) request.getAttribute(Constants.MODIFY_STATE_HDIV_PARAMETER);
@@ -408,6 +411,7 @@ public class HDIVUtil {
 	 * @param parameterName The name of the parameter
 	 * @since 3.0.1
 	 */
+	@SuppressWarnings("deprecation")
 	public static void setModifyHdivStateParameterName(final HttpServletRequest request, final String parameterName) {
 
 		request.setAttribute(Constants.MODIFY_STATE_HDIV_PARAMETER, parameterName);

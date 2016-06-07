@@ -43,10 +43,10 @@ public class DefaultSessionInitializer implements SessionInitializer, Applicatio
 	 * 
 	 * @see org.hdiv.init.SessionInitializer#initializeSession(javax.servlet.http.HttpSession)
 	 */
-	public void initializeSession(HttpSession session) {
+	public void initializeSession(final HttpSession session) {
 
-		this.initPageIdGenerator(session);
-		this.initStateParameterNames(session);
+		initPageIdGenerator(session);
+		initStateParameterNames(session);
 	}
 
 	/*
@@ -54,7 +54,7 @@ public class DefaultSessionInitializer implements SessionInitializer, Applicatio
 	 * 
 	 * @see org.hdiv.init.SessionInitializer#destroySession(javax.servlet.http.HttpSession)
 	 */
-	public void destroySession(HttpSession session) {
+	public void destroySession(final HttpSession session) {
 
 	}
 
@@ -63,10 +63,10 @@ public class DefaultSessionInitializer implements SessionInitializer, Applicatio
 	 * 
 	 * @param httpSession http session
 	 */
-	protected void initPageIdGenerator(HttpSession httpSession) {
+	protected void initPageIdGenerator(final HttpSession httpSession) {
 
 		// Obtain new instance of PageIdGenerator
-		PageIdGenerator pageIdGenerator = this.applicationContext.getBean(PageIdGenerator.class);
+		PageIdGenerator pageIdGenerator = applicationContext.getBean(PageIdGenerator.class);
 		httpSession.setAttribute(Constants.PAGE_ID_GENERATOR_NAME, pageIdGenerator);
 	}
 
@@ -76,32 +76,33 @@ public class DefaultSessionInitializer implements SessionInitializer, Applicatio
 	 * @param httpSession http session
 	 * @since HDIV 1.1
 	 */
-	protected void initStateParameterNames(HttpSession httpSession) {
+	@SuppressWarnings("deprecation")
+	protected void initStateParameterNames(final HttpSession httpSession) {
 
 		String hdivParameterName = null;
 		String modifyHdivStateParameterName = null;
 
-		if (this.config.isRandomName()) {
+		if (config.isRandomName()) {
 			hdivParameterName = HDIVUtil.createRandomToken(Integer.MAX_VALUE);
 			modifyHdivStateParameterName = HDIVUtil.createRandomToken(Integer.MAX_VALUE);
 		}
 		else {
-			hdivParameterName = this.config.getStateParameterName();
-			modifyHdivStateParameterName = this.config.getModifyStateParameterName();
+			hdivParameterName = config.getStateParameterName();
+			modifyHdivStateParameterName = config.getModifyStateParameterName();
 		}
 
 		httpSession.setAttribute(Constants.HDIV_PARAMETER, hdivParameterName);
 		httpSession.setAttribute(Constants.MODIFY_STATE_HDIV_PARAMETER, modifyHdivStateParameterName);
 	}
 
-	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+	public void setApplicationContext(final ApplicationContext applicationContext) throws BeansException {
 		this.applicationContext = applicationContext;
 	}
 
 	/**
 	 * @param config the config to set
 	 */
-	public void setConfig(HDIVConfig config) {
+	public void setConfig(final HDIVConfig config) {
 		this.config = config;
 	}
 }
