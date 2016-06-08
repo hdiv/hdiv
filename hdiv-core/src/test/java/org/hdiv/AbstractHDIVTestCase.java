@@ -247,7 +247,18 @@ public abstract class AbstractHDIVTestCase extends TestCase {
 	}
 
 	protected String getState(final String url) {
-		String value = HDIVUtil.getHdivStateParameterName(getMockRequest()) + "=";
-		return url.substring(url.indexOf(value) + value.length());
+		return getParameter(url, HDIVUtil.getHdivStateParameterName(getMockRequest()));
+	}
+
+	protected String getModifyState(final String url) {
+		return getParameter(url, HDIVUtil.getModifyHdivStateParameterName(getMockRequest()));
+	}
+
+	protected String getParameter(final String url, final String parameter) {
+		String value = parameter + "=";
+		if (url.indexOf(value) == -1) {
+			return null;
+		}
+		return url.substring(url.indexOf(value) + value.length(), Math.min(url.length(), url.indexOf('&', url.indexOf(value))));
 	}
 }
