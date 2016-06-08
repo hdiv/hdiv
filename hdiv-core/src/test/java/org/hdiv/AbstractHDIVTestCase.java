@@ -259,6 +259,10 @@ public abstract class AbstractHDIVTestCase extends TestCase {
 		if (url.indexOf(value) == -1) {
 			return null;
 		}
-		return url.substring(url.indexOf(value) + value.length(), Math.min(url.length(), url.indexOf('&', url.indexOf(value))));
+		int finish = url.length();
+		if (url.indexOf('&', url.indexOf(value)) != -1) {
+			finish = url.indexOf('&', url.indexOf(value));
+		}
+		return url.substring(url.indexOf(value) + value.length(), finish);
 	}
 }
