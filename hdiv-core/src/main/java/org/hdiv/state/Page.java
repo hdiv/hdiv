@@ -140,7 +140,9 @@ public class Page implements IPage, Serializable {
 	 */
 	public IState getState(final int id) {
 		IState state = states.get(id);
-		state.setPage(this);
+		if (state != null) {
+			state.setPage(this);
+		}
 		return state;
 	}
 
