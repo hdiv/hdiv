@@ -152,7 +152,7 @@
 						<executions>
 							<execution>
 								<id>move-sources</id>
-								<phase>generate-sources</phase>
+								<phase>process-sources</phase>
 								<goals>
 									<goal>run</goal>
 								</goals>
@@ -171,6 +171,7 @@
 								<configuration>
 									<tasks>
 										<move file="temp/java/org" todir="src/main/java" force="true" />
+										<delete file="temp/java" />
 									</tasks>
 								</configuration>
 							</execution>
@@ -184,7 +185,7 @@
 						<executions>
 							<execution>
 								<id>replace-for-documentation</id>
-								<phase>process-resources</phase>
+								<phase>generate-sources</phase>
 								<goals>
 									<goal>replace</goal>
 								</goals>
@@ -213,19 +214,67 @@
 
 
 										<replacement>
-											<token>logger.debug</token>
+											<token>logger\.debug</token>
 											<value>org.hdiv.util.HDIVUtil.println</value>
 										</replacement>
 										<replacement>
-											<token>log.debug</token>
+											<token>log\.debug</token>
 											<value>org.hdiv.util.HDIVUtil.println</value>
 										</replacement>
 										<replacement>
-											<token>logger.isDebugEnabled\(\)</token>
+											<token>logger\.isDebugEnabled\(\)</token>
 											<value>true</value>
 										</replacement>
 										<replacement>
-											<token>log.isDebugEnabled\(\)</token>
+											<token>log\.isDebugEnabled\(\)</token>
+											<value>true</value>
+										</replacement>
+										<replacement>
+											<token>logger\.info</token>
+											<value>org.hdiv.util.HDIVUtil.println</value>
+										</replacement>
+										<replacement>
+											<token>log\.info</token>
+											<value>org.hdiv.util.HDIVUtil.println</value>
+										</replacement>
+										<replacement>
+											<token>logger\.isInfoEnabled\(\)</token>
+											<value>true</value>
+										</replacement>
+										<replacement>
+											<token>log\.isInfoEnabled\(\)</token>
+											<value>true</value>
+										</replacement>
+										<replacement>
+											<token>logger\.error</token>
+											<value>org.hdiv.util.HDIVUtil.println</value>
+										</replacement>
+										<replacement>
+											<token>log\.error</token>
+											<value>org.hdiv.util.HDIVUtil.println</value>
+										</replacement>
+										<replacement>
+											<token>logger\.isErrorEnabled\(\)</token>
+											<value>true</value>
+										</replacement>
+										<replacement>
+											<token>log\.isErrorEnabled\(\)</token>
+											<value>true</value>
+										</replacement>
+										<replacement>
+											<token>logger\.warn</token>
+											<value>org.hdiv.util.HDIVUtil.println</value>
+										</replacement>
+										<replacement>
+											<token>log\.warn</token>
+											<value>org.hdiv.util.HDIVUtil.println</value>
+										</replacement>
+										<replacement>
+											<token>logger\.isWarnEnabled\(\)</token>
+											<value>true</value>
+										</replacement>
+										<replacement>
+											<token>log\.isWarnEnabled\(\)</token>
 											<value>true</value>
 										</replacement>
 									</replacements>
