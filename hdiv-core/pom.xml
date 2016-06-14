@@ -84,6 +84,7 @@
 
 	<build>
 		<plugins>
+
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
@@ -121,4 +122,125 @@
 			</plugin>
 		</plugins>
 	</reporting>
+
+	<profiles>
+		<profile>
+			<id>systemout</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>build-helper-maven-plugin</artifactId>
+						<executions>
+							<execution>
+								<phase>generate-sources</phase>
+								<goals>
+									<goal>add-source</goal>
+								</goals>
+								<configuration>
+									<sources>
+										<source>generated/src/main/java</source>
+									</sources>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-antrun-plugin</artifactId>
+						<version>1.8</version>
+						<executions>
+							<execution>
+								<id>move-sources</id>
+								<phase>generate-sources</phase>
+								<goals>
+									<goal>run</goal>
+								</goals>
+								<configuration>
+									<tasks>
+										<move file="src/main/java" todir="temp" force="true" />
+									</tasks>
+								</configuration>
+							</execution>
+							<execution>
+								<id>recover-sources</id>
+								<phase>process-classes</phase>
+								<goals>
+									<goal>run</goal>
+								</goals>
+								<configuration>
+									<tasks>
+										<move file="temp/java/org" todir="src/main/java" force="true" />
+									</tasks>
+								</configuration>
+							</execution>
+						</executions>
+
+					</plugin>
+					<plugin>
+						<groupId>com.google.code.maven-replacer-plugin</groupId>
+						<artifactId>maven-replacer-plugin</artifactId>
+						<version>1.3.5</version>
+						<executions>
+							<execution>
+								<id>replace-for-documentation</id>
+								<phase>process-resources</phase>
+								<goals>
+									<goal>replace</goal>
+								</goals>
+								<configuration>
+									<filesToInclude>
+										src/main/java/**
+									</filesToInclude>
+									<preserveDir>true</preserveDir>
+									<outputDir>generated</outputDir>
+									<replacements>
+										<replacement>
+											<token>public static String stripAndFillSessionData</token>
+											<value>public static void println(Object value) {
+												System.out.println(value);
+												}
+
+												public static void println(Object
+												value, Throwable e) {
+												e.printStackTrace();
+												System.out.println(value);
+												}
+
+												public static String
+												stripAndFillSessionData</value>
+										</replacement>
+
+
+										<replacement>
+											<token>logger.debug</token>
+											<value>org.hdiv.util.HDIVUtil.println</value>
+										</replacement>
+										<replacement>
+											<token>log.debug</token>
+											<value>org.hdiv.util.HDIVUtil.println</value>
+										</replacement>
+										<replacement>
+											<token>logger.isDebugEnabled\(\)</token>
+											<value>true</value>
+										</replacement>
+										<replacement>
+											<token>log.isDebugEnabled\(\)</token>
+											<value>true</value>
+										</replacement>
+									</replacements>
+								</configuration>
+							</execution>
+							<!-- execution> <id>replace-for-resources</id> <phase>prepare-package</phase> 
+								<goals> <goal>replace</goal> </goals> <configuration> <filesToInclude> target/${project.build.finalName}/WEB-INF/classes/spring/default.properties 
+								</filesToInclude> <token>%VERSION%</token> <value>${project.version}</value> 
+								</configuration> </execution -->
+						</executions>
+					</plugin>
+
+				</plugins>
+			</build>
+		</profile>
+
+	</profiles>
 </project>
