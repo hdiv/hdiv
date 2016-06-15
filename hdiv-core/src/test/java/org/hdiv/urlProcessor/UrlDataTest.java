@@ -29,4 +29,17 @@ public class UrlDataTest {
 		Assert.assertTrue(data.isJS());
 	}
 
+	@Test
+	public void testURITemplates() {
+		testPath("/mymethod/test/{?value}", "/mymethod/test/");
+		testPath("/mymethod/test/filter/{?value}", "/mymethod/test/filter/");
+		testPath("/mymethod/test/{myFilter}/MyPage.html", "/mymethod/test/{myFilter}/MyPage.html");
+		testPath("/mymethod/test/MyPage.html", "/mymethod/test/MyPage.html");
+	}
+
+	private void testPath(final String initial, final String expected) {
+		UrlDataImpl data = new UrlDataImpl(initial, Method.GET);
+		Assert.assertEquals(expected, data.getUrlWithOutUriTemplate());
+	}
+
 }

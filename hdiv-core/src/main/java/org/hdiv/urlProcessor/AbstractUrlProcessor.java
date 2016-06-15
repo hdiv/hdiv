@@ -60,6 +60,10 @@ public abstract class AbstractUrlProcessor {
 		return url;
 	}
 
+	protected String removeURITemplateParams(final UrlDataImpl data) {
+		return data.getUrlWithOutUriTemplate();
+	}
+
 	/**
 	 * Create a new instance of {@link UrlData}.
 	 *
@@ -75,11 +79,8 @@ public abstract class AbstractUrlProcessor {
 		final String serverName = request.getServerName();
 		final String baseURL = getBaseURL(request);
 		final UrlDataImpl urlData = new UrlDataImpl(url, method);
+		url = removeURITemplateParams(urlData);
 
-		// Remove URi template params
-		if (urlData.hasUriTemplate()) {
-			url = urlData.getUrlWithOutUriTemplate();
-		}
 		url = processAnchorAndParameters(url, urlData, hdivParameter);
 
 		// Extract protocol, domain and server if exist

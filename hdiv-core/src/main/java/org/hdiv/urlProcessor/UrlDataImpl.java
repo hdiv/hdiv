@@ -307,7 +307,10 @@ public class UrlDataImpl implements UrlData {
 	}
 
 	public String getUrlWithOutUriTemplate() {
-		return originalUrl.replace(getUriTemplate(), "");
+		if (hasUriTemplate()) {
+			return originalUrl.replace(getUriTemplate(), "");
+		}
+		return originalUrl;
 	}
 
 	public String getUriTemplate() {
@@ -382,7 +385,8 @@ public class UrlDataImpl implements UrlData {
 
 	private void parser(final String uriTemplate) {
 		Assert.hasText(uriTemplate, "'uriTemplate' must not be null");
-		final Matcher matcher = NAMES_PATTERN.matcher(uriTemplate);
+		int startVars = uriTemplate.lastIndexOf('/');
+		final Matcher matcher = NAMES_PATTERN.matcher(startVars == -1 ? uriTemplate : uriTemplate.substring(startVars));
 		StringBuilder sb = null;
 
 		boolean variable = false;
