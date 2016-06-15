@@ -66,13 +66,13 @@ public class InitListener implements ServletContextListener, HttpSessionListener
 	 * @param servletContextEvent ServletContext creation event
 	 * @since HDIV 2.1.0
 	 */
-	public void contextInitialized(ServletContextEvent servletContextEvent) {
+	public void contextInitialized(final ServletContextEvent servletContextEvent) {
 
 		ServletContext servletContext = servletContextEvent.getServletContext();
 		WebApplicationContext wac = WebApplicationContextUtils.getWebApplicationContext(servletContext);
 
 		if (wac != null) {
-			this.initServletContext(servletContext);
+			initServletContext(servletContext);
 		}
 		else {
 			if (log.isWarnEnabled()) {
@@ -88,10 +88,10 @@ public class InitListener implements ServletContextListener, HttpSessionListener
 	 * @param servletContextEvent ServletContext destroy event
 	 * @since HDIV 2.1.0
 	 */
-	public void contextDestroyed(ServletContextEvent servletContextEvent) {
+	public void contextDestroyed(final ServletContextEvent servletContextEvent) {
 
-		if (this.servletContextInitializer != null) {
-			this.servletContextInitializer.destroyServletContext(servletContextEvent.getServletContext());
+		if (servletContextInitializer != null) {
+			servletContextInitializer.destroyServletContext(servletContextEvent.getServletContext());
 		}
 	}
 
@@ -100,17 +100,17 @@ public class InitListener implements ServletContextListener, HttpSessionListener
 	 * 
 	 * @param servletContext ServletContext instance
 	 */
-	protected void initServletContext(ServletContext servletContext) {
+	protected void initServletContext(final ServletContext servletContext) {
 
 		WebApplicationContext wac = HDIVUtil.findWebApplicationContext(servletContext);
 
 		// Get initializer instances
-		this.servletContextInitializer = wac.getBean(ServletContextInitializer.class);
-		this.sessionInitializer = wac.getBean(SessionInitializer.class);
+		servletContextInitializer = wac.getBean(ServletContextInitializer.class);
+		sessionInitializer = wac.getBean(SessionInitializer.class);
 
-		this.servletContextInitializer.initializeServletContext(servletContext);
+		servletContextInitializer.initializeServletContext(servletContext);
 
-		this.servletContextInitialized = true;
+		servletContextInitialized = true;
 	}
 
 	/**
@@ -118,15 +118,15 @@ public class InitListener implements ServletContextListener, HttpSessionListener
 	 * 
 	 * @param httpSessionEvent session created event
 	 */
-	public void sessionCreated(HttpSessionEvent httpSessionEvent) {
+	public void sessionCreated(final HttpSessionEvent httpSessionEvent) {
 
 		ServletContext servletContext = httpSessionEvent.getSession().getServletContext();
 
-		if (!this.servletContextInitialized) {
-			this.initServletContext(servletContext);
+		if (!servletContextInitialized) {
+			initServletContext(servletContext);
 		}
 
-		this.sessionInitializer.initializeSession(httpSessionEvent.getSession());
+		sessionInitializer.initializeSession(httpSessionEvent.getSession());
 
 	}
 
@@ -135,11 +135,10 @@ public class InitListener implements ServletContextListener, HttpSessionListener
 	 * 
 	 * @param httpSessionEvent HttpSession destroy event
 	 */
-	public void sessionDestroyed(HttpSessionEvent httpSessionEvent) {
-
-		if (this.sessionInitializer != null) {
+	public void sessionDestroyed(final HttpSessionEvent httpSessionEvent) {
+		if (sessionInitializer != null) {
 			// Prevent error in development environment
-			this.sessionInitializer.destroySession(httpSessionEvent.getSession());
+			sessionInitializer.destroySession(httpSessionEvent.getSession());
 		}
 	}
 
