@@ -15,10 +15,10 @@
  */
 package org.hdiv.web.servlet.support;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -48,7 +48,7 @@ public class HdivRequestDataValueProcessor implements RequestDataValueProcessor 
 	/**
 	 * No editable field types.
 	 */
-	protected List<String> noEditableTypes = new ArrayList<String>();
+	protected Set<String> noEditableTypes = new HashSet<String>();
 
 	public HdivRequestDataValueProcessor() {
 
@@ -221,11 +221,7 @@ public class HdivRequestDataValueProcessor implements RequestDataValueProcessor 
 	 * @return editable
 	 */
 	protected boolean isEditable(final String type) {
-
-		if (noEditableTypes.contains(type)) {
-			return false;
-		}
-		return true;
+		return !noEditableTypes.contains(type);
 	}
 
 	/**
