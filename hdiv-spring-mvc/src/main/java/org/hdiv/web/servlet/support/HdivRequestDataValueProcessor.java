@@ -143,7 +143,7 @@ public class HdivRequestDataValueProcessor implements RequestDataValueProcessor 
 
 		IDataComposer dataComposer = HDIVUtil.getDataComposer(request);
 
-		if (dataComposer == null || dataComposer.isRequestStarted() == false) {
+		if (dataComposer == null) {
 			return value;
 		}
 
