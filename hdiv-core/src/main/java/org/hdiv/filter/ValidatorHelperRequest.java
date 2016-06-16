@@ -688,7 +688,6 @@ public class ValidatorHelperRequest implements IValidationHelper {
 			}
 
 			IPage currentPage = restoredState.getPage();
-			System.out.println("Current page:" + currentPage);
 			if (currentPage == null) {
 				currentPage = session.getPage(context, pageId);
 			}
