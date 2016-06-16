@@ -552,7 +552,7 @@ public abstract class AbstractDataComposer implements IDataComposer {
 		}
 
 		// Remove escaped Html elements
-		if (decodedValue.contains("&")) {
+		if (decodedValue.indexOf('&') != -1) {
 			// Can contain escaped characters
 			decodedValue = HtmlUtils.htmlUnescape(decodedValue);
 		}
