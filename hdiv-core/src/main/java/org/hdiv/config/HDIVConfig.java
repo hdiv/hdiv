@@ -347,7 +347,7 @@ public class HDIVConfig implements Serializable {
 	 */
 	public boolean needValidation(final String parameter, final String hdivParameter) {
 
-		if (isStartParameter(parameter) || parameter.equals(hdivParameter)) {
+		if (parameter.equals(hdivParameter) || isStartParameter(parameter)) {
 			return false;
 		}
 		return true;
