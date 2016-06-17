@@ -189,8 +189,11 @@ public class ValidatorHelperRequest implements IValidationHelper {
 			}
 		}
 
+		// Hdiv parameter name
+		String hdivParameter = getHdivParameter(request);
+
 		// Restore state from request or memory
-		result = restoreState(request, target);
+		result = restoreState(hdivParameter, request, target);
 		if (!result.isValid()) {
 			return result;
 		}
@@ -206,9 +209,6 @@ public class ValidatorHelperRequest implements IValidationHelper {
 		if (!result.isValid()) {
 			return result;
 		}
-
-		// Hdiv parameter name
-		String hdivParameter = getHdivParameter(request);
 
 		// Extract url params from State
 		BasicUrlData urlData = urlProcessor.processUrl(request, "?" + state.getParams());
@@ -579,10 +579,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	 * @param target Part of the url that represents the target action
 	 * @return valid result if restored state is valid. False in otherwise.
 	 */
-	protected ValidatorHelperResult restoreState(final HttpServletRequest request, final String target) {
-
-		// Hdiv parameter name
-		String hdivParameter = getHdivParameter(request);
+	protected ValidatorHelperResult restoreState(final String hdivParameter, final HttpServletRequest request, final String target) {
 
 		// checks if the parameter HDIV parameter exists in the parameters of
 		// the request

@@ -140,19 +140,21 @@ public abstract class AbstractUrlProcessor {
 	 * @return parameters string without state id
 	 */
 	protected static final String removeStateParameter(final String hdivParameter, final String params) {
-
-		if (params == null || !params.contains(hdivParameter)) {
+		int start;
+		if (params == null || (start = params.indexOf(hdivParameter)) == -1) {
 			return params;
 		}
 
-		int start = params.indexOf(hdivParameter);
-		if (start > 0 && params.charAt(start - 1) != '?' && params.charAt(start - 1) != '&') {
-			return params;
+		if (start > 0) {
+			char first = params.charAt(start - 1);
+			if (first != '?' && first != '&') {
+				return params;
+			}
 		}
 
-		int end = params.indexOf("&", start);
+		int end = params.indexOf('&', start);
 		if (end < 0) {
-			end = params.indexOf("#", start);
+			end = params.indexOf('#', start);
 		}
 		if (end < 0) {
 			end = params.length();
