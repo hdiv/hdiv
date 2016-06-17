@@ -43,7 +43,7 @@ public class BasicUrlProcessor extends AbstractUrlProcessor {
 		int paramInit = url.indexOf('?');
 		if (paramInit > -1) {
 			String urlParams = url.substring(paramInit + 1);
-			Map<String, String[]> ulrParamsMap = this.getUrlParamsAsMap(request, urlParams);
+			Map<String, String[]> ulrParamsMap = getUrlParamsAsMap(request, urlParams);
 			urlData.setUrlParams(ulrParamsMap);
 			url = url.substring(0, paramInit);
 		}
