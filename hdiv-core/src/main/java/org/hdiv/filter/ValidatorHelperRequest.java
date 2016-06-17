@@ -49,7 +49,6 @@ import org.hdiv.state.IState;
 import org.hdiv.state.StateUtil;
 import org.hdiv.state.scope.StateScope;
 import org.hdiv.state.scope.StateScopeManager;
-import org.hdiv.urlProcessor.BasicUrlData;
 import org.hdiv.urlProcessor.BasicUrlProcessor;
 import org.hdiv.util.Constants;
 import org.hdiv.util.HDIVErrorCodes;
@@ -211,8 +210,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 		}
 
 		// Extract url params from State
-		BasicUrlData urlData = urlProcessor.processUrl(request, "?" + state.getParams());
-		Map<String, String[]> stateParams = urlData.getUrlParams();
+		Map<String, String[]> stateParams = urlProcessor.getUrlParamsAsMap(request, state.getParams());
 
 		List<ValidatorError> unauthorizedEditableParameters = new ArrayList<ValidatorError>();
 		Enumeration<?> parameters = request.getParameterNames();
