@@ -23,7 +23,6 @@ import java.util.regex.Pattern;
 import org.hdiv.config.HDIVConfig;
 import org.hdiv.regex.PatternMatcher;
 import org.hdiv.util.Method;
-import org.springframework.util.Assert;
 
 /**
  * Contains the data of an url.
@@ -96,8 +95,6 @@ public class UrlDataImpl implements UrlData {
 	 */
 	String uriTemplate;
 
-	private final boolean uriTemplateNotSupported;
-
 	String composedParams;
 
 	/**
@@ -107,21 +104,9 @@ public class UrlDataImpl implements UrlData {
 	 * @param method Http method.
 	 */
 	public UrlDataImpl(final String url, final Method method) {
-		this(url, method, false);
-	}
-
-	/**
-	 * Constructor
-	 *
-	 * @param url Original url
-	 * @param method Http method.
-	 * @param uriTemplateNotSupported true if templates are NOT supported
-	 */
-	public UrlDataImpl(final String url, final Method method, final boolean uriTemplateNotSupported) {
 		originalUrl = url;
 		this.method = method;
-		this.uriTemplateNotSupported = uriTemplateNotSupported;
-		if (!uriTemplateNotSupported && !"".equals(url)) {
+		if (url.indexOf('{') != -1) {
 			parser(url);
 		}
 	}
@@ -300,9 +285,6 @@ public class UrlDataImpl implements UrlData {
 	}
 
 	public boolean hasUriTemplate() {
-		if (uriTemplateNotSupported) {
-			throw new UnsupportedOperationException();
-		}
 		return uriTemplate != null;
 	}
 
@@ -384,7 +366,6 @@ public class UrlDataImpl implements UrlData {
 	private static final Pattern NAMES_PATTERN = Pattern.compile("\\{([^/]+?)\\}");
 
 	private void parser(final String uriTemplate) {
-		Assert.hasText(uriTemplate, "'uriTemplate' must not be null");
 		int startVars = uriTemplate.lastIndexOf('/');
 		final Matcher matcher = NAMES_PATTERN.matcher(startVars == -1 ? uriTemplate : uriTemplate.substring(startVars));
 		StringBuilder sb = null;
