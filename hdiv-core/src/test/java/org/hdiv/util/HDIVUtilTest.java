@@ -15,6 +15,9 @@
  */
 package org.hdiv.util;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+
 import org.hdiv.urlProcessor.UrlDataImpl;
 import org.junit.Assert;
 import org.junit.Test;
@@ -46,6 +49,34 @@ public class HDIVUtilTest {
 		final UrlDataImpl data = new UrlDataImpl(url, Method.GET);
 		Assert.assertEquals("/testing.do", HDIVUtil.stripAndFillSessionData(url, data));
 		Assert.assertEquals("jsessionid=67CFB560B6EC2677D51814A2A2B16B24", data.getjSessionId());
+	}
+
+	@Test
+	public void testDecoding() {
+		final String url = "/testing.do;jsessionid=67CFB560B6EC2677D51814A2A2B16B24"; // is a startPage
+		long time = System.currentTimeMillis();
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < 1000000; i++) {
+			try {
+				HDIVUtil.decodeValue(sb, url, "UTF-8");
+			}
+			catch (UnsupportedEncodingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		System.out.println("Time:" + (System.currentTimeMillis() - time));
+		time = System.currentTimeMillis();
+		for (int i = 0; i < 1000000; i++) {
+			try {
+				URLDecoder.decode(url, "UTF-8");
+			}
+			catch (UnsupportedEncodingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		System.out.println("Time:" + (System.currentTimeMillis() - time));
 	}
 
 }

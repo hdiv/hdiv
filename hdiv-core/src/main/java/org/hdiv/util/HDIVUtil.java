@@ -15,6 +15,8 @@
  */
 package org.hdiv.util;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.Enumeration;
 import java.util.Locale;
 import java.util.Random;
@@ -37,6 +39,7 @@ import org.hdiv.urlProcessor.UrlDataImpl;
 import org.springframework.context.MessageSource;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
+import org.springframework.web.util.HtmlUtils;
 
 /**
  * Class containing utility methods for access HDIV components: IDataComposer, IDataValidator, IApplication, ISession.
@@ -564,6 +567,125 @@ public class HDIVUtil {
 			throw new IllegalStateException("No WebApplicationContext found: no ContextLoaderListener registered?");
 		}
 		return wac;
+	}
+
+	/**
+	 * <p>
+	 * Decoded <code>value</code> using input <code>charEncoding</code>.
+	 * </p>
+	 * <p>
+	 * Removes Html Entity elements too. Like that:
+	 * </p>
+	 * <blockquote> &amp;#<i>Entity</i>; - <i>(Example: &amp;amp;) case sensitive</i> &amp;#<i>Decimal</i>; - <i>(Example: &amp;#68;)</i>
+	 * <br>
+	 * &amp;#x<i>Hex</i>; - <i>(Example: &amp;#xE5;) case insensitive</i><br>
+	 * </blockquote>
+	 * <p>
+	 * Based on {@link HtmlUtils#htmlUnescape}.
+	 * </p>
+	 *
+	 * @param value value to decode
+	 * @param charEncoding character encoding
+	 * @return value decoded
+	 */
+	public static String getDecodedValue(final StringBuilder sb, final String value, final String charEncoding) {
+
+		if (value == null || value.length() == 0) {
+			return "";
+		}
+
+		String decodedValue = null;
+		try {
+			decodedValue = decodeValue(sb, value, charEncoding);
+		}
+		catch (UnsupportedEncodingException e) {
+			decodedValue = value;
+		}
+		catch (IllegalArgumentException e) {
+			decodedValue = value;
+		}
+
+		// Remove escaped Html elements
+		if (decodedValue.indexOf('&') != -1) {
+			// Can contain escaped characters
+			decodedValue = HtmlUtils.htmlUnescape(decodedValue);
+		}
+
+		return decodedValue;
+	}
+
+	/**
+	 * @see URLDecoder#decode(String, String)
+	 */
+	public static String decodeValue(final StringBuilder sb, final String s, final String enc) throws UnsupportedEncodingException {
+		sb.setLength(0);
+		boolean needToChange = false;
+		int numChars = s.length();
+		int i = 0;
+
+		if (enc.length() == 0) {
+			throw new UnsupportedEncodingException("URLDecoder: empty string enc parameter");
+		}
+
+		char c;
+		byte[] bytes = null;
+		while (i < numChars) {
+			c = s.charAt(i);
+			switch (c) {
+			case '+':
+				sb.append(' ');
+				i++;
+				needToChange = true;
+				break;
+			case '%':
+				/*
+				 * Starting with this instance of %, process all consecutive substrings of the form %xy. Each substring %xy will yield a
+				 * byte. Convert all consecutive bytes obtained this way to whatever character(s) they represent in the provided encoding.
+				 */
+
+				try {
+
+					// (numChars-i)/3 is an upper bound for the number
+					// of remaining bytes
+					if (bytes == null) {
+						bytes = new byte[(numChars - i) / 3];
+					}
+					int pos = 0;
+
+					while (((i + 2) < numChars) && (c == '%')) {
+						int v = Integer.parseInt(s.substring(i + 1, i + 3), 16);
+						if (v < 0) {
+							throw new IllegalArgumentException("URLDecoder: Illegal hex characters in escape (%) pattern - negative value");
+						}
+						bytes[pos++] = (byte) v;
+						i += 3;
+						if (i < numChars) {
+							c = s.charAt(i);
+						}
+					}
+
+					// A trailing, incomplete byte encoding such as
+					// "%x" will cause an exception to be thrown
+
+					if ((i < numChars) && (c == '%')) {
+						throw new IllegalArgumentException("URLDecoder: Incomplete trailing escape (%) pattern");
+					}
+
+					sb.append(new String(bytes, 0, pos, enc));
+				}
+				catch (NumberFormatException e) {
+					throw new IllegalArgumentException("URLDecoder: Illegal hex characters in escape (%) pattern - " + e.getMessage());
+				}
+				needToChange = true;
+				break;
+			default:
+				sb.append(c);
+				i++;
+				break;
+			}
+		}
+
+		return (needToChange ? sb.toString() : s);
 	}
 
 }
