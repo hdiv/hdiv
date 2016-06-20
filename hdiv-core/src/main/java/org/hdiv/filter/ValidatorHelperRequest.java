@@ -16,7 +16,6 @@
 package org.hdiv.filter;
 
 import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Enumeration;
@@ -145,7 +144,8 @@ public class ValidatorHelperRequest implements IValidationHelper {
 
 		String target = getTarget(request);
 		target = getTargetWithoutContextPath(request, target);
-		target = decodeUrl(target);
+		StringBuilder sb = new StringBuilder(128);
+		target = decodeUrl(sb, target);
 
 		// Hook before the validation
 		ValidatorHelperResult result = preValidate(request, target);
@@ -210,7 +210,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 		}
 
 		// Extract url params from State
-		Map<String, String[]> stateParams = urlProcessor.getUrlParamsAsMap(request, state.getParams());
+		Map<String, String[]> stateParams = urlProcessor.getUrlParamsAsMap(sb, request, state.getParams());
 
 		List<ValidatorError> unauthorizedEditableParameters = new ArrayList<ValidatorError>();
 		Enumeration<?> parameters = request.getParameterNames();
@@ -251,9 +251,9 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	 * @param url url to decode
 	 * @return decoder url
 	 */
-	protected String decodeUrl(final String url) {
+	protected String decodeUrl(final StringBuilder sb, final String url) {
 		try {
-			return URLDecoder.decode(url, Constants.ENCODING_UTF_8);
+			return HDIVUtil.decodeValue(sb, url, Constants.ENCODING_UTF_8);
 		}
 		catch (final UnsupportedEncodingException e) {
 			throw new HDIVException("Error decoding url", e);
@@ -1012,9 +1012,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	 */
 	protected String getTarget(final HttpServletRequest request) {
 		try {
-			String requestUri = request.getRequestURI();
-			requestUri = HDIVUtil.stripSession(requestUri);
-			return requestUri;
+			return HDIVUtil.stripSession(request.getRequestURI());
 		}
 		catch (final Exception e) {
 			String errorMessage = HDIVUtil.getMessage(request, "helper.actionName");
@@ -1030,8 +1028,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	 * @return target without the ContextPath
 	 */
 	protected String getTargetWithoutContextPath(final HttpServletRequest request, final String target) {
-		String targetWithoutContextPath = target.substring(request.getContextPath().length());
-		return targetWithoutContextPath;
+		return target.substring(request.getContextPath().length());
 	}
 
 	/**

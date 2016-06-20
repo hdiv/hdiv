@@ -15,8 +15,6 @@
  */
 package org.hdiv.urlProcessor;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -29,7 +27,6 @@ import org.hdiv.config.HDIVConfig;
 import org.hdiv.util.Constants;
 import org.hdiv.util.HDIVUtil;
 import org.hdiv.util.Method;
-import org.springframework.web.util.HtmlUtils;
 
 /**
  * This class contains methods to process urls.
@@ -177,7 +174,7 @@ public abstract class AbstractUrlProcessor {
 	 * @param urlParams urls query string
 	 * @return Map
 	 */
-	public Map<String, String[]> getUrlParamsAsMap(final HttpServletRequest request, final String urlParams) {
+	public Map<String, String[]> getUrlParamsAsMap(final StringBuilder sb, final HttpServletRequest request, final String urlParams) {
 
 		Map<String, String[]> params = new LinkedHashMap<String, String[]>();
 
@@ -204,7 +201,7 @@ public abstract class AbstractUrlProcessor {
 			}
 
 			// Decode parameter value
-			val = getDecodedValue(val, Constants.ENCODING_UTF_8);
+			val = HDIVUtil.getDecodedValue(sb, val, Constants.ENCODING_UTF_8);
 
 			// Ignore Hdiv state parameter
 			if (!param.equals(hdivParameter)) {
@@ -223,41 +220,6 @@ public abstract class AbstractUrlProcessor {
 		}
 
 		return params;
-	}
-
-	/**
-	 * <p>
-	 * Decoded <code>value</code> using input <code>charEncoding</code>.
-	 * </p>
-	 *
-	 * @param value value to decode
-	 * @param charEncoding character encoding
-	 * @return value decoded
-	 */
-	protected String getDecodedValue(final String value, final String charEncoding) {
-
-		if (value == null || value.length() == 0) {
-			return "";
-		}
-
-		String decodedValue;
-		try {
-			decodedValue = URLDecoder.decode(value, charEncoding);
-		}
-		catch (final UnsupportedEncodingException e) {
-			decodedValue = value;
-		}
-		catch (final IllegalArgumentException e) {
-			decodedValue = value;
-		}
-
-		// Remove escaped Html elements
-		if (decodedValue.contains("&")) {
-			// Can contain escaped characters
-			decodedValue = HtmlUtils.htmlUnescape(decodedValue);
-		}
-
-		return (decodedValue == null) ? "" : decodedValue;
 	}
 
 	/**

@@ -15,8 +15,6 @@
  */
 package org.hdiv.dataComposer;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.HashMap;
@@ -35,8 +33,8 @@ import org.hdiv.state.Page;
 import org.hdiv.state.Parameter;
 import org.hdiv.state.RandomTokenType;
 import org.hdiv.util.Constants;
+import org.hdiv.util.HDIVUtil;
 import org.hdiv.util.Method;
-import org.springframework.web.util.HtmlUtils;
 
 /**
  * <p>
@@ -89,7 +87,7 @@ public abstract class AbstractDataComposer implements IDataComposer {
 	 */
 	protected RequestContext context;
 
-	private final StringBuilder sb = new StringBuilder(128);
+	protected final StringBuilder sb = new StringBuilder(128);
 
 	public AbstractDataComposer(final RequestContext context) {
 		this.context = context;
@@ -447,7 +445,7 @@ public abstract class AbstractDataComposer implements IDataComposer {
 		// we decoded value before store it in state.
 		String decodedValue = null;
 		if (!editable) {
-			decodedValue = getDecodedValue(value, charEncoding);
+			decodedValue = HDIVUtil.getDecodedValue(sb, value, charEncoding);
 		}
 
 		// Get current IState
@@ -513,51 +511,6 @@ public abstract class AbstractDataComposer implements IDataComposer {
 				parameter.addValue(currentValue);
 			}
 		}
-	}
-
-	/**
-	 * <p>
-	 * Decoded <code>value</code> using input <code>charEncoding</code>.
-	 * </p>
-	 * <p>
-	 * Removes Html Entity elements too. Like that:
-	 * </p>
-	 * <blockquote> &amp;#<i>Entity</i>; - <i>(Example: &amp;amp;) case sensitive</i> &amp;#<i>Decimal</i>; - <i>(Example: &amp;#68;)</i>
-	 * <br>
-	 * &amp;#x<i>Hex</i>; - <i>(Example: &amp;#xE5;) case insensitive</i><br>
-	 * </blockquote>
-	 * <p>
-	 * Based on {@link HtmlUtils#htmlUnescape}.
-	 * </p>
-	 *
-	 * @param value value to decode
-	 * @param charEncoding character encoding
-	 * @return value decoded
-	 */
-	protected String getDecodedValue(final String value, final String charEncoding) {
-
-		if (value == null || value.length() == 0) {
-			return "";
-		}
-
-		String decodedValue = null;
-		try {
-			decodedValue = URLDecoder.decode(value, charEncoding);
-		}
-		catch (UnsupportedEncodingException e) {
-			decodedValue = value;
-		}
-		catch (IllegalArgumentException e) {
-			decodedValue = value;
-		}
-
-		// Remove escaped Html elements
-		if (decodedValue.indexOf('&') != -1) {
-			// Can contain escaped characters
-			decodedValue = HtmlUtils.htmlUnescape(decodedValue);
-		}
-
-		return decodedValue;
 	}
 
 	/**

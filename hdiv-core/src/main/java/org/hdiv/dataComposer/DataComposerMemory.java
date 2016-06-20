@@ -16,7 +16,6 @@
 package org.hdiv.dataComposer;
 
 import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.util.ArrayDeque;
 import java.util.Deque;
 
@@ -32,6 +31,7 @@ import org.hdiv.state.scope.StateScopeManager;
 import org.hdiv.state.scope.StateScopeType;
 import org.hdiv.util.Constants;
 import org.hdiv.util.HDIVStateUtils;
+import org.hdiv.util.HDIVUtil;
 import org.hdiv.util.Method;
 
 /**
@@ -124,7 +124,7 @@ public class DataComposerMemory extends AbstractDataComposer {
 	 */
 	public String beginRequest(final Method method, String action) {
 		try {
-			action = URLDecoder.decode(action, Constants.ENCODING_UTF_8);
+			action = HDIVUtil.decodeValue(sb, action, Constants.ENCODING_UTF_8);
 		}
 		catch (UnsupportedEncodingException e) {
 			throw new HDIVException(Constants.ENCODING_UTF_8 + " enconding not supported.", e);
