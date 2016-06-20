@@ -96,8 +96,9 @@ public class HDIVTilesRequestProcessor extends TilesRequestProcessor {
 	 * @exception ServletException if a servlet exception occurs
 	 * @exception InvalidCancelException if a cancellation is attempted without the proper action configuration
 	 */
-	protected boolean processValidate(HttpServletRequest request, HttpServletResponse response, ActionForm form, ActionMapping mapping)
-			throws IOException, ServletException, InvalidCancelException {
+	@Override
+	protected boolean processValidate(final HttpServletRequest request, final HttpServletResponse response, final ActionForm form,
+			final ActionMapping mapping) throws IOException, ServletException, InvalidCancelException {
 
 		if (form == null) {
 			return (true);
@@ -132,7 +133,7 @@ public class HDIVTilesRequestProcessor extends TilesRequestProcessor {
 		ActionMessages errors = form.validate(mapping, request);
 		if ((errors == null) || errors.isEmpty()) {
 
-			errors = this.getEditableParametersErrors(request);
+			errors = getEditableParametersErrors(request);
 			if ((errors == null) || errors.isEmpty()) {
 
 				if (log.isTraceEnabled()) {
@@ -184,7 +185,7 @@ public class HDIVTilesRequestProcessor extends TilesRequestProcessor {
 	 * @param request The servlet request we are processing
 	 * @return errors detected by HDIV during the validation process of the editable parameters.
 	 */
-	public ActionMessages getEditableParametersErrors(HttpServletRequest request) {
+	public ActionMessages getEditableParametersErrors(final HttpServletRequest request) {
 
 		@SuppressWarnings("unchecked")
 		List<ValidatorError> validationErrors = (List<ValidatorError>) request.getAttribute(EDITABLE_PARAMETER_ERROR);
@@ -203,7 +204,7 @@ public class HDIVTilesRequestProcessor extends TilesRequestProcessor {
 					error = new ActionMessage(HDIV_EDITABLE_PASSWORD_ERROR);
 				}
 				else {
-					String printedValue = this.createMessageError(errorValues);
+					String printedValue = createMessageError(errorValues);
 					error = new ActionMessage(HDIV_EDITABLE_ERROR, printedValue);
 				}
 				errors.add("hdiv.editable." + validationError.getParameterName(), error);
@@ -218,7 +219,7 @@ public class HDIVTilesRequestProcessor extends TilesRequestProcessor {
 	 * @param paramValues values with not allowed characters
 	 * @return message error to show
 	 */
-	public String createMessageError(String paramValues) {
+	public String createMessageError(final String paramValues) {
 
 		String[] values = paramValues.split(",");
 		StringBuilder printedValue = new StringBuilder();
@@ -256,7 +257,8 @@ public class HDIVTilesRequestProcessor extends TilesRequestProcessor {
 	 * @throws ServletException if a servlet exception occurs.
 	 * @since HDIV 2.1.12
 	 */
-	protected void processForwardConfig(HttpServletRequest request, HttpServletResponse response, ForwardConfig forward)
+	@Override
+	protected void processForwardConfig(final HttpServletRequest request, final HttpServletResponse response, ForwardConfig forward)
 			throws IOException, ServletException {
 
 		// Required by struts contract
@@ -313,7 +315,7 @@ public class HDIVTilesRequestProcessor extends TilesRequestProcessor {
 			response.sendRedirect(response.encodeRedirectURL(uri));
 		}
 		else {
-			this.doForward(uri, request, response);
+			doForward(uri, request, response);
 		}
 	}
 
@@ -324,21 +326,24 @@ public class HDIVTilesRequestProcessor extends TilesRequestProcessor {
 	 * @param request Current page request.
 	 * @param response Current page response.
 	 */
-	protected void doForward(String uri, HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+	@Override
+	protected void doForward(final String uri, final HttpServletRequest request, final HttpServletResponse response)
+			throws IOException, ServletException {
 
 		RequestWrapper requestWrapper = HDIVUtil.getNativeRequest(request, RequestWrapper.class);
 		if (requestWrapper != null) {
 
 			LinkUrlProcessor linkUrlProcessorForForward = HDIVUtil.getLinkUrlProcessor(request.getSession().getServletContext());
 			UrlData urlData = linkUrlProcessorForForward.createUrlData(uri, "GET", request);
-			Map<String, String[]> urlParamsAsMap = linkUrlProcessorForForward.getUrlParamsAsMap(request, urlData.getUrlParams());
+			Map<String, String[]> urlParamsAsMap = linkUrlProcessorForForward.getUrlParamsAsMap(new StringBuilder(128), request,
+					urlData.getUrlParams());
 			for (Map.Entry<String, String[]> entry : urlParamsAsMap.entrySet()) {
 				requestWrapper.addParameter(entry.getKey(), entry.getValue());
 			}
 		}
 
 		if (response.isCommitted()) {
-			this.doInclude(uri, request, response);
+			doInclude(uri, request, response);
 
 		}
 		else {

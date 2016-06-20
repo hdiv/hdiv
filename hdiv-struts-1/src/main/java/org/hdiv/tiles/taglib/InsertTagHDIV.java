@@ -48,18 +48,20 @@ public class InsertTagHDIV extends InsertTag {
 	 * @return Appropriate TagHandler.
 	 * @throws JspException InstantiationException Can't create requested controller
 	 */
-	protected TagHandler processDefinition(ComponentDefinition definition) throws JspException {
+	@Override
+	protected TagHandler processDefinition(final ComponentDefinition definition) throws JspException {
 
-		String currentPage = this.page;
+		String currentPage = page;
 
 		if (currentPage == null) {
 			currentPage = definition.getTemplate();
 		}
 
-		if (log.isDebugEnabled())
+		if (log.isDebugEnabled()) {
 			log.debug("Processing definition: " + currentPage);
+		}
 
-		this.addParametersToRequestWrapper((HttpServletRequest) pageContext.getRequest(), currentPage);
+		addParametersToRequestWrapper((HttpServletRequest) pageContext.getRequest(), currentPage);
 		return super.processDefinition(definition);
 	}
 
@@ -68,12 +70,14 @@ public class InsertTagHDIV extends InsertTag {
 	 * 
 	 * @throws JspException If failed to create controller
 	 */
-	public TagHandler processUrl(String url) throws JspException {
+	@Override
+	public TagHandler processUrl(final String url) throws JspException {
 
-		if (log.isDebugEnabled())
+		if (log.isDebugEnabled()) {
 			log.debug("Processing url: " + url);
+		}
 
-		this.addParametersToRequestWrapper((HttpServletRequest) pageContext.getRequest(), url);
+		addParametersToRequestWrapper((HttpServletRequest) pageContext.getRequest(), url);
 		return new InsertHandler(url, role, getController());
 	}
 
@@ -82,13 +86,14 @@ public class InsertTagHDIV extends InsertTag {
 	 * @param request HTTP Servlet Request
 	 * @param url Url to process
 	 */
-	private void addParametersToRequestWrapper(HttpServletRequest request, String url) {
+	private void addParametersToRequestWrapper(final HttpServletRequest request, final String url) {
 		RequestWrapper requestWrapper = HDIVUtil.getNativeRequest(request, RequestWrapper.class);
 		if (requestWrapper != null) {
 
 			LinkUrlProcessor linkUrlProcessorForForward = HDIVUtil.getLinkUrlProcessor(pageContext.getSession().getServletContext());
 			UrlData urlData = linkUrlProcessorForForward.createUrlData(url, "GET", request);
-			Map<String, String[]> urlParamsAsMap = linkUrlProcessorForForward.getUrlParamsAsMap(request, urlData.getUrlParams());
+			Map<String, String[]> urlParamsAsMap = linkUrlProcessorForForward.getUrlParamsAsMap(new StringBuilder(128), request,
+					urlData.getUrlParams());
 			for (Map.Entry<String, String[]> entry : urlParamsAsMap.entrySet()) {
 				requestWrapper.addParameter(entry.getKey(), entry.getValue());
 			}
