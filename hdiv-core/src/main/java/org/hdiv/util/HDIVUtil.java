@@ -613,9 +613,6 @@ public class HDIVUtil {
 
 		return decodedValue;
 	}
-	
-	
-	ander is silly
 
 	/**
 	 * @see URLDecoder#decode(String, String)
