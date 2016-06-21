@@ -120,6 +120,14 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	public void init() {
 	}
 
+	protected final String getDecodedTarget(final StringBuilder sb, final HttpServletRequest request) {
+		/**
+		 * Remove contest path and session info first
+		 */
+		String target = HDIVUtil.stripSession(request.getRequestURI().substring(request.getContextPath().length()));
+		return decodeUrl(sb, target);
+	}
+
 	/**
 	 * Checks if the values of the parameters received in the request <code>request</code> are valid. These values are valid if and only if
 	 * the noneditable parameters haven't been modified.<br>
@@ -141,11 +149,8 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	 * @throws HDIVException If the request doesn't pass the HDIV validation an exception is thrown explaining the cause of the error.
 	 */
 	public ValidatorHelperResult validate(final HttpServletRequest request) {
-
-		String target = getTarget(request);
-		target = getTargetWithoutContextPath(request, target);
 		StringBuilder sb = new StringBuilder(128);
-		target = decodeUrl(sb, target);
+		String target = getDecodedTarget(sb, request);
 
 		// Hook before the validation
 		ValidatorHelperResult result = preValidate(request, target);
@@ -567,6 +572,18 @@ public class ValidatorHelperRequest implements IValidationHelper {
 			return true;
 		}
 		return false;
+	}
+
+	/**
+	 * Restore state from session or <code>request</code> with <code>request</code> identifier. Strategy defined by the user determines the
+	 * way the state is restored.
+	 *
+	 * @param request HTTP request
+	 * @param target Part of the url that represents the target action
+	 * @return valid result if restored state is valid. False in otherwise.
+	 */
+	protected ValidatorHelperResult restoreState(final HttpServletRequest request, final String target) {
+		return restoreState(getHdivParameter(request), request, target);
 	}
 
 	/**
@@ -1002,33 +1019,6 @@ public class ValidatorHelperRequest implements IValidationHelper {
 			}
 		}
 		return null;
-	}
-
-	/**
-	 * Gets the part of the url that represents the action to be executed in this request.
-	 *
-	 * @param request HttpServletRequest to validate
-	 * @return target Part of the url that represents the target action
-	 */
-	protected String getTarget(final HttpServletRequest request) {
-		try {
-			return HDIVUtil.stripSession(request.getRequestURI());
-		}
-		catch (final Exception e) {
-			String errorMessage = HDIVUtil.getMessage(request, "helper.actionName");
-			throw new HDIVException(errorMessage, e);
-		}
-	}
-
-	/**
-	 * Removes the target's ContextPath part
-	 *
-	 * @param request HttpServletRequest to validate
-	 * @param target target to strip the ContextPath
-	 * @return target without the ContextPath
-	 */
-	protected String getTargetWithoutContextPath(final HttpServletRequest request, final String target) {
-		return target.substring(request.getContextPath().length());
 	}
 
 	/**
