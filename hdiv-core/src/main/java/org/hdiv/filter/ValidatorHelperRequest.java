@@ -209,13 +209,13 @@ public class ValidatorHelperRequest implements IValidationHelper {
 			return result;
 		}
 
-		result = allRequiredParametersReceived(request, state, target);
+		// Extract url params from State
+		Map<String, String[]> stateParams = urlProcessor.getUrlParamsAsMap(sb, request, state.getParams());
+
+		result = allRequiredParametersReceived(request, state, target, stateParams);
 		if (!result.isValid()) {
 			return result;
 		}
-
-		// Extract url params from State
-		Map<String, String[]> stateParams = urlProcessor.getUrlParamsAsMap(sb, request, state.getParams());
 
 		List<ValidatorError> unauthorizedEditableParameters = new ArrayList<ValidatorError>();
 		Enumeration<?> parameters = request.getParameterNames();
@@ -433,29 +433,36 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	 * @param request HttpServletRequest to validate
 	 * @param state IState The restored state for this url
 	 * @param target Part of the url that represents the target action
+	 * @param stateParams Url params from State
 	 * @return valid result if all required parameters are received. False in otherwise.
 	 */
-	protected ValidatorHelperResult allRequiredParametersReceived(final HttpServletRequest request, final IState state,
-			final String target) {
+	protected ValidatorHelperResult allRequiredParametersReceived(final HttpServletRequest request, final IState state, final String target,
+			final Map<String, String[]> stateParams) {
 
 		List<String> requiredParameters = state.getRequiredParams();
+		List<String> requiredParams = new ArrayList<String>(stateParams.keySet());
 
 		Enumeration<?> requestParameters = request.getParameterNames();
+
+		List<String> required = new ArrayList<String>();
+		required.addAll(requiredParameters);
+		required.addAll(requiredParams);
+
 		while (requestParameters.hasMoreElements()) {
 
 			String currentParameter = (String) requestParameters.nextElement();
 
-			requiredParameters.remove(currentParameter);
+			required.remove(currentParameter);
 
 			// If multiple parameters are received, it is possible to pass this
 			// verification without checking all the request parameters.
-			if (requiredParameters.isEmpty()) {
+			if (required.isEmpty()) {
 				return ValidatorHelperResult.VALID;
 			}
 		}
 
-		if (requiredParameters.size() > 0) {
-			ValidatorError error = new ValidatorError(HDIVErrorCodes.REQUIRED_PARAMETERS, target, requiredParameters.toString());
+		if (required.size() > 0) {
+			ValidatorError error = new ValidatorError(HDIVErrorCodes.REQUIRED_PARAMETERS, target, required.toString());
 			return new ValidatorHelperResult(error);
 		}
 

@@ -565,4 +565,349 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 		boolean result = helper.validate(requestWrapper).isValid();
 		assertTrue(result);
 	}
+
+	/**
+	 * Test validation with a link without parameters
+	 * @throws UnsupportedEncodingException
+	 */
+	public void testIfAllParametersAreReceivedLinkWithoutParameters() throws UnsupportedEncodingException {
+
+		MockHttpServletRequest request = getMockRequest();
+
+		dataComposer.beginRequest(Method.GET, targetName);
+		String pageState = dataComposer.endRequest();
+		dataComposer.endPage();
+
+		request.addParameter(hdivParameter, pageState);
+
+		boolean result = helper.validate(requestWrapper).isValid();
+		assertTrue(result);
+	}
+
+	/**
+	 * Test validation with a link without parameters and adding a parameter
+	 * @throws UnsupportedEncodingException
+	 */
+	public void testIfAllParametersAreReceivedLinkWithoutParametersAndAddParameter() throws UnsupportedEncodingException {
+
+		MockHttpServletRequest request = getMockRequest();
+
+		dataComposer.beginRequest(Method.GET, targetName);
+		String pageState = dataComposer.endRequest();
+		dataComposer.endPage();
+
+		request.addParameter(hdivParameter, pageState);
+
+		// Add parameter
+		request.addParameter("param1", "0");
+
+		boolean result = helper.validate(requestWrapper).isValid();
+		assertFalse(result);
+	}
+
+	/**
+	 * Test validation with a link with parameter
+	 * @throws UnsupportedEncodingException
+	 */
+	public void testIfAllParametersAreReceivedLinkWithParameter() throws UnsupportedEncodingException {
+
+		MockHttpServletRequest request = getMockRequest();
+
+		dataComposer.beginRequest(Method.GET, targetName);
+		dataComposer.composeParams("param1=111", Method.GET, "utf-8");
+		String pageState = dataComposer.endRequest();
+		dataComposer.endPage();
+
+		request.addParameter(hdivParameter, pageState);
+		request.addParameter("param1", "0");
+
+		boolean result = helper.validate(requestWrapper).isValid();
+		assertTrue(result);
+	}
+
+	/**
+	 * Test validation if a parameter from a link is removed
+	 * @throws UnsupportedEncodingException
+	 */
+	public void testIfAllParametersAreReceivedRemoveParameterFromLink() throws UnsupportedEncodingException {
+
+		MockHttpServletRequest request = getMockRequest();
+
+		dataComposer.beginRequest(Method.GET, targetName);
+		dataComposer.composeParams("param1=111", Method.GET, "utf-8");
+		String pageState = dataComposer.endRequest();
+		dataComposer.endPage();
+
+		request.addParameter(hdivParameter, pageState);
+
+		// Do not add parameter request (remove parameter)
+		// request.addParameter("param1", "0");
+
+		boolean result = helper.validate(requestWrapper).isValid();
+		assertFalse(result);
+	}
+
+	/**
+	 * Test validation if a new parameter is added to a link
+	 * @throws UnsupportedEncodingException
+	 */
+	public void testIfAllParametersAreReceivedAddParameterToLink() throws UnsupportedEncodingException {
+
+		MockHttpServletRequest request = getMockRequest();
+
+		dataComposer.beginRequest(Method.GET, targetName);
+		dataComposer.composeParams("param1=111", Method.GET, "utf-8");
+		String pageState = dataComposer.endRequest();
+		dataComposer.endPage();
+
+		request.addParameter(hdivParameter, pageState);
+
+		// Add new parameter request
+		request.addParameter("param4", "111");
+
+		boolean result = helper.validate(requestWrapper).isValid();
+		assertFalse(result);
+	}
+
+	/**
+	 * Test validation if a form has parameters
+	 * @throws UnsupportedEncodingException
+	 */
+	public void testIfAllParametersAreReceivedFormWithParameters() throws UnsupportedEncodingException {
+
+		MockHttpServletRequest request = getMockRequest();
+		request.setMethod("POST");
+
+		dataComposer.beginRequest(Method.POST, targetName);
+
+		// Form parameters
+		dataComposer.compose("param", "value", false);
+
+		String pageState = dataComposer.endRequest();
+		dataComposer.endPage();
+
+		request.addParameter(hdivParameter, pageState);
+		request.addParameter("param", "0");
+
+		ValidatorHelperResult result = helper.validate(requestWrapper);
+		assertTrue(result.isValid());
+
+	}
+
+	/**
+	 * Test validation if a form has parameters and a new parameter is added
+	 * @throws UnsupportedEncodingException
+	 */
+	public void testIfAllParametersAreReceivedFormWithParametersAndAddParameter() throws UnsupportedEncodingException {
+
+		MockHttpServletRequest request = getMockRequest();
+		request.setMethod("POST");
+
+		dataComposer.beginRequest(Method.POST, targetName);
+
+		// Form parameters
+		dataComposer.compose("param", "value", false);
+
+		String pageState = dataComposer.endRequest();
+		dataComposer.endPage();
+
+		request.addParameter(hdivParameter, pageState);
+		request.addParameter("param", "0");
+		request.addParameter("newParam", "0");
+
+		ValidatorHelperResult result = helper.validate(requestWrapper);
+		assertFalse(result.isValid());
+	}
+
+	/**
+	 * Test validation if a form has parameters and its action has parameters too
+	 * @throws UnsupportedEncodingException
+	 */
+	public void testIfAllParametersAreReceivedFormWithParametersAndActionWithParameters() throws UnsupportedEncodingException {
+
+		MockHttpServletRequest request = getMockRequest();
+		request.setMethod("POST");
+
+		dataComposer.beginRequest(Method.POST, targetName);
+
+		// Action parameters
+		dataComposer.composeParams("paramAction=111", Method.POST, "utf-8");
+
+		// Form parameters
+		dataComposer.compose("param", "value", false);
+
+		String pageState = dataComposer.endRequest();
+		dataComposer.endPage();
+
+		request.addParameter(hdivParameter, pageState);
+		request.addParameter("paramAction", "0");
+		request.addParameter("param", "0");
+
+		ValidatorHelperResult result = helper.validate(requestWrapper);
+		assertTrue(result.isValid());
+
+	}
+
+	/**
+	 * Test validation if a form has parameters and its action has parameters too. Remove a parameter from action
+	 * 
+	 * @throws UnsupportedEncodingException
+	 */
+	public void testIfAllParametersAreReceivedFormWithParametersAndRemoveParamFromAction() throws UnsupportedEncodingException {
+
+		MockHttpServletRequest request = getMockRequest();
+		request.setMethod("POST");
+
+		dataComposer.beginRequest(Method.POST, targetName);
+
+		// Action parameters
+		dataComposer.composeParams("paramAction=111", Method.POST, "utf-8");
+
+		// Form parameters
+		dataComposer.compose("param", "value", false);
+
+		String pageState = dataComposer.endRequest();
+		dataComposer.endPage();
+
+		request.addParameter(hdivParameter, pageState);
+
+		// Remove parameter from action
+		// request.addParameter("paramAction", "0");
+
+		request.addParameter("param", "0");
+
+		ValidatorHelperResult result = helper.validate(requestWrapper);
+		assertFalse(result.isValid());
+
+	}
+
+	/**
+	 * Test validation if a form has parameters and its action has parameters too. Add a parameter to action
+	 * 
+	 * @throws UnsupportedEncodingException
+	 */
+	public void testIfAllParametersAreReceivedFormWithParametersAndAddParamToAction() throws UnsupportedEncodingException {
+
+		MockHttpServletRequest request = getMockRequest();
+		request.setMethod("POST");
+
+		dataComposer.beginRequest(Method.POST, targetName);
+
+		// Action parameters
+		dataComposer.composeParams("paramAction=111", Method.POST, "utf-8");
+
+		// Form parameters
+		dataComposer.compose("param", "value", false);
+
+		String pageState = dataComposer.endRequest();
+		dataComposer.endPage();
+
+		request.addParameter(hdivParameter, pageState);
+		request.addParameter("paramAction", "0");
+		request.addParameter("param", "0");
+
+		// Added parameter
+		request.addParameter("paramAction2", "0");
+
+		ValidatorHelperResult result = helper.validate(requestWrapper);
+		assertFalse(result.isValid());
+
+	}
+
+	/**
+	 * Test validation if a form has NOT parameters and its action has parameters.
+	 * @throws UnsupportedEncodingException
+	 */
+	public void testIfAllParametersAreReceivedFormWithoutParamsAndParamsInAction() throws UnsupportedEncodingException {
+
+		MockHttpServletRequest request = getMockRequest();
+		request.setMethod("POST");
+
+		dataComposer.beginRequest(Method.POST, targetName);
+
+		// Action parameters
+		dataComposer.composeParams("paramAction=111", Method.POST, "utf-8");
+
+		String pageState = dataComposer.endRequest();
+		dataComposer.endPage();
+
+		request.addParameter(hdivParameter, pageState);
+		request.addParameter("paramAction", "0");
+
+		ValidatorHelperResult result = helper.validate(requestWrapper);
+		assertTrue(result.isValid());
+	}
+
+	/**
+	 * Test validation if a form has NOT any parameters and its action has parameters. Remove action param.
+	 * @throws UnsupportedEncodingException
+	 */
+	public void testIfAllParametersAreReceivedFormWithoutParamsAndRemovingParamsInAction() throws UnsupportedEncodingException {
+
+		MockHttpServletRequest request = getMockRequest();
+		request.setMethod("POST");
+
+		dataComposer.beginRequest(Method.POST, targetName);
+
+		// Action parameters
+		dataComposer.composeParams("paramAction=111", Method.POST, "utf-8");
+
+		String pageState = dataComposer.endRequest();
+		dataComposer.endPage();
+
+		request.addParameter(hdivParameter, pageState);
+		// request.addParameter("paramAction", "0");
+
+		ValidatorHelperResult result = helper.validate(requestWrapper);
+		assertFalse(result.isValid());
+
+	}
+
+	/**
+	 * Test validation if a form has NOT any parameters and its action has parameters. Add action param.
+	 * @throws UnsupportedEncodingException
+	 */
+	public void testIfAllParametersAreReceivedFormWithoutParamsAndAddingParamsInAction() throws UnsupportedEncodingException {
+
+		MockHttpServletRequest request = getMockRequest();
+		request.setMethod("POST");
+
+		dataComposer.beginRequest(Method.POST, targetName);
+
+		// Action parameters
+		dataComposer.composeParams("paramAction=111", Method.POST, "utf-8");
+
+		String pageState = dataComposer.endRequest();
+		dataComposer.endPage();
+
+		request.addParameter(hdivParameter, pageState);
+		request.addParameter("paramAction", "0");
+		request.addParameter("paramAction2", "0");
+
+		ValidatorHelperResult result = helper.validate(requestWrapper);
+		assertFalse(result.isValid());
+
+	}
+
+	/**
+	 * Test validation if a form has NOT any parameters. Add form param.
+	 * @throws UnsupportedEncodingException
+	 */
+	public void testIfAllParametersAreReceivedFormWithoutParamsAndAddingFormParam() throws UnsupportedEncodingException {
+
+		MockHttpServletRequest request = getMockRequest();
+		request.setMethod("POST");
+
+		dataComposer.beginRequest(Method.POST, targetName);
+
+		String pageState = dataComposer.endRequest();
+		dataComposer.endPage();
+
+		request.addParameter(hdivParameter, pageState);
+		request.addParameter("newParam", "0");
+
+		ValidatorHelperResult result = helper.validate(requestWrapper);
+		assertFalse(result.isValid());
+
+	}
 }
