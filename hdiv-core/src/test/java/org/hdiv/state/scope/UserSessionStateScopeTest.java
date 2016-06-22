@@ -77,4 +77,15 @@ public class UserSessionStateScopeTest extends AbstractHDIVTestCase {
 
 		assertEquals(id, id2);
 	}
+
+	public void testInvalidStateId() {
+
+		StateScopeType scope = stateScope.getScopeType();
+		assertEquals(StateScopeType.USER_SESSION, scope);
+
+		String scopePrefix = stateScope.getScopePrefix();
+		assertEquals("U", scopePrefix);
+
+		assertFalse(stateScope.isScopeState("1"));
+	}
 }

@@ -77,4 +77,15 @@ public class AppStateScopeTest extends AbstractHDIVTestCase {
 
 		assertEquals(id, id2);
 	}
+
+	public void testInvalidStateId() {
+
+		String scopeName = stateScope.getScopeType().getName();
+		assertEquals("app", scopeName);
+
+		String scopePrefix = stateScope.getScopePrefix();
+		assertEquals("A", scopePrefix);
+
+		assertFalse(stateScope.isScopeState("1"));
+	}
 }

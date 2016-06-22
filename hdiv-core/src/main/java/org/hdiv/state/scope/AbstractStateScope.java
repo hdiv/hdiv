@@ -62,7 +62,8 @@ public abstract class AbstractStateScope implements StateScope {
 	}
 
 	public boolean isScopeState(final String stateId) {
-		return stateId.charAt(preffix.length()) == Constants.STATE_ID_SEPARATOR && stateId.startsWith(preffix);
+		return stateId.length() > preffix.length() && stateId.charAt(preffix.length()) == Constants.STATE_ID_SEPARATOR
+				&& stateId.startsWith(preffix);
 	}
 
 	public final String getScopePrefix() {
