@@ -18,6 +18,7 @@ package org.hdiv.util;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 
+import org.hdiv.exception.HDIVException;
 import org.hdiv.urlProcessor.UrlDataImpl;
 import org.junit.Assert;
 import org.junit.Test;
@@ -79,4 +80,13 @@ public class HDIVUtilTest {
 		System.out.println("Time:" + (System.currentTimeMillis() - time));
 	}
 
+	@Test(expected = HDIVException.class)
+	public void testInvalidPageId() {
+		HDIVStateUtils.getPageId("example-1-FEE0710648A1BE0BAEF05904B586A89B");
+	}
+
+	@Test(expected = HDIVException.class)
+	public void testInvalidStateId() {
+		HDIVStateUtils.getStateId("1-example-FEE0710648A1BE0BAEF05904B586A89B");
+	}
 }

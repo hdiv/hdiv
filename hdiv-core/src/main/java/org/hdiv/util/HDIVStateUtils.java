@@ -37,12 +37,22 @@ public final class HDIVStateUtils {
 		if (firstSeparator == -1) {
 			throw new HDIVException(HDIVErrorCodes.HDIV_PARAMETER_INCORRECT_VALUE);
 		}
-		return Integer.parseInt(stateId.substring(0, firstSeparator));
+		try {
+			return Integer.parseInt(stateId.substring(0, firstSeparator));
+		}
+		catch (NumberFormatException ex) {
+			throw new HDIVException(HDIVErrorCodes.HDIV_PARAMETER_INCORRECT_VALUE);
+		}
 	}
 
 	public static int getStateId(final String stateId) {
 		int start = stateId.indexOf(Constants.STATE_ID_SEPARATOR);
-		return Integer.parseInt(stateId.substring(start + 1, stateId.indexOf(Constants.STATE_ID_SEPARATOR, start + 1)));
+		try {
+			return Integer.parseInt(stateId.substring(start + 1, stateId.indexOf(Constants.STATE_ID_SEPARATOR, start + 1)));
+		}
+		catch (NumberFormatException ex) {
+			throw new HDIVException(HDIVErrorCodes.HDIV_PARAMETER_INCORRECT_VALUE);
+		}
 	}
 
 	public static String getScopedState(final int stateId, final String token) {
@@ -50,7 +60,12 @@ public final class HDIVStateUtils {
 	}
 
 	public static int getStateFromScoped(final String scoped) {
-		return Integer.parseInt(scoped.substring(0, scoped.indexOf(Constants.STATE_ID_SEPARATOR)));
+		try {
+			return Integer.parseInt(scoped.substring(0, scoped.indexOf(Constants.STATE_ID_SEPARATOR)));
+		}
+		catch (NumberFormatException ex) {
+			throw new HDIVException(HDIVErrorCodes.HDIV_PARAMETER_INCORRECT_VALUE);
+		}
 	}
 
 }
