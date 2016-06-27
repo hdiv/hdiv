@@ -30,7 +30,7 @@ import org.springframework.util.StringUtils;
 
 public class ConfigTools {
 
-	protected static final boolean springSecurityPresent = ClassUtils.isPresent(
+	public static final boolean springSecurityPresent = ClassUtils.isPresent(
 			"org.springframework.security.web.servlet.support.csrf.CsrfRequestDataValueProcessor",
 			SpringMvcConfigurationSupport.class.getClassLoader());
 

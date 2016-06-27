@@ -20,15 +20,25 @@ import org.hdiv.config.annotation.condition.SupportedFramework;
 import org.hdiv.config.annotation.configuration.ConfigTools;
 import org.hdiv.config.multipart.IMultipartConfig;
 import org.hdiv.config.multipart.SpringMVCMultipartConfig;
+import org.hdiv.config.xml.ConfigBeanDefinitionParser;
 import org.hdiv.config.xml.EditableValidationsBeanDefinitionParser;
+import org.hdiv.urlProcessor.FormUrlProcessor;
+import org.hdiv.urlProcessor.LinkUrlProcessor;
 import org.hdiv.web.servlet.support.HdivRequestDataValueProcessor;
 import org.hdiv.web.validator.EditableParameterValidator;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.support.BeanDefinitionRegistryPostProcessor;
+import org.springframework.beans.factory.support.DefaultSingletonBeanRegistry;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.security.web.servlet.support.csrf.CsrfRequestDataValueProcessor;
 import org.springframework.util.ClassUtils;
 import org.springframework.validation.Validator;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
+import org.springframework.web.servlet.support.RequestDataValueProcessor;
 
 /**
  * Contains the configuration beans for Spring MVC framework support.
@@ -41,6 +51,41 @@ public class SpringMvcConfigurationSupport {
 
 	protected static final boolean jsr303Present = ClassUtils.isPresent("javax.validation.Validator",
 			SpringMvcConfigurationSupport.class.getClassLoader());
+
+	public void onApplicationEvent(final ContextRefreshedEvent event) {
+		ApplicationContext applicationContext = event.getApplicationContext();
+		if (applicationContext
+				.getBean(ConfigBeanDefinitionParser.REQUEST_DATA_VALUE_PROCESSOR_BEAN_NAME) instanceof CsrfRequestDataValueProcessor) {
+			if (applicationContext instanceof ConfigurableApplicationContext) {
+				@SuppressWarnings("resource")
+				ConfigurableApplicationContext context = (ConfigurableApplicationContext) applicationContext;
+				if (context.getBeanFactory() instanceof DefaultSingletonBeanRegistry) {
+					DefaultSingletonBeanRegistry factory = (DefaultSingletonBeanRegistry) context.getBeanFactory();
+					factory.destroySingleton(ConfigBeanDefinitionParser.REQUEST_DATA_VALUE_PROCESSOR_BEAN_NAME);
+
+					context.getBeanFactory().registerSingleton(ConfigBeanDefinitionParser.REQUEST_DATA_VALUE_PROCESSOR_BEAN_NAME,
+							requestDataValueProcessor());
+				}
+			}
+
+		}
+	}
+
+	@Autowired
+	protected FormUrlProcessor formUrlProcessor;
+
+	@Autowired
+	protected LinkUrlProcessor linkUrlProcessor;
+
+	public RequestDataValueProcessor requestDataValueProcessor() {
+		HdivRequestDataValueProcessor processor = new HdivRequestDataValueProcessor();
+		processor.setFormUrlProcessor(formUrlProcessor);
+		processor.setLinkUrlProcessor(linkUrlProcessor);
+		if (ConfigTools.springSecurityPresent) {
+			processor.setInnerRequestDataValueProcessor(new CsrfRequestDataValueProcessor());
+		}
+		return processor;
+	}
 
 	@Bean
 	public static BeanDefinitionRegistryPostProcessor requestDataValueProcessorPostProcessor() {
