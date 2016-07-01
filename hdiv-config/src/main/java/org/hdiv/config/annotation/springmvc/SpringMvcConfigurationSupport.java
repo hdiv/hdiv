@@ -30,6 +30,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.support.BeanDefinitionRegistryPostProcessor;
 import org.springframework.beans.factory.support.DefaultSingletonBeanRegistry;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationListener;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -47,7 +48,7 @@ import org.springframework.web.servlet.support.RequestDataValueProcessor;
  */
 @Configuration
 @ConditionalOnFramework(SupportedFramework.SPRING_MVC)
-public class SpringMvcConfigurationSupport {
+public class SpringMvcConfigurationSupport implements ApplicationListener<ContextRefreshedEvent> {
 
 	protected static final boolean jsr303Present = ClassUtils.isPresent("javax.validation.Validator",
 			SpringMvcConfigurationSupport.class.getClassLoader());
