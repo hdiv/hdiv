@@ -755,7 +755,20 @@ public class ValidatorHelperRequest implements IValidationHelper {
 
 				if (values.length != actionParamValues.length) {
 
-					String valueMessage = (values.length > actionParamValues.length) ? "extra value" : "more values expected";
+					String valueMessage = "";
+					if (values.length > actionParamValues.length) {
+						if (log.isDebugEnabled()) {
+							log.debug("Received more values than expected for the parameter '" + parameter + "'. Received=" + values
+									+ ", Expected=" + actionParamValues);
+							valueMessage = values.toString();
+						}
+						else {
+							log.debug("Received fewer values than expected for the parameter '" + parameter + "'. Received=" + values
+									+ ", Expected=" + actionParamValues);
+							valueMessage = actionParamValues.toString();
+						}
+					}
+
 					ValidatorError error = new ValidatorError(HDIVErrorCodes.VALUE_LENGTH_INCORRECT, target, parameter, valueMessage);
 					return new ValidatorHelperResult(error);
 				}
