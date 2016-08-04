@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -461,12 +462,49 @@ public class ValidatorHelperRequest implements IValidationHelper {
 			}
 		}
 
+		// Fix for IBM Websphere different behavior with parameters without values.
+		// For example, param1=val1&param2
+		// This kind of parameters are excluded from request.getParameterNames() API.
+		// http://www.ibm.com/support/docview.wss?uid=swg1PM35450
+		if (required.size() > 0) {
+			Iterator<String> it = required.iterator();
+			while (it.hasNext()) {
+				String req = it.next();
+				if (isNoValueParameter(request, req)) {
+					it.remove();
+				}
+			}
+		}
+
 		if (required.size() > 0) {
 			ValidatorError error = new ValidatorError(HDIVErrorCodes.REQUIRED_PARAMETERS, target, required.toString());
 			return new ValidatorHelperResult(error);
 		}
 
 		return ValidatorHelperResult.VALID;
+	}
+
+	/**
+	 * Check if the given parameter doesn't have values looking in the query string.
+	 * 
+	 * @param request HttpServletRequest instance
+	 * @param parameter Parameter name
+	 * @return true if the parameter does't have value
+	 */
+	private boolean isNoValueParameter(final HttpServletRequest request, final String parameter) {
+
+		String queryString = request.getQueryString();
+		if (queryString == null) {
+			return false;
+		}
+
+		String[] parts = queryString.split("&");
+		if (parts.length == 0) {
+			return false;
+		}
+
+		List<String> partsList = Arrays.asList(parts);
+		return partsList.contains(parameter);
 	}
 
 	/**
