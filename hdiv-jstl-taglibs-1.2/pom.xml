@@ -13,6 +13,10 @@
 	<url>http://www.hdiv.org</url>
 	<description>Web Application Security Framework</description>
 
+	<properties>
+		<sonar.skip>true</sonar.skip>
+	</properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.hdiv</groupId>
