@@ -15,6 +15,7 @@
 
 	<properties>
 		<org.struts.version>1.3.8</org.struts.version>
+		<sonar.skip>true</sonar.skip>
 	</properties>
 
 	<dependencies>
