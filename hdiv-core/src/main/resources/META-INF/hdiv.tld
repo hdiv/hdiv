@@ -2,7 +2,7 @@
 <taglib version="2.0" xmlns="http://java.sun.com/xml/ns/j2ee"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_0.xsd">
-	<description>HDIV Tag Library</description>
+	<description>Hdiv Tag Library</description>
 	<tlib-version>3.0</tlib-version>
 	<short-name>hdiv</short-name>
 	<uri>http://www.hdiv.org/tags</uri>

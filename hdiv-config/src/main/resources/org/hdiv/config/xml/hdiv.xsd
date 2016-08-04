@@ -243,14 +243,14 @@
 			<xsd:attribute name="randomName" type="xsd:boolean">
 				<xsd:annotation>
 					<xsd:documentation><![CDATA[
-	HDIV adds an extra parameter to all links and forms. By default this parameter is '_HDIV_STATE_'. If 'randomName' is true a random name is generated instead of default.
+	Hdiv adds an extra parameter to all links and forms. By default this parameter is '_HDIV_STATE_'. If 'randomName' is true a random name is generated instead of default.
 					]]></xsd:documentation>
 				</xsd:annotation>
 			</xsd:attribute>
 			<xsd:attribute name="errorPage" type="xsd:string">
 				<xsd:annotation>
 					<xsd:documentation><![CDATA[
-	Url of the error page to which HDIV will redirect the request if it doesn't pass the HDIV validation.
+	Url of the error page to which Hdiv will redirect the request if it doesn't pass the Hdiv validation.
 					]]></xsd:documentation>
 				</xsd:annotation>
 			</xsd:attribute>
