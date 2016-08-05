@@ -160,9 +160,7 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 	 */
 	public void setBeanFactory(final BeanFactory beanFactory) {
 		this.beanFactory = beanFactory;
-		if (cache instanceof HTTPSessionCache) {
-			cache.setBeanFactory(beanFactory);
-		}
+		cache.setBeanFactory(beanFactory);
 	}
 
 	public String getAttribute(final RequestContext context, final String name) {
@@ -223,11 +221,6 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 	}
 
 	public void removeEndedPages(final RequestContext context, final String conversationId) {
-		if (cache instanceof HTTPSessionCache) {
-			cache.removeEndedPages(context, conversationId);
-		}
-		else {
-			log.error("Remove ended pages not supported by cache:" + cache);
-		}
+		cache.removeEndedPages(context, conversationId);
 	}
 }

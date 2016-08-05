@@ -15,9 +15,10 @@
  */
 package org.hdiv.state;
 
+import java.io.Serializable;
 import java.util.List;
 
-public interface IParameter {
+public interface IParameter extends Serializable {
 
 	/**
 	 * Adds the value <code>value</code> to the parameter <code>this</code>.

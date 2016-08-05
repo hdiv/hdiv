@@ -67,8 +67,8 @@ public class HTTPSessionCache {
 		Integer lastPageId = cache.getLastPageId();
 		IPage lastPage = lastPageId == null ? null : findPage(new SimpleCacheKey(key.getRequestContext(), lastPageId));
 
-		boolean isRefreshRequest = newPage != null && lastPage != null && newPage.getParentStateId() != null
-				&& lastPage.getParentStateId() != null && newPage.getParentStateId().equals(lastPage.getParentStateId());
+		boolean isRefreshRequest = lastPage != null && newPage.getParentStateId() != null && lastPage.getParentStateId() != null
+				&& newPage.getParentStateId().equals(lastPage.getParentStateId());
 
 		// Check if is an Ajax request.
 		Object isAjaxRequestObject = request.getAttribute(Constants.AJAX_REQUEST);

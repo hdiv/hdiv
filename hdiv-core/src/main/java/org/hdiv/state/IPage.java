@@ -15,9 +15,10 @@
  */
 package org.hdiv.state;
 
+import java.io.Serializable;
 import java.util.Collection;
 
-public interface IPage {
+public interface IPage extends Serializable {
 
 	/**
 	 * Adds a new state to the page <code>this</code>.

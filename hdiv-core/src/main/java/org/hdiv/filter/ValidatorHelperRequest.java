@@ -798,12 +798,12 @@ public class ValidatorHelperRequest implements IValidationHelper {
 						if (log.isDebugEnabled()) {
 							log.debug("Received more values than expected for the parameter '" + parameter + "'. Received=" + values
 									+ ", Expected=" + actionParamValues);
-							valueMessage = values.toString();
+							valueMessage = Arrays.toString(values);
 						}
 						else {
 							log.debug("Received fewer values than expected for the parameter '" + parameter + "'. Received=" + values
 									+ ", Expected=" + actionParamValues);
-							valueMessage = actionParamValues.toString();
+							valueMessage = Arrays.toString(actionParamValues);
 						}
 					}
 
