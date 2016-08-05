@@ -9,7 +9,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>hdiv-docs</artifactId>
 	<packaging>pom</packaging>
-	<name>HDIV docs</name>
+	<name>Hdiv Community Documentation</name>
 	<url>http://www.hdiv.org</url>
 	<description>Web Application Security Framework</description>
 

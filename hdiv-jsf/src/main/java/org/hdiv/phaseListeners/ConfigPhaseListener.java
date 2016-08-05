@@ -53,7 +53,7 @@ public class ConfigPhaseListener implements PhaseListener {
 	/**
 	 * Is SevletContext object initialized?
 	 */
-	private boolean initialized = false;
+	private final boolean initialized = false;
 
 	/*
 	 * (non-Javadoc)
@@ -69,11 +69,11 @@ public class ConfigPhaseListener implements PhaseListener {
 	 * 
 	 * @see javax.faces.event.PhaseListener#beforePhase(javax.faces.event.PhaseEvent)
 	 */
-	public void beforePhase(PhaseEvent event) {
+	public void beforePhase(final PhaseEvent event) {
 
 		if (event.getPhaseId().equals(PhaseId.RESTORE_VIEW)) {
 
-			if (!this.initialized) {
+			if (!initialized) {
 
 				if (log.isDebugEnabled()) {
 					log.debug("Initialize ConfigPhaseListener dependencies.");
@@ -81,7 +81,7 @@ public class ConfigPhaseListener implements PhaseListener {
 
 				FacesContext context = event.getFacesContext();
 				// Check not supported features
-				this.checkSupportedFeatures(context);
+				checkSupportedFeatures(context);
 
 				// Get listener instances
 				WebApplicationContext wac = FacesContextUtils.getRequiredWebApplicationContext(context);
@@ -96,7 +96,7 @@ public class ConfigPhaseListener implements PhaseListener {
 
 			FacesContext context = event.getFacesContext();
 			// Add user's unique id to state
-			this.addUserUniqueTokenToState(context);
+			addUserUniqueTokenToState(context);
 		}
 
 	}
@@ -106,7 +106,7 @@ public class ConfigPhaseListener implements PhaseListener {
 	 * 
 	 * @see javax.faces.event.PhaseListener#afterPhase(javax.faces.event.PhaseEvent)
 	 */
-	public void afterPhase(PhaseEvent event) {
+	public void afterPhase(final PhaseEvent event) {
 
 	}
 
@@ -116,7 +116,7 @@ public class ConfigPhaseListener implements PhaseListener {
 	 * 
 	 * @param facesContext request context
 	 */
-	private void addUserUniqueTokenToState(FacesContext facesContext) {
+	private void addUserUniqueTokenToState(final FacesContext facesContext) {
 
 		UIViewRoot viewRoot = facesContext.getViewRoot();
 		if (viewRoot != null) {
@@ -138,7 +138,7 @@ public class ConfigPhaseListener implements PhaseListener {
 	 * 
 	 * @param context request context
 	 */
-	private void checkSupportedFeatures(FacesContext context) {
+	private void checkSupportedFeatures(final FacesContext context) {
 
 		ExternalContext externalContext = context.getExternalContext();
 		ServletContext servletContext = (ServletContext) externalContext.getContext();

@@ -56,9 +56,9 @@ public class ComponentMessagesPhaseListener implements PhaseListener {
 	 * 
 	 * @see javax.faces.event.PhaseListener#beforePhase(javax.faces.event.PhaseEvent)
 	 */
-	public void beforePhase(PhaseEvent event) {
+	public void beforePhase(final PhaseEvent event) {
 
-		if (this.messagesLog == null) {
+		if (messagesLog == null) {
 
 			if (log.isDebugEnabled()) {
 				log.debug("Initialize ComponentMessagesPhaseListener dependencies.");
@@ -66,7 +66,7 @@ public class ComponentMessagesPhaseListener implements PhaseListener {
 
 			WebApplicationContext wac = FacesContextUtils.getRequiredWebApplicationContext(event.getFacesContext());
 			Logger logger = wac.getBean(Logger.class);
-			this.messagesLog = new ComponentMessagesLog(logger);
+			messagesLog = new ComponentMessagesLog(logger);
 		}
 	}
 
@@ -75,8 +75,8 @@ public class ComponentMessagesPhaseListener implements PhaseListener {
 	 * 
 	 * @see javax.faces.event.PhaseListener#afterPhase(javax.faces.event.PhaseEvent)
 	 */
-	public void afterPhase(PhaseEvent event) {
+	public void afterPhase(final PhaseEvent event) {
 
-		this.messagesLog.processMessages(event.getFacesContext());
+		messagesLog.processMessages(event.getFacesContext());
 	}
 }

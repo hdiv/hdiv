@@ -45,7 +45,7 @@
 <listener>
     <listener-class>org.hdiv.listener.InitListener</listener-class>
 </listener>
-<!-- HDIV Validator Filter -->
+<!-- Hdiv Validator Filter -->
 <filter>
     <filter-name>ValidatorFilter</filter-name>
     <filter-class>org.hdiv.filter.ValidatorFilter</filter-class>

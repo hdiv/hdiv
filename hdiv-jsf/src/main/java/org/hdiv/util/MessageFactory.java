@@ -42,7 +42,7 @@ public class MessageFactory {
 	 * @param params extra params
 	 * @return FacesMessage
 	 */
-	public static FacesMessage getMessage(String messageId, Object params[]) {
+	public static FacesMessage getMessage(final String messageId, final Object params[]) {
 		Locale locale = null;
 		FacesContext context = FacesContext.getCurrentInstance();
 		// context.getViewRoot() may not have been initialized at this point.
@@ -59,7 +59,7 @@ public class MessageFactory {
 		return getMessage(locale, messageId, params);
 	}
 
-	public static FacesMessage getMessage(Locale locale, String messageId, Object params[]) {
+	public static FacesMessage getMessage(final Locale locale, final String messageId, final Object params[]) {
 
 		String summary = null, detail = null, bundleName = null;
 		ResourceBundle bundle = null;
@@ -111,7 +111,7 @@ public class MessageFactory {
 		return (new FacesMessage(summary, detail));
 	}
 
-	private static String substituteParams(Locale locale, String msgtext, Object params[]) {
+	private static String substituteParams(final Locale locale, final String msgtext, final Object params[]) {
 		String localizedStr = null;
 
 		if (params == null || msgtext == null) {
@@ -136,7 +136,7 @@ public class MessageFactory {
 		return (afactory.getApplication());
 	}
 
-	protected static ClassLoader getCurrentLoader(Object fallbackClass) {
+	protected static ClassLoader getCurrentLoader(final Object fallbackClass) {
 		ClassLoader loader = Thread.currentThread().getContextClassLoader();
 		if (loader == null) {
 			loader = fallbackClass.getClass().getClassLoader();

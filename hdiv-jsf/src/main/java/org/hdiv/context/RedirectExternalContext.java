@@ -45,24 +45,24 @@ public class RedirectExternalContext extends javax.faces.context.ExternalContext
 	/**
 	 * Class for helping with the redirect logic
 	 */
-	private RedirectHelper redirectHelper;
+	private final RedirectHelper redirectHelper;
 
 	/**
 	 * Original ExternalContext
 	 */
-	private ExternalContext wrapped;
+	private final ExternalContext wrapped;
 
 	/**
 	 * ExternalContext constructor
 	 * 
 	 * @param wrapped original ExternalContext
 	 */
-	public RedirectExternalContext(ExternalContext wrapped) {
+	public RedirectExternalContext(final ExternalContext wrapped) {
 
 		ServletContext servletContext = (ServletContext) wrapped.getContext();
-		this.redirectHelper = WebApplicationContextUtils.getRequiredWebApplicationContext(servletContext).getBean(RedirectHelper.class);
+		redirectHelper = WebApplicationContextUtils.getRequiredWebApplicationContext(servletContext).getBean(RedirectHelper.class);
 
-		Assert.notNull(this.redirectHelper);
+		Assert.notNull(redirectHelper);
 
 		this.wrapped = wrapped;
 	}
@@ -72,24 +72,26 @@ public class RedirectExternalContext extends javax.faces.context.ExternalContext
 	 * 
 	 * @see javax.faces.context.ExternalContextWrapper#getWrapped()
 	 */
+	@Override
 	public ExternalContext getWrapped() {
 
-		return this.wrapped;
+		return wrapped;
 	}
 
 	/**
 	 * If it is an internal redirect (to the application itself) generates the state, stores it in session and adds corresponding parameter
 	 * to url.
 	 */
-	public void redirect(String url) throws IOException {
+	@Override
+	public void redirect(final String url) throws IOException {
 
 		// Add state to url
-		String finalUrl = this.redirectHelper.addHDIVStateToURL(url);
+		String finalUrl = redirectHelper.addHDIVStateToURL(url);
 		if (log.isDebugEnabled()) {
 			log.debug("Redirecting to:" + finalUrl);
 		}
 
-		this.wrapped.redirect(finalUrl);
+		wrapped.redirect(finalUrl);
 
 	}
 

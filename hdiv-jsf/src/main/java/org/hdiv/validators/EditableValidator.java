@@ -53,10 +53,10 @@ public class EditableValidator implements ComponentValidator {
 	 * 
 	 * @see org.hdiv.validators.ComponentValidator#validate(javax.faces.context.FacesContext, javax.faces.component.UIComponent)
 	 */
-	public ValidationError validate(FacesContext context, UIComponent component) {
+	public ValidationError validate(final FacesContext context, final UIComponent component) {
 
 		UIForm form = (UIForm) component;
-		ValidationError error = this.validateEditablesForm(context, form);
+		ValidationError error = validateEditablesForm(context, form);
 		return error;
 	}
 
@@ -67,11 +67,11 @@ public class EditableValidator implements ComponentValidator {
 	 * @param formComponent UIForm component to validate
 	 * @return result
 	 */
-	protected ValidationError validateEditablesForm(FacesContext context, UIForm formComponent) {
+	protected ValidationError validateEditablesForm(final FacesContext context, final UIForm formComponent) {
 		ValidationError error = null;
 
 		for (UIComponent component : formComponent.getChildren()) {
-			ValidationError tempError = this.validateComponent(context, component);
+			ValidationError tempError = validateComponent(context, component);
 			if (tempError != null) {
 				error = tempError;
 			}
@@ -86,7 +86,7 @@ public class EditableValidator implements ComponentValidator {
 	 * @param uiComponent UIComponent to validate
 	 * @return result
 	 */
-	protected ValidationError validateComponent(FacesContext context, UIComponent uiComponent) {
+	protected ValidationError validateComponent(final FacesContext context, final UIComponent uiComponent) {
 		if ((uiComponent instanceof HtmlInputText) || (uiComponent instanceof HtmlInputTextarea) || (uiComponent instanceof HtmlInputSecret)
 				|| (uiComponent instanceof HtmlInputHidden)) {
 			UIInput inputComponent = (UIInput) uiComponent;
@@ -111,7 +111,7 @@ public class EditableValidator implements ComponentValidator {
 	 * @param inputComponent {@link UIInput} to validate
 	 * @return result
 	 */
-	protected ValidationError validateInput(FacesContext context, UIInput inputComponent) {
+	protected ValidationError validateInput(final FacesContext context, final UIInput inputComponent) {
 
 		Object value = inputComponent.getValue();
 		String clientId = inputComponent.getClientId(context);
@@ -129,10 +129,10 @@ public class EditableValidator implements ComponentValidator {
 			contentType = "password";
 		}
 
-		if (!this.validateContent(context, clientId, value, contentType)) {
+		if (!validateContent(context, clientId, value, contentType)) {
 
 			// Add message
-			FacesMessage msg = this.createFacesMessage(context, inputComponent);
+			FacesMessage msg = createFacesMessage(context, inputComponent);
 			context.addMessage(clientId, msg);
 
 			inputComponent.setValid(false);
@@ -151,7 +151,8 @@ public class EditableValidator implements ComponentValidator {
 	 * @param contentType type of content
 	 * @return is the content valid?
 	 */
-	protected boolean validateContent(FacesContext context, String clientId, Object contentObj, String contentType) {
+	protected boolean validateContent(final FacesContext context, final String clientId, final Object contentObj,
+			final String contentType) {
 		if (!(contentObj instanceof String)) {
 			return true;
 		}
@@ -160,8 +161,8 @@ public class EditableValidator implements ComponentValidator {
 		String targetWithoutContextPath = getTargetWithoutContextPath(request, target);
 
 		String[] content = { (String) contentObj };
-		EditableDataValidationResult result = this.hdivConfig.getEditableDataValidationProvider().validate(targetWithoutContextPath,
-				clientId, content, contentType);
+		EditableDataValidationResult result = hdivConfig.getEditableDataValidationProvider().validate(targetWithoutContextPath, clientId,
+				content, contentType);
 		return result.isValid();
 	}
 
@@ -172,7 +173,7 @@ public class EditableValidator implements ComponentValidator {
 	 * @param target target to strip the ContextPath
 	 * @return target without the ContextPath
 	 */
-	protected String getTargetWithoutContextPath(HttpServletRequest request, String target) {
+	protected String getTargetWithoutContextPath(final HttpServletRequest request, final String target) {
 		String targetWithoutContextPath = target.substring(request.getContextPath().length());
 		return targetWithoutContextPath;
 	}
@@ -184,7 +185,7 @@ public class EditableValidator implements ComponentValidator {
 	 * @param inputComponent {@link UIInput} to validate
 	 * @return FacesMessage
 	 */
-	protected FacesMessage createFacesMessage(FacesContext context, UIInput inputComponent) {
+	protected FacesMessage createFacesMessage(final FacesContext context, final UIInput inputComponent) {
 
 		String clientId = inputComponent.getClientId();
 
@@ -229,7 +230,7 @@ public class EditableValidator implements ComponentValidator {
 		return facesMessage;
 	}
 
-	public void setHdivConfig(HDIVConfig hdivConfig) {
+	public void setHdivConfig(final HDIVConfig hdivConfig) {
 		this.hdivConfig = hdivConfig;
 	}
 }

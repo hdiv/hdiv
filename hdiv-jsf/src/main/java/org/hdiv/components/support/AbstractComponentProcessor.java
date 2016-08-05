@@ -33,7 +33,7 @@ public abstract class AbstractComponentProcessor {
 
 	protected LinkUrlProcessor linkUrlProcessor;
 
-	public void removeHdivStateUIParameter(FacesContext context, UIComponent component) {
+	public void removeHdivStateUIParameter(final FacesContext context, final UIComponent component) {
 
 		// Remove the component with the HDIV state, we don't want to store it in the state
 		HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
@@ -61,14 +61,14 @@ public abstract class AbstractComponentProcessor {
 	/**
 	 * @param config the config to set
 	 */
-	public void setConfig(HDIVConfig config) {
+	public void setConfig(final HDIVConfig config) {
 		this.config = config;
 	}
 
 	/**
 	 * @param linkUrlProcessor the linkUrlProcessor to set
 	 */
-	public void setLinkUrlProcessor(LinkUrlProcessor linkUrlProcessor) {
+	public void setLinkUrlProcessor(final LinkUrlProcessor linkUrlProcessor) {
 		this.linkUrlProcessor = linkUrlProcessor;
 	}
 
