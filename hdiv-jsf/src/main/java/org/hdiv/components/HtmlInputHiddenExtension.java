@@ -47,8 +47,8 @@ public class HtmlInputHiddenExtension extends HtmlInputHidden {
 	 * @return hidden real value
 	 */
 	@SuppressWarnings("unchecked")
-	public Object getRealValue(String clientId) {
-		Map<String, Object> values = (Map<String, Object>) this.getAttributes().get(ConstantsJsf.HDIV_ATTRIBUTE_KEY);
+	public Object getRealValue(final String clientId) {
+		Map<String, Object> values = (Map<String, Object>) getAttributes().get(ConstantsJsf.HDIV_ATTRIBUTE_KEY);
 		return values.get(clientId);
 	}
 
@@ -59,8 +59,8 @@ public class HtmlInputHiddenExtension extends HtmlInputHidden {
 	 * @return component id
 	 */
 	@SuppressWarnings("unchecked")
-	public String getRequestId(int rowIndex) {
-		List<String> clientIds = (List<String>) this.getAttributes().get(ConstantsJsf.HDIV_ATTRIBUTE_CLIENTIDS_KEY);
+	public String getRequestId(final int rowIndex) {
+		List<String> clientIds = (List<String>) getAttributes().get(ConstantsJsf.HDIV_ATTRIBUTE_CLIENTIDS_KEY);
 		return clientIds.get(rowIndex);
 	}
 
@@ -69,16 +69,17 @@ public class HtmlInputHiddenExtension extends HtmlInputHidden {
 	 * 
 	 * @see javax.faces.component.UIComponent#encodeBegin(javax.faces.context. FacesContext)
 	 */
+	@Override
 	@SuppressWarnings("unchecked")
-	public void encodeBegin(FacesContext context) throws IOException {
+	public void encodeBegin(final FacesContext context) throws IOException {
 
 		Map<String, Object> values = null;
 		List<String> clientIds = null;
 		UIData tableComp = UtilsJsf.findParentUIData(this);
 		String clientId = this.getClientId(context);
 		if (tableComp != null) {
-			values = (Map<String, Object>) this.getAttributes().get(ConstantsJsf.HDIV_ATTRIBUTE_KEY);
-			clientIds = (List<String>) this.getAttributes().get(ConstantsJsf.HDIV_ATTRIBUTE_CLIENTIDS_KEY);
+			values = (Map<String, Object>) getAttributes().get(ConstantsJsf.HDIV_ATTRIBUTE_KEY);
+			clientIds = (List<String>) getAttributes().get(ConstantsJsf.HDIV_ATTRIBUTE_CLIENTIDS_KEY);
 		}
 		if (values == null) {
 			values = new HashMap<String, Object>();
@@ -88,8 +89,8 @@ public class HtmlInputHiddenExtension extends HtmlInputHidden {
 		}
 		values.put(clientId, super.getValue());
 		clientIds.add(clientId);
-		this.getAttributes().put(ConstantsJsf.HDIV_ATTRIBUTE_KEY, values);
-		this.getAttributes().put(ConstantsJsf.HDIV_ATTRIBUTE_CLIENTIDS_KEY, clientIds);
+		getAttributes().put(ConstantsJsf.HDIV_ATTRIBUTE_KEY, values);
+		getAttributes().put(ConstantsJsf.HDIV_ATTRIBUTE_CLIENTIDS_KEY, clientIds);
 
 		if (log.isDebugEnabled()) {
 			log.debug("Hidden real value :" + values.get(clientId));
@@ -105,7 +106,7 @@ public class HtmlInputHiddenExtension extends HtmlInputHidden {
 	 */
 	@SuppressWarnings("unchecked")
 	public List<String> getClientIds() {
-		return (List<String>) this.getAttributes().get(ConstantsJsf.HDIV_ATTRIBUTE_CLIENTIDS_KEY);
+		return (List<String>) getAttributes().get(ConstantsJsf.HDIV_ATTRIBUTE_CLIENTIDS_KEY);
 	}
 
 }

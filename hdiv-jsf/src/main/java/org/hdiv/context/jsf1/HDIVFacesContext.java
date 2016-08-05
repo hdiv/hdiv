@@ -32,7 +32,7 @@ public class HDIVFacesContext extends FacesContextWrapper {
 	/**
 	 * Original FacesContext
 	 */
-	private FacesContext wrapped;
+	private final FacesContext wrapped;
 
 	/**
 	 * Original ExternalContext
@@ -44,7 +44,7 @@ public class HDIVFacesContext extends FacesContextWrapper {
 	 * 
 	 * @param wrapped original FacesContext
 	 */
-	public HDIVFacesContext(FacesContext wrapped) {
+	public HDIVFacesContext(final FacesContext wrapped) {
 		super();
 		this.wrapped = wrapped;
 		setCurrentInstance(this);
@@ -55,20 +55,22 @@ public class HDIVFacesContext extends FacesContextWrapper {
 	 * 
 	 * @see org.hdiv.context.FacesContextWrapper#getWrapped()
 	 */
+	@Override
 	public FacesContext getWrapped() {
-		return this.wrapped;
+		return wrapped;
 	}
 
 	/**
 	 * Returns ExternalContext wrapper instead of the original Caches ExternalContext instance.
 	 */
+	@Override
 	public ExternalContext getExternalContext() {
 
-		if (this.eContext == null) {
-			ExternalContext original = this.wrapped.getExternalContext();
-			this.eContext = new RedirectExternalContext(original);
+		if (eContext == null) {
+			ExternalContext original = wrapped.getExternalContext();
+			eContext = new RedirectExternalContext(original);
 		}
 
-		return this.eContext;
+		return eContext;
 	}
 }

@@ -28,7 +28,7 @@ public class StateValidationException extends HDIVException {
 	public StateValidationException() {
 	}
 
-	public StateValidationException(Throwable cause) {
+	public StateValidationException(final Throwable cause) {
 		super(cause);
 	}
 

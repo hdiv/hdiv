@@ -31,14 +31,14 @@ public class FacesContextFactoryWrapper extends FacesContextFactory {
 	/**
 	 * Original FacesContextFactory
 	 */
-	private FacesContextFactory wrapped;
+	private final FacesContextFactory wrapped;
 
 	/**
 	 * Default constructor
 	 * 
 	 * @param wrapped Wrapped {@link FacesContextFactory}
 	 */
-	public FacesContextFactoryWrapper(FacesContextFactory wrapped) {
+	public FacesContextFactoryWrapper(final FacesContextFactory wrapped) {
 		super();
 		this.wrapped = wrapped;
 	}
@@ -49,9 +49,11 @@ public class FacesContextFactoryWrapper extends FacesContextFactory {
 	 * @see javax.faces.context.FacesContextFactory#getFacesContext(java.lang.Object, java.lang.Object, java.lang.Object,
 	 * javax.faces.lifecycle.Lifecycle)
 	 */
-	public FacesContext getFacesContext(Object context, Object request, Object response, Lifecycle lifecycle) throws FacesException {
+	@Override
+	public FacesContext getFacesContext(final Object context, final Object request, final Object response, final Lifecycle lifecycle)
+			throws FacesException {
 
-		FacesContext original = this.wrapped.getFacesContext(context, request, response, lifecycle);
+		FacesContext original = wrapped.getFacesContext(context, request, response, lifecycle);
 		return new HDIVFacesContext(original);
 	}
 

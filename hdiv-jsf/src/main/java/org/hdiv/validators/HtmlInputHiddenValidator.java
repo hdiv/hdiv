@@ -43,10 +43,10 @@ public class HtmlInputHiddenValidator implements ComponentValidator {
 	 * 
 	 * @see org.hdiv.validators.ComponentValidator#validate(javax.faces.context.FacesContext, javax.faces.component.UIComponent)
 	 */
-	public ValidationError validate(FacesContext context, UIComponent component) {
+	public ValidationError validate(final FacesContext context, final UIComponent component) {
 
 		HtmlInputHiddenExtension inputHidden = (HtmlInputHiddenExtension) component;
-		ValidationError error = this.validateHiddenComponent(context, inputHidden);
+		ValidationError error = validateHiddenComponent(context, inputHidden);
 
 		return error;
 	}
@@ -58,7 +58,7 @@ public class HtmlInputHiddenValidator implements ComponentValidator {
 	 * @param inputHidden component to validate
 	 * @return validation result
 	 */
-	protected ValidationError validateHiddenComponent(FacesContext context, HtmlInputHiddenExtension inputHidden) {
+	protected ValidationError validateHiddenComponent(final FacesContext context, final HtmlInputHiddenExtension inputHidden) {
 
 		UIData uiDataComp = UtilsJsf.findParentUIData(inputHidden);
 
@@ -91,7 +91,7 @@ public class HtmlInputHiddenValidator implements ComponentValidator {
 				return error;
 			}
 
-			boolean correcto = this.hasEqualValue(hiddenValue, hiddenRealValue);
+			boolean correcto = hasEqualValue(hiddenValue, hiddenRealValue);
 			if (!correcto) {
 				ValidationError error = new ValidationError();
 				error.setErrorKey(HDIVErrorCodes.PARAMETER_VALUE_INCORRECT);

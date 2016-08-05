@@ -53,13 +53,13 @@ public class UIParameterExtension extends UIParameter {
 	 * @return parameter value
 	 */
 	@SuppressWarnings("unchecked")
-	public Object getValue(String parentClientId) {
+	public Object getValue(final String parentClientId) {
 
 		Object val = this.getValue();
 
 		// If it has previously been stored in the state, return the stored value
 		// else return the default
-		Map<String, Object> values = (Map<String, Object>) this.getAttributes().get(ConstantsJsf.HDIV_ATTRIBUTE_KEY);
+		Map<String, Object> values = (Map<String, Object>) getAttributes().get(ConstantsJsf.HDIV_ATTRIBUTE_KEY);
 		if (values != null) {
 			val = values.get(parentClientId);
 		}
@@ -71,23 +71,24 @@ public class UIParameterExtension extends UIParameter {
 	 * 
 	 * @see javax.faces.component.UIComponent#encodeBegin(javax.faces.context. FacesContext)
 	 */
+	@Override
 	@SuppressWarnings("unchecked")
-	public void encodeBegin(FacesContext context) throws IOException {
+	public void encodeBegin(final FacesContext context) throws IOException {
 
 		// HDIV parameter name
 		HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
 		String hdivParameter = HDIVUtil.getHdivStateParameterName(request);
 
-		String name = this.getName();
+		String name = getName();
 		if (name != null && name.equals(hdivParameter)) {
 			// It is the Hdiv parameter added automatically by the link, so do
 			// nothing
 
 		}
 		else {
-			UIComponent parent = this.getParent();
+			UIComponent parent = getParent();
 			String parentClientId = parent.getClientId(context);
-			Map<String, Object> values = (Map<String, Object>) this.getAttributes().get(ConstantsJsf.HDIV_ATTRIBUTE_KEY);
+			Map<String, Object> values = (Map<String, Object>) getAttributes().get(ConstantsJsf.HDIV_ATTRIBUTE_KEY);
 			if (values == null) {
 				values = new HashMap<String, Object>();
 			}
@@ -106,7 +107,7 @@ public class UIParameterExtension extends UIParameter {
 			Object val = this.getValue();
 			values.put(parentClientId, val);
 
-			this.getAttributes().put(ConstantsJsf.HDIV_ATTRIBUTE_KEY, values);
+			getAttributes().put(ConstantsJsf.HDIV_ATTRIBUTE_KEY, values);
 		}
 		super.encodeBegin(context);
 	}

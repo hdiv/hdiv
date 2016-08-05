@@ -44,7 +44,7 @@ public class UICommandValidator implements ComponentValidator {
 	 * 
 	 * @see org.hdiv.validators.ComponentValidator#validate(javax.faces.context.FacesContext, javax.faces.component.UIComponent)
 	 */
-	public ValidationError validate(FacesContext context, UIComponent component) {
+	public ValidationError validate(final FacesContext context, final UIComponent component) {
 
 		UICommand command = (UICommand) component;
 
@@ -60,7 +60,7 @@ public class UICommandValidator implements ComponentValidator {
 		for (UIComponent childComp : component.getChildren()) {
 			if (childComp instanceof UIParameter) {
 				UIParameter param = (UIParameter) childComp;
-				ValidationError error = this.processParam(context, param, rowIndex);
+				ValidationError error = processParam(context, param, rowIndex);
 				if (error != null) {
 					return error;
 				}
@@ -78,7 +78,7 @@ public class UICommandValidator implements ComponentValidator {
 	 * @param rowIndex index that shows where it is the UICommand component inside a UIData
 	 * @return validation result
 	 */
-	private ValidationError processParam(FacesContext context, UIParameter parameter, int rowIndex) {
+	private ValidationError processParam(final FacesContext context, final UIParameter parameter, int rowIndex) {
 
 		UIParameterExtension param = (UIParameterExtension) parameter;
 

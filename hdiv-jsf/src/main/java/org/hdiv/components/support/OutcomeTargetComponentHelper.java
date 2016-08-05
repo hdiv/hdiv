@@ -56,7 +56,7 @@ public class OutcomeTargetComponentHelper {
 	 * @param component {@link UIOutcomeTarget} instance
 	 * @return the url
 	 */
-	public String getUrl(FacesContext context, UIOutcomeTarget component) {
+	public String getUrl(final FacesContext context, final UIOutcomeTarget component) {
 
 		NavigationCase navCase = getNavigationCase(context, component);
 		String url = getEncodedTargetURL(context, component, navCase);
@@ -74,7 +74,7 @@ public class OutcomeTargetComponentHelper {
 	 *
 	 * @return the NavigationCase represeting the outcome target
 	 */
-	protected NavigationCase getNavigationCase(FacesContext context, UIComponent component) {
+	protected NavigationCase getNavigationCase(final FacesContext context, final UIComponent component) {
 		NavigationHandler navHandler = context.getApplication().getNavigationHandler();
 		if (!(navHandler instanceof ConfigurableNavigationHandler)) {
 			// if (logger.isLoggable(Level.WARNING)) {
@@ -118,7 +118,7 @@ public class OutcomeTargetComponentHelper {
 	 *
 	 * @return an encoded URL for the provided navigation case
 	 */
-	protected String getEncodedTargetURL(FacesContext context, UIComponent component, NavigationCase navCase) {
+	protected String getEncodedTargetURL(final FacesContext context, final UIComponent component, final NavigationCase navCase) {
 		// FIXME getNavigationCase doesn't resolve the target viewId (it is part of CaseStruct)
 		String toViewId = navCase.getToViewId(context);
 		Map<String, List<String>> params = getParamOverrides(component);
@@ -127,13 +127,13 @@ public class OutcomeTargetComponentHelper {
 				isIncludeViewParams(component, navCase));
 	}
 
-	protected boolean isIncludeViewParams(UIComponent component, NavigationCase navcase) {
+	protected boolean isIncludeViewParams(final UIComponent component, final NavigationCase navcase) {
 
 		return (((UIOutcomeTarget) component).isIncludeViewParams() || navcase.isIncludeViewParams());
 
 	}
 
-	protected Map<String, List<String>> getParamOverrides(UIComponent component) {
+	protected Map<String, List<String>> getParamOverrides(final UIComponent component) {
 		Map<String, List<String>> params = new LinkedHashMap<String, List<String>>();
 		Param[] declaredParams = getParamList(component);
 		for (Param candidate : declaredParams) {
@@ -158,7 +158,7 @@ public class OutcomeTargetComponentHelper {
 	 *
 	 * @return an array of parameters
 	 */
-	protected Param[] getParamList(UIComponent command) {
+	protected Param[] getParamList(final UIComponent command) {
 
 		if (command.getChildCount() > 0) {
 			ArrayList<Param> parameterList = new ArrayList<Param>();
@@ -181,7 +181,7 @@ public class OutcomeTargetComponentHelper {
 
 	}
 
-	protected void addNavigationParams(NavigationCase navCase, Map<String, List<String>> existingParams) {
+	protected void addNavigationParams(final NavigationCase navCase, final Map<String, List<String>> existingParams) {
 
 		Map<String, List<String>> navParams = navCase.getParameters();
 		if (navParams == null || navParams.isEmpty()) {
@@ -211,7 +211,7 @@ public class OutcomeTargetComponentHelper {
 
 		// -------------------------------------------------------- Constructors
 
-		public Param(String name, String value) {
+		public Param(final String name, final String value) {
 
 			this.name = name;
 			this.value = value;

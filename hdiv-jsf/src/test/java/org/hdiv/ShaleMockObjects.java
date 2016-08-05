@@ -45,7 +45,7 @@ import org.apache.shale.test.mock.MockServletContext;
  */
 public class ShaleMockObjects {
 
-	public void setUp(HttpServletRequest request) throws Exception {
+	public void setUp(final HttpServletRequest request) throws Exception {
 
 		// Set up a new thread context class loader
 		threadContextClassLoader = Thread.currentThread().getContextClassLoader();
@@ -142,7 +142,7 @@ public class ShaleMockObjects {
 		return application;
 	}
 
-	public void setApplication(MockApplication application) {
+	public void setApplication(final MockApplication application) {
 		this.application = application;
 	}
 
@@ -150,7 +150,7 @@ public class ShaleMockObjects {
 		return config;
 	}
 
-	public void setConfig(MockServletConfig config) {
+	public void setConfig(final MockServletConfig config) {
 		this.config = config;
 	}
 
@@ -158,7 +158,7 @@ public class ShaleMockObjects {
 		return externalContext;
 	}
 
-	public void setExternalContext(MockExternalContext externalContext) {
+	public void setExternalContext(final MockExternalContext externalContext) {
 		this.externalContext = externalContext;
 	}
 
@@ -166,7 +166,7 @@ public class ShaleMockObjects {
 		return facesContext;
 	}
 
-	public void setFacesContext(MockFacesContext facesContext) {
+	public void setFacesContext(final MockFacesContext facesContext) {
 		this.facesContext = facesContext;
 	}
 
@@ -174,7 +174,7 @@ public class ShaleMockObjects {
 		return facesContextFactory;
 	}
 
-	public void setFacesContextFactory(MockFacesContextFactory facesContextFactory) {
+	public void setFacesContextFactory(final MockFacesContextFactory facesContextFactory) {
 		this.facesContextFactory = facesContextFactory;
 	}
 
@@ -182,7 +182,7 @@ public class ShaleMockObjects {
 		return lifecycle;
 	}
 
-	public void setLifecycle(MockLifecycle lifecycle) {
+	public void setLifecycle(final MockLifecycle lifecycle) {
 		this.lifecycle = lifecycle;
 	}
 
@@ -190,7 +190,7 @@ public class ShaleMockObjects {
 		return lifecycleFactory;
 	}
 
-	public void setLifecycleFactory(MockLifecycleFactory lifecycleFactory) {
+	public void setLifecycleFactory(final MockLifecycleFactory lifecycleFactory) {
 		this.lifecycleFactory = lifecycleFactory;
 	}
 
@@ -198,7 +198,7 @@ public class ShaleMockObjects {
 		return renderKit;
 	}
 
-	public void setRenderKit(MockRenderKit renderKit) {
+	public void setRenderKit(final MockRenderKit renderKit) {
 		this.renderKit = renderKit;
 	}
 
@@ -206,7 +206,7 @@ public class ShaleMockObjects {
 		return request;
 	}
 
-	public void setRequest(MockHttpServletRequest request) {
+	public void setRequest(final MockHttpServletRequest request) {
 		this.request = request;
 	}
 
@@ -214,7 +214,7 @@ public class ShaleMockObjects {
 		return response;
 	}
 
-	public void setResponse(MockHttpServletResponse response) {
+	public void setResponse(final MockHttpServletResponse response) {
 		this.response = response;
 	}
 
@@ -222,7 +222,7 @@ public class ShaleMockObjects {
 		return servletContext;
 	}
 
-	public void setServletContext(MockServletContext servletContext) {
+	public void setServletContext(final MockServletContext servletContext) {
 		this.servletContext = servletContext;
 	}
 
@@ -230,7 +230,7 @@ public class ShaleMockObjects {
 		return session;
 	}
 
-	public void setSession(MockHttpSession session) {
+	public void setSession(final MockHttpSession session) {
 		this.session = session;
 	}
 
@@ -238,7 +238,7 @@ public class ShaleMockObjects {
 		return threadContextClassLoader;
 	}
 
-	public void setThreadContextClassLoader(ClassLoader threadContextClassLoader) {
+	public void setThreadContextClassLoader(final ClassLoader threadContextClassLoader) {
 		this.threadContextClassLoader = threadContextClassLoader;
 	}
 

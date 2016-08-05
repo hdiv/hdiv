@@ -36,7 +36,8 @@ public class JsfMultipartConfig implements IMultipartConfig {
 	 * @param servletContext Our ServletContext object
 	 * @throws HdivMultipartException if an unrecoverable error occurs.
 	 */
-	public HttpServletRequest handleMultipartRequest(RequestWrapper request, ServletContext servletContext) throws HdivMultipartException {
+	public HttpServletRequest handleMultipartRequest(final RequestWrapper request, final ServletContext servletContext)
+			throws HdivMultipartException {
 
 		return request;
 	}
@@ -46,7 +47,7 @@ public class JsfMultipartConfig implements IMultipartConfig {
 	 * 
 	 * @param request the request to cleanup resources for
 	 */
-	public void cleanupMultipart(HttpServletRequest request) {
+	public void cleanupMultipart(final HttpServletRequest request) {
 
 	}
 

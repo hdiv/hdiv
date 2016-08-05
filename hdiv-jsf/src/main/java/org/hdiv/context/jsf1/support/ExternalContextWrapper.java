@@ -48,7 +48,8 @@ public abstract class ExternalContextWrapper extends ExternalContext {
 	 *
 	 * @see javax.faces.context.ExternalContext#dispatch(String)
 	 */
-	public void dispatch(String path) throws IOException {
+	@Override
+	public void dispatch(final String path) throws IOException {
 		getWrapped().dispatch(path);
 	}
 
@@ -60,7 +61,8 @@ public abstract class ExternalContextWrapper extends ExternalContext {
 	 *
 	 * @see javax.faces.context.ExternalContext#encodeActionURL(String)
 	 */
-	public String encodeActionURL(String url) {
+	@Override
+	public String encodeActionURL(final String url) {
 		return getWrapped().encodeActionURL(url);
 	}
 
@@ -72,7 +74,8 @@ public abstract class ExternalContextWrapper extends ExternalContext {
 	 *
 	 * @see javax.faces.context.ExternalContext#encodeNamespace(String)
 	 */
-	public String encodeNamespace(String name) {
+	@Override
+	public String encodeNamespace(final String name) {
 		return getWrapped().encodeNamespace(name);
 	}
 
@@ -84,7 +87,8 @@ public abstract class ExternalContextWrapper extends ExternalContext {
 	 *
 	 * @see javax.faces.context.ExternalContext#encodeResourceURL(String)
 	 */
-	public String encodeResourceURL(String url) {
+	@Override
+	public String encodeResourceURL(final String url) {
 		return getWrapped().encodeResourceURL(url);
 	}
 
@@ -96,6 +100,7 @@ public abstract class ExternalContextWrapper extends ExternalContext {
 	 *
 	 * @see javax.faces.context.ExternalContext#getApplicationMap()
 	 */
+	@Override
 	public Map getApplicationMap() {
 		return getWrapped().getApplicationMap();
 	}
@@ -107,6 +112,7 @@ public abstract class ExternalContextWrapper extends ExternalContext {
 	 *
 	 * @see javax.faces.context.ExternalContext#getAuthType()
 	 */
+	@Override
 	public String getAuthType() {
 		return getWrapped().getAuthType();
 	}
@@ -118,6 +124,7 @@ public abstract class ExternalContextWrapper extends ExternalContext {
 	 *
 	 * @see javax.faces.context.ExternalContext#getContext()
 	 */
+	@Override
 	public Object getContext() {
 		return getWrapped().getContext();
 	}
@@ -130,7 +137,8 @@ public abstract class ExternalContextWrapper extends ExternalContext {
 	 *
 	 * @see javax.faces.context.ExternalContext#getInitParameter(String)
 	 */
-	public String getInitParameter(String name) {
+	@Override
+	public String getInitParameter(final String name) {
 		return getWrapped().getInitParameter(name);
 	}
 
@@ -142,6 +150,7 @@ public abstract class ExternalContextWrapper extends ExternalContext {
 	 *
 	 * @see javax.faces.context.ExternalContext#getInitParameterMap()
 	 */
+	@Override
 	public Map getInitParameterMap() {
 		return getWrapped().getInitParameterMap();
 	}
@@ -153,6 +162,7 @@ public abstract class ExternalContextWrapper extends ExternalContext {
 	 *
 	 * @see javax.faces.context.ExternalContext#getRemoteUser()
 	 */
+	@Override
 	public String getRemoteUser() {
 		return getWrapped().getRemoteUser();
 	}
@@ -164,6 +174,7 @@ public abstract class ExternalContextWrapper extends ExternalContext {
 	 *
 	 * @see javax.faces.context.ExternalContext#getRequest()
 	 */
+	@Override
 	public Object getRequest() {
 		return getWrapped().getRequest();
 	}
@@ -176,6 +187,7 @@ public abstract class ExternalContextWrapper extends ExternalContext {
 	 *
 	 * @see javax.faces.context.ExternalContext#getRequestContextPath()
 	 */
+	@Override
 	public String getRequestContextPath() {
 		return getWrapped().getRequestContextPath();
 	}
@@ -188,6 +200,7 @@ public abstract class ExternalContextWrapper extends ExternalContext {
 	 *
 	 * @see javax.faces.context.ExternalContext#getRequestCookieMap()
 	 */
+	@Override
 	public Map getRequestCookieMap() {
 		return getWrapped().getRequestCookieMap();
 	}
@@ -200,6 +213,7 @@ public abstract class ExternalContextWrapper extends ExternalContext {
 	 *
 	 * @see javax.faces.context.ExternalContext#getRequestHeaderMap()
 	 */
+	@Override
 	public Map getRequestHeaderMap() {
 		return getWrapped().getRequestHeaderMap();
 	}
@@ -212,6 +226,7 @@ public abstract class ExternalContextWrapper extends ExternalContext {
 	 *
 	 * @see javax.faces.context.ExternalContext#getRequestHeaderValuesMap()
 	 */
+	@Override
 	public Map getRequestHeaderValuesMap() {
 		return getWrapped().getRequestHeaderValuesMap();
 	}
@@ -224,6 +239,7 @@ public abstract class ExternalContextWrapper extends ExternalContext {
 	 *
 	 * @see javax.faces.context.ExternalContext#getRequestLocale()
 	 */
+	@Override
 	public Locale getRequestLocale() {
 		return getWrapped().getRequestLocale();
 	}
@@ -236,6 +252,7 @@ public abstract class ExternalContextWrapper extends ExternalContext {
 	 *
 	 * @see javax.faces.context.ExternalContext#getRequestLocales()
 	 */
+	@Override
 	public Iterator getRequestLocales() {
 		return getWrapped().getRequestLocales();
 	}
@@ -247,6 +264,7 @@ public abstract class ExternalContextWrapper extends ExternalContext {
 	 *
 	 * @see javax.faces.context.ExternalContext#getRequestMap()
 	 */
+	@Override
 	public Map getRequestMap() {
 		return getWrapped().getRequestMap();
 	}
@@ -259,6 +277,7 @@ public abstract class ExternalContextWrapper extends ExternalContext {
 	 *
 	 * @see javax.faces.context.ExternalContext#getRequestParameterMap()
 	 */
+	@Override
 	public Map getRequestParameterMap() {
 		return getWrapped().getRequestParameterMap();
 	}
@@ -271,6 +290,7 @@ public abstract class ExternalContextWrapper extends ExternalContext {
 	 *
 	 * @see javax.faces.context.ExternalContext#getRequestParameterNames()
 	 */
+	@Override
 	public Iterator getRequestParameterNames() {
 		return getWrapped().getRequestParameterNames();
 	}
@@ -283,6 +303,7 @@ public abstract class ExternalContextWrapper extends ExternalContext {
 	 *
 	 * @see javax.faces.context.ExternalContext#getRequestParameterValuesMap()
 	 */
+	@Override
 	public Map getRequestParameterValuesMap() {
 		return getWrapped().getRequestParameterValuesMap();
 	}
@@ -295,6 +316,7 @@ public abstract class ExternalContextWrapper extends ExternalContext {
 	 *
 	 * @see javax.faces.context.ExternalContext#getRequestPathInfo()
 	 */
+	@Override
 	public String getRequestPathInfo() {
 		return getWrapped().getRequestPathInfo();
 	}
@@ -307,6 +329,7 @@ public abstract class ExternalContextWrapper extends ExternalContext {
 	 *
 	 * @see javax.faces.context.ExternalContext#getRequestServletPath()
 	 */
+	@Override
 	public String getRequestServletPath() {
 		return getWrapped().getRequestServletPath();
 	}
@@ -319,7 +342,8 @@ public abstract class ExternalContextWrapper extends ExternalContext {
 	 *
 	 * @see javax.faces.context.ExternalContext#getResource(String)
 	 */
-	public URL getResource(String path) throws MalformedURLException {
+	@Override
+	public URL getResource(final String path) throws MalformedURLException {
 		return getWrapped().getResource(path);
 	}
 
@@ -331,7 +355,8 @@ public abstract class ExternalContextWrapper extends ExternalContext {
 	 *
 	 * @see javax.faces.context.ExternalContext#getResourceAsStream(String)
 	 */
-	public InputStream getResourceAsStream(String path) {
+	@Override
+	public InputStream getResourceAsStream(final String path) {
 		return getWrapped().getResourceAsStream(path);
 	}
 
@@ -343,7 +368,8 @@ public abstract class ExternalContextWrapper extends ExternalContext {
 	 *
 	 * @see javax.faces.context.ExternalContext#getResourcePaths(String)
 	 */
-	public Set getResourcePaths(String path) {
+	@Override
+	public Set getResourcePaths(final String path) {
 		return getWrapped().getResourcePaths(path);
 	}
 
@@ -354,6 +380,7 @@ public abstract class ExternalContextWrapper extends ExternalContext {
 	 *
 	 * @see javax.faces.context.ExternalContext#getResponse()
 	 */
+	@Override
 	public Object getResponse() {
 		return getWrapped().getResponse();
 	}
@@ -366,7 +393,8 @@ public abstract class ExternalContextWrapper extends ExternalContext {
 	 *
 	 * @see javax.faces.context.ExternalContext#getSession(boolean)
 	 */
-	public Object getSession(boolean create) {
+	@Override
+	public Object getSession(final boolean create) {
 		return getWrapped().getSession(create);
 	}
 
@@ -377,6 +405,7 @@ public abstract class ExternalContextWrapper extends ExternalContext {
 	 *
 	 * @see javax.faces.context.ExternalContext#getAuthType()
 	 */
+	@Override
 	public Map getSessionMap() {
 		return getWrapped().getSessionMap();
 	}
@@ -389,6 +418,7 @@ public abstract class ExternalContextWrapper extends ExternalContext {
 	 *
 	 * @see javax.faces.context.ExternalContext#getUserPrincipal()
 	 */
+	@Override
 	public Principal getUserPrincipal() {
 		return getWrapped().getUserPrincipal();
 	}
@@ -401,7 +431,8 @@ public abstract class ExternalContextWrapper extends ExternalContext {
 	 *
 	 * @see javax.faces.context.ExternalContext#isUserInRole(String)
 	 */
-	public boolean isUserInRole(String role) {
+	@Override
+	public boolean isUserInRole(final String role) {
 		return getWrapped().isUserInRole(role);
 	}
 
@@ -412,7 +443,8 @@ public abstract class ExternalContextWrapper extends ExternalContext {
 	 *
 	 * @see javax.faces.context.ExternalContext#log(String)
 	 */
-	public void log(String message) {
+	@Override
+	public void log(final String message) {
 		getWrapped().log(message);
 	}
 
@@ -424,7 +456,8 @@ public abstract class ExternalContextWrapper extends ExternalContext {
 	 *
 	 * @see javax.faces.context.ExternalContext#log(String, Throwable)
 	 */
-	public void log(String message, Throwable exception) {
+	@Override
+	public void log(final String message, final Throwable exception) {
 		getWrapped().log(message, exception);
 	}
 
@@ -436,7 +469,8 @@ public abstract class ExternalContextWrapper extends ExternalContext {
 	 *
 	 * @see javax.faces.context.ExternalContext#redirect(String)
 	 */
-	public void redirect(String url) throws IOException {
+	@Override
+	public void redirect(final String url) throws IOException {
 		getWrapped().redirect(url);
 	}
 
@@ -449,7 +483,8 @@ public abstract class ExternalContextWrapper extends ExternalContext {
 	 * @see javax.faces.context.ExternalContext#setRequest(Object)
 	 */
 
-	public void setRequest(Object request) {
+	@Override
+	public void setRequest(final Object request) {
 		getWrapped().setRequest(request);
 	}
 
@@ -462,7 +497,8 @@ public abstract class ExternalContextWrapper extends ExternalContext {
 	 * @see javax.faces.context.ExternalContext#setRequestCharacterEncoding(String)
 	 */
 
-	public void setRequestCharacterEncoding(String encoding) throws UnsupportedEncodingException {
+	@Override
+	public void setRequestCharacterEncoding(final String encoding) throws UnsupportedEncodingException {
 		getWrapped().setRequestCharacterEncoding(encoding);
 	}
 
@@ -475,6 +511,7 @@ public abstract class ExternalContextWrapper extends ExternalContext {
 	 * @see javax.faces.context.ExternalContext#getRequestCharacterEncoding()
 	 */
 
+	@Override
 	public String getRequestCharacterEncoding() {
 		return getWrapped().getRequestCharacterEncoding();
 	}
@@ -488,6 +525,7 @@ public abstract class ExternalContextWrapper extends ExternalContext {
 	 * @see javax.faces.context.ExternalContext#getRequestContentType()
 	 */
 
+	@Override
 	public String getRequestContentType() {
 		return getWrapped().getRequestContentType();
 	}
@@ -501,6 +539,7 @@ public abstract class ExternalContextWrapper extends ExternalContext {
 	 * @see javax.faces.context.ExternalContext#getResponseCharacterEncoding()
 	 */
 
+	@Override
 	public String getResponseCharacterEncoding() {
 		return getWrapped().getResponseCharacterEncoding();
 	}
@@ -514,6 +553,7 @@ public abstract class ExternalContextWrapper extends ExternalContext {
 	 * @see javax.faces.context.ExternalContext#getResponseContentType()
 	 */
 
+	@Override
 	public String getResponseContentType() {
 		return getWrapped().getResponseContentType();
 	}
@@ -527,7 +567,8 @@ public abstract class ExternalContextWrapper extends ExternalContext {
 	 * @see javax.faces.context.ExternalContext#setResponse(Object)
 	 */
 
-	public void setResponse(Object response) {
+	@Override
+	public void setResponse(final Object response) {
 		getWrapped().setResponse(response);
 	}
 
@@ -540,7 +581,8 @@ public abstract class ExternalContextWrapper extends ExternalContext {
 	 * @see javax.faces.context.ExternalContext#getResponseCharacterEncoding()
 	 */
 
-	public void setResponseCharacterEncoding(String encoding) {
+	@Override
+	public void setResponseCharacterEncoding(final String encoding) {
 		getWrapped().setResponseCharacterEncoding(encoding);
 	}
 
