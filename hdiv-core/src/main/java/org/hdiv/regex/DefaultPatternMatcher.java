@@ -15,7 +15,6 @@
  */
 package org.hdiv.regex;
 
-import java.io.Serializable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -24,7 +23,7 @@ import java.util.regex.Pattern;
  *
  * @since 2.1.6
  */
-public class DefaultPatternMatcher implements PatternMatcher, Serializable {
+public class DefaultPatternMatcher implements PatternMatcher {
 
 	private static final long serialVersionUID = 1L;
 

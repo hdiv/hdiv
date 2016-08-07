@@ -15,7 +15,6 @@
  */
 package org.hdiv.validator;
 
-import java.io.Serializable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -25,7 +24,7 @@ import java.util.regex.Pattern;
  * @author Gorka Vicente
  * @since HDIV 1.1
  */
-public class Validation implements IValidation, Serializable {
+public class Validation implements IValidation {
 
 	private static final long serialVersionUID = 1L;
 
@@ -61,7 +60,7 @@ public class Validation implements IValidation, Serializable {
 	 */
 	protected boolean existComponentType() {
 
-		return (this.componentType != null);
+		return (componentType != null);
 	}
 
 	/**
@@ -98,23 +97,23 @@ public class Validation implements IValidation, Serializable {
 
 		// we check if the component type we apply the validation to is
 		// the same as the parameter's component type.
-		if (dataType != null && this.existComponentType() && !this.isTheSameComponentType(dataType)) {
+		if (dataType != null && existComponentType() && !isTheSameComponentType(dataType)) {
 			return true;
 		}
 
 		// we validate all the values for the parameter
 		for (String value : values) {
 
-			if (this.acceptedPattern != null) {
+			if (acceptedPattern != null) {
 
-				Matcher m = this.acceptedPattern.matcher(value);
+				Matcher m = acceptedPattern.matcher(value);
 				if (!m.matches()) {
 					return false;
 				}
 			}
-			if (this.rejectedPattern != null) {
+			if (rejectedPattern != null) {
 
-				Matcher m = this.rejectedPattern.matcher(value);
+				Matcher m = rejectedPattern.matcher(value);
 				if (m.matches()) {
 					return false;
 				}
@@ -162,7 +161,7 @@ public class Validation implements IValidation, Serializable {
 	 * @return acceptedPattern
 	 */
 	public String getAcceptedPattern() {
-		return this.acceptedPattern == null ? null : this.acceptedPattern.pattern();
+		return acceptedPattern == null ? null : acceptedPattern.pattern();
 	}
 
 	/**
@@ -176,7 +175,7 @@ public class Validation implements IValidation, Serializable {
 	 * @return rejectedPattern
 	 */
 	public String getRejectedPattern() {
-		return this.rejectedPattern == null ? null : this.rejectedPattern.pattern();
+		return rejectedPattern == null ? null : rejectedPattern.pattern();
 	}
 
 	/**
@@ -193,11 +192,11 @@ public class Validation implements IValidation, Serializable {
 	@Override
 	public String toString() {
 		StringBuilder result = new StringBuilder().append("");
-		result = result.append(" name=").append(this.getName());
-		result = result.append(" componentType=").append(this.getComponentType());
-		result = result.append(" acceptedPattern=").append(this.acceptedPattern == null ? "" : this.acceptedPattern.toString());
-		result = result.append(" rejectedPattern=").append(this.rejectedPattern == null ? "" : this.rejectedPattern.toString());
-		result = result.append(" defaultValidation=").append(this.defaultValidation);
+		result = result.append(" name=").append(getName());
+		result = result.append(" componentType=").append(getComponentType());
+		result = result.append(" acceptedPattern=").append(acceptedPattern == null ? "" : acceptedPattern.toString());
+		result = result.append(" rejectedPattern=").append(rejectedPattern == null ? "" : rejectedPattern.toString());
+		result = result.append(" defaultValidation=").append(defaultValidation);
 		return result.toString();
 
 	}

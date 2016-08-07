@@ -15,6 +15,8 @@
  */
 package org.hdiv.regex;
 
+import java.io.Serializable;
+
 /**
  * <p>
  * Abstraction for Java Regular Expression execution.
@@ -26,7 +28,7 @@ package org.hdiv.regex;
  * 
  * @since 2.1.6
  */
-public interface PatternMatcher {
+public interface PatternMatcher extends Serializable {
 
 	/**
 	 * Executes the regular expression over the input String.

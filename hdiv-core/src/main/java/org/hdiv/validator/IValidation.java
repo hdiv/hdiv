@@ -15,13 +15,15 @@
  */
 package org.hdiv.validator;
 
+import java.io.Serializable;
+
 /**
  * Interface for editable data validations.
  * 
  * @author Gorka Vicente
  * @since HDIV 1.1
  */
-public interface IValidation {
+public interface IValidation extends Serializable {
 
 	/**
 	 * Returns the name of the validation rule.
