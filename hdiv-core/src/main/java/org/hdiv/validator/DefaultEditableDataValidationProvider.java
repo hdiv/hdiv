@@ -15,7 +15,6 @@
  */
 package org.hdiv.validator;
 
-import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -23,7 +22,7 @@ import java.util.List;
  * 
  * @since HDIV 2.1.10
  */
-public class DefaultEditableDataValidationProvider implements EditableDataValidationProvider, Serializable {
+public class DefaultEditableDataValidationProvider implements EditableDataValidationProvider {
 
 	private static final long serialVersionUID = 2276666823731793620L;
 
@@ -41,13 +40,13 @@ public class DefaultEditableDataValidationProvider implements EditableDataValida
 	 * @param dataType editable data type
 	 * @return True if the values <code>values</code> are valid for the parameter <code>parameter</code>.
 	 */
-	public EditableDataValidationResult validate(String url, String parameter, String[] values, String dataType) {
+	public EditableDataValidationResult validate(final String url, final String parameter, final String[] values, final String dataType) {
 
-		if (this.validationRepository == null) {
+		if (validationRepository == null) {
 			return EditableDataValidationResult.VALIDATION_NOT_REQUIRED;
 		}
 
-		List<IValidation> validations = this.validationRepository.findValidations(url, parameter);
+		List<IValidation> validations = validationRepository.findValidations(url, parameter);
 
 		if (validations.isEmpty()) {
 			return EditableDataValidationResult.VALIDATION_NOT_REQUIRED;
@@ -67,7 +66,7 @@ public class DefaultEditableDataValidationProvider implements EditableDataValida
 	/**
 	 * @param validationRepository the validationRepository to set
 	 */
-	public void setValidationRepository(ValidationRepository validationRepository) {
+	public void setValidationRepository(final ValidationRepository validationRepository) {
 		this.validationRepository = validationRepository;
 	}
 

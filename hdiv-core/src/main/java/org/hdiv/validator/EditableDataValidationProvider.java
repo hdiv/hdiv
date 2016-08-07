@@ -15,12 +15,14 @@
  */
 package org.hdiv.validator;
 
+import java.io.Serializable;
+
 /**
  * Executes validations against editable fields (text and textarea).
  * 
  * @since HDIV 2.1.10
  */
-public interface EditableDataValidationProvider {
+public interface EditableDataValidationProvider extends Serializable {
 
 	/**
 	 * <p>
