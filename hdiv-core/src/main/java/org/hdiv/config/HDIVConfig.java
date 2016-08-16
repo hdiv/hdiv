@@ -21,6 +21,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -303,11 +304,11 @@ public class HDIVConfig implements Serializable {
 			return false;
 		}
 
-		for (PatternMatcher matcher : paramsWithoutValidation.keySet()) {
+		for (Entry<PatternMatcher, List<PatternMatcher>> entry : paramsWithoutValidation.entrySet()) {
 
-			if (matcher.matches(action)) {
+			if (entry.getKey().matches(action)) {
 
-				for (PatternMatcher paramMatcher : paramsWithoutValidation.get(matcher)) {
+				for (PatternMatcher paramMatcher : entry.getValue()) {
 
 					if (paramMatcher.matches(parameter)) {
 						return true;
@@ -454,7 +455,7 @@ public class HDIVConfig implements Serializable {
 	 * @return Returns true if cookies' confidentiality is activated.
 	 */
 	public boolean isCookiesConfidentialityActivated() {
-		return (avoidCookiesConfidentiality == false);
+		return avoidCookiesConfidentiality == false;
 	}
 
 	/**
@@ -468,7 +469,7 @@ public class HDIVConfig implements Serializable {
 	 * @return Returns true if cookies' integrity is activated.
 	 */
 	public boolean isCookiesIntegrityActivated() {
-		return (avoidCookiesIntegrity == false);
+		return avoidCookiesIntegrity == false;
 	}
 
 	/**
@@ -482,7 +483,7 @@ public class HDIVConfig implements Serializable {
 	 * @return Returns true if validation in urls without parameters is activated.
 	 */
 	public boolean isValidationInUrlsWithoutParamsActivated() {
-		return (avoidValidationInUrlsWithoutParams == false);
+		return avoidValidationInUrlsWithoutParams == false;
 	}
 
 	/**

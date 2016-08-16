@@ -163,53 +163,43 @@ public abstract class AbstractHdivWebSecurityConfiguration {
 
 	@Bean
 	protected SecurityConfigBuilder securityConfigBuilder() {
-		SecurityConfigBuilder builder = new SecurityConfigBuilder(patternMatcherFactory());
-		return builder;
+		return new SecurityConfigBuilder(patternMatcherFactory());
 	}
 
 	@Bean
 	public IApplication securityApplication() {
-		ApplicationHDIV application = new ApplicationHDIV();
-		return application;
+		return new ApplicationHDIV();
 	}
 
 	@Bean
 	public ValidationResult validationResult() {
-		ValidationResult result = new ValidationResult();
-		return result;
+		return new ValidationResult();
 	}
 
 	@Bean
 	public PatternMatcherFactory patternMatcherFactory() {
-
-		PatternMatcherFactory patternMatcherFactory = new PatternMatcherFactory();
-		return patternMatcherFactory;
+		return new PatternMatcherFactory();
 	}
 
 	@Bean
 	public UidGenerator uidGenerator() {
-		RandomGuidUidGenerator uidGenerator = new RandomGuidUidGenerator();
-		return uidGenerator;
+		return new RandomGuidUidGenerator();
 	}
 
 	@Bean
 	@Scope(BeanDefinition.SCOPE_PROTOTYPE)
 	public PageIdGenerator pageIdGenerator() {
-
-		SequentialPageIdGenerator pageIdGenerator = new SequentialPageIdGenerator();
-		return pageIdGenerator;
+		return new SequentialPageIdGenerator();
 	}
 
 	@Bean
 	public IUserData securityUserData() {
-		UserData userData = new UserData();
-		return userData;
+		return new UserData();
 	}
 
 	@Bean
 	public Logger securityLogger() {
-		Logger logger = new Logger();
-		return logger;
+		return new Logger();
 	}
 
 	@Bean
@@ -235,8 +225,7 @@ public abstract class AbstractHdivWebSecurityConfiguration {
 
 	@Bean
 	public ISession securitySession() {
-		SessionHDIV session = new SessionHDIV();
-		return session;
+		return new SessionHDIV();
 	}
 
 	@Bean

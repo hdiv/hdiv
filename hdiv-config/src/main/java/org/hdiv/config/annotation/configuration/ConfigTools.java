@@ -34,6 +34,9 @@ public class ConfigTools {
 			"org.springframework.security.web.servlet.support.csrf.CsrfRequestDataValueProcessor",
 			SpringMvcConfigurationSupport.class.getClassLoader());
 
+	private ConfigTools() {
+	}
+
 	public static BeanDefinitionRegistryPostProcessor requestDataValueProcessorPostProcessor(final Class<?> processorClass) {
 		return new BeanDefinitionRegistryPostProcessor() {
 

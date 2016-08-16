@@ -113,14 +113,14 @@ public class JsfValidatorHelper extends ValidatorHelperRequest {
 		// e.g. action=/view/viewAccount, target=/hdiv-jsf/view/viewAccount.faces and
 		// targetWithoutContextPath = /view/viewAccount.faces
 
-		String targetWithoutServletAndContextPath = target.substring(0, target.indexOf("."));
+		String targetWithoutServletAndContextPath = target.substring(0, target.indexOf('.'));
 		boolean isActionState = state.getAction().equalsIgnoreCase(targetWithoutServletAndContextPath);
 		if (isActionState) {
 			return ValidatorHelperResult.VALID;
 		}
 
 		// In other case, <h:link> component may have context path but not servlet mapping
-		String targetWithoutServlet = target.substring(0, target.indexOf("."));
+		String targetWithoutServlet = target.substring(0, target.indexOf('.'));
 		isActionState = state.getAction().equalsIgnoreCase(targetWithoutServlet);
 		if (isActionState) {
 			return ValidatorHelperResult.VALID;

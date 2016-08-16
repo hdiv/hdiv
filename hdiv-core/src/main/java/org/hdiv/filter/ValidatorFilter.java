@@ -92,13 +92,6 @@ public class ValidatorFilter extends OncePerRequestFilter {
 	protected IUserData userData;
 
 	/**
-	 * Creates a new ValidatorFilter object.
-	 */
-	public ValidatorFilter() {
-
-	}
-
-	/**
 	 * Initialize required dependencies.
 	 */
 	protected void initDependencies() {
@@ -206,7 +199,7 @@ public class ValidatorFilter extends OncePerRequestFilter {
 				hasEditableError = processEditableValidationErrors(multipartProcessedRequest, errors);
 			}
 
-			if (legal || hdivConfig.isDebugMode() || (hasEditableError && !hdivConfig.isShowErrorPageOnEditableValidation())) {
+			if (legal || hdivConfig.isDebugMode() || hasEditableError && !hdivConfig.isShowErrorPageOnEditableValidation()) {
 
 				processRequest(multipartProcessedRequest, responseWrapper, filterChain);
 			}
@@ -259,7 +252,7 @@ public class ValidatorFilter extends OncePerRequestFilter {
 	 * @return <code>true</code> if the request is multipart. <code>false</code> otherwise.
 	 */
 	protected boolean isMultipartContent(final String contentType) {
-		return ((contentType != null) && (contentType.indexOf("multipart/form-data") != -1));
+		return contentType != null && contentType.indexOf("multipart/form-data") != -1;
 	}
 
 	/**

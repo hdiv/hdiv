@@ -15,11 +15,12 @@
  */
 package org.hdiv.filter;
 
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
@@ -144,8 +145,7 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 			return (String[]) data;
 		}
 		else {
-			String[] array = parameters.get(parameter);
-			return array;
+			return parameters.get(parameter);
 		}
 	}
 
@@ -188,15 +188,8 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 			return baseParams;
 		}
 
-		Vector<String> list = new Vector<String>();
-
-		while (baseParams.hasMoreElements()) {
-			list.add(baseParams.nextElement());
-		}
-
-		Collection<String> multipartParams = parameters.keySet();
-
-		list.addAll(multipartParams);
+		List<String> list = new ArrayList<String>(Collections.list(baseParams));
+		list.addAll(parameters.keySet());
 
 		return Collections.enumeration(list);
 	}
@@ -324,14 +317,13 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 	}
 
 	@Override
-	public AsyncContext startAsync() throws IllegalStateException {
+	public AsyncContext startAsync() {
 		isAsyncRequest = true;
 		return super.startAsync();
 	}
 
 	@Override
-	public AsyncContext startAsync(final ServletRequest servletRequest, final ServletResponse servletResponse)
-			throws IllegalStateException {
+	public AsyncContext startAsync(final ServletRequest servletRequest, final ServletResponse servletResponse) {
 		isAsyncRequest = true;
 		return super.startAsync(servletRequest, servletResponse);
 	}

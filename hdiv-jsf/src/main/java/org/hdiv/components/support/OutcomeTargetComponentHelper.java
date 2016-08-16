@@ -77,11 +77,6 @@ public class OutcomeTargetComponentHelper {
 	protected NavigationCase getNavigationCase(final FacesContext context, final UIComponent component) {
 		NavigationHandler navHandler = context.getApplication().getNavigationHandler();
 		if (!(navHandler instanceof ConfigurableNavigationHandler)) {
-			// if (logger.isLoggable(Level.WARNING)) {
-			// logger.log(Level.WARNING,
-			// "jsf.outcome.target.invalid.navigationhandler.type",
-			// component.getId());
-			// }
 			log.warn("jsf.outcome.target.invalid.navigationhandler.type Componente:" + component.getId());
 			return null;
 		}
@@ -95,11 +90,6 @@ public class OutcomeTargetComponentHelper {
 		}
 		NavigationCase navCase = ((ConfigurableNavigationHandler) navHandler).getNavigationCase(context, null, outcome);
 		if (navCase == null) {
-			// if (logger.isLoggable(Level.WARNING)) {
-			// logger.log(Level.WARNING,
-			// "jsf.outcometarget.navigation.case.not.resolved",
-			// component.getId());
-			// }
 			log.warn("jsf.outcometarget.navigation.case.not.resolved Componente:" + component.getId());
 		}
 		return navCase;
@@ -128,9 +118,7 @@ public class OutcomeTargetComponentHelper {
 	}
 
 	protected boolean isIncludeViewParams(final UIComponent component, final NavigationCase navcase) {
-
-		return (((UIOutcomeTarget) component).isIncludeViewParams() || navcase.isIncludeViewParams());
-
+		return ((UIOutcomeTarget) component).isIncludeViewParams() || navcase.isIncludeViewParams();
 	}
 
 	protected Map<String, List<String>> getParamOverrides(final UIComponent component) {
@@ -168,7 +156,7 @@ public class OutcomeTargetComponentHelper {
 					UIParameter uiParam = (UIParameter) kid;
 					if (!uiParam.isDisable()) {
 						Object value = uiParam.getValue();
-						Param param = new Param(uiParam.getName(), (value == null ? null : value.toString()));
+						Param param = new Param(uiParam.getName(), value == null ? null : value.toString());
 						parameterList.add(param);
 					}
 				}
@@ -203,11 +191,11 @@ public class OutcomeTargetComponentHelper {
 	 * <p>
 	 * Simple class to encapsulate the name and value of a <code>UIParameter</code>.
 	 */
-	public static class Param {
+	private static class Param {
 
-		public String name;
+		private String name;
 
-		public String value;
+		private final String value;
 
 		// -------------------------------------------------------- Constructors
 
