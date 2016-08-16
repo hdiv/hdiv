@@ -105,22 +105,22 @@ public class SavedCookie implements Serializable {
 	 */
 	public boolean isEqual(final Cookie c, final boolean cookiesConfidentialityActivated) {
 
-		boolean result = (this.getName() == null ? c.getName() == null : this.getName().equals(c.getName()));
+		boolean result = getName() == null ? c.getName() == null : getName().equals(c.getName());
 		if (result) {
-			if (this.getValue() == null) {
-				result = (c.getValue() == null);
+			if (getValue() == null) {
+				result = c.getValue() == null;
 			}
 			else {
 				if (cookiesConfidentialityActivated) {
 					result = c.getValue().equals("0");
 				}
 				else {
-					result = this.getValue().equals(c.getValue());
+					result = getValue().equals(c.getValue());
 				}
 			}
 		}
 		if (result) {
-			result = (this.getDomain() == null ? c.getDomain() == null : this.getDomain().equals(c.getDomain()));
+			result = getDomain() == null ? c.getDomain() == null : getDomain().equals(c.getDomain());
 		}
 
 		return result;

@@ -17,7 +17,6 @@ package org.hdiv.exceptionHandler;
 
 import java.util.Iterator;
 
-import javax.faces.FacesException;
 import javax.faces.application.NavigationHandler;
 import javax.faces.context.ExceptionHandler;
 import javax.faces.context.ExceptionHandlerWrapper;
@@ -28,7 +27,6 @@ import javax.servlet.ServletContext;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.hdiv.config.HDIVConfig;
 import org.hdiv.exception.StateValidationException;
 import org.hdiv.util.HDIVUtil;
 
@@ -77,7 +75,7 @@ public class HDIVExceptionHandler extends ExceptionHandlerWrapper {
 	 * @see javax.faces.context.ExceptionHandlerWrapper#handle()
 	 */
 	@Override
-	public void handle() throws FacesException {
+	public void handle() {
 
 		for (Iterator<ExceptionQueuedEvent> i = super.getUnhandledExceptionQueuedEvents().iterator(); i.hasNext();) {
 			ExceptionQueuedEvent event = i.next();
@@ -112,10 +110,7 @@ public class HDIVExceptionHandler extends ExceptionHandlerWrapper {
 	private String getErrorPage(final FacesContext facesContext) {
 
 		ServletContext servletContext = (ServletContext) facesContext.getExternalContext().getContext();
-		HDIVConfig config = HDIVUtil.getHDIVConfig(servletContext);
-
-		String errorPage = config.getErrorPage();
-		return errorPage;
+		return HDIVUtil.getHDIVConfig(servletContext).getErrorPage();
 
 	}
 }

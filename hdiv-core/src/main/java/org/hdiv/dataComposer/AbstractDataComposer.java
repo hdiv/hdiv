@@ -105,11 +105,6 @@ public abstract class AbstractDataComposer implements IDataComposer {
 		return states;
 	}
 
-	@Deprecated
-	protected final Deque<IState> getStatesStack() {
-		return states;
-	}
-
 	/**
 	 * Obtains a new unique identifier for the page.
 	 *
@@ -301,7 +296,7 @@ public abstract class AbstractDataComposer implements IDataComposer {
 			if (isConfidentialParam(name, method)) {
 				// Parameter is not a start parameter
 				Integer count = pCount.get(name);
-				int num = (count == null) ? 0 : count + 1;
+				int num = count == null ? 0 : count + 1;
 				pCount.put(name, num);
 
 				// Replace parameter with confidential values
