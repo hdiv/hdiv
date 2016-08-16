@@ -285,7 +285,8 @@ public abstract class AbstractDataComposer implements IDataComposer {
 
 		// Init indexes
 		int beginIndex = 0;
-		int endIndex = parameters.indexOf('&') > 0 ? parameters.indexOf('&') : parameters.length();
+		int ampIndex = parameters.indexOf('&');
+		int endIndex = ampIndex >= 0 ? ampIndex : parameters.length();
 		do {
 			String param = parameters.substring(beginIndex, endIndex);
 			int index = param.indexOf('=');
