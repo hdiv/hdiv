@@ -27,6 +27,7 @@ import org.hdiv.filter.RequestWrapper;
 import org.hdiv.urlProcessor.LinkUrlProcessor;
 import org.hdiv.urlProcessor.UrlData;
 import org.hdiv.util.HDIVUtil;
+import org.hdiv.util.Method;
 
 /**
  * This is the tag handler for &lt;tiles:insert&gt;, which includes a template. The tag's body content consists of &lt;tiles:put&gt; tags,
@@ -91,7 +92,8 @@ public class InsertTagHDIV extends InsertTag {
 		if (requestWrapper != null) {
 
 			LinkUrlProcessor linkUrlProcessorForForward = HDIVUtil.getLinkUrlProcessor(pageContext.getSession().getServletContext());
-			UrlData urlData = linkUrlProcessorForForward.createUrlData(url, "GET", request);
+			UrlData urlData = linkUrlProcessorForForward.createUrlData(url, Method.GET, HDIVUtil.getHdivStateParameterName(request),
+					request);
 			Map<String, String[]> urlParamsAsMap = linkUrlProcessorForForward.getUrlParamsAsMap(new StringBuilder(128), request,
 					urlData.getUrlParams());
 			for (Map.Entry<String, String[]> entry : urlParamsAsMap.entrySet()) {
