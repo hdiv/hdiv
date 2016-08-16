@@ -224,10 +224,8 @@ public class HDIVConfig implements Serializable {
 			StartPage startPage = startPages[i];
 			PatternMatcher m = startPage.compiledPattern;
 
-			if (m.matches(target)) {
-				if (startPage.isAnyMethod() || startPage.method == method) {
-					return true;
-				}
+			if (m.matches(target) && (startPage.isAnyMethod() || startPage.method == method)) {
+				return true;
 			}
 		}
 		return false;

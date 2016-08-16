@@ -607,7 +607,7 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 
 		if (!parserContext.getRegistry()
 				.containsBeanDefinition(EditableValidationsBeanDefinitionParser.EDITABLE_VALIDATION_PROVIDER_BEAN_NAME)) {
-			createDefaultEditableDataValidationProvider(element, source, parserContext);
+			createDefaultEditableDataValidationProvider(source, parserContext);
 		}
 
 		// Process startPages, startParameters and paramsWithoutValidation elements
@@ -616,8 +616,7 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		return bean;
 	}
 
-	protected RuntimeBeanReference createDefaultEditableDataValidationProvider(final Element element, final Object source,
-			final ParserContext parserContext) {
+	protected RuntimeBeanReference createDefaultEditableDataValidationProvider(final Object source, final ParserContext parserContext) {
 		RootBeanDefinition bean = new RootBeanDefinition(DefaultEditableDataValidationProvider.class);
 		bean.setSource(source);
 		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);

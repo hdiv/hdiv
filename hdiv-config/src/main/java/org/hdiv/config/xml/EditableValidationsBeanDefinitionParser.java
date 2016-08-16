@@ -29,7 +29,6 @@ import org.hdiv.validator.IValidation;
 import org.hdiv.validator.Validation;
 import org.hdiv.validator.ValidationRepository;
 import org.hdiv.web.validator.EditableParameterValidator;
-import org.springframework.beans.factory.BeanDefinitionStoreException;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.ListFactoryBean;
 import org.springframework.beans.factory.config.RuntimeBeanReference;
@@ -76,8 +75,7 @@ public class EditableValidationsBeanDefinitionParser extends AbstractSingleBeanD
 	 * org.springframework.beans.factory.support.AbstractBeanDefinition, org.springframework.beans.factory.xml.ParserContext)
 	 */
 	@Override
-	protected String resolveId(final Element element, final AbstractBeanDefinition definition, final ParserContext parserContext)
-			throws BeanDefinitionStoreException {
+	protected String resolveId(final Element element, final AbstractBeanDefinition definition, final ParserContext parserContext) {
 
 		return EDITABLE_VALIDATION_PROVIDER_BEAN_NAME;
 	}
@@ -130,7 +128,7 @@ public class EditableValidationsBeanDefinitionParser extends AbstractSingleBeanD
 		for (int i = 0; i < list.getLength(); i++) {
 			Node node = list.item(i);
 			if (node.getNodeType() == Node.ELEMENT_NODE) {
-				if (node.getLocalName().equalsIgnoreCase("validationRule")) {
+				if ("validationRule".equalsIgnoreCase(node.getLocalName())) {
 
 					processValidationRule(node, validationsData);
 				}

@@ -53,6 +53,12 @@ public class SpringMvcConfigurationSupport implements ApplicationListener<Contex
 	protected static final boolean jsr303Present = ClassUtils.isPresent("javax.validation.Validator",
 			SpringMvcConfigurationSupport.class.getClassLoader());
 
+	@Autowired
+	protected FormUrlProcessor formUrlProcessor;
+
+	@Autowired
+	protected LinkUrlProcessor linkUrlProcessor;
+
 	public void onApplicationEvent(final ContextRefreshedEvent event) {
 		ApplicationContext applicationContext = event.getApplicationContext();
 		if (applicationContext
@@ -71,12 +77,6 @@ public class SpringMvcConfigurationSupport implements ApplicationListener<Contex
 
 		}
 	}
-
-	@Autowired
-	protected FormUrlProcessor formUrlProcessor;
-
-	@Autowired
-	protected LinkUrlProcessor linkUrlProcessor;
 
 	public RequestDataValueProcessor requestDataValueProcessor() {
 		HdivRequestDataValueProcessor processor = new HdivRequestDataValueProcessor();

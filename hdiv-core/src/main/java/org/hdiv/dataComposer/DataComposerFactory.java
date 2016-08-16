@@ -175,10 +175,8 @@ public class DataComposerFactory {
 	 * @return parameter value.
 	 */
 	protected String getModifyStateParameterValue(final IDataComposer dataComposer, final HttpServletRequest request) {
-
 		String paramName = HDIVUtil.getModifyHdivStateParameterName(request);
-		String preState = paramName != null ? request.getParameter(paramName) : null;
-		return preState;
+		return paramName != null ? request.getParameter(paramName) : null;
 	}
 
 	/**
@@ -211,7 +209,7 @@ public class DataComposerFactory {
 
 		String xRequestedWithValue = request.getHeader("x-requested-with");
 
-		boolean isAjaxRequest = (xRequestedWithValue != null) ? "XMLHttpRequest".equalsIgnoreCase(xRequestedWithValue) : false;
+		boolean isAjaxRequest = xRequestedWithValue != null ? "XMLHttpRequest".equalsIgnoreCase(xRequestedWithValue) : false;
 
 		request.setAttribute(Constants.AJAX_REQUEST, isAjaxRequest);
 

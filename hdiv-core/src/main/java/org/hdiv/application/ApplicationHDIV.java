@@ -44,8 +44,8 @@ public class ApplicationHDIV implements IApplication, ApplicationContextAware {
 	 * @throws NoSuchBeanDefinitionException if there is no bean definition with the specified name
 	 * @throws BeansException if the bean could not be obtained
 	 */
-	public Object getBean(String name) {
-		return this.applicationContext.getBean(name);
+	public Object getBean(final String name) {
+		return applicationContext.getBean(name);
 	}
 
 	/*
@@ -53,9 +53,8 @@ public class ApplicationHDIV implements IApplication, ApplicationContextAware {
 	 * 
 	 * @see org.springframework.context.ApplicationContextAware#setApplicationContext(org.springframework.context. ApplicationContext)
 	 */
-	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+	public void setApplicationContext(final ApplicationContext applicationContext) {
 		this.applicationContext = applicationContext;
-
 	}
 
 }
