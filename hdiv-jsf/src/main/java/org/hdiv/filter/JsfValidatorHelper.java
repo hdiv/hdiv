@@ -23,6 +23,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hdiv.state.IState;
 import org.hdiv.util.HDIVErrorCodes;
+import org.hdiv.util.Method;
 import org.hdiv.util.UtilsJsf;
 
 /**
@@ -71,7 +72,7 @@ public class JsfValidatorHelper extends ValidatorHelperRequest {
 				log.debug("Request contains view state");
 			}
 
-			if (hdivConfig.isStartPage(target, request.getMethod())) {
+			if (hdivConfig.isStartPage(target, Method.secureValueOf(request.getMethod()))) {
 				// It is an init page
 				if (log.isDebugEnabled()) {
 					log.debug("Request is start page");

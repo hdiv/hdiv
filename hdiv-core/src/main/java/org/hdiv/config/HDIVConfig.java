@@ -212,11 +212,6 @@ public class HDIVConfig implements Serializable {
 		startPages = pages.toArray(new StartPage[pages.size()]);
 	}
 
-	@Deprecated
-	public final boolean isStartPage(final String target, final String method) {
-		return isStartPage(target, Method.secureValueOf(method));
-	}
-
 	/**
 	 * Checks if <code>target</code> is an init action, in which case it will not be treated by HDIV.
 	 * 
@@ -410,12 +405,12 @@ public class HDIVConfig implements Serializable {
 
 	public void setParamsWithoutValidation(final Map<String, List<String>> paramsWithoutValidation) {
 		this.paramsWithoutValidation = new HashMap<PatternMatcher, List<PatternMatcher>>();
-		for (String url : paramsWithoutValidation.keySet()) {
+		for (Entry<String, List<String>> entry : paramsWithoutValidation.entrySet()) {
 
-			PatternMatcher matcher = patternMatcherFactory.getPatternMatcher(url);
+			PatternMatcher matcher = patternMatcherFactory.getPatternMatcher(entry.getKey());
 			List<PatternMatcher> paramMatchers = new ArrayList<PatternMatcher>();
 
-			for (String param : paramsWithoutValidation.get(url)) {
+			for (String param : entry.getValue()) {
 				PatternMatcher paramMatcher = patternMatcherFactory.getPatternMatcher(param);
 				paramMatchers.add(paramMatcher);
 			}
@@ -455,7 +450,7 @@ public class HDIVConfig implements Serializable {
 	 * @return Returns true if cookies' confidentiality is activated.
 	 */
 	public boolean isCookiesConfidentialityActivated() {
-		return avoidCookiesConfidentiality == false;
+		return !avoidCookiesConfidentiality;
 	}
 
 	/**
@@ -469,7 +464,7 @@ public class HDIVConfig implements Serializable {
 	 * @return Returns true if cookies' integrity is activated.
 	 */
 	public boolean isCookiesIntegrityActivated() {
-		return avoidCookiesIntegrity == false;
+		return !avoidCookiesIntegrity;
 	}
 
 	/**
@@ -483,7 +478,7 @@ public class HDIVConfig implements Serializable {
 	 * @return Returns true if validation in urls without parameters is activated.
 	 */
 	public boolean isValidationInUrlsWithoutParamsActivated() {
-		return avoidValidationInUrlsWithoutParams == false;
+		return !avoidValidationInUrlsWithoutParams;
 	}
 
 	/**

@@ -18,7 +18,7 @@ package org.hdiv.config.validations;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
@@ -89,10 +89,10 @@ public class DefaultValidationParser extends DefaultHandler {
 	public void startElement(final String uri, final String localName, final String qName, final Attributes attributes) {
 
 		if ("validation".equals(qName)) {
-			this.validation = new HashMap<ValidationParam, String>();
+			validation = new EnumMap<ValidationParam, String>(ValidationParam.class);
 			String id = attributes.getValue("id");
-			this.validation.put(ValidationParam.ID, id);
-			this.validations.add(this.validation);
+			validation.put(ValidationParam.ID, id);
+			validations.add(validation);
 		}
 	}
 
@@ -100,7 +100,7 @@ public class DefaultValidationParser extends DefaultHandler {
 	public void characters(final char[] ch, final int start, final int length) throws SAXException {
 		String val = new String(ch, start, length).trim();
 		if (val.length() > 0) {
-			this.validation.put(ValidationParam.REGEX, val);
+			validation.put(ValidationParam.REGEX, val);
 		}
 	}
 

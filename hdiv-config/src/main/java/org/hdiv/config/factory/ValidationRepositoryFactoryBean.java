@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.hdiv.regex.PatternMatcher;
 import org.hdiv.regex.PatternMatcherFactory;
@@ -39,7 +40,7 @@ public class ValidationRepositoryFactoryBean extends AbstractFactoryBean<Default
 	/**
 	 * Regular expression executor factory.
 	 */
-	protected transient PatternMatcherFactory patternMatcherFactory;
+	protected PatternMatcherFactory patternMatcherFactory;
 
 	/**
 	 * <p>
@@ -69,29 +70,30 @@ public class ValidationRepositoryFactoryBean extends AbstractFactoryBean<Default
 
 		Map<ValidationTarget, List<IValidation>> vals = new LinkedHashMap<ValidationTarget, List<IValidation>>();
 
-		for (ValidationTargetData data : this.validationsData.keySet()) {
+		for (Entry<ValidationTargetData, List<String>> entry : validationsData.entrySet()) {
 
 			ValidationTarget target = new ValidationTarget();
-			List<String> ids = this.validationsData.get(data);
+			ValidationTargetData data = entry.getKey();
+			List<String> ids = entry.getValue();
 
 			if (data.getUrl() != null) {
-				PatternMatcher matcher = this.patternMatcherFactory.getPatternMatcher(data.getUrl());
+				PatternMatcher matcher = patternMatcherFactory.getPatternMatcher(data.getUrl());
 				target.setUrl(matcher);
 			}
-			if (data.getParams() != null && data.getParams().size() > 0) {
+			if (data.getParams() != null && !data.getParams().isEmpty()) {
 				List<String> params = data.getParams();
 				List<PatternMatcher> matchers = new ArrayList<PatternMatcher>();
 				for (String param : params) {
-					PatternMatcher matcher = this.patternMatcherFactory.getPatternMatcher(param);
+					PatternMatcher matcher = patternMatcherFactory.getPatternMatcher(param);
 					matchers.add(matcher);
 				}
 				target.setParams(matchers);
 			}
-			vals.put(target, this.createValidationList(ids));
+			vals.put(target, createValidationList(ids));
 		}
 		repository.setValidations(vals);
 
-		repository.setDefaultValidations(this.defaultValidations);
+		repository.setDefaultValidations(defaultValidations);
 
 		return repository;
 	}
@@ -103,11 +105,11 @@ public class ValidationRepositoryFactoryBean extends AbstractFactoryBean<Default
 	 * @return List with bean instances.
 	 */
 	@SuppressWarnings("unchecked")
-	protected List<IValidation> createValidationList(List<String> ids) {
+	protected List<IValidation> createValidationList(final List<String> ids) {
 		List<IValidation> newList = new ArrayList<IValidation>();
 
 		for (String id : ids) {
-			Object bean = this.getBeanFactory().getBean(id);
+			Object bean = getBeanFactory().getBean(id);
 			if (bean instanceof IValidation) {
 				IValidation validation = (IValidation) bean;
 				newList.add(validation);
@@ -136,25 +138,25 @@ public class ValidationRepositoryFactoryBean extends AbstractFactoryBean<Default
 			return params;
 		}
 
-		public void setUrl(String url) {
+		public void setUrl(final String url) {
 			this.url = url;
 		}
 
-		public void setParams(List<String> params) {
+		public void setParams(final List<String> params) {
 			this.params = params;
 		}
 
 	}
 
-	public void setPatternMatcherFactory(PatternMatcherFactory patternMatcherFactory) {
+	public void setPatternMatcherFactory(final PatternMatcherFactory patternMatcherFactory) {
 		this.patternMatcherFactory = patternMatcherFactory;
 	}
 
-	public void setValidationsData(Map<ValidationTargetData, List<String>> validationsData) {
+	public void setValidationsData(final Map<ValidationTargetData, List<String>> validationsData) {
 		this.validationsData = validationsData;
 	}
 
-	public void setDefaultValidations(List<IValidation> defaultValidations) {
+	public void setDefaultValidations(final List<IValidation> defaultValidations) {
 		this.defaultValidations = defaultValidations;
 	}
 }

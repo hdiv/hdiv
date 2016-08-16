@@ -250,8 +250,7 @@ public abstract class AbstractHdivWebSecurityConfiguration {
 		List<StateScope> stateScopes = new ArrayList<StateScope>();
 		stateScopes.add(userSessionStateScope());
 		stateScopes.add(appStateScope());
-		DefaultStateScopeManager scopeManager = new DefaultStateScopeManager(stateScopes);
-		return scopeManager;
+		return new DefaultStateScopeManager(stateScopes);
 	}
 
 	@Bean
@@ -392,8 +391,7 @@ public abstract class AbstractHdivWebSecurityConfiguration {
 
 		RuleRegistry registry = new RuleRegistry();
 		addRules(registry);
-		Map<String, IValidation> customRules = registry.getRules();
-		return customRules;
+		return registry.getRules();
 	}
 
 	protected Map<ValidationTarget, List<IValidation>> getValidationsData(final List<IValidation> defaultRules,

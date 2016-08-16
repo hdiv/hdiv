@@ -32,6 +32,9 @@ import org.springframework.context.annotation.Configuration;
 @ConditionalOnFramework(SupportedFramework.THYMELEAF)
 public class ThymeleafConfigurationSupport {
 
+	private ThymeleafConfigurationSupport() {
+	}
+
 	@Bean
 	public static BeanDefinitionRegistryPostProcessor requestDataValueProcessorPostProcessor() {
 		return ConfigTools.requestDataValueProcessorPostProcessor(ThymeleafHdivRequestDataValueProcessor.class);
