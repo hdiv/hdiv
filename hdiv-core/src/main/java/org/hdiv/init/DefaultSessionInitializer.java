@@ -21,7 +21,6 @@ import org.hdiv.config.HDIVConfig;
 import org.hdiv.idGenerator.PageIdGenerator;
 import org.hdiv.util.Constants;
 import org.hdiv.util.HDIVUtil;
-import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
@@ -79,8 +78,8 @@ public class DefaultSessionInitializer implements SessionInitializer, Applicatio
 	@SuppressWarnings("deprecation")
 	protected void initStateParameterNames(final HttpSession httpSession) {
 
-		String hdivParameterName = null;
-		String modifyHdivStateParameterName = null;
+		String hdivParameterName;
+		String modifyHdivStateParameterName;
 
 		if (config.isRandomName()) {
 			hdivParameterName = HDIVUtil.createRandomToken(Integer.MAX_VALUE);
@@ -95,7 +94,7 @@ public class DefaultSessionInitializer implements SessionInitializer, Applicatio
 		httpSession.setAttribute(Constants.MODIFY_STATE_HDIV_PARAMETER, modifyHdivStateParameterName);
 	}
 
-	public void setApplicationContext(final ApplicationContext applicationContext) throws BeansException {
+	public void setApplicationContext(final ApplicationContext applicationContext) {
 		this.applicationContext = applicationContext;
 	}
 

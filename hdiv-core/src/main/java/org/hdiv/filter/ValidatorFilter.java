@@ -311,16 +311,12 @@ public class ValidatorFilter extends OncePerRequestFilter {
 	 * @return Returns the remote user IP address if behind the proxy.
 	 */
 	protected String getUserLocalIP(final HttpServletRequest request) {
-
-		String ipAddress = null;
-
 		if (request.getHeader("X-Forwarded-For") == null) {
-			ipAddress = request.getRemoteAddr();
+			return request.getRemoteAddr();
 		}
 		else {
-			ipAddress = request.getHeader("X-Forwarded-For");
+			return request.getHeader("X-Forwarded-For");
 		}
-		return ipAddress;
 	}
 
 	/**

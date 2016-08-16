@@ -32,18 +32,17 @@ import org.hdiv.session.ISession;
  */
 public class UserSessionStateScope extends AbstractStateScope {
 
-	public UserSessionStateScope() {
-		super(StateScopeType.USER_SESSION);
-	}
-
 	private static final String USER_STATE_CACHE_ATTR = ScopedStateCache.class.getCanonicalName();
 
 	protected ISession session;
 
+	public UserSessionStateScope() {
+		super(StateScopeType.USER_SESSION);
+	}
+
 	@Override
 	public ScopedStateCache getStateCache(final RequestContext context) {
-		ScopedStateCache cache = session.getAttribute(context, USER_STATE_CACHE_ATTR, ScopedStateCache.class);
-		return cache;
+		return session.getAttribute(context, USER_STATE_CACHE_ATTR, ScopedStateCache.class);
 	}
 
 	@Override

@@ -123,4 +123,8 @@ public class Constants {
 	 */
 	static final String STATE_ID_STR_SEPARATOR = Character.toString(STATE_ID_SEPARATOR);
 
+	private Constants() {
+
+	}
+
 }

@@ -34,29 +34,6 @@ public class Parameter implements IParameter {
 
 	private static final int VALUES_LIST_SIZE = 3;
 
-	public Parameter() {
-
-	}
-
-	public Parameter(final String name, final String[] values, final boolean editable, final String editableDataType,
-			final boolean actionParam) {
-		this(name, values[0], editable, editableDataType, actionParam);
-		if (values.length > 1) {
-			for (int i = 1; i < values.length; i++) {
-				addValue(values[i]);
-			}
-		}
-	}
-
-	public Parameter(final String name, final String value, final boolean editable, final String editableDataType,
-			final boolean actionParam) {
-		this.name = name;
-		this.value = value;
-		this.editable = editable;
-		this.editableDataType = editableDataType;
-		this.actionParam = actionParam;
-	}
-
 	/**
 	 * parameter name
 	 */
@@ -88,6 +65,29 @@ public class Parameter implements IParameter {
 	 * the values of this parameter must arrived within the request. If not, it means that the user has modified the request on purpose.
 	 */
 	private boolean actionParam;
+
+	public Parameter() {
+
+	}
+
+	public Parameter(final String name, final String[] values, final boolean editable, final String editableDataType,
+			final boolean actionParam) {
+		this(name, values[0], editable, editableDataType, actionParam);
+		if (values.length > 1) {
+			for (int i = 1; i < values.length; i++) {
+				addValue(values[i]);
+			}
+		}
+	}
+
+	public Parameter(final String name, final String value, final boolean editable, final String editableDataType,
+			final boolean actionParam) {
+		this.name = name;
+		this.value = value;
+		this.editable = editable;
+		this.editableDataType = editableDataType;
+		this.actionParam = actionParam;
+	}
 
 	/**
 	 * Adds the value <code>value</code> to the parameter <code>this</code>.
@@ -140,14 +140,14 @@ public class Parameter implements IParameter {
 	 * @return True if <code>position</code> is valid position in the array of values <code>values</code>. False otherwise.
 	 */
 	public boolean existPosition(final int position) {
-		return (position == 0) || (values != null && position < values.size());
+		return position == 0 || values != null && position < values.size();
 	}
 
 	/**
 	 * @return Obtains the value of the position <code>position</code> in the list of values of the parameter.
 	 */
 	public String getValuePosition(final int position) {
-		return (position == 0 ? value : values.get(position));
+		return position == 0 ? value : values.get(position);
 	}
 
 	/**

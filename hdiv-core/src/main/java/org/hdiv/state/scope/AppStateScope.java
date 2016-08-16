@@ -33,18 +33,17 @@ import org.springframework.web.context.ServletContextAware;
 
 public final class AppStateScope extends AbstractStateScope implements ServletContextAware {
 
-	public AppStateScope() {
-		super(StateScopeType.APP);
-	}
-
 	private static final String APP_STATE_CONTEXT_ATTR = ScopedStateCache.class.getCanonicalName();
 
 	protected ServletContext servletContext;
 
+	public AppStateScope() {
+		super(StateScopeType.APP);
+	}
+
 	@Override
 	public ScopedStateCache getStateCache(final RequestContext context) {
-		ScopedStateCache cache = (ScopedStateCache) servletContext.getAttribute(APP_STATE_CONTEXT_ATTR);
-		return cache;
+		return (ScopedStateCache) servletContext.getAttribute(APP_STATE_CONTEXT_ATTR);
 	}
 
 	@Override

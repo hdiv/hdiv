@@ -40,11 +40,6 @@ public class HTTPSessionCache {
 	 */
 	private static final Log log = LogFactory.getLog(SessionHDIV.class);
 
-	/**
-	 * The cacheName
-	 */
-	private final String cacheName = Constants.STATE_CACHE_NAME;
-
 	private BeanFactory beanFactory;
 
 	/**
@@ -131,7 +126,7 @@ public class HTTPSessionCache {
 
 			Integer pageId = pageIds.get(i);
 			IPage currentPage = findPage(new SimpleCacheKey(context, pageId));
-			if ((currentPage != null) && conversationId.equalsIgnoreCase(currentPage.getFlowId())) {
+			if (currentPage != null && conversationId.equalsIgnoreCase(currentPage.getFlowId())) {
 
 				deletePage(context.getSession(), pageId);
 				pageIds.remove(i);
@@ -162,9 +157,9 @@ public class HTTPSessionCache {
 						parentPage = page.getParentStateId();
 					}
 					if (parentPage != null) {
-						parentPage = parentPage.substring(0, parentPage.indexOf("-"));
+						parentPage = parentPage.substring(0, parentPage.indexOf('-'));
 					}
-					sb.append("[").append(id).append(" (").append(parentPage).append(")] ");
+					sb.append('[').append(id).append(" (").append(parentPage).append(")] ");
 				}
 				log.trace("Cache content [" + sb.toString() + "]");
 			}
@@ -179,10 +174,10 @@ public class HTTPSessionCache {
 	 */
 	public IStateCache getStateCache(final HttpSession session) {
 
-		IStateCache cache = (IStateCache) session.getAttribute(cacheName);
+		IStateCache cache = (IStateCache) session.getAttribute(Constants.STATE_CACHE_NAME);
 		if (cache == null) {
 			cache = createStateCacheInstance();
-			session.setAttribute(cacheName, cache);
+			session.setAttribute(Constants.STATE_CACHE_NAME, cache);
 		}
 
 		return cache;
@@ -197,7 +192,7 @@ public class HTTPSessionCache {
 	 */
 	protected void saveStateCache(final HttpSession session, final IStateCache stateCache) {
 
-		session.setAttribute(cacheName, stateCache);
+		session.setAttribute(Constants.STATE_CACHE_NAME, stateCache);
 	}
 
 	/**
@@ -207,9 +202,7 @@ public class HTTPSessionCache {
 	 * @since HDIV 2.1.6
 	 */
 	protected IStateCache createStateCacheInstance() {
-
-		IStateCache cache = beanFactory.getBean(IStateCache.class);
-		return cache;
+		return beanFactory.getBean(IStateCache.class);
 	}
 
 	public void setBeanFactory(final BeanFactory beanFactory) {

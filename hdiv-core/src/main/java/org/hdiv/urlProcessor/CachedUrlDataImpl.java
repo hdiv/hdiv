@@ -74,7 +74,7 @@ public class CachedUrlDataImpl extends UrlDataImpl {
 			}
 		}
 		getParamProcessedUrl(sb);
-		char separator = (containsParams()) ? '&' : '?';
+		char separator = containsParams() ? '&' : '?';
 
 		sb.append(separator).append(hdivParameter).append('=').append(stateParam);
 		if (uriTemplate != null) {
@@ -91,9 +91,9 @@ public class CachedUrlDataImpl extends UrlDataImpl {
 	@Override
 	public boolean isHdivStateNecessary(final HDIVConfig config) {
 		if (status == null) {
-			boolean status = super.isHdivStateNecessary(config);
-			this.status = status ? HDIVStatus.ACTIVE : HDIVStatus.INACTIVE;
-			return status;
+			boolean needed = super.isHdivStateNecessary(config);
+			this.status = needed ? HDIVStatus.ACTIVE : HDIVStatus.INACTIVE;
+			return needed;
 		}
 		else {
 			return status == HDIVStatus.ACTIVE;

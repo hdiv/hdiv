@@ -60,7 +60,7 @@ public class Validation implements IValidation {
 	 */
 	protected boolean existComponentType() {
 
-		return (componentType != null);
+		return componentType != null;
 	}
 
 	/**

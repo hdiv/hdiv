@@ -42,7 +42,7 @@ public class RandomUidGenerator implements UidGenerator, ServletContextAware {
 	 * Initialization method
 	 */
 	public void init() {
-		this.random = new Random(System.currentTimeMillis() + this.servletContext.hashCode());
+		random = new Random(System.currentTimeMillis() + servletContext.hashCode());
 	}
 
 	/*
@@ -52,11 +52,11 @@ public class RandomUidGenerator implements UidGenerator, ServletContextAware {
 	 */
 	public Serializable generateUid() {
 
-		long uid = this.random.nextLong();
+		long uid = random.nextLong();
 		if (uid < 0) {
 			uid = uid * -1;// Hacerlo positivo
 		}
-		return new Long(uid).toString();
+		return Long.toString(uid);
 	}
 
 	/*
@@ -64,7 +64,7 @@ public class RandomUidGenerator implements UidGenerator, ServletContextAware {
 	 * 
 	 * @see org.hdiv.util.UidGenerator#parseUid(java.lang.String)
 	 */
-	public Serializable parseUid(String encodedUid) {
+	public Serializable parseUid(final String encodedUid) {
 
 		return encodedUid;
 	}
@@ -74,7 +74,7 @@ public class RandomUidGenerator implements UidGenerator, ServletContextAware {
 	 * 
 	 * @see org.springframework.web.context.ServletContextAware#setServletContext(javax.servlet.ServletContext)
 	 */
-	public void setServletContext(ServletContext servletContext) {
+	public void setServletContext(final ServletContext servletContext) {
 
 		this.servletContext = servletContext;
 	}

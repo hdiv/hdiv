@@ -327,7 +327,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 			validateEditableParameter(request, target, parameter, values, "text", unauthorizedEditableParameters);
 		}
 
-		if (unauthorizedEditableParameters.size() > 0) {
+		if (!unauthorizedEditableParameters.isEmpty()) {
 			return new ValidatorHelperResult(unauthorizedEditableParameters);
 		}
 		return ValidatorHelperResult.VALID;

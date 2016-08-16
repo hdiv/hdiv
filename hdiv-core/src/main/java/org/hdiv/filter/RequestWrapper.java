@@ -274,12 +274,10 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 				continue;
 			}
 
-			if (sessionCookies.containsKey(name)) {
-				if (t.hasMoreTokens()) {
-					String value = t.nextToken().trim();
-					SavedCookie savedCookie = sessionCookies.get(name);
-					header = header.replaceFirst("=" + value, "=" + savedCookie.getValue());
-				}
+			if (sessionCookies.containsKey(name) && t.hasMoreTokens()) {
+				String value = t.nextToken().trim();
+				SavedCookie savedCookie = sessionCookies.get(name);
+				header = header.replaceFirst("=" + value, "=" + savedCookie.getValue());
 			}
 		}
 		return header;

@@ -60,7 +60,7 @@ public class DefaultValidationRepository implements ValidationRepository {
 				List<PatternMatcher> paramMatchers = target.getParams();
 				boolean paramMatch = false;
 
-				if (paramMatchers != null && paramMatchers.size() > 0) {
+				if (paramMatchers != null && !paramMatchers.isEmpty()) {
 					for (PatternMatcher paramMatcher : paramMatchers) {
 						if (paramMatcher.matches(parameter)) {
 							paramMatch = true;

@@ -68,17 +68,17 @@ public class StateCache implements IStateCache {
 	public synchronized Integer addPage(final int pageId, final Integer currentPageId, final boolean isRefreshRequest,
 			final boolean isAjaxRequest) {
 
-		if (this.pageIds.contains(pageId)) {
+		if (pageIds.contains(pageId)) {
 			// Page id already exist in session
 			return null;
 
 		}
 		else {
-			Integer removedKey = this.cleanBuffer(currentPageId, isRefreshRequest, isAjaxRequest);
-			this.pageIds.add(pageId);
+			Integer removedKey = cleanBuffer(currentPageId, isRefreshRequest, isAjaxRequest);
+			pageIds.add(pageId);
 
 			if (log.isDebugEnabled()) {
-				log.debug("Page with [" + pageId + "] added to the cache. Cache contains [" + this.pageIds + "]");
+				log.debug("Page with [" + pageId + "] added to the cache. Cache contains [" + pageIds + "]");
 			}
 
 			return removedKey;
@@ -101,16 +101,15 @@ public class StateCache implements IStateCache {
 
 		Integer removed = null;
 
-		int totalPages = this.pageIds.size();
+		int totalPages = pageIds.size();
 
 		// Remove last page when we know that browser's forward history is empty (See issue #67)
-		if (currentPageId != null && totalPages > 1 && currentPageId == this.pageIds.get(totalPages - 2) && isRefreshRequest
-				&& !isAjaxRequest) {
-			removed = this.pageIds.remove(totalPages - 1);
+		if (currentPageId != null && totalPages > 1 && currentPageId == pageIds.get(totalPages - 2) && isRefreshRequest && !isAjaxRequest) {
+			removed = pageIds.remove(totalPages - 1);
 		}
 
-		if (this.pageIds.size() >= this.maxSize) {
-			removed = this.pageIds.remove(0);
+		if (pageIds.size() >= maxSize) {
+			removed = pageIds.remove(0);
 		}
 
 		if (log.isDebugEnabled() && removed != null) {
@@ -127,7 +126,7 @@ public class StateCache implements IStateCache {
 	 */
 	public Integer getLastPageId() {
 
-		return this.pageIds.size() > 0 ? this.pageIds.get(this.pageIds.size() - 1) : null;
+		return !pageIds.isEmpty() ? pageIds.get(pageIds.size() - 1) : null;
 	}
 
 	@Override
@@ -135,7 +134,7 @@ public class StateCache implements IStateCache {
 
 		StringBuilder result = new StringBuilder();
 		result.append("[");
-		for (Integer pageId : this.pageIds) {
+		for (Integer pageId : pageIds) {
 			result.append(" " + pageId);
 		}
 		result.append("]");
@@ -160,7 +159,7 @@ public class StateCache implements IStateCache {
 	 * @return the pageIds
 	 */
 	public List<Integer> getPageIds() {
-		return this.pageIds;
+		return pageIds;
 	}
 
 }

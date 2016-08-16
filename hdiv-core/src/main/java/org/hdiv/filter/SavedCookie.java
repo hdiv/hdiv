@@ -112,7 +112,7 @@ public class SavedCookie implements Serializable {
 			}
 			else {
 				if (cookiesConfidentialityActivated) {
-					result = c.getValue().equals("0");
+					result = "0".equals(c.getValue());
 				}
 				else {
 					result = getValue().equals(c.getValue());

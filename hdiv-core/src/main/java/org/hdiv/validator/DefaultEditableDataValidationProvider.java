@@ -55,9 +55,7 @@ public class DefaultEditableDataValidationProvider implements EditableDataValida
 		for (IValidation currentValidation : validations) {
 
 			if (!currentValidation.validate(parameter, values, dataType)) {
-
-				EditableDataValidationResult result = new EditableDataValidationResult(false, currentValidation.getName());
-				return result;
+				return new EditableDataValidationResult(false, currentValidation.getName());
 			}
 		}
 		return EditableDataValidationResult.VALID;
