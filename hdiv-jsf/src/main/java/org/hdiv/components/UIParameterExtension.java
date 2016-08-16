@@ -20,29 +20,25 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.faces.component.UIComponent;
-import javax.faces.component.UIData;
 import javax.faces.component.UIParameter;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 
 import org.hdiv.util.ConstantsJsf;
 import org.hdiv.util.HDIVUtil;
-import org.hdiv.util.UtilsJsf;
 
 /**
  * <p>
- * UIParameter component extension
+ * UIParameter component extension.
  * </p>
  * <p>
- * This component is used to define the parameters of CommandLink and outputLink. It stores the real values as component's attributes,
- * storing them in the state.
+ * This component is used to define the parameters of CommandLink and OutputLink. It stores the real values as component's attributes, in
+ * the JSF state.
  * </p>
  * <p>
- * This data will be used to validate that it matches the data received in the next request.
+ * Next request will be validated against the stored data.
  * </p>
- * 
  * @author Gotzon Illarramendi
- * 
  */
 public class UIParameterExtension extends UIParameter {
 
@@ -57,8 +53,7 @@ public class UIParameterExtension extends UIParameter {
 
 		Object val = this.getValue();
 
-		// If it has previously been stored in the state, return the stored value
-		// else return the default
+		// If it has previously been stored in the state, return the stored value else return the default
 		Map<String, Object> values = (Map<String, Object>) getAttributes().get(ConstantsJsf.HDIV_ATTRIBUTE_KEY);
 		if (values != null) {
 			val = values.get(parentClientId);
@@ -81,9 +76,7 @@ public class UIParameterExtension extends UIParameter {
 
 		String name = getName();
 		if (name != null && name.equals(hdivParameter)) {
-			// It is the Hdiv parameter added automatically by the link, so do
-			// nothing
-
+			// It is the Hdiv parameter added automatically by the link, so do nothing
 		}
 		else {
 			UIComponent parent = getParent();
@@ -93,17 +86,7 @@ public class UIParameterExtension extends UIParameter {
 				values = new HashMap<String, Object>();
 			}
 
-			// It is a parameter added by the application, so store its value
-			// in the JSF state to be able to validate it in future requests.
-			UIData uiDataComp = UtilsJsf.findParentUIData(this);
-			if (uiDataComp != null) {
-
-				// The component is in a table, store its value depending on the row
-				int rowIndex = uiDataComp.getRowIndex();
-				if (rowIndex < 0) {
-					rowIndex = 0;
-				}
-			}
+			// It is a parameter added by the application, so store its value in the JSF state to be able to validate it in future requests.
 			Object val = this.getValue();
 			values.put(parentClientId, val);
 
