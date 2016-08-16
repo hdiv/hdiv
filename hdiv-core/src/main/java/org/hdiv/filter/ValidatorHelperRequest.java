@@ -168,7 +168,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 
 		if (!hdivConfig.isValidationInUrlsWithoutParamsActivated()) {
 
-			boolean requestHasParameters = (request.getParameterNames() != null) && (request.getParameterNames().hasMoreElements());
+			boolean requestHasParameters = request.getParameterNames() != null && request.getParameterNames().hasMoreElements();
 			if (!requestHasParameters) {
 				if (log.isDebugEnabled()) {
 					log.debug("The url [" + request.getRequestURI() + "] is not be validated because it has not got parameters");
@@ -233,7 +233,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 
 		}
 
-		if (unauthorizedEditableParameters.size() > 0) {
+		if (!unauthorizedEditableParameters.isEmpty()) {
 			return new ValidatorHelperResult(unauthorizedEditableParameters);
 		}
 		return ValidatorHelperResult.VALID;
@@ -344,7 +344,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 
 		Cookie[] requestCookies = request.getCookies();
 
-		if ((requestCookies == null) || (requestCookies.length == 0)) {
+		if (requestCookies == null || requestCookies.length == 0) {
 			return ValidatorHelperResult.VALID;
 		}
 
