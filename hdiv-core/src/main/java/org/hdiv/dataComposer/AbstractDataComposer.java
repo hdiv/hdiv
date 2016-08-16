@@ -263,7 +263,7 @@ public abstract class AbstractDataComposer implements IDataComposer {
 
 		if (hdivConfig.getConfidentiality()) {
 			// replace real values with confidential ones
-			parameters = applyConfidentialityToParams(parameters, method);
+			parameters = applyConfidentialityToParams(parameters);
 		}
 
 		return parameters;
@@ -276,7 +276,7 @@ public abstract class AbstractDataComposer implements IDataComposer {
 	 * @param method HTTP method
 	 * @return parameters in query format with confidential values
 	 */
-	protected String applyConfidentialityToParams(String parameters, final Method method) {
+	protected String applyConfidentialityToParams(String parameters) {
 
 		Map<String, Integer> pCount = new HashMap<String, Integer>();
 

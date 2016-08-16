@@ -46,9 +46,7 @@ public class HtmlInputHiddenValidator implements ComponentValidator {
 	public ValidationError validate(final FacesContext context, final UIComponent component) {
 
 		HtmlInputHiddenExtension inputHidden = (HtmlInputHiddenExtension) component;
-		ValidationError error = validateHiddenComponent(context, inputHidden);
-
-		return error;
+		return validateHiddenComponent(context, inputHidden);
 	}
 
 	/**
@@ -66,8 +64,8 @@ public class HtmlInputHiddenValidator implements ComponentValidator {
 		if (uiDataComp != null) {
 			rowIndex = uiDataComp.getRowIndex();
 		}
-		Object hiddenValue = null;
-		Object hiddenRealValue = null;
+		Object hiddenValue;
+		Object hiddenRealValue;
 
 		HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
 		if (rowIndex >= 0) {

@@ -31,6 +31,9 @@ public class HDIVUtilJsf {
 
 	public static final String TARGET_REQUEST_KEY = "TARGET_REQUEST_KEY";
 
+	private HDIVUtilJsf() {
+	}
+
 	/* HDIVFacesEventListener */
 
 	public static HDIVFacesEventListener getFacesEventListener(final FacesContext facesContext) {

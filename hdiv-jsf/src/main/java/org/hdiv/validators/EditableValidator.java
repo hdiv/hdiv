@@ -54,10 +54,7 @@ public class EditableValidator implements ComponentValidator {
 	 * @see org.hdiv.validators.ComponentValidator#validate(javax.faces.context.FacesContext, javax.faces.component.UIComponent)
 	 */
 	public ValidationError validate(final FacesContext context, final UIComponent component) {
-
-		UIForm form = (UIForm) component;
-		ValidationError error = validateEditablesForm(context, form);
-		return error;
+		return validateEditablesForm(context, (UIForm) component);
 	}
 
 	/**
@@ -87,8 +84,8 @@ public class EditableValidator implements ComponentValidator {
 	 * @return result
 	 */
 	protected ValidationError validateComponent(final FacesContext context, final UIComponent uiComponent) {
-		if ((uiComponent instanceof HtmlInputText) || (uiComponent instanceof HtmlInputTextarea) || (uiComponent instanceof HtmlInputSecret)
-				|| (uiComponent instanceof HtmlInputHidden)) {
+		if (uiComponent instanceof HtmlInputText || uiComponent instanceof HtmlInputTextarea || uiComponent instanceof HtmlInputSecret
+				|| uiComponent instanceof HtmlInputHidden) {
 			UIInput inputComponent = (UIInput) uiComponent;
 			return validateInput(context, inputComponent);
 		}
@@ -174,8 +171,7 @@ public class EditableValidator implements ComponentValidator {
 	 * @return target without the ContextPath
 	 */
 	protected String getTargetWithoutContextPath(final HttpServletRequest request, final String target) {
-		String targetWithoutContextPath = target.substring(request.getContextPath().length());
-		return targetWithoutContextPath;
+		return target.substring(request.getContextPath().length());
 	}
 
 	/**

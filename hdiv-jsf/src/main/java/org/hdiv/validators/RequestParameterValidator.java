@@ -53,11 +53,7 @@ public class RequestParameterValidator implements ComponentValidator {
 	 * @see org.hdiv.validators.ComponentValidator#validate(javax.faces.context.FacesContext, javax.faces.component.UIComponent)
 	 */
 	public ValidationError validate(final FacesContext context, final UIComponent component) {
-
-		UIForm form = (UIForm) component;
-		ValidationError error = validateRequestParameters(context, form);
-
-		return error;
+		return validateRequestParameters(context, (UIForm) component);
 	}
 
 	/**
@@ -71,14 +67,14 @@ public class RequestParameterValidator implements ComponentValidator {
 
 		List<String> clientIds = getClientIds(context, formComponent);
 
-		boolean validParameter = true;
+		boolean validParameter;
 		boolean validParameters = true;
 
 		ValidationError error = null;
 
 		Map<String, String> requestParameters = context.getExternalContext().getRequestParameterMap();
 		for (Entry<String, String> entry : requestParameters.entrySet()) {
-			String requestParamName = entry.getKey().toString().trim();
+			String requestParamName = entry.getKey().trim();
 			if (UtilsJsf.isFacesViewParamName(requestParamName)) {
 				continue;
 			}
@@ -89,7 +85,7 @@ public class RequestParameterValidator implements ComponentValidator {
 			requestParamName = UtilsJsf.removeRowId(requestParamName);
 
 			// In MyFaces, some clientId of tables contain a rowId
-			validParameter = ((clientIds.contains(requestParamName)) || (clientIds.contains(requestParamNameWithRowId)));
+			validParameter = clientIds.contains(requestParamName) || clientIds.contains(requestParamNameWithRowId);
 			if (!validParameter) {
 
 				// It may be a parameter added in the client, for instance

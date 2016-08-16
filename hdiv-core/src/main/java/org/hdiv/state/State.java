@@ -255,12 +255,12 @@ public class State implements IState {
 
 	public boolean isEquivalent(final IState state) {
 		// Same action
-		if (!(getAction().equals(state.getAction()))) {
+		if (!getAction().equals(state.getAction())) {
 			return false;
 		}
 
 		// Same method
-		if (!(getMethod().equals(((State) state).getMethod()))) {
+		if (!getMethod().equals(((State) state).getMethod())) {
 			return false;
 		}
 
@@ -299,10 +299,8 @@ public class State implements IState {
 		else if (parameters1 == null && parameters2 != null) {
 			return false;
 		}
-		else if (parameters1 != null) {
-			if (!parameters1.equals(parameters2)) {
-				return false;
-			}
+		else if (parameters1 != null && !parameters1.equals(parameters2)) {
+			return false;
 		}
 
 		// Same required Parameters

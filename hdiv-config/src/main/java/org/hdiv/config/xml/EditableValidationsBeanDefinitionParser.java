@@ -127,11 +127,8 @@ public class EditableValidationsBeanDefinitionParser extends AbstractSingleBeanD
 
 		for (int i = 0; i < list.getLength(); i++) {
 			Node node = list.item(i);
-			if (node.getNodeType() == Node.ELEMENT_NODE) {
-				if ("validationRule".equalsIgnoreCase(node.getLocalName())) {
-
-					processValidationRule(node, validationsData);
-				}
+			if (node.getNodeType() == Node.ELEMENT_NODE && "validationRule".equalsIgnoreCase(node.getLocalName())) {
+				processValidationRule(node, validationsData);
 			}
 		}
 

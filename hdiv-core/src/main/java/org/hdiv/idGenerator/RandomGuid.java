@@ -159,7 +159,7 @@ final class RandomGuid {
 		catch (final NoSuchAlgorithmException e) {
 			throw new RuntimeException(e);
 		}
-		long rand = 0;
+		long rand;
 
 		if (secure) {
 			rand = secureRandom.nextLong();

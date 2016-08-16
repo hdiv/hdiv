@@ -71,27 +71,25 @@ public class ConfigPhaseListener implements PhaseListener {
 	 */
 	public void beforePhase(final PhaseEvent event) {
 
-		if (event.getPhaseId().equals(PhaseId.RESTORE_VIEW)) {
+		if (event.getPhaseId().equals(PhaseId.RESTORE_VIEW) && !initialized) {
 
-			if (!initialized) {
-
-				if (log.isDebugEnabled()) {
-					log.debug("Initialize ConfigPhaseListener dependencies.");
-				}
-
-				FacesContext context = event.getFacesContext();
-				// Check not supported features
-				checkSupportedFeatures(context);
-
-				// Get listener instances
-				WebApplicationContext wac = FacesContextUtils.getRequiredWebApplicationContext(context);
-				HDIVFacesEventListener facesEventListener = wac.getBean(HDIVFacesEventListener.class);
-
-				// It is added to the servletContext to be able to consume it from components
-				HDIVUtilJsf.setFacesEventListener(facesEventListener, context);
-
-				initialized = true;
+			if (log.isDebugEnabled()) {
+				log.debug("Initialize ConfigPhaseListener dependencies.");
 			}
+
+			FacesContext context = event.getFacesContext();
+			// Check not supported features
+			checkSupportedFeatures(context);
+
+			// Get listener instances
+			WebApplicationContext wac = FacesContextUtils.getRequiredWebApplicationContext(context);
+			HDIVFacesEventListener facesEventListener = wac.getBean(HDIVFacesEventListener.class);
+
+			// It is added to the servletContext to be able to consume it from components
+			HDIVUtilJsf.setFacesEventListener(facesEventListener, context);
+
+			initialized = true;
+
 		}
 
 		if (event.getPhaseId().equals(PhaseId.RENDER_RESPONSE)) {
