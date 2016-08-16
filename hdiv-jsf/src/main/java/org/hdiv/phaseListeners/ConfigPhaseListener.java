@@ -53,7 +53,7 @@ public class ConfigPhaseListener implements PhaseListener {
 	/**
 	 * Is SevletContext object initialized?
 	 */
-	private final boolean initialized = false;
+	private boolean initialized = false;
 
 	/*
 	 * (non-Javadoc)
@@ -89,6 +89,8 @@ public class ConfigPhaseListener implements PhaseListener {
 
 				// It is added to the servletContext to be able to consume it from components
 				HDIVUtilJsf.setFacesEventListener(facesEventListener, context);
+
+				initialized = true;
 			}
 		}
 
