@@ -32,9 +32,6 @@ import org.springframework.context.annotation.Configuration;
 @ConditionalOnFramework(SupportedFramework.GRAILS)
 public class GrailsConfigurationSupport {
 
-	private GrailsConfigurationSupport() {
-	}
-
 	@Bean
 	public static BeanDefinitionRegistryPostProcessor requestDataValueProcessorPostProcessor() {
 		return ConfigTools.requestDataValueProcessorPostProcessor(GrailsHdivRequestDataValueProcessor.class);
