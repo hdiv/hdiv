@@ -350,16 +350,11 @@ public abstract class AbstractDataComposer implements IDataComposer {
 	 * @since HDIV 2.1.5
 	 */
 	public String compose(final String parameterName, final String value, final boolean editable, final String editableName,
-			final boolean isActionParam, Method method, final String charEncoding) {
+			final boolean isActionParam, final Method method, final String charEncoding) {
 
 		if (!isRequestStarted()) {
 			// If request not started, do nothing
 			return value;
-		}
-
-		if (method == null) {
-			// Default method is GET
-			method = Method.GET;
 		}
 
 		IParameter parameter = composeParameter(parameterName, value, editable, editableName, isActionParam, charEncoding);

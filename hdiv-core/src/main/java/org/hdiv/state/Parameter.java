@@ -232,8 +232,8 @@ public class Parameter implements IParameter {
 		}
 		else {
 			for (int i = 0; i < values.size(); i++) {
-				String value = values.get(i);
-				result.append(value);
+				String currentValue = values.get(i);
+				result.append(currentValue);
 				if (!(i + 1 == values.size())) {
 					result.append(",");
 				}

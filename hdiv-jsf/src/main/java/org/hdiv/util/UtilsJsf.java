@@ -31,6 +31,9 @@ import javax.faces.component.UIViewRoot;
  */
 public abstract class UtilsJsf {
 
+	private UtilsJsf() {
+	}
+
 	/**
 	 * Checks if any of the names of the received parameters contains the ViewState.
 	 * 
