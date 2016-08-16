@@ -15,7 +15,6 @@
  */
 package org.hdiv.context.jsf1;
 
-import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
 import javax.faces.context.FacesContextFactory;
 import javax.faces.lifecycle.Lifecycle;
@@ -39,7 +38,6 @@ public class FacesContextFactoryWrapper extends FacesContextFactory {
 	 * @param wrapped Wrapped {@link FacesContextFactory}
 	 */
 	public FacesContextFactoryWrapper(final FacesContextFactory wrapped) {
-		super();
 		this.wrapped = wrapped;
 	}
 
@@ -50,8 +48,7 @@ public class FacesContextFactoryWrapper extends FacesContextFactory {
 	 * javax.faces.lifecycle.Lifecycle)
 	 */
 	@Override
-	public FacesContext getFacesContext(final Object context, final Object request, final Object response, final Lifecycle lifecycle)
-			throws FacesException {
+	public FacesContext getFacesContext(final Object context, final Object request, final Object response, final Lifecycle lifecycle) {
 
 		FacesContext original = wrapped.getFacesContext(context, request, response, lifecycle);
 		return new HDIVFacesContext(original);

@@ -27,9 +27,9 @@ public class HdivMultipartException extends Exception {
 	/**
 	 * Wrapped exception.
 	 */
-	private Exception original;
+	private final Exception original;
 
-	public HdivMultipartException(Exception original) {
+	public HdivMultipartException(final Exception original) {
 		this.original = original;
 	}
 

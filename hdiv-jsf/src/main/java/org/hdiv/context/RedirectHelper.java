@@ -44,8 +44,7 @@ public class RedirectHelper {
 		FacesContext context = FacesContext.getCurrentInstance();
 		HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
 
-		String finalUrl = linkUrlProcessor.processUrl(request, url);
-		return finalUrl;
+		return linkUrlProcessor.processUrl(request, url);
 	}
 
 	/**

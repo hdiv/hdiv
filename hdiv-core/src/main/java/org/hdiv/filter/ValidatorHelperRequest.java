@@ -68,6 +68,8 @@ import org.springframework.web.util.HtmlUtils;
  */
 public class ValidatorHelperRequest implements IValidationHelper {
 
+	private static final String VALIDATION_ERROR = "validation.error";
+
 	/**
 	 * Commons Logging instance.
 	 */
@@ -409,7 +411,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 
 			String value;
 
-			if (dataType.equals("password")) {
+			if ("password".equals(dataType)) {
 				value = Constants.HDIV_EDITABLE_PASSWORD_ERROR_KEY;
 			}
 			else {
@@ -553,11 +555,10 @@ public class ValidatorHelperRequest implements IValidationHelper {
 		}
 
 		try {
-			ValidatorHelperResult result = validateParameterValues(request, target, stateParameter, actionParamValues, parameter, values);
-			return result;
+			return validateParameterValues(request, target, stateParameter, actionParamValues, parameter, values);
 		}
 		catch (final HDIVException e) {
-			String errorMessage = HDIVUtil.getMessage(request, "validation.error", e.getMessage());
+			String errorMessage = HDIVUtil.getMessage(request, VALIDATION_ERROR, e.getMessage());
 			throw new HDIVException(errorMessage, e);
 		}
 	}
@@ -721,7 +722,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 			// read suffix from page stored in session
 			String pId = value.substring(0, firstSeparator);
 			String sId = value.substring(firstSeparator + 1, lastSeparator);
-			int pageId = 0;
+			int pageId;
 			int stateId = 0;
 			try {
 				stateId = Integer.parseInt(sId);
@@ -759,7 +760,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 
 		}
 		catch (final IndexOutOfBoundsException e) {
-			String errorMessage = HDIVUtil.getMessage(context.getRequest(), "validation.error", e.getMessage());
+			String errorMessage = HDIVUtil.getMessage(context.getRequest(), VALIDATION_ERROR, e.getMessage());
 			if (log.isErrorEnabled()) {
 				log.error(errorMessage);
 			}
@@ -789,30 +790,28 @@ public class ValidatorHelperRequest implements IValidationHelper {
 			// taken into account, this verification will be done for every parameter,
 			// including for example, a multiple combo where hardly ever are all its
 			// values received.
-			if (actionParamValues != null) {
+			if (actionParamValues != null && values.length != actionParamValues.length) {
 
-				if (values.length != actionParamValues.length) {
-
-					String valueMessage = "";
-					if (values.length > actionParamValues.length) {
-						if (log.isDebugEnabled()) {
-							log.debug("Received more values than expected for the parameter '" + parameter + "'. Received=" + values
-									+ ", Expected=" + actionParamValues);
-							valueMessage = Arrays.toString(values);
-						}
-						else {
-							log.debug("Received fewer values than expected for the parameter '" + parameter + "'. Received=" + values
-									+ ", Expected=" + actionParamValues);
-							valueMessage = Arrays.toString(actionParamValues);
-						}
+				String valueMessage = "";
+				if (values.length > actionParamValues.length) {
+					if (log.isDebugEnabled()) {
+						log.debug("Received more values than expected for the parameter '" + parameter + "'. Received=" + values
+								+ ", Expected=" + actionParamValues);
+						valueMessage = Arrays.toString(values);
 					}
-
-					ValidatorError error = new ValidatorError(HDIVErrorCodes.VALUE_LENGTH_INCORRECT, target, parameter, valueMessage);
-					return new ValidatorHelperResult(error);
+					else {
+						log.debug("Received fewer values than expected for the parameter '" + parameter + "'. Received=" + values
+								+ ", Expected=" + actionParamValues);
+						valueMessage = Arrays.toString(actionParamValues);
+					}
 				}
+
+				ValidatorError error = new ValidatorError(HDIVErrorCodes.VALUE_LENGTH_INCORRECT, target, parameter, valueMessage);
+				return new ValidatorHelperResult(error);
+
 			}
 
-			List<String> stateParamValues = null;
+			List<String> stateParamValues;
 			if (stateParameter != null) {
 				stateParamValues = stateParameter.getValues();
 			}
@@ -832,7 +831,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 
 		}
 		catch (final HDIVException e) {
-			String errorMessage = HDIVUtil.getMessage(request, "validation.error", e.getMessage());
+			String errorMessage = HDIVUtil.getMessage(request, VALIDATION_ERROR, e.getMessage());
 			throw new HDIVException(errorMessage, e);
 		}
 	}
@@ -1031,7 +1030,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	 */
 	protected void addParameterToRequest(final HttpServletRequest request, final String name, final String[] value) {
 
-		RequestWrapper wrapper = null;
+		RequestWrapper wrapper;
 
 		if (request instanceof RequestWrapper) {
 			wrapper = (RequestWrapper) request;

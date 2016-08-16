@@ -24,7 +24,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
-import java.util.Vector;
 
 import javax.servlet.AsyncContext;
 import javax.servlet.ServletRequest;
@@ -233,20 +232,20 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 
 		if (name.equalsIgnoreCase(COOKIE) && confidentiality && cookiesConfidentiality) {
 
-			Vector<String> values = new Vector<String>();
 			Map<String, SavedCookie> sessionCookies = session.getAttribute(requestContext, Constants.HDIV_COOKIES_KEY, Map.class);
-
-			if (sessionCookies != null) {
+			if (sessionCookies == null) {
+				return headerValues;
+			}
+			else {
+				List<String> values = new ArrayList<String>();
 				while (headerValues.hasMoreElements()) {
 					String element = headerValues.nextElement();
 					String replaced = replaceCookieString(element, sessionCookies);
 					values.add(replaced);
 				}
+
+				return Collections.enumeration(values);
 			}
-			else {
-				return headerValues;
-			}
-			return values.elements();
 		}
 		return headerValues;
 	}

@@ -52,10 +52,7 @@ public class HDIVExceptionHandlerFactory extends ExceptionHandlerFactory {
 	 */
 	@Override
 	public ExceptionHandler getExceptionHandler() {
-
-		ExceptionHandler exceptionHandler = original.getExceptionHandler();
-		HDIVExceptionHandler hdivExHandler = new HDIVExceptionHandler(exceptionHandler);
-		return hdivExHandler;
+		return new HDIVExceptionHandler(original.getExceptionHandler());
 	}
 
 }
