@@ -47,6 +47,5 @@ public interface IDataValidator {
 	 */
 	public IValidationResult validate(HttpServletRequest request, String value, String target, String parameter, IParameter stateParameter,
 			String[] actionParamValues);
-	// TODO merge stateParameter and actionParamValues parameters
 
 }

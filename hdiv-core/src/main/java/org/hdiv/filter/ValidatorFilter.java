@@ -194,7 +194,7 @@ public class ValidatorFilter extends OncePerRequestFilter {
 				completeErrorData(multipartProcessedRequest, errors);
 
 				// Log the errors
-				logValidationErrors(multipartProcessedRequest, errors);
+				logValidationErrors(errors);
 
 				hasEditableError = processEditableValidationErrors(multipartProcessedRequest, errors);
 			}
@@ -325,7 +325,7 @@ public class ValidatorFilter extends OncePerRequestFilter {
 	 * @param request request object
 	 * @param errors all validation errors
 	 */
-	protected void logValidationErrors(final HttpServletRequest request, final List<ValidatorError> errors) {
+	protected void logValidationErrors(final List<ValidatorError> errors) {
 
 		for (ValidatorError error : errors) {
 			// Log the error

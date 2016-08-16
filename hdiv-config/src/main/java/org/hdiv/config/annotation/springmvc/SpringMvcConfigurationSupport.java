@@ -61,18 +61,17 @@ public class SpringMvcConfigurationSupport implements ApplicationListener<Contex
 
 	public void onApplicationEvent(final ContextRefreshedEvent event) {
 		ApplicationContext applicationContext = event.getApplicationContext();
-		if (applicationContext
+		if (applicationContext instanceof ConfigurableApplicationContext && applicationContext
 				.getBean(ConfigBeanDefinitionParser.REQUEST_DATA_VALUE_PROCESSOR_BEAN_NAME) instanceof CsrfRequestDataValueProcessor) {
-			if (applicationContext instanceof ConfigurableApplicationContext) {
-				@SuppressWarnings("resource")
-				ConfigurableApplicationContext context = (ConfigurableApplicationContext) applicationContext;
-				if (context.getBeanFactory() instanceof DefaultSingletonBeanRegistry) {
-					DefaultSingletonBeanRegistry factory = (DefaultSingletonBeanRegistry) context.getBeanFactory();
-					factory.destroySingleton(ConfigBeanDefinitionParser.REQUEST_DATA_VALUE_PROCESSOR_BEAN_NAME);
 
-					context.getBeanFactory().registerSingleton(ConfigBeanDefinitionParser.REQUEST_DATA_VALUE_PROCESSOR_BEAN_NAME,
-							requestDataValueProcessor());
-				}
+			@SuppressWarnings("resource")
+			ConfigurableApplicationContext context = (ConfigurableApplicationContext) applicationContext;
+			if (context.getBeanFactory() instanceof DefaultSingletonBeanRegistry) {
+				DefaultSingletonBeanRegistry factory = (DefaultSingletonBeanRegistry) context.getBeanFactory();
+				factory.destroySingleton(ConfigBeanDefinitionParser.REQUEST_DATA_VALUE_PROCESSOR_BEAN_NAME);
+
+				context.getBeanFactory().registerSingleton(ConfigBeanDefinitionParser.REQUEST_DATA_VALUE_PROCESSOR_BEAN_NAME,
+						requestDataValueProcessor());
 			}
 
 		}

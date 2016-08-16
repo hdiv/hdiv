@@ -118,7 +118,7 @@ public class DataComposerFactory {
 
 		String hdivState = HDIVUtil.getHdivState(request);
 
-		String preState = getModifyStateParameterValue(dataComposer, request);
+		String preState = getModifyStateParameterValue(request);
 
 		if (preState != null && preState.length() > 0) {
 
@@ -174,7 +174,7 @@ public class DataComposerFactory {
 	 * @param request current HttpServletRequest instance
 	 * @return parameter value.
 	 */
-	protected String getModifyStateParameterValue(final IDataComposer dataComposer, final HttpServletRequest request) {
+	protected String getModifyStateParameterValue(final HttpServletRequest request) {
 		String paramName = HDIVUtil.getModifyHdivStateParameterName(request);
 		return paramName != null ? request.getParameter(paramName) : null;
 	}

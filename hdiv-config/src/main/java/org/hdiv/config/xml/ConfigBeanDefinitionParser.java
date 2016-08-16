@@ -831,10 +831,8 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		bean.getPropertyValues().addPropertyValue("paramsWithoutValidation", map);
 		for (int i = 0; i < nodeList.getLength(); i++) {
 			Node mappingNode = nodeList.item(i);
-			if (mappingNode.getNodeType() == Node.ELEMENT_NODE) {
-				if ("mapping".equalsIgnoreCase(mappingNode.getLocalName())) {
-					processMapping(mappingNode, map);
-				}
+			if (mappingNode.getNodeType() == Node.ELEMENT_NODE && "mapping".equalsIgnoreCase(mappingNode.getLocalName())) {
+				processMapping(mappingNode, map);
 			}
 		}
 	}

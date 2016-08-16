@@ -15,7 +15,6 @@
  */
 package org.hdiv.context;
 
-import javax.faces.FacesException;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.ExternalContextFactory;
 
@@ -63,7 +62,7 @@ public class ExternalContextFactoryWrapper extends ExternalContextFactory {
 	 * @see javax.faces.context.ExternalContextFactory#getExternalContext(java.lang .Object, java.lang.Object, java.lang.Object)
 	 */
 	@Override
-	public ExternalContext getExternalContext(final Object context, final Object request, final Object response) throws FacesException {
+	public ExternalContext getExternalContext(final Object context, final Object request, final Object response) {
 
 		ExternalContext ec = original.getExternalContext(context, request, response);
 		return new RedirectExternalContext(ec);

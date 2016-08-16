@@ -203,16 +203,6 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 		this.pageIdGeneratorName = pageIdGeneratorName;
 	}
 
-	@Deprecated
-	public final void addPage(final RequestContext context, final int pageId, final IPage page) {
-		addPage(context, page);
-	}
-
-	@Deprecated
-	public final void addPartialPage(final RequestContext context, final int pageId, final IPage page) {
-		addPartialPage(context, page);
-	}
-
 	public void removeEndedPages(final RequestContext context, final String conversationId) {
 		cache.removeEndedPages(context, conversationId);
 	}

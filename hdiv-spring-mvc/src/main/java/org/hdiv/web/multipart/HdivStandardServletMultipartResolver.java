@@ -33,7 +33,7 @@ import org.springframework.web.util.WebUtils;
 public class HdivStandardServletMultipartResolver extends StandardServletMultipartResolver {
 
 	@Override
-	public boolean isMultipart(HttpServletRequest request) {
+	public boolean isMultipart(final HttpServletRequest request) {
 
 		HdivMultipartException multipartException = (HdivMultipartException) request.getAttribute(IMultipartConfig.FILEUPLOAD_EXCEPTION);
 		if (multipartException != null) {
@@ -50,7 +50,7 @@ public class HdivStandardServletMultipartResolver extends StandardServletMultipa
 	}
 
 	@Override
-	public MultipartHttpServletRequest resolveMultipart(HttpServletRequest request) throws MultipartException {
+	public MultipartHttpServletRequest resolveMultipart(final HttpServletRequest request) {
 
 		MultipartHttpServletRequest multipartHttpServletRequest = WebUtils.getNativeRequest(request, MultipartHttpServletRequest.class);
 		if (multipartHttpServletRequest != null) {
