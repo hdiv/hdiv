@@ -57,11 +57,8 @@ public class OutcomeTargetComponentHelper {
 	 * @return the url
 	 */
 	public String getUrl(final FacesContext context, final UIOutcomeTarget component) {
-
 		NavigationCase navCase = getNavigationCase(context, component);
-		String url = getEncodedTargetURL(context, component, navCase);
-
-		return url;
+		return getEncodedTargetURL(context, component, navCase);
 	}
 
 	/**

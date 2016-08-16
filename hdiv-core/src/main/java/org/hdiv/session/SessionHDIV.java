@@ -17,8 +17,6 @@ package org.hdiv.session;
 
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.hdiv.context.RequestContext;
 import org.hdiv.exception.HDIVException;
 import org.hdiv.idGenerator.PageIdGenerator;
@@ -36,11 +34,6 @@ import org.springframework.util.Assert;
  * @author Roberto Velasco
  */
 public class SessionHDIV implements ISession, BeanFactoryAware {
-
-	/**
-	 * Commons Logging instance.
-	 */
-	private static final Log log = LogFactory.getLog(SessionHDIV.class);
 
 	/**
 	 * The root interface for accessing a Spring bean container.
