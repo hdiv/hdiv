@@ -52,6 +52,9 @@ public class RandomGuidUidGenerator implements UidGenerator, Serializable {
 	}
 
 	public Serializable generateUid() {
+		if (!secure) {
+			return FastUUID.get();
+		}
 		return RandomGuid.getRandomGuid(secure);
 	}
 
