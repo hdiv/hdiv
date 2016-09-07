@@ -16,7 +16,7 @@
 package org.hdiv.state;
 
 import java.io.Serializable;
-import java.util.Collection;
+import java.util.List;
 
 public interface IPage extends Serializable {
 
@@ -51,7 +51,7 @@ public interface IPage extends Serializable {
 	/**
 	 * @return Returns the page states.
 	 */
-	Collection<? extends IState> getStates();
+	List<? extends IState> getStates();
 
 	/**
 	 * @return number of states.

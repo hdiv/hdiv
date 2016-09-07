@@ -17,7 +17,6 @@ package org.hdiv.state;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -156,7 +155,7 @@ public class Page implements IPage, Serializable {
 	/**
 	 * @return Returns the page states.
 	 */
-	public Collection<? extends IState> getStates() {
+	public List<? extends IState> getStates() {
 		return states;
 	}
 
