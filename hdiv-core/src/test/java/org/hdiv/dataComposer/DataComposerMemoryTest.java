@@ -352,7 +352,6 @@ public class DataComposerMemoryTest extends AbstractHDIVTestCase {
 
 		// Ajax
 		MockHttpServletRequest ajaxRequest = getMockRequest();
-		RequestContext context = getRequestContext();
 		ajaxRequest.addHeader("x-requested-with", "XMLHttpRequest");
 		ajaxRequest.addParameter("_HDIV_STATE_", stateId);
 		IDataComposer ajaxDataComposer = dataComposerFactory.newInstance(request);
