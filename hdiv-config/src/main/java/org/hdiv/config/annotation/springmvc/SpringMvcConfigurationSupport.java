@@ -53,30 +53,29 @@ public class SpringMvcConfigurationSupport implements ApplicationListener<Contex
 	protected static final boolean jsr303Present = ClassUtils.isPresent("javax.validation.Validator",
 			SpringMvcConfigurationSupport.class.getClassLoader());
 
-	public void onApplicationEvent(final ContextRefreshedEvent event) {
-		ApplicationContext applicationContext = event.getApplicationContext();
-		if (applicationContext
-				.getBean(ConfigBeanDefinitionParser.REQUEST_DATA_VALUE_PROCESSOR_BEAN_NAME) instanceof CsrfRequestDataValueProcessor) {
-			if (applicationContext instanceof ConfigurableApplicationContext) {
-				@SuppressWarnings("resource")
-				ConfigurableApplicationContext context = (ConfigurableApplicationContext) applicationContext;
-				if (context.getBeanFactory() instanceof DefaultSingletonBeanRegistry) {
-					DefaultSingletonBeanRegistry factory = (DefaultSingletonBeanRegistry) context.getBeanFactory();
-					factory.destroySingleton(ConfigBeanDefinitionParser.REQUEST_DATA_VALUE_PROCESSOR_BEAN_NAME);
-
-					context.getBeanFactory().registerSingleton(ConfigBeanDefinitionParser.REQUEST_DATA_VALUE_PROCESSOR_BEAN_NAME,
-							requestDataValueProcessor());
-				}
-			}
-
-		}
-	}
-
 	@Autowired
 	protected FormUrlProcessor formUrlProcessor;
 
 	@Autowired
 	protected LinkUrlProcessor linkUrlProcessor;
+
+	public void onApplicationEvent(final ContextRefreshedEvent event) {
+		ApplicationContext applicationContext = event.getApplicationContext();
+		if (applicationContext instanceof ConfigurableApplicationContext && applicationContext
+				.getBean(ConfigBeanDefinitionParser.REQUEST_DATA_VALUE_PROCESSOR_BEAN_NAME) instanceof CsrfRequestDataValueProcessor) {
+
+			@SuppressWarnings("resource")
+			ConfigurableApplicationContext context = (ConfigurableApplicationContext) applicationContext;
+			if (context.getBeanFactory() instanceof DefaultSingletonBeanRegistry) {
+				DefaultSingletonBeanRegistry factory = (DefaultSingletonBeanRegistry) context.getBeanFactory();
+				factory.destroySingleton(ConfigBeanDefinitionParser.REQUEST_DATA_VALUE_PROCESSOR_BEAN_NAME);
+
+				context.getBeanFactory().registerSingleton(ConfigBeanDefinitionParser.REQUEST_DATA_VALUE_PROCESSOR_BEAN_NAME,
+						requestDataValueProcessor());
+			}
+
+		}
+	}
 
 	public RequestDataValueProcessor requestDataValueProcessor() {
 		HdivRequestDataValueProcessor processor = new HdivRequestDataValueProcessor();

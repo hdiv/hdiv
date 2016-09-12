@@ -35,14 +35,14 @@ public class HtmlOutputLinkExtension extends HtmlOutputLink {
 
 	private OutputLinkComponentProcessor componentProcessor;
 
-	protected void init(FacesContext context) {
+	protected void init(final FacesContext context) {
 
-		if (this.componentProcessor == null) {
+		if (componentProcessor == null) {
 			ExternalContext externalContext = context.getExternalContext();
 			ServletContext servletContext = (ServletContext) externalContext.getContext();
 			WebApplicationContext wac = WebApplicationContextUtils.getRequiredWebApplicationContext(servletContext);
 
-			this.componentProcessor = wac.getBean(OutputLinkComponentProcessor.class);
+			componentProcessor = wac.getBean(OutputLinkComponentProcessor.class);
 		}
 	}
 
@@ -51,12 +51,13 @@ public class HtmlOutputLinkExtension extends HtmlOutputLink {
 	 * 
 	 * @see javax.faces.component.UIComponent#encodeBegin(javax.faces.context. FacesContext)
 	 */
-	public void encodeBegin(FacesContext context) throws IOException {
+	@Override
+	public void encodeBegin(final FacesContext context) throws IOException {
 
 		// Init dependencies
-		this.init(context);
+		init(context);
 
-		this.componentProcessor.processOutputLink(context, this);
+		componentProcessor.processOutputLink(context, this);
 
 		super.encodeBegin(context);
 	}
@@ -66,15 +67,16 @@ public class HtmlOutputLinkExtension extends HtmlOutputLink {
 	 * 
 	 * @see javax.faces.component.UIComponentBase#encodeEnd(javax.faces.context.FacesContext)
 	 */
-	public void encodeEnd(FacesContext context) throws IOException {
+	@Override
+	public void encodeEnd(final FacesContext context) throws IOException {
 
 		super.encodeEnd(context);
 
-		this.componentProcessor.removeHdivStateUIParameter(context, this);
+		componentProcessor.removeHdivStateUIParameter(context, this);
 
 		// Deprecated method in 1.2, but necessary to work in 1.1
-		if (this.getValueBinding("value") != null) {
-			this.setValue(null);
+		if (getValueBinding("value") != null) {
+			setValue(null);
 		}
 	}
 

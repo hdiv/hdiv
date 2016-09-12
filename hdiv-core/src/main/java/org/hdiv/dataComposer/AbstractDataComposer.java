@@ -105,11 +105,6 @@ public abstract class AbstractDataComposer implements IDataComposer {
 		return states;
 	}
 
-	@Deprecated
-	protected final Deque<IState> getStatesStack() {
-		return states;
-	}
-
 	/**
 	 * Obtains a new unique identifier for the page.
 	 *
@@ -268,7 +263,7 @@ public abstract class AbstractDataComposer implements IDataComposer {
 
 		if (hdivConfig.getConfidentiality()) {
 			// replace real values with confidential ones
-			parameters = applyConfidentialityToParams(parameters, method);
+			parameters = applyConfidentialityToParams(parameters);
 		}
 
 		return parameters;
@@ -281,7 +276,7 @@ public abstract class AbstractDataComposer implements IDataComposer {
 	 * @param method HTTP method
 	 * @return parameters in query format with confidential values
 	 */
-	protected String applyConfidentialityToParams(String parameters, final Method method) {
+	protected String applyConfidentialityToParams(String parameters) {
 
 		Map<String, Integer> pCount = new HashMap<String, Integer>();
 
@@ -290,17 +285,18 @@ public abstract class AbstractDataComposer implements IDataComposer {
 
 		// Init indexes
 		int beginIndex = 0;
-		int endIndex = parameters.indexOf('&') > 0 ? parameters.indexOf('&') : parameters.length();
+		int ampIndex = parameters.indexOf('&');
+		int endIndex = ampIndex >= 0 ? ampIndex : parameters.length();
 		do {
 			String param = parameters.substring(beginIndex, endIndex);
 			int index = param.indexOf('=');
 			index = index < 0 ? param.length() : index;
 			String name = param.substring(0, index);
 
-			if (isConfidentialParam(name, method)) {
+			if (isConfidentialParam(name)) {
 				// Parameter is not a start parameter
 				Integer count = pCount.get(name);
-				int num = (count == null) ? 0 : count + 1;
+				int num = count == null ? 0 : count + 1;
 				pCount.put(name, num);
 
 				// Replace parameter with confidential values
@@ -354,21 +350,16 @@ public abstract class AbstractDataComposer implements IDataComposer {
 	 * @since HDIV 2.1.5
 	 */
 	public String compose(final String parameterName, final String value, final boolean editable, final String editableName,
-			final boolean isActionParam, Method method, final String charEncoding) {
+			final boolean isActionParam, final Method method, final String charEncoding) {
 
 		if (!isRequestStarted()) {
 			// If request not started, do nothing
 			return value;
 		}
 
-		if (method == null) {
-			// Default method is GET
-			method = Method.GET;
-		}
-
 		IParameter parameter = composeParameter(parameterName, value, editable, editableName, isActionParam, charEncoding);
 
-		if (isConfidentialParam(parameterName, method)) {
+		if (isConfidentialParam(parameterName)) {
 			return parameter.getConfidentialValue();
 		}
 		else {
@@ -385,7 +376,7 @@ public abstract class AbstractDataComposer implements IDataComposer {
 	 * @return boolean result
 	 * @since HDIV 2.1.6
 	 */
-	protected boolean isConfidentialParam(final String parameterName, final Method method) {
+	protected boolean isConfidentialParam(final String parameterName) {
 
 		if (!hdivConfig.getConfidentiality()) {
 			return false;
@@ -503,12 +494,10 @@ public abstract class AbstractDataComposer implements IDataComposer {
 			IParameter parameter = composeParameter(newParameter, storedParameter.getValuePosition(0), false, "", false,
 					Constants.ENCODING_UTF_8);
 
-			String currentValue = null;
 			// We check the parameters since the second position because the first
 			// value has been used to create the parameter
 			for (int i = 1; i < storedParameter.getValues().size(); i++) {
-				currentValue = storedParameter.getValuePosition(i);
-				parameter.addValue(currentValue);
+				parameter.addValue(storedParameter.getValuePosition(i));
 			}
 		}
 	}

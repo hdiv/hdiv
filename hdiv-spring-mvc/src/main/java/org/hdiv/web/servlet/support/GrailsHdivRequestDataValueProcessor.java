@@ -33,11 +33,12 @@ public class GrailsHdivRequestDataValueProcessor extends HdivRequestDataValuePro
 	 * @param url link url
 	 * @return processed url
 	 */
-	public String processUrl(HttpServletRequest request, String url) {
+	@Override
+	public String processUrl(final HttpServletRequest request, final String url) {
 		String urlToProcess = url;
 		Boolean modified = false;
 		String contextPath = request.getContextPath();
-		if (url.indexOf("/") == 0 && contextPath.length() > 1 && url.indexOf(contextPath) != 0) {
+		if (url.indexOf('/') == 0 && contextPath.length() > 1 && url.indexOf(contextPath) != 0) {
 			urlToProcess = contextPath + url;
 			modified = true;
 		}

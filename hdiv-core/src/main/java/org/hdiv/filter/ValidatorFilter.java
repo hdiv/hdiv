@@ -92,13 +92,6 @@ public class ValidatorFilter extends OncePerRequestFilter {
 	protected IUserData userData;
 
 	/**
-	 * Creates a new ValidatorFilter object.
-	 */
-	public ValidatorFilter() {
-
-	}
-
-	/**
 	 * Initialize required dependencies.
 	 */
 	protected void initDependencies() {
@@ -201,12 +194,12 @@ public class ValidatorFilter extends OncePerRequestFilter {
 				completeErrorData(multipartProcessedRequest, errors);
 
 				// Log the errors
-				logValidationErrors(multipartProcessedRequest, errors);
+				logValidationErrors(errors);
 
 				hasEditableError = processEditableValidationErrors(multipartProcessedRequest, errors);
 			}
 
-			if (legal || hdivConfig.isDebugMode() || (hasEditableError && !hdivConfig.isShowErrorPageOnEditableValidation())) {
+			if (legal || hdivConfig.isDebugMode() || hasEditableError && !hdivConfig.isShowErrorPageOnEditableValidation()) {
 
 				processRequest(multipartProcessedRequest, responseWrapper, filterChain);
 			}
@@ -259,7 +252,7 @@ public class ValidatorFilter extends OncePerRequestFilter {
 	 * @return <code>true</code> if the request is multipart. <code>false</code> otherwise.
 	 */
 	protected boolean isMultipartContent(final String contentType) {
-		return ((contentType != null) && (contentType.indexOf("multipart/form-data") != -1));
+		return contentType != null && contentType.indexOf("multipart/form-data") != -1;
 	}
 
 	/**
@@ -318,16 +311,12 @@ public class ValidatorFilter extends OncePerRequestFilter {
 	 * @return Returns the remote user IP address if behind the proxy.
 	 */
 	protected String getUserLocalIP(final HttpServletRequest request) {
-
-		String ipAddress = null;
-
 		if (request.getHeader("X-Forwarded-For") == null) {
-			ipAddress = request.getRemoteAddr();
+			return request.getRemoteAddr();
 		}
 		else {
-			ipAddress = request.getHeader("X-Forwarded-For");
+			return request.getHeader("X-Forwarded-For");
 		}
-		return ipAddress;
 	}
 
 	/**
@@ -336,7 +325,7 @@ public class ValidatorFilter extends OncePerRequestFilter {
 	 * @param request request object
 	 * @param errors all validation errors
 	 */
-	protected void logValidationErrors(final HttpServletRequest request, final List<ValidatorError> errors) {
+	protected void logValidationErrors(final List<ValidatorError> errors) {
 
 		for (ValidatorError error : errors) {
 			// Log the error

@@ -128,7 +128,7 @@ public class StateUtil {
 	 */
 	protected IState restoreMemoryState(final RequestContext context, final String requestState) {
 
-		IState restoredState = null;
+		IState restoredState;
 
 		// Extract pageId and stateId from the state identifier
 		int firstSeparator = requestState.indexOf(Constants.STATE_ID_SEPARATOR);

@@ -46,14 +46,14 @@ public class ComponentMessagesLog {
 	/**
 	 * HDIV logger
 	 */
-	private Logger logger;
+	private final Logger logger;
 
 	/**
 	 * Default constructor
 	 * 
 	 * @param logger Logger instance
 	 */
-	public ComponentMessagesLog(Logger logger) {
+	public ComponentMessagesLog(final Logger logger) {
 		this.logger = logger;
 	}
 
@@ -62,7 +62,7 @@ public class ComponentMessagesLog {
 	 * 
 	 * @param facesContext request context
 	 */
-	public void processMessages(FacesContext facesContext) {
+	public void processMessages(final FacesContext facesContext) {
 		Iterator<String> clientIterator = facesContext.getClientIdsWithMessages();
 		while (clientIterator.hasNext()) {
 			String clientId = clientIterator.next();
@@ -76,7 +76,7 @@ public class ComponentMessagesLog {
 			UIComponent clientComponent = facesContext.getViewRoot().findComponent(clientIdWithoutRowId);
 			Iterator<FacesMessage> clientMessages = facesContext.getMessages(clientId);
 			String requestUri = HDIVUtil.getRequestURI(request);
-			this.manageClientMessages(requestValue, facesContext, clientComponent, clientMessages, requestUri);
+			manageClientMessages(requestValue, facesContext, clientComponent, clientMessages, requestUri);
 		}
 	}
 
@@ -89,8 +89,8 @@ public class ComponentMessagesLog {
 	 * @param clientMessages messages created by the framework
 	 * @param requestUri original url of the request
 	 */
-	private void manageClientMessages(String requestValue, FacesContext facesContext, UIComponent clientComponent,
-			Iterator<FacesMessage> clientMessages, String requestUri) {
+	private void manageClientMessages(final String requestValue, final FacesContext facesContext, final UIComponent clientComponent,
+			final Iterator<FacesMessage> clientMessages, final String requestUri) {
 
 		// If it is editable data, that is: HtmlInputText, HtmlInputTextarea
 		// or HtmlInputSecret
@@ -116,7 +116,7 @@ public class ComponentMessagesLog {
 
 					ValidatorError error = new ValidatorError(HDIVErrorCodes.PARAMETER_VALUE_INCORRECT, requestUri,
 							clientComponent.getClientId(facesContext), value);
-					this.logger.log(error);
+					logger.log(error);
 				}
 			}
 		}

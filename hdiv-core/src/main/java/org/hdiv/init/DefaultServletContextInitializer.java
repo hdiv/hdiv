@@ -23,7 +23,6 @@ import org.hdiv.urlProcessor.FormUrlProcessor;
 import org.hdiv.urlProcessor.LinkUrlProcessor;
 import org.hdiv.util.Constants;
 import org.hdiv.util.HDIVUtil;
-import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.support.ResourceBundleMessageSource;
@@ -53,22 +52,22 @@ public class DefaultServletContextInitializer implements ServletContextInitializ
 	 * 
 	 * @see org.hdiv.init.ServletContextInitializer#initializeServletContext(javax.servlet.ServletContext)
 	 */
-	public void initializeServletContext(ServletContext servletContext) {
+	public void initializeServletContext(final ServletContext servletContext) {
 
-		Assert.notNull(this.config);
-		Assert.notNull(this.application);
-		Assert.notNull(this.linkUrlProcessor);
-		Assert.notNull(this.formUrlProcessor);
+		Assert.notNull(config);
+		Assert.notNull(application);
+		Assert.notNull(linkUrlProcessor);
+		Assert.notNull(formUrlProcessor);
 		Assert.notNull(servletContext);
 
 		// Init servlet context scoped objects
-		HDIVUtil.setHDIVConfig(this.config, servletContext);
-		HDIVUtil.setApplication(this.application, servletContext);
-		HDIVUtil.setLinkUrlProcessor(this.linkUrlProcessor, servletContext);
-		HDIVUtil.setFormUrlProcessor(this.formUrlProcessor, servletContext);
+		HDIVUtil.setHDIVConfig(config, servletContext);
+		HDIVUtil.setApplication(application, servletContext);
+		HDIVUtil.setLinkUrlProcessor(linkUrlProcessor, servletContext);
+		HDIVUtil.setFormUrlProcessor(formUrlProcessor, servletContext);
 
 		ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
-		messageSource.setBeanClassLoader(this.applicationContext.getClassLoader());
+		messageSource.setBeanClassLoader(applicationContext.getClassLoader());
 		messageSource.setBasename(Constants.MESSAGE_SOURCE_PATH);
 		HDIVUtil.setMessageSource(messageSource, servletContext);
 	}
@@ -78,40 +77,39 @@ public class DefaultServletContextInitializer implements ServletContextInitializ
 	 * 
 	 * @see org.hdiv.init.ServletContextInitializer#destroyServletContext(javax.servlet.ServletContext)
 	 */
-	public void destroyServletContext(ServletContext servletContext) {
+	public void destroyServletContext(final ServletContext servletContext) {
 
 	}
 
-	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-
+	public void setApplicationContext(final ApplicationContext applicationContext) {
 		this.applicationContext = applicationContext;
 	}
 
 	/**
 	 * @param config the config to set
 	 */
-	public void setConfig(HDIVConfig config) {
+	public void setConfig(final HDIVConfig config) {
 		this.config = config;
 	}
 
 	/**
 	 * @param application the application to set
 	 */
-	public void setApplication(IApplication application) {
+	public void setApplication(final IApplication application) {
 		this.application = application;
 	}
 
 	/**
 	 * @param linkUrlProcessor the linkUrlProcessor to set
 	 */
-	public void setLinkUrlProcessor(LinkUrlProcessor linkUrlProcessor) {
+	public void setLinkUrlProcessor(final LinkUrlProcessor linkUrlProcessor) {
 		this.linkUrlProcessor = linkUrlProcessor;
 	}
 
 	/**
 	 * @param formUrlProcessor the formUrlProcessor to set
 	 */
-	public void setFormUrlProcessor(FormUrlProcessor formUrlProcessor) {
+	public void setFormUrlProcessor(final FormUrlProcessor formUrlProcessor) {
 		this.formUrlProcessor = formUrlProcessor;
 	}
 

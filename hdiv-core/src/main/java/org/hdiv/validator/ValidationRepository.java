@@ -15,6 +15,7 @@
  */
 package org.hdiv.validator;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -22,7 +23,7 @@ import java.util.List;
  * 
  * @since HDIV 2.1.10
  */
-public interface ValidationRepository {
+public interface ValidationRepository extends Serializable {
 
 	/**
 	 * Returns the validation rules for a concrete url and parameter name.

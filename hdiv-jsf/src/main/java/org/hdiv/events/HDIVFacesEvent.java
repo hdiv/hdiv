@@ -34,7 +34,7 @@ public class HDIVFacesEvent extends FacesEvent {
 	 * 
 	 * @param uiComponent base UIComponent
 	 */
-	public HDIVFacesEvent(UIComponent uiComponent) {
+	public HDIVFacesEvent(final UIComponent uiComponent) {
 		super(uiComponent);
 	}
 
@@ -43,7 +43,8 @@ public class HDIVFacesEvent extends FacesEvent {
 	 * 
 	 * @see javax.faces.event.FacesEvent#isAppropriateListener(javax.faces.event.FacesListener)
 	 */
-	public boolean isAppropriateListener(FacesListener faceslistener) {
+	@Override
+	public boolean isAppropriateListener(final FacesListener faceslistener) {
 
 		return faceslistener instanceof HDIVFacesEventListener;
 	}
@@ -53,7 +54,8 @@ public class HDIVFacesEvent extends FacesEvent {
 	 * 
 	 * @see javax.faces.event.FacesEvent#processListener(javax.faces.event.FacesListener)
 	 */
-	public void processListener(FacesListener faceslistener) {
+	@Override
+	public void processListener(final FacesListener faceslistener) {
 
 		HDIVFacesEventListener listener = (HDIVFacesEventListener) faceslistener;
 		listener.processListener(this);

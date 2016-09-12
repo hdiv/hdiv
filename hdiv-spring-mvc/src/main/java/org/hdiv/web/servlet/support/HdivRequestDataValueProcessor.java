@@ -114,9 +114,7 @@ public class HdivRequestDataValueProcessor implements RequestDataValueProcessor 
 				action = processedAction;
 			}
 		}
-
-		String result = formUrlProcessor.processUrl(request, action, Method.secureValueOf(method));
-		return result;
+		return formUrlProcessor.processUrl(request, action, Method.secureValueOf(method));
 	}
 
 	/**
@@ -152,8 +150,7 @@ public class HdivRequestDataValueProcessor implements RequestDataValueProcessor 
 			return value;
 		}
 		else {
-			String result = dataComposer.composeFormField(name, value, false, type);
-			return result;
+			return dataComposer.composeFormField(name, value, false, type);
 		}
 
 	}
@@ -176,7 +173,7 @@ public class HdivRequestDataValueProcessor implements RequestDataValueProcessor 
 			}
 		}
 
-		if (dataComposer == null || dataComposer.isRequestStarted() == false) {
+		if (dataComposer == null || !dataComposer.isRequestStarted()) {
 			return extraFields;
 		}
 
@@ -209,9 +206,7 @@ public class HdivRequestDataValueProcessor implements RequestDataValueProcessor 
 				url = processedUrl;
 			}
 		}
-
-		String result = linkUrlProcessor.processUrl(request, url);
-		return result;
+		return linkUrlProcessor.processUrl(request, url);
 	}
 
 	/**

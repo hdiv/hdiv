@@ -52,12 +52,8 @@ public class RequestParameterValidator implements ComponentValidator {
 	 * 
 	 * @see org.hdiv.validators.ComponentValidator#validate(javax.faces.context.FacesContext, javax.faces.component.UIComponent)
 	 */
-	public ValidationError validate(FacesContext context, UIComponent component) {
-
-		UIForm form = (UIForm) component;
-		ValidationError error = this.validateRequestParameters(context, form);
-
-		return error;
+	public ValidationError validate(final FacesContext context, final UIComponent component) {
+		return validateRequestParameters(context, (UIForm) component);
 	}
 
 	/**
@@ -67,18 +63,18 @@ public class RequestParameterValidator implements ComponentValidator {
 	 * @param formComponent for component to validate
 	 * @return validation result
 	 */
-	private ValidationError validateRequestParameters(FacesContext context, UIForm formComponent) {
+	private ValidationError validateRequestParameters(final FacesContext context, final UIForm formComponent) {
 
-		List<String> clientIds = this.getClientIds(context, formComponent);
+		List<String> clientIds = getClientIds(context, formComponent);
 
-		boolean validParameter = true;
+		boolean validParameter;
 		boolean validParameters = true;
 
 		ValidationError error = null;
 
 		Map<String, String> requestParameters = context.getExternalContext().getRequestParameterMap();
 		for (Entry<String, String> entry : requestParameters.entrySet()) {
-			String requestParamName = entry.getKey().toString().trim();
+			String requestParamName = entry.getKey().trim();
 			if (UtilsJsf.isFacesViewParamName(requestParamName)) {
 				continue;
 			}
@@ -89,14 +85,14 @@ public class RequestParameterValidator implements ComponentValidator {
 			requestParamName = UtilsJsf.removeRowId(requestParamName);
 
 			// In MyFaces, some clientId of tables contain a rowId
-			validParameter = ((clientIds.contains(requestParamName)) || (clientIds.contains(requestParamNameWithRowId)));
+			validParameter = clientIds.contains(requestParamName) || clientIds.contains(requestParamNameWithRowId);
 			if (!validParameter) {
 
 				// It may be a parameter added in the client, for instance
 				// using JavaScript.
 				// In this case check if it is a userStartParameters
 
-				boolean isStartParam = this.hdivConfig.isStartParameter(requestParamName);
+				boolean isStartParam = hdivConfig.isStartParameter(requestParamName);
 				if (isStartParam) {
 					if (log.isDebugEnabled()) {
 						log.debug("Parameter '" + requestParamName + "' is a startParameter");
@@ -128,13 +124,13 @@ public class RequestParameterValidator implements ComponentValidator {
 	 * @param component form component
 	 * @return list with client ids
 	 */
-	private List<String> getClientIds(FacesContext context, UIForm component) {
+	private List<String> getClientIds(final FacesContext context, final UIForm component) {
 
 		List<String> clientIds = new ArrayList<String>();
 
 		String submittedForm = component.getClientId(context);
 		clientIds.add(UtilsJsf.removeRowId(submittedForm));
-		this.getAllClientIds(context, component, clientIds);
+		getAllClientIds(context, component, clientIds);
 
 		// Add those parameters that are proprietary for each implementation
 		clientIds.addAll(UtilsJsf.getJSFImplementationParamNames(submittedForm));
@@ -150,7 +146,7 @@ public class RequestParameterValidator implements ComponentValidator {
 	 * @param clientIds possible clientId values
 	 */
 	@SuppressWarnings("rawtypes")
-	private void getAllClientIds(FacesContext context, UIComponent component, List<String> clientIds) {
+	private void getAllClientIds(final FacesContext context, final UIComponent component, final List<String> clientIds) {
 
 		// In A4J there are components that are not children but facets
 		Iterator it = component.getFacetsAndChildren();
@@ -171,7 +167,7 @@ public class RequestParameterValidator implements ComponentValidator {
 		}
 	}
 
-	public void setHdivConfig(HDIVConfig hdivConfig) {
+	public void setHdivConfig(final HDIVConfig hdivConfig) {
 		this.hdivConfig = hdivConfig;
 	}
 

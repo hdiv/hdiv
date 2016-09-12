@@ -47,10 +47,11 @@ public class HtmlCommandLinkExtension extends HtmlCommandLink {
 	 * 
 	 * @see javax.faces.component.UICommand#queueEvent(javax.faces.event.FacesEvent)
 	 */
-	public void queueEvent(FacesEvent event) {
+	@Override
+	public void queueEvent(final FacesEvent event) {
 
 		// If it doesn't exist, add listener that handles HDIV's event
-		this.addListener(this.getFacesContext());
+		addListener(getFacesContext());
 
 		// If the event is of type ActionEvent, throw a HDIV event to handle it later
 		// This verification is needed because JSF 2.0 can generate other type
@@ -58,7 +59,7 @@ public class HtmlCommandLinkExtension extends HtmlCommandLink {
 		// to generate two HDIV events.
 		if (event instanceof ActionEvent) {
 			HDIVFacesEvent hdivevent = new HDIVFacesEvent(this);
-			if (this.isImmediate()) {
+			if (isImmediate()) {
 				hdivevent.setPhaseId(PhaseId.APPLY_REQUEST_VALUES);
 			}
 			else {
@@ -73,9 +74,9 @@ public class HtmlCommandLinkExtension extends HtmlCommandLink {
 	}
 
 	@Override
-	public Object saveState(FacesContext context) {
+	public Object saveState(final FacesContext context) {
 		// Remove existing listener
-		this.removeListeners();
+		removeListeners();
 
 		return super.saveState(context);
 	}
@@ -86,7 +87,7 @@ public class HtmlCommandLinkExtension extends HtmlCommandLink {
 	private void removeListeners() {
 		FacesListener[] listeners = null;
 		try {
-			listeners = this.getFacesListeners(HDIVFacesEventListener.class);
+			listeners = getFacesListeners(HDIVFacesEventListener.class);
 		}
 		catch (NullPointerException e) {
 			// Sun RI 1.2 versions throw a NullPointerException when calling
@@ -102,7 +103,7 @@ public class HtmlCommandLinkExtension extends HtmlCommandLink {
 		// If there is a listener remove it
 		if (listeners != null && listeners.length > 0) {
 			for (int i = 0; i < listeners.length; i++) {
-				this.removeFacesListener(listeners[i]);
+				removeFacesListener(listeners[i]);
 			}
 		}
 	}
@@ -112,14 +113,14 @@ public class HtmlCommandLinkExtension extends HtmlCommandLink {
 	 * 
 	 * @param context request context
 	 */
-	private void addListener(FacesContext context) {
+	private void addListener(final FacesContext context) {
 
 		// Remove existing listener
-		this.removeListeners();
+		removeListeners();
 
 		// Add the listener
 		HDIVFacesEventListener eventListener = HDIVUtilJsf.getFacesEventListener(context);
-		this.addFacesListener(eventListener);
+		addFacesListener(eventListener);
 	}
 
 }

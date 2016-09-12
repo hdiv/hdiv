@@ -15,12 +15,13 @@
  */
 package org.hdiv.state;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 
 import org.hdiv.util.Method;
 
-public interface IState {
+public interface IState extends Serializable {
 
 	/**
 	 * Adds a new parameter to the state <code>this</code>. If it is a required parameter <code>parameter</code>, it is also added to the
@@ -107,7 +108,7 @@ public interface IState {
 	 * @return
 	 */
 	RandomTokenType getTokenType();
-	
+
 	IPage getPage();
 
 	void setPage(IPage currentPage);

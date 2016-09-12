@@ -37,7 +37,7 @@ public abstract class AbstractEditableParameterValidator {
 	 * @param errors errors detected by HDIV during the validation process of the editable parameters.
 	 */
 	@SuppressWarnings("unchecked")
-	protected void validateEditableParameters(Errors errors) {
+	protected void validateEditableParameters(final Errors errors) {
 
 		RequestAttributes attr = RequestContextHolder.getRequestAttributes();
 		if (attr == null) {
@@ -46,17 +46,17 @@ public abstract class AbstractEditableParameterValidator {
 		}
 
 		List<ValidatorError> validationErrors = (List<ValidatorError>) attr.getAttribute(Constants.EDITABLE_PARAMETER_ERROR, 0);
-		if (validationErrors != null && validationErrors.size() > 0) {
+		if (validationErrors != null) {
 
 			for (ValidatorError error : validationErrors) {
 
-				this.rejectParamValues(error.getParameterName(), error.getParameterValue(), errors);
+				rejectParamValues(error.getParameterName(), error.getParameterValue(), errors);
 			}
 		}
 	}
 
 	@SuppressWarnings("unchecked")
-	protected void validateEditableParameter(String param, Errors errors) {
+	protected void validateEditableParameter(final String param, final Errors errors) {
 
 		RequestAttributes attr = RequestContextHolder.getRequestAttributes();
 		if (attr == null) {
@@ -65,7 +65,7 @@ public abstract class AbstractEditableParameterValidator {
 		}
 
 		List<ValidatorError> validationErrors = (List<ValidatorError>) attr.getAttribute(Constants.EDITABLE_PARAMETER_ERROR, 0);
-		if (validationErrors != null && validationErrors.size() > 0) {
+		if (validationErrors != null && !validationErrors.isEmpty()) {
 
 			ValidatorError paramError = null;
 			for (ValidatorError error : validationErrors) {
@@ -75,20 +75,20 @@ public abstract class AbstractEditableParameterValidator {
 			}
 			if (paramError != null) {
 
-				this.rejectParamValues(paramError.getParameterName(), paramError.getParameterValue(), errors);
+				rejectParamValues(paramError.getParameterName(), paramError.getParameterValue(), errors);
 			}
 		}
 	}
 
-	protected void rejectParamValues(String param, String paramValues, Errors errors) {
+	protected void rejectParamValues(final String param, final String paramValues, final Errors errors) {
 
-		if ((paramValues.contains(Constants.HDIV_EDITABLE_PASSWORD_ERROR_KEY))) {
+		if (paramValues.contains(Constants.HDIV_EDITABLE_PASSWORD_ERROR_KEY)) {
 
 			errors.rejectValue(param, Constants.HDIV_EDITABLE_PASSWORD_ERROR_KEY);
 
 		}
 		else {
-			String printedValue = this.createMessageError(paramValues);
+			String printedValue = createMessageError(paramValues);
 			errors.rejectValue(param, Constants.HDIV_EDITABLE_ERROR_KEY, new String[] { printedValue },
 					printedValue + " has not allowed characters");
 		}
@@ -100,7 +100,7 @@ public abstract class AbstractEditableParameterValidator {
 	 * @param paramValues values with not allowed characters
 	 * @return message error to show
 	 */
-	protected String createMessageError(String paramValues) {
+	protected String createMessageError(final String paramValues) {
 
 		String[] values = paramValues.split(",");
 		StringBuilder printedValue = new StringBuilder();

@@ -23,6 +23,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hdiv.state.IState;
 import org.hdiv.util.HDIVErrorCodes;
+import org.hdiv.util.Method;
 import org.hdiv.util.UtilsJsf;
 
 /**
@@ -54,8 +55,9 @@ public class JsfValidatorHelper extends ValidatorHelperRequest {
 	 * 
 	 * @see org.hdiv.filter.ValidatorHelperRequest#preValidate(javax.servlet.http.HttpServletRequest, java.lang.String)
 	 */
+	@Override
 	@SuppressWarnings("unchecked")
-	protected ValidatorHelperResult preValidate(HttpServletRequest request, String target) {
+	protected ValidatorHelperResult preValidate(final HttpServletRequest request, final String target) {
 
 		if (log.isDebugEnabled()) {
 			log.debug("URI: " + request.getRequestURI());
@@ -70,7 +72,7 @@ public class JsfValidatorHelper extends ValidatorHelperRequest {
 				log.debug("Request contains view state");
 			}
 
-			if (this.hdivConfig.isStartPage(target, request.getMethod())) {
+			if (hdivConfig.isStartPage(target, Method.secureValueOf(request.getMethod()))) {
 				// It is an init page
 				if (log.isDebugEnabled()) {
 					log.debug("Request is start page");
@@ -93,7 +95,7 @@ public class JsfValidatorHelper extends ValidatorHelperRequest {
 	 * org.hdiv.state.IState)
 	 */
 	@Override
-	public ValidatorHelperResult isTheSameAction(HttpServletRequest request, String target, IState state) {
+	public ValidatorHelperResult isTheSameAction(final HttpServletRequest request, final String target, final IState state) {
 
 		// First check if target and action are the same
 		// When outputlink is used target matches action
@@ -112,14 +114,14 @@ public class JsfValidatorHelper extends ValidatorHelperRequest {
 		// e.g. action=/view/viewAccount, target=/hdiv-jsf/view/viewAccount.faces and
 		// targetWithoutContextPath = /view/viewAccount.faces
 
-		String targetWithoutServletAndContextPath = target.substring(0, target.indexOf("."));
+		String targetWithoutServletAndContextPath = target.substring(0, target.indexOf('.'));
 		boolean isActionState = state.getAction().equalsIgnoreCase(targetWithoutServletAndContextPath);
 		if (isActionState) {
 			return ValidatorHelperResult.VALID;
 		}
 
 		// In other case, <h:link> component may have context path but not servlet mapping
-		String targetWithoutServlet = target.substring(0, target.indexOf("."));
+		String targetWithoutServlet = target.substring(0, target.indexOf('.'));
 		isActionState = state.getAction().equalsIgnoreCase(targetWithoutServlet);
 		if (isActionState) {
 			return ValidatorHelperResult.VALID;
@@ -141,7 +143,7 @@ public class JsfValidatorHelper extends ValidatorHelperRequest {
 	 * @see org.hdiv.filter.ValidatorHelperRequest#addParameterToRequest(javax.servlet.http.HttpServletRequest, java.lang.String,
 	 * java.lang.Object)
 	 */
-	protected void addParameterToRequest(HttpServletRequest request, String name, Object value) {
+	protected void addParameterToRequest(final HttpServletRequest request, final String name, final Object value) {
 		throw new IllegalStateException("Confidentiality is not implemented in JSF.");
 	}
 

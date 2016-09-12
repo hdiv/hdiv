@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -66,6 +67,8 @@ import org.springframework.web.util.HtmlUtils;
  * @since HDIV 2.0
  */
 public class ValidatorHelperRequest implements IValidationHelper {
+
+	private static final String VALIDATION_ERROR = "validation.error";
 
 	/**
 	 * Commons Logging instance.
@@ -167,7 +170,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 
 		if (!hdivConfig.isValidationInUrlsWithoutParamsActivated()) {
 
-			boolean requestHasParameters = (request.getParameterNames() != null) && (request.getParameterNames().hasMoreElements());
+			boolean requestHasParameters = request.getParameterNames() != null && request.getParameterNames().hasMoreElements();
 			if (!requestHasParameters) {
 				if (log.isDebugEnabled()) {
 					log.debug("The url [" + request.getRequestURI() + "] is not be validated because it has not got parameters");
@@ -232,7 +235,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 
 		}
 
-		if (unauthorizedEditableParameters.size() > 0) {
+		if (!unauthorizedEditableParameters.isEmpty()) {
 			return new ValidatorHelperResult(unauthorizedEditableParameters);
 		}
 		return ValidatorHelperResult.VALID;
@@ -321,10 +324,10 @@ public class ValidatorHelperRequest implements IValidationHelper {
 			String parameter = (String) parameters.nextElement();
 			String[] values = request.getParameterValues(parameter);
 
-			validateEditableParameter(request, target, parameter, values, "text", unauthorizedEditableParameters);
+			validateEditableParameter(target, parameter, values, "text", unauthorizedEditableParameters);
 		}
 
-		if (unauthorizedEditableParameters.size() > 0) {
+		if (!unauthorizedEditableParameters.isEmpty()) {
 			return new ValidatorHelperResult(unauthorizedEditableParameters);
 		}
 		return ValidatorHelperResult.VALID;
@@ -343,7 +346,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 
 		Cookie[] requestCookies = request.getCookies();
 
-		if ((requestCookies == null) || (requestCookies.length == 0)) {
+		if (requestCookies == null || requestCookies.length == 0) {
 			return ValidatorHelperResult.VALID;
 		}
 
@@ -371,10 +374,8 @@ public class ValidatorHelperRequest implements IValidationHelper {
 				if (savedCookie.isEqual(requestCookies[i], cookiesConfidentiality)) {
 
 					found = true;
-					if (cookiesConfidentiality) {
-						if (savedCookie.getValue() != null) {
-							requestCookies[i].setValue(savedCookie.getValue());
-						}
+					if (cookiesConfidentiality && savedCookie.getValue() != null) {
+						requestCookies[i].setValue(savedCookie.getValue());
 					}
 				}
 			}
@@ -400,15 +401,15 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	 * @param unauthorizedParameters Unauthorized editable parameters
 	 * @since HDIV 1.1
 	 */
-	protected void validateEditableParameter(final HttpServletRequest request, final String target, final String parameter,
-			final String[] values, final String dataType, final List<ValidatorError> unauthorizedParameters) {
+	protected void validateEditableParameter(final String target, final String parameter, final String[] values, final String dataType,
+			final List<ValidatorError> unauthorizedParameters) {
 
 		EditableDataValidationResult result = hdivConfig.getEditableDataValidationProvider().validate(target, parameter, values, dataType);
 		if (!result.isValid()) {
 
 			String value;
 
-			if (dataType.equals("password")) {
+			if ("password".equals(dataType)) {
 				value = Constants.HDIV_EDITABLE_PASSWORD_ERROR_KEY;
 			}
 			else {
@@ -461,12 +462,49 @@ public class ValidatorHelperRequest implements IValidationHelper {
 			}
 		}
 
-		if (required.size() > 0) {
+		// Fix for IBM Websphere different behavior with parameters without values.
+		// For example, param1=val1&param2
+		// This kind of parameters are excluded from request.getParameterNames() API.
+		// http://www.ibm.com/support/docview.wss?uid=swg1PM35450
+		if (!required.isEmpty()) {
+			Iterator<String> it = required.iterator();
+			while (it.hasNext()) {
+				String req = it.next();
+				if (isNoValueParameter(request, req)) {
+					it.remove();
+				}
+			}
+		}
+
+		if (!required.isEmpty()) {
 			ValidatorError error = new ValidatorError(HDIVErrorCodes.REQUIRED_PARAMETERS, target, required.toString());
 			return new ValidatorHelperResult(error);
 		}
 
 		return ValidatorHelperResult.VALID;
+	}
+
+	/**
+	 * Check if the given parameter doesn't have values looking in the query string.
+	 * 
+	 * @param request HttpServletRequest instance
+	 * @param parameter Parameter name
+	 * @return true if the parameter does't have value
+	 */
+	private boolean isNoValueParameter(final HttpServletRequest request, final String parameter) {
+
+		String queryString = request.getQueryString();
+		if (queryString == null) {
+			return false;
+		}
+
+		String[] parts = queryString.split("&");
+		if (parts.length == 0) {
+			return false;
+		}
+
+		List<String> partsList = Arrays.asList(parts);
+		return partsList.contains(parameter);
 	}
 
 	/**
@@ -508,18 +546,16 @@ public class ValidatorHelperRequest implements IValidationHelper {
 			addEditableParameter(request, parameter);
 
 			if (stateParameter.getEditableDataType() != null) {
-				validateEditableParameter(request, target, parameter, values, stateParameter.getEditableDataType(),
-						unauthorizedEditableParameters);
+				validateEditableParameter(target, parameter, values, stateParameter.getEditableDataType(), unauthorizedEditableParameters);
 			}
 			return ValidatorHelperResult.VALID;
 		}
 
 		try {
-			ValidatorHelperResult result = validateParameterValues(request, target, stateParameter, actionParamValues, parameter, values);
-			return result;
+			return validateParameterValues(request, target, stateParameter, actionParamValues, parameter, values);
 		}
 		catch (final HDIVException e) {
-			String errorMessage = HDIVUtil.getMessage(request, "validation.error", e.getMessage());
+			String errorMessage = HDIVUtil.getMessage(request, VALIDATION_ERROR, e.getMessage());
 			throw new HDIVException(errorMessage, e);
 		}
 	}
@@ -626,13 +662,10 @@ public class ValidatorHelperRequest implements IValidationHelper {
 			// Save current page id in request
 			HDIVUtil.setCurrentPageId(pageId, request);
 
-			if (stateUtil.isMemoryStrategy(requestState)) {
-
-				if (!validateHDIVSuffix(context, requestState, state)) {
-					ValidatorError error = new ValidatorError(HDIVErrorCodes.HDIV_PARAMETER_INCORRECT_VALUE, target, hdivParameter,
-							requestState);
-					return new ValidatorHelperResult(error);
-				}
+			if (stateUtil.isMemoryStrategy(requestState) && !validateHDIVSuffix(context, requestState, state)) {
+				ValidatorError error = new ValidatorError(HDIVErrorCodes.HDIV_PARAMETER_INCORRECT_VALUE, target, hdivParameter,
+						requestState);
+				return new ValidatorHelperResult(error);
 			}
 
 			// return validation OK and resultant state
@@ -683,7 +716,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 			// read suffix from page stored in session
 			String pId = value.substring(0, firstSeparator);
 			String sId = value.substring(firstSeparator + 1, lastSeparator);
-			int pageId = 0;
+			int pageId;
 			int stateId = 0;
 			try {
 				stateId = Integer.parseInt(sId);
@@ -721,7 +754,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 
 		}
 		catch (final IndexOutOfBoundsException e) {
-			String errorMessage = HDIVUtil.getMessage(context.getRequest(), "validation.error", e.getMessage());
+			String errorMessage = HDIVUtil.getMessage(context.getRequest(), VALIDATION_ERROR, e.getMessage());
 			if (log.isErrorEnabled()) {
 				log.error(errorMessage);
 			}
@@ -751,17 +784,28 @@ public class ValidatorHelperRequest implements IValidationHelper {
 			// taken into account, this verification will be done for every parameter,
 			// including for example, a multiple combo where hardly ever are all its
 			// values received.
-			if (actionParamValues != null) {
+			if (actionParamValues != null && values.length != actionParamValues.length) {
 
-				if (values.length != actionParamValues.length) {
-
-					String valueMessage = (values.length > actionParamValues.length) ? "extra value" : "more values expected";
-					ValidatorError error = new ValidatorError(HDIVErrorCodes.VALUE_LENGTH_INCORRECT, target, parameter, valueMessage);
-					return new ValidatorHelperResult(error);
+				String valueMessage = "";
+				if (values.length > actionParamValues.length) {
+					if (log.isDebugEnabled()) {
+						log.debug("Received more values than expected for the parameter '" + parameter + "'. Received=" + values
+								+ ", Expected=" + actionParamValues);
+						valueMessage = Arrays.toString(values);
+					}
+					else {
+						log.debug("Received fewer values than expected for the parameter '" + parameter + "'. Received=" + values
+								+ ", Expected=" + actionParamValues);
+						valueMessage = Arrays.toString(actionParamValues);
+					}
 				}
+
+				ValidatorError error = new ValidatorError(HDIVErrorCodes.VALUE_LENGTH_INCORRECT, target, parameter, valueMessage);
+				return new ValidatorHelperResult(error);
+
 			}
 
-			List<String> stateParamValues = null;
+			List<String> stateParamValues;
 			if (stateParameter != null) {
 				stateParamValues = stateParameter.getValues();
 			}
@@ -781,7 +825,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 
 		}
 		catch (final HDIVException e) {
-			String errorMessage = HDIVUtil.getMessage(request, "validation.error", e.getMessage());
+			String errorMessage = HDIVUtil.getMessage(request, VALIDATION_ERROR, e.getMessage());
 			throw new HDIVException(errorMessage, e);
 		}
 	}
@@ -980,7 +1024,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	 */
 	protected void addParameterToRequest(final HttpServletRequest request, final String name, final String[] value) {
 
-		RequestWrapper wrapper = null;
+		RequestWrapper wrapper;
 
 		if (request instanceof RequestWrapper) {
 			wrapper = (RequestWrapper) request;

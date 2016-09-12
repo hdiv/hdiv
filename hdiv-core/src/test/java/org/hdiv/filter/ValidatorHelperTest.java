@@ -409,7 +409,7 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 	/**
 	 * Test for cookies integrity.
 	 */
-	public void testValidateCookiesIntegrity() {
+	public void testValidateCookiesIntegrityIncorrect() {
 
 		MockHttpServletRequest request = getMockRequest();
 
@@ -428,6 +428,30 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 
 		boolean result = helper.validate(requestWrapper).isValid();
 		assertFalse(result);
+	}
+
+	/**
+	 * Test for cookies integrity.
+	 */
+	public void testValidateCookiesIntegrityCorrect() {
+
+		MockHttpServletRequest request = getMockRequest();
+
+		responseWrapper.addCookie(new Cookie("name", "value"));
+
+		dataComposer.beginRequest(Method.GET, targetName);
+		dataComposer.compose("param1", "value1", false);
+		String pageState = dataComposer.endRequest();
+		assertNotNull(pageState);
+		request.addParameter(hdivParameter, pageState);
+
+		dataComposer.endPage();
+
+		// Modify cookie value on client
+		request.setCookies(new Cookie[] { new Cookie("name", "0") });
+
+		boolean result = helper.validate(requestWrapper).isValid();
+		assertTrue(result);
 	}
 
 	public void testValidateWhitespace() {

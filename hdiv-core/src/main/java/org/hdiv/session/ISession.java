@@ -37,9 +37,6 @@ public interface ISession {
 	 */
 	void addPage(RequestContext context, IPage page);
 
-	@Deprecated
-	void addPage(RequestContext context, int pageId, IPage page);
-
 	/**
 	 * It adds a partial page to the user session.
 	 *
@@ -48,12 +45,6 @@ public interface ISession {
 	 * @since HDIV 2.1.13
 	 */
 	void addPartialPage(RequestContext context, IPage page);
-
-	@Deprecated
-	void addPartialPage(RequestContext context, int pageId, IPage page);
-
-	@Deprecated
-	void removeEndedPages(RequestContext context, String conversationId);
 
 	/**
 	 * Obtains the state identifier <code>stateId</code> related to the page identifier <code>pageId</code>.

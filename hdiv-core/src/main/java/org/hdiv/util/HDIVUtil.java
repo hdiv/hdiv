@@ -88,7 +88,9 @@ public class HDIVUtil {
 
 	private static Random r = new Random();
 
-	/* DataComposer */
+	private HDIVUtil() {
+
+	}
 
 	/**
 	 * Returns data composer object from <code>HttpServletRequest</code>
@@ -462,7 +464,7 @@ public class HDIVUtil {
 		if (pos != -1) {
 			final char[] data = url.toCharArray();
 			int sessionStart;
-			if ((sessionStart = indexOf(data, jsessionLower, pos)) != -1 || ((sessionStart = indexOf(data, jsessionUpper, pos)) != -1)) {
+			if ((sessionStart = indexOf(data, jsessionLower, pos)) != -1 || (sessionStart = indexOf(data, jsessionUpper, pos)) != -1) {
 				int sessionEnd = indexOf(data, SEMICOLON, sessionStart + 1);
 				if (sessionEnd == -1) {
 					sessionEnd = indexOf(data, QUESTION, sessionStart + 1);
@@ -487,7 +489,7 @@ public class HDIVUtil {
 	private static int indexOf(final char[] source, final char[] target, final int fromIndex) {
 
 		char first = target[0];
-		int max = (source.length - target.length);
+		int max = source.length - target.length;
 
 		for (int i = 0 + fromIndex; i <= max; i++) {
 			/* Look for first character. */
@@ -652,7 +654,7 @@ public class HDIVUtil {
 					}
 					int pos = 0;
 
-					while (((i + 2) < numChars) && (c == '%')) {
+					while (i + 2 < numChars && c == '%') {
 						int v = Integer.parseInt(s.substring(i + 1, i + 3), 16);
 						if (v < 0) {
 							throw new IllegalArgumentException("URLDecoder: Illegal hex characters in escape (%) pattern - negative value");
@@ -667,7 +669,7 @@ public class HDIVUtil {
 					// A trailing, incomplete byte encoding such as
 					// "%x" will cause an exception to be thrown
 
-					if ((i < numChars) && (c == '%')) {
+					if (i < numChars && c == '%') {
 						throw new IllegalArgumentException("URLDecoder: Incomplete trailing escape (%) pattern");
 					}
 
@@ -685,7 +687,7 @@ public class HDIVUtil {
 			}
 		}
 
-		return (needToChange ? sb.toString() : s);
+		return needToChange ? sb.toString() : s;
 	}
 
 }

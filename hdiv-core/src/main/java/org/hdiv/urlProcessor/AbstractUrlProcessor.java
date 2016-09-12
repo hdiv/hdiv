@@ -41,11 +41,6 @@ public abstract class AbstractUrlProcessor {
 	 */
 	protected HDIVConfig config;
 
-	@Deprecated
-	public final UrlData createUrlData(final String url, final String method, final HttpServletRequest request) {
-		return createUrlData(url, Method.secureValueOf(method), HDIVUtil.getHdivStateParameterName(request), request);
-	}
-
 	protected static final String processAnchorAndParameters(String url, final UrlDataImpl urlData, final String hdivParameter) {
 		url = urlData.findAnchor(url);
 		// Remove parameters
@@ -190,7 +185,7 @@ public abstract class AbstractUrlProcessor {
 		while (st.hasMoreTokens()) {
 			String token = st.nextToken();
 			int index = token.indexOf('=');
-			String param = "";
+			String param;
 			String val = "";
 			if (index > -1) {
 				param = token.substring(0, index);
@@ -276,7 +271,6 @@ public abstract class AbstractUrlProcessor {
 
 		}
 		else {
-
 			if (url.startsWith(contextPath) && (url.length() == contextPath.length() || url.charAt(contextPath.length()) == '/')) {
 				// url of type /APP/... or /APP
 				return true;
@@ -302,7 +296,7 @@ public abstract class AbstractUrlProcessor {
 
 		final int pos = url.indexOf("://");
 		if (pos > 0) {
-			int posicion = url.indexOf("/", pos + 3);
+			int posicion = url.indexOf('/', pos + 3);
 			if (posicion > 0) {
 				url = url.substring(0, posicion);
 				return url;
@@ -325,7 +319,7 @@ public abstract class AbstractUrlProcessor {
 
 		String returnValue;
 
-		if (url.equals("")) {
+		if ("".equals(url)) {
 			return baseUrl;
 		}
 		else if (url.charAt(0) == '/') {
@@ -368,8 +362,8 @@ public abstract class AbstractUrlProcessor {
 			while (pathParts.hasMoreTokens()) {
 				String part = pathParts.nextToken();
 
-				if (!part.equals(".")) {
-					if (part.equals("..")) {
+				if (!".".equals(part)) {
+					if ("..".equals(part)) {
 						stack.pop();
 					}
 					else {

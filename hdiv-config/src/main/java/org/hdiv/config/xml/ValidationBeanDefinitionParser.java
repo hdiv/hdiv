@@ -28,11 +28,13 @@ import org.w3c.dom.NodeList;
  */
 public class ValidationBeanDefinitionParser extends AbstractSingleBeanDefinitionParser {
 
-	protected Class<?> getBeanClass(Element element) {
+	@Override
+	protected Class<?> getBeanClass(final Element element) {
 		return Validation.class;
 	}
 
-	protected void doParse(Element element, BeanDefinitionBuilder bean) {
+	@Override
+	protected void doParse(final Element element, final BeanDefinitionBuilder bean) {
 
 		String id = element.getAttribute("id");
 		bean.addPropertyValue("name", id);
@@ -49,7 +51,7 @@ public class ValidationBeanDefinitionParser extends AbstractSingleBeanDefinition
 		for (int i = 0; i < list.getLength(); i++) {
 			Node node = list.item(i);
 			if (node.getNodeType() == Node.ELEMENT_NODE) {
-				if (node.getLocalName().equalsIgnoreCase("acceptedPattern")) {
+				if ("acceptedPattern".equalsIgnoreCase(node.getLocalName())) {
 
 					String value = node.getTextContent();
 					if (StringUtils.hasText(value)) {
@@ -57,7 +59,7 @@ public class ValidationBeanDefinitionParser extends AbstractSingleBeanDefinition
 					}
 				}
 
-				if (node.getLocalName().equalsIgnoreCase("rejectedPattern")) {
+				if ("rejectedPattern".equalsIgnoreCase(node.getLocalName())) {
 
 					String value = node.getTextContent();
 					if (StringUtils.hasText(value)) {

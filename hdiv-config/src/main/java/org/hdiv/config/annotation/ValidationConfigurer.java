@@ -29,7 +29,7 @@ import org.springframework.util.Assert;
  */
 public class ValidationConfigurer {
 
-	private List<ValidationConfig> validationConfigs = new ArrayList<ValidationConfig>();
+	private final List<ValidationConfig> validationConfigs = new ArrayList<ValidationConfig>();
 
 	/**
 	 * Add an editable validation for all urls.
@@ -39,9 +39,8 @@ public class ValidationConfigurer {
 	public EditableValidationConfigurer addValidation() {
 
 		ValidationConfig validationConfig = new ValidationConfig();
-		this.validationConfigs.add(validationConfig);
-		EditableValidationConfigurer editableValidationConfigurer = validationConfig.getEditableValidationConfigurer();
-		return editableValidationConfigurer;
+		validationConfigs.add(validationConfig);
+		return validationConfig.getEditableValidationConfigurer();
 	}
 
 	/**
@@ -50,29 +49,28 @@ public class ValidationConfigurer {
 	 * @param urlPattern Url pattern
 	 * @return More configuration options
 	 */
-	public EditableValidationConfigurer addValidation(String urlPattern) {
+	public EditableValidationConfigurer addValidation(final String urlPattern) {
 
 		ValidationConfig validationConfig = new ValidationConfig(urlPattern);
-		this.validationConfigs.add(validationConfig);
-		EditableValidationConfigurer editableValidationConfigurer = validationConfig.getEditableValidationConfigurer();
-		return editableValidationConfigurer;
+		validationConfigs.add(validationConfig);
+		return validationConfig.getEditableValidationConfigurer();
 	}
 
 	protected List<ValidationConfig> getValidationConfigs() {
 
-		return this.validationConfigs;
+		return validationConfigs;
 	}
 
 	public class ValidationConfig {
 
 		private String urlPattern;
 
-		private EditableValidationConfigurer editableValidationConfigurer = new EditableValidationConfigurer();
+		private final EditableValidationConfigurer editableValidationConfigurer = new EditableValidationConfigurer();
 
 		public ValidationConfig() {
 		}
 
-		public ValidationConfig(String urlPattern) {
+		public ValidationConfig(final String urlPattern) {
 			this.urlPattern = urlPattern;
 		}
 
@@ -86,7 +84,7 @@ public class ValidationConfigurer {
 
 		public class EditableValidationConfigurer extends RuleConfigurer {
 
-			private List<String> parameters = new ArrayList<String>();
+			private final List<String> parameters = new ArrayList<String>();
 
 			/**
 			 * Configure editable validation only for some parameters.
@@ -94,20 +92,20 @@ public class ValidationConfigurer {
 			 * @param parameterNames parameter name patterns
 			 * @return More configuration options
 			 */
-			public RuleConfigurer forParameters(String... parameterNames) {
+			public RuleConfigurer forParameters(final String... parameterNames) {
 				Assert.notEmpty(parameterNames, "Parameter names are required");
-				this.parameters.addAll(Arrays.asList(parameterNames));
+				parameters.addAll(Arrays.asList(parameterNames));
 				return this;
 			}
 
 			protected List<String> getParameters() {
-				return this.parameters;
+				return parameters;
 			}
 		}
 
 		public class RuleConfigurer {
 
-			private List<String> rules = new ArrayList<String>();
+			private final List<String> rules = new ArrayList<String>();
 
 			/**
 			 * Default rules are included by default.
@@ -120,9 +118,9 @@ public class ValidationConfigurer {
 			 * @param ruleNames Rule names
 			 * @return More configuration options
 			 */
-			public RuleConfigurer rules(String... ruleNames) {
+			public RuleConfigurer rules(final String... ruleNames) {
 				Assert.notEmpty(ruleNames, "Rule names are required");
-				this.rules.addAll(Arrays.asList(ruleNames));
+				rules.addAll(Arrays.asList(ruleNames));
 				return this;
 			}
 
@@ -133,7 +131,7 @@ public class ValidationConfigurer {
 			 */
 			public RuleConfigurer disableDefaults() {
 
-				this.defaultRules = false;
+				defaultRules = false;
 				return this;
 			}
 

@@ -31,6 +31,8 @@ import org.hdiv.util.Method;
  */
 public class UrlDataImpl implements UrlData {
 
+	private static final Pattern NAMES_PATTERN = Pattern.compile("\\{([^/]+?)\\}");
+
 	/**
 	 * Original url, previous to any change.
 	 */
@@ -126,7 +128,7 @@ public class UrlDataImpl implements UrlData {
 	 * @return has parameters?
 	 */
 	public boolean containsParams() {
-		return (originalUrlParams != null && originalUrlParams.size() > 0) || urlParams != null;
+		return originalUrlParams != null && originalUrlParams.size() > 0 || urlParams != null;
 	}
 
 	/**
@@ -139,8 +141,7 @@ public class UrlDataImpl implements UrlData {
 	public String findAnchor(final String url) {
 		int pos = url.indexOf('#');
 		if (pos >= 0) {
-			String anchor = url.substring(pos + 1);
-			setAnchor(anchor);
+			setAnchor(url.substring(pos + 1));
 
 			return url.substring(0, pos);
 		}
@@ -332,7 +333,7 @@ public class UrlDataImpl implements UrlData {
 			return sb.toString();
 		}
 		getParamProcessedUrl(sb);
-		char separator = (containsParams()) ? '&' : '?';
+		char separator = containsParams() ? '&' : '?';
 
 		sb.append(separator).append(hdivParameter).append('=').append(stateParam);
 		if (uriTemplate != null) {
@@ -362,8 +363,6 @@ public class UrlDataImpl implements UrlData {
 		}
 		return url.toString();
 	}
-
-	private static final Pattern NAMES_PATTERN = Pattern.compile("\\{([^/]+?)\\}");
 
 	private void parser(final String uriTemplate) {
 		int startVars = uriTemplate.lastIndexOf('/');
@@ -450,7 +449,7 @@ public class UrlDataImpl implements UrlData {
 			}
 		}
 
-		return (contextPathRelativeUrl.charAt(0) != '/') && (contextPathRelativeUrl.indexOf('.') == -1);
+		return contextPathRelativeUrl.charAt(0) != '/' && contextPathRelativeUrl.indexOf('.') == -1;
 	}
 
 }

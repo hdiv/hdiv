@@ -84,13 +84,13 @@ public class JsfConfigurationSupport {
 	public IValidationHelper jsfValidatorHelper() {
 
 		ValidatorHelperRequest validatorHelperRequest = new JsfValidatorHelper();
-		validatorHelperRequest.setStateUtil(this.stateUtil);
-		validatorHelperRequest.setHdivConfig(this.config);
-		validatorHelperRequest.setSession(this.session);
-		validatorHelperRequest.setDataValidator(this.dataValidator);
-		validatorHelperRequest.setUrlProcessor(this.basicUrlProcessor);
-		validatorHelperRequest.setDataComposerFactory(this.dataComposerFactory);
-		validatorHelperRequest.setStateScopeManager(this.stateScopeManager);
+		validatorHelperRequest.setStateUtil(stateUtil);
+		validatorHelperRequest.setHdivConfig(config);
+		validatorHelperRequest.setSession(session);
+		validatorHelperRequest.setDataValidator(dataValidator);
+		validatorHelperRequest.setUrlProcessor(basicUrlProcessor);
+		validatorHelperRequest.setDataComposerFactory(dataComposerFactory);
+		validatorHelperRequest.setStateScopeManager(stateScopeManager);
 		validatorHelperRequest.init();
 		return validatorHelperRequest;
 	}
@@ -99,14 +99,13 @@ public class JsfConfigurationSupport {
 	public RedirectHelper redirectHelper() {
 
 		RedirectHelper redirectHelper = new RedirectHelper();
-		redirectHelper.setLinkUrlProcessor(this.linkUrlProcessor);
+		redirectHelper.setLinkUrlProcessor(linkUrlProcessor);
 		return redirectHelper;
 	}
 
 	@Bean
 	public JsfMultipartConfig jsfMultipartConfig() {
-		JsfMultipartConfig multipartConfig = new JsfMultipartConfig();
-		return multipartConfig;
+		return new JsfMultipartConfig();
 	}
 
 	@Bean
@@ -114,19 +113,19 @@ public class JsfConfigurationSupport {
 
 		// ComponentValidator instances
 		RequestParameterValidator requestParameterValidator = new RequestParameterValidator();
-		requestParameterValidator.setHdivConfig(this.config);
+		requestParameterValidator.setHdivConfig(config);
 
 		UICommandValidator uiCommandValidator = new UICommandValidator();
 
 		HtmlInputHiddenValidator htmlInputHiddenValidator = new HtmlInputHiddenValidator();
 
 		EditableValidator editableValidator = new EditableValidator();
-		editableValidator.setHdivConfig(this.config);
+		editableValidator.setHdivConfig(config);
 
 		// EventListener instance
 		HDIVFacesEventListener listener = new HDIVFacesEventListener();
-		listener.setConfig(this.config);
-		listener.setLogger(this.logger);
+		listener.setConfig(config);
+		listener.setLogger(logger);
 		listener.setHtmlInputHiddenValidator(htmlInputHiddenValidator);
 		listener.setRequestParamValidator(requestParameterValidator);
 		listener.setUiCommandValidator(uiCommandValidator);
@@ -138,8 +137,8 @@ public class JsfConfigurationSupport {
 	public OutcomeTargetComponentProcessor outcomeTargetComponentProcessor() {
 
 		OutcomeTargetComponentProcessor processor = new OutcomeTargetComponentProcessor();
-		processor.setConfig(this.config);
-		processor.setLinkUrlProcessor(this.linkUrlProcessor);
+		processor.setConfig(config);
+		processor.setLinkUrlProcessor(linkUrlProcessor);
 		return processor;
 	}
 
@@ -147,8 +146,8 @@ public class JsfConfigurationSupport {
 	public OutputLinkComponentProcessor outputLinkComponentProcessor() {
 
 		OutputLinkComponentProcessor processor = new OutputLinkComponentProcessor();
-		processor.setConfig(this.config);
-		processor.setLinkUrlProcessor(this.linkUrlProcessor);
+		processor.setConfig(config);
+		processor.setLinkUrlProcessor(linkUrlProcessor);
 		return processor;
 	}
 

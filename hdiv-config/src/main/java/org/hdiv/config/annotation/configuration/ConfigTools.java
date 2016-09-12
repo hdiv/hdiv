@@ -19,7 +19,6 @@ import org.hdiv.config.annotation.springmvc.SpringMvcConfigurationSupport;
 import org.hdiv.config.xml.ConfigBeanDefinitionParser;
 import org.hdiv.urlProcessor.FormUrlProcessor;
 import org.hdiv.urlProcessor.LinkUrlProcessor;
-import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.BeanDefinitionRegistryPostProcessor;
@@ -34,13 +33,16 @@ public class ConfigTools {
 			"org.springframework.security.web.servlet.support.csrf.CsrfRequestDataValueProcessor",
 			SpringMvcConfigurationSupport.class.getClassLoader());
 
+	private ConfigTools() {
+	}
+
 	public static BeanDefinitionRegistryPostProcessor requestDataValueProcessorPostProcessor(final Class<?> processorClass) {
 		return new BeanDefinitionRegistryPostProcessor() {
 
-			public void postProcessBeanFactory(final ConfigurableListableBeanFactory beanFactory) throws BeansException {
+			public void postProcessBeanFactory(final ConfigurableListableBeanFactory beanFactory) {
 			}
 
-			public void postProcessBeanDefinitionRegistry(final BeanDefinitionRegistry registry) throws BeansException {
+			public void postProcessBeanDefinitionRegistry(final BeanDefinitionRegistry registry) {
 				try {
 					registry.removeBeanDefinition(ConfigBeanDefinitionParser.REQUEST_DATA_VALUE_PROCESSOR_BEAN_NAME);
 				}

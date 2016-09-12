@@ -31,13 +31,16 @@ import javax.faces.component.UIViewRoot;
  */
 public abstract class UtilsJsf {
 
+	private UtilsJsf() {
+	}
+
 	/**
 	 * Checks if any of the names of the received parameters contains the ViewState.
 	 * 
 	 * @param paramNameSet parameter name group
 	 * @return boolean
 	 */
-	public static boolean hasFacesViewParamName(Set<String> paramNameSet) {
+	public static boolean hasFacesViewParamName(final Set<String> paramNameSet) {
 		String[] params = UtilsJsf.getFacesViewParamNames();
 
 		for (int i = 0; i < params.length; i++) {
@@ -54,7 +57,7 @@ public abstract class UtilsJsf {
 	 * @param paramName parameter name
 	 * @return boolean
 	 */
-	public static boolean isFacesViewParamName(String paramName) {
+	public static boolean isFacesViewParamName(final String paramName) {
 		String[] params = UtilsJsf.getFacesViewParamNames();
 
 		for (int i = 0; i < params.length; i++) {
@@ -83,7 +86,7 @@ public abstract class UtilsJsf {
 	 * @param submitedFormClientId client id of the form sent in the last request.
 	 * @return list of parameter names
 	 */
-	public static List<String> getJSFImplementationParamNames(String submitedFormClientId) {
+	public static List<String> getJSFImplementationParamNames(final String submitedFormClientId) {
 
 		List<String> list = new ArrayList<String>();
 
@@ -108,7 +111,7 @@ public abstract class UtilsJsf {
 	 * @param clientId ClientID
 	 * @return clientId without row id
 	 */
-	public static String removeRowId(String clientId) {
+	public static String removeRowId(final String clientId) {
 		if (clientId == null) {
 			return null;
 		}
@@ -121,7 +124,7 @@ public abstract class UtilsJsf {
 	 * @param comp componente en el que se basa la busqueda
 	 * @return componente UIData pariente o null si no existe
 	 */
-	public static UIData findParentUIData(UIComponent comp) {
+	public static UIData findParentUIData(final UIComponent comp) {
 
 		UIComponent parent = comp.getParent();
 		while (!(parent instanceof UIData)) {
@@ -140,7 +143,7 @@ public abstract class UtilsJsf {
 	 * @param component {@link UIComponent} component
 	 * @return if component has children
 	 */
-	public static boolean hasUIParameterChild(UIComponent component) {
+	public static boolean hasUIParameterChild(final UIComponent component) {
 
 		boolean hasParams = false;
 		for (UIComponent comp : component.getChildren()) {

@@ -17,7 +17,6 @@ package org.hdiv.state;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -102,24 +101,24 @@ public class Page implements IPage, Serializable {
 	 * @param state State that represents all the data that composes a possible request.
 	 */
 	public void addState(final IState state) {
-		int id = state.getId();
-		int size = states.size();
-		if (size < id) {
+		int stateId = state.getId();
+		int statesSize = states.size();
+		if (statesSize < stateId) {
 			// There are empty positions before id, fill with null values
-			for (int i = size; i < id; i++) {
+			for (int i = statesSize; i < stateId; i++) {
 				states.add(i, null);
 			}
-			states.add(id, state);
+			states.add(stateId, state);
 
 		}
-		else if (size > id) {
+		else if (statesSize > stateId) {
 			// overwrite existing position
-			states.set(id, state);
+			states.set(stateId, state);
 
 		}
 		else {
 			// list size == id
-			states.add(id, state);
+			states.add(stateId, state);
 		}
 	}
 
@@ -156,7 +155,7 @@ public class Page implements IPage, Serializable {
 	/**
 	 * @return Returns the page states.
 	 */
-	public Collection<? extends IState> getStates() {
+	public List<? extends IState> getStates() {
 		return states;
 	}
 

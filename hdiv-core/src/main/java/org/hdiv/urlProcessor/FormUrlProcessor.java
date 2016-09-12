@@ -49,11 +49,6 @@ public class FormUrlProcessor extends AbstractUrlProcessor {
 		return processUrl(request, url, Method.POST);
 	}
 
-	@Deprecated
-	public final String processUrl(final HttpServletRequest request, final String url, final String method) {
-		return processUrl(request, url, Method.secureValueOf(method));
-	}
-
 	/**
 	 * Process form action url to add hdiv state if it is necessary.
 	 *

@@ -15,7 +15,6 @@
  */
 package org.hdiv.state;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -25,7 +24,7 @@ import java.util.List;
  *
  * @author Roberto Velasco
  */
-public class Parameter implements IParameter, Serializable {
+public class Parameter implements IParameter {
 
 	/**
 	 * Universal version identifier. Deserialization uses this number to ensure that a loaded class corresponds exactly to a serialized
@@ -34,29 +33,6 @@ public class Parameter implements IParameter, Serializable {
 	private static final long serialVersionUID = 1390866699507616631L;
 
 	private static final int VALUES_LIST_SIZE = 3;
-
-	public Parameter() {
-
-	}
-
-	public Parameter(final String name, final String[] values, final boolean editable, final String editableDataType,
-			final boolean actionParam) {
-		this(name, values[0], editable, editableDataType, actionParam);
-		if (values.length > 1) {
-			for (int i = 1; i < values.length; i++) {
-				addValue(values[i]);
-			}
-		}
-	}
-
-	public Parameter(final String name, final String value, final boolean editable, final String editableDataType,
-			final boolean actionParam) {
-		this.name = name;
-		this.value = value;
-		this.editable = editable;
-		this.editableDataType = editableDataType;
-		this.actionParam = actionParam;
-	}
 
 	/**
 	 * parameter name
@@ -90,6 +66,29 @@ public class Parameter implements IParameter, Serializable {
 	 */
 	private boolean actionParam;
 
+	public Parameter() {
+
+	}
+
+	public Parameter(final String name, final String[] values, final boolean editable, final String editableDataType,
+			final boolean actionParam) {
+		this(name, values[0], editable, editableDataType, actionParam);
+		if (values.length > 1) {
+			for (int i = 1; i < values.length; i++) {
+				addValue(values[i]);
+			}
+		}
+	}
+
+	public Parameter(final String name, final String value, final boolean editable, final String editableDataType,
+			final boolean actionParam) {
+		this.name = name;
+		this.value = value;
+		this.editable = editable;
+		this.editableDataType = editableDataType;
+		this.actionParam = actionParam;
+	}
+
 	/**
 	 * Adds the value <code>value</code> to the parameter <code>this</code>.
 	 */
@@ -103,12 +102,12 @@ public class Parameter implements IParameter, Serializable {
 			return;
 		}
 
-		if (this.values == null) {
-			this.values = new ArrayList<String>(VALUES_LIST_SIZE);
-			this.values.add(this.value);
+		if (values == null) {
+			values = new ArrayList<String>(VALUES_LIST_SIZE);
+			values.add(this.value);
 		}
 
-		this.values.add(value);
+		values.add(value);
 	}
 
 	/**
@@ -121,11 +120,11 @@ public class Parameter implements IParameter, Serializable {
 			return false;
 		}
 
-		if (this.values == null) {
+		if (values == null) {
 			return this.value.equalsIgnoreCase(value);
 		}
 
-		for (int i = 0; i < this.values.size(); i++) {
+		for (int i = 0; i < values.size(); i++) {
 			String tempValue = values.get(i);
 			if (tempValue.equalsIgnoreCase(value)) {
 				return true;
@@ -141,14 +140,14 @@ public class Parameter implements IParameter, Serializable {
 	 * @return True if <code>position</code> is valid position in the array of values <code>values</code>. False otherwise.
 	 */
 	public boolean existPosition(final int position) {
-		return (position == 0) || (values != null && position < values.size());
+		return position == 0 || values != null && position < values.size();
 	}
 
 	/**
 	 * @return Obtains the value of the position <code>position</code> in the list of values of the parameter.
 	 */
 	public String getValuePosition(final int position) {
-		return (position == 0 ? this.value : this.values.get(position));
+		return position == 0 ? value : values.get(position);
 	}
 
 	/**
@@ -166,7 +165,7 @@ public class Parameter implements IParameter, Serializable {
 			return Collections.emptyList();
 		}
 
-		if (this.values == null) {
+		if (values == null) {
 			return Collections.singletonList(value);
 		}
 
@@ -192,11 +191,11 @@ public class Parameter implements IParameter, Serializable {
 	 * @return Returns confidential value.
 	 */
 	public String getConfidentialValue() {
-		if (this.values == null) {
+		if (values == null) {
 			return "0";
 		}
 
-		return Integer.toString(this.values.size() - 1);
+		return Integer.toString(values.size() - 1);
 	}
 
 	/**
@@ -226,16 +225,16 @@ public class Parameter implements IParameter, Serializable {
 	public String toString() {
 
 		StringBuilder result = new StringBuilder();
-		result.append(" Parameter:" + this.getName() + " Values:");
+		result.append(" Parameter:" + getName() + " Values:");
 
 		if (values == null) {
-			result.append(this.value);
+			result.append(value);
 		}
 		else {
-			for (int i = 0; i < this.values.size(); i++) {
-				String value = this.values.get(i);
-				result.append(value);
-				if (!(i + 1 == this.values.size())) {
+			for (int i = 0; i < values.size(); i++) {
+				String currentValue = values.get(i);
+				result.append(currentValue);
+				if (!(i + 1 == values.size())) {
 					result.append(",");
 				}
 			}

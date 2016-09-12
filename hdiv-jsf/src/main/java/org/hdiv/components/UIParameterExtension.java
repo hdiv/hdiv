@@ -20,29 +20,25 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.faces.component.UIComponent;
-import javax.faces.component.UIData;
 import javax.faces.component.UIParameter;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 
 import org.hdiv.util.ConstantsJsf;
 import org.hdiv.util.HDIVUtil;
-import org.hdiv.util.UtilsJsf;
 
 /**
  * <p>
- * UIParameter component extension
+ * UIParameter component extension.
  * </p>
  * <p>
- * This component is used to define the parameters of CommandLink and outputLink. It stores the real values as component's attributes,
- * storing them in the state.
+ * This component is used to define the parameters of CommandLink and OutputLink. It stores the real values as component's attributes, in
+ * the JSF state.
  * </p>
  * <p>
- * This data will be used to validate that it matches the data received in the next request.
+ * Next request will be validated against the stored data.
  * </p>
- * 
  * @author Gotzon Illarramendi
- * 
  */
 public class UIParameterExtension extends UIParameter {
 
@@ -53,13 +49,12 @@ public class UIParameterExtension extends UIParameter {
 	 * @return parameter value
 	 */
 	@SuppressWarnings("unchecked")
-	public Object getValue(String parentClientId) {
+	public Object getValue(final String parentClientId) {
 
 		Object val = this.getValue();
 
-		// If it has previously been stored in the state, return the stored value
-		// else return the default
-		Map<String, Object> values = (Map<String, Object>) this.getAttributes().get(ConstantsJsf.HDIV_ATTRIBUTE_KEY);
+		// If it has previously been stored in the state, return the stored value else return the default
+		Map<String, Object> values = (Map<String, Object>) getAttributes().get(ConstantsJsf.HDIV_ATTRIBUTE_KEY);
 		if (values != null) {
 			val = values.get(parentClientId);
 		}
@@ -71,42 +66,31 @@ public class UIParameterExtension extends UIParameter {
 	 * 
 	 * @see javax.faces.component.UIComponent#encodeBegin(javax.faces.context. FacesContext)
 	 */
+	@Override
 	@SuppressWarnings("unchecked")
-	public void encodeBegin(FacesContext context) throws IOException {
+	public void encodeBegin(final FacesContext context) throws IOException {
 
 		// HDIV parameter name
 		HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
 		String hdivParameter = HDIVUtil.getHdivStateParameterName(request);
 
-		String name = this.getName();
+		String name = getName();
 		if (name != null && name.equals(hdivParameter)) {
-			// It is the Hdiv parameter added automatically by the link, so do
-			// nothing
-
+			// It is the Hdiv parameter added automatically by the link, so do nothing
 		}
 		else {
-			UIComponent parent = this.getParent();
+			UIComponent parent = getParent();
 			String parentClientId = parent.getClientId(context);
-			Map<String, Object> values = (Map<String, Object>) this.getAttributes().get(ConstantsJsf.HDIV_ATTRIBUTE_KEY);
+			Map<String, Object> values = (Map<String, Object>) getAttributes().get(ConstantsJsf.HDIV_ATTRIBUTE_KEY);
 			if (values == null) {
 				values = new HashMap<String, Object>();
 			}
 
-			// It is a parameter added by the application, so store its value
-			// in the JSF state to be able to validate it in future requests.
-			UIData uiDataComp = UtilsJsf.findParentUIData(this);
-			if (uiDataComp != null) {
-
-				// The component is in a table, store its value depending on the row
-				int rowIndex = uiDataComp.getRowIndex();
-				if (rowIndex < 0) {
-					rowIndex = 0;
-				}
-			}
+			// It is a parameter added by the application, so store its value in the JSF state to be able to validate it in future requests.
 			Object val = this.getValue();
 			values.put(parentClientId, val);
 
-			this.getAttributes().put(ConstantsJsf.HDIV_ATTRIBUTE_KEY, values);
+			getAttributes().put(ConstantsJsf.HDIV_ATTRIBUTE_KEY, values);
 		}
 		super.encodeBegin(context);
 	}

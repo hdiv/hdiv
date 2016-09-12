@@ -53,7 +53,7 @@ public class ValidationError {
 	 * @param errorParam parameter that has generated the error
 	 * @param errorValue value of the parameter that has generated the error
 	 */
-	public ValidationError(String errorKey, String errorComponent, String errorParam, String errorValue) {
+	public ValidationError(final String errorKey, final String errorComponent, final String errorParam, final String errorValue) {
 		super();
 		this.errorKey = errorKey;
 		this.errorComponent = errorComponent;
@@ -65,7 +65,7 @@ public class ValidationError {
 		return errorKey;
 	}
 
-	public void setErrorKey(String errorKey) {
+	public void setErrorKey(final String errorKey) {
 		this.errorKey = errorKey;
 	}
 
@@ -73,7 +73,7 @@ public class ValidationError {
 		return errorComponent;
 	}
 
-	public void setErrorComponent(String errorComponent) {
+	public void setErrorComponent(final String errorComponent) {
 		this.errorComponent = errorComponent;
 	}
 
@@ -81,7 +81,7 @@ public class ValidationError {
 		return errorParam;
 	}
 
-	public void setErrorParam(String errorParam) {
+	public void setErrorParam(final String errorParam) {
 		this.errorParam = errorParam;
 	}
 
@@ -89,7 +89,7 @@ public class ValidationError {
 		return errorValue;
 	}
 
-	public void setErrorValue(String errorValue) {
+	public void setErrorValue(final String errorValue) {
 		this.errorValue = errorValue;
 	}
 

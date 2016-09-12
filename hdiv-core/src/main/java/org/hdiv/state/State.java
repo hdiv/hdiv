@@ -15,7 +15,6 @@
  */
 package org.hdiv.state;
 
-import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -35,7 +34,7 @@ import org.hdiv.util.Method;
  * @author anderruiz
  *
  */
-public class State implements IState, Serializable {
+public class State implements IState {
 
 	/**
 	 * Universal version identifier. Deserialization uses this number to ensure that a loaded class corresponds exactly to a serialized
@@ -256,12 +255,12 @@ public class State implements IState, Serializable {
 
 	public boolean isEquivalent(final IState state) {
 		// Same action
-		if (!(getAction().equals(state.getAction()))) {
+		if (!getAction().equals(state.getAction())) {
 			return false;
 		}
 
 		// Same method
-		if (!(getMethod().equals(((State) state).getMethod()))) {
+		if (!getMethod().equals(((State) state).getMethod())) {
 			return false;
 		}
 
@@ -274,7 +273,7 @@ public class State implements IState, Serializable {
 		else if (params1 == null && params2 != null) {
 			return false;
 		}
-		else if (params1 != null && params2 != null) {
+		else if (params1 != null) {
 			if (params1.size() != params2.size()) {
 				return false;
 			}
@@ -300,10 +299,8 @@ public class State implements IState, Serializable {
 		else if (parameters1 == null && parameters2 != null) {
 			return false;
 		}
-		else if (parameters1 != null && parameters2 != null) {
-			if (!parameters1.equals(parameters2)) {
-				return false;
-			}
+		else if (parameters1 != null && !parameters1.equals(parameters2)) {
+			return false;
 		}
 
 		// Same required Parameters
@@ -315,7 +312,7 @@ public class State implements IState, Serializable {
 		else if (requiredParams1 == null && requiredParams2 != null) {
 			return false;
 		}
-		else if (requiredParams1 != null && requiredParams2 != null) {
+		else if (requiredParams1 != null) {
 			if (requiredParams1.size() != requiredParams2.size()) {
 				return false;
 			}

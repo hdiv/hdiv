@@ -39,19 +39,18 @@ public class RedirectHelper {
 	 * @param url Url to secure
 	 * @return secured url
 	 */
-	public String addHDIVStateToURL(String url) {
+	public String addHDIVStateToURL(final String url) {
 
 		FacesContext context = FacesContext.getCurrentInstance();
 		HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
 
-		String finalUrl = this.linkUrlProcessor.processUrl(request, url);
-		return finalUrl;
+		return linkUrlProcessor.processUrl(request, url);
 	}
 
 	/**
 	 * @param linkUrlProcessor the linkUrlProcessor to set
 	 */
-	public void setLinkUrlProcessor(LinkUrlProcessor linkUrlProcessor) {
+	public void setLinkUrlProcessor(final LinkUrlProcessor linkUrlProcessor) {
 		this.linkUrlProcessor = linkUrlProcessor;
 	}
 

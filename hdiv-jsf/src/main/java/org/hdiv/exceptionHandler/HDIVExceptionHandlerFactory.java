@@ -34,14 +34,14 @@ public class HDIVExceptionHandlerFactory extends ExceptionHandlerFactory {
 	/**
 	 * Original ExceptionHandlerFactory
 	 */
-	private ExceptionHandlerFactory original;
+	private final ExceptionHandlerFactory original;
 
 	/**
 	 * Default constructor
 	 * 
 	 * @param original original ExceptionHandlerFactory
 	 */
-	public HDIVExceptionHandlerFactory(ExceptionHandlerFactory original) {
+	public HDIVExceptionHandlerFactory(final ExceptionHandlerFactory original) {
 		this.original = original;
 	}
 
@@ -50,11 +50,9 @@ public class HDIVExceptionHandlerFactory extends ExceptionHandlerFactory {
 	 * 
 	 * @see javax.faces.context.ExceptionHandlerFactory#getExceptionHandler()
 	 */
+	@Override
 	public ExceptionHandler getExceptionHandler() {
-
-		ExceptionHandler exceptionHandler = this.original.getExceptionHandler();
-		HDIVExceptionHandler hdivExHandler = new HDIVExceptionHandler(exceptionHandler);
-		return hdivExHandler;
+		return new HDIVExceptionHandler(original.getExceptionHandler());
 	}
 
 }

@@ -26,23 +26,23 @@ import org.hdiv.config.annotation.builders.SecurityConfigBuilder;
  */
 public class HdivWebSecurityConfigurerAdapter implements HdivWebSecurityConfigurer {
 
-	public void configure(SecurityConfigBuilder securityConfigBuilder) {
+	public void configure(final SecurityConfigBuilder securityConfigBuilder) {
 
 	}
 
-	public void addExclusions(ExclusionRegistry registry) {
+	public void addExclusions(final ExclusionRegistry registry) {
 
 	}
 
-	public void addLongLivingPages(LongLivingPagesRegistry registry) {
+	public void addLongLivingPages(final LongLivingPagesRegistry registry) {
 
 	}
 
-	public void addRules(RuleRegistry registry) {
+	public void addRules(final RuleRegistry registry) {
 
 	}
 
-	public void configureEditableValidation(ValidationConfigurer validationConfigurer) {
+	public void configureEditableValidation(final ValidationConfigurer validationConfigurer) {
 
 	}
 

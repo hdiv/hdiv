@@ -43,12 +43,10 @@ public class HtmlInputHiddenValidator implements ComponentValidator {
 	 * 
 	 * @see org.hdiv.validators.ComponentValidator#validate(javax.faces.context.FacesContext, javax.faces.component.UIComponent)
 	 */
-	public ValidationError validate(FacesContext context, UIComponent component) {
+	public ValidationError validate(final FacesContext context, final UIComponent component) {
 
 		HtmlInputHiddenExtension inputHidden = (HtmlInputHiddenExtension) component;
-		ValidationError error = this.validateHiddenComponent(context, inputHidden);
-
-		return error;
+		return validateHiddenComponent(context, inputHidden);
 	}
 
 	/**
@@ -58,7 +56,7 @@ public class HtmlInputHiddenValidator implements ComponentValidator {
 	 * @param inputHidden component to validate
 	 * @return validation result
 	 */
-	protected ValidationError validateHiddenComponent(FacesContext context, HtmlInputHiddenExtension inputHidden) {
+	protected ValidationError validateHiddenComponent(final FacesContext context, final HtmlInputHiddenExtension inputHidden) {
 
 		UIData uiDataComp = UtilsJsf.findParentUIData(inputHidden);
 
@@ -66,8 +64,8 @@ public class HtmlInputHiddenValidator implements ComponentValidator {
 		if (uiDataComp != null) {
 			rowIndex = uiDataComp.getRowIndex();
 		}
-		Object hiddenValue = null;
-		Object hiddenRealValue = null;
+		Object hiddenValue;
+		Object hiddenRealValue;
 
 		HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
 		if (rowIndex >= 0) {
@@ -91,7 +89,7 @@ public class HtmlInputHiddenValidator implements ComponentValidator {
 				return error;
 			}
 
-			boolean correcto = this.hasEqualValue(hiddenValue, hiddenRealValue);
+			boolean correcto = hasEqualValue(hiddenValue, hiddenRealValue);
 			if (!correcto) {
 				ValidationError error = new ValidationError();
 				error.setErrorKey(HDIVErrorCodes.PARAMETER_VALUE_INCORRECT);

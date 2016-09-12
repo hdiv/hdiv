@@ -40,6 +40,7 @@ import org.hdiv.urlProcessor.LinkUrlProcessor;
 import org.hdiv.urlProcessor.UrlData;
 import org.hdiv.util.Constants;
 import org.hdiv.util.HDIVUtil;
+import org.hdiv.util.Method;
 
 /**
  * <p>
@@ -101,12 +102,12 @@ public class HDIVTilesRequestProcessor extends TilesRequestProcessor {
 			final ActionMapping mapping) throws IOException, ServletException, InvalidCancelException {
 
 		if (form == null) {
-			return (true);
+			return true;
 		}
 
 		// Has validation been turned off for this mapping?
 		if (!mapping.getValidate()) {
-			return (true);
+			return true;
 		}
 
 		// Was this request cancelled? If it has been, the mapping also
@@ -118,7 +119,7 @@ public class HDIVTilesRequestProcessor extends TilesRequestProcessor {
 				if (log.isDebugEnabled()) {
 					log.debug(" Cancelled transaction, skipping validation");
 				}
-				return (true);
+				return true;
 			}
 			else {
 				request.removeAttribute(Globals.CANCEL_KEY);
@@ -131,15 +132,15 @@ public class HDIVTilesRequestProcessor extends TilesRequestProcessor {
 			log.debug(" Validating input form properties");
 		}
 		ActionMessages errors = form.validate(mapping, request);
-		if ((errors == null) || errors.isEmpty()) {
+		if (errors == null || errors.isEmpty()) {
 
 			errors = getEditableParametersErrors(request);
-			if ((errors == null) || errors.isEmpty()) {
+			if (errors == null || errors.isEmpty()) {
 
 				if (log.isTraceEnabled()) {
 					log.trace("  No errors detected, accepting input");
 				}
-				return (true);
+				return true;
 			}
 		}
 
@@ -158,7 +159,7 @@ public class HDIVTilesRequestProcessor extends TilesRequestProcessor {
 				log.trace("  Validation failed but no input form available");
 			}
 			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, getInternal().getMessage("noInput", mapping.getPath()));
-			return (false);
+			return false;
 		}
 
 		// Save our error messages and return to the input form if possible
@@ -175,7 +176,7 @@ public class HDIVTilesRequestProcessor extends TilesRequestProcessor {
 			internalModuleRelativeForward(input, request, response);
 		}
 
-		return (false);
+		return false;
 
 	}
 
@@ -334,7 +335,8 @@ public class HDIVTilesRequestProcessor extends TilesRequestProcessor {
 		if (requestWrapper != null) {
 
 			LinkUrlProcessor linkUrlProcessorForForward = HDIVUtil.getLinkUrlProcessor(request.getSession().getServletContext());
-			UrlData urlData = linkUrlProcessorForForward.createUrlData(uri, "GET", request);
+			UrlData urlData = linkUrlProcessorForForward.createUrlData(uri, Method.GET, HDIVUtil.getHdivStateParameterName(request),
+					request);
 			Map<String, String[]> urlParamsAsMap = linkUrlProcessorForForward.getUrlParamsAsMap(new StringBuilder(128), request,
 					urlData.getUrlParams());
 			for (Map.Entry<String, String[]> entry : urlParamsAsMap.entrySet()) {

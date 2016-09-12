@@ -102,8 +102,8 @@ public class HdivWebSecurityConfigurationSupportTest {
 		assertNotNull(config);
 
 		assertEquals(true, config.isStartPage("/attacks/view.html", (Method) null));
-		assertEquals(false, config.isStartPage("/j_spring_security_check", "GET"));
-		assertEquals(true, config.isStartPage("/", "GET"));
+		assertEquals(false, config.isStartPage("/j_spring_security_check", Method.GET));
+		assertEquals(true, config.isStartPage("/", Method.GET));
 
 		assertEquals(true, config.isParameterWithoutValidation("/attacks/home.html", "param1"));
 		assertEquals(true, config.isParameterWithoutValidation("/attacks/home.html", "param1234"));

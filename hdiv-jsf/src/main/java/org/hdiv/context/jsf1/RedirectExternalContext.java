@@ -41,26 +41,26 @@ public class RedirectExternalContext extends ExternalContextWrapper {
 	/**
 	 * Helper with the redirect logic
 	 */
-	private RedirectHelper redirectHelper;
+	private final RedirectHelper redirectHelper;
 
 	/**
 	 * Original ExternalContext
 	 */
-	private ExternalContext wrapped;
+	private final ExternalContext wrapped;
 
 	/**
 	 * Default constructor
 	 * 
 	 * @param wrapped original ExternalContext
 	 */
-	public RedirectExternalContext(ExternalContext wrapped) {
+	public RedirectExternalContext(final ExternalContext wrapped) {
 		super();
 		this.wrapped = wrapped;
 
 		ServletContext servletContext = (ServletContext) wrapped.getContext();
-		this.redirectHelper = WebApplicationContextUtils.getRequiredWebApplicationContext(servletContext).getBean(RedirectHelper.class);
+		redirectHelper = WebApplicationContextUtils.getRequiredWebApplicationContext(servletContext).getBean(RedirectHelper.class);
 
-		Assert.notNull(this.redirectHelper);
+		Assert.notNull(redirectHelper);
 	}
 
 	/*
@@ -68,9 +68,10 @@ public class RedirectExternalContext extends ExternalContextWrapper {
 	 * 
 	 * @see org.hdiv.context.ExternalContextWrapper#getWrapped()
 	 */
+	@Override
 	public ExternalContext getWrapped() {
 
-		return this.wrapped;
+		return wrapped;
 	}
 
 	/**
@@ -79,14 +80,15 @@ public class RedirectExternalContext extends ExternalContextWrapper {
 	 * 
 	 * @param url url to redirect
 	 */
-	public void redirect(String url) throws IOException {
+	@Override
+	public void redirect(final String url) throws IOException {
 
-		String finalUrl = this.redirectHelper.addHDIVStateToURL(url);
+		String finalUrl = redirectHelper.addHDIVStateToURL(url);
 		if (log.isDebugEnabled()) {
 			log.debug("Redirecting to url:" + finalUrl);
 		}
 
-		this.wrapped.redirect(finalUrl);
+		wrapped.redirect(finalUrl);
 
 	}
 

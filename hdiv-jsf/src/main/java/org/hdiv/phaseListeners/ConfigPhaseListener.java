@@ -69,34 +69,34 @@ public class ConfigPhaseListener implements PhaseListener {
 	 * 
 	 * @see javax.faces.event.PhaseListener#beforePhase(javax.faces.event.PhaseEvent)
 	 */
-	public void beforePhase(PhaseEvent event) {
+	public void beforePhase(final PhaseEvent event) {
 
-		if (event.getPhaseId().equals(PhaseId.RESTORE_VIEW)) {
+		if (event.getPhaseId().equals(PhaseId.RESTORE_VIEW) && !initialized) {
 
-			if (!this.initialized) {
-
-				if (log.isDebugEnabled()) {
-					log.debug("Initialize ConfigPhaseListener dependencies.");
-				}
-
-				FacesContext context = event.getFacesContext();
-				// Check not supported features
-				this.checkSupportedFeatures(context);
-
-				// Get listener instances
-				WebApplicationContext wac = FacesContextUtils.getRequiredWebApplicationContext(context);
-				HDIVFacesEventListener facesEventListener = wac.getBean(HDIVFacesEventListener.class);
-
-				// It is added to the servletContext to be able to consume it from components
-				HDIVUtilJsf.setFacesEventListener(facesEventListener, context);
+			if (log.isDebugEnabled()) {
+				log.debug("Initialize ConfigPhaseListener dependencies.");
 			}
+
+			FacesContext context = event.getFacesContext();
+			// Check not supported features
+			checkSupportedFeatures(context);
+
+			// Get listener instances
+			WebApplicationContext wac = FacesContextUtils.getRequiredWebApplicationContext(context);
+			HDIVFacesEventListener facesEventListener = wac.getBean(HDIVFacesEventListener.class);
+
+			// It is added to the servletContext to be able to consume it from components
+			HDIVUtilJsf.setFacesEventListener(facesEventListener, context);
+
+			initialized = true;
+
 		}
 
 		if (event.getPhaseId().equals(PhaseId.RENDER_RESPONSE)) {
 
 			FacesContext context = event.getFacesContext();
 			// Add user's unique id to state
-			this.addUserUniqueTokenToState(context);
+			addUserUniqueTokenToState(context);
 		}
 
 	}
@@ -106,7 +106,7 @@ public class ConfigPhaseListener implements PhaseListener {
 	 * 
 	 * @see javax.faces.event.PhaseListener#afterPhase(javax.faces.event.PhaseEvent)
 	 */
-	public void afterPhase(PhaseEvent event) {
+	public void afterPhase(final PhaseEvent event) {
 
 	}
 
@@ -116,7 +116,7 @@ public class ConfigPhaseListener implements PhaseListener {
 	 * 
 	 * @param facesContext request context
 	 */
-	private void addUserUniqueTokenToState(FacesContext facesContext) {
+	private void addUserUniqueTokenToState(final FacesContext facesContext) {
 
 		UIViewRoot viewRoot = facesContext.getViewRoot();
 		if (viewRoot != null) {
@@ -138,7 +138,7 @@ public class ConfigPhaseListener implements PhaseListener {
 	 * 
 	 * @param context request context
 	 */
-	private void checkSupportedFeatures(FacesContext context) {
+	private void checkSupportedFeatures(final FacesContext context) {
 
 		ExternalContext externalContext = context.getExternalContext();
 		ServletContext servletContext = (ServletContext) externalContext.getContext();

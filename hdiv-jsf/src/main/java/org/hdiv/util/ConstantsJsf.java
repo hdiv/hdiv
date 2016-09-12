@@ -27,8 +27,11 @@ public class ConstantsJsf {
 	public static final String HDIV_ATTRIBUTE_CLIENTIDS_KEY = "HDIV_CLIENTIDS";
 
 	/** Name of the state parameter for each of the implementations */
-	public final static String[] FACES_VIEWSTATE_PARAMNAMES = { "com.sun.faces.VIEW", "javax.faces.ViewState", // SUN RI
+	public static final String[] FACES_VIEWSTATE_PARAMNAMES = { "com.sun.faces.VIEW", "javax.faces.ViewState", // SUN RI
 			"javax.faces.ViewState", // Since version 1.1.5 of MyFaces
 			"jsf_state_64", "jsf_state" // Before version 1.1.5 of MyFaces
 			, "jsf_sequence" }; // MyFaces 1.2
+
+	private ConstantsJsf() {
+	}
 }

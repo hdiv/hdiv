@@ -92,4 +92,8 @@ public class HDIVErrorCodes {
 	 * @since HDIV 2.1.8
 	 */
 	public static final String INTERNAL_ERROR = "INTERNAL_ERROR";
+
+	private HDIVErrorCodes() {
+
+	}
 }

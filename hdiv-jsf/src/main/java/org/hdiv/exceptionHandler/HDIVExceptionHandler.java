@@ -17,7 +17,6 @@ package org.hdiv.exceptionHandler;
 
 import java.util.Iterator;
 
-import javax.faces.FacesException;
 import javax.faces.application.NavigationHandler;
 import javax.faces.context.ExceptionHandler;
 import javax.faces.context.ExceptionHandlerWrapper;
@@ -28,7 +27,6 @@ import javax.servlet.ServletContext;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.hdiv.config.HDIVConfig;
 import org.hdiv.exception.StateValidationException;
 import org.hdiv.util.HDIVUtil;
 
@@ -49,14 +47,14 @@ public class HDIVExceptionHandler extends ExceptionHandlerWrapper {
 	/**
 	 * Original ExceptionHandler
 	 */
-	private ExceptionHandler original;
+	private final ExceptionHandler original;
 
 	/**
 	 * Constructor
 	 * 
 	 * @param original original ExceptionHandler
 	 */
-	public HDIVExceptionHandler(ExceptionHandler original) {
+	public HDIVExceptionHandler(final ExceptionHandler original) {
 		this.original = original;
 	}
 
@@ -65,9 +63,10 @@ public class HDIVExceptionHandler extends ExceptionHandlerWrapper {
 	 * 
 	 * @see javax.faces.context.ExceptionHandlerWrapper#getWrapped()
 	 */
+	@Override
 	public ExceptionHandler getWrapped() {
 
-		return this.original;
+		return original;
 	}
 
 	/*
@@ -75,13 +74,14 @@ public class HDIVExceptionHandler extends ExceptionHandlerWrapper {
 	 * 
 	 * @see javax.faces.context.ExceptionHandlerWrapper#handle()
 	 */
-	public void handle() throws FacesException {
+	@Override
+	public void handle() {
 
 		for (Iterator<ExceptionQueuedEvent> i = super.getUnhandledExceptionQueuedEvents().iterator(); i.hasNext();) {
 			ExceptionQueuedEvent event = i.next();
 			ExceptionQueuedEventContext context = (ExceptionQueuedEventContext) event.getSource();
 			Throwable t = context.getException();
-			Throwable cause = this.getRootCause(t);
+			Throwable cause = getRootCause(t);
 			if (cause instanceof StateValidationException) {
 				StateValidationException hdivExc = (StateValidationException) cause;
 				if (log.isDebugEnabled()) {
@@ -90,7 +90,7 @@ public class HDIVExceptionHandler extends ExceptionHandlerWrapper {
 				try {
 					FacesContext fc = FacesContext.getCurrentInstance();
 					NavigationHandler nav = fc.getApplication().getNavigationHandler();
-					nav.handleNavigation(fc, null, this.getErrorPage(fc));
+					nav.handleNavigation(fc, null, getErrorPage(fc));
 					fc.renderResponse();
 				}
 				finally {
@@ -107,13 +107,10 @@ public class HDIVExceptionHandler extends ExceptionHandlerWrapper {
 	 * @param facesContext active FacesContext
 	 * @return error page
 	 */
-	private String getErrorPage(FacesContext facesContext) {
+	private String getErrorPage(final FacesContext facesContext) {
 
 		ServletContext servletContext = (ServletContext) facesContext.getExternalContext().getContext();
-		HDIVConfig config = HDIVUtil.getHDIVConfig(servletContext);
-
-		String errorPage = config.getErrorPage();
-		return errorPage;
+		return HDIVUtil.getHDIVConfig(servletContext).getErrorPage();
 
 	}
 }

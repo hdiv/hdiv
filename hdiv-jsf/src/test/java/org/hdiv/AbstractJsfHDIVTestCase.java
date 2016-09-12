@@ -26,16 +26,16 @@ public abstract class AbstractJsfHDIVTestCase extends AbstractHDIVTestCase {
 	@Override
 	protected void onSetUp() throws Exception {
 
-		HttpServletRequest request = this.getMockRequest();
+		HttpServletRequest request = getMockRequest();
 
-		this.shaleMockObjects = new ShaleMockObjects();
-		this.shaleMockObjects.setUp(request);
+		shaleMockObjects = new ShaleMockObjects();
+		shaleMockObjects.setUp(request);
 
-		this.innerSetUp();
+		innerSetUp();
 	}
 
 	@Override
-	protected void postCreateHdivConfig(HDIVConfig config) {
+	protected void postCreateHdivConfig(final HDIVConfig config) {
 
 		// Disable not supported features
 		config.setConfidentiality(Boolean.FALSE);
@@ -49,7 +49,7 @@ public abstract class AbstractJsfHDIVTestCase extends AbstractHDIVTestCase {
 	protected void tearDown() throws Exception {
 		super.tearDown();
 
-		this.shaleMockObjects.tearDown();
+		shaleMockObjects.tearDown();
 	}
 
 }

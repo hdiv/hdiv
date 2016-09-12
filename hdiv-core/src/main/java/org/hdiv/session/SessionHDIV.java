@@ -17,8 +17,6 @@ package org.hdiv.session;
 
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.hdiv.context.RequestContext;
 import org.hdiv.exception.HDIVException;
 import org.hdiv.idGenerator.PageIdGenerator;
@@ -36,11 +34,6 @@ import org.springframework.util.Assert;
  * @author Roberto Velasco
  */
 public class SessionHDIV implements ISession, BeanFactoryAware {
-
-	/**
-	 * Commons Logging instance.
-	 */
-	private static final Log log = LogFactory.getLog(SessionHDIV.class);
 
 	/**
 	 * The root interface for accessing a Spring bean container.
@@ -160,9 +153,7 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 	 */
 	public void setBeanFactory(final BeanFactory beanFactory) {
 		this.beanFactory = beanFactory;
-		if (cache instanceof HTTPSessionCache) {
-			cache.setBeanFactory(beanFactory);
-		}
+		cache.setBeanFactory(beanFactory);
 	}
 
 	public String getAttribute(final RequestContext context, final String name) {
@@ -212,22 +203,7 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 		this.pageIdGeneratorName = pageIdGeneratorName;
 	}
 
-	@Deprecated
-	public final void addPage(final RequestContext context, final int pageId, final IPage page) {
-		addPage(context, page);
-	}
-
-	@Deprecated
-	public final void addPartialPage(final RequestContext context, final int pageId, final IPage page) {
-		addPartialPage(context, page);
-	}
-
 	public void removeEndedPages(final RequestContext context, final String conversationId) {
-		if (cache instanceof HTTPSessionCache) {
-			cache.removeEndedPages(context, conversationId);
-		}
-		else {
-			log.error("Remove ended pages not supported by cache:" + cache);
-		}
+		cache.removeEndedPages(context, conversationId);
 	}
 }

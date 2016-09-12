@@ -15,7 +15,6 @@
  */
 package org.hdiv.validator;
 
-import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -28,7 +27,7 @@ import org.hdiv.regex.PatternMatcher;
  *
  * @since HDIV 2.1.10
  */
-public class DefaultValidationRepository implements ValidationRepository, Serializable {
+public class DefaultValidationRepository implements ValidationRepository {
 
 	private static final long serialVersionUID = 467553775965908017L;
 
@@ -51,7 +50,7 @@ public class DefaultValidationRepository implements ValidationRepository, Serial
 	 */
 	public List<IValidation> findValidations(final String url, final String parameter) {
 
-		for (Entry<ValidationTarget, List<IValidation>> entry : this.validations.entrySet()) {
+		for (Entry<ValidationTarget, List<IValidation>> entry : validations.entrySet()) {
 			ValidationTarget target = entry.getKey();
 			PatternMatcher urlMatcher = target.getUrl();
 
@@ -61,7 +60,7 @@ public class DefaultValidationRepository implements ValidationRepository, Serial
 				List<PatternMatcher> paramMatchers = target.getParams();
 				boolean paramMatch = false;
 
-				if (paramMatchers != null && paramMatchers.size() > 0) {
+				if (paramMatchers != null && !paramMatchers.isEmpty()) {
 					for (PatternMatcher paramMatcher : paramMatchers) {
 						if (paramMatcher.matches(parameter)) {
 							paramMatch = true;
@@ -88,7 +87,7 @@ public class DefaultValidationRepository implements ValidationRepository, Serial
 	 * @return Default validations
 	 */
 	public List<IValidation> findDefaultValidations() {
-		return this.defaultValidations;
+		return defaultValidations;
 	}
 
 	/**

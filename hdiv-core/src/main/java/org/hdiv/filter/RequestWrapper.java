@@ -15,15 +15,15 @@
  */
 package org.hdiv.filter;
 
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
-import java.util.Vector;
 
 import javax.servlet.AsyncContext;
 import javax.servlet.ServletRequest;
@@ -144,8 +144,7 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 			return (String[]) data;
 		}
 		else {
-			String[] array = parameters.get(parameter);
-			return array;
+			return parameters.get(parameter);
 		}
 	}
 
@@ -188,15 +187,8 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 			return baseParams;
 		}
 
-		Vector<String> list = new Vector<String>();
-
-		while (baseParams.hasMoreElements()) {
-			list.add(baseParams.nextElement());
-		}
-
-		Collection<String> multipartParams = parameters.keySet();
-
-		list.addAll(multipartParams);
+		List<String> list = new ArrayList<String>(Collections.list(baseParams));
+		list.addAll(parameters.keySet());
 
 		return Collections.enumeration(list);
 	}
@@ -240,20 +232,20 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 
 		if (name.equalsIgnoreCase(COOKIE) && confidentiality && cookiesConfidentiality) {
 
-			Vector<String> values = new Vector<String>();
 			Map<String, SavedCookie> sessionCookies = session.getAttribute(requestContext, Constants.HDIV_COOKIES_KEY, Map.class);
-
-			if (sessionCookies != null) {
+			if (sessionCookies == null) {
+				return headerValues;
+			}
+			else {
+				List<String> values = new ArrayList<String>();
 				while (headerValues.hasMoreElements()) {
 					String element = headerValues.nextElement();
 					String replaced = replaceCookieString(element, sessionCookies);
 					values.add(replaced);
 				}
+
+				return Collections.enumeration(values);
 			}
-			else {
-				return headerValues;
-			}
-			return values.elements();
 		}
 		return headerValues;
 	}
@@ -282,12 +274,10 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 				continue;
 			}
 
-			if (sessionCookies.containsKey(name)) {
-				if (t.hasMoreTokens()) {
-					String value = t.nextToken().trim();
-					SavedCookie savedCookie = sessionCookies.get(name);
-					header = header.replaceFirst("=" + value, "=" + savedCookie.getValue());
-				}
+			if (sessionCookies.containsKey(name) && t.hasMoreTokens()) {
+				String value = t.nextToken().trim();
+				SavedCookie savedCookie = sessionCookies.get(name);
+				header = header.replaceFirst("=" + value, "=" + savedCookie.getValue());
 			}
 		}
 		return header;
@@ -324,14 +314,13 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 	}
 
 	@Override
-	public AsyncContext startAsync() throws IllegalStateException {
+	public AsyncContext startAsync() {
 		isAsyncRequest = true;
 		return super.startAsync();
 	}
 
 	@Override
-	public AsyncContext startAsync(final ServletRequest servletRequest, final ServletResponse servletResponse)
-			throws IllegalStateException {
+	public AsyncContext startAsync(final ServletRequest servletRequest, final ServletResponse servletResponse) {
 		isAsyncRequest = true;
 		return super.startAsync(servletRequest, servletResponse);
 	}

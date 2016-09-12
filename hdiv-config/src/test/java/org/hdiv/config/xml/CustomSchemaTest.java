@@ -26,6 +26,7 @@ import org.hdiv.session.StateCache;
 import org.hdiv.state.scope.StateScope;
 import org.hdiv.state.scope.StateScopeManager;
 import org.hdiv.state.scope.StateScopeType;
+import org.hdiv.util.Method;
 import org.hdiv.validator.DefaultValidationRepository;
 import org.hdiv.validator.EditableDataValidationProvider;
 import org.hdiv.validator.EditableDataValidationResult;
@@ -74,10 +75,10 @@ public class CustomSchemaTest extends TestCase {
 		HDIVConfig hdivConfig = context.getBean(HDIVConfig.class);
 		assertNotNull(hdivConfig);
 
-		boolean result = hdivConfig.isStartPage("/onlyGet.html", "get");
+		boolean result = hdivConfig.isStartPage("/onlyGet.html", Method.GET);
 		assertTrue(result);
 
-		result = hdivConfig.isStartPage("/onlyGet.html", "post");
+		result = hdivConfig.isStartPage("/onlyGet.html", Method.POST);
 		assertFalse(result);
 	}
 

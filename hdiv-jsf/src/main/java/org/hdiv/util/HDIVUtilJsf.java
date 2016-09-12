@@ -31,9 +31,12 @@ public class HDIVUtilJsf {
 
 	public static final String TARGET_REQUEST_KEY = "TARGET_REQUEST_KEY";
 
+	private HDIVUtilJsf() {
+	}
+
 	/* HDIVFacesEventListener */
 
-	public static HDIVFacesEventListener getFacesEventListener(FacesContext facesContext) {
+	public static HDIVFacesEventListener getFacesEventListener(final FacesContext facesContext) {
 
 		HDIVFacesEventListener newFacesEventListener = (HDIVFacesEventListener) facesContext.getExternalContext().getApplicationMap()
 				.get(FACESEVENTLISTENER_SERVLETCONTEXT_KEY);
@@ -46,7 +49,7 @@ public class HDIVUtilJsf {
 		}
 	}
 
-	public static void setFacesEventListener(HDIVFacesEventListener newFacesEventListener, FacesContext facesContext) {
+	public static void setFacesEventListener(final HDIVFacesEventListener newFacesEventListener, final FacesContext facesContext) {
 
 		facesContext.getExternalContext().getApplicationMap().put(FACESEVENTLISTENER_SERVLETCONTEXT_KEY, newFacesEventListener);
 
