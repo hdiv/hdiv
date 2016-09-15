@@ -231,6 +231,19 @@
 				</plugins>
 			</build>
 		</profile>
+		<profile>
+			<id>deploySnapshot</id>
+			<distributionManagement>
+				<snapshotRepository>
+					<id>nexus</id>
+					<url>http://dev.hdivsecurity.com:8081/nexus/content/repositories/snapshots</url>
+				</snapshotRepository>
+				<repository>
+					<id>nexus</id>
+					<url>http://dev.hdivsecurity.com:8081/nexus/content/repositories/releases</url>
+				</repository>
+			</distributionManagement>
+		</profile>
 	</profiles>
 
 </project>
