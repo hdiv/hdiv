@@ -44,13 +44,13 @@ public class DefaultRequestInitializer implements RequestInitializer {
 	 */
 	protected ISession session;
 
-	public void initRequest(HttpServletRequest request, HttpServletResponse response) {
+	public void initRequest(final HttpServletRequest request, final HttpServletResponse response) {
 
 		RequestContext context = new RequestContext(request);
 
 		// Store session scoped data into request
-		String stateParameterName = this.session.getAttribute(context, Constants.HDIV_PARAMETER);
-		String modifyStateParameterName = this.session.getAttribute(context, Constants.MODIFY_STATE_HDIV_PARAMETER);
+		String stateParameterName = session.getAttribute(context, Constants.HDIV_PARAMETER);
+		String modifyStateParameterName = session.getAttribute(context, Constants.MODIFY_STATE_HDIV_PARAMETER);
 
 		HDIVUtil.setHdivStateParameterName(request, stateParameterName);
 		HDIVUtil.setModifyHdivStateParameterName(request, modifyStateParameterName);
@@ -59,23 +59,24 @@ public class DefaultRequestInitializer implements RequestInitializer {
 		HDIVUtil.setRequestURI(request.getRequestURI(), request);
 	}
 
-	public void endRequest(HttpServletRequest request, HttpServletResponse response) {
+	public void endRequest(final HttpServletRequest request, final HttpServletResponse response) {
 	}
 
-	public RequestWrapper createRequestWrapper(HttpServletRequest request, HttpServletResponse response) {
+	public RequestWrapper createRequestWrapper(final HttpServletRequest request, final HttpServletResponse response) {
 		RequestWrapper requestWrapper = new RequestWrapper(request);
-		requestWrapper.setConfidentiality(this.config.getConfidentiality());
-		requestWrapper.setCookiesConfidentiality(this.config.isCookiesConfidentialityActivated());
-		requestWrapper.setSession(this.session);
+		requestWrapper.setConfidentiality(config.getConfidentiality());
+		requestWrapper.setCookiesConfidentiality(config.isCookiesConfidentialityActivated());
+		requestWrapper.setSession(session);
 
 		return requestWrapper;
 	}
 
-	public ResponseWrapper createResponseWrapper(HttpServletRequest request, HttpServletResponse response) {
+	public ResponseWrapper createResponseWrapper(final HttpServletRequest request, final HttpServletResponse response) {
 		ResponseWrapper responseWrapper = new ResponseWrapper(request, response);
-		responseWrapper.setConfidentiality(this.config.getConfidentiality());
-		responseWrapper.setAvoidCookiesConfidentiality(!this.config.isCookiesConfidentialityActivated());
-		responseWrapper.setSession(this.session);
+		responseWrapper.setConfidentiality(config.getConfidentiality());
+		responseWrapper.setAvoidCookiesConfidentiality(!config.isCookiesConfidentialityActivated());
+		responseWrapper.setSession(session);
+		responseWrapper.setConfig(config);
 
 		return responseWrapper;
 	}
@@ -83,14 +84,14 @@ public class DefaultRequestInitializer implements RequestInitializer {
 	/**
 	 * @param config the config to set
 	 */
-	public void setConfig(HDIVConfig config) {
+	public void setConfig(final HDIVConfig config) {
 		this.config = config;
 	}
 
 	/**
 	 * @param session the session to set
 	 */
-	public void setSession(ISession session) {
+	public void setSession(final ISession session) {
 		this.session = session;
 	}
 
