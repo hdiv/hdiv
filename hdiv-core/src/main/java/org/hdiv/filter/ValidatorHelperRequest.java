@@ -969,7 +969,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 			}
 		}
 		catch (final NumberFormatException e) {
-			// value is greater than the length of Integer.MAX_VALUE
+			// value is not a number or is greater than the length of Integer.MAX_VALUE
 			String originalValue = stateValues.size() > 1 ? stateValues.toString() : stateValues.get(0);
 			ValidatorError error = new ValidatorError(HDIVErrorCodes.CONFIDENTIAL_VALUE_INCORRECT, target, parameter, value, originalValue);
 			return new ValidatorHelperResult(error);
