@@ -182,9 +182,15 @@ public class ValidatorHelperRequest implements IValidationHelper {
 		if (isStartPage(request, target)) {
 			result = validateStartPageParameters(request, target);
 			if (result.isValid()) {
+				if (log.isDebugEnabled()) {
+					log.debug("The target [" + target + "] is an start page and parameters are valid.");
+				}
 				return ValidatorHelperResult.VALIDATION_NOT_REQUIRED;
 			}
 			else {
+				if (log.isDebugEnabled()) {
+					log.debug("The target [" + target + "] is an start page and parameters are NOT valid.");
+				}
 				return result;
 			}
 		}
@@ -192,6 +198,9 @@ public class ValidatorHelperRequest implements IValidationHelper {
 		if (hdivConfig.isCookiesIntegrityActivated()) {
 			result = validateRequestCookies(request, target);
 			if (!result.isValid()) {
+				if (log.isDebugEnabled()) {
+					log.debug("Invalid cookies found.");
+				}
 				return result;
 			}
 		}
@@ -202,6 +211,9 @@ public class ValidatorHelperRequest implements IValidationHelper {
 		// Restore state from request or memory
 		result = restoreState(hdivParameter, request, target);
 		if (!result.isValid()) {
+			if (log.isDebugEnabled()) {
+				log.debug("Error restoring the state: " + result);
+			}
 			return result;
 		}
 		// Get resultant object, the stored state
@@ -969,7 +981,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 			}
 		}
 		catch (final NumberFormatException e) {
-			// value is greater than the length of Integer.MAX_VALUE
+			// value is not a number or is greater than the length of Integer.MAX_VALUE
 			String originalValue = stateValues.size() > 1 ? stateValues.toString() : stateValues.get(0);
 			ValidatorError error = new ValidatorError(HDIVErrorCodes.CONFIDENTIAL_VALUE_INCORRECT, target, parameter, value, originalValue);
 			return new ValidatorHelperResult(error);
