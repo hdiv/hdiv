@@ -148,7 +148,7 @@ public class StartPage implements Serializable {
 			msg = msg + ", pattern=" + pattern;
 		}
 		if (compiledPattern != null) {
-			msg = msg + ", compiledPattern=" + compiledPattern;
+			msg = msg + ", compiledPattern=" + compiledPattern.getPattern();
 		}
 		return msg + "]";
 	}

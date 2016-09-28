@@ -25,6 +25,8 @@ import java.util.Map.Entry;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.hdiv.regex.PatternMatcher;
 import org.hdiv.regex.PatternMatcherFactory;
 import org.hdiv.state.IPage;
@@ -43,6 +45,8 @@ import org.hdiv.validator.EditableDataValidationProvider;
 public class HDIVConfig implements Serializable {
 
 	private static final long serialVersionUID = 1L;
+
+	private static final Log log = LogFactory.getLog(HDIVConfig.class);
 
 	private static final Strategy DEFAULT_STRATEGY = Strategy.MEMORY;
 
@@ -206,9 +210,14 @@ public class HDIVConfig implements Serializable {
 		return false;
 	}
 
-	private void addStartPage(final StartPage page) {
+	private void addStartPage(final StartPage startPage) {
+
+		if (log.isDebugEnabled()) {
+			log.debug("Added a StartPage: " + startPage);
+		}
+
 		List<StartPage> pages = new ArrayList<StartPage>(Arrays.asList(startPages));
-		pages.add(page);
+		pages.add(startPage);
 		startPages = pages.toArray(new StartPage[pages.size()]);
 	}
 
