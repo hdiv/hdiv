@@ -279,9 +279,7 @@ public abstract class AbstractDataComposer implements IDataComposer {
 	protected String applyConfidentialityToParams(String parameters) {
 
 		Map<String, Integer> pCount = new HashMap<String, Integer>();
-		String origin = parameters;
 		parameters = parameters.replaceAll("&amp;", "&");
-		boolean changed = origin != parameters;
 		String newParameters = parameters;
 
 		// Init indexes
@@ -313,9 +311,6 @@ public abstract class AbstractDataComposer implements IDataComposer {
 
 		} while (endIndex > beginIndex);
 
-		if (changed) {
-			newParameters = newParameters.replaceAll("&", "&amp;");
-		}
 		return newParameters;
 	}
 
