@@ -22,6 +22,7 @@ import org.hdiv.dataComposer.DataComposerFactory;
 import org.hdiv.dataComposer.IDataComposer;
 import org.hdiv.util.HDIVUtil;
 import org.hdiv.util.Method;
+import org.springframework.mock.web.MockHttpServletRequest;
 
 public class FormUrlProcessorTest extends AbstractHDIVTestCase {
 
@@ -202,5 +203,15 @@ public class FormUrlProcessorTest extends AbstractHDIVTestCase {
 		url = "/formAction.do?aaaa=bbbb&amp;_HDIV_STATE_=11-11-1234567890#hash";
 		result = formUrlProcessor.processUrl(request, url);
 		assertEquals("/formAction.do?aaaa=0#hash", result);
+	}
+
+	public void testProcessEmptyAction() {
+
+		MockHttpServletRequest request = getMockRequest();
+		request.setContextPath("/contextPath");
+
+		String url = "";
+		String result = formUrlProcessor.processUrl(request, url);
+		assertEquals(url, result);
 	}
 }

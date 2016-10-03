@@ -34,11 +34,12 @@ public class AvoidValidationInUrlsWithoutParamsTest extends AbstractHDIVTestCase
 	/*
 	 * @see TestCase#setUp()
 	 */
+	@Override
 	protected void onSetUp() throws Exception {
 
-		this.linkUrlProcessor = this.getApplicationContext().getBean(LinkUrlProcessor.class);
-		this.formUrlProcessor = this.getApplicationContext().getBean(FormUrlProcessor.class);
-		this.dataComposerFactory = this.getApplicationContext().getBean(DataComposerFactory.class);
+		linkUrlProcessor = getApplicationContext().getBean(LinkUrlProcessor.class);
+		formUrlProcessor = getApplicationContext().getBean(FormUrlProcessor.class);
+		dataComposerFactory = getApplicationContext().getBean(DataComposerFactory.class);
 	}
 
 	/*
@@ -47,48 +48,48 @@ public class AvoidValidationInUrlsWithoutParamsTest extends AbstractHDIVTestCase
 
 	public void testProcessAction() {
 
-		this.getConfig().setAvoidValidationInUrlsWithoutParams(Boolean.FALSE);
+		getConfig().setAvoidValidationInUrlsWithoutParams(Boolean.FALSE);
 
-		HttpServletRequest request = this.getMockRequest();
+		HttpServletRequest request = getMockRequest();
 		String url = "/testAction.do";
 
-		String result = this.linkUrlProcessor.processUrl(request, url);
+		String result = linkUrlProcessor.processUrl(request, url);
 
 		assertTrue(result.contains("_HDIV_STATE_"));
 	}
 
 	public void testProcessActionParams() {
 
-		this.getConfig().setAvoidValidationInUrlsWithoutParams(Boolean.FALSE);
+		getConfig().setAvoidValidationInUrlsWithoutParams(Boolean.FALSE);
 
-		HttpServletRequest request = this.getMockRequest();
+		HttpServletRequest request = getMockRequest();
 		String url = "/testAction.do?param=1";
 
-		String result = this.linkUrlProcessor.processUrl(request, url);
+		String result = linkUrlProcessor.processUrl(request, url);
 
 		assertTrue(result.contains("_HDIV_STATE_"));
 	}
 
 	public void testProcessActionAvoid() {
 
-		this.getConfig().setAvoidValidationInUrlsWithoutParams(Boolean.TRUE);
+		getConfig().setAvoidValidationInUrlsWithoutParams(Boolean.TRUE);
 
-		HttpServletRequest request = this.getMockRequest();
+		HttpServletRequest request = getMockRequest();
 		String url = "/testAction.do";
 
-		String result = this.linkUrlProcessor.processUrl(request, url);
+		String result = linkUrlProcessor.processUrl(request, url);
 
 		assertFalse(result.contains("_HDIV_STATE_"));
 	}
 
 	public void testProcessActionAvoidParams() {
 
-		this.getConfig().setAvoidValidationInUrlsWithoutParams(Boolean.TRUE);
+		getConfig().setAvoidValidationInUrlsWithoutParams(Boolean.TRUE);
 
-		HttpServletRequest request = this.getMockRequest();
+		HttpServletRequest request = getMockRequest();
 		String url = "/testAction.do?param=1";
 
-		String result = this.linkUrlProcessor.processUrl(request, url);
+		String result = linkUrlProcessor.processUrl(request, url);
 
 		assertTrue(result.contains("_HDIV_STATE_"));
 	}
@@ -99,12 +100,12 @@ public class AvoidValidationInUrlsWithoutParamsTest extends AbstractHDIVTestCase
 
 	public void testProcessFormAction() {
 
-		this.getConfig().setAvoidValidationInUrlsWithoutParams(Boolean.FALSE);
+		getConfig().setAvoidValidationInUrlsWithoutParams(Boolean.FALSE);
 
-		HttpServletRequest request = this.getMockRequest();
+		HttpServletRequest request = getMockRequest();
 		String action = "/testAction.do";
 
-		String result = this.formUrlProcessor.processUrl(request, action);
+		String result = formUrlProcessor.processUrl(request, action);
 
 		// Post urls are not modified
 		assertEquals(action, result);
@@ -112,12 +113,12 @@ public class AvoidValidationInUrlsWithoutParamsTest extends AbstractHDIVTestCase
 
 	public void testProcessFormParamAction() {
 
-		this.getConfig().setAvoidValidationInUrlsWithoutParams(Boolean.FALSE);
+		getConfig().setAvoidValidationInUrlsWithoutParams(Boolean.FALSE);
 
-		HttpServletRequest request = this.getMockRequest();
+		HttpServletRequest request = getMockRequest();
 		String action = "/testAction.do?param=1";
 
-		String result = this.formUrlProcessor.processUrl(request, action);
+		String result = formUrlProcessor.processUrl(request, action);
 
 		// Confidenciality
 		assertEquals("/testAction.do?param=0", result);
@@ -125,17 +126,17 @@ public class AvoidValidationInUrlsWithoutParamsTest extends AbstractHDIVTestCase
 
 	public void testProcessActionComplete() {
 
-		this.getConfig().setAvoidValidationInUrlsWithoutParams(Boolean.TRUE);
+		getConfig().setAvoidValidationInUrlsWithoutParams(Boolean.TRUE);
 
-		HttpServletRequest request = this.getMockRequest();
+		HttpServletRequest request = getMockRequest();
 
-		IDataComposer dataComposer = this.dataComposerFactory.newInstance(request);
+		IDataComposer dataComposer = dataComposerFactory.newInstance(request);
 		HDIVUtil.setDataComposer(dataComposer, request);
 		dataComposer.startPage();
 
 		String action = "/testAction.do";
 
-		String result = this.formUrlProcessor.processUrl(request, action);
+		String result = formUrlProcessor.processUrl(request, action);
 
 		// Post urls are not modified
 		assertEquals(action, result);
@@ -151,14 +152,14 @@ public class AvoidValidationInUrlsWithoutParamsTest extends AbstractHDIVTestCase
 
 	public void testAvoidValidationWithAjaxCallWithParameters() {
 
-		this.getConfig().setAvoidValidationInUrlsWithoutParams(Boolean.TRUE);
+		getConfig().setAvoidValidationInUrlsWithoutParams(Boolean.TRUE);
 
-		MockHttpServletRequest request = this.getMockRequest();
+		MockHttpServletRequest request = getMockRequest();
 		request.addHeader("x-requested-with", "XMLHttpRequest");
 
 		String url = "/testAction.do?param=1";
 
-		String result = this.linkUrlProcessor.processUrl(request, url);
+		String result = linkUrlProcessor.processUrl(request, url);
 
 		assertTrue(result.contains("_HDIV_STATE_"));
 
@@ -166,14 +167,14 @@ public class AvoidValidationInUrlsWithoutParamsTest extends AbstractHDIVTestCase
 
 	public void testAvoidValidationWithAjaxCall() {
 
-		this.getConfig().setAvoidValidationInUrlsWithoutParams(Boolean.TRUE);
+		getConfig().setAvoidValidationInUrlsWithoutParams(Boolean.TRUE);
 
-		MockHttpServletRequest request = this.getMockRequest();
+		MockHttpServletRequest request = getMockRequest();
 		request.addHeader("x-requested-with", "XMLHttpRequest");
 
 		String url = "/testAction.do";
 
-		String result = this.linkUrlProcessor.processUrl(request, url);
+		String result = linkUrlProcessor.processUrl(request, url);
 
 		assertTrue(!result.contains("_HDIV_STATE_"));
 	}
