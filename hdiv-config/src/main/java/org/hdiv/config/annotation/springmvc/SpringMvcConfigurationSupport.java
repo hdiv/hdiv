@@ -61,7 +61,7 @@ public class SpringMvcConfigurationSupport implements ApplicationListener<Contex
 
 	public void onApplicationEvent(final ContextRefreshedEvent event) {
 		ApplicationContext applicationContext = event.getApplicationContext();
-		if (applicationContext instanceof ConfigurableApplicationContext && applicationContext
+		if (ConfigTools.springSecurityPresent && applicationContext instanceof ConfigurableApplicationContext && applicationContext
 				.getBean(ConfigBeanDefinitionParser.REQUEST_DATA_VALUE_PROCESSOR_BEAN_NAME) instanceof CsrfRequestDataValueProcessor) {
 
 			@SuppressWarnings("resource")
