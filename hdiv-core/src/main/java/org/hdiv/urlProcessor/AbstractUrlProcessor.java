@@ -36,6 +36,10 @@ import org.hdiv.util.Method;
  */
 public abstract class AbstractUrlProcessor {
 
+	private static final String AMP = "&amp;";
+
+	private static final int AMP_LENGTH = AMP.length();
+
 	/**
 	 * Hdiv configuration.
 	 */
@@ -131,19 +135,26 @@ public abstract class AbstractUrlProcessor {
 	 * @param params parameters string
 	 * @return parameters string without state id
 	 */
-	protected static final String removeStateParameter(final String hdivParameter, final String params) {
+	protected static final String removeStateParameter(final String hdivParameter, String params) {
 		int start;
 		if (params == null || (start = params.indexOf(hdivParameter)) == -1) {
 			return params;
 		}
 
+		if (start > AMP_LENGTH) {
+			int amp = params.indexOf("&amp;", start - AMP_LENGTH);
+			if (amp != -1) {
+				params = params.substring(0, amp + 1) + params.substring(amp + "&amp;".length());
+				start = params.indexOf(hdivParameter);
+			}
+		}
 		if (start > 0) {
 			char first = params.charAt(start - 1);
 			if (first != '?' && first != '&') {
 				return params;
 			}
 		}
-
+		
 		int end = params.indexOf('&', start);
 		if (end < 0) {
 			end = params.indexOf('#', start);
@@ -154,11 +165,11 @@ public abstract class AbstractUrlProcessor {
 
 		String result = params.substring(0, start);
 		result = result + params.substring(end, params.length());
-
+		
 		if (result.endsWith("&")) {
 			result = result.substring(0, result.length() - 1);
 		}
-
+		
 		return result;
 	}
 

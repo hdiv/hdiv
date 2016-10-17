@@ -183,7 +183,23 @@ public class FormUrlProcessorTest extends AbstractHDIVTestCase {
 		result = formUrlProcessor.processUrl(request, url);
 		assertEquals("/formAction.do?aaaa=0", result);
 
+		url = "/formAction.do?aaaa=bbbb&cccc=dddd&_HDIV_STATE_=11-11-1234567890";
+		result = formUrlProcessor.processUrl(request, url);
+		assertEquals("/formAction.do?aaaa=0&cccc=0", result);
+
 		url = "/formAction.do?aaaa=bbbb&_HDIV_STATE_=11-11-1234567890#hash";
+		result = formUrlProcessor.processUrl(request, url);
+		assertEquals("/formAction.do?aaaa=0#hash", result);
+
+		url = "/formAction.do?aaaa=bbbb&amp;_HDIV_STATE_=11-11-1234567890";
+		result = formUrlProcessor.processUrl(request, url);
+		assertEquals("/formAction.do?aaaa=0", result);
+
+		url = "/formAction.do?aaaa=bbbb&amp;cccc=dddd&amp;_HDIV_STATE_=11-11-1234567890";
+		result = formUrlProcessor.processUrl(request, url);
+		assertEquals("/formAction.do?aaaa=0&cccc=0", result);
+
+		url = "/formAction.do?aaaa=bbbb&amp;_HDIV_STATE_=11-11-1234567890#hash";
 		result = formUrlProcessor.processUrl(request, url);
 		assertEquals("/formAction.do?aaaa=0#hash", result);
 	}

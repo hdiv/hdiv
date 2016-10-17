@@ -7,7 +7,7 @@
 	<artifactId>hdiv</artifactId>
 	<packaging>pom</packaging>
 	<name>HDIV Parent</name>
-	<version>3.2.2</version>
+	<version>3.2.3</version>
 	<url>http://www.hdiv.org</url>
 	<description>Web Application Security Framework</description>
 
@@ -230,6 +230,19 @@
 					</plugin>
 				</plugins>
 			</build>
+		</profile>
+		<profile>
+			<id>deploySnapshot</id>
+			<distributionManagement>
+				<snapshotRepository>
+					<id>nexus</id>
+					<url>http://localhost:8081/nexus/content/repositories/snapshots</url>
+				</snapshotRepository>
+				<repository>
+					<id>nexus</id>
+					<url>http://localhost:8081/nexus/content/repositories/releases</url>
+				</repository>
+			</distributionManagement>
 		</profile>
 	</profiles>
 
