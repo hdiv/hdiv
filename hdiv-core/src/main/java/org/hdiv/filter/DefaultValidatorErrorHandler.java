@@ -54,9 +54,10 @@ public class DefaultValidatorErrorHandler implements ValidatorErrorHandler {
 	 * @param errors Validation errors
 	 * @since 2.1.13
 	 */
-	public void handleValidatorError(HttpServletRequest request, HttpServletResponse response, List<ValidatorError> errors) {
+	public void handleValidatorError(final HttpServletRequest request, final HttpServletResponse response,
+			final List<ValidatorError> errors) {
 
-		if (this.isPageNotFoundError(errors)) {
+		if (isPageNotFoundError(errors)) {
 			// Page not found in session
 
 			HttpSession session = request.getSession(false);
@@ -64,18 +65,18 @@ public class DefaultValidatorErrorHandler implements ValidatorErrorHandler {
 			if (session == null || session.isNew()) {
 				// New session, maybe expired session
 				// Redirect to login page instead of error page
-				this.redirectToLoginPage(request, response);
+				redirectToLoginPage(request, response);
 			}
 			else {
 				ValidatorError error = errors.get(0);
 				String username = error.getUserName();
 				if (username == null || username == IUserData.ANONYMOUS) {
 					// Not logged, so send to login page
-					this.redirectToLoginPage(request, response);
+					redirectToLoginPage(request, response);
 				}
 				else {
 					// Logged, send to home
-					this.redirectToHomePage(request, response);
+					redirectToHomePage(request, response);
 				}
 			}
 
@@ -93,7 +94,7 @@ public class DefaultValidatorErrorHandler implements ValidatorErrorHandler {
 	 * @param errors Validation errors
 	 * @return true if there is any PAGE_ID_INCORRECT error in the list
 	 */
-	protected boolean isPageNotFoundError(List<ValidatorError> errors) {
+	protected boolean isPageNotFoundError(final List<ValidatorError> errors) {
 
 		for (ValidatorError error : errors) {
 			if (HDIVErrorCodes.PAGE_ID_INCORRECT.equals(error.getType())) {
@@ -109,9 +110,9 @@ public class DefaultValidatorErrorHandler implements ValidatorErrorHandler {
 	 * @param request {@link HttpServletRequest} instance
 	 * @param response {@link HttpServletResponse} instance
 	 */
-	protected void redirectToErrorPage(HttpServletRequest request, HttpServletResponse response) {
-		if (this.config.getErrorPage() != null) {
-			redirect(response, request.getContextPath() + this.config.getErrorPage());
+	protected void redirectToErrorPage(final HttpServletRequest request, final HttpServletResponse response) {
+		if (config.getErrorPage() != null) {
+			redirect(response, request.getContextPath() + config.getErrorPage());
 		}
 		else {
 			redirectToDefaultErrorPage(request, response);
@@ -124,9 +125,9 @@ public class DefaultValidatorErrorHandler implements ValidatorErrorHandler {
 	 * @param request {@link HttpServletRequest} instance
 	 * @param response {@link HttpServletResponse} instance
 	 */
-	protected void redirectToLoginPage(HttpServletRequest request, HttpServletResponse response) {
-		if (this.config.getSessionExpiredLoginPage() != null) {
-			redirect(response, request.getContextPath() + this.config.getSessionExpiredLoginPage());
+	protected void redirectToLoginPage(final HttpServletRequest request, final HttpServletResponse response) {
+		if (config.getSessionExpiredLoginPage() != null) {
+			redirect(response, request.getContextPath() + config.getSessionExpiredLoginPage());
 		}
 		else {
 			redirectToErrorPage(request, response);
@@ -139,9 +140,9 @@ public class DefaultValidatorErrorHandler implements ValidatorErrorHandler {
 	 * @param request {@link HttpServletRequest} instance
 	 * @param response {@link HttpServletResponse} instance
 	 */
-	protected void redirectToHomePage(HttpServletRequest request, HttpServletResponse response) {
-		if (this.config.getSessionExpiredHomePage() != null) {
-			redirect(response, request.getContextPath() + this.config.getSessionExpiredHomePage());
+	protected void redirectToHomePage(final HttpServletRequest request, final HttpServletResponse response) {
+		if (config.getSessionExpiredHomePage() != null) {
+			redirect(response, request.getContextPath() + config.getSessionExpiredHomePage());
 		}
 		else {
 			redirectToErrorPage(request, response);
@@ -154,7 +155,7 @@ public class DefaultValidatorErrorHandler implements ValidatorErrorHandler {
 	 * @param response {@link HttpServletResponse} instance
 	 * @param url redirect to
 	 */
-	protected void redirect(HttpServletResponse response, String url) {
+	protected void redirect(final HttpServletResponse response, final String url) {
 
 		try {
 			response.sendRedirect(response.encodeRedirectURL(url));
@@ -172,7 +173,7 @@ public class DefaultValidatorErrorHandler implements ValidatorErrorHandler {
 	 * @param response {@link HttpServletResponse} instance
 	 */
 	@SuppressWarnings("unchecked")
-	protected void redirectToDefaultErrorPage(HttpServletRequest request, HttpServletResponse response) {
+	protected void redirectToDefaultErrorPage(final HttpServletRequest request, final HttpServletResponse response) {
 
 		try {
 
@@ -183,7 +184,7 @@ public class DefaultValidatorErrorHandler implements ValidatorErrorHandler {
 					.getAttribute(Constants.EDITABLE_PARAMETER_ERROR);
 			request.getSession().removeAttribute(Constants.EDITABLE_PARAMETER_ERROR);
 
-			this.errorPageWritter.writetErrorPage(out, editableErrors);
+			errorPageWritter.writeErrorPage(request, out, editableErrors);
 			out.flush();
 		}
 		catch (IOException e) {
@@ -192,7 +193,7 @@ public class DefaultValidatorErrorHandler implements ValidatorErrorHandler {
 
 	}
 
-	public void setConfig(HDIVConfig config) {
+	public void setConfig(final HDIVConfig config) {
 		this.config = config;
 	}
 
