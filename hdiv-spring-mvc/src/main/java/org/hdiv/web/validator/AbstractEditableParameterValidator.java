@@ -17,6 +17,7 @@ package org.hdiv.web.validator;
 
 import java.util.List;
 
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.hdiv.filter.ValidatorError;
 import org.hdiv.util.Constants;
 import org.springframework.validation.Errors;
@@ -120,7 +121,7 @@ public abstract class AbstractEditableParameterValidator {
 				break;
 			}
 		}
-		return printedValue.toString();
+		return StringEscapeUtils.escapeHtml4(printedValue.toString());
 	}
 
 }
