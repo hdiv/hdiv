@@ -86,6 +86,11 @@ public class FormUrlProcessor extends AbstractUrlProcessor {
 
 			// Action url with confidential values
 			url = getProcessedUrl(dataComposer.getBuilder(), urlData);
+
+		}
+		else {
+			// Reset state info
+			request.removeAttribute(FORM_STATE_ID);
 		}
 
 		return url;
