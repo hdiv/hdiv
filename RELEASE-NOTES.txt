@@ -7,6 +7,8 @@ Release 3.3.0
  * Fix issue with parameters without values in WebSphere servers: http://www-01.ibm.com/support/docview.wss?uid=swg1PM35450 
  * Fix Spring security issue that may cause the links not to be processed by Hdiv
  * Performance improvements.
+ * Ensure error message content is escaped.
+ * Error page design update.
 
 Release 3.2.0
 ==================================
