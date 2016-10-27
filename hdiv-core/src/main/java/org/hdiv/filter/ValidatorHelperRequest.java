@@ -239,8 +239,8 @@ public class ValidatorHelperRequest implements IValidationHelper {
 			String parameter = (String) parameters.nextElement();
 
 			// Validate parameter
-			result = validateParameter(request, state.getParameter(parameter), stateParams.get(parameter), unauthorizedEditableParameters,
-					hdivParameter, target, parameter);
+			result = validateParameter(request, stateParams, state.getParameter(parameter), stateParams.get(parameter),
+					unauthorizedEditableParameters, hdivParameter, target, parameter);
 			if (!result.isValid()) {
 				return result;
 			}
@@ -488,12 +488,32 @@ public class ValidatorHelperRequest implements IValidationHelper {
 			}
 		}
 
-		if (!required.isEmpty()) {
-			ValidatorError error = new ValidatorError(HDIVErrorCodes.REQUIRED_PARAMETERS, target, required.toString());
-			return new ValidatorHelperResult(error);
+		return validateMissingParameters(request, state, target, stateParams, required);
+	}
+
+	/**
+	 * Validate required parameters but not received in the request.
+	 * 
+	 * @param request HttpServletRequest to validate
+	 * @param state IState The restored state for this url
+	 * @param target Part of the url that represents the target action
+	 * @param stateParams Url params from State
+	 * @param missingParameters Required parameters not received in the request.
+	 * @return result with the error
+	 */
+	protected ValidatorHelperResult validateMissingParameters(final HttpServletRequest request, final IState state, final String target,
+			final Map<String, String[]> stateParams, final List<String> missingParameters) {
+
+		if (missingParameters.isEmpty()) {
+			return ValidatorHelperResult.VALID;
 		}
 
-		return ValidatorHelperResult.VALID;
+		if (log.isDebugEnabled()) {
+			log.debug("Missing some required parameters: " + missingParameters.toString());
+		}
+
+		ValidatorError error = new ValidatorError(HDIVErrorCodes.REQUIRED_PARAMETERS, target, missingParameters.toString());
+		return new ValidatorHelperResult(error);
 	}
 
 	/**
@@ -523,8 +543,9 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	 * Validate single parameter values.
 	 *
 	 * @param request HttpServletRequest to validate
+	 * @param stateParams parameter and values from the parameters stored in the state
 	 * @param stateParameter IParameter The restored state for this url
-	 * @param actionParamValues actio params values
+	 * @param actionParamValues action params values
 	 * @param unauthorizedEditableParameters Editable parameters with errors
 	 * @param hdivParameter Hdiv state parameter name
 	 * @param target Part of the url that represents the target action
@@ -532,9 +553,9 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	 * @return Valid if parameter has not errors
 	 * @since HDIV 2.1.5
 	 */
-	protected ValidatorHelperResult validateParameter(final HttpServletRequest request, final IParameter stateParameter,
-			final String[] actionParamValues, final List<ValidatorError> unauthorizedEditableParameters, final String hdivParameter,
-			final String target, final String parameter) {
+	protected ValidatorHelperResult validateParameter(final HttpServletRequest request, final Map<String, String[]> stateParams,
+			final IParameter stateParameter, final String[] actionParamValues, final List<ValidatorError> unauthorizedEditableParameters,
+			final String hdivParameter, final String target, final String parameter) {
 
 		// If the parameter requires no validation it is considered a valid parameter
 		if (isUserDefinedNonValidationParameter(target, parameter, hdivParameter)) {
@@ -544,8 +565,8 @@ public class ValidatorHelperRequest implements IValidationHelper {
 		if (stateParameter == null && actionParamValues == null) {
 
 			// The parameter is not defined in the state, it is an extra parameter.
-			return validateExtraParameter(request, stateParameter, actionParamValues, unauthorizedEditableParameters, hdivParameter, target,
-					parameter);
+			return validateExtraParameter(request, stateParams, stateParameter, actionParamValues, unauthorizedEditableParameters,
+					hdivParameter, target, parameter);
 		}
 
 		// At this point we are processing a noneditable parameter
@@ -576,6 +597,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	 * Validate parameter non present in the state.
 	 *
 	 * @param request HttpServletRequest to validate
+	 * @param stateParams parameter and values from the parameters stored in the state
 	 * @param stateParameter IParameter The restored state for this url
 	 * @param actionParamValues actio params values
 	 * @param unauthorizedEditableParameters Editable parameters with errors
@@ -585,9 +607,9 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	 * @return Valid if parameter has not errors
 	 * @since HDIV 2.1.13
 	 */
-	protected ValidatorHelperResult validateExtraParameter(final HttpServletRequest request, final IParameter stateParameter,
-			final String[] actionParamValues, final List<ValidatorError> unauthorizedEditableParameters, final String hdivParameter,
-			final String target, final String parameter) {
+	protected ValidatorHelperResult validateExtraParameter(final HttpServletRequest request, final Map<String, String[]> stateParams,
+			final IParameter stateParameter, final String[] actionParamValues, final List<ValidatorError> unauthorizedEditableParameters,
+			final String hdivParameter, final String target, final String parameter) {
 
 		// If the parameter is not defined in the state, it is an error.
 		// With this verification we guarantee that no extra parameters are added.

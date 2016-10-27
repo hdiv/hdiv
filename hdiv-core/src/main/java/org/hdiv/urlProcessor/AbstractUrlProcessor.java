@@ -105,6 +105,10 @@ public abstract class AbstractUrlProcessor {
 			String urlWithoutContextPath = contextPathRelativeUrl.substring(contextPath.length());
 			urlData.setUrlWithoutContextPath(urlWithoutContextPath);
 		}
+		else {
+			// If contextPath is not present, the relative url is out of application
+			urlData.setInternal(false);
+		}
 
 		return urlData;
 
@@ -154,7 +158,7 @@ public abstract class AbstractUrlProcessor {
 				return params;
 			}
 		}
-		
+
 		int end = params.indexOf('&', start);
 		if (end < 0) {
 			end = params.indexOf('#', start);
@@ -165,11 +169,11 @@ public abstract class AbstractUrlProcessor {
 
 		String result = params.substring(0, start);
 		result = result + params.substring(end, params.length());
-		
+
 		if (result.endsWith("&")) {
 			result = result.substring(0, result.length() - 1);
 		}
-		
+
 		return result;
 	}
 

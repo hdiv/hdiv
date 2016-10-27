@@ -27,16 +27,17 @@ public class BasicUrlProcessorTest extends AbstractHDIVTestCase {
 
 	private BasicUrlProcessor urlProcessor;
 
+	@Override
 	protected void onSetUp() throws Exception {
-		this.urlProcessor = this.getApplicationContext().getBean(BasicUrlProcessor.class);
+		urlProcessor = getApplicationContext().getBean(BasicUrlProcessor.class);
 	}
 
 	public void testProcessAction() {
 
-		HttpServletRequest request = this.getMockRequest();
+		HttpServletRequest request = getMockRequest();
 		String url = "/testAction.do?par1=val1&par2=val2";
 
-		BasicUrlData result = this.urlProcessor.processUrl(request, url);
+		BasicUrlData result = urlProcessor.processUrl(request, url);
 
 		assertEquals(result.getContextPathRelativeUrl(), "/testAction.do");
 		assertEquals(2, result.getUrlParams().size());
@@ -46,10 +47,10 @@ public class BasicUrlProcessorTest extends AbstractHDIVTestCase {
 
 	public void testOnlyParams() {
 
-		HttpServletRequest request = this.getMockRequest();
+		HttpServletRequest request = getMockRequest();
 		String url = "?par1=val1&par2=val2";
 
-		BasicUrlData result = this.urlProcessor.processUrl(request, url);
+		BasicUrlData result = urlProcessor.processUrl(request, url);
 
 		assertEquals(result.getContextPathRelativeUrl(), "");
 		assertEquals(2, result.getUrlParams().size());
@@ -62,10 +63,10 @@ public class BasicUrlProcessorTest extends AbstractHDIVTestCase {
 		String par1 = URLEncoder.encode("1111", Constants.ENCODING_UTF_8);
 		String par2 = URLEncoder.encode("You & Me", Constants.ENCODING_UTF_8);
 
-		HttpServletRequest request = this.getMockRequest();
+		HttpServletRequest request = getMockRequest();
 		String url = "?par1=" + par1 + "&amp;par2=" + par2;
 
-		BasicUrlData result = this.urlProcessor.processUrl(request, url);
+		BasicUrlData result = urlProcessor.processUrl(request, url);
 
 		assertEquals(result.getContextPathRelativeUrl(), "");
 		assertEquals(2, result.getUrlParams().size());

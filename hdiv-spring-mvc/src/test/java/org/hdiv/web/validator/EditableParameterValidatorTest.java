@@ -32,6 +32,7 @@ import org.hdiv.util.Method;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.validation.Errors;
 import org.springframework.validation.MapBindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -91,6 +92,10 @@ public class EditableParameterValidatorTest extends AbstractHDIVTestCase {
 		// move errors to Errors instance
 		validator.validate("anyObject", errors);
 		assertTrue(errors.hasErrors());
+
+		ObjectError err = errors.getAllErrors().get(0);
+		assertEquals("&lt;script&gt;storeCookie(... has not allowed characters", err.getDefaultMessage());
+		assertEquals("hdiv.editable.error", err.getCode());
 	}
 
 }
