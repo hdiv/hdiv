@@ -145,6 +145,12 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 		cache.insertPage(new SimpleCacheKey(context, page.getId()), page);
 	}
 
+	public boolean removePage(final RequestContext context, final int pageId) {
+		Assert.notNull(context);
+
+		return cache.removePage(new SimpleCacheKey(context, pageId));
+	}
+
 	/**
 	 * Callback that supplies the owning factory to a bean instance. Invoked after population of normal bean properties but before an init
 	 * callback like InitializingBean's afterPropertiesSet or a custom init-method.

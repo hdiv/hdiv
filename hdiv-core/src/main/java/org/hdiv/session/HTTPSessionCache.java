@@ -103,6 +103,20 @@ public class HTTPSessionCache {
 		return (IPage) session.getAttribute(PAGE_ID_KEY_PREFIX + key.getPageId());
 	}
 
+	public boolean removePage(final SimpleCacheKey key) {
+
+		HttpSession session = key.getRequestContext().getSession();
+
+		Object attr = session.getAttribute(PAGE_ID_KEY_PREFIX + key.getPageId());
+		if (attr == null) {
+			return false;
+		}
+		session.removeAttribute(PAGE_ID_KEY_PREFIX + key.getPageId());
+
+		IStateCache cache = getStateCache(session);
+		return cache.getPageIds().remove(new Integer(key.getPageId()));
+	}
+
 	private void deletePage(final HttpSession session, final int pageId) {
 		session.removeAttribute(PAGE_ID_KEY_PREFIX + pageId);
 

@@ -35,12 +35,12 @@ public class SessionTest extends AbstractHDIVTestCase {
 	@Override
 	protected void onSetUp() throws Exception {
 
-		this.session = this.getApplicationContext().getBean(ISession.class);
+		session = getApplicationContext().getBean(ISession.class);
 	}
 
 	public void testGetPageId() {
 
-		RequestContext context = this.getRequestContext();
+		RequestContext context = getRequestContext();
 
 		int pageId = session.getPageId(context);
 
@@ -49,7 +49,7 @@ public class SessionTest extends AbstractHDIVTestCase {
 
 	public void testAddPage() {
 
-		RequestContext context = this.getRequestContext();
+		RequestContext context = getRequestContext();
 
 		IPage page = new Page(20);
 
@@ -65,7 +65,7 @@ public class SessionTest extends AbstractHDIVTestCase {
 
 	public void testGetState() {
 
-		RequestContext context = this.getRequestContext();
+		RequestContext context = getRequestContext();
 
 		IPage page = new Page(20);
 
@@ -86,7 +86,7 @@ public class SessionTest extends AbstractHDIVTestCase {
 
 	public void testGetPage() {
 
-		RequestContext context = this.getRequestContext();
+		RequestContext context = getRequestContext();
 
 		IPage page = new Page(20);
 
@@ -107,7 +107,7 @@ public class SessionTest extends AbstractHDIVTestCase {
 
 	public void testPageRefresh() {
 
-		RequestContext context = this.getRequestContext();
+		RequestContext context = getRequestContext();
 
 		// First page
 		IPage page = new Page(20);
@@ -118,7 +118,7 @@ public class SessionTest extends AbstractHDIVTestCase {
 
 		session.addPage(context, page);
 
-		IStateCache cache = (IStateCache) this.getMockRequest().getSession().getAttribute(Constants.STATE_CACHE_NAME);
+		IStateCache cache = (IStateCache) getMockRequest().getSession().getAttribute(Constants.STATE_CACHE_NAME);
 		List<Integer> ids = cache.getPageIds();
 		assertEquals(1, ids.size());
 
@@ -132,12 +132,12 @@ public class SessionTest extends AbstractHDIVTestCase {
 
 		session.addPage(context, page);
 
-		cache = (IStateCache) this.getMockRequest().getSession().getAttribute(Constants.STATE_CACHE_NAME);
+		cache = (IStateCache) getMockRequest().getSession().getAttribute(Constants.STATE_CACHE_NAME);
 		ids = cache.getPageIds();
 		assertEquals(2, ids.size());
 
 		// Simulate Page refresh
-		HDIVUtil.setCurrentPageId(20, this.getMockRequest());
+		HDIVUtil.setCurrentPageId(20, getMockRequest());
 
 		// Third page
 		page = new Page(22);
@@ -151,7 +151,7 @@ public class SessionTest extends AbstractHDIVTestCase {
 
 		session.addPage(context, page);
 
-		cache = (IStateCache) this.getMockRequest().getSession().getAttribute(Constants.STATE_CACHE_NAME);
+		cache = (IStateCache) getMockRequest().getSession().getAttribute(Constants.STATE_CACHE_NAME);
 		ids = cache.getPageIds();
 		assertEquals(2, ids.size());
 
@@ -163,16 +163,16 @@ public class SessionTest extends AbstractHDIVTestCase {
 		String name = "attr";
 		String value = "value";
 
-		String result = this.session.getAttribute(context, name);
+		String result = session.getAttribute(context, name);
 		assertNull(result);
 
-		this.session.setAttribute(context, name, value);
-		result = this.session.getAttribute(context, name);
+		session.setAttribute(context, name, value);
+		result = session.getAttribute(context, name);
 		assertNotNull(result);
 		assertEquals(value, result);
 
-		this.session.removeAttribute(context, name);
-		result = this.session.getAttribute(context, name);
+		session.removeAttribute(context, name);
+		result = session.getAttribute(context, name);
 		assertNull(result);
 
 	}
@@ -182,22 +182,43 @@ public class SessionTest extends AbstractHDIVTestCase {
 		RequestContext context = super.getRequestContext();
 		String name = "attr";
 
-		Test1Bean result = this.session.getAttribute(context, name, Test1Bean.class);
+		Test1Bean result = session.getAttribute(context, name, Test1Bean.class);
 		assertNull(result);
 
 		Test1Bean bean = new Test1Bean();
-		this.session.setAttribute(context, name, bean);
-		Test1Bean res = this.session.getAttribute(context, name, Test1Bean.class);
+		session.setAttribute(context, name, bean);
+		Test1Bean res = session.getAttribute(context, name, Test1Bean.class);
 		assertNotNull(res);
 		assertEquals(bean, res);
 
 		try {
-			this.session.getAttribute(context, name, Test2Bean.class);
+			session.getAttribute(context, name, Test2Bean.class);
 			fail();
 		}
 		catch (IllegalArgumentException e) {
 		}
 
+	}
+
+	public void testRemovePage() {
+
+		RequestContext context = getRequestContext();
+
+		IPage page = new Page(20);
+
+		IState state = new State(0);
+		state.setAction("/action");
+		IParameter param = new Parameter("name", "value", false, null, true);
+		state.addParameter(param);
+		page.addState(state);
+
+		session.addPage(context, page);
+
+		boolean result = session.removePage(context, 0);
+		assertEquals(false, result);
+
+		result = session.removePage(context, 20);
+		assertEquals(true, result);
 	}
 
 	class Test1Bean {
