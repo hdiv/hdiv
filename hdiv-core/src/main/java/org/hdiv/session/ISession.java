@@ -76,6 +76,16 @@ public interface ISession {
 	IPage getPage(RequestContext context, int pageId);
 
 	/**
+	 * Removes the page with id <code>pageId</code>.
+	 *
+	 * @param context Context holder for request-specific state.
+	 * @param pageId page id
+	 * @return True if the page was found and correctly deleted, false otherwise.
+	 * @since HDIV 3.3.0
+	 */
+	boolean removePage(RequestContext context, int pageId);
+
+	/**
 	 * Get an attribute from session.
 	 * @param context Context holder for request-specific state.
 	 * @param name Attribute name.
