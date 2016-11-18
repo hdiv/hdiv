@@ -39,7 +39,7 @@ public class FastUUID {
 			    "F0F1F2F3F4F5F6F7F8F9FAFBFCFDFEFF").toCharArray();
 			   ; 
 	// @formatter:on
-	private static final Random random = new Random(new SecureRandom().nextLong());
+	private static final Random random = new CustomRandom(new SecureRandom().nextLong());
 
 	private static String asHex(final long mostSignificant, final long lestSignificant) {
 		char[] hexChars = new char[32];
@@ -67,6 +67,19 @@ public class FastUUID {
 	 */
 	public static String get() {
 		return asHex(random.nextLong(), random.nextLong());
+	}
+
+	static class CustomRandom extends Random {
+
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
+		public CustomRandom(final long seed) {
+			super(seed);
+		}
+
 	}
 
 }
