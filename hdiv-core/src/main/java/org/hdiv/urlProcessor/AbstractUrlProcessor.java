@@ -146,9 +146,9 @@ public abstract class AbstractUrlProcessor {
 		}
 
 		if (start > AMP_LENGTH) {
-			int amp = params.indexOf("&amp;", start - AMP_LENGTH);
+			int amp = params.indexOf(AMP, start - AMP_LENGTH);
 			if (amp != -1) {
-				params = params.substring(0, amp + 1) + params.substring(amp + "&amp;".length());
+				params = params.substring(0, amp + 1) + params.substring(amp + AMP_LENGTH);
 				start = params.indexOf(hdivParameter);
 			}
 		}
@@ -192,7 +192,7 @@ public abstract class AbstractUrlProcessor {
 			return params;
 		}
 
-		String value = urlParams.replaceAll("&amp;", "&");
+		String value = urlParams.replaceAll(AMP, "&");
 
 		String hdivParameter = HDIVUtil.getHdivStateParameterName(request);
 

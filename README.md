@@ -3,9 +3,9 @@
 ## Hdiv: Application Self-Protection
 Hdiv is a leading provider of open source software for real-time, self-protected applications.  Hdiv solutions are built into applications during development to deliver the strongest available runtime application self-protection (RASP) against OWASP Top 10 threats. Since 2008, Hdiv has pioneered self-protection cyber security software, and today its solutions are used by leading commercial software providers and global enterprises in banking, government, retail, technology, and aerospace.
 
-Official Site: [http://hdivsecurity.com](http://hdivsecurity.com)
+Official Site: [https://hdivsecurity.com](http://hdivsecurity.com)
 
-Technical documentation: [http://hdivsecurity.com/technical-documentation/doc.html](http://hdivsecurity.com/technical-documentation/doc.html)
+Technical documentation: [https://hdivsecurity.com/technical-documentation/doc.html](http://hdivsecurity.com/technical-documentation/doc.html)
 
 Wiki: [https://github.com/hdiv/hdiv/wiki](https://github.com/hdiv/hdiv/wiki)
 
