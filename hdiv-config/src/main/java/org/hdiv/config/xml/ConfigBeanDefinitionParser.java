@@ -219,11 +219,11 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		createPageIdGenerator(source, parserContext);
 		userDataRef = createUserData(element, source, parserContext);
 
+		sessionRef = createSession(source, parserContext);
 		stateScopeManagerRef = createStateScopeManager(source, parserContext);
 		createValidatorErrorHandler(source, parserContext);
 		loggerRef = createLogger(source, parserContext);
 		createStateCache(element, source, parserContext);
-		sessionRef = createSession(source, parserContext);
 		applicationRef = this.createSimpleBean(source, parserContext, ApplicationHDIV.class);
 		this.createSimpleBean(source, parserContext, ValidationResult.class);
 		stateUtilRef = createStateUtil(source, parserContext);
