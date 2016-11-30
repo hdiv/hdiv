@@ -53,9 +53,10 @@ public class SelectTagHDIV extends SelectTag {
 	 * @exception JspException if a JSP exception has occurred
 	 * @see org.hdiv.dataComposer.IDataComposer#composeFormField(String, String, boolean, String)
 	 */
+	@Override
 	public int doStartTag() throws JspException {
 
-		HttpServletRequest request = (HttpServletRequest) this.pageContext.getRequest();
+		HttpServletRequest request = (HttpServletRequest) pageContext.getRequest();
 		IDataComposer dataComposer = HDIVUtil.getDataComposer(request);
 
 		// this property is editable and we must check it

@@ -51,7 +51,7 @@ public class CipherTag extends TagSupport {
 	 * 
 	 * @param action Action
 	 */
-	public void setAction(String action) {
+	public void setAction(final String action) {
 		this.setValue("action", action);
 	}
 
@@ -60,7 +60,7 @@ public class CipherTag extends TagSupport {
 	 * 
 	 * @param parameter Parameter
 	 */
-	public void setParameter(String parameter) {
+	public void setParameter(final String parameter) {
 		this.setValue("parameter", parameter);
 	}
 
@@ -69,7 +69,7 @@ public class CipherTag extends TagSupport {
 	 * 
 	 * @param value Value
 	 */
-	public void setValue(String value) {
+	public void setValue(final String value) {
 		this.setValue("value", value);
 	}
 
@@ -78,14 +78,15 @@ public class CipherTag extends TagSupport {
 	 * 
 	 * @throws JspException If the attributes passed to the tag are incorrect, an exception will be thrown.
 	 */
+	@Override
 	public int doStartTag() throws JspException {
 
-		HttpServletRequest request = (HttpServletRequest) this.pageContext.getRequest();
+		HttpServletRequest request = (HttpServletRequest) pageContext.getRequest();
 		IDataComposer dataComposer = HDIVUtil.getDataComposer(request);
 
-		String action = (String) this.getValue("action");
-		String parameter = (String) this.getValue("parameter");
-		String value = (String) this.getValue("value");
+		String action = (String) getValue("action");
+		String parameter = (String) getValue("parameter");
+		String value = (String) getValue("value");
 
 		String cipheredValue;
 		if (action != null) {
@@ -97,7 +98,7 @@ public class CipherTag extends TagSupport {
 
 		try {
 			// getJspWriter to output content
-			JspWriter out = this.pageContext.getOut();
+			JspWriter out = pageContext.getOut();
 			out.print(cipheredValue);
 		}
 		catch (IOException e) {

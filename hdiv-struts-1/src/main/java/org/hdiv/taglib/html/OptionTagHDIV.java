@@ -58,9 +58,10 @@ public class OptionTagHDIV extends OptionTag {
 	 * Process the end of this tag.
 	 * @exception JspException if a JSP exception has occurred
 	 */
+	@Override
 	public int doEndTag() throws JspException {
 
-		HttpServletRequest request = (HttpServletRequest) this.pageContext.getRequest();
+		HttpServletRequest request = (HttpServletRequest) pageContext.getRequest();
 		IDataComposer dataComposer = HDIVUtil.getDataComposer(request);
 
 		// Acquire the select tag we are associated with
@@ -79,9 +80,9 @@ public class OptionTagHDIV extends OptionTag {
 		// any value for the property key, the value of the property value is shown.
 		// This is, the encoded value is shown. That is the reason why we store the
 		// plain value, without encoding.
-		this.valueWithoutEncrypt = this.value;
+		valueWithoutEncrypt = value;
 
-		this.value = cipheredValue;
+		value = cipheredValue;
 
 		return super.doEndTag();
 	}
@@ -90,17 +91,18 @@ public class OptionTagHDIV extends OptionTag {
 	 * Return the text to be displayed to the user for this option (if any).
 	 * @exception JspException if an error occurs
 	 */
+	@Override
 	protected String text() throws JspException {
 
-		String optionText = this.text;
+		String optionText = text;
 
-		if ((optionText == null) && (this.key != null)) {
+		if ((optionText == null) && (key != null)) {
 			optionText = TagUtils.getInstance().message(pageContext, bundle, locale, key);
 		}
 
 		// no body text and no key to lookup so display the value
 		if (optionText == null) {
-			optionText = this.valueWithoutEncrypt;
+			optionText = valueWithoutEncrypt;
 		}
 
 		return optionText;
@@ -112,15 +114,16 @@ public class OptionTagHDIV extends OptionTag {
 	 * @throws JspException
 	 * @since Struts 1.1
 	 */
+	@Override
 	protected String renderOptionElement() throws JspException {
 
 		StringBuilder results = new StringBuilder("<option value=\"");
 
 		if (filter) {
-			results.append(TagUtils.getInstance().filter(this.value));
+			results.append(TagUtils.getInstance().filter(value));
 		}
 		else {
-			results.append(this.value);
+			results.append(value);
 		}
 		results.append("\"");
 
@@ -129,12 +132,12 @@ public class OptionTagHDIV extends OptionTag {
 		}
 		// we check if any element is selected using the plain value (without
 		// encoding).
-		if (this.selectTag().isMatched(this.valueWithoutEncrypt)) {
+		if (selectTag().isMatched(valueWithoutEncrypt)) {
 			results.append(" selected=\"selected\"");
 		}
-		renderAttribute(results, "style", this.getStyle());
+		renderAttribute(results, "style", getStyle());
 		renderAttribute(results, "id", styleId);
-		renderAttribute(results, "class", this.getStyleClass());
+		renderAttribute(results, "class", getStyleClass());
 
 		results.append(">");
 		results.append(text());
@@ -167,7 +170,7 @@ public class OptionTagHDIV extends OptionTag {
 	 * 
 	 * @param handlers The StringBuilder that output will be appended to.
 	 */
-	protected void renderAttribute(StringBuilder handlers, String name, Object value) {
+	protected void renderAttribute(final StringBuilder handlers, final String name, final Object value) {
 
 		if (value != null) {
 			handlers.append(" ");

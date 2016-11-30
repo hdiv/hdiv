@@ -43,10 +43,11 @@ public class RedirectTagHDIV extends RedirectTag {
 	 *
 	 * @exception JspException if a JSP exception has occurred
 	 */
+	@Override
 	public int doEndTag() throws JspException {
 
 		// calculate the url to redirect to
-		String url = this.generateRedirectURL();
+		String url = generateRedirectURL();
 
 		// If useLocalEncoding set to true, urlencoding is done on the bytes of
 		// character encoding from ServletResponse#getCharacterEncoding. Use UTF-8
@@ -59,13 +60,13 @@ public class RedirectTagHDIV extends RedirectTag {
 		// generate a new encoded values for the url parameters
 		HttpServletRequest request = (HttpServletRequest) pageContext.getRequest();
 		// Call to Hdiv LinkUrlProcessor
-		if (this.linkUrlProcessor == null) {
-			this.linkUrlProcessor = HDIVUtil.getLinkUrlProcessor(request.getSession().getServletContext());
+		if (linkUrlProcessor == null) {
+			linkUrlProcessor = HDIVUtil.getLinkUrlProcessor(request.getSession().getServletContext());
 		}
-		String urlHDIVstate = this.linkUrlProcessor.processUrl(request, url, charEncoding);
+		String urlHDIVstate = linkUrlProcessor.processUrl(request, url, charEncoding);
 
 		// redirect to the given url
-		this.doRedirect(urlHDIVstate);
+		doRedirect(urlHDIVstate);
 
 		return (SKIP_PAGE);
 	}

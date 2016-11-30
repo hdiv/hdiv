@@ -56,6 +56,7 @@ public class HiddenTagHDIV extends HiddenTag {
 	 * @exception JspException if a JSP exception has occurred
 	 * @see org.hdiv.dataComposer.IDataComposer#composeFormField(String, String, boolean, String)
 	 */
+	@Override
 	public int doStartTag() throws JspException {
 
 		try {
@@ -71,12 +72,12 @@ public class HiddenTagHDIV extends HiddenTag {
 				}
 			}
 
-			HttpServletRequest request = (HttpServletRequest) this.pageContext.getRequest();
+			HttpServletRequest request = (HttpServletRequest) pageContext.getRequest();
 			IDataComposer dataComposer = HDIVUtil.getDataComposer(request);
-			this.encodedValue = dataComposer.composeFormField(prepareName(), hiddenValue, false, null);
+			encodedValue = dataComposer.composeFormField(prepareName(), hiddenValue, false, null);
 
 			// Render the result to the output writer
-			TagUtils.getInstance().write(this.pageContext, this.renderInputElement());
+			TagUtils.getInstance().write(pageContext, renderInputElement());
 
 			// Is rendering the value separately requested?
 			if (!write) {
@@ -112,19 +113,20 @@ public class HiddenTagHDIV extends HiddenTag {
 	/**
 	 * Render the value element.
 	 * 
-	 * @param results The StringBuilder that output will be appended to.
+	 * @param results The StringBuffer that output will be appended to.
 	 */
-	protected void prepareValue(StringBuilder results) throws JspException {
+	@Override
+	protected void prepareValue(final StringBuffer results) throws JspException {
 
 		results.append(" value=\"");
 
-		if (this.encodedValue != null) {
-			results.append(this.formatValue(this.encodedValue));
+		if (encodedValue != null) {
+			results.append(formatValue(encodedValue));
 
 		}
 		else if (redisplay || !"password".equals(type)) {
 			Object lookupValue = TagUtils.getInstance().lookup(pageContext, name, property, null);
-			results.append(this.formatValue(lookupValue));
+			results.append(formatValue(lookupValue));
 		}
 		results.append("\"");
 	}

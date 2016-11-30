@@ -47,7 +47,7 @@ public class OptionsTagHDIV extends OptionsTag {
 	private static final long serialVersionUID = -6449963390432302145L;
 
 	/**
-	 * Add an option element to the specified StringBuilder based on the specified parameters.
+	 * Add an option element to the specified StringBuffer based on the specified parameters.
 	 * <p>
 	 * Note that this tag specifically does not support the <code>styleId</code> tag attribute, which causes the HTML <code>id</code>
 	 * attribute to be emitted. This is because the HTML specification states that all "id" attributes in a document have to be unique. This
@@ -55,20 +55,21 @@ public class OptionsTagHDIV extends OptionsTag {
 	 * conceivable some sort of mechanism to supply an array of <code>id</code> values could be devised, but that doesn't seem to be worth
 	 * the trouble.
 	 * 
-	 * @param sb StringBuilder accumulating our results
+	 * @param sb StringBuffer accumulating our results
 	 * @param value Value to be returned to the server for this option
 	 * @param label Value to be shown to the user for this option
 	 * @param matched Should this value be marked as selected?
 	 * @see org.hdiv.dataComposer.IDataComposer#composeFormField(String, String, boolean, String)
 	 */
-	protected void addOption(StringBuilder sb, String value, String label, boolean matched) {
+	@Override
+	protected void addOption(final StringBuffer sb, final String value, final String label, final boolean matched) {
 
 		SelectTag selectTag = (SelectTag) pageContext.getAttribute(Constants.SELECT_KEY);
 
 		sb.append("<option value=\"");
 		String cipheredValue = null;
 
-		HttpServletRequest request = (HttpServletRequest) this.pageContext.getRequest();
+		HttpServletRequest request = (HttpServletRequest) pageContext.getRequest();
 		IDataComposer dataComposer = HDIVUtil.getDataComposer(request);
 		cipheredValue = dataComposer.composeFormField(selectTag.getProperty(), value, false, null);
 
@@ -83,8 +84,8 @@ public class OptionsTagHDIV extends OptionsTag {
 			renderAttribute(sb, "selected", "selected");
 		}
 
-		renderAttribute(sb, "style", this.getStyle());
-		renderAttribute(sb, "class", this.getStyleClass());
+		renderAttribute(sb, "style", getStyle());
+		renderAttribute(sb, "class", getStyleClass());
 
 		sb.append(">");
 
@@ -99,10 +100,10 @@ public class OptionsTagHDIV extends OptionsTag {
 	}
 
 	/**
-	 * Prepares an attribute if the value is not null, appending it to the the given StringBuilder.
-	 * @param handlers The StringBuilder that output will be appended to.
+	 * Prepares an attribute if the value is not null, appending it to the the given StringBuffer.
+	 * @param handlers The StringBuffer that output will be appended to.
 	 */
-	protected void renderAttribute(StringBuilder handlers, String name, Object value) {
+	protected void renderAttribute(final StringBuffer handlers, final String name, final Object value) {
 
 		if (value != null) {
 			handlers.append(" ");

@@ -24,7 +24,6 @@ import org.apache.struts.taglib.TagUtils;
 import org.apache.struts.taglib.html.FormTag;
 import org.hdiv.dataComposer.IDataComposer;
 import org.hdiv.urlProcessor.FormUrlProcessor;
-import org.hdiv.util.Constants;
 import org.hdiv.util.HDIVUtil;
 
 /**
@@ -51,18 +50,19 @@ public class FormTagHDIV extends FormTag {
 	 * @see org.hdiv.dataComposer.IDataComposer
 	 * @see org.hdiv.urlProcessor.FormUrlProcessor
 	 */
-	protected void renderAction(final StringBuilder results) {
+	@Override
+	protected void renderAction(final StringBuffer results) {
 
-		final HttpServletResponse response = (HttpServletResponse) this.pageContext.getResponse();
-		final HttpServletRequest request = (HttpServletRequest) this.pageContext.getRequest();
+		final HttpServletResponse response = (HttpServletResponse) pageContext.getResponse();
+		final HttpServletRequest request = (HttpServletRequest) pageContext.getRequest();
 
-		final String calcAction = (this.action == null ? this.getPostbackAction() : this.action);
+		final String calcAction = (action == null ? getPostbackAction() : action);
 
-		final String url = response.encodeURL(TagUtils.getInstance().getActionMappingURL(calcAction, this.pageContext));
+		final String url = response.encodeURL(TagUtils.getInstance().getActionMappingURL(calcAction, pageContext));
 
 		// Call to Hdiv FormUrlProcessor
-		if (this.formUrlProcessor == null) {
-			this.formUrlProcessor = HDIVUtil.getFormUrlProcessor(request.getSession().getServletContext());
+		if (formUrlProcessor == null) {
+			formUrlProcessor = HDIVUtil.getFormUrlProcessor(request.getSession().getServletContext());
 		}
 		final String encodedURL = formUrlProcessor.processUrl(request, url);
 
@@ -92,7 +92,7 @@ public class FormTagHDIV extends FormTag {
 	@Override
 	public int doEndTag() throws JspException {
 
-		this.addHDIVParameter();
+		addHDIVParameter();
 		return super.doEndTag();
 	}
 
@@ -101,7 +101,7 @@ public class FormTagHDIV extends FormTag {
 	 */
 	protected void addHDIVParameter() throws JspException {
 
-		final HttpServletRequest request = (HttpServletRequest) this.pageContext.getRequest();
+		final HttpServletRequest request = (HttpServletRequest) pageContext.getRequest();
 		final IDataComposer dataComposer = HDIVUtil.getDataComposer(request);
 		if (!dataComposer.isRequestStarted()) {
 			return;
@@ -110,7 +110,7 @@ public class FormTagHDIV extends FormTag {
 
 		if (requestId.length() > 0) {
 			final String hdivParameter = HDIVUtil.getHdivStateParameterName(request);
-			TagUtils.getInstance().write(pageContext, this.generateHiddenTag(hdivParameter, requestId));
+			TagUtils.getInstance().write(pageContext, generateHiddenTag(hdivParameter, requestId));
 		}
 	}
 

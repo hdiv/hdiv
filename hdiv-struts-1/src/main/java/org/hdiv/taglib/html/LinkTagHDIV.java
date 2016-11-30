@@ -57,7 +57,7 @@ public class LinkTagHDIV extends LinkTag {
 
 		// the value specified in linkname will render a "name" element in the
 		// generated anchor tag
-		if (this.getLinkName() != null) {
+		if (getLinkName() != null) {
 			return super.doEndTag();
 		}
 
@@ -76,10 +76,10 @@ public class LinkTagHDIV extends LinkTag {
 		}
 
 		// Call to Hdiv LinkUrlProcessor
-		if (this.linkUrlProcessor == null) {
-			this.linkUrlProcessor = HDIVUtil.getLinkUrlProcessor(request.getSession().getServletContext());
+		if (linkUrlProcessor == null) {
+			linkUrlProcessor = HDIVUtil.getLinkUrlProcessor(request.getSession().getServletContext());
 		}
-		final String urlWithHDIVParameter = this.linkUrlProcessor.processUrl(request, url, charEncoding);
+		final String urlWithHDIVParameter = linkUrlProcessor.processUrl(request, url, charEncoding);
 
 		renderAttribute(results, "href", urlWithHDIVParameter);
 
