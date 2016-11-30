@@ -59,20 +59,20 @@ public class MultiboxTagHDIV extends MultiboxTag {
 	/**
 	 * Render the value element
 	 *
-	 * @param results The StringBuilder that output will be appended to.
+	 * @param results The StringBuffer that output will be appended to.
 	 * @see org.hdiv.dataComposer.IDataComposer#composeFormField(String, String, boolean, String)
 	 */
 	@Override
 	protected String prepareValue(final StringBuffer results) throws JspException {
 
-		final String value = (this.value == null) ? this.constant : this.value;
+		final String value = (this.value == null) ? constant : this.value;
 		if (value == null) {
 			final JspException e = new JspException(messages.getMessage("multiboxTag.value"));
 			pageContext.setAttribute(Globals.EXCEPTION_KEY, e, PageContext.REQUEST_SCOPE);
 			throw e;
 		}
 
-		final HttpServletRequest request = (HttpServletRequest) this.pageContext.getRequest();
+		final HttpServletRequest request = (HttpServletRequest) pageContext.getRequest();
 		final IDataComposer dataComposer = HDIVUtil.getDataComposer(request);
 		final String cipheredValue = dataComposer.composeFormField(property, value, false, null);
 

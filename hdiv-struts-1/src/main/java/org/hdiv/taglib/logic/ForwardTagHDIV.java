@@ -46,6 +46,7 @@ public class ForwardTagHDIV extends ForwardTag {
 	 * @throws JspException
 	 * @since Struts 1.2
 	 */
+	@Override
 	protected void doRedirect(String path) throws JspException {
 
 		HttpServletRequest request = (HttpServletRequest) pageContext.getRequest();
@@ -58,8 +59,8 @@ public class ForwardTagHDIV extends ForwardTag {
 
 			// generate a new encoded values for the url parameters
 			// Call to Hdiv LinkUrlProcessor
-			if (this.linkUrlProcessor == null) {
-				this.linkUrlProcessor = HDIVUtil.getLinkUrlProcessor(request.getSession().getServletContext());
+			if (linkUrlProcessor == null) {
+				linkUrlProcessor = HDIVUtil.getLinkUrlProcessor(request.getSession().getServletContext());
 			}
 			String urlHDIVstate = linkUrlProcessor.processUrl(request, path);
 

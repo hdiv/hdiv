@@ -56,12 +56,13 @@ public class RadioTagHDIV extends RadioTag {
 	 * @see org.hdiv.dataComposer.IDataComposer#composeFormField(String, String, boolean, String)
 	 * @since Struts 1.1
 	 */
-	protected String renderRadioElement(String serverValue, String checkedValue) throws JspException {
+	@Override
+	protected String renderRadioElement(final String serverValue, final String checkedValue) throws JspException {
 
 		String cipheredValue = null;
 
 		String preparedName = prepareName();
-		HttpServletRequest request = (HttpServletRequest) this.pageContext.getRequest();
+		HttpServletRequest request = (HttpServletRequest) pageContext.getRequest();
 		IDataComposer dataComposer = HDIVUtil.getDataComposer(request);
 		cipheredValue = dataComposer.composeFormField(preparedName, serverValue, false, null);
 
@@ -86,7 +87,7 @@ public class RadioTagHDIV extends RadioTag {
 	 * Prepares an attribute if the value is not null, appending it to the the given StringBuilder.
 	 * @param handlers The StringBuilder that output will be appended to.
 	 */
-	protected void renderAttribute(StringBuilder handlers, String name, Object value) {
+	protected void renderAttribute(final StringBuilder handlers, final String name, final Object value) {
 
 		if (value != null) {
 			handlers.append(" ");
