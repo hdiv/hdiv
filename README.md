@@ -1,16 +1,26 @@
 [![Build Status](https://travis-ci.org/hdiv/hdiv.svg)](https://travis-ci.org/hdiv/hdiv)
 ![Hdiv](https://hdivsecurity.com/img/Hdiv-main.png)
-
+> *New to Hdiv? Check [this](https://www.youtube.com/watch?v=f4UPPxYId4Q)* out
 ## Hdiv: Application Self-Protection
 Hdiv is a leading provider of open source software for real-time, self-protected applications.  Hdiv solutions are built into applications during development to deliver the strongest available runtime application self-protection (RASP) against OWASP Top 10 threats. Since 2008, Hdiv has pioneered self-protection cyber security software, and today its solutions are used by leading commercial software providers and global enterprises in banking, government, retail, technology, and aerospace.
 
 Official Site: [https://hdivsecurity.com](http://hdivsecurity.com)
+
 Technical documentation: [https://hdivsecurity.com/technical-documentation/doc.html](http://hdivsecurity.com/technical-documentation/doc.html)
+
 Wiki: [https://github.com/hdiv/hdiv/wiki](https://github.com/hdiv/hdiv/wiki)
+
+`May 25th, 2016` - **[Hdiv v3.2.0 released!](https://github.com/hdiv/hdiv/releases)**
 
 ## Installation
 
 ### Spring MVC
+
+![-](https://hdivsecurity.com/img/hdivInstallation.gif)
+
+> https://www.youtube.com/watch?v=6-BNTh8AqQY
+
+### Steps
 Thanks to the new [extension point](http://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/web/servlet/support/RequestDataValueProcessor.html) included in Spring 3.1, Hdiv installation and configuration for Spring MVC is cleaner and easier than previously.
 
 1. Add Hdiv Jars.
