@@ -1,4 +1,7 @@
 [![Build Status](https://travis-ci.org/hdiv/hdiv.svg)](https://travis-ci.org/hdiv/hdiv)
+[![Maven Central](https://img.shields.io/maven-central/v/org.hdiv/hdiv.svg](http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22hdiv%22)
+[![GitHub license](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://raw.githubusercontent.com/hdiv/hdiv/master/LICENSE_HEADER)
+
 ![Hdiv](https://hdivsecurity.com/img/Hdiv-main.png)
 > *New to Hdiv? Check [this](https://www.youtube.com/watch?v=f4UPPxYId4Q)* out
 
