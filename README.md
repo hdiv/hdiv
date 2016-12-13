@@ -5,13 +5,32 @@
 ## Hdiv: Application Self-Protection
 Hdiv is a leading provider of open source software for real-time, self-protected applications.  Hdiv solutions are built into applications during development to deliver the strongest available runtime application self-protection (RASP) against OWASP Top 10 threats. Since 2008, Hdiv has pioneered self-protection cyber security software, and today its solutions are used by leading commercial software providers and global enterprises in banking, government, retail, technology, and aerospace.
 
-Official Site: [https://hdivsecurity.com](http://hdivsecurity.com)
-
+> Official Site: [https://hdivsecurity.com](http://hdivsecurity.com)
 Technical documentation: [https://hdivsecurity.com/technical-documentation/doc.html](http://hdivsecurity.com/technical-documentation/doc.html)
 
-Wiki: [https://github.com/hdiv/hdiv/wiki](https://github.com/hdiv/hdiv/wiki)
 
 `May 25th, 2016` - **[Hdiv v3.2.0 released!](https://github.com/hdiv/hdiv/releases)**
+
+## How does Hdiv help?
+
+Hdiv repels 90% of application security risks included in the OWASP Top 10—a broad consensus of the most critical web application security flaws —such as SQL injection, cross-site scripting, cross-site request forgery, data tampering, and brute force attacks. Hdiv offers higher effectiveness than any of the solutions currently available to fight web application security risks.    
+
+- Want to ensure strong security without having to know and understand all current security threats.
+
+- Want strong security without compromising application performance or the user experience.
+
+- Want to build security into applications while in development, instead of having to go back and patch and tweak applications later.
+
+## Editions
+
+### Hdiv Community
+
+Is an open-source web application security framework that includes read-only data protection and editable data risk mitigation. It is appropriate for customers who have less stringent security requirements but want protection from cyber threats.
+
+### Hdiv Enterprise
+Is a commercial all-in-one solution integrating the best of AST (Application Security Testing), RASP (Runtime application self protection), and WAF (Web application firewall) approaches with enterprise-class security, exclusive functionality, scalability, and enterprise-level support services. For more information, contact us at support@hdivsecurity.com
+
+![Hdiv](https://hdivsecurity.com/img/technologies.png)
 
 ## Installation
 
