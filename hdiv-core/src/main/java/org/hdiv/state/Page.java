@@ -267,7 +267,7 @@ public class Page implements IPage, Serializable {
 		result.append("Page:").append(id).append(' ');
 
 		for (IState state : states) {
-			result.append(" ").append(state.toString());
+			result.append(" ").append(String.valueOf(state));
 		}
 
 		return result.toString();
