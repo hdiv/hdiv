@@ -17,6 +17,8 @@ package org.hdiv.config.annotation;
 
 import java.util.regex.Pattern;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.hdiv.validator.Validation;
 import org.springframework.util.Assert;
 
@@ -27,14 +29,16 @@ import org.springframework.util.Assert;
  */
 public class RuleRegistration {
 
+	private static final Log log = LogFactory.getLog(RuleRegistration.class);
+
 	/**
 	 * Validation rule.
 	 */
-	private Validation validation;
+	private final Validation validation;
 
-	public RuleRegistration(String name) {
-		this.validation = new Validation();
-		this.validation.setName(name);
+	public RuleRegistration(final String name) {
+		validation = new Validation();
+		validation.setName(name);
 	}
 
 	/**
@@ -48,9 +52,9 @@ public class RuleRegistration {
 	 * @param componentType Type of the component.
 	 * @return More configuration options
 	 */
-	public RuleRegistration componentType(String componentType) {
+	public RuleRegistration componentType(final String componentType) {
 		Assert.notNull(componentType, "Component type is required");
-		this.validation.setComponentType(componentType);
+		validation.setComponentType(componentType);
 		return this;
 	}
 
@@ -65,9 +69,12 @@ public class RuleRegistration {
 	 * @param acceptedPattern Accepter pattern
 	 * @return More configuration options
 	 */
-	public RuleRegistration acceptedPattern(String acceptedPattern) {
+	public RuleRegistration acceptedPattern(final String acceptedPattern) {
 		Assert.notNull(acceptedPattern, "Accepted pattern is required");
-		this.validation.setAcceptedPattern(acceptedPattern);
+		if (validation.getAcceptedPattern() != null) {
+			log.warn("Can't add more than one acceptedPattern per rule. This will overwrite the previous one.");
+		}
+		validation.setAcceptedPattern(acceptedPattern);
 		return this;
 	}
 
@@ -82,9 +89,12 @@ public class RuleRegistration {
 	 * @param rejectedPattern Rejected pattern
 	 * @return More configuration options
 	 */
-	public RuleRegistration rejectedPattern(String rejectedPattern) {
+	public RuleRegistration rejectedPattern(final String rejectedPattern) {
 		Assert.notNull(rejectedPattern, "Rejected pattern is required");
-		this.validation.setRejectedPattern(rejectedPattern);
+		if (validation.getRejectedPattern() != null) {
+			log.warn("Can't add more than one rejectedPattern per rule. This will overwrite the previous one.");
+		}
+		validation.setRejectedPattern(rejectedPattern);
 		return this;
 	}
 
