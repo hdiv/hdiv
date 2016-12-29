@@ -50,6 +50,11 @@ public class JsfValidatorHelper extends ValidatorHelperRequest {
 	 */
 	private static final Log log = LogFactory.getLog(JsfValidatorHelper.class);
 
+	/**
+	 * Request attribute that has a true value only if the request has a view state.
+	 */
+	public static final String IS_VIEW_STATE_REQUEST = JsfValidatorHelper.class.getName() + "IS_VIEW_STATE_REQUEST";
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -66,6 +71,9 @@ public class JsfValidatorHelper extends ValidatorHelperRequest {
 		Map<String, Object> requestMap = request.getParameterMap();
 
 		boolean isViewState = UtilsJsf.hasFacesViewParamName(requestMap.keySet());
+
+		request.setAttribute(IS_VIEW_STATE_REQUEST, isViewState);
+
 		if (isViewState) {
 			// Contains parameter with JSF state, it is a JSF request.
 			if (log.isDebugEnabled()) {

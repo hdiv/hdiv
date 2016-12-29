@@ -56,6 +56,11 @@ public class HDIVFacesEventListener implements FacesListener, StateHolder {
 	private static final Log log = LogFactory.getLog(HDIVFacesEventListener.class);
 
 	/**
+	 * Request attribute that has a true value only if the request was correctly validated.
+	 */
+	public static final String REQUEST_VALID = HDIVFacesEventListener.class.getName() + ".REQUEST_VALID";
+
+	/**
 	 * Parameter validator
 	 */
 	private ComponentValidator requestParamValidator;
@@ -128,6 +133,8 @@ public class HDIVFacesEventListener implements FacesListener, StateHolder {
 		if (error != null) {
 			log(context, error);
 		}
+
+		context.getExternalContext().getRequestMap().put(REQUEST_VALID, true);
 	}
 
 	/**

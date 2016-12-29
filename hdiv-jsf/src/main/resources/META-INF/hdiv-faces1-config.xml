@@ -26,6 +26,7 @@
 	<lifecycle>
 		<phase-listener>org.hdiv.phaseListeners.ComponentMessagesPhaseListener</phase-listener>
 		<phase-listener>org.hdiv.phaseListeners.ConfigPhaseListener</phase-listener>
+		<phase-listener>org.hdiv.phaseListeners.ValidationStatusPhaseListener</phase-listener>
 	</lifecycle>
 
 	<factory>
