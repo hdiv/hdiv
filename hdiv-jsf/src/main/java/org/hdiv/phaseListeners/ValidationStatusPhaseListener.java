@@ -26,7 +26,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hdiv.events.HDIVFacesEventListener;
-import org.hdiv.exception.StateValidationException;
 import org.hdiv.filter.JsfValidatorHelper;
 import org.hdiv.filter.ValidatorError;
 import org.hdiv.logs.Logger;
@@ -65,10 +64,10 @@ public class ValidationStatusPhaseListener implements PhaseListener {
 			// Check if the request was validated
 
 			Map<String, Object> params = event.getFacesContext().getExternalContext().getRequestMap();
-			Boolean isValidRequest = (Boolean) params.get(HDIVFacesEventListener.REQUEST_VALID);
+			Boolean isRequestValidated = (Boolean) params.get(HDIVFacesEventListener.REQUEST_VALIDATED);
 			Boolean isViewStateRequest = (Boolean) params.get(JsfValidatorHelper.IS_VIEW_STATE_REQUEST);
 
-			if (isViewStateRequest && (isValidRequest == null || !isValidRequest)) {
+			if (isViewStateRequest && (isRequestValidated == null || !isRequestValidated)) {
 				if (log.isErrorEnabled()) {
 					log.error("This request is not validated.");
 				}
@@ -77,7 +76,8 @@ public class ValidationStatusPhaseListener implements PhaseListener {
 
 				// Stop the request
 				// Throw an exception that will be processed by the ExceptionHadler
-				throw new StateValidationException();
+				// TODO Commented because we are breaking some components with this solution. Find another way to stop the request.
+				// throw new StateValidationException();
 			}
 		}
 

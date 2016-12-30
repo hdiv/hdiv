@@ -46,6 +46,10 @@ public class UICommandValidator implements ComponentValidator {
 	 */
 	public ValidationError validate(final FacesContext context, final UIComponent component) {
 
+		if (!(component instanceof UICommand)) {
+			return null;
+		}
+
 		UICommand command = (UICommand) component;
 
 		// Search parent components of type UIData
