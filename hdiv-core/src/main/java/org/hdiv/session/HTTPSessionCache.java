@@ -48,7 +48,7 @@ public class HTTPSessionCache {
 	private static final String PAGE_ID_KEY_PREFIX = "hdiv-page-";
 
 	public void insertPage(final SimpleCacheKey key, final IPage newPage) {
-		HttpSession session = key.getRequestContext().getSession();
+		SessionModel session = key.getRequestContext().getSession();
 		int pageId = newPage.getId();
 		HttpServletRequest request = key.getRequestContext().getRequest();
 
@@ -99,13 +99,13 @@ public class HTTPSessionCache {
 			log.debug("Getting page with id:" + key.getPageId());
 		}
 
-		HttpSession session = key.getRequestContext().getSession();
+		SessionModel session = key.getRequestContext().getSession();
 		return (IPage) session.getAttribute(PAGE_ID_KEY_PREFIX + key.getPageId());
 	}
 
 	public boolean removePage(final SimpleCacheKey key) {
 
-		HttpSession session = key.getRequestContext().getSession();
+		SessionModel session = key.getRequestContext().getSession();
 
 		Object attr = session.getAttribute(PAGE_ID_KEY_PREFIX + key.getPageId());
 		if (attr == null) {
@@ -117,7 +117,7 @@ public class HTTPSessionCache {
 		return cache.getPageIds().remove(new Integer(key.getPageId()));
 	}
 
-	private void deletePage(final HttpSession session, final int pageId) {
+	private void deletePage(final SessionModel session, final int pageId) {
 		session.removeAttribute(PAGE_ID_KEY_PREFIX + pageId);
 
 		if (log.isDebugEnabled()) {
@@ -127,7 +127,7 @@ public class HTTPSessionCache {
 
 	void removeEndedPages(final RequestContext context, final String conversationId) {
 
-		HttpSession session = context.getRequest().getSession();
+		SessionModel session = context.getSession();
 
 		IStateCache cache = getStateCache(session);
 		if (log.isDebugEnabled()) {
@@ -186,7 +186,7 @@ public class HTTPSessionCache {
 	 * @param session {@link HttpSession} instance
 	 * @return IStateCache instance
 	 */
-	public IStateCache getStateCache(final HttpSession session) {
+	public IStateCache getStateCache(final SessionModel session) {
 
 		IStateCache cache = (IStateCache) session.getAttribute(Constants.STATE_CACHE_NAME);
 		if (cache == null) {
@@ -204,7 +204,7 @@ public class HTTPSessionCache {
 	 * @param stateCache {@link IStateCache} instance
 	 * @since HDIV 2.1.6
 	 */
-	protected void saveStateCache(final HttpSession session, final IStateCache stateCache) {
+	protected void saveStateCache(final SessionModel session, final IStateCache stateCache) {
 
 		session.setAttribute(Constants.STATE_CACHE_NAME, stateCache);
 	}

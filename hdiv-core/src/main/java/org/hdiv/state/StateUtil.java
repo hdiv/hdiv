@@ -166,7 +166,7 @@ public class StateUtil {
 			return restoredState;
 		}
 
-		// Obtain State from a HttpSession
+		// Obtain State from a Session
 		int pageId;
 		try {
 			pageId = Integer.parseInt(pId);

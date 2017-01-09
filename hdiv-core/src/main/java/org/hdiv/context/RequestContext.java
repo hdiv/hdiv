@@ -17,7 +17,8 @@ package org.hdiv.context;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+
+import org.hdiv.session.SessionModel;
 
 /**
  * Context holder for request-specific state. Contains request-specific data for validation and composition phases.
@@ -26,23 +27,20 @@ import javax.servlet.http.HttpSession;
  */
 public class RequestContext {
 
-	private HttpServletRequest request;
+	private final HttpServletRequest request;
 
-	private HttpServletResponse response;
+	private final HttpServletResponse response;
 
-	private HttpSession session;
+	private final SessionModel session;
 
 	public RequestContext(final HttpServletRequest request) {
 		this(request, null);
 	}
 
-	public RequestContext(final HttpSession session) {
-		this.session = session;
-	}
-
 	public RequestContext(final HttpServletRequest request, final HttpServletResponse response) {
 		this.request = request;
 		this.response = response;
+		session = new HttpSessionModel(request.getSession());
 	}
 
 	/**
@@ -62,10 +60,7 @@ public class RequestContext {
 	/**
 	 * @return the session
 	 */
-	public HttpSession getSession() {
-		if (session == null) {
-			return request.getSession();
-		}
+	public SessionModel getSession() {
 		return session;
 	}
 
