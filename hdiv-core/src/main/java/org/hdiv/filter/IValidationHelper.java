@@ -18,6 +18,7 @@ package org.hdiv.filter;
 import javax.servlet.http.HttpServletRequest;
 
 import org.hdiv.exception.HDIVException;
+import org.hdiv.state.IState;
 
 /**
  * Interface to validate a client request.
@@ -58,5 +59,7 @@ public interface IValidationHelper {
 	 * @param request HTTP servlet request
 	 */
 	void endPage(HttpServletRequest request);
+
+	String validateObfuscated(final HttpServletRequest request);
 
 }

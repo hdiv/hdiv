@@ -136,12 +136,15 @@ public class ValidatorFilter extends OncePerRequestFilter {
 	@Override
 	protected void doFilterInternal(final HttpServletRequest request, final HttpServletResponse response, final FilterChain filterChain)
 			throws ServletException, IOException {
-
+		System.out.println("Filtering:" + request.getRequestURI());
 		// Initialize dependencies
 		initDependencies();
 
 		// Initialize request scoped data
 		requestInitializer.initRequest(request, response);
+
+		String obfuscated = validationHelper.validateObfuscated(request);
+		System.out.println(obfuscated);
 
 		RequestWrapper requestWrapper = requestInitializer.createRequestWrapper(request, response);
 		ResponseWrapper responseWrapper = requestInitializer.createResponseWrapper(request, response);
@@ -201,7 +204,7 @@ public class ValidatorFilter extends OncePerRequestFilter {
 
 			if (legal || hdivConfig.isDebugMode() || hasEditableError && !hdivConfig.isShowErrorPageOnEditableValidation()) {
 
-				processRequest(multipartProcessedRequest, responseWrapper, filterChain);
+				processRequest(multipartProcessedRequest, responseWrapper, filterChain, obfuscated);
 			}
 			else {
 
@@ -265,11 +268,26 @@ public class ValidatorFilter extends OncePerRequestFilter {
 	 * @throws ServletException if there is an error in request process.
 	 */
 	protected void processRequest(final HttpServletRequest requestWrapper, final ResponseWrapper responseWrapper,
-			final FilterChain filterChain) throws IOException, ServletException {
+			final FilterChain filterChain, final String obfuscated) throws IOException, ServletException {
 
 		validationHelper.startPage(requestWrapper);
 		try {
-			filterChain.doFilter(requestWrapper, responseWrapper);
+			if (obfuscated != null) {
+				System.out.println("Forwarding to:" + obfuscated);
+				System.out.println("Context:" + obfuscated.substring(0, obfuscated.lastIndexOf('/') + 1));
+				ServletContext otherContext = requestWrapper.getServletContext()
+						.getContext(obfuscated.substring(0, obfuscated.lastIndexOf('/') + 1));
+				if (otherContext != null) {
+					otherContext.getRequestDispatcher(obfuscated.substring(obfuscated.lastIndexOf('/'))).forward(requestWrapper,
+							responseWrapper);
+				}
+				else {
+					requestWrapper.getRequestDispatcher(obfuscated).forward(requestWrapper, responseWrapper);
+				}
+			}
+			else {
+				filterChain.doFilter(requestWrapper, responseWrapper);
+			}
 		}
 		finally {
 			validationHelper.endPage(requestWrapper);
@@ -330,6 +348,7 @@ public class ValidatorFilter extends OncePerRequestFilter {
 		for (ValidatorError error : errors) {
 			// Log the error
 			logger.log(error);
+			System.out.println(error);
 		}
 
 	}

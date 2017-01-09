@@ -99,6 +99,8 @@ public class UrlDataImpl implements UrlData {
 
 	String composedParams;
 
+	boolean urlObfuscation;
+
 	/**
 	 * Constructor
 	 *
@@ -311,7 +313,14 @@ public class UrlDataImpl implements UrlData {
 		if (server != null) {
 			sb.append(server);
 		}
-		sb.append(contextPathRelativeUrl);
+		if (!urlObfuscation || !internal) {
+			sb.append(contextPathRelativeUrl);
+		}
+		else {
+			System.out.println("Rendering:" + contextPathRelativeUrl + " relative:" + urlWithoutContextPath);
+			sb.append(contextPathRelativeUrl.substring(0, contextPathRelativeUrl.length() - urlWithoutContextPath.length())).append('/');
+			// sb.append(Math.abs(urlWithoutContextPath.hashCode()));
+		}
 
 		// Add jSessionId
 		if (jSessionId != null) {
@@ -413,6 +422,7 @@ public class UrlDataImpl implements UrlData {
 		if (isGetMethod() && !validateParamLessUrls && !containsParams()) {
 			return false;
 		}
+		urlObfuscation = config.isUrlObfuscation();
 		return true;
 	}
 

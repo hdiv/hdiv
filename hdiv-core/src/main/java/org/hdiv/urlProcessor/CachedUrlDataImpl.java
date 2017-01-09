@@ -38,23 +38,13 @@ public class CachedUrlDataImpl extends UrlDataImpl {
 	 */
 	@Override
 	void getParamProcessedUrl(final StringBuilder sb) {
-		sb.setLength(0);
 		if (cacheProcessed != null) {
+			sb.setLength(0);
 			sb.append(cacheProcessed);
 			return;
 		}
-		if (server != null) {
-			sb.append(server);
-		}
-		sb.append(contextPathRelativeUrl);
-
-		// Add jSessionId
-		if (jSessionId != null) {
-			sb.append(';').append(jSessionId);
-		}
-
-		if (composedParams != null) {
-			sb.append('?').append(composedParams);
+		else {
+			super.getParamProcessedUrl(sb);
 		}
 		if (cached > 0) {
 			cacheProcessed = sb.toString();
@@ -92,11 +82,15 @@ public class CachedUrlDataImpl extends UrlDataImpl {
 	public boolean isHdivStateNecessary(final HDIVConfig config) {
 		if (status == null) {
 			boolean needed = super.isHdivStateNecessary(config);
-			this.status = needed ? HDIVStatus.ACTIVE : HDIVStatus.INACTIVE;
+			status = needed ? HDIVStatus.ACTIVE : HDIVStatus.INACTIVE;
 			return needed;
 		}
 		else {
-			return status == HDIVStatus.ACTIVE;
+			boolean needed = status == HDIVStatus.ACTIVE;
+			if (needed) {
+				urlObfuscation = config.isUrlObfuscation();
+			}
+			return needed;
 		}
 	}
 

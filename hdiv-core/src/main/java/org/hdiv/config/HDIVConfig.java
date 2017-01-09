@@ -188,6 +188,11 @@ public class HDIVConfig implements Serializable {
 	protected Map<PatternMatcher, String> longLivingPages = new HashMap<PatternMatcher, String>();
 
 	/**
+	 * True if URLs should be obfuscated
+	 */
+	private boolean urlObfuscation = false;
+
+	/**
 	 * @param strategy the strategy to set
 	 */
 	public void setStrategy(final Strategy strategy) {
@@ -653,6 +658,14 @@ public class HDIVConfig implements Serializable {
 	 */
 	public EditableDataValidationProvider getEditableDataValidationProvider() {
 		return editableDataValidationProvider;
+	}
+
+	public boolean isUrlObfuscation() {
+		return urlObfuscation;
+	}
+
+	public void setUrlObfuscation(final boolean urlObfuscation) {
+		this.urlObfuscation = urlObfuscation;
 	}
 
 	@Override

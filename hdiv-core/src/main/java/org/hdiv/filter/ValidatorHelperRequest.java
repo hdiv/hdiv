@@ -131,6 +131,24 @@ public class ValidatorHelperRequest implements IValidationHelper {
 		return decodeUrl(sb, target);
 	}
 
+	public String validateObfuscated(final HttpServletRequest request) {
+		String hdivParameter = getHdivParameter(request);
+
+		if (hdivParameter != null) {
+			StringBuilder sb = new StringBuilder(128);
+			String target = getDecodedTarget(sb, request);
+			// Restore state from request or memory
+			ValidatorHelperResult result = restoreState(hdivParameter, request, target);
+			if (!result.isValid()) {
+				return null;
+			}
+			// Get resultant object, the stored state
+			return result.getValue().getAction();
+		}
+		return null;
+
+	}
+
 	/**
 	 * Checks if the values of the parameters received in the request <code>request</code> are valid. These values are valid if and only if
 	 * the noneditable parameters haven't been modified.<br>
@@ -292,13 +310,27 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	 * @return valid result if the actions are the same. False otherwise.
 	 */
 	protected ValidatorHelperResult isTheSameAction(final HttpServletRequest request, final String target, final IState state) {
+		return isTheSameAction(request, target, state.getAction());
+	}
 
-		String stateAction = state.getAction();
+	/**
+	 * Checks if the action received in the request is the same as the one stored in the HDIV state.
+	 *
+	 * @param request HttpServletRequest to validate
+	 * @param target Part of the url that represents the target action
+	 * @param state The restored state for this url
+	 * @return valid result if the actions are the same. False otherwise.
+	 */
+	protected ValidatorHelperResult isTheSameAction(final HttpServletRequest request, final String target, String stateAction) {
 
 		// Remove HTML escaped content from the action, for example, HTML entities like &Ntilde;
 		stateAction = HtmlUtils.htmlUnescape(stateAction);
 
 		if (stateAction.equalsIgnoreCase(target)) {
+			return ValidatorHelperResult.VALID;
+		}
+
+		if (hdivConfig.isUrlObfuscation() && target.equals("/")) {
 			return ValidatorHelperResult.VALID;
 		}
 
@@ -310,8 +342,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 		}
 
 		if (log.isDebugEnabled()) {
-			log.debug(
-					"Validation error in the action. Action in state [" + state.getAction() + "], action in the request [" + target + "]");
+			log.debug("Validation error in the action. Action in state [" + stateAction + "], action in the request [" + target + "]");
 		}
 		ValidatorError error = new ValidatorError(HDIVErrorCodes.ACTION_ERROR, target);
 		return new ValidatorHelperResult(error);
