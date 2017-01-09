@@ -56,6 +56,11 @@ public class HDIVFacesEventListener implements FacesListener, StateHolder {
 	private static final Log log = LogFactory.getLog(HDIVFacesEventListener.class);
 
 	/**
+	 * Request attribute that has a true value only if the request was correctly validated.
+	 */
+	public static final String REQUEST_VALIDATED = HDIVFacesEventListener.class.getName() + ".REQUEST_VALIDATED";
+
+	/**
 	 * Parameter validator
 	 */
 	private ComponentValidator requestParamValidator;
@@ -98,7 +103,7 @@ public class HDIVFacesEventListener implements FacesListener, StateHolder {
 
 		FacesContext context = FacesContext.getCurrentInstance();
 
-		UICommand eventComp = (UICommand) facesEvent.getComponent();
+		UIComponent eventComp = facesEvent.getComponent();
 
 		// Search form component
 		UIForm form = findParentForm(eventComp);
@@ -128,6 +133,8 @@ public class HDIVFacesEventListener implements FacesListener, StateHolder {
 		if (error != null) {
 			log(context, error);
 		}
+
+		context.getExternalContext().getRequestMap().put(REQUEST_VALIDATED, true);
 	}
 
 	/**
@@ -136,7 +143,6 @@ public class HDIVFacesEventListener implements FacesListener, StateHolder {
 	 * @param comp Base component
 	 * @return UIForm component
 	 */
-
 	private UIForm findParentForm(final UIComponent comp) {
 
 		UIComponent parent = comp.getParent();
@@ -144,7 +150,6 @@ public class HDIVFacesEventListener implements FacesListener, StateHolder {
 			parent = parent.getParent();
 		}
 		return (UIForm) parent;
-
 	}
 
 	/**
@@ -181,15 +186,27 @@ public class HDIVFacesEventListener implements FacesListener, StateHolder {
 	 * @param context Request context
 	 * @param comp component which throws the event
 	 */
-	private void forwardToErrorPage(final FacesContext context, final UICommand comp) {
-		if (!comp.isImmediate()) {
-			// Redirect to Hdiv errors page
-			try {
-				String contextPath = context.getExternalContext().getRequestContextPath();
-				context.getExternalContext().redirect(contextPath + config.getErrorPage());
+	private void forwardToErrorPage(final FacesContext context, final UIComponent comp) {
+
+		if (comp instanceof UICommand) {
+			UICommand comm = (UICommand) comp;
+			if (!comm.isImmediate()) {
+				// Redirect to Hdiv errors page
+				try {
+					String contextPath = context.getExternalContext().getRequestContextPath();
+					context.getExternalContext().redirect(contextPath + config.getErrorPage());
+				}
+				catch (IOException e) {
+					throw new StateValidationException(e);
+				}
 			}
-			catch (IOException e) {
-				throw new StateValidationException(e);
+			else {
+				// Previous strategy doesn't work with immediate components because
+				// the execution of business logic continues running-
+				// An exception is thrown to be catched by the ExceptionHandler
+				// (JSF2)
+				// TODO Commented because we are breaking some components with this solution. Find another way to stop the request.
+				// throw new StateValidationException();
 			}
 		}
 		else {
@@ -197,7 +214,8 @@ public class HDIVFacesEventListener implements FacesListener, StateHolder {
 			// the execution of business logic continues running-
 			// An exception is thrown to be catched by the ExceptionHandler
 			// (JSF2)
-			throw new StateValidationException();
+			// TODO Commented because we are breaking some components with this solution. Find another way to stop the request.
+			// throw new StateValidationException();
 		}
 
 	}

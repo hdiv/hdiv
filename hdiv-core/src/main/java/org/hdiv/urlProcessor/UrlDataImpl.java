@@ -130,7 +130,7 @@ public class UrlDataImpl implements UrlData {
 	 * @return has parameters?
 	 */
 	public boolean containsParams() {
-		return originalUrlParams != null && originalUrlParams.size() > 0 || urlParams != null;
+		return (originalUrlParams != null && originalUrlParams.size() > 0) || (urlParams != null && urlParams.length() > 0);
 	}
 
 	/**

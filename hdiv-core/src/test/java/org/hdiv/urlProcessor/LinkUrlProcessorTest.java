@@ -342,18 +342,21 @@ public class LinkUrlProcessorTest extends AbstractHDIVTestCase {
 		String result = linkUrlProcessor.processUrl(request, url);
 		assertEquals(1, StringUtils.countOccurrencesOf(result, "_HDIV_STATE_"));
 		assertFalse(result.contains("11-11-1234567890"));
+		assertTrue(result.startsWith("/link.do?_HDIV_STATE_="));
 		assertTrue(!result.equals(url));
 
 		url = "/link.do?aaaa=bbbb&_HDIV_STATE_=11-11-1234567890";
 		result = linkUrlProcessor.processUrl(request, url);
 		assertEquals(1, StringUtils.countOccurrencesOf(result, "_HDIV_STATE_"));
 		assertFalse(result.contains("11-11-1234567890"));
+		assertTrue(result.startsWith("/link.do?aaaa=0&_HDIV_STATE_="));
 		assertTrue(!result.equals(url));
 
 		url = "/link.do?aaaa=bbbb&_HDIV_STATE_=11-11-1234567890#hash";
 		result = linkUrlProcessor.processUrl(request, url);
 		assertEquals(1, StringUtils.countOccurrencesOf(result, "_HDIV_STATE_"));
 		assertFalse(result.contains("11-11-1234567890"));
+		assertTrue(result.startsWith("/link.do?aaaa=0&_HDIV_STATE_="));
 		assertTrue(!result.equals(url));
 
 		url = "/link.do?aaaa=bbbb&_MODIFY_HDIV_STATE_=11-11-1234567890";
@@ -361,6 +364,7 @@ public class LinkUrlProcessorTest extends AbstractHDIVTestCase {
 		assertEquals(1, StringUtils.countOccurrencesOf(result, "&_HDIV_STATE_"));
 		assertEquals(1, StringUtils.countOccurrencesOf(result, "&_MODIFY_HDIV_STATE_"));
 		assertTrue(result.contains("11-11-1234567890"));
+		assertTrue(result.startsWith("/link.do?aaaa=0&_MODIFY_HDIV_STATE_="));
 		assertTrue(!result.equals(url));
 	}
 

@@ -48,7 +48,7 @@ public class Logger {
 	 * 
 	 * @param error Validator error data
 	 */
-	public void log(ValidatorError error) {
+	public void log(final ValidatorError error) {
 
 		this.log(error.getType(), error.getTarget(), error.getParameterName(), error.getParameterValue(), error.getOriginalParameterValue(),
 				error.getLocalIp(), error.getRemoteIp(), error.getUserName(), error.getValidationRuleName());
@@ -67,10 +67,11 @@ public class Logger {
 	 * @param userName user name in application
 	 * @param validationRuleName In an attack of type 'EDITABLE_VALIDATION_ERROR', contains the name of the rule that rejected the value
 	 */
-	protected void log(String type, String target, String parameterName, String parameterValue, String originalParameterValue,
-			String localIp, String remoteIp, String userName, String validationRuleName) {
+	protected void log(final String type, final String target, final String parameterName, final String parameterValue,
+			final String originalParameterValue, final String localIp, final String remoteIp, final String userName,
+			final String validationRuleName) {
 
-		String formatedData = this.format(type, target, parameterName, parameterValue, originalParameterValue, localIp, remoteIp, userName,
+		String formatedData = format(type, target, parameterName, parameterValue, originalParameterValue, localIp, remoteIp, userName,
 				validationRuleName);
 		log.info(formatedData);
 	}
@@ -95,15 +96,18 @@ public class Logger {
 	 * 
 	 * @return String Formatted text with the attach.
 	 */
-	protected String format(String type, String target, String parameterName, String parameterValue, String originalParameterValue,
-			String localIp, String remoteIp, String userName, String validationRuleName) {
+	protected String format(final String type, final String target, final String parameterName, final String parameterValue,
+			final String originalParameterValue, final String localIp, final String remoteIp, final String userName,
+			final String validationRuleName) {
 
 		StringBuilder buffer = new StringBuilder();
 		buffer.append(type);
 		buffer.append(";");
 		buffer.append(target);
 		buffer.append(";");
-		buffer.append(parameterName);
+		if (parameterName != null) {
+			buffer.append(parameterName);
+		}
 		buffer.append(";");
 		if (parameterValue != null) {
 			buffer.append(parameterValue);
