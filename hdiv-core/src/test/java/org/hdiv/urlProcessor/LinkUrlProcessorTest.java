@@ -31,6 +31,10 @@ public class LinkUrlProcessorTest extends AbstractHDIVTestCase {
 		linkUrlProcessor = getApplicationContext().getBean(LinkUrlProcessor.class);
 	}
 
+	private void startsWith(final String result, final String value) {
+		assertTrue(result + " does not start with:" + value, result.startsWith(value));
+	}
+
 	public void testProcessAction() {
 
 		HttpServletRequest request = getMockRequest();
@@ -38,7 +42,7 @@ public class LinkUrlProcessorTest extends AbstractHDIVTestCase {
 
 		String result = linkUrlProcessor.processUrl(request, url);
 
-		assertTrue(result.startsWith("/testAction.do?_HDIV_STATE_="));
+		startsWith(result, "/testAction.do?_HDIV_STATE_=");
 	}
 
 	public void testProcessActionWithContextPath() {
@@ -49,7 +53,7 @@ public class LinkUrlProcessorTest extends AbstractHDIVTestCase {
 
 		String result = linkUrlProcessor.processUrl(request, url);
 
-		assertTrue(result.startsWith("/path/testAction.do?_HDIV_STATE_="));
+		startsWith(result, "/path/testAction.do?_HDIV_STATE_=");
 	}
 
 	public void testProcessActionWithAnchor() {
@@ -59,7 +63,7 @@ public class LinkUrlProcessorTest extends AbstractHDIVTestCase {
 
 		String result = linkUrlProcessor.processUrl(request, url);
 
-		assertTrue(result.startsWith("/testAction.do?_HDIV_STATE_="));
+		startsWith(result, "/testAction.do?_HDIV_STATE_=");
 		assertTrue(result.endsWith("#anchor"));
 	}
 
@@ -70,7 +74,7 @@ public class LinkUrlProcessorTest extends AbstractHDIVTestCase {
 
 		String result = linkUrlProcessor.processUrl(request, url);
 
-		assertTrue(result.startsWith("/testAction.do?params=0&_HDIV_STATE_"));
+		startsWith(result, "/testAction.do?params=0&_HDIV_STATE_");
 	}
 
 	public void testProcessActionParamWithoutValue() {
@@ -80,7 +84,7 @@ public class LinkUrlProcessorTest extends AbstractHDIVTestCase {
 
 		String result = linkUrlProcessor.processUrl(request, url);
 
-		assertTrue(result.startsWith("/testAction.do?params=0&_HDIV_STATE_"));
+		startsWith(result, "/testAction.do?params=0&_HDIV_STATE_");
 	}
 
 	public void testProcessActionRelative() {
@@ -90,7 +94,7 @@ public class LinkUrlProcessorTest extends AbstractHDIVTestCase {
 
 		String result = linkUrlProcessor.processUrl(request, url);
 
-		assertTrue(result.startsWith("/path/testAction.do?_HDIV_STATE_="));
+		startsWith(result, "/path/testAction.do?_HDIV_STATE_=");
 	}
 
 	public void testProcessActionRelative2() {
@@ -100,7 +104,7 @@ public class LinkUrlProcessorTest extends AbstractHDIVTestCase {
 
 		String result = linkUrlProcessor.processUrl(request, url);
 
-		assertTrue(result.startsWith("/testAction.do?_HDIV_STATE_="));
+		startsWith(result, "/testAction.do?_HDIV_STATE_=");
 	}
 
 	public void testProcessActionRelative3() {
@@ -159,7 +163,7 @@ public class LinkUrlProcessorTest extends AbstractHDIVTestCase {
 
 		String result = linkUrlProcessor.processUrl(request, url);
 
-		assertTrue(result.startsWith("http://localhost:8080/path/sample.do?_HDIV_STATE_="));
+		startsWith(result, "http://localhost:8080/path/sample.do?_HDIV_STATE_=");
 	}
 
 	public void testProcessAbsoluteInternalUrlWithContextPath2() {
@@ -171,7 +175,7 @@ public class LinkUrlProcessorTest extends AbstractHDIVTestCase {
 
 		String result = linkUrlProcessor.processUrl(request, url);
 
-		assertTrue(result.startsWith("http://localhost:8080/path/sample.do"));
+		startsWith(result, "http://localhost:8080/path/sample.do");
 	}
 
 	public void testProcessAbsoluteInternalUrl() {
@@ -182,7 +186,7 @@ public class LinkUrlProcessorTest extends AbstractHDIVTestCase {
 
 		String result = linkUrlProcessor.processUrl(request, url);
 
-		assertTrue(result.startsWith("http://localhost:8080/path/sample.do?_HDIV_STATE_="));
+		startsWith(result, "http://localhost:8080/path/sample.do?_HDIV_STATE_=");
 	}
 
 	public void testProcessActionStartPage() {
@@ -199,7 +203,7 @@ public class LinkUrlProcessorTest extends AbstractHDIVTestCase {
 
 		url = "/onlypost.do"; // is a startPage only in POST requests
 		result = linkUrlProcessor.processUrl(request, url);
-		assertTrue(result.startsWith("/onlypost.do?_HDIV_STATE_="));
+		startsWith(result, "/onlypost.do?_HDIV_STATE_=");
 	}
 
 	public void testProcessActionStartPageWithParams() {
