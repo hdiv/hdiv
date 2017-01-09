@@ -17,6 +17,7 @@ package org.hdiv.context;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.hdiv.session.SessionModel;
 
@@ -27,9 +28,9 @@ import org.hdiv.session.SessionModel;
  */
 public class RequestContext {
 
-	private final HttpServletRequest request;
+	private HttpServletRequest request;
 
-	private final HttpServletResponse response;
+	private HttpServletResponse response;
 
 	private final SessionModel session;
 
@@ -41,6 +42,10 @@ public class RequestContext {
 		this.request = request;
 		this.response = response;
 		session = new HttpSessionModel(request.getSession());
+	}
+
+	public RequestContext(final HttpSession session) {
+		this.session = new HttpSessionModel(session);
 	}
 
 	/**
