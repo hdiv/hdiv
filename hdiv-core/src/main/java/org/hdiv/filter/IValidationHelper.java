@@ -18,7 +18,6 @@ package org.hdiv.filter;
 import javax.servlet.http.HttpServletRequest;
 
 import org.hdiv.exception.HDIVException;
-import org.hdiv.state.IState;
 
 /**
  * Interface to validate a client request.
@@ -44,7 +43,7 @@ public interface IValidationHelper {
 	 * HDIV validation. False, otherwise.
 	 * @throws HDIVException If the request doesn't pass the HDIV validation an exception is thrown explaining the cause of the error.
 	 */
-	ValidatorHelperResult validate(HttpServletRequest request);
+	ValidatorHelperResult validate(ValidationContext context);
 
 	/**
 	 * It is called in the pre-processing stage of each user request.
@@ -59,7 +58,5 @@ public interface IValidationHelper {
 	 * @param request HTTP servlet request
 	 */
 	void endPage(HttpServletRequest request);
-
-	String validateObfuscated(final HttpServletRequest request);
 
 }

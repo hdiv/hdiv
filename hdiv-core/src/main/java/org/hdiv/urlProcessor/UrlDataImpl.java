@@ -313,13 +313,13 @@ public class UrlDataImpl implements UrlData {
 		if (server != null) {
 			sb.append(server);
 		}
-		if (!urlObfuscation || !internal) {
+		if (!urlObfuscation || !internal || uriTemplate != null) {
 			sb.append(contextPathRelativeUrl);
 		}
 		else {
 			System.out.println("Rendering:" + contextPathRelativeUrl + " relative:" + urlWithoutContextPath);
 			sb.append(contextPathRelativeUrl.substring(0, contextPathRelativeUrl.length() - urlWithoutContextPath.length())).append('/');
-			// sb.append(Math.abs(urlWithoutContextPath.hashCode()));
+			sb.append(Math.abs(urlWithoutContextPath.hashCode()));
 		}
 
 		// Add jSessionId

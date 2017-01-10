@@ -15,7 +15,6 @@
  */
 package org.hdiv.filter;
 
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Enumeration;
@@ -66,7 +65,7 @@ import org.springframework.web.util.HtmlUtils;
  * @author Gotzon Illarramendi
  * @since HDIV 2.0
  */
-public class ValidatorHelperRequest implements IValidationHelper {
+public class ValidatorHelperRequest implements IValidationHelper, StateRestorer {
 
 	private static final String VALIDATION_ERROR = "validation.error";
 
@@ -123,32 +122,6 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	public void init() {
 	}
 
-	protected final String getDecodedTarget(final StringBuilder sb, final HttpServletRequest request) {
-		/**
-		 * Remove contest path and session info first
-		 */
-		String target = HDIVUtil.stripSession(request.getRequestURI().substring(request.getContextPath().length()));
-		return decodeUrl(sb, target);
-	}
-
-	public String validateObfuscated(final HttpServletRequest request) {
-		String hdivParameter = getHdivParameter(request);
-
-		if (hdivParameter != null) {
-			StringBuilder sb = new StringBuilder(128);
-			String target = getDecodedTarget(sb, request);
-			// Restore state from request or memory
-			ValidatorHelperResult result = restoreState(hdivParameter, request, target);
-			if (!result.isValid()) {
-				return null;
-			}
-			// Get resultant object, the stored state
-			return result.getValue().getAction();
-		}
-		return null;
-
-	}
-
 	/**
 	 * Checks if the values of the parameters received in the request <code>request</code> are valid. These values are valid if and only if
 	 * the noneditable parameters haven't been modified.<br>
@@ -169,9 +142,9 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	 * @return valid result If all the parameter values of the request <code>request</code> pass the the HDIV validation. False, otherwise.
 	 * @throws HDIVException If the request doesn't pass the HDIV validation an exception is thrown explaining the cause of the error.
 	 */
-	public ValidatorHelperResult validate(final HttpServletRequest request) {
-		StringBuilder sb = new StringBuilder(128);
-		String target = getDecodedTarget(sb, request);
+	public ValidatorHelperResult validate(final ValidationContext context) {
+		String target = context.getTarget();
+		HttpServletRequest request = context.getRequest();
 
 		// Hook before the validation
 		ValidatorHelperResult result = preValidate(request, target);
@@ -243,7 +216,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 		}
 
 		// Extract url params from State
-		Map<String, String[]> stateParams = urlProcessor.getUrlParamsAsMap(sb, request, state.getParams());
+		Map<String, String[]> stateParams = urlProcessor.getUrlParamsAsMap(context.getBuffer(), request, state.getParams());
 
 		result = allRequiredParametersReceived(request, state, target, stateParams);
 		if (!result.isValid()) {
@@ -284,24 +257,6 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	}
 
 	/**
-	 * It decodes the url to replace the character represented by percentage with its equivalent.
-	 *
-	 * @param url url to decode
-	 * @return decoder url
-	 */
-	protected String decodeUrl(final StringBuilder sb, final String url) {
-		try {
-			return HDIVUtil.decodeValue(sb, url, Constants.ENCODING_UTF_8);
-		}
-		catch (final UnsupportedEncodingException e) {
-			throw new HDIVException("Error decoding url", e);
-		}
-		catch (final IllegalArgumentException e) {
-			throw new HDIVException("Error decoding url", e);
-		}
-	}
-
-	/**
 	 * Checks if the action received in the request is the same as the one stored in the HDIV state.
 	 *
 	 * @param request HttpServletRequest to validate
@@ -327,10 +282,6 @@ public class ValidatorHelperRequest implements IValidationHelper {
 		stateAction = HtmlUtils.htmlUnescape(stateAction);
 
 		if (stateAction.equalsIgnoreCase(target)) {
-			return ValidatorHelperResult.VALID;
-		}
-
-		if (hdivConfig.isUrlObfuscation() && target.equals("/")) {
 			return ValidatorHelperResult.VALID;
 		}
 
@@ -702,7 +653,7 @@ public class ValidatorHelperRequest implements IValidationHelper {
 	 * @param target Part of the url that represents the target action
 	 * @return valid result if restored state is valid. False in otherwise.
 	 */
-	protected ValidatorHelperResult restoreState(final String hdivParameter, final HttpServletRequest request, final String target) {
+	public ValidatorHelperResult restoreState(final String hdivParameter, final HttpServletRequest request, final String target) {
 
 		// checks if the parameter HDIV parameter exists in the parameters of
 		// the request

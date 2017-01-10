@@ -142,11 +142,6 @@ public class ValidatorFilter extends OncePerRequestFilter {
 		// Initialize request scoped data
 		requestInitializer.initRequest(request, response);
 
-		String obfuscated = null;
-		if (hdivConfig.isUrlObfuscation()) {
-			obfuscated = validationHelper.validateObfuscated(request);
-		}
-
 		RequestWrapper requestWrapper = requestInitializer.createRequestWrapper(request, response);
 		ResponseWrapper responseWrapper = requestInitializer.createResponseWrapper(request, response);
 
@@ -181,8 +176,10 @@ public class ValidatorFilter extends OncePerRequestFilter {
 			}
 
 			ValidatorHelperResult result = null;
+			ValidationContext context = new ValidationContextImpl(multipartProcessedRequest, (StateRestorer) validationHelper,
+					hdivConfig.isUrlObfuscation());
 			if (!isMultipartException) {
-				result = validationHelper.validate(multipartProcessedRequest);
+				result = validationHelper.validate(context);
 				legal = result.isValid();
 
 				// Store validation result in request
@@ -205,7 +202,7 @@ public class ValidatorFilter extends OncePerRequestFilter {
 
 			if (legal || hdivConfig.isDebugMode() || hasEditableError && !hdivConfig.isShowErrorPageOnEditableValidation()) {
 
-				processRequest(multipartProcessedRequest, responseWrapper, filterChain, obfuscated);
+				processRequest(multipartProcessedRequest, responseWrapper, filterChain, context.getRedirect());
 			}
 			else {
 

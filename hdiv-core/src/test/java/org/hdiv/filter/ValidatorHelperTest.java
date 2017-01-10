@@ -52,7 +52,7 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 
 	private final String targetName = "/path/testAction.do";
 
-	private RequestWrapper requestWrapper;
+	private ValidationContext requestWrapper;
 
 	private ResponseWrapper responseWrapper;
 
@@ -71,7 +71,8 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 		dataComposer.startPage();
 
 		RequestInitializer requestInitializer = getApplicationContext().getBean(RequestInitializer.class);
-		requestWrapper = requestInitializer.createRequestWrapper(request, response);
+		RequestWrapper requestWrapper = requestInitializer.createRequestWrapper(request, response);
+		this.requestWrapper = new ValidationContextImpl(requestWrapper, (StateRestorer) helper, false);
 		responseWrapper = requestInitializer.createResponseWrapper(request, response);
 
 	}
@@ -148,7 +149,7 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 
 		request.addParameter(hdivParameter, pageState);
 
-		String value = (confidentiality) ? "0" : "value1";
+		String value = confidentiality ? "0" : "value1";
 		request.addParameter("param1", value);
 
 		assertTrue(helper.validate(requestWrapper).isValid());
@@ -170,10 +171,10 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 
 		request.addParameter(hdivParameter, pageState);
 
-		String value = (confidentiality) ? "0" : "value1";
+		String value = confidentiality ? "0" : "value1";
 		request.addParameter("param1", value);
 
-		value = (confidentiality) ? "1" : "value2";
+		value = confidentiality ? "1" : "value2";
 		request.addParameter("param1", value);
 
 		assertTrue(helper.validate(requestWrapper).isValid());
@@ -195,13 +196,13 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 
 		request.addParameter(hdivParameter, pageState);
 
-		String value = (confidentiality) ? "0" : "value1";
+		String value = confidentiality ? "0" : "value1";
 		request.addParameter("param1", value);
 
-		value = (confidentiality) ? "1" : "value2";
+		value = confidentiality ? "1" : "value2";
 		request.addParameter("param1", value);
 
-		value = (confidentiality) ? "0" : "value3";
+		value = confidentiality ? "0" : "value3";
 		request.addParameter("param2", value);
 
 		dataComposer.endPage();
@@ -222,7 +223,7 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 		String pageState = dataComposer.endRequest();
 		dataComposer.endPage();
 
-		String value = (confidentiality) ? "0" : "value1";
+		String value = confidentiality ? "0" : "value1";
 		request.addParameter("param1", value);
 
 		request.addParameter("testingInitParameter", "0");
@@ -271,10 +272,10 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 		String pageState = dataComposer.endRequest();
 		dataComposer.endPage();
 
-		String value = (confidentiality) ? "0" : "value1";
+		String value = confidentiality ? "0" : "value1";
 		request.addParameter("param1", value);
 
-		value = (confidentiality) ? "1" : "value2";
+		value = confidentiality ? "1" : "value2";
 		request.addParameter("param1", value);
 
 		request.addParameter(hdivParameter, pageState);
@@ -296,10 +297,10 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 		String pageState = dataComposer.endRequest();
 		dataComposer.endPage();
 
-		String value = (confidentiality) ? "0" : "value1";
+		String value = confidentiality ? "0" : "value1";
 		request.addParameter("param1", value);
 
-		value = (confidentiality) ? "0" : "value1";
+		value = confidentiality ? "0" : "value1";
 		request.addParameter("param1", value);
 
 		request.addParameter(hdivParameter, pageState);
@@ -347,7 +348,7 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 
 		request.addParameter(hdivParameter, pageState);
 
-		String value = (confidentiality) ? "0" : "value1";
+		String value = confidentiality ? "0" : "value1";
 		request.addParameter("param1", value);
 
 		dataComposer.endPage();
@@ -516,10 +517,10 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 		boolean result = helper.validate(requestWrapper).isValid();
 		assertTrue(result);
 
-		String param1Value = requestWrapper.getParameter("param1");
+		String param1Value = requestWrapper.getRequest().getParameter("param1");
 		assertEquals("111", param1Value);
 
-		String param2Value = requestWrapper.getParameter("param2");
+		String param2Value = requestWrapper.getRequest().getParameter("param2");
 		assertEquals("Me & You", param2Value);
 
 	}
