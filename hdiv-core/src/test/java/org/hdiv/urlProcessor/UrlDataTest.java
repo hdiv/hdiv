@@ -38,11 +38,23 @@ public class UrlDataTest {
 		testPath("/mymethod/test/MyPage.html?value=3{&id}", "/mymethod/test/MyPage.html?value=3");
 		testPath("/mymethod/test/MyPage.html?value=3{&id,other}", "/mymethod/test/MyPage.html?value=3");
 		testPath("/mymethod/test/{id}", "/mymethod/test/{id}");
+		testObfPath("/mymethod/test/{id}", "/mymethod/test/{id}");
+		testObfPath("/mymethod/test/MyPage.html?value=3", "/" + UrlData.OBFUSCATION_PATH);
 	}
 
 	private void testPath(final String initial, final String expected) {
 		UrlDataImpl data = new UrlDataImpl(initial, Method.GET);
 		Assert.assertEquals(expected, data.getUrlWithOutUriTemplate());
+	}
+
+	private void testObfPath(final String initial, final String expected) {
+		UrlDataImpl data = new UrlDataImpl(initial, Method.GET);
+		data.setContextPathRelativeUrl(initial);
+		data.setUrlWithoutContextPath(initial);
+		data.urlObfuscation = true;
+		StringBuilder sb = new StringBuilder();
+		data.getParamProcessedUrl(sb);
+		Assert.assertEquals(expected, sb.toString());
 	}
 
 }
