@@ -136,15 +136,16 @@ public class ValidatorFilter extends OncePerRequestFilter {
 	@Override
 	protected void doFilterInternal(final HttpServletRequest request, final HttpServletResponse response, final FilterChain filterChain)
 			throws ServletException, IOException {
-		System.out.println("Filtering:" + request.getRequestURI());
 		// Initialize dependencies
 		initDependencies();
 
 		// Initialize request scoped data
 		requestInitializer.initRequest(request, response);
 
-		String obfuscated = validationHelper.validateObfuscated(request);
-		System.out.println(obfuscated);
+		String obfuscated = null;
+		if (hdivConfig.isUrlObfuscation()) {
+			obfuscated = validationHelper.validateObfuscated(request);
+		}
 
 		RequestWrapper requestWrapper = requestInitializer.createRequestWrapper(request, response);
 		ResponseWrapper responseWrapper = requestInitializer.createResponseWrapper(request, response);
@@ -273,8 +274,6 @@ public class ValidatorFilter extends OncePerRequestFilter {
 		validationHelper.startPage(requestWrapper);
 		try {
 			if (obfuscated != null) {
-				System.out.println("Forwarding to:" + obfuscated);
-				System.out.println("Context:" + obfuscated.substring(0, obfuscated.lastIndexOf('/') + 1));
 				ServletContext otherContext = requestWrapper.getServletContext()
 						.getContext(obfuscated.substring(0, obfuscated.lastIndexOf('/') + 1));
 				if (otherContext != null) {
