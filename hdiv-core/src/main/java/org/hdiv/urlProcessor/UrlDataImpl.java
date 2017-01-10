@@ -97,6 +97,11 @@ public class UrlDataImpl implements UrlData {
 	 */
 	String uriTemplate;
 
+	/**
+	 * true if the URL is still templated i.e. path variables
+	 */
+	boolean templated;
+
 	String composedParams;
 
 	boolean urlObfuscation;
@@ -313,13 +318,12 @@ public class UrlDataImpl implements UrlData {
 		if (server != null) {
 			sb.append(server);
 		}
-		if (!urlObfuscation || !internal || uriTemplate != null) {
+		if (!urlObfuscation || !internal || templated) {
 			sb.append(contextPathRelativeUrl);
 		}
 		else {
-			System.out.println("Rendering:" + contextPathRelativeUrl + " relative:" + urlWithoutContextPath);
-			sb.append(contextPathRelativeUrl.substring(0, contextPathRelativeUrl.length() - urlWithoutContextPath.length())).append('/');
-			sb.append(Math.abs(urlWithoutContextPath.hashCode()));
+			sb.append(contextPathRelativeUrl.substring(0, contextPathRelativeUrl.length() - urlWithoutContextPath.length())).append('/')
+					.append(OBFUSCATION_PATH);
 		}
 
 		// Add jSessionId
@@ -381,7 +385,6 @@ public class UrlDataImpl implements UrlData {
 		boolean variable = false;
 		while (matcher.find()) {
 			final String match = matcher.group(1);
-			System.out.println("Match:" + match);
 			if (match.startsWith("?") || match.startsWith("&")) {
 				final int colonIdx = match.indexOf(':');
 				if (colonIdx == -1) {
@@ -402,6 +405,9 @@ public class UrlDataImpl implements UrlData {
 					}
 					sb.append(match.substring(0, colonIdx));
 				}
+			}
+			else {
+				templated = true;
 			}
 		}
 		if (variable) {

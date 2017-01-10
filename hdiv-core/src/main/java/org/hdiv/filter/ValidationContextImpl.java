@@ -1,3 +1,18 @@
+/**
+ * Copyright 2005-2016 hdiv.org
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * 	http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package org.hdiv.filter;
 
 import java.io.UnsupportedEncodingException;
@@ -5,12 +20,17 @@ import java.io.UnsupportedEncodingException;
 import javax.servlet.http.HttpServletRequest;
 
 import org.hdiv.exception.HDIVException;
+import org.hdiv.urlProcessor.UrlData;
 import org.hdiv.util.Constants;
 import org.hdiv.util.HDIVUtil;
 
 public class ValidationContextImpl implements ValidationContext {
 
 	private final HttpServletRequest request;
+
+	private final boolean obfuscation;
+
+	private final StateRestorer restorer;
 
 	private final StringBuilder sb = new StringBuilder(128);
 
@@ -20,22 +40,8 @@ public class ValidationContextImpl implements ValidationContext {
 
 	public ValidationContextImpl(final HttpServletRequest request, final StateRestorer restorer, final boolean obfuscation) {
 		this.request = request;
-		String target = getDecodedTarget(sb, request);
-		if (obfuscation) {
-			String hdivParameter = HDIVUtil.getHdivStateParameterName(request);
-			if (hdivParameter != null) {
-
-				// Restore state from request or memory
-				ValidatorHelperResult result = restorer.restoreState(hdivParameter, request, target);
-				if (result.isValid()) {
-					this.target = result.getValue().getAction();
-					redirect = this.target;
-				}
-			}
-		}
-		else {
-			this.target = target;
-		}
+		this.obfuscation = obfuscation;
+		this.restorer = restorer;
 	}
 
 	public HttpServletRequest getRequest() {
@@ -43,6 +49,24 @@ public class ValidationContextImpl implements ValidationContext {
 	}
 
 	public String getTarget() {
+		if (target == null) {
+			String target = getDecodedTarget(sb, request);
+			if (obfuscation && target.endsWith(UrlData.OBFUSCATION_PATH)) {
+				String hdivParameter = HDIVUtil.getHdivStateParameterName(request);
+				if (hdivParameter != null) {
+
+					// Restore state from request or memory
+					ValidatorHelperResult result = restorer.restoreState(hdivParameter, request, target);
+					if (result.isValid()) {
+						this.target = result.getValue().getAction();
+						redirect = this.target;
+					}
+				}
+			}
+			if (this.target == null) {
+				this.target = target;
+			}
+		}
 		return target;
 	}
 

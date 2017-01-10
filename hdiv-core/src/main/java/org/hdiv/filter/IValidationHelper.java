@@ -25,7 +25,7 @@ import org.hdiv.exception.HDIVException;
  * @author Roberto Velasco
  * @author Gorka Vicente
  */
-public interface IValidationHelper {
+public interface IValidationHelper extends StateRestorer {
 
 	/**
 	 * Initialization of the objects needed for the validation process.

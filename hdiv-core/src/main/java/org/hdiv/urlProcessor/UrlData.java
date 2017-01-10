@@ -19,6 +19,8 @@ import org.hdiv.config.HDIVConfig;
 
 public interface UrlData {
 
+	String OBFUSCATION_PATH = "oBfT";
+
 	String getUrlWithoutContextPath();
 
 	String getUrlParams();
