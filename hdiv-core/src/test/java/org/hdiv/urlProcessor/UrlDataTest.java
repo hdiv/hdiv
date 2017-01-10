@@ -35,6 +35,9 @@ public class UrlDataTest {
 		testPath("/mymethod/test/filter/{?value}", "/mymethod/test/filter/");
 		testPath("/mymethod/test/{myFilter}/MyPage.html", "/mymethod/test/{myFilter}/MyPage.html");
 		testPath("/mymethod/test/MyPage.html", "/mymethod/test/MyPage.html");
+		testPath("/mymethod/test/MyPage.html?value=3{&id}", "/mymethod/test/MyPage.html?value=3");
+		testPath("/mymethod/test/MyPage.html?value=3{&id,other}", "/mymethod/test/MyPage.html?value=3");
+		testPath("/mymethod/test/{id}", "/mymethod/test/{id}");
 	}
 
 	private void testPath(final String initial, final String expected) {

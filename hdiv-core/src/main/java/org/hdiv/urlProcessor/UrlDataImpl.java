@@ -130,7 +130,7 @@ public class UrlDataImpl implements UrlData {
 	 * @return has parameters?
 	 */
 	public boolean containsParams() {
-		return (originalUrlParams != null && originalUrlParams.size() > 0) || (urlParams != null && urlParams.length() > 0);
+		return originalUrlParams != null && originalUrlParams.size() > 0 || urlParams != null && urlParams.length() > 0;
 	}
 
 	/**
@@ -381,24 +381,27 @@ public class UrlDataImpl implements UrlData {
 		boolean variable = false;
 		while (matcher.find()) {
 			final String match = matcher.group(1);
-			final int colonIdx = match.indexOf(':');
-			if (colonIdx == -1) {
-				variable = true;
-				if (sb == null) {
-					sb = new StringBuilder();
-					sb.append('{');
+			System.out.println("Match:" + match);
+			if (match.startsWith("?") || match.startsWith("&")) {
+				final int colonIdx = match.indexOf(':');
+				if (colonIdx == -1) {
+					variable = true;
+					if (sb == null) {
+						sb = new StringBuilder();
+						sb.append('{');
+					}
+					sb.append(match);
 				}
-				sb.append(match);
-			}
-			else {
-				if (colonIdx + 1 == match.length()) {
-					throw new IllegalArgumentException("No custom regular expression specified after ':' in \"" + match + "\"");
+				else {
+					if (colonIdx + 1 == match.length()) {
+						throw new IllegalArgumentException("No custom regular expression specified after ':' in \"" + match + "\"");
+					}
+					if (sb == null) {
+						sb = new StringBuilder();
+						sb.append('{');
+					}
+					sb.append(match.substring(0, colonIdx));
 				}
-				if (sb == null) {
-					sb = new StringBuilder();
-					sb.append('{');
-				}
-				sb.append(match.substring(0, colonIdx));
 			}
 		}
 		if (variable) {
