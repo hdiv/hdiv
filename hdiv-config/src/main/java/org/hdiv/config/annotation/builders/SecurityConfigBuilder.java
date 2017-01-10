@@ -30,82 +30,87 @@ public class SecurityConfigBuilder {
 
 	protected SessionExpiredConfigure sessionExpiredConfigure = new SessionExpiredConfigure();
 
-	public SecurityConfigBuilder(PatternMatcherFactory patternMatcherFactory) {
-		this.config = new HDIVConfig();
-		this.config.setPatternMatcherFactory(patternMatcherFactory);
+	public SecurityConfigBuilder(final PatternMatcherFactory patternMatcherFactory) {
+		config = new HDIVConfig();
+		config.setPatternMatcherFactory(patternMatcherFactory);
 	}
 
-	public SecurityConfigBuilder cookiesConfidentiality(boolean cookiesConfidentiality) {
-		this.config.setAvoidCookiesConfidentiality(!cookiesConfidentiality);
+	public SecurityConfigBuilder cookiesConfidentiality(final boolean cookiesConfidentiality) {
+		config.setAvoidCookiesConfidentiality(!cookiesConfidentiality);
 		return this;
 	}
 
-	public SecurityConfigBuilder cookiesIntegrity(boolean cookiesIntegrity) {
-		this.config.setAvoidCookiesIntegrity(!cookiesIntegrity);
+	public SecurityConfigBuilder cookiesIntegrity(final boolean cookiesIntegrity) {
+		config.setAvoidCookiesIntegrity(!cookiesIntegrity);
 		return this;
 	}
 
-	public SecurityConfigBuilder reuseExistingPageInAjaxRequest(boolean reuseExistingPageInAjaxRequest) {
-		this.config.setReuseExistingPageInAjaxRequest(reuseExistingPageInAjaxRequest);
+	public SecurityConfigBuilder reuseExistingPageInAjaxRequest(final boolean reuseExistingPageInAjaxRequest) {
+		config.setReuseExistingPageInAjaxRequest(reuseExistingPageInAjaxRequest);
 		return this;
 	}
 
-	public SecurityConfigBuilder validateUrlsWithoutParams(boolean validateUrlsWithoutParams) {
-		this.config.setAvoidValidationInUrlsWithoutParams(!validateUrlsWithoutParams);
+	public SecurityConfigBuilder validateUrlsWithoutParams(final boolean validateUrlsWithoutParams) {
+		config.setAvoidValidationInUrlsWithoutParams(!validateUrlsWithoutParams);
 		return this;
 	}
 
-	public SecurityConfigBuilder confidentiality(boolean confidentiality) {
-		this.config.setConfidentiality(confidentiality);
+	public SecurityConfigBuilder confidentiality(final boolean confidentiality) {
+		config.setConfidentiality(confidentiality);
 		return this;
 	}
 
-	public SecurityConfigBuilder debugMode(boolean debugMode) {
-		this.config.setDebugMode(debugMode);
+	public SecurityConfigBuilder debugMode(final boolean debugMode) {
+		config.setDebugMode(debugMode);
 		return this;
 	}
 
-	public SecurityConfigBuilder errorPage(String errorPage) {
-		this.config.setErrorPage(errorPage);
+	public SecurityConfigBuilder errorPage(final String errorPage) {
+		config.setErrorPage(errorPage);
 		return this;
 	}
 
-	public SecurityConfigBuilder randomName(boolean randomName) {
-		this.config.setRandomName(randomName);
+	public SecurityConfigBuilder randomName(final boolean randomName) {
+		config.setRandomName(randomName);
 		return this;
 	}
 
-	public SecurityConfigBuilder showErrorPageOnEditableValidation(boolean showErrorPageOnEditableValidation) {
-		this.config.setShowErrorPageOnEditableValidation(showErrorPageOnEditableValidation);
+	public SecurityConfigBuilder showErrorPageOnEditableValidation(final boolean showErrorPageOnEditableValidation) {
+		config.setShowErrorPageOnEditableValidation(showErrorPageOnEditableValidation);
 		return this;
 	}
 
-	public SecurityConfigBuilder strategy(Strategy strategy) {
-		this.config.setStrategy(strategy);
+	public SecurityConfigBuilder strategy(final Strategy strategy) {
+		config.setStrategy(strategy);
 		return this;
 	}
 
-	public SecurityConfigBuilder stateParameterName(String stateParameterName) {
-		this.config.setStateParameterName(stateParameterName);
+	public SecurityConfigBuilder stateParameterName(final String stateParameterName) {
+		config.setStateParameterName(stateParameterName);
 		return this;
 	}
 
-	public SecurityConfigBuilder modifyStateParameterName(String modifyStateParameterName) {
-		this.config.setModifyStateParameterName(modifyStateParameterName);
+	public SecurityConfigBuilder modifyStateParameterName(final String modifyStateParameterName) {
+		config.setModifyStateParameterName(modifyStateParameterName);
 		return this;
 	}
 
-	public SecurityConfigBuilder maxPagesPerSession(int maxPagesPerSession) {
+	public SecurityConfigBuilder maxPagesPerSession(final int maxPagesPerSession) {
 		this.maxPagesPerSession = maxPagesPerSession;
 		return this;
 	}
 
+	public SecurityConfigBuilder urlObfuscation(final boolean urlObfuscation) {
+		config.setUrlObfuscation(urlObfuscation);
+		return this;
+	}
+
 	public SessionExpiredConfigure sessionExpired() {
-		return this.sessionExpiredConfigure;
+		return sessionExpiredConfigure;
 	}
 
 	public HDIVConfig build() {
-		return this.config;
+		return config;
 	}
 
 	public int getMaxPagesPerSession() {
@@ -114,13 +119,13 @@ public class SecurityConfigBuilder {
 
 	public class SessionExpiredConfigure {
 
-		public SessionExpiredConfigure homePage(String sessionExpiredHomePage) {
-			SecurityConfigBuilder.this.config.setSessionExpiredHomePage(sessionExpiredHomePage);
+		public SessionExpiredConfigure homePage(final String sessionExpiredHomePage) {
+			config.setSessionExpiredHomePage(sessionExpiredHomePage);
 			return this;
 		}
 
-		public SessionExpiredConfigure loginPage(String sessionExpiredLoginPage) {
-			SecurityConfigBuilder.this.config.setSessionExpiredLoginPage(sessionExpiredLoginPage);
+		public SessionExpiredConfigure loginPage(final String sessionExpiredLoginPage) {
+			config.setSessionExpiredLoginPage(sessionExpiredLoginPage);
 			return this;
 		}
 
