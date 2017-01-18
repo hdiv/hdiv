@@ -19,7 +19,7 @@ package org.hdiv.util;
  * Class containing valid HTTP Method
  */
 public enum Method {
-	GET(false), HEAD(false), POST(true), PATCH(true), PUT(true), DELETE(true);
+	GET(false), HEAD(false), POST(true), PATCH(true), PUT(true), DELETE(true), ANY(false);
 
 	public final boolean isForm;
 
