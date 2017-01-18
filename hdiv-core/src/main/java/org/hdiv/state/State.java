@@ -229,7 +229,7 @@ public class State implements IState {
 	 */
 	public void setMethod(final Method method) {
 		this.method = method;
-		tokenType = method.isForm ? RandomTokenType.FORM : RandomTokenType.LINK;
+		tokenType = method != null && method.isForm ? RandomTokenType.FORM : RandomTokenType.LINK;
 	}
 
 	/*
