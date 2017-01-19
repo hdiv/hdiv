@@ -127,7 +127,7 @@
 		<property name="name" value="SQLInjection" />
 		<property name="componentType" value="textarea" />
 		<property name="rejectedPattern">
-			<value><![CDATA[(\s|\S)*((%27)|(')|(%3D)|(=)|(/)|(%2F)|(")|((%22)|(-|%2D){2})|(%23)|(%3B)|(;))+(\s|\S)*]]></value>
+			<value><![CDATA[(\s|\S)*((%27)|(')|(%3D)|(=)|(%2F)|(")|((%22)|(-|%2D){2})|(%23)|(%3B)|(;))+(\s|\S)*]]></value>
 		</property>
 	</bean>
 
