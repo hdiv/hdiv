@@ -690,4 +690,8 @@ public class HDIVUtil {
 		return needToChange ? sb.toString() : s;
 	}
 
+	public static boolean isPathVariable(final String uriTemplate, final String variable) {
+		return uriTemplate.indexOf('{' + variable + '}') != -1;
+	}
+
 }
