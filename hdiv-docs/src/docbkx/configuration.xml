@@ -188,8 +188,8 @@ public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
 		</para>
 		<programlisting language="xml">
 <![CDATA[<hdiv:validation id="customValidation" componentType="text">
-    <hdiv:acceptedPattern><[a-zA-Z0-9@.\-_]*$></hdiv:acceptedPattern>
-    <hdiv:rejectedPattern><[(\s|\S)*(--)(\s|\S)*></hdiv:rejectedPattern>
+    <hdiv:acceptedPattern>^[a-zA-Z0-9@.\-_]*$</hdiv:acceptedPattern>
+    <hdiv:rejectedPattern>(\s|\S)*(--)(\s|\S)*</hdiv:rejectedPattern>
 </hdiv:validation>
 ]]></programlisting>
 
