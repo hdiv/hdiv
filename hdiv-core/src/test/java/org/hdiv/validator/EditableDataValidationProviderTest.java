@@ -27,10 +27,11 @@ public class EditableDataValidationProviderTest extends AbstractHDIVTestCase {
 
 	private ValidationRepository validationRepository;
 
+	@Override
 	protected void onSetUp() throws Exception {
 
-		this.validationProvider = this.getApplicationContext().getBean(EditableDataValidationProvider.class);
-		this.validationRepository = this.getApplicationContext().getBean(ValidationRepository.class);
+		validationProvider = getApplicationContext().getBean(EditableDataValidationProvider.class);
+		validationRepository = getApplicationContext().getBean(ValidationRepository.class);
 	}
 
 	public void testEditableParamValidator() {
@@ -39,19 +40,19 @@ public class EditableDataValidationProviderTest extends AbstractHDIVTestCase {
 		String parameter = "param";
 		String[] values = { "<script>" };
 		String dataType = "text";
-		EditableDataValidationResult result = this.validationProvider.validate(url, parameter, values, dataType);
+		EditableDataValidationResult result = validationProvider.validate(url, parameter, values, dataType);
 
 		assertFalse(result.isValid());
 
 		dataType = "textarea";
-		result = this.validationProvider.validate(url, parameter, values, dataType);
+		result = validationProvider.validate(url, parameter, values, dataType);
 
 		assertFalse(result.isValid());
 	}
 
 	public void testEditableParamValidatorOrder() {
 
-		Map<ValidationTarget, List<IValidation>> validations = ((DefaultValidationRepository) this.validationRepository).getValidations();
+		Map<ValidationTarget, List<IValidation>> validations = ((DefaultValidationRepository) validationRepository).getValidations();
 		assertEquals(4, validations.size());
 
 		Object[] ptrs = validations.keySet().toArray();
@@ -73,7 +74,7 @@ public class EditableDataValidationProviderTest extends AbstractHDIVTestCase {
 		String parameter = "param";
 		String[] values = { "<script>" };
 		String dataType = "text";
-		EditableDataValidationResult result = this.validationProvider.validate(url, parameter, values, dataType);
+		EditableDataValidationResult result = validationProvider.validate(url, parameter, values, dataType);
 
 		assertTrue(result.isValid());
 	}
@@ -85,19 +86,19 @@ public class EditableDataValidationProviderTest extends AbstractHDIVTestCase {
 		String parameter = "param1";
 		String[] values = { "<script>" };
 		String dataType = "text";
-		EditableDataValidationResult result = this.validationProvider.validate(url, parameter, values, dataType);
+		EditableDataValidationResult result = validationProvider.validate(url, parameter, values, dataType);
 
 		assertTrue(result.isValid());
 
 		// param2
 		parameter = "param2";
-		result = this.validationProvider.validate(url, parameter, values, dataType);
+		result = validationProvider.validate(url, parameter, values, dataType);
 
 		assertTrue(result.isValid());
 
 		// otherParam
 		parameter = "otherParam";
-		result = this.validationProvider.validate(url, parameter, values, dataType);
+		result = validationProvider.validate(url, parameter, values, dataType);
 
 		assertFalse(result.isValid());
 	}
@@ -109,19 +110,19 @@ public class EditableDataValidationProviderTest extends AbstractHDIVTestCase {
 		String parameter = "param1";
 		String[] values = { "<script>" };
 		String dataType = "text";
-		EditableDataValidationResult result = this.validationProvider.validate(url, parameter, values, dataType);
+		EditableDataValidationResult result = validationProvider.validate(url, parameter, values, dataType);
 
 		assertFalse(result.isValid());
 
 		// param2
 		parameter = "param2";
-		result = this.validationProvider.validate(url, parameter, values, dataType);
+		result = validationProvider.validate(url, parameter, values, dataType);
 
 		assertFalse(result.isValid());
 
 		// otherParam
 		parameter = "otherParam";
-		result = this.validationProvider.validate(url, parameter, values, dataType);
+		result = validationProvider.validate(url, parameter, values, dataType);
 
 		assertFalse(result.isValid());
 	}
@@ -133,7 +134,7 @@ public class EditableDataValidationProviderTest extends AbstractHDIVTestCase {
 		String parameter = "param3";
 		String[] values = { "<script>" };
 		String dataType = null;
-		EditableDataValidationResult result = this.validationProvider.validate(url, parameter, values, dataType);
+		EditableDataValidationResult result = validationProvider.validate(url, parameter, values, dataType);
 
 		assertFalse(result.isValid());
 	}
