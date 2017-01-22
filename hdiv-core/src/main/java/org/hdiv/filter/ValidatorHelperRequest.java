@@ -653,11 +653,21 @@ public class ValidatorHelperRequest implements IValidationHelper, StateRestorer 
 	 * @param target Part of the url that represents the target action
 	 * @return valid result if restored state is valid. False in otherwise.
 	 */
-	public ValidatorHelperResult restoreState(final String hdivParameter, final HttpServletRequest request, final String target) {
+	public final ValidatorHelperResult restoreState(final String hdivParameter, final HttpServletRequest request, final String target) {
+		// checks if the parameter HDIV parameter exists in the parameters of the request
+		return restoreState(hdivParameter, request, target, request.getParameter(hdivParameter));
+	}
 
-		// checks if the parameter HDIV parameter exists in the parameters of
-		// the request
-		String requestState = request.getParameter(hdivParameter);
+	/**
+	 * Restore state from session or <code>request</code> with <code>request</code> identifier. Strategy defined by the user determines the
+	 * way the state is restored.
+	 *
+	 * @param request HTTP request
+	 * @param target Part of the url that represents the target action
+	 * @return valid result if restored state is valid. False in otherwise.
+	 */
+	protected ValidatorHelperResult restoreState(final String hdivParameter, final HttpServletRequest request, final String target,
+			String requestState) {
 
 		if (requestState == null) {
 			ValidatorError error = new ValidatorError(HDIVErrorCodes.HDIV_PARAMETER_DOES_NOT_EXIST, target, hdivParameter);
