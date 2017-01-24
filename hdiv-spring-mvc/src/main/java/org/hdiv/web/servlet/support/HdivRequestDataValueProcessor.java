@@ -163,16 +163,9 @@ public class HdivRequestDataValueProcessor implements RequestDataValueProcessor 
 	 */
 	public Map<String, String> getExtraHiddenFields(final HttpServletRequest request) {
 
+		Map<String, String> extraFields = getInnerExtraHiddenFields(request);
+
 		IDataComposer dataComposer = HDIVUtil.getDataComposer(request);
-		Map<String, String> extraFields = new HashMap<String, String>();
-
-		if (innerRequestDataValueProcessor != null) {
-			Map<String, String> innerExtras = innerRequestDataValueProcessor.getExtraHiddenFields(request);
-			if (innerExtras != null) {
-				extraFields.putAll(innerExtras);
-			}
-		}
-
 		if (dataComposer == null || !dataComposer.isRequestStarted()) {
 			return extraFields;
 		}
@@ -187,6 +180,25 @@ public class HdivRequestDataValueProcessor implements RequestDataValueProcessor 
 
 			// Publish the state in request to make it accessible on jsp
 			request.setAttribute(FormUrlProcessor.FORM_STATE_ID, requestId);
+		}
+		return extraFields;
+	}
+
+	/**
+	 * Get extra hidden fields from the inner {@link RequestDataValueProcessor}.
+	 * 
+	 * @param request request object
+	 * @return hidden field name/value
+	 */
+	protected Map<String, String> getInnerExtraHiddenFields(final HttpServletRequest request) {
+
+		Map<String, String> extraFields = new HashMap<String, String>();
+
+		if (innerRequestDataValueProcessor != null) {
+			Map<String, String> innerExtras = innerRequestDataValueProcessor.getExtraHiddenFields(request);
+			if (innerExtras != null) {
+				extraFields.putAll(innerExtras);
+			}
 		}
 		return extraFields;
 	}
