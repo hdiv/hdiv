@@ -27,45 +27,42 @@ public class HdivRequestDataValueProcessorTest extends AbstractHDIVTestCase {
 
 	@Override
 	protected void onSetUp() throws Exception {
-		this.dataValueProcessor = (HdivRequestDataValueProcessor) this.getApplicationContext().getBean("requestDataValueProcessor");
-
+		dataValueProcessor = (HdivRequestDataValueProcessor) getApplicationContext().getBean("requestDataValueProcessor");
 	}
 
 	public void testProcessUrl() {
 
-		HttpServletRequest request = this.getMockRequest();
+		HttpServletRequest request = getMockRequest();
 		String url = "/testAction.do";
 
-		String result = this.dataValueProcessor.processUrl(request, url);
+		String result = dataValueProcessor.processUrl(request, url);
 		assertTrue(result.contains("_HDIV_STATE_"));
-
 	}
 
 	public void testProcessUrlAvoid() {
 
-		this.getConfig().setAvoidValidationInUrlsWithoutParams(true);
+		getConfig().setAvoidValidationInUrlsWithoutParams(true);
 
-		HttpServletRequest request = this.getMockRequest();
+		HttpServletRequest request = getMockRequest();
 		String url = "/testAction.do";
 
-		String result = this.dataValueProcessor.processUrl(request, url);
+		String result = dataValueProcessor.processUrl(request, url);
 		assertEquals(url, result);
-
 	}
 
 	public void testProcessAction() {
 
-		HttpServletRequest request = this.getMockRequest();
+		HttpServletRequest request = getMockRequest();
 		String action = "/testAction.do";
 
-		String result = this.dataValueProcessor.processAction(request, action);
+		String result = dataValueProcessor.processAction(request, action);
 		// Post urls are not modified
 		assertEquals(action, result);
 
-		String val = this.dataValueProcessor.processFormFieldValue(request, "param", "value", "select");
+		String val = dataValueProcessor.processFormFieldValue(request, "param", "value", "select");
 		assertEquals("0", val);
 
-		Map<String, String> extraParams = this.dataValueProcessor.getExtraHiddenFields(request);
+		Map<String, String> extraParams = dataValueProcessor.getExtraHiddenFields(request);
 
 		assertNotNull(extraParams);
 		assertTrue(extraParams.size() > 0);
@@ -73,17 +70,17 @@ public class HdivRequestDataValueProcessorTest extends AbstractHDIVTestCase {
 
 	public void testProcessActionGetMethod() {
 
-		HttpServletRequest request = this.getMockRequest();
+		HttpServletRequest request = getMockRequest();
 		String action = "/onlyget.do"; // Is startPage only for get
 
-		String result = this.dataValueProcessor.processAction(request, action, "GET");
+		String result = dataValueProcessor.processAction(request, action, "GET");
 		// Post urls are not modified
 		assertEquals(action, result);
 
-		String val = this.dataValueProcessor.processFormFieldValue(request, "param", "value", "select");
+		String val = dataValueProcessor.processFormFieldValue(request, "param", "value", "select");
 		assertEquals("value", val);
 
-		Map<String, String> extraParams = this.dataValueProcessor.getExtraHiddenFields(request);
+		Map<String, String> extraParams = dataValueProcessor.getExtraHiddenFields(request);
 
 		assertNotNull(extraParams);
 		assertTrue(extraParams.size() == 0);
@@ -91,19 +88,19 @@ public class HdivRequestDataValueProcessorTest extends AbstractHDIVTestCase {
 
 	public void testProcessActionAvoid() {
 
-		this.getConfig().setAvoidValidationInUrlsWithoutParams(true);
+		getConfig().setAvoidValidationInUrlsWithoutParams(true);
 
-		HttpServletRequest request = this.getMockRequest();
+		HttpServletRequest request = getMockRequest();
 		String action = "/testAction.do";
 
-		String result = this.dataValueProcessor.processAction(request, action);
+		String result = dataValueProcessor.processAction(request, action);
 		// Post urls are not modified
 		assertEquals(action, result);
 
-		String val = this.dataValueProcessor.processFormFieldValue(request, "param", "value", "select");
+		String val = dataValueProcessor.processFormFieldValue(request, "param", "value", "select");
 		assertEquals("0", val);
 
-		Map<String, String> extraParams = this.dataValueProcessor.getExtraHiddenFields(request);
+		Map<String, String> extraParams = dataValueProcessor.getExtraHiddenFields(request);
 
 		assertNotNull(extraParams);
 		assertTrue(extraParams.size() > 0);
