@@ -427,7 +427,7 @@ public class HDIVUtil {
 	 * @since 3.3.0
 	 */
 	public static String getHdivObfUrl(final HttpServletRequest request, final String target) {
-		return request.getRequestURI().substring(0, request.getRequestURI().indexOf(UrlData.OBFUSCATION_PATH)) + target;
+		return request.getContextPath() + target;
 	}
 
 	/**
@@ -437,7 +437,7 @@ public class HDIVUtil {
 	 * @since 3.3.0
 	 */
 	public static boolean isObfuscatedTarget(final String target) {
-		return target.endsWith(UrlData.OBFUSCATION_PATH);
+		return target.indexOf(UrlData.OBFUSCATION_ROOT_PATH) != -1;
 	}
 
 	/**

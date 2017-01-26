@@ -19,11 +19,21 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 
 import org.hdiv.exception.HDIVException;
+import org.hdiv.urlProcessor.UrlData;
 import org.hdiv.urlProcessor.UrlDataImpl;
 import org.junit.Assert;
 import org.junit.Test;
 
 public class HDIVUtilTest {
+
+	@Test
+	public void testObfuscationUtils() {
+		Assert.assertTrue(HDIVUtil.isObfuscatedTarget(UrlData.OBFUSCATION_ROOT_PATH));
+		Assert.assertTrue(HDIVUtil.isObfuscatedTarget(UrlData.OBFUSCATION_ROOT_PATH + ";jsessionid=67CFB560B6EC2677D51814A2A2B16B24"));
+		Assert.assertTrue(HDIVUtil.isObfuscatedTarget(UrlData.OBFUSCATION_ROOT_PATH + "?_HDIV_STATE=aaaa"));
+		Assert.assertTrue(HDIVUtil.isObfuscatedTarget("http://localhost:8080" + UrlData.OBFUSCATION_ROOT_PATH + "?_HDIV_STATE=aaaa"));
+
+	}
 
 	@Test
 	public void testProcessActionJsessionId() {

@@ -21,6 +21,8 @@ public interface UrlData {
 
 	String OBFUSCATION_PATH = "oBfT";
 
+	String OBFUSCATION_ROOT_PATH = "/" + OBFUSCATION_PATH;
+
 	String getUrlWithoutContextPath();
 
 	String getUrlParams();
