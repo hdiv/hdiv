@@ -78,6 +78,11 @@ public class Constants {
 	public static final String HDIV_PARAMETER = "HDIVParameter";
 
 	/**
+	 * Obfuscation redirect target
+	 */
+	static final String HDIV_OBF_REDIRECT = "HDIVObfRedirect";
+
+	/**
 	 * Session and request attribute for Modify Hdiv state parameter name.
 	 */
 	@Deprecated

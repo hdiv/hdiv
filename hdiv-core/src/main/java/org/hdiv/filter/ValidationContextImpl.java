@@ -20,7 +20,6 @@ import java.io.UnsupportedEncodingException;
 import javax.servlet.http.HttpServletRequest;
 
 import org.hdiv.exception.HDIVException;
-import org.hdiv.urlProcessor.UrlData;
 import org.hdiv.util.Constants;
 import org.hdiv.util.HDIVUtil;
 
@@ -51,7 +50,7 @@ public class ValidationContextImpl implements ValidationContext {
 	public String getTarget() {
 		if (target == null) {
 			String target = getDecodedTarget(sb, request);
-			if (obfuscation && target.endsWith(UrlData.OBFUSCATION_PATH)) {
+			if (obfuscation && HDIVUtil.isObfuscatedTarget(target)) {
 				String hdivParameter = HDIVUtil.getHdivStateParameterName(request);
 				if (hdivParameter != null) {
 
@@ -60,6 +59,7 @@ public class ValidationContextImpl implements ValidationContext {
 					if (result.isValid()) {
 						this.target = result.getValue().getAction();
 						redirect = this.target;
+						HDIVUtil.setHdivObfRedirectAction(request, redirect);
 					}
 				}
 			}

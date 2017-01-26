@@ -270,14 +270,7 @@ public class ValidatorFilter extends OncePerRequestFilter {
 		validationHelper.startPage(requestWrapper);
 		try {
 			if (obfuscated != null) {
-				ServletContext otherContext = requestWrapper.getServletContext()
-						.getContext(obfuscated.substring(0, obfuscated.lastIndexOf('/') + 1));
-				/**
-				 * if (otherContext != null) { String path = obfuscated.substring(obfuscated.lastIndexOf('/')); System.out.println(path);
-				 * otherContext.getRequestDispatcher(path).forward(requestWrapper, responseWrapper); } else {
-				 */
 				requestWrapper.getRequestDispatcher(obfuscated).forward(requestWrapper, responseWrapper);
-				// }
 			}
 			else {
 				filterChain.doFilter(requestWrapper, responseWrapper);
