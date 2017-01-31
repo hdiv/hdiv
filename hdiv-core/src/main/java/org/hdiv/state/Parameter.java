@@ -121,7 +121,12 @@ public class Parameter implements IParameter {
 		}
 
 		if (values == null) {
-			return this.value.equalsIgnoreCase(value);
+			if (this.value != null) {
+				return this.value.equalsIgnoreCase(value);
+			}
+			else {
+				return this.value == value;
+			}
 		}
 
 		for (int i = 0; i < values.size(); i++) {
