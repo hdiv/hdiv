@@ -42,7 +42,6 @@
 
 	<factory>
 		<external-context-factory>org.hdiv.context.ExternalContextFactoryWrapper</external-context-factory>
-		<exception-handler-factory>org.hdiv.exceptionHandler.HDIVExceptionHandlerFactory</exception-handler-factory>
 	</factory>
 
 </faces-config>

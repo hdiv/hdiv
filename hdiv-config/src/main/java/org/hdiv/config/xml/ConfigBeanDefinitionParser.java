@@ -38,6 +38,7 @@ import org.hdiv.dataValidator.ValidationResult;
 import org.hdiv.events.HDIVFacesEventListener;
 import org.hdiv.filter.DefaultValidatorErrorHandler;
 import org.hdiv.filter.IValidationHelper;
+import org.hdiv.filter.JsfValidatorErrorHandler;
 import org.hdiv.filter.JsfValidatorHelper;
 import org.hdiv.filter.ValidatorErrorHandler;
 import org.hdiv.filter.ValidatorHelperRequest;
@@ -199,6 +200,8 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 
 	protected RuntimeBeanReference stateScopeManagerRef;
 
+	protected RuntimeBeanReference validatorErrorHandlerRef;
+
 	protected boolean springVersionGrEqThan4() {
 		String springVersion = SpringVersion.getVersion();
 		if (springVersion == null || springVersion.compareTo(MIN_SPRING_VERSION) >= 0) {
@@ -221,7 +224,7 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 
 		sessionRef = createSession(source, parserContext);
 		stateScopeManagerRef = createStateScopeManager(source, parserContext);
-		createValidatorErrorHandler(source, parserContext);
+		validatorErrorHandlerRef = createValidatorErrorHandler(source, parserContext);
 		loggerRef = createLogger(source, parserContext);
 		createStateCache(element, source, parserContext);
 		applicationRef = this.createSimpleBean(source, parserContext, ApplicationHDIV.class);
@@ -316,13 +319,16 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 
 	protected RuntimeBeanReference createValidatorErrorHandler(final Object source, final ParserContext parserContext) {
 
-		RootBeanDefinition bean = new RootBeanDefinition(DefaultValidatorErrorHandler.class);
+		Class<?> errorHandlerClass = DefaultValidatorErrorHandler.class;
+		if (jsfPresent && jsfModulePresent) {
+			errorHandlerClass = JsfValidatorErrorHandler.class;
+		}
+		RootBeanDefinition bean = new RootBeanDefinition(errorHandlerClass);
 		bean.setSource(source);
 		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
 		bean.getPropertyValues().addPropertyValue(CONFIG, configRef);
 
 		return registerBean(bean, ValidatorErrorHandler.class.getName(), parserContext);
-
 	}
 
 	protected RuntimeBeanReference createStateCache(final Element element, final Object source, final ParserContext parserContext) {
@@ -640,6 +646,7 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
 		bean.getPropertyValues().addPropertyValue(CONFIG, configRef);
 		bean.getPropertyValues().addPropertyValue("logger", loggerRef);
+		bean.getPropertyValues().addPropertyValue("validatorErrorHandler", validatorErrorHandlerRef);
 		bean.getPropertyValues().addPropertyValue("htmlInputHiddenValidator", htmlInputHiddenValidatorRef);
 		bean.getPropertyValues().addPropertyValue("requestParamValidator", requestParameterValidatorRef);
 		bean.getPropertyValues().addPropertyValue("uiCommandValidator", uiCommandValidatorRef);

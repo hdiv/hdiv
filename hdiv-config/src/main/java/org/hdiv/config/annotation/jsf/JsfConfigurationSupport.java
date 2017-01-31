@@ -26,7 +26,9 @@ import org.hdiv.dataComposer.DataComposerFactory;
 import org.hdiv.dataValidator.IDataValidator;
 import org.hdiv.events.HDIVFacesEventListener;
 import org.hdiv.filter.IValidationHelper;
+import org.hdiv.filter.JsfValidatorErrorHandler;
 import org.hdiv.filter.JsfValidatorHelper;
+import org.hdiv.filter.ValidatorErrorHandler;
 import org.hdiv.filter.ValidatorHelperRequest;
 import org.hdiv.logs.Logger;
 import org.hdiv.session.ISession;
@@ -81,6 +83,14 @@ public class JsfConfigurationSupport {
 
 	@Bean
 	@Primary
+	public ValidatorErrorHandler validatorErrorHandler() {
+		JsfValidatorErrorHandler validatorErrorHandler = new JsfValidatorErrorHandler();
+		validatorErrorHandler.setConfig(config);
+		return validatorErrorHandler;
+	}
+
+	@Bean
+	@Primary
 	public IValidationHelper jsfValidatorHelper() {
 
 		ValidatorHelperRequest validatorHelperRequest = new JsfValidatorHelper();
@@ -126,6 +136,7 @@ public class JsfConfigurationSupport {
 		HDIVFacesEventListener listener = new HDIVFacesEventListener();
 		listener.setConfig(config);
 		listener.setLogger(logger);
+		listener.setValidatorErrorHandler(validatorErrorHandler());
 		listener.setHtmlInputHiddenValidator(htmlInputHiddenValidator);
 		listener.setRequestParamValidator(requestParameterValidator);
 		listener.setUiCommandValidator(uiCommandValidator);

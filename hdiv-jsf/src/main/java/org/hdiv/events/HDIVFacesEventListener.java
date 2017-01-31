@@ -15,22 +15,22 @@
  */
 package org.hdiv.events;
 
-import java.io.IOException;
+import java.util.Collections;
 
 import javax.faces.component.StateHolder;
-import javax.faces.component.UICommand;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIForm;
 import javax.faces.component.html.HtmlInputHidden;
 import javax.faces.context.FacesContext;
 import javax.faces.event.FacesListener;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hdiv.config.HDIVConfig;
-import org.hdiv.exception.StateValidationException;
 import org.hdiv.filter.ValidatorError;
+import org.hdiv.filter.ValidatorErrorHandler;
 import org.hdiv.logs.Logger;
 import org.hdiv.util.HDIVUtil;
 import org.hdiv.validation.ValidationError;
@@ -63,32 +63,37 @@ public class HDIVFacesEventListener implements FacesListener, StateHolder {
 	/**
 	 * Parameter validator
 	 */
-	private ComponentValidator requestParamValidator;
+	protected ComponentValidator requestParamValidator;
 
 	/**
 	 * UICommand components validator
 	 */
-	private ComponentValidator uiCommandValidator;
+	protected ComponentValidator uiCommandValidator;
 
 	/**
 	 * HtmlInputHidden components validator
 	 */
-	private ComponentValidator htmlInputHiddenValidator;
+	protected ComponentValidator htmlInputHiddenValidator;
 
 	/**
 	 * Editable data validator
 	 */
-	private EditableValidator editableValidator;
+	protected EditableValidator editableValidator;
 
 	/**
 	 * HDIV config
 	 */
-	private HDIVConfig config;
+	protected HDIVConfig config;
 
 	/**
 	 * Hdiv attack logger
 	 */
-	private Logger logger;
+	protected Logger logger;
+
+	/**
+	 * Error handler.
+	 */
+	protected ValidatorErrorHandler validatorErrorHandler;
 
 	/**
 	 * Process a HDIVFacesEvent event
@@ -111,22 +116,22 @@ public class HDIVFacesEventListener implements FacesListener, StateHolder {
 		// Validate request parameters
 		ValidationError error = requestParamValidator.validate(context, form);
 		if (error != null) {
-			log(context, error);
-			forwardToErrorPage(context, eventComp);
+			ValidatorError validatorError = log(context, error);
+			forwardToErrorPage(context, validatorError);
 		}
 
 		// Validate component parameters
 		error = uiCommandValidator.validate(context, eventComp);
 		if (error != null) {
-			log(context, error);
-			forwardToErrorPage(context, eventComp);
+			ValidatorError validatorError = log(context, error);
+			forwardToErrorPage(context, validatorError);
 		}
 
 		// Validate all the hidden components in the form
 		error = validateHiddens(context, form);
 		if (error != null) {
-			log(context, error);
-			forwardToErrorPage(context, eventComp);
+			ValidatorError validatorError = log(context, error);
+			forwardToErrorPage(context, validatorError);
 		}
 
 		error = editableValidator.validate(context, form);
@@ -143,7 +148,7 @@ public class HDIVFacesEventListener implements FacesListener, StateHolder {
 	 * @param comp Base component
 	 * @return UIForm component
 	 */
-	private UIForm findParentForm(final UIComponent comp) {
+	protected UIForm findParentForm(final UIComponent comp) {
 
 		UIComponent parent = comp.getParent();
 		while (!(parent instanceof UIForm)) {
@@ -159,7 +164,7 @@ public class HDIVFacesEventListener implements FacesListener, StateHolder {
 	 * @param component UIForm component
 	 * @return validation result
 	 */
-	private ValidationError validateHiddens(final FacesContext context, final UIComponent component) {
+	protected ValidationError validateHiddens(final FacesContext context, final UIComponent component) {
 
 		for (UIComponent uicomponent : component.getChildren()) {
 			if (uicomponent instanceof HtmlInputHidden) {
@@ -184,40 +189,14 @@ public class HDIVFacesEventListener implements FacesListener, StateHolder {
 	 * Redirects the execution to the HDIV error page
 	 * 
 	 * @param context Request context
-	 * @param comp component which throws the event
+	 * @param validatorError validation error data
 	 */
-	private void forwardToErrorPage(final FacesContext context, final UIComponent comp) {
+	protected void forwardToErrorPage(final FacesContext context, final ValidatorError validatorError) {
 
-		if (comp instanceof UICommand) {
-			UICommand comm = (UICommand) comp;
-			if (!comm.isImmediate()) {
-				// Redirect to Hdiv errors page
-				try {
-					String contextPath = context.getExternalContext().getRequestContextPath();
-					context.getExternalContext().redirect(contextPath + config.getErrorPage());
-				}
-				catch (IOException e) {
-					throw new StateValidationException(e);
-				}
-			}
-			else {
-				// Previous strategy doesn't work with immediate components because
-				// the execution of business logic continues running-
-				// An exception is thrown to be catched by the ExceptionHandler
-				// (JSF2)
-				// TODO Commented because we are breaking some components with this solution. Find another way to stop the request.
-				// throw new StateValidationException();
-			}
-		}
-		else {
-			// Previous strategy doesn't work with immediate components because
-			// the execution of business logic continues running-
-			// An exception is thrown to be catched by the ExceptionHandler
-			// (JSF2)
-			// TODO Commented because we are breaking some components with this solution. Find another way to stop the request.
-			// throw new StateValidationException();
-		}
+		HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
+		HttpServletResponse response = (HttpServletResponse) context.getExternalContext().getResponse();
 
+		validatorErrorHandler.handleValidatorError(request, response, Collections.singletonList(validatorError));
 	}
 
 	/**
@@ -225,14 +204,17 @@ public class HDIVFacesEventListener implements FacesListener, StateHolder {
 	 * 
 	 * @param context Request context
 	 * @param error validation result
+	 * @return validator error data
 	 */
-	private void log(final FacesContext context, final ValidationError error) {
+	private ValidatorError log(final FacesContext context, final ValidationError error) {
 
 		HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
 
 		ValidatorError errorData = new ValidatorError(error.getErrorKey(), HDIVUtil.getRequestURI(request), error.getErrorParam(),
 				error.getErrorValue());
 		logger.log(errorData);
+
+		return errorData;
 	}
 
 	/**
@@ -305,6 +287,13 @@ public class HDIVFacesEventListener implements FacesListener, StateHolder {
 	 */
 	public void setLogger(final Logger logger) {
 		this.logger = logger;
+	}
+
+	/**
+	 * @param validatorErrorHandler the validatorErrorHandler to set
+	 */
+	public void setValidatorErrorHandler(final ValidatorErrorHandler validatorErrorHandler) {
+		this.validatorErrorHandler = validatorErrorHandler;
 	}
 
 }

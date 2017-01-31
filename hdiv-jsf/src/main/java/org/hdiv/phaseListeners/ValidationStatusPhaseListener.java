@@ -15,6 +15,7 @@
  */
 package org.hdiv.phaseListeners;
 
+import java.util.Collections;
 import java.util.Map;
 
 import javax.faces.context.FacesContext;
@@ -22,12 +23,14 @@ import javax.faces.event.PhaseEvent;
 import javax.faces.event.PhaseId;
 import javax.faces.event.PhaseListener;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hdiv.events.HDIVFacesEventListener;
 import org.hdiv.filter.JsfValidatorHelper;
 import org.hdiv.filter.ValidatorError;
+import org.hdiv.filter.ValidatorErrorHandler;
 import org.hdiv.logs.Logger;
 import org.hdiv.util.HDIVUtil;
 import org.springframework.web.context.WebApplicationContext;
@@ -44,6 +47,8 @@ public class ValidationStatusPhaseListener implements PhaseListener {
 
 	private Logger logger;
 
+	private ValidatorErrorHandler validatorErrorHandler;
+
 	public PhaseId getPhaseId() {
 		return PhaseId.ANY_PHASE;
 	}
@@ -58,6 +63,7 @@ public class ValidationStatusPhaseListener implements PhaseListener {
 
 			WebApplicationContext wac = FacesContextUtils.getRequiredWebApplicationContext(event.getFacesContext());
 			logger = wac.getBean(Logger.class);
+			validatorErrorHandler = wac.getBean(ValidatorErrorHandler.class);
 		}
 
 		if (event.getPhaseId().equals(PhaseId.INVOKE_APPLICATION) || event.getPhaseId().equals(PhaseId.RENDER_RESPONSE)) {
@@ -72,12 +78,9 @@ public class ValidationStatusPhaseListener implements PhaseListener {
 					log.error("This request is not validated.");
 				}
 
-				log(event.getFacesContext());
+				ValidatorError validatorError = log(event.getFacesContext());
 
-				// Stop the request
-				// Throw an exception that will be processed by the ExceptionHadler
-				// TODO Commented because we are breaking some components with this solution. Find another way to stop the request.
-				// throw new StateValidationException();
+				forwardToErrorPage(event.getFacesContext(), validatorError);
 			}
 		}
 
@@ -91,12 +94,27 @@ public class ValidationStatusPhaseListener implements PhaseListener {
 	 * 
 	 * @param context Request context
 	 */
-	private void log(final FacesContext context) {
+	private ValidatorError log(final FacesContext context) {
 
 		HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
 
 		ValidatorError errorData = new ValidatorError("REQUEST_NOT_VALIDATED", HDIVUtil.getRequestURI(request));
 		logger.log(errorData);
+		return errorData;
+	}
+
+	/**
+	 * Redirects the execution to the HDIV error page
+	 * 
+	 * @param context Request context
+	 * @param validatorError validation error data
+	 */
+	private void forwardToErrorPage(final FacesContext context, final ValidatorError validatorError) {
+
+		HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
+		HttpServletResponse response = (HttpServletResponse) context.getExternalContext().getResponse();
+
+		validatorErrorHandler.handleValidatorError(request, response, Collections.singletonList(validatorError));
 	}
 
 }
