@@ -33,9 +33,9 @@ public class ValidationContextImpl implements ValidationContext {
 
 	private final StringBuilder sb = new StringBuilder(128);
 
-	private String target;
+	protected String target;
 
-	private String redirect;
+	protected String redirect;
 
 	public ValidationContextImpl(final HttpServletRequest request, final StateRestorer restorer, final boolean obfuscation) {
 		this.request = request;
