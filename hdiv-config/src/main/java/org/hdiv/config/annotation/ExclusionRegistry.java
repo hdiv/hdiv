@@ -17,7 +17,7 @@ package org.hdiv.config.annotation;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -114,7 +114,7 @@ public class ExclusionRegistry {
 
 	protected Map<String, List<String>> getParamExclusionsForUrl() {
 
-		Map<String, List<String>> paramExclusions = new HashMap<String, List<String>>();
+		Map<String, List<String>> paramExclusions = new LinkedHashMap<String, List<String>>();
 
 		for (ParamExclusionRegistration regitration : paramRegistrations) {
 			String urlPattern = regitration.getUrlPattern();

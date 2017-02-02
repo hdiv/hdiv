@@ -16,7 +16,7 @@
 package org.hdiv.config.annotation;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -42,7 +42,7 @@ public class RuleRegistry {
 	 * @param name Name of the rule
 	 * @return More configuration options
 	 */
-	public RuleRegistration addRule(String name) {
+	public RuleRegistration addRule(final String name) {
 		Assert.notNull(name, "Rule name is required");
 		RuleRegistration registration = new RuleRegistration(name);
 		registrations.add(registration);
@@ -51,7 +51,7 @@ public class RuleRegistry {
 
 	protected Map<String, IValidation> getRules() {
 
-		Map<String, IValidation> rules = new HashMap<String, IValidation>();
+		Map<String, IValidation> rules = new LinkedHashMap<String, IValidation>();
 
 		for (RuleRegistration regitration : registrations) {
 			Validation rule = regitration.getRule();

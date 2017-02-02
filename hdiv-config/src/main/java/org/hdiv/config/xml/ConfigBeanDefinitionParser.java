@@ -16,7 +16,7 @@
 package org.hdiv.config.xml;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -168,7 +168,7 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 	/**
 	 * Long-living pages configured by the user
 	 */
-	protected Map<String, String> longLivingPages = new HashMap<String, String>();
+	protected Map<String, String> longLivingPages = new LinkedHashMap<String, String>();
 
 	/* Bean references */
 	protected RuntimeBeanReference patternMatcherFactoryRef;
@@ -827,7 +827,7 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 	protected void processParamsWithoutValidation(final Node node, final RootBeanDefinition bean) {
 		NodeList nodeList = node.getChildNodes();
 
-		Map<String, List<String>> map = new HashMap<String, List<String>>();
+		Map<String, List<String>> map = new LinkedHashMap<String, List<String>>();
 		bean.getPropertyValues().addPropertyValue("paramsWithoutValidation", map);
 		for (int i = 0; i < nodeList.getLength(); i++) {
 			Node mappingNode = nodeList.item(i);
