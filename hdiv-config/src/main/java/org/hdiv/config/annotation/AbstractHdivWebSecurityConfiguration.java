@@ -33,8 +33,10 @@ import org.hdiv.dataComposer.DataComposerFactory;
 import org.hdiv.dataValidator.DataValidator;
 import org.hdiv.dataValidator.IDataValidator;
 import org.hdiv.dataValidator.ValidationResult;
+import org.hdiv.filter.DefaultValidationContextFactory;
 import org.hdiv.filter.DefaultValidatorErrorHandler;
 import org.hdiv.filter.IValidationHelper;
+import org.hdiv.filter.ValidationContextFactory;
 import org.hdiv.filter.ValidatorErrorHandler;
 import org.hdiv.filter.ValidatorHelperRequest;
 import org.hdiv.idGenerator.PageIdGenerator;
@@ -360,6 +362,11 @@ public abstract class AbstractHdivWebSecurityConfiguration {
 		repository.setValidations(validationsData);
 		repository.setDefaultValidations(defaultRules);
 		return repository;
+	}
+	
+	@Bean
+	public ValidationContextFactory validationContextFactory() {
+		return new DefaultValidationContextFactory();
 	}
 
 	protected List<IValidation> getDefaultRules() {

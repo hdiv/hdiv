@@ -92,6 +92,8 @@
 		<property name="config" ref="config" />
 	</bean>
 
+	<bean id="validationContextFactory" class="org.hdiv.filter.DefaultValidationContextFactory" />
+
 	<!-- RegExp executor -->
 	<bean id="patternMatcherFactory" class="org.hdiv.regex.PatternMatcherFactory" />
 
