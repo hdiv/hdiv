@@ -36,9 +36,11 @@ import org.hdiv.dataValidator.DataValidator;
 import org.hdiv.dataValidator.IDataValidator;
 import org.hdiv.dataValidator.ValidationResult;
 import org.hdiv.events.HDIVFacesEventListener;
+import org.hdiv.filter.DefaultValidationContextFactory;
 import org.hdiv.filter.DefaultValidatorErrorHandler;
 import org.hdiv.filter.IValidationHelper;
 import org.hdiv.filter.JsfValidatorHelper;
+import org.hdiv.filter.ValidationContextFactory;
 import org.hdiv.filter.ValidatorErrorHandler;
 import org.hdiv.filter.ValidatorHelperRequest;
 import org.hdiv.idGenerator.PageIdGenerator;
@@ -198,6 +200,8 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 	protected RuntimeBeanReference userDataRef;
 
 	protected RuntimeBeanReference stateScopeManagerRef;
+	
+	protected RuntimeBeanReference validationContextFactoryRef;
 
 	protected boolean springVersionGrEqThan4() {
 		String springVersion = SpringVersion.getVersion();
@@ -232,6 +236,7 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		linkUrlProcessorRef = createLinkUrlProcessor(source, parserContext);
 		formUrlProcessorRef = createFormUrlProcessor(source, parserContext);
 		basicUrlProcessorRef = createBasicUrlProcessor(source, parserContext);
+		validationContextFactoryRef = createValidationContextFactory(source, parserContext);
 		createRequestInitializer(source, parserContext);
 		createServletContextInitializer(source, parserContext);
 		createSessionInitializer(source, parserContext);
@@ -487,6 +492,14 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		return registerBean(bean, BasicUrlProcessor.class.getName(), parserContext);
 	}
 
+	protected RuntimeBeanReference createValidationContextFactory(final Object source, final ParserContext parserContext) {
+		RootBeanDefinition bean = new RootBeanDefinition(DefaultValidationContextFactory.class);
+		bean.setSource(source);
+		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
+
+		return registerBean(bean, ValidationContextFactory.class.getName(), parserContext);
+	}
+	
 	protected RuntimeBeanReference createRequestDataValueProcessor(final Object source, final ParserContext parserContext) {
 		RootBeanDefinition bean = new RootBeanDefinition(HdivRequestDataValueProcessor.class);
 		bean.setSource(source);

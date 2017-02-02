@@ -90,6 +90,11 @@ public class ValidatorFilter extends OncePerRequestFilter {
 	 * Obtains user data from the request
 	 */
 	protected IUserData userData;
+	
+	/**
+	 * Creates ValidationContext
+	 */
+	protected ValidationContextFactory validationContextFactory;
 
 	/**
 	 * Initialize required dependencies.
@@ -120,6 +125,7 @@ public class ValidatorFilter extends OncePerRequestFilter {
 				logger = context.getBean(Logger.class);
 				errorHandler = context.getBean(ValidatorErrorHandler.class);
 				requestInitializer = context.getBean(RequestInitializer.class);
+				validationContextFactory = context.getBean(ValidationContextFactory.class);
 			}
 		}
 	}
@@ -176,8 +182,7 @@ public class ValidatorFilter extends OncePerRequestFilter {
 			}
 
 			ValidatorHelperResult result = null;
-			ValidationContext context = new ValidationContextImpl(multipartProcessedRequest, validationHelper,
-					hdivConfig.isUrlObfuscation());
+			ValidationContext context = validationContextFactory.newInstance(multipartProcessedRequest, validationHelper, hdivConfig.isUrlObfuscation());
 			if (!isMultipartException) {
 				result = validationHelper.validate(context);
 				legal = result.isValid();
