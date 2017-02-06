@@ -17,27 +17,16 @@ package org.hdiv.validators;
 
 import javax.faces.component.UIComponent;
 
-import org.hdiv.validation.ValidationContext;
+public abstract class AbstractComponentValidator implements ComponentValidator {
 
-/**
- * The class that implements this interface will handle the validation of a component type. Implementation must be stateless as it is
- * singleton.
- * 
- * @author Gotzon Illarramendi
- */
-public interface ComponentValidator {
+	private final Class<?> supportedComponent;
 
-	/**
-	 * @param component {@link UIComponent} to validate.
-	 * @return true if this {@link ComponentValidator} can validate the component.
-	 */
-	boolean supports(UIComponent component);
+	public boolean supports(final UIComponent component) {
 
-	/**
-	 * Validates a component
-	 * 
-	 * @param context Validation context
-	 * @param component Component to validate
-	 */
-	void validate(ValidationContext context, UIComponent component);
+		return supportedComponent.isAssignableFrom(component.getClass());
+	}
+
+	public AbstractComponentValidator(final Class<?> supportedComponent) {
+		this.supportedComponent = supportedComponent;
+	}
 }

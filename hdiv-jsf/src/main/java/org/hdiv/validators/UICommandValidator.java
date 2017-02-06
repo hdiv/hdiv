@@ -19,7 +19,6 @@ import java.util.Map;
 
 import javax.faces.component.UICommand;
 import javax.faces.component.UIComponent;
-import javax.faces.component.UIData;
 import javax.faces.component.UIParameter;
 import javax.faces.context.FacesContext;
 
@@ -27,51 +26,39 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hdiv.components.UIParameterExtension;
 import org.hdiv.util.HDIVErrorCodes;
-import org.hdiv.util.UtilsJsf;
-import org.hdiv.validation.ValidationError;
+import org.hdiv.validation.ValidationContext;
 
 /**
  * ComponentValidator that validates parameters of a component of type UICommand,
  * 
  * @author Gotzon Illarramendi
  */
-public class UICommandValidator implements ComponentValidator {
+public class UICommandValidator extends AbstractComponentValidator {
 
 	private static final Log log = LogFactory.getLog(UICommandValidator.class);
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.hdiv.validators.ComponentValidator#validate(javax.faces.context.FacesContext, javax.faces.component.UIComponent)
-	 */
-	public ValidationError validate(final FacesContext context, final UIComponent component) {
+	public UICommandValidator() {
+		super(UICommand.class);
+	}
 
-		if (!(component instanceof UICommand)) {
-			return null;
-		}
+	public void validate(final ValidationContext validationContext, final UIComponent component) {
 
 		UICommand command = (UICommand) component;
 
-		// Search parent components of type UIData
-		UIData uiDataComp = UtilsJsf.findParentUIData(command);
-
-		int rowIndex = 0;
-		if (uiDataComp != null) {
-			rowIndex = uiDataComp.getRowIndex();
+		if (command != validationContext.getEventSource()) {
+			// Only validate the executed command
+			return;
 		}
+
+		validationContext.acceptParameter(command.getClientId(validationContext.getFacesContext()), command.getValue());
 
 		// Check CommandLink's parameters
-		for (UIComponent childComp : component.getChildren()) {
+		for (UIComponent childComp : command.getChildren()) {
 			if (childComp instanceof UIParameter) {
 				UIParameter param = (UIParameter) childComp;
-				ValidationError error = processParam(context, param, rowIndex);
-				if (error != null) {
-					return error;
-				}
+				processParam(validationContext, param);
 			}
 		}
-		return null;
-
 	}
 
 	/**
@@ -79,10 +66,11 @@ public class UICommandValidator implements ComponentValidator {
 	 * 
 	 * @param context Request context
 	 * @param parameter UIParameter component to validate
-	 * @param rowIndex index that shows where it is the UICommand component inside a UIData
 	 * @return validation result
 	 */
-	private ValidationError processParam(final FacesContext context, final UIParameter parameter, int rowIndex) {
+	private void processParam(final ValidationContext validationContext, final UIParameter parameter) {
+
+		FacesContext context = validationContext.getFacesContext();
 
 		UIParameterExtension param = (UIParameterExtension) parameter;
 
@@ -92,40 +80,33 @@ public class UICommandValidator implements ComponentValidator {
 		Map<String, String> requestMap = context.getExternalContext().getRequestParameterMap();
 		String requestValue = requestMap.get(param.getName());
 
-		String realValue;
-
-		if (rowIndex < 0) {
-
-			// May be -1 when commandLink finds a facet in a table,
-			// in the footer for example
-			// In these cases value has been stored in the 0 position
-			rowIndex = 0;
-		}
-		realValue = param.getValue(parentClientId).toString();
+		String realValue = param.getValue(parentClientId).toString();
 
 		if (log.isDebugEnabled()) {
-			log.debug("requestValue:" + requestValue);
-			log.debug("realValue:" + realValue);
+			log.debug("UIParameter requestValue:" + requestValue);
+			log.debug("UIParameter realValue:" + realValue);
 		}
 
-		if (requestValue == null) {
-			ValidationError error = new ValidationError();
-			error.setErrorKey(HDIVErrorCodes.REQUIRED_PARAMETERS);
-			error.setErrorParam(param.getId());
-			error.setErrorValue(requestValue);
-			error.setErrorComponent(param.getClientId(context));
-			return error;
+		if (requestValue != null && requestValue.equals(realValue)) {
+			validationContext.acceptParameter(param.getName(), requestValue);
+		}
+		else if (requestValue == null) {
 
+			if (log.isDebugEnabled()) {
+				log.debug("Parameter '" + param.getName() + "' rejected in component '" + param.getClientId(context)
+						+ "' in ComponentValidator '" + this.getClass() + "'");
+			}
+			validationContext.rejectParameter(param.getName(), requestValue, HDIVErrorCodes.REQUIRED_PARAMETERS,
+					param.getClientId(context));
 		}
-		if (!requestValue.equals(realValue)) {
-			ValidationError error = new ValidationError();
-			error.setErrorKey(HDIVErrorCodes.PARAMETER_VALUE_INCORRECT);
-			error.setErrorParam(param.getId());
-			error.setErrorValue(requestValue);
-			error.setErrorComponent(param.getClientId(context));
-			return error;
+		else {
+
+			if (log.isDebugEnabled()) {
+				log.debug("Parameter '" + param.getName() + "' rejected in component '" + param.getClientId(context)
+						+ "' in ComponentValidator '" + this.getClass() + "'");
+			}
+			validationContext.rejectParameter(param.getName(), requestValue, HDIVErrorCodes.PARAMETER_VALUE_INCORRECT,
+					param.getClientId(context));
 		}
-		return null;
 	}
-
 }

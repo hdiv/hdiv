@@ -16,47 +16,48 @@
 package org.hdiv.validators;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIData;
+import javax.faces.component.html.HtmlInputHidden;
 import javax.faces.context.FacesContext;
-import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hdiv.components.HtmlInputHiddenExtension;
 import org.hdiv.util.HDIVErrorCodes;
 import org.hdiv.util.UtilsJsf;
-import org.hdiv.validation.ValidationError;
+import org.hdiv.validation.ValidationContext;
 
 /**
  * Validates component of type HtmlInputHiddenExtension.
  * 
  * @author Gotzon Illarramendi
  */
-public class HtmlInputHiddenValidator implements ComponentValidator {
+public class HtmlInputHiddenValidator extends AbstractComponentValidator {
 
 	private static final Log log = LogFactory.getLog(HtmlInputHiddenValidator.class);
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.hdiv.validators.ComponentValidator#validate(javax.faces.context.FacesContext, javax.faces.component.UIComponent)
-	 */
-	public ValidationError validate(final FacesContext context, final UIComponent component) {
+	public HtmlInputHiddenValidator() {
+		super(HtmlInputHidden.class);
+	}
+
+	public void validate(final ValidationContext context, final UIComponent component) {
 
 		HtmlInputHiddenExtension inputHidden = (HtmlInputHiddenExtension) component;
-		return validateHiddenComponent(context, inputHidden);
+		validateHiddenComponent(context, inputHidden);
 	}
 
 	/**
 	 * Validates Hidden component received as input
 	 * 
-	 * @param context Request context
+	 * @param validationContext Validation context
 	 * @param inputHidden component to validate
-	 * @return validation result
 	 */
-	protected ValidationError validateHiddenComponent(final FacesContext context, final HtmlInputHiddenExtension inputHidden) {
+	protected void validateHiddenComponent(final ValidationContext validationContext, final HtmlInputHiddenExtension inputHidden) {
+
+		FacesContext context = validationContext.getFacesContext();
 
 		UIData uiDataComp = UtilsJsf.findParentUIData(inputHidden);
 
@@ -67,12 +68,12 @@ public class HtmlInputHiddenValidator implements ComponentValidator {
 		Object hiddenValue;
 		Object hiddenRealValue;
 
-		HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
+		Map<String, String> parameters = context.getExternalContext().getRequestParameterMap();
 		if (rowIndex >= 0) {
 			// If rowIndex >= 0, current position is a table and hidden's component
 			// clientId is correct
 
-			hiddenValue = request.getParameter(inputHidden.getClientId(context));
+			hiddenValue = parameters.get(inputHidden.getClientId(context));
 			hiddenRealValue = inputHidden.getRealValue(inputHidden.getClientId(context));
 
 			if (log.isDebugEnabled()) {
@@ -81,22 +82,27 @@ public class HtmlInputHiddenValidator implements ComponentValidator {
 			}
 
 			if (hiddenValue == null) {
-				ValidationError error = new ValidationError();
-				error.setErrorKey(HDIVErrorCodes.REQUIRED_PARAMETERS);
-				error.setErrorParam(inputHidden.getId());
-				error.setErrorValue("null");
-				error.setErrorComponent(inputHidden.getClientId(context));
-				return error;
+
+				if (log.isDebugEnabled()) {
+					log.debug("Parameter '" + inputHidden.getId() + "' rejected in component '" + inputHidden.getId()
+							+ "' in ComponentValidator '" + this.getClass() + "'");
+				}
+				validationContext.rejectParameter(inputHidden.getId(), null, HDIVErrorCodes.REQUIRED_PARAMETERS,
+						inputHidden.getClientId(context));
 			}
 
-			boolean correcto = hasEqualValue(hiddenValue, hiddenRealValue);
-			if (!correcto) {
-				ValidationError error = new ValidationError();
-				error.setErrorKey(HDIVErrorCodes.PARAMETER_VALUE_INCORRECT);
-				error.setErrorParam(inputHidden.getId());
-				error.setErrorValue(hiddenRealValue.toString());
-				error.setErrorComponent(inputHidden.getClientId(context));
-				return error;
+			boolean correct = hasEqualValue(hiddenValue, hiddenRealValue);
+			if (!correct) {
+
+				if (log.isDebugEnabled()) {
+					log.debug("Parameter '" + inputHidden.getId() + "' rejected in component '" + inputHidden.getId()
+							+ "' in ComponentValidator '" + this.getClass() + "'");
+				}
+				validationContext.rejectParameter(inputHidden.getId(), hiddenRealValue.toString(), HDIVErrorCodes.PARAMETER_VALUE_INCORRECT,
+						inputHidden.getClientId(context));
+			}
+			else {
+				validationContext.acceptParameter(inputHidden.getId(), hiddenRealValue.toString());
 			}
 		}
 		else {
@@ -105,7 +111,7 @@ public class HtmlInputHiddenValidator implements ComponentValidator {
 			List<String> clientIds = inputHidden.getClientIds();
 			for (int i = 0; i < clientIds.size(); i++) {
 				String clientId = clientIds.get(i);
-				hiddenValue = request.getParameter(clientId);
+				hiddenValue = parameters.get(clientId);
 				hiddenRealValue = inputHidden.getRealValue(clientId);
 				if (log.isDebugEnabled()) {
 					log.debug("Hidden's value received:" + hiddenValue);
@@ -113,28 +119,31 @@ public class HtmlInputHiddenValidator implements ComponentValidator {
 				}
 
 				if (hiddenValue == null) {
-					ValidationError error = new ValidationError();
-					error.setErrorKey(HDIVErrorCodes.REQUIRED_PARAMETERS);
-					error.setErrorParam(inputHidden.getId());
-					error.setErrorValue("null");
-					error.setErrorComponent(inputHidden.getClientId(context));
-					return error;
+
+					if (log.isDebugEnabled()) {
+						log.debug("Parameter '" + inputHidden.getId() + "' rejected in component '" + inputHidden.getId()
+								+ "' in ComponentValidator '" + this.getClass() + "'");
+					}
+					validationContext.rejectParameter(inputHidden.getId(), null, HDIVErrorCodes.REQUIRED_PARAMETERS,
+							inputHidden.getClientId(context));
 				}
 
-				boolean correcto = hiddenValue.equals(hiddenRealValue);
-				if (!correcto) {
-					ValidationError error = new ValidationError();
-					error.setErrorKey(HDIVErrorCodes.PARAMETER_VALUE_INCORRECT);
-					error.setErrorParam(inputHidden.getId());
-					error.setErrorValue(hiddenRealValue.toString());
-					error.setErrorComponent(inputHidden.getClientId(context));
-					return error;
+				boolean correct = hiddenValue.equals(hiddenRealValue);
+				if (!correct) {
+
+					if (log.isDebugEnabled()) {
+						log.debug("Parameter '" + inputHidden.getId() + "' rejected in component '" + inputHidden.getId()
+								+ "' in ComponentValidator '" + this.getClass() + "'");
+					}
+					validationContext.rejectParameter(inputHidden.getId(), hiddenRealValue.toString(),
+							HDIVErrorCodes.PARAMETER_VALUE_INCORRECT, inputHidden.getClientId(context));
+				}
+				else {
+					validationContext.acceptParameter(inputHidden.getId(), hiddenRealValue.toString());
 				}
 			}
 
 		}
-
-		return null;
 	}
 
 	/**

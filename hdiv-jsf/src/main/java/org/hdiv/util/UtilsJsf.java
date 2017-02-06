@@ -21,6 +21,7 @@ import java.util.Set;
 
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIData;
+import javax.faces.component.UIForm;
 import javax.faces.component.UIParameter;
 import javax.faces.component.UIViewRoot;
 
@@ -134,7 +135,24 @@ public abstract class UtilsJsf {
 			parent = parent.getParent();
 		}
 		return (UIData) parent;
+	}
 
+	/**
+	 * Searches the form inside the component. Input component must be UICommand type and must be inside a form.
+	 * 
+	 * @param comp Base component
+	 * @return UIForm component
+	 */
+	public static UIForm findParentForm(final UIComponent comp) {
+
+		UIComponent parent = comp.getParent();
+		while (!(parent instanceof UIForm)) {
+			if (parent instanceof UIViewRoot) {
+				return null;
+			}
+			parent = parent.getParent();
+		}
+		return (UIForm) parent;
 	}
 
 	/**

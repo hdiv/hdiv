@@ -36,10 +36,7 @@ import org.hdiv.state.StateUtil;
 import org.hdiv.state.scope.StateScopeManager;
 import org.hdiv.urlProcessor.BasicUrlProcessor;
 import org.hdiv.urlProcessor.LinkUrlProcessor;
-import org.hdiv.validators.EditableValidator;
-import org.hdiv.validators.HtmlInputHiddenValidator;
-import org.hdiv.validators.RequestParameterValidator;
-import org.hdiv.validators.UICommandValidator;
+import org.hdiv.validation.DefaultComponentTreeValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -106,6 +103,14 @@ public class JsfConfigurationSupport {
 	}
 
 	@Bean
+	public DefaultComponentTreeValidator componentTreeValidator() {
+
+		DefaultComponentTreeValidator componentTreeValidator = new DefaultComponentTreeValidator();
+		componentTreeValidator.setConfig(config);
+		return componentTreeValidator;
+	}
+
+	@Bean
 	public RedirectHelper redirectHelper() {
 
 		RedirectHelper redirectHelper = new RedirectHelper();
@@ -121,26 +126,11 @@ public class JsfConfigurationSupport {
 	@Bean
 	public HDIVFacesEventListener hdivFacesEventListener() {
 
-		// ComponentValidator instances
-		RequestParameterValidator requestParameterValidator = new RequestParameterValidator();
-		requestParameterValidator.setHdivConfig(config);
-
-		UICommandValidator uiCommandValidator = new UICommandValidator();
-
-		HtmlInputHiddenValidator htmlInputHiddenValidator = new HtmlInputHiddenValidator();
-
-		EditableValidator editableValidator = new EditableValidator();
-		editableValidator.setHdivConfig(config);
-
 		// EventListener instance
 		HDIVFacesEventListener listener = new HDIVFacesEventListener();
 		listener.setConfig(config);
 		listener.setLogger(logger);
 		listener.setValidatorErrorHandler(validatorErrorHandler());
-		listener.setHtmlInputHiddenValidator(htmlInputHiddenValidator);
-		listener.setRequestParamValidator(requestParameterValidator);
-		listener.setUiCommandValidator(uiCommandValidator);
-		listener.setEditableValidator(editableValidator);
 		return listener;
 	}
 

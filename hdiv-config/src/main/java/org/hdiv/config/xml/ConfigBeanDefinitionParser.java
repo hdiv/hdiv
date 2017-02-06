@@ -68,11 +68,9 @@ import org.hdiv.state.scope.UserSessionStateScope;
 import org.hdiv.urlProcessor.BasicUrlProcessor;
 import org.hdiv.urlProcessor.FormUrlProcessor;
 import org.hdiv.urlProcessor.LinkUrlProcessor;
+import org.hdiv.validation.ComponentTreeValidator;
+import org.hdiv.validation.DefaultComponentTreeValidator;
 import org.hdiv.validator.DefaultEditableDataValidationProvider;
-import org.hdiv.validators.EditableValidator;
-import org.hdiv.validators.HtmlInputHiddenValidator;
-import org.hdiv.validators.RequestParameterValidator;
-import org.hdiv.validators.UICommandValidator;
 import org.hdiv.web.servlet.support.GrailsHdivRequestDataValueProcessor;
 import org.hdiv.web.servlet.support.HdivRequestDataValueProcessor;
 import org.hdiv.web.servlet.support.ThymeleafHdivRequestDataValueProcessor;
@@ -264,7 +262,7 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 			this.createSimpleBean(source, parserContext, JsfMultipartConfig.class, IMultipartConfig.class.getName());
 
 			createFacesEventListener(source, parserContext);
-
+			createComponentTreeValidator(source, parserContext);
 			createRedirectHelper(source, parserContext);
 
 			if (!jsf1Present) {
@@ -635,24 +633,24 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 
 	protected RuntimeBeanReference createFacesEventListener(final Object source, final ParserContext parserContext) {
 
-		// Register ComponentValidator objects
-		RuntimeBeanReference requestParameterValidatorRef = createRequestParameterValidator(source, parserContext);
-		RuntimeBeanReference uiCommandValidatorRef = this.createSimpleBean(source, parserContext, UICommandValidator.class);
-		RuntimeBeanReference htmlInputHiddenValidatorRef = this.createSimpleBean(source, parserContext, HtmlInputHiddenValidator.class);
-		RuntimeBeanReference editableValidatorRef = createEditableValidator(source, parserContext);
-
 		RootBeanDefinition bean = new RootBeanDefinition(HDIVFacesEventListener.class);
 		bean.setSource(source);
 		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
 		bean.getPropertyValues().addPropertyValue(CONFIG, configRef);
 		bean.getPropertyValues().addPropertyValue("logger", loggerRef);
 		bean.getPropertyValues().addPropertyValue("validatorErrorHandler", validatorErrorHandlerRef);
-		bean.getPropertyValues().addPropertyValue("htmlInputHiddenValidator", htmlInputHiddenValidatorRef);
-		bean.getPropertyValues().addPropertyValue("requestParamValidator", requestParameterValidatorRef);
-		bean.getPropertyValues().addPropertyValue("uiCommandValidator", uiCommandValidatorRef);
-		bean.getPropertyValues().addPropertyValue("editableValidator", editableValidatorRef);
 
 		return registerBean(bean, HDIVFacesEventListener.class.getName(), parserContext);
+	}
+
+	protected RuntimeBeanReference createComponentTreeValidator(final Object source, final ParserContext parserContext) {
+
+		RootBeanDefinition bean = new RootBeanDefinition(DefaultComponentTreeValidator.class);
+		bean.setSource(source);
+		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
+		bean.getPropertyValues().addPropertyValue("config", configRef);
+
+		return registerBean(bean, ComponentTreeValidator.class.getName(), parserContext);
 	}
 
 	protected RuntimeBeanReference createJsfValidatorHelper(final Object source, final ParserContext parserContext) {
@@ -670,24 +668,6 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		bean.getPropertyValues().addPropertyValue(STATE_SCOPE_MANAGER, stateScopeManagerRef);
 
 		return registerBean(bean, IValidationHelper.class.getName(), parserContext);
-	}
-
-	protected RuntimeBeanReference createRequestParameterValidator(final Object source, final ParserContext parserContext) {
-		RootBeanDefinition bean = new RootBeanDefinition(RequestParameterValidator.class);
-		bean.setSource(source);
-		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
-		bean.getPropertyValues().addPropertyValue(HDIV_CONFIG, configRef);
-
-		return registerBean(bean, RequestParameterValidator.class.getName(), parserContext);
-	}
-
-	protected RuntimeBeanReference createEditableValidator(final Object source, final ParserContext parserContext) {
-		RootBeanDefinition bean = new RootBeanDefinition(EditableValidator.class);
-		bean.setSource(source);
-		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
-		bean.getPropertyValues().addPropertyValue(HDIV_CONFIG, configRef);
-
-		return registerBean(bean, EditableValidator.class.getName(), parserContext);
 	}
 
 	protected RuntimeBeanReference createRedirectHelper(final Object source, final ParserContext parserContext) {
