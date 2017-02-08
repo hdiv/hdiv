@@ -33,6 +33,7 @@ import org.hdiv.application.IApplication;
 import org.hdiv.config.HDIVConfig;
 import org.hdiv.dataComposer.IDataComposer;
 import org.hdiv.exception.HDIVException;
+import org.hdiv.filter.RequestWrapper;
 import org.hdiv.urlProcessor.FormUrlProcessor;
 import org.hdiv.urlProcessor.LinkUrlProcessor;
 import org.hdiv.urlProcessor.UrlData;
@@ -394,6 +395,10 @@ public class HDIVUtil {
 	 */
 	public static String getHdivState(final HttpServletRequest request) {
 		return request.getParameter(getHdivStateParameterName(request));
+	}
+
+	public static void setHdivState(final HttpServletRequest request, final String value) {
+		((RequestWrapper) request).addParameter(getHdivStateParameterName(request), new String[] { value });
 	}
 
 	/**
