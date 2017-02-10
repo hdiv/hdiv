@@ -21,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.hdiv.exception.HDIVException;
 import org.hdiv.util.Constants;
+import org.hdiv.util.HDIVErrorCodes;
 import org.hdiv.util.HDIVUtil;
 
 public class ValidationContextImpl implements ValidationContext {
@@ -61,6 +62,9 @@ public class ValidationContextImpl implements ValidationContext {
 						redirect = this.target;
 						HDIVUtil.setHdivObfRedirectAction(request, redirect);
 					}
+				}
+				if (redirect == null) {
+					throw new HDIVException(HDIVErrorCodes.HDIV_PARAMETER_INCORRECT_VALUE);
 				}
 			}
 			if (this.target == null) {

@@ -90,7 +90,7 @@ public class ValidatorFilter extends OncePerRequestFilter {
 	 * Obtains user data from the request
 	 */
 	protected IUserData userData;
-	
+
 	/**
 	 * Creates ValidationContext
 	 */
@@ -180,19 +180,25 @@ public class ValidatorFilter extends OncePerRequestFilter {
 					legal = true;
 				}
 			}
+			ValidationContext context = validationContextFactory.newInstance(multipartProcessedRequest, validationHelper,
+					hdivConfig.isUrlObfuscation());
+			List<ValidatorError> errors = null;
+			try {
+				ValidatorHelperResult result = null;
+				if (!isMultipartException) {
+					result = validationHelper.validate(context);
+					legal = result.isValid();
 
-			ValidatorHelperResult result = null;
-			ValidationContext context = validationContextFactory.newInstance(multipartProcessedRequest, validationHelper, hdivConfig.isUrlObfuscation());
-			if (!isMultipartException) {
-				result = validationHelper.validate(context);
-				legal = result.isValid();
+					// Store validation result in request
+					request.setAttribute(Constants.VALIDATOR_HELPER_RESULT_NAME, result);
+				}
 
-				// Store validation result in request
-				request.setAttribute(Constants.VALIDATOR_HELPER_RESULT_NAME, result);
+				// All errors, integrity and editable validation
+				errors = result == null ? null : result.getErrors();
 			}
-
-			// All errors, integrity and editable validation
-			List<ValidatorError> errors = result == null ? null : result.getErrors();
+			catch (ValidationErrorException e) {
+				errors = e.getResult().getErrors();
+			}
 
 			boolean hasEditableError = false;
 			if (errors != null && !errors.isEmpty()) {
