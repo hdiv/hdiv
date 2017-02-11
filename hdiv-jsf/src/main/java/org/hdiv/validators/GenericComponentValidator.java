@@ -68,20 +68,25 @@ public class GenericComponentValidator extends AbstractComponentValidator {
 			for (String event : clientBehaviors.keySet()) {
 				List<ClientBehavior> behaviors = clientBehaviors.get(event);
 				for (ClientBehavior behavior : behaviors) {
-					if (behavior instanceof AjaxBehavior) {
-						AjaxBehavior ajaxBehavior = (AjaxBehavior) behavior;
-						Collection<String> executeIds = ajaxBehavior.getExecute();
-						Collection<String> renderIds = ajaxBehavior.getRender();
-
-						context.acceptParameter("javax.faces.partial.ajax", "true");
-						context.acceptParameter("javax.faces.source", ((UIComponent) component).getClientId());
-						context.acceptParameter("javax.faces.behavior.event", event);
-						context.acceptParameter("javax.faces.partial.execute", resolveClientIds((UIComponent) component, executeIds));
-						context.acceptParameter("javax.faces.partial.render", resolveClientIds((UIComponent) component, renderIds));
-						context.acceptParameter("javax.faces.partial.event", "click");// TODO more valid values??
-					}
+					validateClientBehavior(context, component, event, behavior);
 				}
 			}
+		}
+	}
+
+	protected void validateClientBehavior(final ValidationContext context, final ClientBehaviorHolder component,
+			final String behaviourEvent, final ClientBehavior behavior) {
+		if (behavior instanceof AjaxBehavior) {
+			AjaxBehavior ajaxBehavior = (AjaxBehavior) behavior;
+			Collection<String> executeIds = ajaxBehavior.getExecute();
+			Collection<String> renderIds = ajaxBehavior.getRender();
+
+			context.acceptParameter("javax.faces.partial.ajax", "true");
+			context.acceptParameter("javax.faces.source", ((UIComponent) component).getClientId());
+			context.acceptParameter("javax.faces.behavior.event", behaviourEvent);
+			context.acceptParameter("javax.faces.partial.execute", resolveClientIds((UIComponent) component, executeIds));
+			context.acceptParameter("javax.faces.partial.render", resolveClientIds((UIComponent) component, renderIds));
+			context.acceptParameter("javax.faces.partial.event", "click");// TODO more valid values??
 		}
 	}
 

@@ -31,7 +31,6 @@ import org.hdiv.events.HDIVFacesEventListener;
 import org.hdiv.exception.HDIVException;
 import org.hdiv.util.HDIVUtil;
 import org.hdiv.util.HDIVUtilJsf;
-import org.hdiv.validation.ComponentTreeValidator;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.jsf.FacesContextUtils;
 
@@ -71,18 +70,6 @@ public class ConfigPhaseListener implements PhaseListener {
 	 * @see javax.faces.event.PhaseListener#beforePhase(javax.faces.event.PhaseEvent)
 	 */
 	public void beforePhase(final PhaseEvent event) {
-
-		// TODO move to a RequestInitializer????
-		if (event.getPhaseId().equals(PhaseId.RESTORE_VIEW)) {
-
-			FacesContext context = event.getFacesContext();
-
-			// TODO inject and constant
-			ComponentTreeValidator validator = FacesContextUtils.getRequiredWebApplicationContext(context)
-					.getBean(ComponentTreeValidator.class);
-			validator.createComponentValidators(context);
-			context.getExternalContext().getRequestMap().put("ComponentTreeValidator", validator);
-		}
 
 		if (event.getPhaseId().equals(PhaseId.RESTORE_VIEW) && !initialized) {
 

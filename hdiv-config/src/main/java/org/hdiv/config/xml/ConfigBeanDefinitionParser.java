@@ -649,7 +649,7 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		bean.setSource(source);
 		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
 		bean.getPropertyValues().addPropertyValue("config", configRef);
-
+		bean.setInitMethodName("createComponentValidators");
 		return registerBean(bean, ComponentTreeValidator.class.getName(), parserContext);
 	}
 

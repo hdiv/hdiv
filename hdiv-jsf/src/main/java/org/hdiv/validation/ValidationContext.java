@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
 import org.hdiv.filter.ValidatorError;
@@ -31,17 +30,14 @@ public class ValidationContext {
 
 	private final FacesContext facesContext;
 
-	private final UIComponent eventSource;
-
 	private final Map<String, String> requestParameters;
 
 	private final Map<String, Set<Object>> validParameters;
 
 	private final List<ValidatorError> errors;
 
-	public ValidationContext(final FacesContext facesContext, final UIComponent eventSource) {
+	public ValidationContext(final FacesContext facesContext) {
 		this.facesContext = facesContext;
-		this.eventSource = eventSource;
 		errors = new ArrayList<ValidatorError>();
 		requestParameters = facesContext.getExternalContext().getRequestParameterMap();
 		validParameters = new HashMap<String, Set<Object>>();
@@ -49,10 +45,6 @@ public class ValidationContext {
 
 	public FacesContext getFacesContext() {
 		return facesContext;
-	}
-
-	public UIComponent getEventSource() {
-		return eventSource;
 	}
 
 	public Map<String, String> getRequestParameters() {

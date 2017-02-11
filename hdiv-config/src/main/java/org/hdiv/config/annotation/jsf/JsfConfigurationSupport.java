@@ -107,6 +107,7 @@ public class JsfConfigurationSupport {
 
 		DefaultComponentTreeValidator componentTreeValidator = new DefaultComponentTreeValidator();
 		componentTreeValidator.setConfig(config);
+		componentTreeValidator.createComponentValidators();
 		return componentTreeValidator;
 	}
 

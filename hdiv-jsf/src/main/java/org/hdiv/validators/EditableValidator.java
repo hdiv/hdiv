@@ -70,8 +70,8 @@ public class EditableValidator extends AbstractComponentValidator {
 
 		FacesContext context = validationContext.getFacesContext();
 
-		Object value = inputComponent.getValue();
 		String clientId = inputComponent.getClientId(context);
+		Object value = context.getExternalContext().getRequestParameterMap().get(clientId);
 		String contentType = null;
 		if (inputComponent instanceof HtmlInputHidden) {
 			contentType = "hidden";

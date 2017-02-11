@@ -17,14 +17,13 @@ package org.hdiv.validation;
 
 import java.util.List;
 
-import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
 import org.hdiv.filter.ValidatorError;
 
 public interface ComponentTreeValidator {
 
-	void createComponentValidators(FacesContext facesContext);
+	void createComponentValidators();
 
-	List<ValidatorError> validateComponentTree(FacesContext facesContext, UIComponent eventComponent);
+	List<ValidatorError> validateComponentTree(FacesContext facesContext);
 }

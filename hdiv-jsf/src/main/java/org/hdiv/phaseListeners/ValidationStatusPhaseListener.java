@@ -15,8 +15,7 @@
  */
 package org.hdiv.phaseListeners;
 
-import java.util.Collections;
-import java.util.Map;
+import java.util.List;
 
 import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseEvent;
@@ -27,12 +26,12 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.hdiv.events.HDIVFacesEventListener;
-import org.hdiv.filter.JsfValidatorHelper;
 import org.hdiv.filter.ValidatorError;
 import org.hdiv.filter.ValidatorErrorHandler;
 import org.hdiv.logs.Logger;
+import org.hdiv.util.HDIVErrorCodes;
 import org.hdiv.util.HDIVUtil;
+import org.hdiv.validation.ComponentTreeValidator;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.jsf.FacesContextUtils;
 
@@ -65,56 +64,80 @@ public class ValidationStatusPhaseListener implements PhaseListener {
 			logger = wac.getBean(Logger.class);
 			validatorErrorHandler = wac.getBean(ValidatorErrorHandler.class);
 		}
-
-		if (event.getPhaseId().equals(PhaseId.INVOKE_APPLICATION) || event.getPhaseId().equals(PhaseId.RENDER_RESPONSE)) {
-			// Check if the request was validated
-
-			Map<String, Object> params = event.getFacesContext().getExternalContext().getRequestMap();
-			Boolean isRequestValidated = (Boolean) params.get(HDIVFacesEventListener.REQUEST_VALIDATED);
-			Boolean isViewStateRequest = (Boolean) params.get(JsfValidatorHelper.IS_VIEW_STATE_REQUEST);
-
-			if (isViewStateRequest && (isRequestValidated == null || !isRequestValidated)) {
-				if (log.isErrorEnabled()) {
-					log.error("This request is not validated.");
-				}
-
-				ValidatorError validatorError = log(event.getFacesContext());
-
-				forwardToErrorPage(event.getFacesContext(), validatorError);
-			}
-		}
-
 	}
 
 	public void afterPhase(final PhaseEvent event) {
+
+		if (event.getPhaseId().equals(PhaseId.RESTORE_VIEW)) {
+
+			FacesContext context = event.getFacesContext();
+
+			if (!context.isPostback()) {
+				// Don't validate a request if it is not a postback
+				return;
+			}
+
+			// TODO inject the required dependencies
+			ComponentTreeValidator componentTreeValidator = FacesContextUtils.getRequiredWebApplicationContext(context)
+					.getBean(ComponentTreeValidator.class);
+
+			List<ValidatorError> errors = null;
+			try {
+				errors = componentTreeValidator.validateComponentTree(context);
+			}
+			catch (Exception e) {
+				// TODO handle exception
+				e.printStackTrace();
+			}
+			log(context, errors);
+			if (mustStopRequest(errors)) {
+				forwardToErrorPage(context, errors);
+			}
+		}
 	}
 
-	/**
-	 * Helper method to write an attack in the log
-	 * 
-	 * @param context Request context
-	 */
-	private ValidatorError log(final FacesContext context) {
+	protected boolean mustStopRequest(final List<ValidatorError> errors) {
 
-		HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
+		// TODO check debug config
 
-		ValidatorError errorData = new ValidatorError("REQUEST_NOT_VALIDATED", HDIVUtil.getRequestURI(request));
-		logger.log(errorData);
-		return errorData;
+		if (errors != null && !errors.isEmpty()) {
+			for (ValidatorError error : errors) {
+				if (!error.getType().equals(HDIVErrorCodes.EDITABLE_VALIDATION_ERROR)) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	/**
 	 * Redirects the execution to the HDIV error page
 	 * 
 	 * @param context Request context
-	 * @param validatorError validation error data
+	 * @param validatorErrors validation error data
 	 */
-	private void forwardToErrorPage(final FacesContext context, final ValidatorError validatorError) {
+	protected void forwardToErrorPage(final FacesContext context, final List<ValidatorError> validatorErrors) {
 
 		HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
 		HttpServletResponse response = (HttpServletResponse) context.getExternalContext().getResponse();
 
-		validatorErrorHandler.handleValidatorError(request, response, Collections.singletonList(validatorError));
+		validatorErrorHandler.handleValidatorError(request, response, validatorErrors);
+	}
+
+	/**
+	 * Helper method to write an attack in the log
+	 * 
+	 * @param context Request context
+	 * @param error validation result
+	 */
+	private void log(final FacesContext context, final List<ValidatorError> errors) {
+
+		HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
+
+		for (ValidatorError error : errors) {
+			error.setTarget(HDIVUtil.getRequestURI(request));
+			logger.log(error);
+		}
 	}
 
 }

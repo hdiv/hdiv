@@ -15,12 +15,14 @@
  */
 package org.hdiv.validators;
 
+import java.util.Collection;
 import java.util.Map;
 
 import javax.faces.component.UICommand;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIParameter;
 import javax.faces.context.FacesContext;
+import javax.faces.context.PartialViewContext;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -45,10 +47,34 @@ public class UICommandValidator extends AbstractComponentValidator {
 
 		UICommand command = (UICommand) component;
 
-		if (command != validationContext.getEventSource()) {
+		if (!wasClicked(validationContext.getFacesContext(), command)) {
 			// Only validate the executed command
 			return;
 		}
+
+		validateUICommand(validationContext, command);
+	}
+
+	// TODO add myfaces support, the parameter is different
+	protected boolean wasClicked(final FacesContext facesContext, final UICommand command) {
+
+		String clientId = command.getClientId();
+		String value = facesContext.getExternalContext().getRequestParameterMap().get(clientId);
+		if (value != null && (value.equals(clientId) || value.equals(command.getValue()))) {
+			return true;
+		}
+
+		PartialViewContext partialContext = facesContext.getPartialViewContext();
+		if (partialContext != null && partialContext.isPartialRequest()) {
+			// Is an ajax call partially processing the component tree
+			Collection<String> execIds = partialContext.getExecuteIds();
+			return execIds.contains(clientId);
+		}
+
+		return false;
+	}
+
+	protected void validateUICommand(final ValidationContext validationContext, final UICommand command) {
 
 		validationContext.acceptParameter(command.getClientId(validationContext.getFacesContext()), command.getValue());
 

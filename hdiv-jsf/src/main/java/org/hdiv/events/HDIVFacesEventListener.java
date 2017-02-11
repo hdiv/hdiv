@@ -105,7 +105,7 @@ public class HDIVFacesEventListener implements FacesListener, StateHolder {
 		UIComponent eventComponent = facesEvent.getComponent();
 
 		// Validate component tree
-		List<ValidatorError> errors = componentTreeValidator.validateComponentTree(context, eventComponent);
+		List<ValidatorError> errors = componentTreeValidator.validateComponentTree(context);
 
 		log(context, errors);
 		if (mustStopRequest(errors)) {
