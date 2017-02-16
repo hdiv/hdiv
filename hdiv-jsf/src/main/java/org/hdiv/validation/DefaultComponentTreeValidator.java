@@ -18,6 +18,7 @@ package org.hdiv.validation;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -32,6 +33,7 @@ import javax.faces.context.PartialViewContext;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hdiv.config.HDIVConfig;
+import org.hdiv.exception.HDIVException;
 import org.hdiv.filter.ValidatorError;
 import org.hdiv.util.HDIVErrorCodes;
 import org.hdiv.util.UtilsJsf;
@@ -66,12 +68,52 @@ public class DefaultComponentTreeValidator implements ComponentTreeValidator {
 		PartialViewContext partialContext = facesContext.getPartialViewContext();
 		if (partialContext != null && partialContext.isPartialRequest()) {
 			// Is an ajax call partially processing the component tree
-			Collection<String> execIds = partialContext.getExecuteIds();
 
+			String source = facesContext.getExternalContext().getRequestParameterMap().get("javax.faces.source");
+			UIComponent sourceComp = null;
+			if (source != null) {
+				sourceComp = facesContext.getViewRoot().findComponent(source);
+			}
+
+			Set<UIComponent> componentsToValidate = new HashSet<UIComponent>();
+
+			Collection<String> execIds = partialContext.getExecuteIds();
 			for (String execId : execIds) {
 				UIComponent execComp = null;
-				if (execId.equals("@all")) {
-					execComp = facesContext.getViewRoot();
+				if (execId.startsWith("@")) {
+					if (execId.equals("@all")) {
+						execComp = facesContext.getViewRoot();
+					}
+					else if (execId.equals("@form")) {
+						if (sourceComp != null) {
+							execComp = UtilsJsf.findParentForm(sourceComp);
+						}
+						else {
+							throw new HDIVException("Cant determine the component to validate!");
+						}
+					}
+					else if (execId.equals("@this")) {
+						if (sourceComp != null) {
+							execComp = sourceComp;
+						}
+						else {
+							throw new HDIVException("Cant determine the component to validate!");
+						}
+					}
+					else if (execId.equals("@none")) {
+						execComp = null;
+					}
+					else if (execId.equals("@parent")) {
+						if (sourceComp != null) {
+							execComp = sourceComp.getParent();
+						}
+						else {
+							throw new HDIVException("Cant determine the component to validate!");
+						}
+					}
+					else {
+						log.error("Component reference '" + execId + "' is not supported");
+					}
 				}
 				else {
 					execComp = facesContext.getViewRoot().findComponent(execId);
@@ -84,8 +126,17 @@ public class DefaultComponentTreeValidator implements ComponentTreeValidator {
 					compToValidate = submittedForm;
 				}
 
-				validateComponentTree(context, compToValidate);
+				if (compToValidate != null) {
+					componentsToValidate.add(compToValidate);
+				}
 			}
+
+			if (componentsToValidate.size() > 0) {
+				for (UIComponent comp : componentsToValidate) {
+					validateComponentTree(context, comp);
+				}
+			}
+
 		}
 		else {
 			// This is not an Ajax request
@@ -221,14 +272,12 @@ public class DefaultComponentTreeValidator implements ComponentTreeValidator {
 	 */
 	protected UIForm findParentSubmittedForm(final FacesContext facesContext, final UIComponent comp) {
 
-		if (comp instanceof UIViewRoot) {
+		if (comp == null || comp instanceof UIViewRoot) {
 			return null;
 		}
 
-		UIComponent parent = comp.getParent();
-
-		if (parent instanceof UIForm) {
-			UIForm form = (UIForm) parent;
+		if (comp instanceof UIForm) {
+			UIForm form = (UIForm) comp;
 			String clientId = form.getClientId();
 			String paramValue = facesContext.getExternalContext().getRequestParameterMap().get(clientId);
 			if (paramValue != null && paramValue.equals(clientId)) {
@@ -236,7 +285,7 @@ public class DefaultComponentTreeValidator implements ComponentTreeValidator {
 			}
 		}
 
-		return findParentSubmittedForm(facesContext, parent);
+		return findParentSubmittedForm(facesContext, comp.getParent());
 	}
 
 	public void setConfig(final HDIVConfig config) {

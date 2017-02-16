@@ -122,8 +122,8 @@ public abstract class UtilsJsf {
 	/**
 	 * Searches in the parent components of comp if exists one of type UIData. Returns null if not
 	 * 
-	 * @param comp componente en el que se basa la busqueda
-	 * @return componente UIData pariente o null si no existe
+	 * @param comp base component to start to find
+	 * @return UIData component or null
 	 */
 	public static UIData findParentUIData(final UIComponent comp) {
 
