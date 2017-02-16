@@ -24,9 +24,13 @@ import java.util.Set;
 
 import javax.faces.context.FacesContext;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.hdiv.filter.ValidatorError;
 
 public class ValidationContext {
+
+	private static final Log log = LogFactory.getLog(ValidationContext.class);
 
 	private final FacesContext facesContext;
 
@@ -52,6 +56,10 @@ public class ValidationContext {
 	}
 
 	public void acceptParameter(final String parameterName, final Object parameterValue) {
+
+		if (log.isDebugEnabled()) {
+			log.debug("Accepted parameter: " + parameterName + ", " + parameterValue);
+		}
 
 		Set<Object> values = validParameters.get(parameterName);
 		if (values == null) {
