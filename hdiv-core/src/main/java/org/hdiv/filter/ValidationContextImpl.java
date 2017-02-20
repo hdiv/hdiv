@@ -41,6 +41,17 @@ public class ValidationContextImpl implements ValidationContext {
 
 	private final HttpServletResponse response;
 
+	/**
+	 * @deprecated
+	 * @param request
+	 * @param restorer
+	 * @param obfuscation
+	 */
+	@Deprecated
+	public ValidationContextImpl(final HttpServletRequest request, final StateRestorer restorer, final boolean obfuscation) {
+		this(request, null, restorer, obfuscation);
+	}
+
 	public ValidationContextImpl(final HttpServletRequest request, final HttpServletResponse response, final StateRestorer restorer,
 			final boolean obfuscation) {
 		this.request = request;
