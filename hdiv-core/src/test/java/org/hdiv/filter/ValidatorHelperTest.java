@@ -72,7 +72,7 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 
 		RequestInitializer requestInitializer = getApplicationContext().getBean(RequestInitializer.class);
 		RequestWrapper requestWrapper = requestInitializer.createRequestWrapper(request, response);
-		this.requestWrapper = new ValidationContextImpl(requestWrapper, (StateRestorer) helper, false);
+		this.requestWrapper = new ValidationContextImpl(requestWrapper, response, helper, false);
 		responseWrapper = requestInitializer.createResponseWrapper(request, response);
 
 	}
