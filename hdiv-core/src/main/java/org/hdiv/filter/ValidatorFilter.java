@@ -180,7 +180,7 @@ public class ValidatorFilter extends OncePerRequestFilter {
 					legal = true;
 				}
 			}
-			ValidationContext context = validationContextFactory.newInstance(multipartProcessedRequest, validationHelper,
+			ValidationContext context = validationContextFactory.newInstance(multipartProcessedRequest, response, validationHelper,
 					hdivConfig.isUrlObfuscation());
 			List<ValidatorError> errors = null;
 			try {
@@ -197,6 +197,9 @@ public class ValidatorFilter extends OncePerRequestFilter {
 				errors = result == null ? null : result.getErrors();
 			}
 			catch (ValidationErrorException e) {
+				if (e.getResult() == ValidatorHelperResult.PEN_TESTING) {
+					return;
+				}
 				errors = e.getResult().getErrors();
 			}
 
