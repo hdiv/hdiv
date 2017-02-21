@@ -87,8 +87,7 @@ public class HtmlInputHiddenValidator extends AbstractComponentValidator {
 					log.debug("Parameter '" + inputHidden.getId() + "' rejected in component '" + inputHidden.getId()
 							+ "' in ComponentValidator '" + this.getClass() + "'");
 				}
-				validationContext.rejectParameter(inputHidden.getId(), null, HDIVErrorCodes.REQUIRED_PARAMETERS,
-						inputHidden.getClientId(context));
+				validationContext.rejectParameter(inputHidden.getId(), null, HDIVErrorCodes.REQUIRED_PARAMETERS);
 			}
 
 			boolean correct = hasEqualValue(hiddenValue, hiddenRealValue);

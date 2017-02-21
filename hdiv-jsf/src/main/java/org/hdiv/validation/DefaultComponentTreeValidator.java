@@ -165,18 +165,12 @@ public class DefaultComponentTreeValidator implements ComponentTreeValidator {
 
 		validateComponent(context, component);
 
-		if (context.hasErrors()) {
-			// TODO stop or continue?
-			return;
-		}
-
 		Iterator<UIComponent> it = component.getFacetsAndChildren();
 		while (it.hasNext()) {
 			UIComponent child = it.next();
 
 			validateComponentTree(context, child);
 		}
-
 	}
 
 	protected void validateComponent(final ValidationContext context, final UIComponent component) {

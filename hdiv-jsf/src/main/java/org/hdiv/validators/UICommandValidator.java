@@ -122,8 +122,7 @@ public class UICommandValidator extends AbstractComponentValidator {
 				log.debug("Parameter '" + param.getName() + "' rejected in component '" + param.getClientId(context)
 						+ "' in ComponentValidator '" + this.getClass() + "'");
 			}
-			validationContext.rejectParameter(param.getName(), requestValue, HDIVErrorCodes.REQUIRED_PARAMETERS,
-					param.getClientId(context));
+			validationContext.rejectParameter(param.getName(), requestValue, HDIVErrorCodes.REQUIRED_PARAMETERS);
 		}
 		else {
 
