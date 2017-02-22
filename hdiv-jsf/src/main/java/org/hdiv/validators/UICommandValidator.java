@@ -58,7 +58,7 @@ public class UICommandValidator extends AbstractComponentValidator {
 	// TODO add myfaces support, the parameter is different
 	protected boolean wasClicked(final FacesContext facesContext, final UICommand command) {
 
-		String clientId = command.getClientId();
+		String clientId = command.getClientId(facesContext);
 		String value = facesContext.getExternalContext().getRequestParameterMap().get(clientId);
 		if (value != null && (value.equals(clientId) || value.equals(command.getValue()))) {
 			return true;
