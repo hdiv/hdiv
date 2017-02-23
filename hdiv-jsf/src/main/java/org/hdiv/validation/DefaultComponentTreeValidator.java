@@ -163,6 +163,11 @@ public class DefaultComponentTreeValidator implements ComponentTreeValidator {
 
 	protected void validateComponentTree(final ValidationContext context, final UIComponent component) {
 
+		if (!component.isRendered()) {
+			// Exclude non rendered components from the parameter validation
+			return;
+		}
+
 		validateComponent(context, component);
 
 		Iterator<UIComponent> it = component.getFacetsAndChildren();
