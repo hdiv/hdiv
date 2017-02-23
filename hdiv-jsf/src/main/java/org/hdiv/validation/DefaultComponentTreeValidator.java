@@ -34,7 +34,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hdiv.config.HDIVConfig;
 import org.hdiv.exception.HDIVException;
-import org.hdiv.filter.ValidatorError;
 import org.hdiv.util.HDIVErrorCodes;
 import org.hdiv.util.UtilsJsf;
 import org.hdiv.validators.ComponentValidator;
@@ -61,7 +60,7 @@ public class DefaultComponentTreeValidator implements ComponentTreeValidator {
 		componentValidators.add(editableValidator);
 	}
 
-	public List<ValidatorError> validateComponentTree(final FacesContext facesContext) {
+	public List<FacesValidatorError> validateComponentTree(final FacesContext facesContext) {
 
 		ValidationContext context = new ValidationContext(facesContext);
 
@@ -149,13 +148,13 @@ public class DefaultComponentTreeValidator implements ComponentTreeValidator {
 					log.error("Can't find submitted form.");
 				}
 				// TODO review this error key
-				return Collections.singletonList(new ValidatorError("ERROR_VALIDATING"));
+				return Collections.singletonList(new FacesValidatorError("ERROR_VALIDATING"));
 			}
 			// Validate component tree starting in form
 			validateComponentTree(context, submittedForm);
 		}
 
-		List<ValidatorError> errors = checkParameters(context);
+		List<FacesValidatorError> errors = checkParameters(context);
 
 		errors.addAll(context.getErrors());
 		return errors;
@@ -187,9 +186,9 @@ public class DefaultComponentTreeValidator implements ComponentTreeValidator {
 		}
 	}
 
-	protected List<ValidatorError> checkParameters(final ValidationContext context) {
+	protected List<FacesValidatorError> checkParameters(final ValidationContext context) {
 
-		List<ValidatorError> errors = new ArrayList<ValidatorError>();
+		List<FacesValidatorError> errors = new ArrayList<FacesValidatorError>();
 
 		for (String param : context.getRequestParameters().keySet()) {
 
@@ -219,7 +218,7 @@ public class DefaultComponentTreeValidator implements ComponentTreeValidator {
 					}
 
 					String type = paramIsPressent ? HDIVErrorCodes.PARAMETER_VALUE_INCORRECT : HDIVErrorCodes.PARAMETER_NOT_EXISTS;
-					ValidatorError error = new ValidatorError(type, null, param, value);
+					FacesValidatorError error = new FacesValidatorError(type, null, param, value);
 					errors.add(error);
 				}
 			}

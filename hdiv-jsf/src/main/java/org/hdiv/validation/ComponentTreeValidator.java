@@ -19,11 +19,9 @@ import java.util.List;
 
 import javax.faces.context.FacesContext;
 
-import org.hdiv.filter.ValidatorError;
-
 public interface ComponentTreeValidator {
 
 	void createComponentValidators();
 
-	List<ValidatorError> validateComponentTree(FacesContext facesContext);
+	List<FacesValidatorError> validateComponentTree(FacesContext facesContext);
 }

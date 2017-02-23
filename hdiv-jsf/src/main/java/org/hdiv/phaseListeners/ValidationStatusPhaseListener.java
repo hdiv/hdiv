@@ -15,8 +15,11 @@
  */
 package org.hdiv.phaseListeners;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import javax.faces.component.UIComponent;
+import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseEvent;
 import javax.faces.event.PhaseId;
@@ -32,6 +35,7 @@ import org.hdiv.logs.Logger;
 import org.hdiv.util.HDIVErrorCodes;
 import org.hdiv.util.HDIVUtil;
 import org.hdiv.validation.ComponentTreeValidator;
+import org.hdiv.validation.FacesValidatorError;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.jsf.FacesContextUtils;
 
@@ -43,6 +47,8 @@ public class ValidationStatusPhaseListener implements PhaseListener {
 	private static final long serialVersionUID = -5951308353665763734L;
 
 	private static final Log log = LogFactory.getLog(ValidationStatusPhaseListener.class);
+
+	private static final String VALIDATION_ERRORS_ATTR_NAME = "VALIDATION_ERRORS_ATTR_NAME";
 
 	private Logger logger;
 
@@ -64,6 +70,26 @@ public class ValidationStatusPhaseListener implements PhaseListener {
 			logger = wac.getBean(Logger.class);
 			validatorErrorHandler = wac.getBean(ValidatorErrorHandler.class);
 		}
+
+		if (event.getPhaseId().equals(PhaseId.PROCESS_VALIDATIONS)) {
+
+			@SuppressWarnings("unchecked")
+			List<FacesValidatorError> errors = (List<FacesValidatorError>) event.getFacesContext().getAttributes()
+					.get(VALIDATION_ERRORS_ATTR_NAME);
+			if (errors != null) {
+				for (FacesValidatorError error : errors) {
+					if (error.getType().equals(HDIVErrorCodes.EDITABLE_VALIDATION_ERROR)) {
+						UIComponent comp = error.getEditableValidationComponent();
+						if (comp instanceof UIInput) {
+							((UIInput) comp).setValid(false);
+						}
+						else {
+							log.info("Can't set validity to false on component: " + comp.getClientId(event.getFacesContext()));
+						}
+					}
+				}
+			}
+		}
 	}
 
 	public void afterPhase(final PhaseEvent event) {
@@ -81,7 +107,7 @@ public class ValidationStatusPhaseListener implements PhaseListener {
 			ComponentTreeValidator componentTreeValidator = FacesContextUtils.getRequiredWebApplicationContext(context)
 					.getBean(ComponentTreeValidator.class);
 
-			List<ValidatorError> errors = null;
+			List<FacesValidatorError> errors = null;
 			try {
 				errors = componentTreeValidator.validateComponentTree(context);
 			}
@@ -89,6 +115,9 @@ public class ValidationStatusPhaseListener implements PhaseListener {
 				// TODO handle exception
 				e.printStackTrace();
 			}
+
+			context.getAttributes().put(VALIDATION_ERRORS_ATTR_NAME, errors);
+
 			log(context, errors);
 			if (mustStopRequest(errors)) {
 				forwardToErrorPage(context, errors);
@@ -96,7 +125,7 @@ public class ValidationStatusPhaseListener implements PhaseListener {
 		}
 	}
 
-	protected boolean mustStopRequest(final List<ValidatorError> errors) {
+	protected boolean mustStopRequest(final List<FacesValidatorError> errors) {
 
 		// TODO check debug config
 
@@ -116,12 +145,16 @@ public class ValidationStatusPhaseListener implements PhaseListener {
 	 * @param context Request context
 	 * @param validatorErrors validation error data
 	 */
-	protected void forwardToErrorPage(final FacesContext context, final List<ValidatorError> validatorErrors) {
+	protected void forwardToErrorPage(final FacesContext context, final List<FacesValidatorError> validatorErrors) {
 
 		HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
 		HttpServletResponse response = (HttpServletResponse) context.getExternalContext().getResponse();
 
-		validatorErrorHandler.handleValidatorError(request, response, validatorErrors);
+		List<ValidatorError> errors = new ArrayList<ValidatorError>();
+		for (FacesValidatorError error : validatorErrors) {
+			errors.add(error);
+		}
+		validatorErrorHandler.handleValidatorError(request, response, errors);
 	}
 
 	/**
@@ -130,7 +163,7 @@ public class ValidationStatusPhaseListener implements PhaseListener {
 	 * @param context Request context
 	 * @param error validation result
 	 */
-	private void log(final FacesContext context, final List<ValidatorError> errors) {
+	private void log(final FacesContext context, final List<FacesValidatorError> errors) {
 
 		HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
 

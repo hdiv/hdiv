@@ -105,14 +105,14 @@ public class HDIVFacesEventListener implements FacesListener, StateHolder {
 		UIComponent eventComponent = facesEvent.getComponent();
 
 		// Validate component tree
-		List<ValidatorError> errors = componentTreeValidator.validateComponentTree(context);
-
-		log(context, errors);
-		if (mustStopRequest(errors)) {
-			forwardToErrorPage(context, errors);
-		}
-
-		context.getExternalContext().getRequestMap().put(REQUEST_VALIDATED, true);
+		// List<ValidatorError> errors = componentTreeValidator.validateComponentTree(context);
+		//
+		// log(context, errors);
+		// if (mustStopRequest(errors)) {
+		// forwardToErrorPage(context, errors);
+		// }
+		//
+		// context.getExternalContext().getRequestMap().put(REQUEST_VALIDATED, true);
 	}
 
 	protected boolean mustStopRequest(final List<ValidatorError> errors) {

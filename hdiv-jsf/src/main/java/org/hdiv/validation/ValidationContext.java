@@ -22,11 +22,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.hdiv.filter.ValidatorError;
 
 public class ValidationContext {
 
@@ -38,13 +38,13 @@ public class ValidationContext {
 
 	private final Map<String, Set<Object>> validParameters;
 
-	private final List<ValidatorError> errors;
+	private final List<FacesValidatorError> errors;
 
 	public ValidationContext(final FacesContext facesContext) {
 		this.facesContext = facesContext;
-		errors = new ArrayList<ValidatorError>();
 		requestParameters = facesContext.getExternalContext().getRequestParameterMap();
 		validParameters = new HashMap<String, Set<Object>>();
+		errors = new ArrayList<FacesValidatorError>();
 	}
 
 	public FacesContext getFacesContext() {
@@ -73,19 +73,19 @@ public class ValidationContext {
 	}
 
 	public void rejectParameter(final String paramName, final String paramErrorValue, final String errorKey,
-			final String editableValidationRule) {
-		errors.add(new ValidatorError(errorKey, null, paramName, paramErrorValue, null, editableValidationRule));
+			final String editableValidationRule, final UIComponent editableComponent) {
+		errors.add(new FacesValidatorError(errorKey, null, paramName, paramErrorValue, null, editableValidationRule, editableComponent));
 	}
 
 	public void rejectParameter(final String paramName, final String paramErrorValue, final String errorKey) {
-		rejectParameter(paramName, paramErrorValue, errorKey, null);
+		rejectParameter(paramName, paramErrorValue, errorKey, null, null);
 	}
 
 	public Map<String, Set<Object>> getValidParameters() {
 		return validParameters;
 	}
 
-	public List<ValidatorError> getErrors() {
+	public List<FacesValidatorError> getErrors() {
 		return errors;
 	}
 

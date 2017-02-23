@@ -101,7 +101,8 @@ public class EditableValidator extends AbstractComponentValidator {
 			FacesMessage msg = createFacesMessage(context, inputComponent);
 			context.addMessage(clientId, msg);
 
-			inputComponent.setValid(false);
+			// We can't do this in RestoreState phase. Store the component and do it later.
+			// inputComponent.setValid(false);
 
 			if (log.isDebugEnabled()) {
 				log.debug("Parameter '" + clientId + "' rejected in component '" + clientId + "' in ComponentValidator '" + this.getClass()
@@ -109,7 +110,7 @@ public class EditableValidator extends AbstractComponentValidator {
 			}
 
 			validationContext.rejectParameter(clientId, value.toString(), HDIVErrorCodes.EDITABLE_VALIDATION_ERROR,
-					result.getValidationId());
+					result.getValidationId(), inputComponent);
 		}
 	}
 
