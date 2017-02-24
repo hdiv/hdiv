@@ -43,7 +43,7 @@ import org.hdiv.validator.EditableDataValidationResult;
  * 
  * @author Ugaitz Urien
  */
-public class EditableValidator extends AbstractComponentValidator {
+public class EditableValidator implements ComponentValidator {
 
 	private static final Log log = LogFactory.getLog(EditableValidator.class);
 
@@ -52,8 +52,9 @@ public class EditableValidator extends AbstractComponentValidator {
 	 */
 	private HDIVConfig hdivConfig;
 
-	public EditableValidator() {
-		super(UIInput.class);
+	public boolean supports(final UIComponent component) {
+
+		return UIInput.class.isAssignableFrom(component.getClass()) && component.getFamily().equals("javax.faces.Input");
 	}
 
 	public void validate(final ValidationContext context, final UIComponent component) {
