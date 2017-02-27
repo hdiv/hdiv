@@ -934,4 +934,56 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 		assertFalse(result.isValid());
 
 	}
+
+	/**
+	 * Test validation if a form has a parameter with special characters
+	 * @throws UnsupportedEncodingException
+	 */
+	public void testFormWithParameterWithSpecialCharacterDifferentValue() throws UnsupportedEncodingException {
+
+		getConfig().setConfidentiality(false);
+		MockHttpServletRequest request = getMockRequest();
+		request.setMethod("POST");
+
+		dataComposer.beginRequest(Method.POST, targetName);
+
+		// Form parameters
+		dataComposer.compose("param", "valu+e", false);
+
+		String pageState = dataComposer.endRequest();
+		dataComposer.endPage();
+
+		request.addParameter(hdivParameter, pageState);
+		request.addParameter("param", "valu e");
+
+		ValidatorHelperResult result = helper.validate(requestWrapper);
+		assertTrue(result.isValid());
+
+	}
+
+	/**
+	 * Test validation if a form has a parameter with special characters
+	 * @throws UnsupportedEncodingException
+	 */
+	public void testFormWithParameterWithSpecialCharacterSameValue() throws UnsupportedEncodingException {
+
+		getConfig().setConfidentiality(false);
+		MockHttpServletRequest request = getMockRequest();
+		request.setMethod("POST");
+
+		dataComposer.beginRequest(Method.POST, targetName);
+
+		// Form parameters
+		dataComposer.compose("param", "valu+e", false);
+
+		String pageState = dataComposer.endRequest();
+		dataComposer.endPage();
+
+		request.addParameter(hdivParameter, pageState);
+		request.addParameter("param", "valu+e");
+
+		ValidatorHelperResult result = helper.validate(requestWrapper);
+		assertTrue(result.isValid());
+
+	}
 }

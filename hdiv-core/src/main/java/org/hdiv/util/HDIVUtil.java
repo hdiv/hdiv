@@ -617,6 +617,19 @@ public class HDIVUtil {
 	}
 
 	/**
+	 * Returns if <code>parameterValue</code> and <code>value</code> are the same encoded value.
+	 * 
+	 * @param parameterValue
+	 * @param value
+	 * @return <code>true</code> if they are the same value; <code>false</code> otherwise
+	 * @since HDIV 3.3
+	 */
+	public static boolean isTheSameEncodedValue(final String parameterValue, final String value) {
+
+		return parameterValue.replace(" ", "+").equalsIgnoreCase(value);
+	}
+
+	/**
 	 * @see URLDecoder#decode(String, String)
 	 */
 	public static String decodeValue(final StringBuilder sb, final String s, final String enc) throws UnsupportedEncodingException {
