@@ -19,6 +19,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.hdiv.util.HDIVUtil;
+
 /**
  * Data structure to store all the values of a parameter
  *
@@ -122,7 +124,7 @@ public class Parameter implements IParameter {
 
 		if (values == null) {
 			if (this.value != null) {
-				return this.value.equalsIgnoreCase(value);
+				return this.value.equalsIgnoreCase(value) || HDIVUtil.isTheSameEncodedValue(this.value, value);
 			}
 			else {
 				return this.value == value;
@@ -131,7 +133,7 @@ public class Parameter implements IParameter {
 
 		for (int i = 0; i < values.size(); i++) {
 			String tempValue = values.get(i);
-			if (tempValue.equalsIgnoreCase(value)) {
+			if (tempValue.equalsIgnoreCase(value) || HDIVUtil.isTheSameEncodedValue(tempValue, value)) {
 				return true;
 			}
 		}
