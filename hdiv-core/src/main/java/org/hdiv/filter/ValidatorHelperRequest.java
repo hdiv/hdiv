@@ -183,7 +183,7 @@ public class ValidatorHelperRequest implements IValidationHelper, StateRestorer 
 
 		String target = context.getTarget();
 
-		if (target.endsWith(UrlData.PEN_TESTING_ROOT_PATH)) {
+		if (false && target.endsWith(UrlData.PEN_TESTING_ROOT_PATH)) {
 			processPenTesting(context, target);
 		}
 
