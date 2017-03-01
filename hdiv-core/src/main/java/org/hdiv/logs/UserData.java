@@ -21,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.util.ClassUtils;
 
 /**
@@ -34,7 +35,7 @@ public class UserData implements IUserData {
 	private final boolean springSecurityPresent = ClassUtils.isPresent("org.springframework.security.core.context.SecurityContextHolder",
 			UserData.class.getClassLoader());
 
-	public String getUsername(HttpServletRequest request) {
+	public String getUsername(final HttpServletRequest request) {
 
 		// Find username in JEE standard security
 		Principal principal = request.getUserPrincipal();
@@ -45,6 +46,12 @@ public class UserData implements IUserData {
 		// Find username in Spring Security
 		if (springSecurityPresent) {
 			SecurityContext securityContext = SecurityContextHolder.getContext();
+			if (securityContext != null && securityContext.getAuthentication() != null) {
+				return securityContext.getAuthentication().getName();
+			}
+
+			securityContext = (SecurityContext) request.getSession()
+					.getAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY);
 			if (securityContext != null && securityContext.getAuthentication() != null) {
 				return securityContext.getAuthentication().getName();
 			}
