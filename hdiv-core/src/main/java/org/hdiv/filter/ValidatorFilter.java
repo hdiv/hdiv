@@ -100,32 +100,33 @@ public class ValidatorFilter extends OncePerRequestFilter {
 	 * Initialize required dependencies.
 	 */
 	protected void initDependencies() {
-
-		if (hdivConfig == null) {
+		if (validationContextFactory == null) {
 			synchronized (this) {
-				ServletContext servletContext = getServletContext();
-				WebApplicationContext context = HDIVUtil.findWebApplicationContext(servletContext);
+				if (hdivConfig == null) {
+					ServletContext servletContext = getServletContext();
+					WebApplicationContext context = HDIVUtil.findWebApplicationContext(servletContext);
 
-				hdivConfig = context.getBean(HDIVConfig.class);
-				validationHelper = context.getBean(IValidationHelper.class);
+					hdivConfig = context.getBean(HDIVConfig.class);
+					validationHelper = context.getBean(IValidationHelper.class);
 
-				String[] names = context.getBeanNamesForType(IMultipartConfig.class);
-				if (names.length > 1) {
-					throw new HDIVException("More than one bean of type 'multipartConfig' is defined.");
-				}
-				if (names.length == 1) {
-					multipartConfig = context.getBean(IMultipartConfig.class);
-				}
-				else {
-					// For applications without Multipart requests
-					multipartConfig = null;
-				}
+					String[] names = context.getBeanNamesForType(IMultipartConfig.class);
+					if (names.length > 1) {
+						throw new HDIVException("More than one bean of type 'multipartConfig' is defined.");
+					}
+					if (names.length == 1) {
+						multipartConfig = context.getBean(IMultipartConfig.class);
+					}
+					else {
+						// For applications without Multipart requests
+						multipartConfig = null;
+					}
 
-				userData = context.getBean(IUserData.class);
-				logger = context.getBean(Logger.class);
-				errorHandler = context.getBean(ValidatorErrorHandler.class);
-				requestInitializer = context.getBean(RequestInitializer.class);
-				validationContextFactory = context.getBean(ValidationContextFactory.class);
+					userData = context.getBean(IUserData.class);
+					logger = context.getBean(Logger.class);
+					errorHandler = context.getBean(ValidatorErrorHandler.class);
+					requestInitializer = context.getBean(RequestInitializer.class);
+					validationContextFactory = context.getBean(ValidationContextFactory.class);
+				}
 			}
 		}
 	}
