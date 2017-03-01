@@ -981,7 +981,7 @@ public class ValidatorHelperRequest implements IValidationHelper, StateRestorer 
 
 				String tempValue = tempStateValues.get(j);
 
-				if (tempValue.equalsIgnoreCase(values[i])) {
+				if (tempValue.equalsIgnoreCase(values[i]) || HDIVUtil.isTheSameEncodedValue(tempValue, values[i])) {
 					tempStateValues.remove(j);
 					exists = true;
 				}
