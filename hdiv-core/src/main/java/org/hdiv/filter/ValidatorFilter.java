@@ -181,7 +181,7 @@ public class ValidatorFilter extends OncePerRequestFilter {
 					legal = true;
 				}
 			}
-			ValidationContext context = validationContextFactory.newInstance(multipartProcessedRequest, validationHelper,
+			ValidationContext context = validationContextFactory.newInstance(multipartProcessedRequest, response, validationHelper,
 					hdivConfig.isUrlObfuscation());
 			List<ValidatorError> errors = null;
 			try {
@@ -198,6 +198,9 @@ public class ValidatorFilter extends OncePerRequestFilter {
 				errors = result == null ? null : result.getErrors();
 			}
 			catch (ValidationErrorException e) {
+				if (e.getResult() == ValidatorHelperResult.PEN_TESTING) {
+					return;
+				}
 				errors = e.getResult().getErrors();
 			}
 
@@ -314,8 +317,11 @@ public class ValidatorFilter extends OncePerRequestFilter {
 
 			// Include context path in the target
 			String target = error.getTarget();
-			if (!target.startsWith(contextPath)) {
+			if (target != null && !target.startsWith(contextPath)) {
 				target = request.getContextPath() + target;
+			}
+			else if (target == null) {
+				target = request.getRequestURI();
 			}
 			error.setTarget(target);
 		}

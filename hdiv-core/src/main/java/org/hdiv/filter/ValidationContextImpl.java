@@ -18,6 +18,7 @@ package org.hdiv.filter;
 import java.io.UnsupportedEncodingException;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.hdiv.exception.HDIVException;
 import org.hdiv.util.Constants;
@@ -38,14 +39,33 @@ public class ValidationContextImpl implements ValidationContext {
 
 	protected String redirect;
 
+	private final HttpServletResponse response;
+
+	/**
+	 * @deprecated
+	 * @param request
+	 * @param restorer
+	 * @param obfuscation
+	 */
+	@Deprecated
 	public ValidationContextImpl(final HttpServletRequest request, final StateRestorer restorer, final boolean obfuscation) {
+		this(request, null, restorer, obfuscation);
+	}
+
+	public ValidationContextImpl(final HttpServletRequest request, final HttpServletResponse response, final StateRestorer restorer,
+			final boolean obfuscation) {
 		this.request = request;
+		this.response = response;
 		this.obfuscation = obfuscation;
 		this.restorer = restorer;
 	}
 
 	public HttpServletRequest getRequest() {
 		return request;
+	}
+
+	public HttpServletResponse getResponse() {
+		return response;
 	}
 
 	public String getTarget() {

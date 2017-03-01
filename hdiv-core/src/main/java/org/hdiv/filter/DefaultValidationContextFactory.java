@@ -16,10 +16,12 @@
 package org.hdiv.filter;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 public class DefaultValidationContextFactory implements ValidationContextFactory {
 
-	public ValidationContext newInstance(final HttpServletRequest request, final StateRestorer restorer, final boolean obfuscation) {
-		return new ValidationContextImpl(request, restorer, obfuscation);
+	public ValidationContext newInstance(final HttpServletRequest request, final HttpServletResponse response, final StateRestorer restorer,
+			final boolean obfuscation) {
+		return new ValidationContextImpl(request, response, restorer, obfuscation);
 	}
 }

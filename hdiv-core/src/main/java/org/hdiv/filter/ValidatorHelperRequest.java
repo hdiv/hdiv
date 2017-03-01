@@ -15,6 +15,8 @@
  */
 package org.hdiv.filter;
 
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Enumeration;
@@ -49,6 +51,7 @@ import org.hdiv.state.StateUtil;
 import org.hdiv.state.scope.StateScope;
 import org.hdiv.state.scope.StateScopeManager;
 import org.hdiv.urlProcessor.BasicUrlProcessor;
+import org.hdiv.urlProcessor.UrlData;
 import org.hdiv.util.Constants;
 import org.hdiv.util.HDIVErrorCodes;
 import org.hdiv.util.HDIVUtil;
@@ -122,6 +125,40 @@ public class ValidatorHelperRequest implements IValidationHelper, StateRestorer 
 	public void init() {
 	}
 
+	private void processPenTesting(final ValidationContext context, final String target) {
+		ValidatorHelperResult ptresult = restoreState(context.getRequest(), target);
+		if (ptresult.isValid()) {
+			List<String> editable = new ArrayList<String>();
+			context.getResponse().setContentType("text/html");
+
+			if (ptresult.getValue().getParameters() != null) {
+				for (IParameter parameter : ptresult.getValue().getParameters()) {
+					if (parameter.isEditable()) {
+						editable.add(parameter.getName());
+					}
+				}
+			}
+			for (int i = 0; i < editable.size(); i++) {
+
+				try {
+					PrintWriter out = context.getResponse().getWriter();
+					if (i != 0) {
+						out.write(',');
+					}
+					out.write(editable.get(i));
+					out.flush();
+				}
+				catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+			}
+
+			throw new ValidationErrorException(ValidatorHelperResult.PEN_TESTING);
+		}
+	}
+
 	/**
 	 * Checks if the values of the parameters received in the request <code>request</code> are valid. These values are valid if and only if
 	 * the noneditable parameters haven't been modified.<br>
@@ -143,7 +180,13 @@ public class ValidatorHelperRequest implements IValidationHelper, StateRestorer 
 	 * @throws HDIVException If the request doesn't pass the HDIV validation an exception is thrown explaining the cause of the error.
 	 */
 	public ValidatorHelperResult validate(final ValidationContext context) {
+
 		String target = context.getTarget();
+
+		if (false && target.endsWith(UrlData.PEN_TESTING_ROOT_PATH)) {
+			processPenTesting(context, target);
+		}
+
 		HttpServletRequest request = context.getRequest();
 
 		// Hook before the validation

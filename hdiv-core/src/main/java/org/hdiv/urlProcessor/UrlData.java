@@ -23,6 +23,8 @@ public interface UrlData {
 
 	String OBFUSCATION_ROOT_PATH = "/" + OBFUSCATION_PATH;
 
+	String PEN_TESTING_ROOT_PATH = "/PtRp";
+
 	String getUrlWithoutContextPath();
 
 	String getUrlParams();
