@@ -41,6 +41,7 @@ import org.hdiv.validators.EditableValidator;
 import org.hdiv.validators.GenericComponentValidator;
 import org.hdiv.validators.HtmlInputHiddenValidator;
 import org.hdiv.validators.UICommandValidator;
+import org.hdiv.validators.UISelectValidator;
 
 public class DefaultComponentTreeValidator implements ComponentTreeValidator {
 
@@ -58,6 +59,7 @@ public class DefaultComponentTreeValidator implements ComponentTreeValidator {
 		EditableValidator editableValidator = new EditableValidator();
 		editableValidator.setHdivConfig(config);
 		componentValidators.add(editableValidator);
+		componentValidators.add(new UISelectValidator());
 	}
 
 	public List<FacesValidatorError> validateComponentTree(final FacesContext facesContext) {
@@ -190,36 +192,42 @@ public class DefaultComponentTreeValidator implements ComponentTreeValidator {
 
 		List<FacesValidatorError> errors = new ArrayList<FacesValidatorError>();
 
-		for (String param : context.getRequestParameters().keySet()) {
+		Map<String, String[]> params = context.getFacesContext().getExternalContext().getRequestParameterValuesMap();
+		Map<String, Set<Object>> validParameters = context.getValidParameters();
 
-			String value = context.getRequestParameters().get(param);
-			Map<String, Set<Object>> validParameters = context.getValidParameters();
+		for (String param : params.keySet()) {
 
+			String[] values = params.get(param);
 			boolean paramIsPressent = validParameters.keySet().contains(param);
-			boolean paramValuePressent = false;
-			if (paramIsPressent) {
-				if (validParameters.get(param).contains(value)) {
-					paramValuePressent = true;
+
+			if (!paramIsPressent) {
+				if (!isExcludedParameter(context, param, null)) {
+					if (log.isDebugEnabled()) {
+						log.debug("Invalid parameter name: " + param);
+					}
+					FacesValidatorError error = new FacesValidatorError(HDIVErrorCodes.PARAMETER_NOT_EXISTS, null, param, null);
+					errors.add(error);
 				}
 			}
-
-			if (!paramIsPressent || !paramValuePressent) {
-
-				if (!isExcludedParameter(context, param, value)) {
-
-					if (log.isDebugEnabled()) {
-						if (!paramIsPressent) {
-							log.debug("Invalid parameter name: " + param);
+			else {
+				if (values != null) {
+					for (String value : values) {
+						boolean paramValuePressent = false;
+						if (validParameters.get(param).contains(value)) {
+							paramValuePressent = true;
 						}
-						else if (!paramValuePressent) {
-							log.debug("Invalid parameter value for parameter: " + param + ". Valid values are: "
-									+ validParameters.get(param));
+						if (!paramValuePressent) {
+							if (!isExcludedParameter(context, param, value)) {
+								if (log.isDebugEnabled()) {
+									log.debug("Invalid parameter value for parameter: " + param + ". Valid values are: "
+											+ validParameters.get(param));
+								}
+								FacesValidatorError error = new FacesValidatorError(HDIVErrorCodes.PARAMETER_VALUE_INCORRECT, null, param,
+										value);
+								errors.add(error);
+							}
 						}
 					}
-
-					String type = paramIsPressent ? HDIVErrorCodes.PARAMETER_VALUE_INCORRECT : HDIVErrorCodes.PARAMETER_NOT_EXISTS;
-					FacesValidatorError error = new FacesValidatorError(type, null, param, value);
-					errors.add(error);
 				}
 			}
 		}
@@ -232,6 +240,7 @@ public class DefaultComponentTreeValidator implements ComponentTreeValidator {
 			return true;
 		}
 
+		// TODO is a client parameter????
 		// TODO check startParameters and paramsWithoutValidation
 
 		return false;
