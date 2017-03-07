@@ -75,11 +75,7 @@ public class DefaultComponentTreeValidator implements ComponentTreeValidator {
 		if (partialContext != null && partialContext.isPartialRequest()) {
 			// Is an ajax call partially processing the component tree
 
-			String source = facesContext.getExternalContext().getRequestParameterMap().get("javax.faces.source");
-			UIComponent sourceComp = null;
-			if (source != null) {
-				sourceComp = facesContext.getViewRoot().findComponent(source);
-			}
+			UIComponent source = findSourceComponent(facesContext);
 
 			Set<UIComponent> componentsToValidate = new HashSet<UIComponent>();
 
@@ -91,16 +87,16 @@ public class DefaultComponentTreeValidator implements ComponentTreeValidator {
 						execComp = facesContext.getViewRoot();
 					}
 					else if (execId.equals("@form")) {
-						if (sourceComp != null) {
-							execComp = UtilsJsf.findParentForm(sourceComp);
+						if (source != null) {
+							execComp = UtilsJsf.findParentForm(source);
 						}
 						else {
 							throw new HDIVException("Cant determine the component to validate!");
 						}
 					}
 					else if (execId.equals("@this")) {
-						if (sourceComp != null) {
-							execComp = sourceComp;
+						if (source != null) {
+							execComp = source;
 						}
 						else {
 							throw new HDIVException("Cant determine the component to validate!");
@@ -110,8 +106,8 @@ public class DefaultComponentTreeValidator implements ComponentTreeValidator {
 						execComp = null;
 					}
 					else if (execId.equals("@parent")) {
-						if (sourceComp != null) {
-							execComp = sourceComp.getParent();
+						if (source != null) {
+							execComp = source.getParent();
 						}
 						else {
 							throw new HDIVException("Cant determine the component to validate!");
@@ -122,7 +118,7 @@ public class DefaultComponentTreeValidator implements ComponentTreeValidator {
 					}
 				}
 				else {
-					execComp = facesContext.getViewRoot().findComponent(execId);
+					execComp = findComponent(facesContext, execId);
 				}
 
 				UIComponent compToValidate = execComp;
@@ -165,6 +161,21 @@ public class DefaultComponentTreeValidator implements ComponentTreeValidator {
 
 		errors.addAll(context.getErrors());
 		return errors;
+	}
+
+	protected UIComponent findSourceComponent(final FacesContext context) {
+
+		String source = context.getExternalContext().getRequestParameterMap().get("javax.faces.source");
+		UIComponent sourceComp = null;
+		if (source != null) {
+			sourceComp = context.getViewRoot().findComponent(source);
+		}
+		return sourceComp;
+	}
+
+	protected UIComponent findComponent(final FacesContext context, final String compId) {
+
+		return context.getViewRoot().findComponent(compId);
 	}
 
 	protected void validateComponentTree(final ValidationContext context, final UIComponent component) {
