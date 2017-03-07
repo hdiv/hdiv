@@ -35,6 +35,7 @@ import org.apache.commons.logging.LogFactory;
 import org.hdiv.config.HDIVConfig;
 import org.hdiv.exception.HDIVException;
 import org.hdiv.util.HDIVErrorCodes;
+import org.hdiv.util.Method;
 import org.hdiv.util.UtilsJsf;
 import org.hdiv.validators.ComponentValidator;
 import org.hdiv.validators.EditableValidator;
@@ -63,6 +64,10 @@ public class DefaultComponentTreeValidator implements ComponentTreeValidator {
 	}
 
 	public List<FacesValidatorError> validateComponentTree(final FacesContext facesContext) {
+
+		if (isExcludedUrl(facesContext)) {
+			return Collections.emptyList();
+		}
 
 		ValidationContext context = new ValidationContext(facesContext);
 
@@ -232,6 +237,12 @@ public class DefaultComponentTreeValidator implements ComponentTreeValidator {
 			}
 		}
 		return errors;
+	}
+
+	protected boolean isExcludedUrl(final FacesContext context) {
+
+		String target = UtilsJsf.getTargetUrl(context);
+		return config.isStartPage(target, Method.POST);
 	}
 
 	protected boolean isExcludedParameter(final ValidationContext context, final String paramName, final String paramValue) {

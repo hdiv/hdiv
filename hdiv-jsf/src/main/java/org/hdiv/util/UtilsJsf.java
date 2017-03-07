@@ -24,6 +24,8 @@ import javax.faces.component.UIData;
 import javax.faces.component.UIForm;
 import javax.faces.component.UIParameter;
 import javax.faces.component.UIViewRoot;
+import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * General HDIV utility methods
@@ -171,6 +173,13 @@ public abstract class UtilsJsf {
 			}
 		}
 		return hasParams;
+	}
+
+	public static String getTargetUrl(final FacesContext context) {
+
+		HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
+		String url = HDIVUtil.getRequestURI(request);
+		return url.substring(request.getContextPath().length());
 	}
 
 }

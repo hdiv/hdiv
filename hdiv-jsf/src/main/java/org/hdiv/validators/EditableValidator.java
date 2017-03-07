@@ -35,6 +35,7 @@ import org.hdiv.util.Constants;
 import org.hdiv.util.HDIVErrorCodes;
 import org.hdiv.util.HDIVUtil;
 import org.hdiv.util.MessageFactory;
+import org.hdiv.util.UtilsJsf;
 import org.hdiv.validation.ValidationContext;
 import org.hdiv.validator.EditableDataValidationResult;
 
@@ -129,25 +130,12 @@ public class EditableValidator implements ComponentValidator {
 		if (!(contentObj instanceof String)) {
 			return EditableDataValidationResult.VALIDATION_NOT_REQUIRED;
 		}
-		HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
-		String target = HDIVUtil.getRequestURI(request);
-		String targetWithoutContextPath = getTargetWithoutContextPath(request, target);
+		String target = UtilsJsf.getTargetUrl(context);
 
 		String[] content = { (String) contentObj };
-		EditableDataValidationResult result = hdivConfig.getEditableDataValidationProvider().validate(targetWithoutContextPath, clientId,
-				content, contentType);
+		EditableDataValidationResult result = hdivConfig.getEditableDataValidationProvider().validate(target, clientId, content,
+				contentType);
 		return result;
-	}
-
-	/**
-	 * Removes the target's ContextPath part
-	 * 
-	 * @param request HttpServletRequest to validate
-	 * @param target target to strip the ContextPath
-	 * @return target without the ContextPath
-	 */
-	protected String getTargetWithoutContextPath(final HttpServletRequest request, final String target) {
-		return target.substring(request.getContextPath().length());
 	}
 
 	/**
