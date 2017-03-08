@@ -353,7 +353,6 @@ public class ValidatorFilter extends OncePerRequestFilter {
 		for (ValidatorError error : errors) {
 			// Log the error
 			logger.log(error);
-			System.out.println(error);
 		}
 
 	}
