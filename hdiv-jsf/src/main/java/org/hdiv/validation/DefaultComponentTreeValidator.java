@@ -157,9 +157,9 @@ public class DefaultComponentTreeValidator implements ComponentTreeValidator {
 			validateComponentTree(context, submittedForm);
 		}
 
-		List<FacesValidatorError> errors = checkParameters(context);
+		List<FacesValidatorError> errors = context.getErrors();
+		checkParameters(context, errors);
 
-		errors.addAll(context.getErrors());
 		return errors;
 	}
 
@@ -204,9 +204,18 @@ public class DefaultComponentTreeValidator implements ComponentTreeValidator {
 		}
 	}
 
-	protected List<FacesValidatorError> checkParameters(final ValidationContext context) {
+	protected List<FacesValidatorError> checkParameters(final ValidationContext context, final List<FacesValidatorError> errors) {
 
-		List<FacesValidatorError> errors = new ArrayList<FacesValidatorError>();
+		if (!errors.isEmpty()) {
+			Iterator<FacesValidatorError> it = errors.iterator();
+			while (it.hasNext()) {
+				FacesValidatorError error = it.next();
+				boolean excluded = isExcludedParameter(context, error.getParameterName(), error.getParameterValue());
+				if (excluded) {
+					it.remove();
+				}
+			}
+		}
 
 		Map<String, String[]> params = context.getFacesContext().getExternalContext().getRequestParameterValuesMap();
 		Map<String, Set<Object>> validParameters = context.getValidParameters();
@@ -262,9 +271,21 @@ public class DefaultComponentTreeValidator implements ComponentTreeValidator {
 			return true;
 		}
 
-		// TODO is a client parameter????
-		// TODO check startParameters and paramsWithoutValidation
+		if (config.isStartParameter(paramName)) {
+			if (log.isDebugEnabled()) {
+				log.debug("Parameter '" + paramName + "' is a start parameter and is excluded from validation.");
+			}
+			return true;
+		}
 
+		String target = UtilsJsf.getTargetUrl(context.getFacesContext());
+		if (config.isParameterWithoutValidation(target, paramName)) {
+			if (log.isDebugEnabled()) {
+				log.debug("Parameter '" + paramName + "' for url '" + target
+						+ "' is a parameter without validation and is excluded from validation.");
+			}
+			return true;
+		}
 		return false;
 	}
 
