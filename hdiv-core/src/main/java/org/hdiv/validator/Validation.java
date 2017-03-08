@@ -104,6 +104,10 @@ public class Validation implements IValidation {
 		// we validate all the values for the parameter
 		for (String value : values) {
 
+			if (value == null) {
+				continue;
+			}
+
 			if (acceptedPattern != null) {
 
 				Matcher m = acceptedPattern.matcher(value);
