@@ -24,6 +24,7 @@ import org.hdiv.exception.HDIVException;
 import org.hdiv.util.Constants;
 import org.hdiv.util.HDIVErrorCodes;
 import org.hdiv.util.HDIVUtil;
+import org.hdiv.util.Method;
 
 public class ValidationContextImpl implements ValidationContext {
 
@@ -40,6 +41,8 @@ public class ValidationContextImpl implements ValidationContext {
 	protected String redirect;
 
 	private final HttpServletResponse response;
+
+	private final Method method;
 
 	/**
 	 * @deprecated
@@ -58,6 +61,7 @@ public class ValidationContextImpl implements ValidationContext {
 		this.response = response;
 		this.obfuscation = obfuscation;
 		this.restorer = restorer;
+		method = Method.valueOf(request.getMethod());
 	}
 
 	public HttpServletRequest getRequest() {
@@ -126,6 +130,10 @@ public class ValidationContextImpl implements ValidationContext {
 		catch (final IllegalArgumentException e) {
 			throw new HDIVException("Error decoding url", e);
 		}
+	}
+
+	public Method getMethod() {
+		return method;
 	}
 
 }

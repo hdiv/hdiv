@@ -18,6 +18,8 @@ package org.hdiv.filter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.hdiv.util.Method;
+
 public interface ValidationContext {
 
 	HttpServletRequest getRequest();
@@ -29,5 +31,7 @@ public interface ValidationContext {
 	String getRedirect();
 
 	StringBuilder getBuffer();
+
+	Method getMethod();
 
 }
