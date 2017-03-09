@@ -190,7 +190,7 @@ public class ValidatorHelperRequest implements IValidationHelper, StateRestorer 
 		HttpServletRequest request = context.getRequest();
 
 		// Hook before the validation
-		ValidatorHelperResult result = preValidate(request, target);
+		ValidatorHelperResult result = preValidate(context);
 		if (result != null) {
 			return result;
 		}
@@ -1173,6 +1173,11 @@ public class ValidatorHelperRequest implements IValidationHelper, StateRestorer 
 	 * @param target target url
 	 * @return ValidatorHelperResult result
 	 */
+	protected ValidatorHelperResult preValidate(final ValidationContext context) {
+		return preValidate(context.getRequest(), context.getTarget());
+	}
+
+	@Deprecated
 	protected ValidatorHelperResult preValidate(final HttpServletRequest request, final String target) {
 		return null;
 	}
