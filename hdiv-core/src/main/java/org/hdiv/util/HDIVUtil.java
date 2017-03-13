@@ -90,6 +90,11 @@ public class HDIVUtil {
 
 	private static Random r = new Random();
 
+	/**
+	 * Part of HTTP content type header.
+	 */
+	private static final String MULTIPART = "multipart/";
+
 	private HDIVUtil() {
 
 	}
@@ -765,6 +770,26 @@ public class HDIVUtil {
 
 	public static boolean isPathVariable(final String uriTemplate, final String variable) {
 		return uriTemplate.indexOf('{' + variable + '}') != -1;
+	}
+
+	/**
+	 * Utility method that determines whether the request contains multipart content.
+	 *
+	 * @param request the request
+	 * @return <code>true</code> if the request is multipart. <code>false</code> otherwise.
+	 */
+	public static boolean isMultipartContent(final HttpServletRequest request) {
+		if (!Method.POST.toString().equalsIgnoreCase(request.getMethod())) {
+			return false;
+		}
+		String contentType = request.getContentType();
+		if (contentType == null) {
+			return false;
+		}
+		if (contentType.toLowerCase(Locale.ENGLISH).startsWith(MULTIPART)) {
+			return true;
+		}
+		return false;
 	}
 
 }
