@@ -155,7 +155,7 @@ public class ValidatorFilter extends OncePerRequestFilter {
 			boolean legal = false;
 			boolean isMultipartException = false;
 
-			if (isMultipartContent(request.getContentType())) {
+			if (isMultipartContent(request)) {
 
 				requestWrapper.setMultipart(true);
 
@@ -248,11 +248,11 @@ public class ValidatorFilter extends OncePerRequestFilter {
 	/**
 	 * Utility method that determines whether the request contains multipart content.
 	 *
-	 * @param contentType content type
+	 * @param request the request
 	 * @return <code>true</code> if the request is multipart. <code>false</code> otherwise.
 	 */
-	protected boolean isMultipartContent(final String contentType) {
-		return contentType != null && contentType.indexOf("multipart/form-data") != -1;
+	protected boolean isMultipartContent(final HttpServletRequest request) {
+		return HDIVUtil.isMultipartContent(request);
 	}
 
 	/**
