@@ -119,9 +119,6 @@ public class SavedCookie implements Serializable {
 				}
 			}
 		}
-		if (result) {
-			result = getDomain() == null ? c.getDomain() == null : getDomain().equals(c.getDomain());
-		}
 
 		return result;
 	}
