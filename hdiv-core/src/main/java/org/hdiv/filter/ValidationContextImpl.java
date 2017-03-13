@@ -106,6 +106,10 @@ public class ValidationContextImpl implements ValidationContext {
 		return redirect;
 	}
 
+	protected StateRestorer getRestorer() {
+		return restorer;
+	}
+
 	private final String getDecodedTarget(final StringBuilder sb, final HttpServletRequest request) {
 		/**
 		 * Remove contest path and session info first
