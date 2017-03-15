@@ -26,6 +26,8 @@ public interface ValidationContext {
 
 	HttpServletResponse getResponse();
 
+	String getHdivParameterName();
+
 	String getTarget();
 
 	String getRedirect();

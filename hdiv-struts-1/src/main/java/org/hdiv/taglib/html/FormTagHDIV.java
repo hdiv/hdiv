@@ -109,8 +109,7 @@ public class FormTagHDIV extends FormTag {
 		final String requestId = dataComposer.endRequest();
 
 		if (requestId.length() > 0) {
-			final String hdivParameter = HDIVUtil.getHdivStateParameterName(request);
-			TagUtils.getInstance().write(pageContext, generateHiddenTag(hdivParameter, requestId));
+			TagUtils.getInstance().write(pageContext, generateHiddenTag(dataComposer.getHdivParameterName(), requestId));
 		}
 	}
 

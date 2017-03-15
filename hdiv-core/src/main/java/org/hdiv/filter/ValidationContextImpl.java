@@ -44,6 +44,8 @@ public class ValidationContextImpl implements ValidationContext {
 
 	private final Method method;
 
+	private final String hdivParameterName;
+
 	/**
 	 * @deprecated
 	 * @param request
@@ -62,6 +64,23 @@ public class ValidationContextImpl implements ValidationContext {
 		this.obfuscation = obfuscation;
 		this.restorer = restorer;
 		method = Method.valueOf(request.getMethod());
+		hdivParameterName = getHdivParameter(request);
+	}
+
+	/**
+	 * Name of the parameter that HDIV will include in the requests or/and forms which contains the state identifier in the memory strategy.
+	 *
+	 * @param request request
+	 * @return hdiv parameter value
+	 */
+	protected String getHdivParameter(final HttpServletRequest request) {
+
+		String paramName = HDIVUtil.getHdivStateParameterName(request);
+
+		if (paramName == null) {
+			throw new HDIVException("HDIV parameter name missing in session. Deleted by the app?");
+		}
+		return paramName;
 	}
 
 	public HttpServletRequest getRequest() {
@@ -76,17 +95,14 @@ public class ValidationContextImpl implements ValidationContext {
 		if (target == null) {
 			String target = getDecodedTarget(sb, request);
 			if (obfuscation && HDIVUtil.isObfuscatedTarget(target)) {
-				String hdivParameter = HDIVUtil.getHdivStateParameterName(request);
-				if (hdivParameter != null) {
 
-					// Restore state from request or memory
-					ValidatorHelperResult result = restorer.restoreState(hdivParameter, request, target,
-							request.getParameter(hdivParameter));
-					if (result.isValid()) {
-						this.target = result.getValue().getAction();
-						redirect = this.target;
-						HDIVUtil.setHdivObfRedirectAction(request, redirect);
-					}
+				// Restore state from request or memory
+				ValidatorHelperResult result = restorer.restoreState(hdivParameterName, request, target,
+						request.getParameter(hdivParameterName));
+				if (result.isValid()) {
+					this.target = result.getValue().getAction();
+					redirect = this.target;
+					HDIVUtil.setHdivObfRedirectAction(request, redirect);
 				}
 				if (redirect == null) {
 					throw new HDIVException(HDIVErrorCodes.HDIV_PARAMETER_INCORRECT_VALUE);
@@ -139,6 +155,10 @@ public class ValidationContextImpl implements ValidationContext {
 
 	public Method getMethod() {
 		return method;
+	}
+
+	public String getHdivParameterName() {
+		return hdivParameterName;
 	}
 
 }

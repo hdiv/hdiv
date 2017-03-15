@@ -72,8 +72,7 @@ public class ThymeleafHdivRequestDataValueProcessor extends HdivRequestDataValue
 		String formStateId = (String) request.getAttribute(FormUrlProcessor.FORM_STATE_ID);
 
 		if (formStateId != null && formStateId.length() > 0) {
-			String hdivStateParam = HDIVUtil.getHdivStateParameterName(request);
-			extraFields.put(hdivStateParam, formStateId);
+			extraFields.put(dataComposer.getHdivParameterName(), formStateId);
 		}
 		return extraFields;
 	}

@@ -89,8 +89,15 @@ public abstract class AbstractDataComposer implements IDataComposer {
 
 	protected final StringBuilder sb = new StringBuilder(128);
 
+	private final String hdivParameterName;
+
 	public AbstractDataComposer(final RequestContext context) {
 		this.context = context;
+		hdivParameterName = HDIVUtil.getHdivStateParameterName(context.getRequest());
+	}
+
+	public String getHdivParameterName() {
+		return hdivParameterName;
 	}
 
 	/**

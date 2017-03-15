@@ -239,7 +239,7 @@ public class ValidatorHelperRequest implements IValidationHelper, StateRestorer 
 		}
 
 		// Hdiv parameter name
-		String hdivParameter = getHdivParameter(request);
+		String hdivParameter = context.getHdivParameterName();
 
 		// Restore state from request or memory
 		result = restoreState(hdivParameter, context);
@@ -258,7 +258,8 @@ public class ValidatorHelperRequest implements IValidationHelper, StateRestorer 
 		}
 
 		// Extract url params from State
-		Map<String, String[]> stateParams = urlProcessor.getUrlParamsAsMap(context.getBuffer(), request, state.getParams());
+		Map<String, String[]> stateParams = urlProcessor.getUrlParamsAsMap(context.getHdivParameterName(), context.getBuffer(),
+				state.getParams());
 
 		result = allRequiredParametersReceived(request, state, target, stateParams);
 		if (!result.isValid()) {
@@ -683,8 +684,8 @@ public class ValidatorHelperRequest implements IValidationHelper, StateRestorer 
 	 * @param target Part of the url that represents the target action
 	 * @return valid result if restored state is valid. False in otherwise.
 	 */
-	protected ValidatorHelperResult restoreState(final ValidationContext context) {
-		return restoreState(getHdivParameter(context.getRequest()), context);
+	public ValidatorHelperResult restoreState(final ValidationContext context) {
+		return restoreState(context.getHdivParameterName(), context);
 	}
 
 	/**
@@ -1149,22 +1150,6 @@ public class ValidatorHelperRequest implements IValidationHelper, StateRestorer 
 			}
 		}
 		return null;
-	}
-
-	/**
-	 * Name of the parameter that HDIV will include in the requests or/and forms which contains the state identifier in the memory strategy.
-	 *
-	 * @param request request
-	 * @return hdiv parameter value
-	 */
-	protected String getHdivParameter(final HttpServletRequest request) {
-
-		String paramName = HDIVUtil.getHdivStateParameterName(request);
-
-		if (paramName == null) {
-			throw new HDIVException("HDIV parameter name missing in session. Deleted by the app?");
-		}
-		return paramName;
 	}
 
 	/**

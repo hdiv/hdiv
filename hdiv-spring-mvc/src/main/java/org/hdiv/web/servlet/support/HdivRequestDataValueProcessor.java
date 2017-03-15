@@ -173,7 +173,7 @@ public class HdivRequestDataValueProcessor implements RequestDataValueProcessor 
 		String requestId = dataComposer.endRequest();
 
 		if (requestId != null && requestId.length() > 0) {
-			String hdivStateParam = HDIVUtil.getHdivStateParameterName(request);
+			String hdivStateParam = dataComposer.getHdivParameterName();
 			if (hdivStateParam != null) {
 				extraFields.put(hdivStateParam, requestId);
 			}
