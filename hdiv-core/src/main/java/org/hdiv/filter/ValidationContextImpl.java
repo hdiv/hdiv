@@ -93,7 +93,7 @@ public class ValidationContextImpl implements ValidationContext {
 
 	public String getTarget() {
 		if (target == null) {
-			String target = getDecodedTarget(sb, request);
+			String target = getRequestedTarget();
 			if (obfuscation && HDIVUtil.isObfuscatedTarget(target)) {
 
 				// Restore state from request or memory
@@ -159,6 +159,10 @@ public class ValidationContextImpl implements ValidationContext {
 
 	public String getHdivParameterName() {
 		return hdivParameterName;
+	}
+
+	public String getRequestedTarget() {
+		return getDecodedTarget(sb, request);
 	}
 
 }

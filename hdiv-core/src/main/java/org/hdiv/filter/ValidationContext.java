@@ -28,6 +28,8 @@ public interface ValidationContext {
 
 	String getHdivParameterName();
 
+	String getRequestedTarget();
+
 	String getTarget();
 
 	String getRedirect();
