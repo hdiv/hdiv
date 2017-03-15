@@ -21,9 +21,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.hdiv.config.HDIVConfig;
-import org.hdiv.config.Strategy;
 import org.hdiv.context.RequestContext;
-import org.hdiv.exception.HDIVException;
 import org.hdiv.idGenerator.UidGenerator;
 import org.hdiv.session.ISession;
 import org.hdiv.state.IPage;
@@ -89,21 +87,14 @@ public class DataComposerFactory {
 	public IDataComposer newInstance(final HttpServletRequest request) {
 
 		RequestContext context = new RequestContext(request);
-
-		if (config.getStrategy() == Strategy.MEMORY) {
-			DataComposerMemory composer = new DataComposerMemory(context);
-			composer.setHdivConfig(config);
-			composer.setSession(session);
-			composer.setUidGenerator(uidGenerator);
-			composer.setStateScopeManager(stateScopeManager);
-			composer.init();
-			initDataComposer(composer, context);
-			return composer;
-		}
-		else {
-			throw new HDIVException(HDIVUtil.getMessage(request, "strategy.error", config.getStrategy().toString()));
-		}
-
+		DataComposerMemory composer = new DataComposerMemory(context);
+		composer.setHdivConfig(config);
+		composer.setSession(session);
+		composer.setUidGenerator(uidGenerator);
+		composer.setStateScopeManager(stateScopeManager);
+		composer.init();
+		initDataComposer(composer, context);
+		return composer;
 	}
 
 	/**

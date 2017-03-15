@@ -80,7 +80,8 @@ public class ValidationContextImpl implements ValidationContext {
 				if (hdivParameter != null) {
 
 					// Restore state from request or memory
-					ValidatorHelperResult result = restorer.restoreState(hdivParameter, request, target);
+					ValidatorHelperResult result = restorer.restoreState(hdivParameter, request, target,
+							request.getParameter(hdivParameter));
 					if (result.isValid()) {
 						this.target = result.getValue().getAction();
 						redirect = this.target;

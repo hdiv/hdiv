@@ -36,7 +36,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hdiv.config.HDIVConfig;
-import org.hdiv.config.Strategy;
 import org.hdiv.context.RequestContext;
 import org.hdiv.dataComposer.DataComposerFactory;
 import org.hdiv.dataComposer.IDataComposer;
@@ -125,8 +124,8 @@ public class ValidatorHelperRequest implements IValidationHelper, StateRestorer 
 	public void init() {
 	}
 
-	private void processPenTesting(final ValidationContext context, final String target) {
-		ValidatorHelperResult ptresult = restoreState(context.getRequest(), target);
+	private void processPenTesting(final ValidationContext context) {
+		ValidatorHelperResult ptresult = restoreState(context);
 		if (ptresult.isValid()) {
 			List<String> editable = new ArrayList<String>();
 			context.getResponse().setContentType("text/html");
@@ -184,7 +183,7 @@ public class ValidatorHelperRequest implements IValidationHelper, StateRestorer 
 		String target = context.getTarget();
 
 		if (false && target.endsWith(UrlData.PEN_TESTING_ROOT_PATH)) {
-			processPenTesting(context, target);
+			processPenTesting(context);
 		}
 
 		HttpServletRequest request = context.getRequest();
@@ -243,7 +242,7 @@ public class ValidatorHelperRequest implements IValidationHelper, StateRestorer 
 		String hdivParameter = getHdivParameter(request);
 
 		// Restore state from request or memory
-		result = restoreState(hdivParameter, request, target);
+		result = restoreState(hdivParameter, context);
 		if (!result.isValid()) {
 			if (log.isDebugEnabled()) {
 				log.debug("Error restoring the state: " + result);
@@ -684,8 +683,8 @@ public class ValidatorHelperRequest implements IValidationHelper, StateRestorer 
 	 * @param target Part of the url that represents the target action
 	 * @return valid result if restored state is valid. False in otherwise.
 	 */
-	protected ValidatorHelperResult restoreState(final HttpServletRequest request, final String target) {
-		return restoreState(getHdivParameter(request), request, target);
+	protected ValidatorHelperResult restoreState(final ValidationContext context) {
+		return restoreState(getHdivParameter(context.getRequest()), context);
 	}
 
 	/**
@@ -696,9 +695,10 @@ public class ValidatorHelperRequest implements IValidationHelper, StateRestorer 
 	 * @param target Part of the url that represents the target action
 	 * @return valid result if restored state is valid. False in otherwise.
 	 */
-	public final ValidatorHelperResult restoreState(final String hdivParameter, final HttpServletRequest request, final String target) {
+	public final ValidatorHelperResult restoreState(final String hdivParameter, final ValidationContext context) {
 		// checks if the parameter HDIV parameter exists in the parameters of the request
-		return restoreState(hdivParameter, request, target, request.getParameter(hdivParameter));
+		HttpServletRequest request = context.getRequest();
+		return restoreState(hdivParameter, request, context.getTarget(), request.getParameter(hdivParameter));
 	}
 
 	/**
@@ -709,7 +709,20 @@ public class ValidatorHelperRequest implements IValidationHelper, StateRestorer 
 	 * @param target Part of the url that represents the target action
 	 * @return valid result if restored state is valid. False in otherwise.
 	 */
-	protected ValidatorHelperResult restoreState(final String hdivParameter, final HttpServletRequest request, final String target,
+	public final ValidatorHelperResult restoreState(final String hdivParameter, final String hdivState, final ValidationContext context) {
+		// checks if the parameter HDIV parameter exists in the parameters of the requestds
+		return restoreState(hdivParameter, context.getRequest(), context.getTarget(), hdivState);
+	}
+
+	/**
+	 * Restore state from session or <code>request</code> with <code>request</code> identifier. Strategy defined by the user determines the
+	 * way the state is restored.
+	 *
+	 * @param request HTTP request
+	 * @param target Part of the url that represents the target action
+	 * @return valid result if restored state is valid. False in otherwise.
+	 */
+	public ValidatorHelperResult restoreState(final String hdivParameter, final HttpServletRequest request, final String target,
 			String requestState) {
 
 		if (requestState == null) {
@@ -731,7 +744,7 @@ public class ValidatorHelperRequest implements IValidationHelper, StateRestorer 
 			// Save current page id in request
 			HDIVUtil.setCurrentPageId(pageId, request);
 
-			if (stateUtil.isMemoryStrategy(requestState) && !validateHDIVSuffix(context, requestState, state)) {
+			if (!validateHDIVSuffix(context, requestState, state)) {
 				ValidatorError error = new ValidatorError(HDIVErrorCodes.HDIV_PARAMETER_INCORRECT_VALUE, target, hdivParameter,
 						requestState);
 				return new ValidatorHelperResult(error);
@@ -744,9 +757,6 @@ public class ValidatorHelperRequest implements IValidationHelper, StateRestorer 
 		catch (final HDIVException e) {
 			if (log.isDebugEnabled()) {
 				log.debug("Error while restoring state:" + requestState, e);
-			}
-			if (!hdivConfig.getStrategy().equals(Strategy.MEMORY)) {
-				requestState = null;
 			}
 
 			// HDIVException message contains error code

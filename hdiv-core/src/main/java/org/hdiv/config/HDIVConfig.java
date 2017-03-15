@@ -153,13 +153,6 @@ public class HDIVConfig implements Serializable {
 	protected String modifyStateParameterName = DEFAULT_MODIFY_STATE_PARAMETER_NAME;
 
 	/**
-	 * HDIV behaviour strategy. There are 1 possible option: memory
-	 * 
-	 * @since HDIV 2.1.0
-	 */
-	protected Strategy strategy = DEFAULT_STRATEGY;
-
-	/**
 	 * If debug mode is enabled, the attacks are logged but the requests are not stopped.
 	 * 
 	 * @since HDIV 2.1.1
@@ -192,11 +185,8 @@ public class HDIVConfig implements Serializable {
 	 */
 	private boolean urlObfuscation = false;
 
-	/**
-	 * @param strategy the strategy to set
-	 */
+	@Deprecated
 	public void setStrategy(final Strategy strategy) {
-		this.strategy = strategy;
 	}
 
 	/**
@@ -550,11 +540,9 @@ public class HDIVConfig implements Serializable {
 		this.randomName = randomName;
 	}
 
-	/**
-	 * @return the strategy
-	 */
+	@Deprecated
 	public Strategy getStrategy() {
-		return strategy;
+		return Strategy.MEMORY;
 	}
 
 	/**

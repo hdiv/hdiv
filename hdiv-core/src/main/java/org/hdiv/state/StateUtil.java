@@ -15,12 +15,9 @@
  */
 package org.hdiv.state;
 
-import java.util.regex.Pattern;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hdiv.config.HDIVConfig;
-import org.hdiv.config.Strategy;
 import org.hdiv.context.RequestContext;
 import org.hdiv.exception.HDIVException;
 import org.hdiv.session.ISession;
@@ -41,16 +38,6 @@ public class StateUtil {
 	 * Commons Logging instance.
 	 */
 	private static final Log log = LogFactory.getLog(StateUtil.class);
-
-	/**
-	 * Pattern to check if the memory strategy is being used
-	 */
-	protected static final String MEMORY_PATTERN = "([0-9]+-){2}[A-Za-z0-9]+";
-
-	/**
-	 * Compiled MEMORY_PATTERN
-	 */
-	protected Pattern memoryPattern = Pattern.compile(MEMORY_PATTERN);
 
 	/**
 	 * Hdiv configuration for this app. Access to user defined strategy.
@@ -94,13 +81,7 @@ public class StateUtil {
 	 */
 	public IState restoreState(final RequestContext context, final String requestState) {
 
-		IState restoredState = null;
-
-		if (isMemoryStrategy(requestState)) {
-
-			restoredState = restoreMemoryState(context, requestState);
-
-		}
+		IState restoredState = restoreMemoryState(context, requestState);
 
 		if (restoredState == null) {
 			throw new HDIVException(HDIVErrorCodes.HDIV_PARAMETER_INCORRECT_VALUE);
@@ -108,15 +89,9 @@ public class StateUtil {
 		return restoredState;
 	}
 
-	/**
-	 * Checks if the memory strategy is being used
-	 *
-	 * @param value State id value
-	 *
-	 * @return True if strategy is memory. False in otherwise.
-	 */
+	@Deprecated
 	public boolean isMemoryStrategy(final String value) {
-		return config.getStrategy() == Strategy.MEMORY || memoryPattern.matcher(value).matches();
+		return true;
 	}
 
 	/**

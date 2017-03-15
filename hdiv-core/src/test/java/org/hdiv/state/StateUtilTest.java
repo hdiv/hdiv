@@ -83,18 +83,6 @@ public class StateUtilTest extends AbstractHDIVTestCase {
 		}
 	}
 
-	public void testIsMemoryStrategy() {
-
-		HttpServletRequest request = getMockRequest();
-		IDataComposer dataComposer = dataComposerFactory.newInstance(request);
-
-		HDIVUtil.setDataComposer(dataComposer, request);
-
-		// memory strategy in conf and bad formatted stateId
-		boolean result = stateUtil.isMemoryStrategy("1111");
-		assertTrue(result);
-	}
-
 	public void testLongLivingApp() {
 
 		HttpServletRequest request = getMockRequest();
