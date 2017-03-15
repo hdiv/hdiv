@@ -38,4 +38,6 @@ public interface ValidationContext {
 
 	Method getMethod();
 
+	String getHdivState();
+
 }

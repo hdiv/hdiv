@@ -161,6 +161,10 @@ public class ValidationContextImpl implements ValidationContext {
 		return hdivParameterName;
 	}
 
+	public String getHdivState() {
+		return request.getParameter(hdivParameterName);
+	}
+
 	public String getRequestedTarget() {
 		return getDecodedTarget(sb, request);
 	}

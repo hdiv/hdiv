@@ -258,8 +258,7 @@ public class ValidatorHelperRequest implements IValidationHelper, StateRestorer 
 		}
 
 		// Extract url params from State
-		Map<String, String[]> stateParams = urlProcessor.getUrlParamsAsMap(context.getHdivParameterName(), context.getBuffer(),
-				state.getParams());
+		Map<String, String[]> stateParams = urlProcessor.getUrlParamsAsMap(hdivParameter, context.getBuffer(), state.getParams());
 
 		result = allRequiredParametersReceived(request, state, target, stateParams);
 		if (!result.isValid()) {
