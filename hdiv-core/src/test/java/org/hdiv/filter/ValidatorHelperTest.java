@@ -383,7 +383,7 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 		// Editable errors
 		List<ValidatorError> errors = result.getErrors();
 		assertEquals(1, errors.size());
-		assertEquals(HDIVErrorCodes.EDITABLE_VALIDATION_ERROR, errors.get(0).getType());
+		assertEquals(HDIVErrorCodes.INVALID_EDITABLE_VALUE, errors.get(0).getType());
 	}
 
 	public void testEditableParameterValidationRedirect() {

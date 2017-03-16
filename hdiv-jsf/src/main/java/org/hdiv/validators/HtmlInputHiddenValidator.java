@@ -82,7 +82,7 @@ public class HtmlInputHiddenValidator implements ComponentValidator {
 
 			if (hiddenValue == null) {
 				ValidationError error = new ValidationError();
-				error.setErrorKey(HDIVErrorCodes.REQUIRED_PARAMETERS);
+				error.setErrorKey(HDIVErrorCodes.NOT_RECEIVED_ALL_REQUIRED_PARAMETERS);
 				error.setErrorParam(inputHidden.getId());
 				error.setErrorValue("null");
 				error.setErrorComponent(inputHidden.getClientId(context));
@@ -92,7 +92,7 @@ public class HtmlInputHiddenValidator implements ComponentValidator {
 			boolean correcto = hasEqualValue(hiddenValue, hiddenRealValue);
 			if (!correcto) {
 				ValidationError error = new ValidationError();
-				error.setErrorKey(HDIVErrorCodes.PARAMETER_VALUE_INCORRECT);
+				error.setErrorKey(HDIVErrorCodes.INVALID_PARAMETER_VALUE);
 				error.setErrorParam(inputHidden.getId());
 				error.setErrorValue(hiddenRealValue.toString());
 				error.setErrorComponent(inputHidden.getClientId(context));
@@ -114,7 +114,7 @@ public class HtmlInputHiddenValidator implements ComponentValidator {
 
 				if (hiddenValue == null) {
 					ValidationError error = new ValidationError();
-					error.setErrorKey(HDIVErrorCodes.REQUIRED_PARAMETERS);
+					error.setErrorKey(HDIVErrorCodes.NOT_RECEIVED_ALL_REQUIRED_PARAMETERS);
 					error.setErrorParam(inputHidden.getId());
 					error.setErrorValue("null");
 					error.setErrorComponent(inputHidden.getClientId(context));
@@ -124,7 +124,7 @@ public class HtmlInputHiddenValidator implements ComponentValidator {
 				boolean correcto = hiddenValue.equals(hiddenRealValue);
 				if (!correcto) {
 					ValidationError error = new ValidationError();
-					error.setErrorKey(HDIVErrorCodes.PARAMETER_VALUE_INCORRECT);
+					error.setErrorKey(HDIVErrorCodes.INVALID_PARAMETER_VALUE);
 					error.setErrorParam(inputHidden.getId());
 					error.setErrorValue(hiddenRealValue.toString());
 					error.setErrorComponent(inputHidden.getClientId(context));

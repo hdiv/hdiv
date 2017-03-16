@@ -35,13 +35,13 @@ public final class HDIVStateUtils {
 	public static int getPageId(final String stateId) {
 		int firstSeparator = stateId.indexOf(Constants.STATE_ID_SEPARATOR);
 		if (firstSeparator == -1) {
-			throw new HDIVException(HDIVErrorCodes.HDIV_PARAMETER_INCORRECT_VALUE);
+			throw new HDIVException(HDIVErrorCodes.INVALID_HDIV_PARAMETER_VALUE);
 		}
 		try {
 			return Integer.parseInt(stateId.substring(0, firstSeparator));
 		}
 		catch (NumberFormatException ex) {
-			throw new HDIVException(HDIVErrorCodes.HDIV_PARAMETER_INCORRECT_VALUE);
+			throw new HDIVException(HDIVErrorCodes.INVALID_HDIV_PARAMETER_VALUE);
 		}
 	}
 
@@ -51,7 +51,7 @@ public final class HDIVStateUtils {
 			return Integer.parseInt(stateId.substring(start + 1, stateId.indexOf(Constants.STATE_ID_SEPARATOR, start + 1)));
 		}
 		catch (NumberFormatException ex) {
-			throw new HDIVException(HDIVErrorCodes.HDIV_PARAMETER_INCORRECT_VALUE);
+			throw new HDIVException(HDIVErrorCodes.INVALID_HDIV_PARAMETER_VALUE);
 		}
 	}
 
@@ -64,7 +64,7 @@ public final class HDIVStateUtils {
 			return Integer.parseInt(scoped.substring(0, scoped.indexOf(Constants.STATE_ID_SEPARATOR)));
 		}
 		catch (NumberFormatException ex) {
-			throw new HDIVException(HDIVErrorCodes.HDIV_PARAMETER_INCORRECT_VALUE);
+			throw new HDIVException(HDIVErrorCodes.INVALID_HDIV_PARAMETER_VALUE);
 		}
 	}
 

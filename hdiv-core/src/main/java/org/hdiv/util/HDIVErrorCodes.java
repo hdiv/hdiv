@@ -25,37 +25,58 @@ public class HDIVErrorCodes {
 	/**
 	 * The action or url received in the request does not match the one expected.
 	 */
-	public static final String ACTION_ERROR = "INVALID_ACTION";
+	public static final String INVALID_ACTION = "INVALID_ACTION";
+
+	@Deprecated
+	public static final String ACTION_ERROR = INVALID_ACTION;
 
 	/**
 	 * The parameter received in the request does not exist in the request state.
 	 */
-	public static final String PARAMETER_NOT_EXISTS = "INVALID_PARAMETER_NAME";
+	public static final String INVALID_PARAMETER_NAME = "INVALID_PARAMETER_NAME";
+
+	@Deprecated
+	public static final String PARAMETER_NOT_EXISTS = INVALID_PARAMETER_NAME;
 
 	/**
 	 * For a certain parameter, the expected number of values have not been received.
 	 */
-	public static final String REQUIRED_PARAMETERS = "NOT_RECEIVED_ALL_REQUIRED_PARAMETERS";
+	public static final String NOT_RECEIVED_ALL_REQUIRED_PARAMETERS = "NOT_RECEIVED_ALL_REQUIRED_PARAMETERS";
+
+	@Deprecated
+	public static final String REQUIRED_PARAMETERS = NOT_RECEIVED_ALL_REQUIRED_PARAMETERS;
 
 	/**
 	 * Incorrect parameter value.
 	 */
-	public static final String PARAMETER_VALUE_INCORRECT = "INVALID_PARAMETER_VALUE";
+	public static final String INVALID_PARAMETER_VALUE = "INVALID_PARAMETER_VALUE";
+
+	@Deprecated
+	public static final String PARAMETER_VALUE_INCORRECT = INVALID_PARAMETER_VALUE;
 
 	/**
 	 * For a certain parameter not the expected number of values has been received.
 	 */
-	public static final String VALUE_LENGTH_INCORRECT = "NOT_RECEIVED_ALL_PARAMETER_VALUES";
+	public static final String NOT_RECEIVED_ALL_PARAMETER_VALUES = "NOT_RECEIVED_ALL_PARAMETER_VALUES";
+
+	@Deprecated
+	public static final String VALUE_LENGTH_INCORRECT = NOT_RECEIVED_ALL_PARAMETER_VALUES;
 
 	/**
 	 * Repeated values have been received for the same parameter.
 	 */
-	public static final String REPEATED_VALUES = "REPEATED_VALUES_FOR_PARAMETER";
+	public static final String REPEATED_VALUES_FOR_PARAMETER = "REPEATED_VALUES_FOR_PARAMETER";
+
+	@Deprecated
+	public static final String REPEATED_VALUES = REPEATED_VALUES_FOR_PARAMETER;
 
 	/**
 	 * Incorrect parameter value received if confidentiality is activated.
 	 */
-	public static final String CONFIDENTIAL_VALUE_INCORRECT = "INVALID_CONFIDENTIAL_VALUE";
+	public static final String INVALID_CONFIDENTIAL_VALUE = "INVALID_CONFIDENTIAL_VALUE";
+
+	@Deprecated
+	public static final String CONFIDENTIAL_VALUE_INCORRECT = INVALID_CONFIDENTIAL_VALUE;
 
 	/**
 	 * The HDIV parameter has not been received in the request.
@@ -65,26 +86,33 @@ public class HDIVErrorCodes {
 	/**
 	 * The HDIV parameter has an incorrect value.
 	 */
-	public static final String HDIV_PARAMETER_INCORRECT_VALUE = "INVALID_HDIV_PARAMETER_VALUE";
+	public static final String INVALID_HDIV_PARAMETER_VALUE = "INVALID_HDIV_PARAMETER_VALUE";
+
+	@Deprecated
+	public static final String HDIV_PARAMETER_INCORRECT_VALUE = INVALID_HDIV_PARAMETER_VALUE;
 
 	/**
 	 * The HDIV parameter has an incorrect page identifier.
 	 */
-	public static final String PAGE_ID_INCORRECT = "INVALID_PAGE_ID";
+	public static final String INVALID_PAGE_ID = "INVALID_PAGE_ID";
+
+	@Deprecated
+	public static final String PAGE_ID_INCORRECT = INVALID_PAGE_ID;
 
 	/**
 	 * Error in the editable parameter validation.
-	 * 
-	 * @since HDIV 1.1
 	 */
-	public static final String EDITABLE_VALIDATION_ERROR = "INVALID_EDITABLE_VALUE";
+	public static final String INVALID_EDITABLE_VALUE = "INVALID_EDITABLE_VALUE";
+
+	@Deprecated
+	public static final String EDITABLE_VALIDATION_ERROR = INVALID_EDITABLE_VALUE;
 
 	/**
 	 * The cookie received in the request has an incorrect value.
 	 * 
 	 * @since HDIV 1.1
 	 */
-	public static final String COOKIE_INCORRECT = "INVALID_COOKIE";
+	public static final String INVALID_COOKIE = "INVALID_COOKIE";
 
 	/**
 	 * Internal error created in HDIV during request processing.

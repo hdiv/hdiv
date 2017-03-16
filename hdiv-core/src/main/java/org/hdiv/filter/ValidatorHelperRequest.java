@@ -337,7 +337,7 @@ public class ValidatorHelperRequest implements IValidationHelper, StateRestorer 
 		if (log.isDebugEnabled()) {
 			log.debug("Validation error in the action. Action in state [" + stateAction + "], action in the request [" + target + "]");
 		}
-		ValidatorError error = new ValidatorError(HDIVErrorCodes.ACTION_ERROR, target);
+		ValidatorError error = new ValidatorError(HDIVErrorCodes.INVALID_ACTION, target);
 		return new ValidatorHelperResult(error);
 	}
 
@@ -417,7 +417,7 @@ public class ValidatorHelperRequest implements IValidationHelper, StateRestorer 
 			}
 
 			if (!found) {
-				ValidatorError error = new ValidatorError(HDIVErrorCodes.COOKIE_INCORRECT, target, "cookie:" + requestCookies[i].getName(),
+				ValidatorError error = new ValidatorError(HDIVErrorCodes.INVALID_COOKIE, target, "cookie:" + requestCookies[i].getName(),
 						requestCookies[i].getValue());
 				return new ValidatorHelperResult(error);
 			}
@@ -458,7 +458,7 @@ public class ValidatorHelperRequest implements IValidationHelper, StateRestorer 
 				value = unauthorizedValues.toString();
 			}
 
-			ValidatorError error = new ValidatorError(HDIVErrorCodes.EDITABLE_VALIDATION_ERROR, target, parameter, value, null,
+			ValidatorError error = new ValidatorError(HDIVErrorCodes.INVALID_EDITABLE_VALUE, target, parameter, value, null,
 					result.getValidationId());
 			unauthorizedParameters.add(error);
 		}
@@ -536,7 +536,7 @@ public class ValidatorHelperRequest implements IValidationHelper, StateRestorer 
 			log.debug("Missing some required parameters: " + missingParameters.toString());
 		}
 
-		ValidatorError error = new ValidatorError(HDIVErrorCodes.REQUIRED_PARAMETERS, target, missingParameters.toString());
+		ValidatorError error = new ValidatorError(HDIVErrorCodes.NOT_RECEIVED_ALL_REQUIRED_PARAMETERS, target, missingParameters.toString());
 		return new ValidatorHelperResult(error);
 	}
 
@@ -641,7 +641,7 @@ public class ValidatorHelperRequest implements IValidationHelper, StateRestorer 
 			log.debug("Validation Error Detected: Parameter [" + parameter + "] does not exist in the state for action [" + target + "]");
 		}
 
-		ValidatorError error = new ValidatorError(HDIVErrorCodes.PARAMETER_NOT_EXISTS, target, parameter);
+		ValidatorError error = new ValidatorError(HDIVErrorCodes.INVALID_PARAMETER_NAME, target, parameter);
 		return new ValidatorHelperResult(error);
 	}
 
@@ -745,7 +745,7 @@ public class ValidatorHelperRequest implements IValidationHelper, StateRestorer 
 			HDIVUtil.setCurrentPageId(pageId, request);
 
 			if (!validateHDIVSuffix(context, requestState, state)) {
-				ValidatorError error = new ValidatorError(HDIVErrorCodes.HDIV_PARAMETER_INCORRECT_VALUE, target, hdivParameter,
+				ValidatorError error = new ValidatorError(HDIVErrorCodes.INVALID_HDIV_PARAMETER_VALUE, target, hdivParameter,
 						requestState);
 				return new ValidatorHelperResult(error);
 			}
@@ -801,7 +801,7 @@ public class ValidatorHelperRequest implements IValidationHelper, StateRestorer 
 				stateId = Integer.parseInt(sId);
 			}
 			catch (final NumberFormatException e) {
-				throw new HDIVException(HDIVErrorCodes.PAGE_ID_INCORRECT, e);
+				throw new HDIVException(HDIVErrorCodes.INVALID_PAGE_ID, e);
 			}
 
 			StateScope stateScope = stateScopeManager.getStateScope(value);
@@ -815,7 +815,7 @@ public class ValidatorHelperRequest implements IValidationHelper, StateRestorer 
 				pageId = Integer.parseInt(pId);
 			}
 			catch (final NumberFormatException e) {
-				throw new HDIVException(HDIVErrorCodes.PAGE_ID_INCORRECT, e);
+				throw new HDIVException(HDIVErrorCodes.INVALID_PAGE_ID, e);
 			}
 
 			IPage currentPage = restoredState.getPage();
@@ -827,7 +827,7 @@ public class ValidatorHelperRequest implements IValidationHelper, StateRestorer 
 				if (log.isErrorEnabled()) {
 					log.error("Page with id [" + pageId + "] not found in session.");
 				}
-				throw new HDIVException(HDIVErrorCodes.PAGE_ID_INCORRECT);
+				throw new HDIVException(HDIVErrorCodes.INVALID_PAGE_ID);
 			}
 			return currentPage.getRandomToken(restoredState.getTokenType()).equals(requestSuffix);
 
@@ -879,7 +879,7 @@ public class ValidatorHelperRequest implements IValidationHelper, StateRestorer 
 					}
 				}
 
-				ValidatorError error = new ValidatorError(HDIVErrorCodes.VALUE_LENGTH_INCORRECT, target, parameter, valueMessage);
+				ValidatorError error = new ValidatorError(HDIVErrorCodes.NOT_RECEIVED_ALL_PARAMETER_VALUES, target, parameter, valueMessage);
 				return new ValidatorHelperResult(error);
 
 			}
@@ -961,7 +961,7 @@ public class ValidatorHelperRequest implements IValidationHelper, StateRestorer 
 
 			if (receivedValues.contains(values[i])) {
 				String originalValue = stateValues.size() > 1 ? stateValues.toString() : stateValues.get(0);
-				ValidatorError error = new ValidatorError(HDIVErrorCodes.REPEATED_VALUES, target, parameter, values[i], originalValue);
+				ValidatorError error = new ValidatorError(HDIVErrorCodes.REPEATED_VALUES_FOR_PARAMETER, target, parameter, values[i], originalValue);
 				return new ValidatorHelperResult(error);
 			}
 
@@ -1008,11 +1008,11 @@ public class ValidatorHelperRequest implements IValidationHelper, StateRestorer 
 				}
 
 				if (receivedValues.contains(values[i])) {
-					ValidatorError error = new ValidatorError(HDIVErrorCodes.REPEATED_VALUES, target, parameter, values[i], originalValue);
+					ValidatorError error = new ValidatorError(HDIVErrorCodes.REPEATED_VALUES_FOR_PARAMETER, target, parameter, values[i], originalValue);
 					return new ValidatorHelperResult(error);
 				}
 
-				ValidatorError error = new ValidatorError(HDIVErrorCodes.PARAMETER_VALUE_INCORRECT, target, parameter, values[i],
+				ValidatorError error = new ValidatorError(HDIVErrorCodes.INVALID_PARAMETER_VALUE, target, parameter, values[i],
 						originalValue);
 				return new ValidatorHelperResult(error);
 			}
@@ -1042,7 +1042,7 @@ public class ValidatorHelperRequest implements IValidationHelper, StateRestorer 
 			if (!m.matches() || Integer.parseInt(value) >= stateValues.size()) {
 				String originalValue = stateValues.size() > 1 ? stateValues.toString() : stateValues.get(0);
 
-				ValidatorError error = new ValidatorError(HDIVErrorCodes.CONFIDENTIAL_VALUE_INCORRECT, target, parameter, value,
+				ValidatorError error = new ValidatorError(HDIVErrorCodes.INVALID_CONFIDENTIAL_VALUE, target, parameter, value,
 						originalValue);
 				return new ValidatorHelperResult(error);
 			}
@@ -1050,7 +1050,7 @@ public class ValidatorHelperRequest implements IValidationHelper, StateRestorer 
 		catch (final NumberFormatException e) {
 			// value is not a number or is greater than the length of Integer.MAX_VALUE
 			String originalValue = stateValues.size() > 1 ? stateValues.toString() : stateValues.get(0);
-			ValidatorError error = new ValidatorError(HDIVErrorCodes.CONFIDENTIAL_VALUE_INCORRECT, target, parameter, value, originalValue);
+			ValidatorError error = new ValidatorError(HDIVErrorCodes.INVALID_CONFIDENTIAL_VALUE, target, parameter, value, originalValue);
 			return new ValidatorHelperResult(error);
 		}
 		return ValidatorHelperResult.VALID;
@@ -1077,7 +1077,7 @@ public class ValidatorHelperRequest implements IValidationHelper, StateRestorer 
 
 			IValidationResult result = dataValidator.validate(request, values[i], target, parameter, stateParameter, actionParamValues);
 			if (!result.getLegal()) {
-				ValidatorError error = new ValidatorError(HDIVErrorCodes.PARAMETER_VALUE_INCORRECT, target, parameter, values[i]);
+				ValidatorError error = new ValidatorError(HDIVErrorCodes.INVALID_PARAMETER_VALUE, target, parameter, values[i]);
 				return new ValidatorHelperResult(error);
 			}
 			else {

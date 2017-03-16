@@ -368,7 +368,7 @@ public class ValidatorFilter extends OncePerRequestFilter {
 
 		List<ValidatorError> editableErrors = new ArrayList<ValidatorError>();
 		for (ValidatorError error : errors) {
-			if (HDIVErrorCodes.EDITABLE_VALIDATION_ERROR.equals(error.getType())) {
+			if (HDIVErrorCodes.INVALID_EDITABLE_VALUE.equals(error.getType())) {
 				editableErrors.add(error);
 			}
 		}

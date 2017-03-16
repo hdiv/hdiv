@@ -84,7 +84,7 @@ public class StateUtil {
 		IState restoredState = restoreMemoryState(context, requestState);
 
 		if (restoredState == null) {
-			throw new HDIVException(HDIVErrorCodes.HDIV_PARAMETER_INCORRECT_VALUE);
+			throw new HDIVException(HDIVErrorCodes.INVALID_HDIV_PARAMETER_VALUE);
 		}
 		return restoredState;
 	}
@@ -109,7 +109,7 @@ public class StateUtil {
 		int firstSeparator = requestState.indexOf(Constants.STATE_ID_SEPARATOR);
 		int lastSeparator = requestState.lastIndexOf(Constants.STATE_ID_SEPARATOR);
 		if (firstSeparator == -1 || lastSeparator == -1) {
-			throw new HDIVException(HDIVErrorCodes.HDIV_PARAMETER_INCORRECT_VALUE);
+			throw new HDIVException(HDIVErrorCodes.INVALID_HDIV_PARAMETER_VALUE);
 		}
 
 		String pId;
@@ -119,7 +119,7 @@ public class StateUtil {
 			sId = requestState.substring(firstSeparator + 1, lastSeparator);
 		}
 		catch (StringIndexOutOfBoundsException e) {
-			throw new HDIVException(HDIVErrorCodes.HDIV_PARAMETER_INCORRECT_VALUE, e);
+			throw new HDIVException(HDIVErrorCodes.INVALID_HDIV_PARAMETER_VALUE, e);
 		}
 
 		int stateId;
@@ -127,7 +127,7 @@ public class StateUtil {
 			stateId = Integer.parseInt(sId);
 		}
 		catch (NumberFormatException e) {
-			throw new HDIVException(HDIVErrorCodes.HDIV_PARAMETER_INCORRECT_VALUE, e);
+			throw new HDIVException(HDIVErrorCodes.INVALID_HDIV_PARAMETER_VALUE, e);
 		}
 
 		// Obtain State from a StateScopes
@@ -136,7 +136,7 @@ public class StateUtil {
 		if (stateScope != null) {
 			restoredState = stateScope.restoreState(context, stateId);
 			if (restoredState == null) {
-				throw new HDIVException(HDIVErrorCodes.PAGE_ID_INCORRECT);
+				throw new HDIVException(HDIVErrorCodes.INVALID_PAGE_ID);
 			}
 			return restoredState;
 		}
@@ -147,7 +147,7 @@ public class StateUtil {
 			pageId = Integer.parseInt(pId);
 		}
 		catch (NumberFormatException e) {
-			throw new HDIVException(HDIVErrorCodes.HDIV_PARAMETER_INCORRECT_VALUE, e);
+			throw new HDIVException(HDIVErrorCodes.INVALID_HDIV_PARAMETER_VALUE, e);
 		}
 
 		restoredState = getStateFromSession(context, pageId, stateId);
@@ -167,7 +167,7 @@ public class StateUtil {
 		final IState sessionState = session.getState(context, pageId, stateId);
 
 		if (sessionState == null) {
-			throw new HDIVException(HDIVErrorCodes.HDIV_PARAMETER_INCORRECT_VALUE);
+			throw new HDIVException(HDIVErrorCodes.INVALID_HDIV_PARAMETER_VALUE);
 		}
 		return sessionState;
 	}

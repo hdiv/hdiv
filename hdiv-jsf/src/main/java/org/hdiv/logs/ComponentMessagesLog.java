@@ -114,7 +114,7 @@ public class ComponentMessagesLog {
 						value = requestValue;
 					}
 
-					ValidatorError error = new ValidatorError(HDIVErrorCodes.PARAMETER_VALUE_INCORRECT, requestUri,
+					ValidatorError error = new ValidatorError(HDIVErrorCodes.INVALID_PARAMETER_VALUE, requestUri,
 							clientComponent.getClientId(facesContext), value);
 					logger.log(error);
 				}

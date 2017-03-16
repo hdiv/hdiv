@@ -134,7 +134,7 @@ public class EditableValidator implements ComponentValidator {
 
 			inputComponent.setValid(false);
 
-			return new ValidationError(HDIVErrorCodes.EDITABLE_VALIDATION_ERROR, null, clientId, value.toString());
+			return new ValidationError(HDIVErrorCodes.INVALID_EDITABLE_VALUE, null, clientId, value.toString());
 		}
 		return null;
 	}

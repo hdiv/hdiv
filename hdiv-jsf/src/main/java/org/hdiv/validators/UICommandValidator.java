@@ -110,7 +110,7 @@ public class UICommandValidator implements ComponentValidator {
 
 		if (requestValue == null) {
 			ValidationError error = new ValidationError();
-			error.setErrorKey(HDIVErrorCodes.REQUIRED_PARAMETERS);
+			error.setErrorKey(HDIVErrorCodes.NOT_RECEIVED_ALL_REQUIRED_PARAMETERS);
 			error.setErrorParam(param.getId());
 			error.setErrorValue(requestValue);
 			error.setErrorComponent(param.getClientId(context));
@@ -119,7 +119,7 @@ public class UICommandValidator implements ComponentValidator {
 		}
 		if (!requestValue.equals(realValue)) {
 			ValidationError error = new ValidationError();
-			error.setErrorKey(HDIVErrorCodes.PARAMETER_VALUE_INCORRECT);
+			error.setErrorKey(HDIVErrorCodes.INVALID_PARAMETER_VALUE);
 			error.setErrorParam(param.getId());
 			error.setErrorValue(requestValue);
 			error.setErrorComponent(param.getClientId(context));

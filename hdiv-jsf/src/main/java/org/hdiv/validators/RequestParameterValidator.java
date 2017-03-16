@@ -109,7 +109,7 @@ public class RequestParameterValidator implements ComponentValidator {
 					if (value != null) {
 						paramValue = value.toString();
 					}
-					error = new ValidationError(HDIVErrorCodes.PARAMETER_NOT_EXISTS, null, requestParamName, paramValue);
+					error = new ValidationError(HDIVErrorCodes.INVALID_PARAMETER_NAME, null, requestParamName, paramValue);
 				}
 			}
 			validParameters = validParameters && validParameter;

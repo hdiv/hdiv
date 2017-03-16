@@ -105,7 +105,7 @@ public class ValidationContextImpl implements ValidationContext {
 					HDIVUtil.setHdivObfRedirectAction(request, redirect);
 				}
 				if (redirect == null) {
-					throw new HDIVException(HDIVErrorCodes.HDIV_PARAMETER_INCORRECT_VALUE);
+					throw new HDIVException(HDIVErrorCodes.INVALID_HDIV_PARAMETER_VALUE);
 				}
 			}
 			if (this.target == null) {
