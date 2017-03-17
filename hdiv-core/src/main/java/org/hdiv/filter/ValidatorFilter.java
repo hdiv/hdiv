@@ -203,6 +203,23 @@ public class ValidatorFilter extends OncePerRequestFilter {
 				}
 				errors = e.getResult().getErrors();
 			}
+			catch (Exception e) {
+				if (hdivConfig.isDebugMode()) {
+					errors = findErrors(e, context.getRequestedTarget());
+					if (errors == null) {
+						/**
+						 * It is not a HdivException... but it was launched in our code...
+						 */
+						if (log.isErrorEnabled()) {
+							log.error("Exception in request validation", e);
+						}
+						errors = Collections.singletonList(new ValidatorError(e.getMessage(), context.getRequestedTarget()));
+					}
+				}
+				else {
+					throw e;
+				}
+			}
 
 			boolean hasEditableError = false;
 			if (errors != null && !errors.isEmpty()) {
@@ -227,21 +244,10 @@ public class ValidatorFilter extends OncePerRequestFilter {
 
 		}
 		catch (Exception e) {
-
-			Throwable hdivException = e;
-			do {
-				if (!(hdivException instanceof HDIVException)) {
-					hdivException = hdivException.getCause();
-				}
-			} while (hdivException != null && !(hdivException instanceof HDIVException));
-			if (hdivException instanceof HDIVException) {
-				if (log.isErrorEnabled()) {
-					log.error("Exception in request validation", hdivException);
-				}
+			List<ValidatorError> errors = findErrors(e, request.getRequestURI());
+			if (errors != null) {
 				// Show error page
 				if (!hdivConfig.isDebugMode()) {
-					List<ValidatorError> errors = Collections
-							.singletonList(new ValidatorError(hdivException.getMessage(), request.getRequestURI()));
 					errorHandler.handleValidatorError(multipartProcessedRequest, responseWrapper, errors);
 				}
 			}
@@ -271,6 +277,23 @@ public class ValidatorFilter extends OncePerRequestFilter {
 			// Destroy request scoped data
 			requestInitializer.endRequest(multipartProcessedRequest, responseWrapper);
 		}
+	}
+
+	private List<ValidatorError> findErrors(final Throwable e, final String target) {
+		Throwable current = e;
+		do {
+			if (!(current instanceof HDIVException)) {
+				current = current.getCause();
+			}
+		} while (current != null && !(current instanceof HDIVException));
+		if (current instanceof HDIVException) {
+			if (log.isErrorEnabled()) {
+				log.error("Exception in request validation", current);
+			}
+			// Show error page
+			return Collections.singletonList(new ValidatorError(current.getMessage(), target));
+		}
+		return null;
 	}
 
 	/**
