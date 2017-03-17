@@ -246,6 +246,18 @@ public class ValidatorFilter extends OncePerRequestFilter {
 				}
 			}
 			else {
+				/**
+				 * Try to rethrow the same exception if posible
+				 */
+				if (e instanceof RuntimeException) {
+					throw (RuntimeException) e;
+				}
+				if (e instanceof ServletException) {
+					throw (ServletException) e;
+				}
+				if (e instanceof IOException) {
+					throw (IOException) e;
+				}
 				throw new RuntimeException(e);
 			}
 		}
