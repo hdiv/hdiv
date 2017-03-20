@@ -12,7 +12,6 @@
 		<component-type>javax.faces.HtmlOutcomeTargetButton</component-type>
 		<component-class>org.hdiv.components.HtmlOutcomeTargetButtonExtension</component-class>
 	</component>
-
 	<component>
 		<component-type>javax.faces.Parameter</component-type>
 		<component-class>org.hdiv.components.UIParameterExtension</component-class>
@@ -24,14 +23,6 @@
 	<component>
 		<component-type>javax.faces.HtmlOutputLink</component-type>
 		<component-class>org.hdiv.components.HtmlOutputLinkExtension</component-class>
-	</component>
-	<component>
-		<component-type>javax.faces.HtmlCommandLink</component-type>
-		<component-class>org.hdiv.components.HtmlCommandLinkExtension</component-class>
-	</component>
-	<component>
-		<component-type>javax.faces.HtmlCommandButton</component-type>
-		<component-class>org.hdiv.components.HtmlCommandButtonExtension</component-class>
 	</component>
 
 	<lifecycle>

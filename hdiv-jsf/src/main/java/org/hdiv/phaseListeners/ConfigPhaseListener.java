@@ -27,12 +27,8 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hdiv.config.HDIVConfig;
-import org.hdiv.events.HDIVFacesEventListener;
 import org.hdiv.exception.HDIVException;
 import org.hdiv.util.HDIVUtil;
-import org.hdiv.util.HDIVUtilJsf;
-import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.jsf.FacesContextUtils;
 
 /**
  * PhaseListener that takes care of HDIV configuration, mostly objects that are stored in application context.
@@ -74,19 +70,12 @@ public class ConfigPhaseListener implements PhaseListener {
 		if (event.getPhaseId().equals(PhaseId.RESTORE_VIEW) && !initialized) {
 
 			if (log.isDebugEnabled()) {
-				log.debug("Initialize ConfigPhaseListener dependencies.");
+				log.debug("Initialize ConfigPhaseListener.");
 			}
 
 			FacesContext context = event.getFacesContext();
 			// Check not supported features
 			checkSupportedFeatures(context);
-
-			// Get listener instances
-			WebApplicationContext wac = FacesContextUtils.getRequiredWebApplicationContext(context);
-			HDIVFacesEventListener facesEventListener = wac.getBean(HDIVFacesEventListener.class);
-
-			// It is added to the servletContext to be able to consume it from components
-			HDIVUtilJsf.setFacesEventListener(facesEventListener, context);
 
 			initialized = true;
 

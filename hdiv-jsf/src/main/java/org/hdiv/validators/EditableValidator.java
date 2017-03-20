@@ -111,8 +111,8 @@ public class EditableValidator implements ComponentValidator {
 						+ "'");
 			}
 
-			validationContext.rejectParameter(clientId, value.toString(), HDIVErrorCodes.EDITABLE_VALIDATION_ERROR,
-					result.getValidationId(), inputComponent);
+			validationContext.rejectParameter(clientId, value.toString(), HDIVErrorCodes.INVALID_EDITABLE_VALUE, result.getValidationId(),
+					inputComponent);
 		}
 	}
 

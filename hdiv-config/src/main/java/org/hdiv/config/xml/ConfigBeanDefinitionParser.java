@@ -35,7 +35,6 @@ import org.hdiv.dataComposer.DataComposerFactory;
 import org.hdiv.dataValidator.DataValidator;
 import org.hdiv.dataValidator.IDataValidator;
 import org.hdiv.dataValidator.ValidationResult;
-import org.hdiv.events.HDIVFacesEventListener;
 import org.hdiv.filter.DefaultValidationContextFactory;
 import org.hdiv.filter.DefaultValidatorErrorHandler;
 import org.hdiv.filter.IValidationHelper;
@@ -199,7 +198,7 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 	protected RuntimeBeanReference userDataRef;
 
 	protected RuntimeBeanReference stateScopeManagerRef;
-	
+
 	protected RuntimeBeanReference validationContextFactoryRef;
 
 	protected RuntimeBeanReference validatorErrorHandlerRef;
@@ -266,7 +265,6 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 			createJsfValidatorHelper(source, parserContext);
 			this.createSimpleBean(source, parserContext, JsfMultipartConfig.class, IMultipartConfig.class.getName());
 
-			createFacesEventListener(source, parserContext);
 			createComponentTreeValidator(source, parserContext);
 			createRedirectHelper(source, parserContext);
 
@@ -503,7 +501,7 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 
 		return registerBean(bean, ValidationContextFactory.class.getName(), parserContext);
 	}
-	
+
 	protected RuntimeBeanReference createRequestDataValueProcessor(final Object source, final ParserContext parserContext) {
 		RootBeanDefinition bean = new RootBeanDefinition(HdivRequestDataValueProcessor.class);
 		bean.setSource(source);
@@ -643,18 +641,6 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 	}
 
 	// JSF Beans
-
-	protected RuntimeBeanReference createFacesEventListener(final Object source, final ParserContext parserContext) {
-
-		RootBeanDefinition bean = new RootBeanDefinition(HDIVFacesEventListener.class);
-		bean.setSource(source);
-		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
-		bean.getPropertyValues().addPropertyValue(CONFIG, configRef);
-		bean.getPropertyValues().addPropertyValue("logger", loggerRef);
-		bean.getPropertyValues().addPropertyValue("validatorErrorHandler", validatorErrorHandlerRef);
-
-		return registerBean(bean, HDIVFacesEventListener.class.getName(), parserContext);
-	}
 
 	protected RuntimeBeanReference createComponentTreeValidator(final Object source, final ParserContext parserContext) {
 

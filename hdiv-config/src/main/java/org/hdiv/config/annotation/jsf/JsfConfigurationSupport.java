@@ -24,7 +24,6 @@ import org.hdiv.config.multipart.JsfMultipartConfig;
 import org.hdiv.context.RedirectHelper;
 import org.hdiv.dataComposer.DataComposerFactory;
 import org.hdiv.dataValidator.IDataValidator;
-import org.hdiv.events.HDIVFacesEventListener;
 import org.hdiv.filter.IValidationHelper;
 import org.hdiv.filter.JsfValidatorErrorHandler;
 import org.hdiv.filter.JsfValidatorHelper;
@@ -122,17 +121,6 @@ public class JsfConfigurationSupport {
 	@Bean
 	public JsfMultipartConfig jsfMultipartConfig() {
 		return new JsfMultipartConfig();
-	}
-
-	@Bean
-	public HDIVFacesEventListener hdivFacesEventListener() {
-
-		// EventListener instance
-		HDIVFacesEventListener listener = new HDIVFacesEventListener();
-		listener.setConfig(config);
-		listener.setLogger(logger);
-		listener.setValidatorErrorHandler(validatorErrorHandler());
-		return listener;
 	}
 
 	@Bean

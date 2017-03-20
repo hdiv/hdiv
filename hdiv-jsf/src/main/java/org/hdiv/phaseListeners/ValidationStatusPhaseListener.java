@@ -29,6 +29,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.hdiv.config.HDIVConfig;
 import org.hdiv.filter.ValidatorError;
 import org.hdiv.filter.ValidatorErrorHandler;
 import org.hdiv.logs.Logger;
@@ -50,6 +51,10 @@ public class ValidationStatusPhaseListener implements PhaseListener {
 
 	private static final String VALIDATION_ERRORS_ATTR_NAME = "VALIDATION_ERRORS_ATTR_NAME";
 
+	private ComponentTreeValidator componentTreeValidator;
+
+	private HDIVConfig config;
+
 	private Logger logger;
 
 	private ValidatorErrorHandler validatorErrorHandler;
@@ -67,8 +72,10 @@ public class ValidationStatusPhaseListener implements PhaseListener {
 			}
 
 			WebApplicationContext wac = FacesContextUtils.getRequiredWebApplicationContext(event.getFacesContext());
-			logger = wac.getBean(Logger.class);
 			validatorErrorHandler = wac.getBean(ValidatorErrorHandler.class);
+			componentTreeValidator = wac.getBean(ComponentTreeValidator.class);
+			config = wac.getBean(HDIVConfig.class);
+			logger = wac.getBean(Logger.class);
 		}
 
 		if (event.getPhaseId().equals(PhaseId.PROCESS_VALIDATIONS)) {
@@ -78,7 +85,7 @@ public class ValidationStatusPhaseListener implements PhaseListener {
 					.get(VALIDATION_ERRORS_ATTR_NAME);
 			if (errors != null) {
 				for (FacesValidatorError error : errors) {
-					if (error.getType().equals(HDIVErrorCodes.EDITABLE_VALIDATION_ERROR)) {
+					if (error.getType().equals(HDIVErrorCodes.INVALID_EDITABLE_VALUE)) {
 						UIComponent comp = error.getEditableValidationComponent();
 						if (comp instanceof UIInput) {
 							((UIInput) comp).setValid(false);
@@ -103,17 +110,14 @@ public class ValidationStatusPhaseListener implements PhaseListener {
 				return;
 			}
 
-			// TODO inject the required dependencies
-			ComponentTreeValidator componentTreeValidator = FacesContextUtils.getRequiredWebApplicationContext(context)
-					.getBean(ComponentTreeValidator.class);
-
 			List<FacesValidatorError> errors = null;
 			try {
 				errors = componentTreeValidator.validateComponentTree(context);
 			}
 			catch (Exception e) {
-				// TODO handle exception
-				e.printStackTrace();
+				if (log.isErrorEnabled()) {
+					log.error("Error in component tree validation.", e);
+				}
 			}
 
 			context.getAttributes().put(VALIDATION_ERRORS_ATTR_NAME, errors);
@@ -127,11 +131,13 @@ public class ValidationStatusPhaseListener implements PhaseListener {
 
 	protected boolean mustStopRequest(final List<FacesValidatorError> errors) {
 
-		// TODO check debug config
+		if (config.isDebugMode()) {
+			return false;
+		}
 
 		if (errors != null && !errors.isEmpty()) {
 			for (ValidatorError error : errors) {
-				if (!error.getType().equals(HDIVErrorCodes.EDITABLE_VALIDATION_ERROR)) {
+				if (!error.getType().equals(HDIVErrorCodes.INVALID_EDITABLE_VALUE)) {
 					return true;
 				}
 			}

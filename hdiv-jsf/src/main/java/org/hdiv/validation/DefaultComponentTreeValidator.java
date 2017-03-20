@@ -230,7 +230,7 @@ public class DefaultComponentTreeValidator implements ComponentTreeValidator {
 					if (log.isDebugEnabled()) {
 						log.debug("Invalid parameter name: " + param);
 					}
-					FacesValidatorError error = new FacesValidatorError(HDIVErrorCodes.PARAMETER_NOT_EXISTS, null, param, null);
+					FacesValidatorError error = new FacesValidatorError(HDIVErrorCodes.INVALID_PARAMETER_NAME, null, param, null);
 					errors.add(error);
 				}
 			}
@@ -247,7 +247,7 @@ public class DefaultComponentTreeValidator implements ComponentTreeValidator {
 									log.debug("Invalid parameter value for parameter: " + param + ". Valid values are: "
 											+ validParameters.get(param));
 								}
-								FacesValidatorError error = new FacesValidatorError(HDIVErrorCodes.PARAMETER_VALUE_INCORRECT, null, param,
+								FacesValidatorError error = new FacesValidatorError(HDIVErrorCodes.INVALID_PARAMETER_VALUE, null, param,
 										value);
 								errors.add(error);
 							}

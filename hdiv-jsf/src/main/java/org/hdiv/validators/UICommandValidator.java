@@ -122,7 +122,7 @@ public class UICommandValidator extends AbstractComponentValidator {
 				log.debug("Parameter '" + param.getName() + "' rejected in component '" + param.getClientId(context)
 						+ "' in ComponentValidator '" + this.getClass() + "'");
 			}
-			validationContext.rejectParameter(param.getName(), requestValue, HDIVErrorCodes.REQUIRED_PARAMETERS);
+			validationContext.rejectParameter(param.getName(), requestValue, HDIVErrorCodes.NOT_RECEIVED_ALL_REQUIRED_PARAMETERS);
 		}
 		else {
 
@@ -130,7 +130,7 @@ public class UICommandValidator extends AbstractComponentValidator {
 				log.debug("Parameter '" + param.getName() + "' rejected in component '" + param.getClientId(context)
 						+ "' in ComponentValidator '" + this.getClass() + "'");
 			}
-			validationContext.rejectParameter(param.getName(), requestValue, HDIVErrorCodes.PARAMETER_VALUE_INCORRECT);
+			validationContext.rejectParameter(param.getName(), requestValue, HDIVErrorCodes.INVALID_PARAMETER_VALUE);
 		}
 	}
 }

@@ -87,7 +87,7 @@ public class HtmlInputHiddenValidator extends AbstractComponentValidator {
 					log.debug("Parameter '" + inputHidden.getId() + "' rejected in component '" + inputHidden.getId()
 							+ "' in ComponentValidator '" + this.getClass() + "'");
 				}
-				validationContext.rejectParameter(inputHidden.getId(), null, HDIVErrorCodes.REQUIRED_PARAMETERS);
+				validationContext.rejectParameter(inputHidden.getId(), null, HDIVErrorCodes.NOT_RECEIVED_ALL_REQUIRED_PARAMETERS);
 			}
 
 			boolean correct = hasEqualValue(hiddenValue, hiddenRealValue);
@@ -97,8 +97,7 @@ public class HtmlInputHiddenValidator extends AbstractComponentValidator {
 					log.debug("Parameter '" + inputHidden.getId() + "' rejected in component '" + inputHidden.getId()
 							+ "' in ComponentValidator '" + this.getClass() + "'");
 				}
-				validationContext.rejectParameter(inputHidden.getId(), hiddenRealValue.toString(),
-						HDIVErrorCodes.PARAMETER_VALUE_INCORRECT);
+				validationContext.rejectParameter(inputHidden.getId(), hiddenRealValue.toString(), HDIVErrorCodes.INVALID_PARAMETER_VALUE);
 			}
 			else {
 				validationContext.acceptParameter(inputHidden.getId(), hiddenRealValue.toString());
@@ -123,7 +122,7 @@ public class HtmlInputHiddenValidator extends AbstractComponentValidator {
 						log.debug("Parameter '" + inputHidden.getId() + "' rejected in component '" + inputHidden.getId()
 								+ "' in ComponentValidator '" + this.getClass() + "'");
 					}
-					validationContext.rejectParameter(inputHidden.getId(), null, HDIVErrorCodes.REQUIRED_PARAMETERS);
+					validationContext.rejectParameter(inputHidden.getId(), null, HDIVErrorCodes.NOT_RECEIVED_ALL_REQUIRED_PARAMETERS);
 				}
 
 				boolean correct = hiddenValue.equals(hiddenRealValue);
@@ -134,7 +133,7 @@ public class HtmlInputHiddenValidator extends AbstractComponentValidator {
 								+ "' in ComponentValidator '" + this.getClass() + "'");
 					}
 					validationContext.rejectParameter(inputHidden.getId(), hiddenRealValue.toString(),
-							HDIVErrorCodes.PARAMETER_VALUE_INCORRECT);
+							HDIVErrorCodes.INVALID_PARAMETER_VALUE);
 				}
 				else {
 					validationContext.acceptParameter(inputHidden.getId(), hiddenRealValue.toString());

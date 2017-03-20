@@ -3,12 +3,6 @@
 	xmlns="http://www.springframework.org/schema/beans"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-	<bean id="HDIVFacesEventListener" class="org.hdiv.events.HDIVFacesEventListener">
-		<property name="config" ref="config" />
-		<property name="logger" ref="logger" />
-		<property name="validatorErrorHandler" ref="validatorErrorHandler" />
-	</bean>
-
 	<bean id="defaultComponentTreeValidator" class="org.hdiv.validation.DefaultComponentTreeValidator">
 		<property name="config" ref="config" />
 	</bean>
