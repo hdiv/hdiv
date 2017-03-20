@@ -33,6 +33,7 @@ import org.hdiv.application.IApplication;
 import org.hdiv.config.HDIVConfig;
 import org.hdiv.dataComposer.IDataComposer;
 import org.hdiv.exception.HDIVException;
+import org.hdiv.filter.RequestWrapper;
 import org.hdiv.urlProcessor.FormUrlProcessor;
 import org.hdiv.urlProcessor.LinkUrlProcessor;
 import org.hdiv.urlProcessor.UrlData;
@@ -88,6 +89,11 @@ public class HDIVUtil {
 	private static final char[] QUESTION = "?".toCharArray();
 
 	private static Random r = new Random();
+
+	/**
+	 * Part of HTTP content type header.
+	 */
+	private static final String MULTIPART = "multipart/";
 
 	private HDIVUtil() {
 
@@ -396,6 +402,10 @@ public class HDIVUtil {
 		return request.getParameter(getHdivStateParameterName(request));
 	}
 
+	public static void setHdivState(final HttpServletRequest request, final String value) {
+		((RequestWrapper) request).addParameter(getHdivStateParameterName(request), new String[] { value });
+	}
+
 	/**
 	 * Get Hdiv redirection from request.
 	 * @param request HttpServletRequest object
@@ -672,6 +682,19 @@ public class HDIVUtil {
 	}
 
 	/**
+	 * Returns if <code>parameterValue</code> and <code>value</code> are the same encoded value.
+	 * 
+	 * @param parameterValue
+	 * @param value
+	 * @return <code>true</code> if they are the same value; <code>false</code> otherwise
+	 * @since HDIV 3.3
+	 */
+	public static boolean isTheSameEncodedValue(final String parameterValue, final String value) {
+
+		return parameterValue.replace(" ", "+").equalsIgnoreCase(value);
+	}
+
+	/**
 	 * @see URLDecoder#decode(String, String)
 	 */
 	public static String decodeValue(final StringBuilder sb, final String s, final String enc) throws UnsupportedEncodingException {
@@ -747,6 +770,26 @@ public class HDIVUtil {
 
 	public static boolean isPathVariable(final String uriTemplate, final String variable) {
 		return uriTemplate.indexOf('{' + variable + '}') != -1;
+	}
+
+	/**
+	 * Utility method that determines whether the request contains multipart content.
+	 *
+	 * @param request the request
+	 * @return <code>true</code> if the request is multipart. <code>false</code> otherwise.
+	 */
+	public static boolean isMultipartContent(final HttpServletRequest request) {
+		if (!Method.POST.toString().equalsIgnoreCase(request.getMethod())) {
+			return false;
+		}
+		String contentType = request.getContentType();
+		if (contentType == null) {
+			return false;
+		}
+		if (contentType.toLowerCase(Locale.ENGLISH).startsWith(MULTIPART)) {
+			return true;
+		}
+		return false;
 	}
 
 }

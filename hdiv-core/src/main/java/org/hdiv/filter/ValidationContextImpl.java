@@ -18,10 +18,13 @@ package org.hdiv.filter;
 import java.io.UnsupportedEncodingException;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.hdiv.exception.HDIVException;
 import org.hdiv.util.Constants;
+import org.hdiv.util.HDIVErrorCodes;
 import org.hdiv.util.HDIVUtil;
+import org.hdiv.util.Method;
 
 public class ValidationContextImpl implements ValidationContext {
 
@@ -33,34 +36,76 @@ public class ValidationContextImpl implements ValidationContext {
 
 	private final StringBuilder sb = new StringBuilder(128);
 
-	private String target;
+	protected String target;
 
-	private String redirect;
+	protected String redirect;
 
+	private final HttpServletResponse response;
+
+	private final Method method;
+
+	private final String hdivParameterName;
+
+	/**
+	 * @deprecated
+	 * @param request
+	 * @param restorer
+	 * @param obfuscation
+	 */
+	@Deprecated
 	public ValidationContextImpl(final HttpServletRequest request, final StateRestorer restorer, final boolean obfuscation) {
+		this(request, null, restorer, obfuscation);
+	}
+
+	public ValidationContextImpl(final HttpServletRequest request, final HttpServletResponse response, final StateRestorer restorer,
+			final boolean obfuscation) {
 		this.request = request;
+		this.response = response;
 		this.obfuscation = obfuscation;
 		this.restorer = restorer;
+		method = Method.valueOf(request.getMethod());
+		hdivParameterName = getHdivParameter(request);
+	}
+
+	/**
+	 * Name of the parameter that HDIV will include in the requests or/and forms which contains the state identifier in the memory strategy.
+	 *
+	 * @param request request
+	 * @return hdiv parameter value
+	 */
+	protected String getHdivParameter(final HttpServletRequest request) {
+
+		String paramName = HDIVUtil.getHdivStateParameterName(request);
+
+		if (paramName == null) {
+			throw new HDIVException("HDIV parameter name missing in session. Deleted by the app?");
+		}
+		return paramName;
 	}
 
 	public HttpServletRequest getRequest() {
 		return request;
 	}
 
+	public HttpServletResponse getResponse() {
+		return response;
+	}
+
 	public String getTarget() {
 		if (target == null) {
-			String target = getDecodedTarget(sb, request);
+			String target = getRequestedTarget();
 			if (obfuscation && HDIVUtil.isObfuscatedTarget(target)) {
-				String hdivParameter = HDIVUtil.getHdivStateParameterName(request);
-				if (hdivParameter != null) {
 
-					// Restore state from request or memory
-					ValidatorHelperResult result = restorer.restoreState(hdivParameter, request, target);
-					if (result.isValid()) {
-						this.target = result.getValue().getAction();
-						redirect = this.target;
-						HDIVUtil.setHdivObfRedirectAction(request, redirect);
-					}
+				// Restore state from request or memory
+				ValidatorHelperResult result = restorer.restoreState(hdivParameterName, request, target,
+						request.getParameter(hdivParameterName));
+				if (result.isValid()) {
+					this.target = result.getValue().getAction();
+					redirect = this.target;
+					HDIVUtil.setHdivObfRedirectAction(request, redirect);
+				}
+				if (redirect == null) {
+					throw new HDIVException(HDIVErrorCodes.INVALID_HDIV_PARAMETER_VALUE);
 				}
 			}
 			if (this.target == null) {
@@ -76,6 +121,10 @@ public class ValidationContextImpl implements ValidationContext {
 
 	public String getRedirect() {
 		return redirect;
+	}
+
+	protected StateRestorer getRestorer() {
+		return restorer;
 	}
 
 	private final String getDecodedTarget(final StringBuilder sb, final HttpServletRequest request) {
@@ -102,6 +151,22 @@ public class ValidationContextImpl implements ValidationContext {
 		catch (final IllegalArgumentException e) {
 			throw new HDIVException("Error decoding url", e);
 		}
+	}
+
+	public Method getMethod() {
+		return method;
+	}
+
+	public String getHdivParameterName() {
+		return hdivParameterName;
+	}
+
+	public String getHdivState() {
+		return request.getParameter(hdivParameterName);
+	}
+
+	public String getRequestedTarget() {
+		return getDecodedTarget(sb, request);
 	}
 
 }

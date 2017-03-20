@@ -16,7 +16,7 @@
 package org.hdiv.config.annotation;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -42,7 +42,7 @@ public class LongLivingPagesRegistry {
 	 * @param urlPatterns Url patterns.
 	 * @return more configuration options
 	 */
-	public LongLivingPagesRegistration addLongLivingPages(String... urlPatterns) {
+	public LongLivingPagesRegistration addLongLivingPages(final String... urlPatterns) {
 		Assert.notEmpty(urlPatterns, "Url patterns are required");
 		LongLivingPagesRegistration registration = new LongLivingPagesRegistration(urlPatterns);
 		registrations.add(registration);
@@ -51,7 +51,7 @@ public class LongLivingPagesRegistry {
 
 	protected Map<String, String> getLongLivingPages() {
 
-		Map<String, String> all = new HashMap<String, String>();
+		Map<String, String> all = new LinkedHashMap<String, String>();
 
 		for (LongLivingPagesRegistration regitration : registrations) {
 			Map<String, String> pages = regitration.getLongLivingPages();

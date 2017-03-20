@@ -15,7 +15,7 @@
  */
 package org.hdiv.config.annotation;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.hdiv.state.scope.StateScope;
@@ -29,11 +29,11 @@ import org.springframework.util.Assert;
  */
 public class LongLivingPagesRegistration {
 
-	private String[] urlPatterns;
+	private final String[] urlPatterns;
 
 	private StateScopeType scopeType = StateScopeType.USER_SESSION;
 
-	public LongLivingPagesRegistration(String[] urlPatterns) {
+	public LongLivingPagesRegistration(final String[] urlPatterns) {
 		Assert.notEmpty(urlPatterns, "A URL path is required to create a start page.");
 		this.urlPatterns = urlPatterns;
 	}
@@ -48,15 +48,15 @@ public class LongLivingPagesRegistration {
 	 * 
 	 * @param scopeType Scope to use.
 	 */
-	public void scope(StateScopeType scopeType) {
+	public void scope(final StateScopeType scopeType) {
 		Assert.notNull(scopeType, "Scope is required");
 		this.scopeType = scopeType;
 	}
 
 	protected Map<String, String> getLongLivingPages() {
 
-		Map<String, String> pages = new HashMap<String, String>();
-		for (String pattern : this.urlPatterns) {
+		Map<String, String> pages = new LinkedHashMap<String, String>();
+		for (String pattern : urlPatterns) {
 
 			pages.put(pattern, scopeType.getName());
 		}

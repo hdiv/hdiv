@@ -72,7 +72,7 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 
 		RequestInitializer requestInitializer = getApplicationContext().getBean(RequestInitializer.class);
 		RequestWrapper requestWrapper = requestInitializer.createRequestWrapper(request, response);
-		this.requestWrapper = new ValidationContextImpl(requestWrapper, (StateRestorer) helper, false);
+		this.requestWrapper = new ValidationContextImpl(requestWrapper, response, helper, false);
 		responseWrapper = requestInitializer.createResponseWrapper(request, response);
 
 	}
@@ -383,7 +383,7 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 		// Editable errors
 		List<ValidatorError> errors = result.getErrors();
 		assertEquals(1, errors.size());
-		assertEquals(HDIVErrorCodes.EDITABLE_VALIDATION_ERROR, errors.get(0).getType());
+		assertEquals(HDIVErrorCodes.INVALID_EDITABLE_VALUE, errors.get(0).getType());
 	}
 
 	public void testEditableParameterValidationRedirect() {
@@ -439,6 +439,33 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 		MockHttpServletRequest request = getMockRequest();
 
 		responseWrapper.addCookie(new Cookie("name", "value"));
+
+		dataComposer.beginRequest(Method.GET, targetName);
+		dataComposer.compose("param1", "value1", false);
+		String pageState = dataComposer.endRequest();
+		assertNotNull(pageState);
+		request.addParameter(hdivParameter, pageState);
+
+		dataComposer.endPage();
+
+		// Modify cookie value on client
+		request.setCookies(new Cookie[] { new Cookie("name", "0") });
+
+		boolean result = helper.validate(requestWrapper).isValid();
+		assertTrue(result);
+	}
+
+	/**
+	 * Test for cookies integrity.
+	 */
+	public void testValidateCookiesIntegrityCorrectWithDomain() {
+
+		MockHttpServletRequest request = getMockRequest();
+
+		Cookie localCookie = new Cookie("name", "value");
+		localCookie.setDomain("localhost");
+
+		responseWrapper.addCookie(localCookie);
 
 		dataComposer.beginRequest(Method.GET, targetName);
 		dataComposer.compose("param1", "value1", false);
@@ -933,6 +960,58 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 
 		ValidatorHelperResult result = helper.validate(requestWrapper);
 		assertFalse(result.isValid());
+
+	}
+
+	/**
+	 * Test validation if a form has a parameter with special characters
+	 * @throws UnsupportedEncodingException
+	 */
+	public void testFormWithParameterWithSpecialCharacterDifferentValue() throws UnsupportedEncodingException {
+
+		getConfig().setConfidentiality(false);
+		MockHttpServletRequest request = getMockRequest();
+		request.setMethod("POST");
+
+		dataComposer.beginRequest(Method.POST, targetName);
+
+		// Form parameters
+		dataComposer.compose("param", "valu+e", false);
+
+		String pageState = dataComposer.endRequest();
+		dataComposer.endPage();
+
+		request.addParameter(hdivParameter, pageState);
+		request.addParameter("param", "valu e");
+
+		ValidatorHelperResult result = helper.validate(requestWrapper);
+		assertTrue(result.isValid());
+
+	}
+
+	/**
+	 * Test validation if a form has a parameter with special characters
+	 * @throws UnsupportedEncodingException
+	 */
+	public void testFormWithParameterWithSpecialCharacterSameValue() throws UnsupportedEncodingException {
+
+		getConfig().setConfidentiality(false);
+		MockHttpServletRequest request = getMockRequest();
+		request.setMethod("POST");
+
+		dataComposer.beginRequest(Method.POST, targetName);
+
+		// Form parameters
+		dataComposer.compose("param", "valu+e", false);
+
+		String pageState = dataComposer.endRequest();
+		dataComposer.endPage();
+
+		request.addParameter(hdivParameter, pageState);
+		request.addParameter("param", "valu+e");
+
+		ValidatorHelperResult result = helper.validate(requestWrapper);
+		assertTrue(result.isValid());
 
 	}
 }

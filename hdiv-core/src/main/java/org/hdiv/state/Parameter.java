@@ -19,6 +19,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.hdiv.util.HDIVUtil;
+
 /**
  * Data structure to store all the values of a parameter
  *
@@ -72,7 +74,7 @@ public class Parameter implements IParameter {
 
 	public Parameter(final String name, final String[] values, final boolean editable, final String editableDataType,
 			final boolean actionParam) {
-		this(name, values[0], editable, editableDataType, actionParam);
+		this(name, values.length != 0 ? values[0] : null, editable, editableDataType, actionParam);
 		if (values.length > 1) {
 			for (int i = 1; i < values.length; i++) {
 				addValue(values[i]);
@@ -121,12 +123,17 @@ public class Parameter implements IParameter {
 		}
 
 		if (values == null) {
-			return this.value.equalsIgnoreCase(value);
+			if (this.value != null) {
+				return this.value.equalsIgnoreCase(value) || HDIVUtil.isTheSameEncodedValue(this.value, value);
+			}
+			else {
+				return this.value == value;
+			}
 		}
 
 		for (int i = 0; i < values.size(); i++) {
 			String tempValue = values.get(i);
-			if (tempValue.equalsIgnoreCase(value)) {
+			if (tempValue.equalsIgnoreCase(value) || HDIVUtil.isTheSameEncodedValue(tempValue, value)) {
 				return true;
 			}
 		}

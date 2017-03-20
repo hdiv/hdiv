@@ -93,7 +93,7 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 			return cache.findPage(new SimpleCacheKey(context, pageId));
 		}
 		catch (final IllegalStateException e) {
-			throw new HDIVException(HDIVErrorCodes.PAGE_ID_INCORRECT, e);
+			throw new HDIVException(HDIVErrorCodes.INVALID_PAGE_ID, e);
 		}
 	}
 
@@ -128,7 +128,7 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 			return getPage(context, pageId).getState(stateId);
 		}
 		catch (final Exception e) {
-			throw new HDIVException(HDIVErrorCodes.PAGE_ID_INCORRECT, e);
+			throw new HDIVException(HDIVErrorCodes.INVALID_PAGE_ID, e);
 		}
 	}
 

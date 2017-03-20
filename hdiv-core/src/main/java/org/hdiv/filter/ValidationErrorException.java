@@ -15,16 +15,21 @@
  */
 package org.hdiv.filter;
 
-import javax.servlet.http.HttpServletRequest;
+public class ValidationErrorException extends RuntimeException {
 
-public interface StateRestorer {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
-	ValidatorHelperResult restoreState(ValidationContext context);
+	private final ValidatorHelperResult result;
 
-	ValidatorHelperResult restoreState(final String hdivParameter, ValidationContext context);
+	public ValidationErrorException(final ValidatorHelperResult result) {
+		this.result = result;
+	}
 
-	ValidatorHelperResult restoreState(final String hdivParameter, String hdivState, ValidationContext context);
+	public ValidatorHelperResult getResult() {
+		return result;
+	}
 
-	ValidatorHelperResult restoreState(final String hdivParameter, final HttpServletRequest request, final String target,
-			String requestState);
 }

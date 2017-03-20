@@ -141,7 +141,7 @@ public class JsfValidatorHelper extends ValidatorHelperRequest {
 			log.debug(" state action:" + state.getAction());
 		}
 
-		ValidatorError error = new ValidatorError(HDIVErrorCodes.ACTION_ERROR, target);
+		ValidatorError error = new ValidatorError(HDIVErrorCodes.INVALID_ACTION, target);
 		return new ValidatorHelperResult(error);
 	}
 

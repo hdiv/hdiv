@@ -16,15 +16,12 @@
 package org.hdiv.filter;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
-public interface StateRestorer {
+public class DefaultValidationContextFactory implements ValidationContextFactory {
 
-	ValidatorHelperResult restoreState(ValidationContext context);
-
-	ValidatorHelperResult restoreState(final String hdivParameter, ValidationContext context);
-
-	ValidatorHelperResult restoreState(final String hdivParameter, String hdivState, ValidationContext context);
-
-	ValidatorHelperResult restoreState(final String hdivParameter, final HttpServletRequest request, final String target,
-			String requestState);
+	public ValidationContext newInstance(final HttpServletRequest request, final HttpServletResponse response, final StateRestorer restorer,
+			final boolean obfuscation) {
+		return new ValidationContextImpl(request, response, restorer, obfuscation);
+	}
 }

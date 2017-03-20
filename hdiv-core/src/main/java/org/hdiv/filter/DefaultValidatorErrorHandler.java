@@ -97,7 +97,7 @@ public class DefaultValidatorErrorHandler implements ValidatorErrorHandler {
 	protected boolean isPageNotFoundError(final List<ValidatorError> errors) {
 
 		for (ValidatorError error : errors) {
-			if (HDIVErrorCodes.PAGE_ID_INCORRECT.equals(error.getType())) {
+			if (HDIVErrorCodes.INVALID_PAGE_ID.equals(error.getType())) {
 				return true;
 			}
 		}

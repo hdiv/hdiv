@@ -15,12 +15,9 @@
  */
 package org.hdiv.state;
 
-import java.util.regex.Pattern;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hdiv.config.HDIVConfig;
-import org.hdiv.config.Strategy;
 import org.hdiv.context.RequestContext;
 import org.hdiv.exception.HDIVException;
 import org.hdiv.session.ISession;
@@ -41,16 +38,6 @@ public class StateUtil {
 	 * Commons Logging instance.
 	 */
 	private static final Log log = LogFactory.getLog(StateUtil.class);
-
-	/**
-	 * Pattern to check if the memory strategy is being used
-	 */
-	protected static final String MEMORY_PATTERN = "([0-9]+-){2}[A-Za-z0-9]+";
-
-	/**
-	 * Compiled MEMORY_PATTERN
-	 */
-	protected Pattern memoryPattern = Pattern.compile(MEMORY_PATTERN);
 
 	/**
 	 * Hdiv configuration for this app. Access to user defined strategy.
@@ -94,29 +81,17 @@ public class StateUtil {
 	 */
 	public IState restoreState(final RequestContext context, final String requestState) {
 
-		IState restoredState = null;
-
-		if (isMemoryStrategy(requestState)) {
-
-			restoredState = restoreMemoryState(context, requestState);
-
-		}
+		IState restoredState = restoreMemoryState(context, requestState);
 
 		if (restoredState == null) {
-			throw new HDIVException(HDIVErrorCodes.HDIV_PARAMETER_INCORRECT_VALUE);
+			throw new HDIVException(HDIVErrorCodes.INVALID_HDIV_PARAMETER_VALUE);
 		}
 		return restoredState;
 	}
 
-	/**
-	 * Checks if the memory strategy is being used
-	 *
-	 * @param value State id value
-	 *
-	 * @return True if strategy is memory. False in otherwise.
-	 */
+	@Deprecated
 	public boolean isMemoryStrategy(final String value) {
-		return config.getStrategy() == Strategy.MEMORY || memoryPattern.matcher(value).matches();
+		return true;
 	}
 
 	/**
@@ -134,7 +109,7 @@ public class StateUtil {
 		int firstSeparator = requestState.indexOf(Constants.STATE_ID_SEPARATOR);
 		int lastSeparator = requestState.lastIndexOf(Constants.STATE_ID_SEPARATOR);
 		if (firstSeparator == -1 || lastSeparator == -1) {
-			throw new HDIVException(HDIVErrorCodes.HDIV_PARAMETER_INCORRECT_VALUE);
+			throw new HDIVException(HDIVErrorCodes.INVALID_HDIV_PARAMETER_VALUE);
 		}
 
 		String pId;
@@ -144,7 +119,7 @@ public class StateUtil {
 			sId = requestState.substring(firstSeparator + 1, lastSeparator);
 		}
 		catch (StringIndexOutOfBoundsException e) {
-			throw new HDIVException(HDIVErrorCodes.HDIV_PARAMETER_INCORRECT_VALUE, e);
+			throw new HDIVException(HDIVErrorCodes.INVALID_HDIV_PARAMETER_VALUE, e);
 		}
 
 		int stateId;
@@ -152,7 +127,7 @@ public class StateUtil {
 			stateId = Integer.parseInt(sId);
 		}
 		catch (NumberFormatException e) {
-			throw new HDIVException(HDIVErrorCodes.HDIV_PARAMETER_INCORRECT_VALUE, e);
+			throw new HDIVException(HDIVErrorCodes.INVALID_HDIV_PARAMETER_VALUE, e);
 		}
 
 		// Obtain State from a StateScopes
@@ -161,7 +136,7 @@ public class StateUtil {
 		if (stateScope != null) {
 			restoredState = stateScope.restoreState(context, stateId);
 			if (restoredState == null) {
-				throw new HDIVException(HDIVErrorCodes.PAGE_ID_INCORRECT);
+				throw new HDIVException(HDIVErrorCodes.INVALID_PAGE_ID);
 			}
 			return restoredState;
 		}
@@ -172,7 +147,7 @@ public class StateUtil {
 			pageId = Integer.parseInt(pId);
 		}
 		catch (NumberFormatException e) {
-			throw new HDIVException(HDIVErrorCodes.HDIV_PARAMETER_INCORRECT_VALUE, e);
+			throw new HDIVException(HDIVErrorCodes.INVALID_HDIV_PARAMETER_VALUE, e);
 		}
 
 		restoredState = getStateFromSession(context, pageId, stateId);
@@ -192,7 +167,7 @@ public class StateUtil {
 		final IState sessionState = session.getState(context, pageId, stateId);
 
 		if (sessionState == null) {
-			throw new HDIVException(HDIVErrorCodes.HDIV_PARAMETER_INCORRECT_VALUE);
+			throw new HDIVException(HDIVErrorCodes.INVALID_HDIV_PARAMETER_VALUE);
 		}
 		return sessionState;
 	}

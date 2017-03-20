@@ -39,7 +39,7 @@ public class ValidatorErrorHandlerTest extends AbstractHDIVTestCase {
 		HttpServletRequest request = this.getMockRequest();
 		MockHttpServletResponse response = new MockHttpServletResponse();
 
-		ValidatorError error = new ValidatorError(HDIVErrorCodes.PAGE_ID_INCORRECT);
+		ValidatorError error = new ValidatorError(HDIVErrorCodes.INVALID_PAGE_ID);
 		List<ValidatorError> errors = Collections.singletonList(error);
 		this.validatorErrorHandler.handleValidatorError(request, response, errors);
 
@@ -55,7 +55,7 @@ public class ValidatorErrorHandlerTest extends AbstractHDIVTestCase {
 		session.setNew(false); // mark as not new sesssion
 		MockHttpServletResponse response = new MockHttpServletResponse();
 
-		ValidatorError error = new ValidatorError(HDIVErrorCodes.REQUIRED_PARAMETERS);
+		ValidatorError error = new ValidatorError(HDIVErrorCodes.NOT_RECEIVED_ALL_REQUIRED_PARAMETERS);
 		List<ValidatorError> errors = Collections.singletonList(error);
 		this.validatorErrorHandler.handleValidatorError(request, response, errors);
 
@@ -72,7 +72,7 @@ public class ValidatorErrorHandlerTest extends AbstractHDIVTestCase {
 		HttpServletRequest request = this.getMockRequest();
 		MockHttpServletResponse response = new MockHttpServletResponse();
 
-		ValidatorError error = new ValidatorError(HDIVErrorCodes.REQUIRED_PARAMETERS);
+		ValidatorError error = new ValidatorError(HDIVErrorCodes.NOT_RECEIVED_ALL_REQUIRED_PARAMETERS);
 		List<ValidatorError> errors = Collections.singletonList(error);
 		this.validatorErrorHandler.handleValidatorError(request, response, errors);
 

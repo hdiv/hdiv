@@ -16,15 +16,28 @@
 package org.hdiv.filter;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.hdiv.util.Method;
 
 public interface ValidationContext {
 
-	public HttpServletRequest getRequest();
+	HttpServletRequest getRequest();
 
-	public String getTarget();
+	HttpServletResponse getResponse();
 
-	public String getRedirect();
+	String getHdivParameterName();
 
-	public StringBuilder getBuffer();
+	String getRequestedTarget();
+
+	String getTarget();
+
+	String getRedirect();
+
+	StringBuilder getBuffer();
+
+	Method getMethod();
+
+	String getHdivState();
 
 }

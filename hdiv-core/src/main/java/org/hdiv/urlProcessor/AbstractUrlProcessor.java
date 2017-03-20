@@ -179,12 +179,23 @@ public abstract class AbstractUrlProcessor {
 
 	/**
 	 * Generates a Map with request parameter name and values.
-	 *
+	 * @see Still used in structs1
 	 * @param request {@link HttpServletRequest} object
 	 * @param urlParams urls query string
 	 * @return Map
 	 */
 	public Map<String, String[]> getUrlParamsAsMap(final StringBuilder sb, final HttpServletRequest request, final String urlParams) {
+		return getUrlParamsAsMap(HDIVUtil.getHdivStateParameterName(request), sb, urlParams);
+	}
+
+	/**
+	 * Generates a Map with request parameter name and values.
+	 *
+	 * @param request {@link HttpServletRequest} object
+	 * @param urlParams urls query string
+	 * @return Map
+	 */
+	public Map<String, String[]> getUrlParamsAsMap(final String hdivParameter, final StringBuilder sb, final String urlParams) {
 
 		Map<String, String[]> params = new LinkedHashMap<String, String[]>();
 
@@ -193,8 +204,6 @@ public abstract class AbstractUrlProcessor {
 		}
 
 		String value = urlParams.replaceAll(AMP, "&");
-
-		String hdivParameter = HDIVUtil.getHdivStateParameterName(request);
 
 		StringTokenizer st = new StringTokenizer(value, "&");
 		while (st.hasMoreTokens()) {

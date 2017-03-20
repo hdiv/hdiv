@@ -39,6 +39,11 @@ public class ValidatorHelperResult {
 	public static final ValidatorHelperResult VALIDATION_NOT_REQUIRED = new ValidatorHelperResult(true);
 
 	/**
+	 * Constant valid result.
+	 */
+	public static final ValidatorHelperResult PEN_TESTING = new ValidatorHelperResult(false);
+
+	/**
 	 * Validation is valid or not
 	 */
 	private final boolean valid;
@@ -62,7 +67,7 @@ public class ValidatorHelperResult {
 	}
 
 	public ValidatorHelperResult(final List<ValidatorError> errors) {
-		this.valid = false;
+		valid = false;
 		this.errors = errors;
 	}
 
@@ -73,8 +78,8 @@ public class ValidatorHelperResult {
 
 	public ValidatorHelperResult(final boolean valid, final ValidatorError error) {
 		this.valid = valid;
-		this.errors = new ArrayList<ValidatorError>();
-		this.errors.add(error);
+		errors = new ArrayList<ValidatorError>();
+		errors.add(error);
 	}
 
 	public boolean isValid() {
@@ -92,16 +97,16 @@ public class ValidatorHelperResult {
 	@Override
 	public String toString() {
 		StringBuilder b = new StringBuilder();
-		b.append("Valid: ").append(this.valid).append(", ");
-		if (this.errors != null) {
+		b.append("Valid: ").append(valid).append(", ");
+		if (errors != null) {
 			for (ValidatorError error : errors) {
 				b.append(" Errorcode: ").append(error.toString());
 			}
 		}
-		if (this.value != null) {
-			b.append(" Value:").append(this.value).append(", ");
+		if (value != null) {
+			b.append(" Value:").append(value).append(", ");
 		}
-		if (this.equals(VALIDATION_NOT_REQUIRED)) {
+		if (equals(VALIDATION_NOT_REQUIRED)) {
 			b.append(" Type: VALIDATION_NOT_REQUIRED");
 		}
 

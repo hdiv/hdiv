@@ -16,7 +16,7 @@
 package org.hdiv.config.xml;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -36,10 +36,12 @@ import org.hdiv.dataValidator.DataValidator;
 import org.hdiv.dataValidator.IDataValidator;
 import org.hdiv.dataValidator.ValidationResult;
 import org.hdiv.events.HDIVFacesEventListener;
+import org.hdiv.filter.DefaultValidationContextFactory;
 import org.hdiv.filter.DefaultValidatorErrorHandler;
 import org.hdiv.filter.IValidationHelper;
 import org.hdiv.filter.JsfValidatorErrorHandler;
 import org.hdiv.filter.JsfValidatorHelper;
+import org.hdiv.filter.ValidationContextFactory;
 import org.hdiv.filter.ValidatorErrorHandler;
 import org.hdiv.filter.ValidatorHelperRequest;
 import org.hdiv.idGenerator.PageIdGenerator;
@@ -167,7 +169,7 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 	/**
 	 * Long-living pages configured by the user
 	 */
-	protected Map<String, String> longLivingPages = new HashMap<String, String>();
+	protected Map<String, String> longLivingPages = new LinkedHashMap<String, String>();
 
 	/* Bean references */
 	protected RuntimeBeanReference patternMatcherFactoryRef;
@@ -197,6 +199,8 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 	protected RuntimeBeanReference userDataRef;
 
 	protected RuntimeBeanReference stateScopeManagerRef;
+	
+	protected RuntimeBeanReference validationContextFactoryRef;
 
 	protected RuntimeBeanReference validatorErrorHandlerRef;
 
@@ -233,6 +237,7 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		linkUrlProcessorRef = createLinkUrlProcessor(source, parserContext);
 		formUrlProcessorRef = createFormUrlProcessor(source, parserContext);
 		basicUrlProcessorRef = createBasicUrlProcessor(source, parserContext);
+		validationContextFactoryRef = createValidationContextFactory(source, parserContext);
 		createRequestInitializer(source, parserContext);
 		createServletContextInitializer(source, parserContext);
 		createSessionInitializer(source, parserContext);
@@ -491,6 +496,14 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		return registerBean(bean, BasicUrlProcessor.class.getName(), parserContext);
 	}
 
+	protected RuntimeBeanReference createValidationContextFactory(final Object source, final ParserContext parserContext) {
+		RootBeanDefinition bean = new RootBeanDefinition(DefaultValidationContextFactory.class);
+		bean.setSource(source);
+		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
+
+		return registerBean(bean, ValidationContextFactory.class.getName(), parserContext);
+	}
+	
 	protected RuntimeBeanReference createRequestDataValueProcessor(final Object source, final ParserContext parserContext) {
 		RootBeanDefinition bean = new RootBeanDefinition(HdivRequestDataValueProcessor.class);
 		bean.setSource(source);
@@ -814,7 +827,7 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 	protected void processParamsWithoutValidation(final Node node, final RootBeanDefinition bean) {
 		NodeList nodeList = node.getChildNodes();
 
-		Map<String, List<String>> map = new HashMap<String, List<String>>();
+		Map<String, List<String>> map = new LinkedHashMap<String, List<String>>();
 		bean.getPropertyValues().addPropertyValue("paramsWithoutValidation", map);
 		for (int i = 0; i < nodeList.getLength(); i++) {
 			Node mappingNode = nodeList.item(i);

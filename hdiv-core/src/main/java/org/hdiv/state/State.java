@@ -358,9 +358,7 @@ public class State implements IState {
 	}
 
 	public IPage getPage() {
-		IPage temp = page;
-		page = null;
-		return temp;
+		return page;
 	}
 
 	public void setPage(final IPage page) {

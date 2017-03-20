@@ -92,34 +92,41 @@ public class ValidatorFilter extends OncePerRequestFilter {
 	protected IUserData userData;
 
 	/**
+	 * Creates ValidationContext
+	 */
+	protected ValidationContextFactory validationContextFactory;
+
+	/**
 	 * Initialize required dependencies.
 	 */
 	protected void initDependencies() {
-
-		if (hdivConfig == null) {
+		if (validationContextFactory == null) {
 			synchronized (this) {
-				ServletContext servletContext = getServletContext();
-				WebApplicationContext context = HDIVUtil.findWebApplicationContext(servletContext);
+				if (hdivConfig == null) {
+					ServletContext servletContext = getServletContext();
+					WebApplicationContext context = HDIVUtil.findWebApplicationContext(servletContext);
 
-				hdivConfig = context.getBean(HDIVConfig.class);
-				validationHelper = context.getBean(IValidationHelper.class);
+					hdivConfig = context.getBean(HDIVConfig.class);
+					validationHelper = context.getBean(IValidationHelper.class);
 
-				String[] names = context.getBeanNamesForType(IMultipartConfig.class);
-				if (names.length > 1) {
-					throw new HDIVException("More than one bean of type 'multipartConfig' is defined.");
-				}
-				if (names.length == 1) {
-					multipartConfig = context.getBean(IMultipartConfig.class);
-				}
-				else {
-					// For applications without Multipart requests
-					multipartConfig = null;
-				}
+					String[] names = context.getBeanNamesForType(IMultipartConfig.class);
+					if (names.length > 1) {
+						throw new HDIVException("More than one bean of type 'multipartConfig' is defined.");
+					}
+					if (names.length == 1) {
+						multipartConfig = context.getBean(IMultipartConfig.class);
+					}
+					else {
+						// For applications without Multipart requests
+						multipartConfig = null;
+					}
 
-				userData = context.getBean(IUserData.class);
-				logger = context.getBean(Logger.class);
-				errorHandler = context.getBean(ValidatorErrorHandler.class);
-				requestInitializer = context.getBean(RequestInitializer.class);
+					userData = context.getBean(IUserData.class);
+					logger = context.getBean(Logger.class);
+					errorHandler = context.getBean(ValidatorErrorHandler.class);
+					requestInitializer = context.getBean(RequestInitializer.class);
+					validationContextFactory = context.getBean(ValidationContextFactory.class);
+				}
 			}
 		}
 	}
@@ -154,7 +161,7 @@ public class ValidatorFilter extends OncePerRequestFilter {
 			boolean legal = false;
 			boolean isMultipartException = false;
 
-			if (isMultipartContent(request.getContentType())) {
+			if (isMultipartContent(request)) {
 
 				requestWrapper.setMultipart(true);
 
@@ -174,20 +181,45 @@ public class ValidatorFilter extends OncePerRequestFilter {
 					legal = true;
 				}
 			}
-
-			ValidatorHelperResult result = null;
-			ValidationContext context = new ValidationContextImpl(multipartProcessedRequest, validationHelper,
+			ValidationContext context = validationContextFactory.newInstance(multipartProcessedRequest, response, validationHelper,
 					hdivConfig.isUrlObfuscation());
-			if (!isMultipartException) {
-				result = validationHelper.validate(context);
-				legal = result.isValid();
+			List<ValidatorError> errors = null;
+			try {
+				ValidatorHelperResult result = null;
+				if (!isMultipartException) {
+					result = validationHelper.validate(context);
+					legal = result.isValid();
 
-				// Store validation result in request
-				request.setAttribute(Constants.VALIDATOR_HELPER_RESULT_NAME, result);
+					// Store validation result in request
+					request.setAttribute(Constants.VALIDATOR_HELPER_RESULT_NAME, result);
+				}
+
+				// All errors, integrity and editable validation
+				errors = result == null ? null : result.getErrors();
 			}
-
-			// All errors, integrity and editable validation
-			List<ValidatorError> errors = result == null ? null : result.getErrors();
+			catch (ValidationErrorException e) {
+				if (e.getResult() == ValidatorHelperResult.PEN_TESTING) {
+					return;
+				}
+				errors = e.getResult().getErrors();
+			}
+			catch (Exception e) {
+				if (hdivConfig.isDebugMode()) {
+					errors = findErrors(e, context.getRequestedTarget());
+					if (errors == null) {
+						/**
+						 * It is not a HdivException... but it was launched in our code...
+						 */
+						if (log.isErrorEnabled()) {
+							log.error("Exception in request validation", e);
+						}
+						errors = Collections.singletonList(new ValidatorError(e.getMessage(), context.getRequestedTarget()));
+					}
+				}
+				else {
+					throw e;
+				}
+			}
 
 			boolean hasEditableError = false;
 			if (errors != null && !errors.isEmpty()) {
@@ -212,25 +244,26 @@ public class ValidatorFilter extends OncePerRequestFilter {
 
 		}
 		catch (Exception e) {
-
-			Throwable hdivException = e;
-			do {
-				if (!(hdivException instanceof HDIVException)) {
-					hdivException = hdivException.getCause();
-				}
-			} while (hdivException != null && !(hdivException instanceof HDIVException));
-			if (hdivException instanceof HDIVException) {
-				if (log.isErrorEnabled()) {
-					log.error("Exception in request validation", hdivException);
-				}
+			List<ValidatorError> errors = findErrors(e, request.getRequestURI());
+			if (errors != null) {
 				// Show error page
 				if (!hdivConfig.isDebugMode()) {
-					List<ValidatorError> errors = Collections
-							.singletonList(new ValidatorError(hdivException.getMessage(), request.getRequestURI()));
 					errorHandler.handleValidatorError(multipartProcessedRequest, responseWrapper, errors);
 				}
 			}
 			else {
+				/**
+				 * Try to rethrow the same exception if posible
+				 */
+				if (e instanceof RuntimeException) {
+					throw (RuntimeException) e;
+				}
+				if (e instanceof ServletException) {
+					throw (ServletException) e;
+				}
+				if (e instanceof IOException) {
+					throw (IOException) e;
+				}
 				throw new RuntimeException(e);
 			}
 		}
@@ -246,14 +279,31 @@ public class ValidatorFilter extends OncePerRequestFilter {
 		}
 	}
 
+	private List<ValidatorError> findErrors(final Throwable e, final String target) {
+		Throwable current = e;
+		do {
+			if (!(current instanceof HDIVException)) {
+				current = current.getCause();
+			}
+		} while (current != null && !(current instanceof HDIVException));
+		if (current instanceof HDIVException) {
+			if (log.isErrorEnabled()) {
+				log.error("Exception in request validation", current);
+			}
+			// Show error page
+			return Collections.singletonList(new ValidatorError(current.getMessage(), target));
+		}
+		return null;
+	}
+
 	/**
 	 * Utility method that determines whether the request contains multipart content.
 	 *
-	 * @param contentType content type
+	 * @param request the request
 	 * @return <code>true</code> if the request is multipart. <code>false</code> otherwise.
 	 */
-	protected boolean isMultipartContent(final String contentType) {
-		return contentType != null && contentType.indexOf("multipart/form-data") != -1;
+	protected boolean isMultipartContent(final HttpServletRequest request) {
+		return HDIVUtil.isMultipartContent(request);
 	}
 
 	/**
@@ -302,8 +352,11 @@ public class ValidatorFilter extends OncePerRequestFilter {
 
 			// Include context path in the target
 			String target = error.getTarget();
-			if (!target.startsWith(contextPath)) {
+			if (target != null && !target.startsWith(contextPath)) {
 				target = request.getContextPath() + target;
+			}
+			else if (target == null) {
+				target = request.getRequestURI();
 			}
 			error.setTarget(target);
 		}
@@ -335,7 +388,6 @@ public class ValidatorFilter extends OncePerRequestFilter {
 		for (ValidatorError error : errors) {
 			// Log the error
 			logger.log(error);
-			System.out.println(error);
 		}
 
 	}
@@ -351,7 +403,7 @@ public class ValidatorFilter extends OncePerRequestFilter {
 
 		List<ValidatorError> editableErrors = new ArrayList<ValidatorError>();
 		for (ValidatorError error : errors) {
-			if (HDIVErrorCodes.EDITABLE_VALIDATION_ERROR.equals(error.getType())) {
+			if (HDIVErrorCodes.INVALID_EDITABLE_VALUE.equals(error.getType())) {
 				editableErrors.add(error);
 			}
 		}

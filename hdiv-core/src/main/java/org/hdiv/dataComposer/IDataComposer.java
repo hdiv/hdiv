@@ -242,5 +242,15 @@ public interface IDataComposer {
 	 */
 	boolean isRequestStarted();
 
+	/**
+	 * Temporal buffer for processing
+	 * @return
+	 */
 	StringBuilder getBuilder();
+
+	/**
+	 * Hdiv parameter name
+	 * @return
+	 */
+	String getHdivParameterName();
 }
