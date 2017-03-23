@@ -25,9 +25,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 
-import javax.servlet.AsyncContext;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 
@@ -92,11 +89,6 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 	 * relative values. If it is <code>false</code> they must be replaced by relative values to provide confidentiality.
 	 */
 	protected boolean cookiesConfidentiality;
-
-	/**
-	 * True if this is an Async request.
-	 */
-	protected boolean isAsyncRequest = false;
 
 	/**
 	 * Session object wrapper.
@@ -313,18 +305,6 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 		return map;
 	}
 
-	@Override
-	public AsyncContext startAsync() {
-		isAsyncRequest = true;
-		return super.startAsync();
-	}
-
-	@Override
-	public AsyncContext startAsync(final ServletRequest servletRequest, final ServletResponse servletResponse) {
-		isAsyncRequest = true;
-		return super.startAsync(servletRequest, servletResponse);
-	}
-
 	/**
 	 * Returns a map containing the text (that is, non-file) request parameters.
 	 * 
@@ -380,13 +360,6 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 	 */
 	public boolean isEditableParameter(final String parameter) {
 		return editableParameters.contains(parameter);
-	}
-
-	/**
-	 * @return the isAsyncRequest
-	 */
-	public boolean isAsyncRequest() {
-		return isAsyncRequest;
 	}
 
 	/**
