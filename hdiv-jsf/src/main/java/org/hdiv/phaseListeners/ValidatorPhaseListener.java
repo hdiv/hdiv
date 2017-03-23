@@ -43,11 +43,11 @@ import org.springframework.web.jsf.FacesContextUtils;
 /**
  * {@link PhaseListener} that verifies that Hdiv validation is executed and is valid. Otherwise, the request will be stopped.
  */
-public class ValidationStatusPhaseListener implements PhaseListener {
+public class ValidatorPhaseListener implements PhaseListener {
 
 	private static final long serialVersionUID = -5951308353665763734L;
 
-	private static final Log log = LogFactory.getLog(ValidationStatusPhaseListener.class);
+	private static final Log log = LogFactory.getLog(ValidatorPhaseListener.class);
 
 	private static final String VALIDATION_ERRORS_ATTR_NAME = "VALIDATION_ERRORS_ATTR_NAME";
 

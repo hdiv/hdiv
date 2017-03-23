@@ -68,6 +68,11 @@ public class EditableValidationsBeanDefinitionParser extends AbstractSingleBeanD
 	private static boolean jsr303Present = ClassUtils.isPresent("javax.validation.Validator",
 			EditableValidationsBeanDefinitionParser.class.getClassLoader());
 
+	/* HDIV module present flags */
+
+	protected final boolean springMvcModulePresent = ClassUtils.isPresent("org.hdiv.web.servlet.support.HdivRequestDataValueProcessor",
+			ConfigBeanDefinitionParser.class.getClassLoader());
+
 	/*
 	 * (non-Javadoc)
 	 *
@@ -132,7 +137,7 @@ public class EditableValidationsBeanDefinitionParser extends AbstractSingleBeanD
 			}
 		}
 
-		if (springMvcPresent) {
+		if (springMvcPresent && springMvcModulePresent) {
 			parserContext.getRegistry().registerBeanDefinition(EDITABLE_VALIDATOR_BEAN_NAME, createValidator(source, parserContext));
 		}
 	}
