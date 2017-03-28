@@ -3,27 +3,8 @@
 	xmlns="http://www.springframework.org/schema/beans"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-	<bean id="HDIVFacesEventListener" class="org.hdiv.events.HDIVFacesEventListener">
+	<bean id="defaultComponentTreeValidator" class="org.hdiv.validation.DefaultComponentTreeValidator">
 		<property name="config" ref="config" />
-		<property name="logger" ref="logger" />
-		<property name="editableValidator" ref="editableValidator" />
-		<property name="htmlInputHiddenValidator" ref="htmlInputHiddenValidator" />
-		<property name="requestParamValidator" ref="requestParameterValidator" />
-		<property name="uiCommandValidator" ref="uiCommandValidator" />
-	</bean>
-
-	<bean id="requestParameterValidator" class="org.hdiv.validators.RequestParameterValidator">
-		<property name="hdivConfig" ref="config" />
-	</bean>
-
-	<bean id="uiCommandValidator" class="org.hdiv.validators.UICommandValidator">
-	</bean>
-
-	<bean id="htmlInputHiddenValidator" class="org.hdiv.validators.HtmlInputHiddenValidator">
-	</bean>
-
-	<bean id="editableValidator" class="org.hdiv.validators.EditableValidator">
-		<property name="hdivConfig" ref="config" />
 	</bean>
 
 	<bean id="redirectHelper" class="org.hdiv.context.RedirectHelper">

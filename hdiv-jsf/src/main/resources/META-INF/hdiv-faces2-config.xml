@@ -12,7 +12,6 @@
 		<component-type>javax.faces.HtmlOutcomeTargetButton</component-type>
 		<component-class>org.hdiv.components.HtmlOutcomeTargetButtonExtension</component-class>
 	</component>
-
 	<component>
 		<component-type>javax.faces.Parameter</component-type>
 		<component-class>org.hdiv.components.UIParameterExtension</component-class>
@@ -25,24 +24,15 @@
 		<component-type>javax.faces.HtmlOutputLink</component-type>
 		<component-class>org.hdiv.components.HtmlOutputLinkExtension</component-class>
 	</component>
-	<component>
-		<component-type>javax.faces.HtmlCommandLink</component-type>
-		<component-class>org.hdiv.components.HtmlCommandLinkExtension</component-class>
-	</component>
-	<component>
-		<component-type>javax.faces.HtmlCommandButton</component-type>
-		<component-class>org.hdiv.components.HtmlCommandButtonExtension</component-class>
-	</component>
 
 	<lifecycle>
 		<phase-listener>org.hdiv.phaseListeners.ComponentMessagesPhaseListener</phase-listener>
 		<phase-listener>org.hdiv.phaseListeners.ConfigPhaseListener</phase-listener>
-		<phase-listener>org.hdiv.phaseListeners.ValidationStatusPhaseListener</phase-listener>
+		<phase-listener>org.hdiv.phaseListeners.ValidatorPhaseListener</phase-listener>
 	</lifecycle>
 
 	<factory>
 		<external-context-factory>org.hdiv.context.ExternalContextFactoryWrapper</external-context-factory>
-		<exception-handler-factory>org.hdiv.exceptionHandler.HDIVExceptionHandlerFactory</exception-handler-factory>
 	</factory>
 
 </faces-config>

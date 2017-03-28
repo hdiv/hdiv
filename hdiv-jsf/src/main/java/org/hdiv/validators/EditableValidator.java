@@ -19,21 +19,24 @@ import java.util.Locale;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
-import javax.faces.component.UIForm;
 import javax.faces.component.UIInput;
 import javax.faces.component.html.HtmlInputHidden;
 import javax.faces.component.html.HtmlInputSecret;
 import javax.faces.component.html.HtmlInputText;
 import javax.faces.component.html.HtmlInputTextarea;
 import javax.faces.context.FacesContext;
+import javax.faces.convert.Converter;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.hdiv.config.HDIVConfig;
 import org.hdiv.util.Constants;
 import org.hdiv.util.HDIVErrorCodes;
 import org.hdiv.util.HDIVUtil;
 import org.hdiv.util.MessageFactory;
-import org.hdiv.validation.ValidationError;
+import org.hdiv.util.UtilsJsf;
+import org.hdiv.validation.ValidationContext;
 import org.hdiv.validator.EditableDataValidationResult;
 
 /**
@@ -43,75 +46,34 @@ import org.hdiv.validator.EditableDataValidationResult;
  */
 public class EditableValidator implements ComponentValidator {
 
+	private static final Log log = LogFactory.getLog(EditableValidator.class);
+
 	/**
 	 * HDIV config
 	 */
 	private HDIVConfig hdivConfig;
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.hdiv.validators.ComponentValidator#validate(javax.faces.context.FacesContext, javax.faces.component.UIComponent)
-	 */
-	public ValidationError validate(final FacesContext context, final UIComponent component) {
-		return validateEditablesForm(context, (UIForm) component);
+	public boolean supports(final UIComponent component) {
+
+		return UIInput.class.isAssignableFrom(component.getClass()) && component.getFamily().equals("javax.faces.Input");
 	}
 
-	/**
-	 * Validates all the editable components of the form
-	 * 
-	 * @param context Request context
-	 * @param formComponent UIForm component to validate
-	 * @return result
-	 */
-	protected ValidationError validateEditablesForm(final FacesContext context, final UIForm formComponent) {
-		ValidationError error = null;
-
-		for (UIComponent component : formComponent.getChildren()) {
-			ValidationError tempError = validateComponent(context, component);
-			if (tempError != null) {
-				error = tempError;
-			}
-		}
-		return error;
-	}
-
-	/**
-	 * Recursive method. When a component is non editable, verifies its children.
-	 * 
-	 * @param context Request context
-	 * @param uiComponent UIComponent to validate
-	 * @return result
-	 */
-	protected ValidationError validateComponent(final FacesContext context, final UIComponent uiComponent) {
-		if (uiComponent instanceof HtmlInputText || uiComponent instanceof HtmlInputTextarea || uiComponent instanceof HtmlInputSecret
-				|| uiComponent instanceof HtmlInputHidden) {
-			UIInput inputComponent = (UIInput) uiComponent;
-			return validateInput(context, inputComponent);
-		}
-		else {
-			ValidationError error = null;
-			for (UIComponent child : uiComponent.getChildren()) {
-				ValidationError tempError = validateComponent(context, child);
-				if (tempError != null) {
-					error = tempError;
-				}
-			}
-			return error;
-		}
+	public void validate(final ValidationContext context, final UIComponent component) {
+		validateInput(context, (UIInput) component);
 	}
 
 	/**
 	 * Configures variables to call validateContent
 	 * 
-	 * @param context Request context
+	 * @param validationContext Validation context
 	 * @param inputComponent {@link UIInput} to validate
-	 * @return result
 	 */
-	protected ValidationError validateInput(final FacesContext context, final UIInput inputComponent) {
+	protected void validateInput(final ValidationContext validationContext, final UIInput inputComponent) {
 
-		Object value = inputComponent.getValue();
+		FacesContext context = validationContext.getFacesContext();
+
 		String clientId = inputComponent.getClientId(context);
+		Object value = context.getExternalContext().getRequestParameterMap().get(clientId);
 		String contentType = null;
 		if (inputComponent instanceof HtmlInputHidden) {
 			contentType = "hidden";
@@ -126,17 +88,32 @@ public class EditableValidator implements ComponentValidator {
 			contentType = "password";
 		}
 
-		if (!validateContent(context, clientId, value, contentType)) {
+		// Parameter value is always accepted, because the component has an editable value
+		Converter conv = inputComponent.getConverter();
+		String convertedValue = value == null ? "" : value.toString();
+		if (conv != null) {
+			convertedValue = conv.getAsString(context, inputComponent, value);
+		}
+		validationContext.acceptParameter(clientId, convertedValue);
+
+		EditableDataValidationResult result = validateContent(context, clientId, value, contentType);
+		if (!result.isValid()) {
 
 			// Add message
 			FacesMessage msg = createFacesMessage(context, inputComponent);
 			context.addMessage(clientId, msg);
 
-			inputComponent.setValid(false);
+			// We can't do this in RestoreState phase. Store the component and do it later.
+			// inputComponent.setValid(false);
 
-			return new ValidationError(HDIVErrorCodes.INVALID_EDITABLE_VALUE, null, clientId, value.toString());
+			if (log.isDebugEnabled()) {
+				log.debug("Parameter '" + clientId + "' rejected in component '" + clientId + "' in ComponentValidator '" + this.getClass()
+						+ "'");
+			}
+
+			validationContext.rejectParameter(clientId, value.toString(), HDIVErrorCodes.INVALID_EDITABLE_VALUE, result.getValidationId(),
+					inputComponent);
 		}
-		return null;
 	}
 
 	/**
@@ -148,30 +125,17 @@ public class EditableValidator implements ComponentValidator {
 	 * @param contentType type of content
 	 * @return is the content valid?
 	 */
-	protected boolean validateContent(final FacesContext context, final String clientId, final Object contentObj,
+	protected EditableDataValidationResult validateContent(final FacesContext context, final String clientId, final Object contentObj,
 			final String contentType) {
 		if (!(contentObj instanceof String)) {
-			return true;
+			return EditableDataValidationResult.VALIDATION_NOT_REQUIRED;
 		}
-		HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
-		String target = HDIVUtil.getRequestURI(request);
-		String targetWithoutContextPath = getTargetWithoutContextPath(request, target);
+		String target = UtilsJsf.getTargetUrl(context);
 
 		String[] content = { (String) contentObj };
-		EditableDataValidationResult result = hdivConfig.getEditableDataValidationProvider().validate(targetWithoutContextPath, clientId,
-				content, contentType);
-		return result.isValid();
-	}
-
-	/**
-	 * Removes the target's ContextPath part
-	 * 
-	 * @param request HttpServletRequest to validate
-	 * @param target target to strip the ContextPath
-	 * @return target without the ContextPath
-	 */
-	protected String getTargetWithoutContextPath(final HttpServletRequest request, final String target) {
-		return target.substring(request.getContextPath().length());
+		EditableDataValidationResult result = hdivConfig.getEditableDataValidationProvider().validate(target, clientId, content,
+				contentType);
+		return result;
 	}
 
 	/**

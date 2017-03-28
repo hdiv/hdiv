@@ -24,9 +24,10 @@ import org.hdiv.config.multipart.JsfMultipartConfig;
 import org.hdiv.context.RedirectHelper;
 import org.hdiv.dataComposer.DataComposerFactory;
 import org.hdiv.dataValidator.IDataValidator;
-import org.hdiv.events.HDIVFacesEventListener;
 import org.hdiv.filter.IValidationHelper;
+import org.hdiv.filter.JsfValidatorErrorHandler;
 import org.hdiv.filter.JsfValidatorHelper;
+import org.hdiv.filter.ValidatorErrorHandler;
 import org.hdiv.filter.ValidatorHelperRequest;
 import org.hdiv.logs.Logger;
 import org.hdiv.session.ISession;
@@ -34,10 +35,7 @@ import org.hdiv.state.StateUtil;
 import org.hdiv.state.scope.StateScopeManager;
 import org.hdiv.urlProcessor.BasicUrlProcessor;
 import org.hdiv.urlProcessor.LinkUrlProcessor;
-import org.hdiv.validators.EditableValidator;
-import org.hdiv.validators.HtmlInputHiddenValidator;
-import org.hdiv.validators.RequestParameterValidator;
-import org.hdiv.validators.UICommandValidator;
+import org.hdiv.validation.DefaultComponentTreeValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -81,6 +79,14 @@ public class JsfConfigurationSupport {
 
 	@Bean
 	@Primary
+	public ValidatorErrorHandler validatorErrorHandler() {
+		JsfValidatorErrorHandler validatorErrorHandler = new JsfValidatorErrorHandler();
+		validatorErrorHandler.setConfig(config);
+		return validatorErrorHandler;
+	}
+
+	@Bean
+	@Primary
 	public IValidationHelper jsfValidatorHelper() {
 
 		ValidatorHelperRequest validatorHelperRequest = new JsfValidatorHelper();
@@ -96,6 +102,15 @@ public class JsfConfigurationSupport {
 	}
 
 	@Bean
+	public DefaultComponentTreeValidator componentTreeValidator() {
+
+		DefaultComponentTreeValidator componentTreeValidator = new DefaultComponentTreeValidator();
+		componentTreeValidator.setConfig(config);
+		componentTreeValidator.createComponentValidators();
+		return componentTreeValidator;
+	}
+
+	@Bean
 	public RedirectHelper redirectHelper() {
 
 		RedirectHelper redirectHelper = new RedirectHelper();
@@ -106,31 +121,6 @@ public class JsfConfigurationSupport {
 	@Bean
 	public JsfMultipartConfig jsfMultipartConfig() {
 		return new JsfMultipartConfig();
-	}
-
-	@Bean
-	public HDIVFacesEventListener hdivFacesEventListener() {
-
-		// ComponentValidator instances
-		RequestParameterValidator requestParameterValidator = new RequestParameterValidator();
-		requestParameterValidator.setHdivConfig(config);
-
-		UICommandValidator uiCommandValidator = new UICommandValidator();
-
-		HtmlInputHiddenValidator htmlInputHiddenValidator = new HtmlInputHiddenValidator();
-
-		EditableValidator editableValidator = new EditableValidator();
-		editableValidator.setHdivConfig(config);
-
-		// EventListener instance
-		HDIVFacesEventListener listener = new HDIVFacesEventListener();
-		listener.setConfig(config);
-		listener.setLogger(logger);
-		listener.setHtmlInputHiddenValidator(htmlInputHiddenValidator);
-		listener.setRequestParamValidator(requestParameterValidator);
-		listener.setUiCommandValidator(uiCommandValidator);
-		listener.setEditableValidator(editableValidator);
-		return listener;
 	}
 
 	@Bean

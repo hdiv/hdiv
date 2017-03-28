@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.hdiv.config.HDIVConfig;
 import org.hdiv.context.RequestContext;
+import org.hdiv.filter.AsyncRequestWrapper;
 import org.hdiv.filter.RequestWrapper;
 import org.hdiv.filter.ResponseWrapper;
 import org.hdiv.session.ISession;
@@ -65,7 +66,7 @@ public class DefaultRequestInitializer implements RequestInitializer {
 	}
 
 	public RequestWrapper createRequestWrapper(final HttpServletRequest request, final HttpServletResponse response) {
-		RequestWrapper requestWrapper = new RequestWrapper(request);
+		RequestWrapper requestWrapper = new AsyncRequestWrapper(request);
 		requestWrapper.setConfidentiality(config.getConfidentiality());
 		requestWrapper.setCookiesConfidentiality(config.isCookiesConfidentialityActivated());
 		requestWrapper.setSession(session);

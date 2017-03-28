@@ -13,23 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.hdiv.exception;
+package org.hdiv.validation;
 
-/**
- * Exception thrown when an attack is detected in an <b>immediate</b> component. This exception is thrown in order to stop JSF's default
- * life cycle and show HDIV's error page.
- * 
- * @author Gotzon Illarramendi
- */
-public class StateValidationException extends HDIVException {
+import java.util.List;
 
-	private static final long serialVersionUID = 373542288299714280L;
+import javax.faces.context.FacesContext;
 
-	public StateValidationException() {
-	}
+public interface ComponentTreeValidator {
 
-	public StateValidationException(final Throwable cause) {
-		super(cause);
-	}
+	void createComponentValidators();
 
+	List<FacesValidatorError> validateComponentTree(FacesContext facesContext);
 }

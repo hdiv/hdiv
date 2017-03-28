@@ -18,11 +18,15 @@ package org.hdiv.util;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIData;
+import javax.faces.component.UIForm;
 import javax.faces.component.UIParameter;
 import javax.faces.component.UIViewRoot;
+import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * General HDIV utility methods
@@ -30,6 +34,8 @@ import javax.faces.component.UIViewRoot;
  * @author Gotzon Illarramendi
  */
 public abstract class UtilsJsf {
+
+	private static final Pattern HAS_ROW_ID_PATTERN = Pattern.compile(":\\d*:");
 
 	private UtilsJsf() {
 	}
@@ -119,10 +125,24 @@ public abstract class UtilsJsf {
 	}
 
 	/**
+	 * Determines if the component id has an row id.
+	 * 
+	 * @param clientId ClientID
+	 * @return true if the id has a row id
+	 */
+	public static boolean hasRowId(final String clientId) {
+		if (clientId == null) {
+			return false;
+		}
+
+		return HAS_ROW_ID_PATTERN.matcher(clientId).find();
+	}
+
+	/**
 	 * Searches in the parent components of comp if exists one of type UIData. Returns null if not
 	 * 
-	 * @param comp componente en el que se basa la busqueda
-	 * @return componente UIData pariente o null si no existe
+	 * @param comp base component to start to find
+	 * @return UIData component or null
 	 */
 	public static UIData findParentUIData(final UIComponent comp) {
 
@@ -134,7 +154,24 @@ public abstract class UtilsJsf {
 			parent = parent.getParent();
 		}
 		return (UIData) parent;
+	}
 
+	/**
+	 * Searches the form inside the component. Input component must be UICommand type and must be inside a form.
+	 * 
+	 * @param comp Base component
+	 * @return UIForm component
+	 */
+	public static UIForm findParentForm(final UIComponent comp) {
+
+		UIComponent parent = comp.getParent();
+		while (!(parent instanceof UIForm)) {
+			if (parent instanceof UIViewRoot) {
+				return null;
+			}
+			parent = parent.getParent();
+		}
+		return (UIForm) parent;
 	}
 
 	/**
@@ -153,6 +190,13 @@ public abstract class UtilsJsf {
 			}
 		}
 		return hasParams;
+	}
+
+	public static String getTargetUrl(final FacesContext context) {
+
+		HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
+		String url = HDIVUtil.getRequestURI(request);
+		return url.substring(request.getContextPath().length());
 	}
 
 }

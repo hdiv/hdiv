@@ -15,6 +15,7 @@
  */
 package org.hdiv.validators;
 
+import java.util.Collection;
 import java.util.Map;
 
 import javax.faces.component.UICommand;
@@ -22,56 +23,107 @@ import javax.faces.component.UIComponent;
 import javax.faces.component.UIData;
 import javax.faces.component.UIParameter;
 import javax.faces.context.FacesContext;
+import javax.faces.context.PartialViewContext;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hdiv.components.UIParameterExtension;
 import org.hdiv.util.HDIVErrorCodes;
 import org.hdiv.util.UtilsJsf;
-import org.hdiv.validation.ValidationError;
+import org.hdiv.validation.ValidationContext;
 
 /**
  * ComponentValidator that validates parameters of a component of type UICommand,
  * 
  * @author Gotzon Illarramendi
  */
-public class UICommandValidator implements ComponentValidator {
+public class UICommandValidator extends AbstractComponentValidator {
 
 	private static final Log log = LogFactory.getLog(UICommandValidator.class);
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.hdiv.validators.ComponentValidator#validate(javax.faces.context.FacesContext, javax.faces.component.UIComponent)
-	 */
-	public ValidationError validate(final FacesContext context, final UIComponent component) {
+	public UICommandValidator() {
+		super(UICommand.class);
+	}
 
-		if (!(component instanceof UICommand)) {
-			return null;
-		}
+	public void validate(final ValidationContext validationContext, final UIComponent component) {
 
 		UICommand command = (UICommand) component;
 
-		// Search parent components of type UIData
-		UIData uiDataComp = UtilsJsf.findParentUIData(command);
+		Clicked clicked = wasClicked(validationContext.getFacesContext(), command);
+		if (!clicked.isClicked()) {
+			// Only validate the executed command
+			return;
+		}
 
-		int rowIndex = 0;
-		if (uiDataComp != null) {
-			rowIndex = uiDataComp.getRowIndex();
+		validateUICommand(validationContext, command, clicked);
+	}
+
+	// TODO add myfaces support, the parameter is different
+	protected Clicked wasClicked(final FacesContext facesContext, final UICommand command) {
+
+		String clientId = command.getClientId(facesContext);
+		String value = facesContext.getExternalContext().getRequestParameterMap().get(clientId);
+		if (value != null && (value.equals(clientId) || value.equals(command.getValue()))) {
+			return new Clicked(true, clientId);
+		}
+
+		Clicked clicked = wasComponentWithRowIdClicked(facesContext, command, clientId);
+		if (clicked.isClicked()) {
+			return clicked;
+		}
+
+		PartialViewContext partialContext = facesContext.getPartialViewContext();
+		if (partialContext != null && partialContext.isPartialRequest()) {
+			// Is an ajax call partially processing the component tree
+			Collection<String> execIds = partialContext.getExecuteIds();
+			return new Clicked(execIds.contains(clientId));
+		}
+
+		return new Clicked(false);
+	}
+
+	/**
+	 * If the UICommand component is inside a UIData component can have an index in the name. <br>
+	 * For example: form:pets:1:button
+	 */
+	protected Clicked wasComponentWithRowIdClicked(final FacesContext facesContext, final UICommand command, final String clientId) {
+
+		UIData uiData = UtilsJsf.findParentUIData(command);
+		if (uiData == null) {
+			return new Clicked(false);
+		}
+
+		Map<String, String> params = facesContext.getExternalContext().getRequestParameterMap();
+		for (String paramName : params.keySet()) {
+
+			if (paramName.startsWith("javax.faces")) {
+				continue;
+			}
+
+			String paramNameNoIndex = UtilsJsf.removeRowId(paramName);
+			if (clientId.equals(paramNameNoIndex) && paramName.equals(params.get(paramName))) {
+				return new Clicked(true, paramName);
+			}
+		}
+		return new Clicked(false);
+	}
+
+	protected void validateUICommand(final ValidationContext validationContext, final UICommand command, final Clicked clicked) {
+
+		validationContext.acceptParameter(command.getClientId(validationContext.getFacesContext()), command.getValue());
+
+		if (clicked.getParamName() != null) {
+			validationContext.acceptParameter(clicked.getParamName(),
+					validationContext.getFacesContext().getExternalContext().getRequestParameterMap().get(clicked.getParamName()));
 		}
 
 		// Check CommandLink's parameters
-		for (UIComponent childComp : component.getChildren()) {
+		for (UIComponent childComp : command.getChildren()) {
 			if (childComp instanceof UIParameter) {
 				UIParameter param = (UIParameter) childComp;
-				ValidationError error = processParam(context, param, rowIndex);
-				if (error != null) {
-					return error;
-				}
+				processParam(validationContext, param);
 			}
 		}
-		return null;
-
 	}
 
 	/**
@@ -79,10 +131,11 @@ public class UICommandValidator implements ComponentValidator {
 	 * 
 	 * @param context Request context
 	 * @param parameter UIParameter component to validate
-	 * @param rowIndex index that shows where it is the UICommand component inside a UIData
 	 * @return validation result
 	 */
-	private ValidationError processParam(final FacesContext context, final UIParameter parameter, int rowIndex) {
+	private void processParam(final ValidationContext validationContext, final UIParameter parameter) {
+
+		FacesContext context = validationContext.getFacesContext();
 
 		UIParameterExtension param = (UIParameterExtension) parameter;
 
@@ -92,40 +145,57 @@ public class UICommandValidator implements ComponentValidator {
 		Map<String, String> requestMap = context.getExternalContext().getRequestParameterMap();
 		String requestValue = requestMap.get(param.getName());
 
-		String realValue;
-
-		if (rowIndex < 0) {
-
-			// May be -1 when commandLink finds a facet in a table,
-			// in the footer for example
-			// In these cases value has been stored in the 0 position
-			rowIndex = 0;
-		}
-		realValue = param.getValue(parentClientId).toString();
+		String realValue = param.getValue(parentClientId).toString();
 
 		if (log.isDebugEnabled()) {
-			log.debug("requestValue:" + requestValue);
-			log.debug("realValue:" + realValue);
+			log.debug("UIParameter requestValue:" + requestValue);
+			log.debug("UIParameter realValue:" + realValue);
 		}
 
-		if (requestValue == null) {
-			ValidationError error = new ValidationError();
-			error.setErrorKey(HDIVErrorCodes.NOT_RECEIVED_ALL_REQUIRED_PARAMETERS);
-			error.setErrorParam(param.getId());
-			error.setErrorValue(requestValue);
-			error.setErrorComponent(param.getClientId(context));
-			return error;
+		if (requestValue != null && requestValue.equals(realValue)) {
+			validationContext.acceptParameter(param.getName(), requestValue);
+		}
+		else if (requestValue == null) {
 
+			if (log.isDebugEnabled()) {
+				log.debug("Parameter '" + param.getName() + "' rejected in component '" + param.getClientId(context)
+						+ "' in ComponentValidator '" + this.getClass() + "'");
+			}
+			validationContext.rejectParameter(param.getName(), requestValue, HDIVErrorCodes.NOT_RECEIVED_ALL_REQUIRED_PARAMETERS);
 		}
-		if (!requestValue.equals(realValue)) {
-			ValidationError error = new ValidationError();
-			error.setErrorKey(HDIVErrorCodes.INVALID_PARAMETER_VALUE);
-			error.setErrorParam(param.getId());
-			error.setErrorValue(requestValue);
-			error.setErrorComponent(param.getClientId(context));
-			return error;
+		else {
+
+			if (log.isDebugEnabled()) {
+				log.debug("Parameter '" + param.getName() + "' rejected in component '" + param.getClientId(context)
+						+ "' in ComponentValidator '" + this.getClass() + "'");
+			}
+			validationContext.rejectParameter(param.getName(), requestValue, HDIVErrorCodes.INVALID_PARAMETER_VALUE);
 		}
-		return null;
 	}
 
+	public static class Clicked {
+
+		private final boolean clicked;
+
+		private final String paramName;
+
+		public Clicked(final boolean clicked) {
+			this.clicked = clicked;
+			paramName = null;
+		}
+
+		public Clicked(final boolean clicked, final String paramName) {
+			this.clicked = clicked;
+			this.paramName = paramName;
+		}
+
+		public boolean isClicked() {
+			return clicked;
+		}
+
+		public String getParamName() {
+			return paramName;
+		}
+
+	}
 }

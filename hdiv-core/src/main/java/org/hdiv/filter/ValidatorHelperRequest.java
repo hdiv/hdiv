@@ -536,7 +536,8 @@ public class ValidatorHelperRequest implements IValidationHelper, StateRestorer 
 			log.debug("Missing some required parameters: " + missingParameters.toString());
 		}
 
-		ValidatorError error = new ValidatorError(HDIVErrorCodes.NOT_RECEIVED_ALL_REQUIRED_PARAMETERS, target, missingParameters.toString());
+		ValidatorError error = new ValidatorError(HDIVErrorCodes.NOT_RECEIVED_ALL_REQUIRED_PARAMETERS, target,
+				missingParameters.toString());
 		return new ValidatorHelperResult(error);
 	}
 
@@ -745,8 +746,7 @@ public class ValidatorHelperRequest implements IValidationHelper, StateRestorer 
 			HDIVUtil.setCurrentPageId(pageId, request);
 
 			if (!validateHDIVSuffix(context, requestState, state)) {
-				ValidatorError error = new ValidatorError(HDIVErrorCodes.INVALID_HDIV_PARAMETER_VALUE, target, hdivParameter,
-						requestState);
+				ValidatorError error = new ValidatorError(HDIVErrorCodes.INVALID_HDIV_PARAMETER_VALUE, target, hdivParameter, requestState);
 				return new ValidatorHelperResult(error);
 			}
 
@@ -879,7 +879,8 @@ public class ValidatorHelperRequest implements IValidationHelper, StateRestorer 
 					}
 				}
 
-				ValidatorError error = new ValidatorError(HDIVErrorCodes.NOT_RECEIVED_ALL_PARAMETER_VALUES, target, parameter, valueMessage);
+				ValidatorError error = new ValidatorError(HDIVErrorCodes.NOT_RECEIVED_ALL_PARAMETER_VALUES, target, parameter,
+						valueMessage);
 				return new ValidatorHelperResult(error);
 
 			}
@@ -961,7 +962,8 @@ public class ValidatorHelperRequest implements IValidationHelper, StateRestorer 
 
 			if (receivedValues.contains(values[i])) {
 				String originalValue = stateValues.size() > 1 ? stateValues.toString() : stateValues.get(0);
-				ValidatorError error = new ValidatorError(HDIVErrorCodes.REPEATED_VALUES_FOR_PARAMETER, target, parameter, values[i], originalValue);
+				ValidatorError error = new ValidatorError(HDIVErrorCodes.REPEATED_VALUES_FOR_PARAMETER, target, parameter, values[i],
+						originalValue);
 				return new ValidatorHelperResult(error);
 			}
 
@@ -1008,7 +1010,8 @@ public class ValidatorHelperRequest implements IValidationHelper, StateRestorer 
 				}
 
 				if (receivedValues.contains(values[i])) {
-					ValidatorError error = new ValidatorError(HDIVErrorCodes.REPEATED_VALUES_FOR_PARAMETER, target, parameter, values[i], originalValue);
+					ValidatorError error = new ValidatorError(HDIVErrorCodes.REPEATED_VALUES_FOR_PARAMETER, target, parameter, values[i],
+							originalValue);
 					return new ValidatorHelperResult(error);
 				}
 
@@ -1209,9 +1212,12 @@ public class ValidatorHelperRequest implements IValidationHelper, StateRestorer 
 			dataComposer.endPage();
 
 			RequestWrapper wrapper = HDIVUtil.getNativeRequest(request, RequestWrapper.class);
-			if (wrapper == null || !wrapper.isAsyncRequest()) {
-				// If this is an Async request, don't remove IDataComposer from request.
-				HDIVUtil.removeDataComposer(request);
+			if (wrapper != null && wrapper instanceof AsyncRequestWrapper) {
+				AsyncRequestWrapper asyncWrapper = (AsyncRequestWrapper) wrapper;
+				if (!asyncWrapper.isAsyncRequest()) {
+					// If this is an Async request, don't remove IDataComposer from request.
+					HDIVUtil.removeDataComposer(request);
+				}
 			}
 		}
 
