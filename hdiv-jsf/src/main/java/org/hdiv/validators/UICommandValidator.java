@@ -20,6 +20,7 @@ import java.util.Map;
 
 import javax.faces.component.UICommand;
 import javax.faces.component.UIComponent;
+import javax.faces.component.UIData;
 import javax.faces.component.UIParameter;
 import javax.faces.context.FacesContext;
 import javax.faces.context.PartialViewContext;
@@ -28,6 +29,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hdiv.components.UIParameterExtension;
 import org.hdiv.util.HDIVErrorCodes;
+import org.hdiv.util.UtilsJsf;
 import org.hdiv.validation.ValidationContext;
 
 /**
@@ -47,36 +49,73 @@ public class UICommandValidator extends AbstractComponentValidator {
 
 		UICommand command = (UICommand) component;
 
-		if (!wasClicked(validationContext.getFacesContext(), command)) {
+		Clicked clicked = wasClicked(validationContext.getFacesContext(), command);
+		if (!clicked.isClicked()) {
 			// Only validate the executed command
 			return;
 		}
 
-		validateUICommand(validationContext, command);
+		validateUICommand(validationContext, command, clicked);
 	}
 
 	// TODO add myfaces support, the parameter is different
-	protected boolean wasClicked(final FacesContext facesContext, final UICommand command) {
+	protected Clicked wasClicked(final FacesContext facesContext, final UICommand command) {
 
 		String clientId = command.getClientId(facesContext);
 		String value = facesContext.getExternalContext().getRequestParameterMap().get(clientId);
 		if (value != null && (value.equals(clientId) || value.equals(command.getValue()))) {
-			return true;
+			return new Clicked(true, clientId);
+		}
+
+		Clicked clicked = wasComponentWithRowIdClicked(facesContext, command, clientId);
+		if (clicked.isClicked()) {
+			return clicked;
 		}
 
 		PartialViewContext partialContext = facesContext.getPartialViewContext();
 		if (partialContext != null && partialContext.isPartialRequest()) {
 			// Is an ajax call partially processing the component tree
 			Collection<String> execIds = partialContext.getExecuteIds();
-			return execIds.contains(clientId);
+			return new Clicked(execIds.contains(clientId));
 		}
 
-		return false;
+		return new Clicked(false);
 	}
 
-	protected void validateUICommand(final ValidationContext validationContext, final UICommand command) {
+	/**
+	 * If the UICommand component is inside a UIData component can have an index in the name. <br>
+	 * For example: form:pets:1:button
+	 */
+	protected Clicked wasComponentWithRowIdClicked(final FacesContext facesContext, final UICommand command, final String clientId) {
+
+		UIData uiData = UtilsJsf.findParentUIData(command);
+		if (uiData == null) {
+			return new Clicked(false);
+		}
+
+		Map<String, String> params = facesContext.getExternalContext().getRequestParameterMap();
+		for (String paramName : params.keySet()) {
+
+			if (paramName.startsWith("javax.faces")) {
+				continue;
+			}
+
+			String paramNameNoIndex = UtilsJsf.removeRowId(paramName);
+			if (clientId.equals(paramNameNoIndex) && paramName.equals(params.get(paramName))) {
+				return new Clicked(true, paramName);
+			}
+		}
+		return new Clicked(false);
+	}
+
+	protected void validateUICommand(final ValidationContext validationContext, final UICommand command, final Clicked clicked) {
 
 		validationContext.acceptParameter(command.getClientId(validationContext.getFacesContext()), command.getValue());
+
+		if (clicked.getParamName() != null) {
+			validationContext.acceptParameter(clicked.getParamName(),
+					validationContext.getFacesContext().getExternalContext().getRequestParameterMap().get(clicked.getParamName()));
+		}
 
 		// Check CommandLink's parameters
 		for (UIComponent childComp : command.getChildren()) {
@@ -132,5 +171,31 @@ public class UICommandValidator extends AbstractComponentValidator {
 			}
 			validationContext.rejectParameter(param.getName(), requestValue, HDIVErrorCodes.INVALID_PARAMETER_VALUE);
 		}
+	}
+
+	public static class Clicked {
+
+		private final boolean clicked;
+
+		private final String paramName;
+
+		public Clicked(final boolean clicked) {
+			this.clicked = clicked;
+			paramName = null;
+		}
+
+		public Clicked(final boolean clicked, final String paramName) {
+			this.clicked = clicked;
+			this.paramName = paramName;
+		}
+
+		public boolean isClicked() {
+			return clicked;
+		}
+
+		public String getParamName() {
+			return paramName;
+		}
+
 	}
 }

@@ -18,6 +18,7 @@ package org.hdiv.util;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIData;
@@ -33,6 +34,8 @@ import javax.servlet.http.HttpServletRequest;
  * @author Gotzon Illarramendi
  */
 public abstract class UtilsJsf {
+
+	private static final Pattern HAS_ROW_ID_PATTERN = Pattern.compile(":\\d*:");
 
 	private UtilsJsf() {
 	}
@@ -119,6 +122,20 @@ public abstract class UtilsJsf {
 			return null;
 		}
 		return clientId.replaceAll(":\\d*:", ":");
+	}
+
+	/**
+	 * Determines if the component id has an row id.
+	 * 
+	 * @param clientId ClientID
+	 * @return true if the id has a row id
+	 */
+	public static boolean hasRowId(final String clientId) {
+		if (clientId == null) {
+			return false;
+		}
+
+		return HAS_ROW_ID_PATTERN.matcher(clientId).find();
 	}
 
 	/**

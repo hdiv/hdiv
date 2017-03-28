@@ -170,12 +170,19 @@ public class DefaultComponentTreeValidator implements ComponentTreeValidator {
 		if (source != null) {
 			sourceComp = context.getViewRoot().findComponent(source);
 		}
+		if (sourceComp == null) {
+			sourceComp = context.getViewRoot().findComponent(UtilsJsf.removeRowId(source));
+		}
 		return sourceComp;
 	}
 
 	protected UIComponent findComponent(final FacesContext context, final String compId) {
 
-		return context.getViewRoot().findComponent(compId);
+		UIComponent comp = context.getViewRoot().findComponent(compId);
+		if (comp == null) {
+			comp = context.getViewRoot().findComponent(UtilsJsf.removeRowId(compId));
+		}
+		return comp;
 	}
 
 	protected void validateComponentTree(final ValidationContext context, final UIComponent component) {

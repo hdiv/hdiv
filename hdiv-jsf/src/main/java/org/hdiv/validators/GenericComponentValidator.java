@@ -82,6 +82,7 @@ public class GenericComponentValidator extends AbstractComponentValidator {
 			Collection<String> renderIds = ajaxBehavior.getRender();
 
 			context.acceptParameter("javax.faces.partial.ajax", "true");
+			// TODO If component is child of UIData the 'javax.faces.source' will contain an indexed id: 'form:list:1:button'
 			context.acceptParameter("javax.faces.source", ((UIComponent) component).getClientId());
 			context.acceptParameter("javax.faces.behavior.event", behaviourEvent);
 			context.acceptParameter("javax.faces.partial.execute", resolveClientIds((UIComponent) component, executeIds));

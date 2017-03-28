@@ -22,15 +22,17 @@ public class UtilsJsfTest extends TestCase {
 	public void testRemoveRowId() {
 
 		String clientId = "aaaa:1:bbbb";
-
-		long time1 = System.nanoTime();
 		String ci = UtilsJsf.removeRowId(clientId);
-		long time2 = System.nanoTime();
-
-		System.out.println(time2 - time1);
-
-		System.out.println(ci);
 		assertFalse(ci.matches(":\\d*:"));
+	}
+
+	public void testHasRowId() {
+
+		String clientId = "aaaa:1:bbbb";
+		assertTrue(UtilsJsf.hasRowId(clientId));
+
+		clientId = "aaaa:bbbb";
+		assertFalse(UtilsJsf.hasRowId(clientId));
 	}
 
 }
