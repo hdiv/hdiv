@@ -213,7 +213,7 @@ public class ValidatorFilter extends OncePerRequestFilter {
 						if (log.isErrorEnabled()) {
 							log.error("Exception in request validation", e);
 						}
-						errors = Collections.singletonList(new ValidatorError(e.getMessage(), context.getRequestedTarget()));
+						errors = Collections.singletonList(new ValidatorError(e, context.getRequestedTarget()));
 					}
 				}
 				else {
@@ -291,7 +291,7 @@ public class ValidatorFilter extends OncePerRequestFilter {
 				log.error("Exception in request validation", current);
 			}
 			// Show error page
-			return Collections.singletonList(new ValidatorError(current.getMessage(), target));
+			return Collections.singletonList(new ValidatorError(current, target));
 		}
 		return null;
 	}

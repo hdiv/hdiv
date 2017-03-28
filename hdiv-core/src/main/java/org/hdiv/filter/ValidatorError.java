@@ -66,10 +66,17 @@ public class ValidatorError {
 	 */
 	private final String validationRuleName;
 
+	private Throwable exception;
+
 	private StackTraceElement[] stackTrace;
 
 	public ValidatorError(final String type) {
 		this(type, null);
+	}
+
+	public ValidatorError(final Throwable error, final String target) {
+		this(error.getMessage(), target);
+		setException(error);
 	}
 
 	public ValidatorError(final String type, final String target) {
@@ -220,6 +227,14 @@ public class ValidatorError {
 
 	public StackTraceElement[] getStackTrace() {
 		return stackTrace;
+	}
+
+	public Throwable getException() {
+		return exception;
+	}
+
+	public void setException(final Throwable exception) {
+		this.exception = exception;
 	}
 
 }
