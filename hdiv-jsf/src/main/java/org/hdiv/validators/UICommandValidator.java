@@ -18,9 +18,9 @@ package org.hdiv.validators;
 import java.util.Collection;
 import java.util.Map;
 
+import javax.faces.component.NamingContainer;
 import javax.faces.component.UICommand;
 import javax.faces.component.UIComponent;
-import javax.faces.component.UIData;
 import javax.faces.component.UIParameter;
 import javax.faces.context.FacesContext;
 import javax.faces.context.PartialViewContext;
@@ -88,8 +88,8 @@ public class UICommandValidator extends AbstractComponentValidator {
 	 */
 	protected Clicked wasComponentWithRowIdClicked(final FacesContext facesContext, final UICommand command, final String clientId) {
 
-		UIData uiData = UtilsJsf.findParentUIData(command);
-		if (uiData == null) {
+		NamingContainer container = UtilsJsf.findParentNamingContainer(command);
+		if (container == null) {
 			return new Clicked(false);
 		}
 

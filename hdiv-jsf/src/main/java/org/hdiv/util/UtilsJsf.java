@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
 
+import javax.faces.component.NamingContainer;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIData;
 import javax.faces.component.UIForm;
@@ -139,39 +140,54 @@ public abstract class UtilsJsf {
 	}
 
 	/**
-	 * Searches in the parent components of comp if exists one of type UIData. Returns null if not
+	 * Searches in the parent components of comp if exists one of type UIData. Returns null if not found.
 	 * 
 	 * @param comp base component to start to find
 	 * @return UIData component or null
 	 */
 	public static UIData findParentUIData(final UIComponent comp) {
 
-		UIComponent parent = comp.getParent();
-		while (!(parent instanceof UIData)) {
-			if (parent instanceof UIViewRoot) {
-				return null;
-			}
-			parent = parent.getParent();
-		}
-		return (UIData) parent;
+		return (UIData) findParentOfType(comp, UIData.class);
 	}
 
 	/**
-	 * Searches the form inside the component. Input component must be UICommand type and must be inside a form.
+	 * Searches in the parent components of comp if exists one of type UIForm. Returns null if not found.
 	 * 
 	 * @param comp Base component
 	 * @return UIForm component
 	 */
 	public static UIForm findParentForm(final UIComponent comp) {
 
+		return (UIForm) findParentOfType(comp, UIForm.class);
+	}
+
+	/**
+	 * Searches in the parent components of comp if exists one of type NamingContainer. Returns null if not found.
+	 * 
+	 * @param comp Base component
+	 * @return NamingContainer component
+	 */
+	public static NamingContainer findParentNamingContainer(final UIComponent comp) {
+
+		return (NamingContainer) findParentOfType(comp, NamingContainer.class);
+	}
+
+	/**
+	 * Generic method to find parent component of a type
+	 * @param comp Base component
+	 * @param type Component type
+	 * @return found component or null
+	 */
+	public static UIComponent findParentOfType(final UIComponent comp, final Class<?> type) {
+
 		UIComponent parent = comp.getParent();
-		while (!(parent instanceof UIForm)) {
+		while (!type.isAssignableFrom(parent.getClass())) {
 			if (parent instanceof UIViewRoot) {
 				return null;
 			}
 			parent = parent.getParent();
 		}
-		return (UIForm) parent;
+		return parent;
 	}
 
 	/**
