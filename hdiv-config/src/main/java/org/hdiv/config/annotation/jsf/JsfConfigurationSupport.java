@@ -29,7 +29,6 @@ import org.hdiv.filter.JsfValidatorErrorHandler;
 import org.hdiv.filter.JsfValidatorHelper;
 import org.hdiv.filter.ValidatorErrorHandler;
 import org.hdiv.filter.ValidatorHelperRequest;
-import org.hdiv.logs.Logger;
 import org.hdiv.session.ISession;
 import org.hdiv.state.StateUtil;
 import org.hdiv.state.scope.StateScopeManager;
@@ -51,31 +50,28 @@ import org.springframework.context.annotation.Primary;
 public class JsfConfigurationSupport {
 
 	@Autowired
-	private Logger logger;
+	protected StateUtil stateUtil;
 
 	@Autowired
-	private StateUtil stateUtil;
+	protected HDIVConfig config;
 
 	@Autowired
-	private HDIVConfig config;
+	protected ISession session;
 
 	@Autowired
-	private ISession session;
+	protected IDataValidator dataValidator;
 
 	@Autowired
-	private IDataValidator dataValidator;
+	protected BasicUrlProcessor basicUrlProcessor;
 
 	@Autowired
-	private BasicUrlProcessor basicUrlProcessor;
+	protected DataComposerFactory dataComposerFactory;
 
 	@Autowired
-	private DataComposerFactory dataComposerFactory;
+	protected LinkUrlProcessor linkUrlProcessor;
 
 	@Autowired
-	private LinkUrlProcessor linkUrlProcessor;
-
-	@Autowired
-	private StateScopeManager stateScopeManager;
+	protected StateScopeManager stateScopeManager;
 
 	@Bean
 	@Primary
