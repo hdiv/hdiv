@@ -121,7 +121,7 @@ public class UICommandValidator extends AbstractComponentValidator {
 		for (UIComponent childComp : command.getChildren()) {
 			if (childComp instanceof UIParameter) {
 				UIParameter param = (UIParameter) childComp;
-				processParam(validationContext, param);
+				processParam(validationContext, param, clicked);
 			}
 		}
 	}
@@ -133,10 +133,9 @@ public class UICommandValidator extends AbstractComponentValidator {
 	 * @param parameter UIParameter component to validate
 	 * @return validation result
 	 */
-	private void processParam(final ValidationContext validationContext, final UIParameter parameter) {
+	private void processParam(final ValidationContext validationContext, final UIParameter parameter, final Clicked clicked) {
 
 		FacesContext context = validationContext.getFacesContext();
-
 		UIParameterExtension param = (UIParameterExtension) parameter;
 
 		UIComponent parent = parameter.getParent();
@@ -145,7 +144,18 @@ public class UICommandValidator extends AbstractComponentValidator {
 		Map<String, String> requestMap = context.getExternalContext().getRequestParameterMap();
 		String requestValue = requestMap.get(param.getName());
 
-		String realValue = param.getValue(parentClientId).toString();
+		Object realValueObj = param.getValue(parentClientId);
+		String realValue = null;
+
+		if (realValueObj != null) {
+			realValue = realValueObj.toString();
+		}
+		else {
+			realValueObj = param.getValue(clicked.getParamName());
+			if (realValueObj != null) {
+				realValue = realValueObj.toString();
+			}
+		}
 
 		if (log.isDebugEnabled()) {
 			log.debug("UIParameter requestValue:" + requestValue);
