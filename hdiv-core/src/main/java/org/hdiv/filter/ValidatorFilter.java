@@ -211,7 +211,7 @@ public class ValidatorFilter extends OncePerRequestFilter {
 						 * It is not a HdivException... but it was launched in our code...
 						 */
 						if (log.isErrorEnabled()) {
-							log.error("Exception in request validation", e);
+							log.error("Exception in request validation in target:" + context.getRequestedTarget(), e);
 						}
 						errors = Collections.singletonList(new ValidatorError(e, context.getRequestedTarget()));
 					}
