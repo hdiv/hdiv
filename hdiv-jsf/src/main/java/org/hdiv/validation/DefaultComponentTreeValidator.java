@@ -74,12 +74,37 @@ public class DefaultComponentTreeValidator implements ComponentTreeValidator {
 		PartialViewContext partialContext = facesContext.getPartialViewContext();
 		if (partialContext != null && partialContext.isPartialRequest()) {
 			// Is an ajax call partially processing the component tree
+			validateAjaxRequest(context);
+		}
+		else {
+			// This is not an Ajax request
+			validateNonAjaxRequest(context);
+		}
 
-			UIComponent source = findSourceComponent(context);
+		List<FacesValidatorError> errors = context.getErrors();
+		checkParameters(context, errors);
 
-			Set<UIComponent> componentsToValidate = new HashSet<UIComponent>();
+		return errors;
+	}
 
-			Collection<String> execIds = partialContext.getExecuteIds();
+	protected void validateAjaxRequest(final ValidationContext context) {
+
+		UIComponent source = findSourceComponent(context);
+
+		Set<UIComponent> componentsToValidate = new HashSet<UIComponent>();
+
+		FacesContext facesContext = context.getFacesContext();
+		PartialViewContext partialContext = facesContext.getPartialViewContext();
+		Collection<String> execIds = partialContext.getExecuteIds();
+		if (execIds.size() == 0) {
+			// No Exec components
+			UIForm submittedForm = findParentSubmittedForm(facesContext, source);
+			if (submittedForm != null) {
+				componentsToValidate.add(submittedForm);
+			}
+		}
+		else {
+			// Find executed components
 			for (String execId : execIds) {
 				UIComponent execComp = null;
 				if (execId.startsWith("@")) {
@@ -132,35 +157,29 @@ public class DefaultComponentTreeValidator implements ComponentTreeValidator {
 					componentsToValidate.add(compToValidate);
 				}
 			}
-
-			if (componentsToValidate.size() > 0) {
-				for (UIComponent comp : componentsToValidate) {
-					validateComponentTree(context, comp);
-				}
-			}
-
 		}
-		else {
-			// This is not an Ajax request
-			// Find submitted form
 
-			UIForm submittedForm = findSubmittedForm(facesContext, facesContext.getViewRoot());
-
-			if (submittedForm == null) {
-				if (log.isErrorEnabled()) {
-					log.error("Can't find submitted form.");
-				}
-				// TODO review this error key
-				return Collections.singletonList(new FacesValidatorError("ERROR_VALIDATING"));
+		if (componentsToValidate.size() > 0) {
+			for (UIComponent comp : componentsToValidate) {
+				validateComponentTree(context, comp);
 			}
+		}
+	}
+
+	protected void validateNonAjaxRequest(final ValidationContext context) {
+
+		// Find submitted form
+		UIForm submittedForm = findSubmittedForm(context.getFacesContext(), context.getFacesContext().getViewRoot());
+
+		if (submittedForm != null) {
 			// Validate component tree starting in form
 			validateComponentTree(context, submittedForm);
 		}
-
-		List<FacesValidatorError> errors = context.getErrors();
-		checkParameters(context, errors);
-
-		return errors;
+		else {
+			if (log.isErrorEnabled()) {
+				log.error("Can't find submitted form.");
+			}
+		}
 	}
 
 	protected ValidationContext createValidationContext(final FacesContext facesContext) {
