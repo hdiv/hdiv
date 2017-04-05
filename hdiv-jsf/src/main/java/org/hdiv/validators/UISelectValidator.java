@@ -15,6 +15,8 @@
  */
 package org.hdiv.validators;
 
+import java.util.List;
+
 import javax.faces.component.UIComponent;
 import javax.faces.component.UISelectBoolean;
 import javax.faces.component.UISelectMany;
@@ -42,7 +44,17 @@ public class UISelectValidator implements ComponentValidator {
 		String clientId = component.getClientId(context);
 		Object value = context.getExternalContext().getRequestParameterMap().get(clientId);
 
-		validationContext.acceptParameter(clientId, value);
+		if (value != null) {
+			validationContext.acceptParameter(clientId, value);
+		}
+		else {
+			List<String> params = validationContext.getParamsWithRowId().get(clientId);
+			if (params != null && params.size() > 0) {
+				for (String param : params) {
+					validationContext.acceptParameter(param, validationContext.getRequestParameters().get(param));
+				}
+			}
+		}
 	}
 
 }
