@@ -160,6 +160,10 @@ public class DefaultComponentTreeValidator implements ComponentTreeValidator {
 		}
 
 		if (componentsToValidate.size() > 0) {
+			if (log.isDebugEnabled()) {
+				log.debug("Validating Ajax request.");
+				log.debug("Components to validate:");
+			}
 			for (UIComponent comp : componentsToValidate) {
 				validateComponentTree(context, comp);
 			}
@@ -172,6 +176,10 @@ public class DefaultComponentTreeValidator implements ComponentTreeValidator {
 		UIForm submittedForm = findSubmittedForm(context.getFacesContext(), context.getFacesContext().getViewRoot());
 
 		if (submittedForm != null) {
+			if (log.isDebugEnabled()) {
+				log.debug("Validating Non Ajax request.");
+				log.debug("Components to validate:");
+			}
 			// Validate component tree starting in form
 			validateComponentTree(context, submittedForm);
 		}
@@ -213,6 +221,11 @@ public class DefaultComponentTreeValidator implements ComponentTreeValidator {
 	}
 
 	protected void validateComponentTree(final ValidationContext context, final UIComponent component) {
+
+		if (log.isDebugEnabled()) {
+			String clientId = component.getClientId(context.getFacesContext());
+			log.debug(" - Component: " + clientId + " of Type: " + component.getClass().getCanonicalName());
+		}
 
 		if (!component.isRendered()) {
 			// Exclude non rendered components from the parameter validation
