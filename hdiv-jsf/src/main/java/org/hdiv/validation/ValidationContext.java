@@ -27,24 +27,55 @@ import javax.faces.context.FacesContext;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.hdiv.util.UtilsJsf;
 
 public class ValidationContext {
 
 	private static final Log log = LogFactory.getLog(ValidationContext.class);
 
-	private final FacesContext facesContext;
+	protected final FacesContext facesContext;
 
-	private final Map<String, String> requestParameters;
+	protected final Map<String, String> requestParameters;
 
-	private final Map<String, Set<Object>> validParameters;
+	protected final Map<String, List<String>> paramsWithRowId = new HashMap<String, List<String>>();
 
-	private final List<FacesValidatorError> errors;
+	protected final Map<String, Set<Object>> validParameters;
+
+	protected final List<FacesValidatorError> errors;
 
 	public ValidationContext(final FacesContext facesContext) {
 		this.facesContext = facesContext;
 		requestParameters = facesContext.getExternalContext().getRequestParameterMap();
 		validParameters = new HashMap<String, Set<Object>>();
 		errors = new ArrayList<FacesValidatorError>();
+
+		initParamsWithRowId(facesContext);
+	}
+
+	protected void initParamsWithRowId(final FacesContext facesContext) {
+
+		Map<String, String> params = facesContext.getExternalContext().getRequestParameterMap();
+		for (String paramName : params.keySet()) {
+
+			if (paramName.startsWith("javax.faces")) {
+				continue;
+			}
+
+			String paramNameNoIndex = UtilsJsf.removeRowId(paramName);
+			if (!paramName.equals(paramNameNoIndex)) {
+
+				List<String> previous = paramsWithRowId.get(paramNameNoIndex);
+				if (previous == null) {
+					previous = new ArrayList<String>();
+					paramsWithRowId.put(paramNameNoIndex, previous);
+				}
+				previous.add(paramName);
+			}
+		}
+	}
+
+	public Map<String, List<String>> getParamsWithRowId() {
+		return paramsWithRowId;
 	}
 
 	public FacesContext getFacesContext() {

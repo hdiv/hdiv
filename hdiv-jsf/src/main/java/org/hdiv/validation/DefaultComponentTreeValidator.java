@@ -69,13 +69,13 @@ public class DefaultComponentTreeValidator implements ComponentTreeValidator {
 			return Collections.emptyList();
 		}
 
-		ValidationContext context = new ValidationContext(facesContext);
+		ValidationContext context = createValidationContext(facesContext);
 
 		PartialViewContext partialContext = facesContext.getPartialViewContext();
 		if (partialContext != null && partialContext.isPartialRequest()) {
 			// Is an ajax call partially processing the component tree
 
-			UIComponent source = findSourceComponent(facesContext);
+			UIComponent source = findSourceComponent(context);
 
 			Set<UIComponent> componentsToValidate = new HashSet<UIComponent>();
 
@@ -118,7 +118,7 @@ public class DefaultComponentTreeValidator implements ComponentTreeValidator {
 					}
 				}
 				else {
-					execComp = findComponent(facesContext, execId);
+					execComp = findComponent(context, execId);
 				}
 
 				UIComponent compToValidate = execComp;
@@ -163,7 +163,13 @@ public class DefaultComponentTreeValidator implements ComponentTreeValidator {
 		return errors;
 	}
 
-	protected UIComponent findSourceComponent(final FacesContext context) {
+	protected ValidationContext createValidationContext(final FacesContext facesContext) {
+		return new ValidationContext(facesContext);
+	}
+
+	protected UIComponent findSourceComponent(final ValidationContext validationContext) {
+
+		FacesContext context = validationContext.getFacesContext();
 
 		String source = context.getExternalContext().getRequestParameterMap().get("javax.faces.source");
 		UIComponent sourceComp = null;
@@ -176,7 +182,9 @@ public class DefaultComponentTreeValidator implements ComponentTreeValidator {
 		return sourceComp;
 	}
 
-	protected UIComponent findComponent(final FacesContext context, final String compId) {
+	protected UIComponent findComponent(final ValidationContext validationContext, final String compId) {
+
+		FacesContext context = validationContext.getFacesContext();
 
 		UIComponent comp = context.getViewRoot().findComponent(compId);
 		if (comp == null) {

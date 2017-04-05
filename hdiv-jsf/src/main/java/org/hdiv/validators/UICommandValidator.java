@@ -16,9 +16,9 @@
 package org.hdiv.validators;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
-import javax.faces.component.NamingContainer;
 import javax.faces.component.UICommand;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIParameter;
@@ -29,7 +29,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hdiv.components.UIParameterExtension;
 import org.hdiv.util.HDIVErrorCodes;
-import org.hdiv.util.UtilsJsf;
 import org.hdiv.validation.ValidationContext;
 
 /**
@@ -49,7 +48,7 @@ public class UICommandValidator extends AbstractComponentValidator {
 
 		UICommand command = (UICommand) component;
 
-		Clicked clicked = wasClicked(validationContext.getFacesContext(), command);
+		Clicked clicked = wasClicked(validationContext, command);
 		if (!clicked.isClicked()) {
 			// Only validate the executed command
 			return;
@@ -59,20 +58,20 @@ public class UICommandValidator extends AbstractComponentValidator {
 	}
 
 	// TODO add myfaces support, the parameter is different
-	protected Clicked wasClicked(final FacesContext facesContext, final UICommand command) {
+	protected Clicked wasClicked(final ValidationContext context, final UICommand command) {
 
-		String clientId = command.getClientId(facesContext);
-		String value = facesContext.getExternalContext().getRequestParameterMap().get(clientId);
+		String clientId = command.getClientId(context.getFacesContext());
+		String value = context.getFacesContext().getExternalContext().getRequestParameterMap().get(clientId);
 		if (value != null && (value.equals(clientId) || value.equals(command.getValue()))) {
 			return new Clicked(true, clientId);
 		}
 
-		Clicked clicked = wasComponentWithRowIdClicked(facesContext, command, clientId);
+		Clicked clicked = wasComponentWithRowIdClicked(context, command, clientId);
 		if (clicked.isClicked()) {
 			return clicked;
 		}
 
-		PartialViewContext partialContext = facesContext.getPartialViewContext();
+		PartialViewContext partialContext = context.getFacesContext().getPartialViewContext();
 		if (partialContext != null && partialContext.isPartialRequest()) {
 			// Is an ajax call partially processing the component tree
 			Collection<String> execIds = partialContext.getExecuteIds();
@@ -86,23 +85,17 @@ public class UICommandValidator extends AbstractComponentValidator {
 	 * If the UICommand component is inside a UIData component can have an index in the name. <br>
 	 * For example: form:pets:1:button
 	 */
-	protected Clicked wasComponentWithRowIdClicked(final FacesContext facesContext, final UICommand command, final String clientId) {
+	protected Clicked wasComponentWithRowIdClicked(final ValidationContext context, final UICommand command, final String clientId) {
 
-		NamingContainer container = UtilsJsf.findParentNamingContainer(command);
-		if (container == null) {
-			return new Clicked(false);
-		}
+		Map<String, List<String>> paramsWithRowId = context.getParamsWithRowId();
 
-		Map<String, String> params = facesContext.getExternalContext().getRequestParameterMap();
-		for (String paramName : params.keySet()) {
-
-			if (paramName.startsWith("javax.faces")) {
-				continue;
-			}
-
-			String paramNameNoIndex = UtilsJsf.removeRowId(paramName);
-			if (clientId.equals(paramNameNoIndex) && paramName.equals(params.get(paramName))) {
-				return new Clicked(true, paramName);
+		if (paramsWithRowId.containsKey(clientId)) {
+			List<String> params = paramsWithRowId.get(clientId);
+			if (params.size() == 1) {
+				String param = params.get(0);
+				if (context.getRequestParameters().containsKey(param) && context.getRequestParameters().get(param).equals(param)) {
+					return new Clicked(true, param);
+				}
 			}
 		}
 		return new Clicked(false);
