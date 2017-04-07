@@ -393,11 +393,7 @@ public class HDIVUtil {
 		return (String) request.getAttribute(Constants.HDIV_PARAMETER);
 	}
 
-	/**
-	 * Get Hdiv state parameter from request
-	 * @param request HttpServletRequest object
-	 * @return parameter value
-	 */
+	@Deprecated
 	public static String getHdivState(final HttpServletRequest request) {
 		return request.getParameter(getHdivStateParameterName(request));
 	}

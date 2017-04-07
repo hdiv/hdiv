@@ -60,23 +60,7 @@ public class ValidationContextImpl extends RequestContext implements ValidationC
 		this.obfuscation = obfuscation;
 		this.restorer = restorer;
 		method = Method.valueOf(request.getMethod());
-		hdivParameterName = getHdivParameter(request);
-	}
-
-	/**
-	 * Name of the parameter that HDIV will include in the requests or/and forms which contains the state identifier in the memory strategy.
-	 *
-	 * @param request request
-	 * @return hdiv parameter value
-	 */
-	protected String getHdivParameter(final HttpServletRequest request) {
-
-		String paramName = HDIVUtil.getHdivStateParameterName(request);
-
-		if (paramName == null) {
-			throw new HDIVException("HDIV parameter name missing in session. Deleted by the app?");
-		}
-		return paramName;
+		hdivParameterName = getHdivParameter();
 	}
 
 	public String getTarget() {
@@ -145,12 +129,9 @@ public class ValidationContextImpl extends RequestContext implements ValidationC
 		return method;
 	}
 
+	@Override
 	public String getHdivParameterName() {
 		return hdivParameterName;
-	}
-
-	public String getHdivState() {
-		return request.getParameter(hdivParameterName);
 	}
 
 	public String getRequestedTarget() {

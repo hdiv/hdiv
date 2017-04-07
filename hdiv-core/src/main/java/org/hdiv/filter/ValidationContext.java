@@ -20,8 +20,6 @@ import org.hdiv.util.Method;
 
 public interface ValidationContext extends RequestContextHolder {
 
-	String getHdivParameterName();
-
 	String getRequestedTarget();
 
 	String getTarget();
@@ -31,7 +29,5 @@ public interface ValidationContext extends RequestContextHolder {
 	StringBuilder getBuffer();
 
 	Method getMethod();
-
-	String getHdivState();
 
 }

@@ -28,4 +28,8 @@ public interface RequestContextHolder {
 
 	HttpServletRequest getRequest();
 
+	String getHdivParameterName();
+
+	String getHdivState();
+
 }

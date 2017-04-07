@@ -19,7 +19,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.hdiv.exception.HDIVException;
 import org.hdiv.session.SessionModel;
+import org.hdiv.util.HDIVUtil;
 
 /**
  * Context holder for request-specific state. Contains request-specific data for validation and composition phases.
@@ -69,4 +71,27 @@ public class RequestContext implements RequestContextHolder {
 		return session;
 	}
 
+	/**
+	 * Name of the parameter that HDIV will include in the requests or/and forms which contains the state identifier in the memory strategy.
+	 *
+	 * @param request request
+	 * @return hdiv parameter value
+	 */
+	protected String getHdivParameter() {
+
+		String paramName = HDIVUtil.getHdivStateParameterName(request);
+
+		if (paramName == null) {
+			throw new HDIVException("HDIV parameter name missing in session. Deleted by the app?");
+		}
+		return paramName;
+	}
+
+	public String getHdivParameterName() {
+		return getHdivParameter();
+	}
+
+	public String getHdivState() {
+		return request.getParameter(getHdivParameterName());
+	}
 }
