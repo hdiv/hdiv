@@ -16,6 +16,7 @@
 package org.hdiv.validation;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -84,6 +85,12 @@ public class ValidationContext {
 
 	public Map<String, String> getRequestParameters() {
 		return requestParameters;
+	}
+
+	public void acceptParameterValues(final String parameterName, final Collection<Object> parameterValues) {
+		for (Object value : parameterValues) {
+			acceptParameter(parameterName, value);
+		}
 	}
 
 	public void acceptParameter(final String parameterName, final Object parameterValue) {
