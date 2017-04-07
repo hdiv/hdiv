@@ -29,6 +29,7 @@ import javax.servlet.http.HttpServletResponseWrapper;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hdiv.context.RequestContext;
+import org.hdiv.context.RequestContextHolder;
 import org.hdiv.session.ISession;
 import org.hdiv.util.Constants;
 import org.springframework.util.Assert;
@@ -71,7 +72,7 @@ public class ResponseWrapper extends HttpServletResponseWrapper {
 	/**
 	 * Request context data.
 	 */
-	protected RequestContext requestContext;
+	protected RequestContextHolder requestContext;
 
 	/**
 	 * Session object wrapper.
@@ -91,7 +92,7 @@ public class ResponseWrapper extends HttpServletResponseWrapper {
 		Assert.notNull(request);
 		Assert.notNull(originalResponse);
 
-		this.requestContext = new RequestContext(request);
+		requestContext = new RequestContext(request, originalResponse);
 
 		if (log.isDebugEnabled()) {
 			log.debug("New ResponseWrapper instance.");
@@ -111,13 +112,13 @@ public class ResponseWrapper extends HttpServletResponseWrapper {
 		String confidentialValue = value;
 
 		if (name.equalsIgnoreCase(SET_COOKIE)) {
-			this.cookies.clear();
-			this.removeCookiesFromSession();
+			cookies.clear();
+			removeCookiesFromSession();
 
-			List<String> parseValues = this.parseCookieString(value);
+			List<String> parseValues = parseCookieString(value);
 
-			if (this.confidentiality && !this.avoidCookiesConfidentiality) {
-				confidentialValue = this.replaceOriginalValues(parseValues, value);
+			if (confidentiality && !avoidCookiesConfidentiality) {
+				confidentialValue = replaceOriginalValues(parseValues, value);
 			}
 		}
 		super.setHeader(name, confidentialValue);
@@ -137,10 +138,10 @@ public class ResponseWrapper extends HttpServletResponseWrapper {
 
 		if (name.equalsIgnoreCase(SET_COOKIE)) {
 
-			List<String> parseValues = this.parseCookieString(value);
+			List<String> parseValues = parseCookieString(value);
 
-			if (this.confidentiality && !this.avoidCookiesConfidentiality) {
-				confidentialValue = this.replaceOriginalValues(parseValues, value);
+			if (confidentiality && !avoidCookiesConfidentiality) {
+				confidentialValue = replaceOriginalValues(parseValues, value);
 			}
 		}
 
@@ -170,8 +171,8 @@ public class ResponseWrapper extends HttpServletResponseWrapper {
 	public void reset() {
 
 		super.reset();
-		this.cookies.clear();
-		this.removeCookiesFromSession();
+		cookies.clear();
+		removeCookiesFromSession();
 	}
 
 	/**
@@ -194,11 +195,11 @@ public class ResponseWrapper extends HttpServletResponseWrapper {
 			String name = t.nextToken().trim();
 			if (t.hasMoreTokens()) {
 				String value = t.nextToken().trim();
-				this.cookies.put(name, new SavedCookie(name, value));
+				cookies.put(name, new SavedCookie(name, value));
 				values.add(value);
 			}
 		}
-		this.updateSessionCookies();
+		updateSessionCookies();
 		return values;
 	}
 
@@ -210,10 +211,10 @@ public class ResponseWrapper extends HttpServletResponseWrapper {
 	 */
 	@Override
 	public void addCookie(final Cookie cookie) {
-		this.cookies.put(cookie.getName(), new SavedCookie(cookie));
-		this.updateSessionCookies();
+		cookies.put(cookie.getName(), new SavedCookie(cookie));
+		updateSessionCookies();
 
-		if (this.confidentiality && !this.avoidCookiesConfidentiality) {
+		if (confidentiality && !avoidCookiesConfidentiality) {
 			cookie.setValue("0");
 		}
 
@@ -226,17 +227,16 @@ public class ResponseWrapper extends HttpServletResponseWrapper {
 	@SuppressWarnings("unchecked")
 	protected void updateSessionCookies() {
 
-		Map<String, SavedCookie> sessionOriginalCookies = this.session.getAttribute(this.requestContext, Constants.HDIV_COOKIES_KEY,
-				Map.class);
+		Map<String, SavedCookie> sessionOriginalCookies = session.getAttribute(requestContext, Constants.HDIV_COOKIES_KEY, Map.class);
 
 		if (sessionOriginalCookies != null && sessionOriginalCookies.size() > 0) {
 
-			sessionOriginalCookies.putAll(this.cookies);
-			this.session.setAttribute(this.requestContext, Constants.HDIV_COOKIES_KEY, sessionOriginalCookies);
+			sessionOriginalCookies.putAll(cookies);
+			session.setAttribute(requestContext, Constants.HDIV_COOKIES_KEY, sessionOriginalCookies);
 
 		}
 		else {
-			this.session.setAttribute(this.requestContext, Constants.HDIV_COOKIES_KEY, this.cookies);
+			session.setAttribute(requestContext, Constants.HDIV_COOKIES_KEY, cookies);
 		}
 	}
 
@@ -245,7 +245,7 @@ public class ResponseWrapper extends HttpServletResponseWrapper {
 	 */
 	protected void removeCookiesFromSession() {
 
-		this.session.removeAttribute(this.requestContext, Constants.HDIV_COOKIES_KEY);
+		session.removeAttribute(requestContext, Constants.HDIV_COOKIES_KEY);
 	}
 
 	/**
@@ -254,7 +254,7 @@ public class ResponseWrapper extends HttpServletResponseWrapper {
 	 * @return cookies added by the application
 	 */
 	public Map<String, SavedCookie> getCookies() {
-		return this.cookies;
+		return cookies;
 	}
 
 	/**
@@ -274,7 +274,7 @@ public class ResponseWrapper extends HttpServletResponseWrapper {
 	/**
 	 * @param session the session to set
 	 */
-	public void setSession(ISession session) {
+	public void setSession(final ISession session) {
 		this.session = session;
 	}
 

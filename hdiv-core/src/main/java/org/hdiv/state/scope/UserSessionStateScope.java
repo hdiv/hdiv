@@ -17,7 +17,7 @@ package org.hdiv.state.scope;
 
 import javax.servlet.http.HttpSession;
 
-import org.hdiv.context.RequestContext;
+import org.hdiv.context.RequestContextHolder;
 import org.hdiv.session.ISession;
 
 /**
@@ -41,12 +41,12 @@ public class UserSessionStateScope extends AbstractStateScope {
 	}
 
 	@Override
-	public ScopedStateCache getStateCache(final RequestContext context) {
+	public ScopedStateCache getStateCache(final RequestContextHolder context) {
 		return session.getAttribute(context, USER_STATE_CACHE_ATTR, ScopedStateCache.class);
 	}
 
 	@Override
-	public void setStateCache(final RequestContext context, final ScopedStateCache cache) {
+	public void setStateCache(final RequestContextHolder context, final ScopedStateCache cache) {
 		session.setAttribute(context, USER_STATE_CACHE_ATTR, cache);
 	}
 

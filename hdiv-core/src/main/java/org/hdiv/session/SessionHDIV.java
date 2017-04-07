@@ -17,7 +17,7 @@ package org.hdiv.session;
 
 import javax.servlet.http.HttpSession;
 
-import org.hdiv.context.RequestContext;
+import org.hdiv.context.RequestContextHolder;
 import org.hdiv.exception.HDIVException;
 import org.hdiv.idGenerator.PageIdGenerator;
 import org.hdiv.state.IPage;
@@ -55,7 +55,7 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 	 * @param context Context holder for request-specific state.
 	 * @return Returns the pageId.
 	 */
-	public final int getPageId(final RequestContext context) {
+	public final int getPageId(final RequestContextHolder context) {
 
 		HttpSession session = context.getRequest().getSession();
 
@@ -88,7 +88,7 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 	 * @return Returns the page with id <code>pageId</code>.
 	 * @since HDIV 2.0.4
 	 */
-	public IPage getPage(final RequestContext context, final int pageId) {
+	public IPage getPage(final RequestContextHolder context, final int pageId) {
 		try {
 			return cache.findPage(new SimpleCacheKey(context, pageId));
 		}
@@ -103,7 +103,7 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 	 * @param context Context holder for request-specific state.
 	 * @param page Page with all the information about states
 	 */
-	public void addPage(final RequestContext context, final IPage page) {
+	public void addPage(final RequestContextHolder context, final IPage page) {
 		addPageToSession(context, page, false);
 	}
 
@@ -113,7 +113,7 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 	 * @param context Context holder for request-specific state.
 	 * @param page Page with all the information about states
 	 */
-	public void addPartialPage(final RequestContext context, final IPage page) {
+	public void addPartialPage(final RequestContextHolder context, final IPage page) {
 		addPageToSession(context, page, true);
 	}
 
@@ -123,7 +123,7 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 	 * @param context Context holder for request-specific state.
 	 * @return State identifier <code>stateId</code> throws HDIVException If the state doesn't exist a new HDIV exception is thrown.
 	 */
-	public IState getState(final RequestContext context, final int pageId, final int stateId) {
+	public IState getState(final RequestContextHolder context, final int pageId, final int stateId) {
 		try {
 			return getPage(context, pageId).getState(stateId);
 		}
@@ -135,17 +135,17 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 	/**
 	 * Internal method to add a new IPage instance to {@link HttpSession}
 	 * 
-	 * @param context {@link RequestContext} instance
+	 * @param context {@link RequestContextHolder} instance
 	 * @param page IPage instance
 	 * @param isPartial If is partial page
 	 * 
 	 * @since HDIV 2.1.5
 	 */
-	protected void addPageToSession(final RequestContext context, final IPage page, final boolean isPartial) {
+	protected void addPageToSession(final RequestContextHolder context, final IPage page, final boolean isPartial) {
 		cache.insertPage(new SimpleCacheKey(context, page.getId()), page);
 	}
 
-	public boolean removePage(final RequestContext context, final int pageId) {
+	public boolean removePage(final RequestContextHolder context, final int pageId) {
 		Assert.notNull(context);
 
 		return cache.removePage(new SimpleCacheKey(context, pageId));
@@ -162,7 +162,7 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 		cache.setBeanFactory(beanFactory);
 	}
 
-	public String getAttribute(final RequestContext context, final String name) {
+	public String getAttribute(final RequestContextHolder context, final String name) {
 		Assert.notNull(context);
 		Assert.notNull(name);
 
@@ -170,7 +170,7 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 	}
 
 	@SuppressWarnings("unchecked")
-	public <T> T getAttribute(final RequestContext context, final String name, final Class<T> requiredType) {
+	public <T> T getAttribute(final RequestContextHolder context, final String name, final Class<T> requiredType) {
 		Assert.notNull(context);
 		Assert.notNull(name);
 		Assert.notNull(requiredType);
@@ -188,14 +188,14 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 		}
 	}
 
-	public void setAttribute(final RequestContext context, final String name, final Object value) {
+	public void setAttribute(final RequestContextHolder context, final String name, final Object value) {
 		Assert.notNull(context);
 		Assert.notNull(name);
 
 		context.getSession().setAttribute(name, value);
 	}
 
-	public void removeAttribute(final RequestContext context, final String name) {
+	public void removeAttribute(final RequestContextHolder context, final String name) {
 		Assert.notNull(context);
 		Assert.notNull(name);
 
@@ -209,7 +209,7 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 		this.pageIdGeneratorName = pageIdGeneratorName;
 	}
 
-	public void removeEndedPages(final RequestContext context, final String conversationId) {
+	public void removeEndedPages(final RequestContextHolder context, final String conversationId) {
 		cache.removeEndedPages(context, conversationId);
 	}
 }

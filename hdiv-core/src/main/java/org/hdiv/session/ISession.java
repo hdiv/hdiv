@@ -17,7 +17,7 @@ package org.hdiv.session;
 
 import javax.servlet.http.HttpSession;
 
-import org.hdiv.context.RequestContext;
+import org.hdiv.context.RequestContextHolder;
 import org.hdiv.state.IPage;
 import org.hdiv.state.IState;
 
@@ -35,7 +35,7 @@ public interface ISession {
 	 * @param context Context holder for request-specific state.
 	 * @param page Page with all the information about states
 	 */
-	void addPage(RequestContext context, IPage page);
+	void addPage(RequestContextHolder context, IPage page);
 
 	/**
 	 * It adds a partial page to the user session.
@@ -44,7 +44,7 @@ public interface ISession {
 	 * @param page Page with all the information about states
 	 * @since HDIV 2.1.13
 	 */
-	void addPartialPage(RequestContext context, IPage page);
+	void addPartialPage(RequestContextHolder context, IPage page);
 
 	/**
 	 * Obtains the state identifier <code>stateId</code> related to the page identifier <code>pageId</code>.
@@ -55,7 +55,7 @@ public interface ISession {
 	 *
 	 * @return State identifier <code>stateId</code> throws HDIVException If the state doesn't exist a new HDIV exception is thrown.
 	 */
-	IState getState(RequestContext context, int pageId, int stateId);
+	IState getState(RequestContextHolder context, int pageId, int stateId);
 
 	/**
 	 * Obtains from the user session the page identifier for the current request.
@@ -63,7 +63,7 @@ public interface ISession {
 	 * @param context Context holder for request-specific state.
 	 * @return Returns the pageId.
 	 */
-	int getPageId(RequestContext context);
+	int getPageId(RequestContextHolder context);
 
 	/**
 	 * Returns the page with id <code>pageId</code>.
@@ -73,7 +73,7 @@ public interface ISession {
 	 * @return Returns the page with id <code>pageId</code>.
 	 * @since HDIV 2.0.4
 	 */
-	IPage getPage(RequestContext context, int pageId);
+	IPage getPage(RequestContextHolder context, int pageId);
 
 	/**
 	 * Removes the page with id <code>pageId</code>.
@@ -83,7 +83,7 @@ public interface ISession {
 	 * @return True if the page was found and correctly deleted, false otherwise.
 	 * @since HDIV 3.3.0
 	 */
-	boolean removePage(RequestContext context, int pageId);
+	boolean removePage(RequestContextHolder context, int pageId);
 
 	/**
 	 * Get an attribute from session.
@@ -92,7 +92,7 @@ public interface ISession {
 	 * @return Attribute value or null if the attribute doesn't exist.
 	 * @since HDIV 3.0.1
 	 */
-	String getAttribute(RequestContext context, String name);
+	String getAttribute(RequestContextHolder context, String name);
 
 	/**
 	 * Get an attribute from session.
@@ -103,7 +103,7 @@ public interface ISession {
 	 * @return Attribute value or null if the attribute doesn't exist.
 	 * @since HDIV 3.0.1
 	 */
-	<T> T getAttribute(RequestContext context, String name, Class<T> requiredType);
+	<T> T getAttribute(RequestContextHolder context, String name, Class<T> requiredType);
 
 	/**
 	 * Set an attribute value in session.
@@ -112,7 +112,7 @@ public interface ISession {
 	 * @param value Attribute value.
 	 * @since HDIV 3.0.1
 	 */
-	void setAttribute(RequestContext context, String name, Object value);
+	void setAttribute(RequestContextHolder context, String name, Object value);
 
 	/**
 	 * Remove an attribute from session.
@@ -120,5 +120,5 @@ public interface ISession {
 	 * @param name Attribute name.
 	 * @since HDIV 3.0.1
 	 */
-	void removeAttribute(RequestContext context, String name);
+	void removeAttribute(RequestContextHolder context, String name);
 }

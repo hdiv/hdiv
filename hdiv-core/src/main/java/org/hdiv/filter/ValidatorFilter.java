@@ -255,6 +255,7 @@ public class ValidatorFilter extends OncePerRequestFilter {
 				/**
 				 * Try to rethrow the same exception if posible
 				 */
+
 				if (e instanceof RuntimeException) {
 					throw (RuntimeException) e;
 				}

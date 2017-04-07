@@ -16,7 +16,7 @@
 package org.hdiv.dataComposer;
 
 import org.hdiv.AbstractHDIVTestCase;
-import org.hdiv.context.RequestContext;
+import org.hdiv.context.RequestContextHolder;
 import org.hdiv.state.IParameter;
 import org.hdiv.state.IState;
 import org.hdiv.state.StateUtil;
@@ -43,7 +43,7 @@ public class AjaxTest extends AbstractHDIVTestCase {
 		getConfig().setReuseExistingPageInAjaxRequest(false);
 
 		MockHttpServletRequest request = getMockRequest();
-		RequestContext context = getRequestContext();
+		RequestContextHolder context = getRequestContext();
 		IDataComposer dataComposer = dataComposerFactory.newInstance(request);
 		HDIVUtil.setDataComposer(dataComposer, request);
 
@@ -108,7 +108,7 @@ public class AjaxTest extends AbstractHDIVTestCase {
 		getConfig().setReuseExistingPageInAjaxRequest(true);
 
 		MockHttpServletRequest request = getMockRequest();
-		RequestContext context = getRequestContext();
+		RequestContextHolder context = getRequestContext();
 		IDataComposer dataComposer = dataComposerFactory.newInstance(request);
 		HDIVUtil.setDataComposer(dataComposer, request);
 
@@ -173,7 +173,7 @@ public class AjaxTest extends AbstractHDIVTestCase {
 		getConfig().setReuseExistingPageInAjaxRequest(true);
 
 		MockHttpServletRequest request = getMockRequest();
-		RequestContext context = getRequestContext();
+		RequestContextHolder context = getRequestContext();
 		IDataComposer dataComposer = dataComposerFactory.newInstance(request);
 		HDIVUtil.setDataComposer(dataComposer, request);
 

@@ -15,7 +15,7 @@
  */
 package org.hdiv.state.scope;
 
-import org.hdiv.context.RequestContext;
+import org.hdiv.context.RequestContextHolder;
 import org.hdiv.state.IState;
 import org.hdiv.util.Constants;
 
@@ -35,7 +35,7 @@ public abstract class AbstractStateScope implements StateScope {
 		this.type = type;
 	}
 
-	public String addState(final RequestContext context, final IState state, final String token) {
+	public String addState(final RequestContextHolder context, final IState state, final String token) {
 
 		ScopedStateCache cache = getStateCache(context);
 		if (cache == null) {
@@ -49,13 +49,13 @@ public abstract class AbstractStateScope implements StateScope {
 		return new StringBuilder().append(preffix).append(Constants.STATE_ID_SEPARATOR).append(stateId).toString();
 	}
 
-	public IState restoreState(final RequestContext context, final int stateId) {
+	public IState restoreState(final RequestContextHolder context, final int stateId) {
 
 		ScopedStateCache cache = getStateCache(context);
 		return cache == null ? null : cache.getState(stateId);
 	}
 
-	public String getStateToken(final RequestContext context, final int stateId) {
+	public String getStateToken(final RequestContextHolder context, final int stateId) {
 
 		ScopedStateCache cache = getStateCache(context);
 		return cache == null ? null : cache.getStateToken(stateId);
@@ -74,8 +74,8 @@ public abstract class AbstractStateScope implements StateScope {
 		return type;
 	}
 
-	protected abstract ScopedStateCache getStateCache(RequestContext context);
+	protected abstract ScopedStateCache getStateCache(RequestContextHolder context);
 
-	protected abstract void setStateCache(RequestContext context, ScopedStateCache cache);
+	protected abstract void setStateCache(RequestContextHolder context, ScopedStateCache cache);
 
 }

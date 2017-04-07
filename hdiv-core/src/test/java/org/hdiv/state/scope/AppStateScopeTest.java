@@ -16,7 +16,7 @@
 package org.hdiv.state.scope;
 
 import org.hdiv.AbstractHDIVTestCase;
-import org.hdiv.context.RequestContext;
+import org.hdiv.context.RequestContextHolder;
 import org.hdiv.state.IParameter;
 import org.hdiv.state.IState;
 import org.hdiv.state.Parameter;
@@ -45,7 +45,7 @@ public class AppStateScopeTest extends AbstractHDIVTestCase {
 
 	public void testAddState() {
 
-		RequestContext context = getRequestContext();
+		RequestContextHolder context = getRequestContext();
 
 		IState state = new State(0);
 		state.setAction("/action");
@@ -59,7 +59,7 @@ public class AppStateScopeTest extends AbstractHDIVTestCase {
 
 	public void testAddSameActionState() {
 
-		RequestContext context = getRequestContext();
+		RequestContextHolder context = getRequestContext();
 
 		IState state = new State(0);
 		state.setAction("/action");

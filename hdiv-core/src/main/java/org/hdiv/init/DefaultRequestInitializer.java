@@ -48,7 +48,7 @@ public class DefaultRequestInitializer implements RequestInitializer {
 	@SuppressWarnings("deprecation")
 	public void initRequest(final HttpServletRequest request, final HttpServletResponse response) {
 
-		RequestContext context = new RequestContext(request);
+		RequestContext context = new RequestContext(request, response);
 
 		// Store session scoped data into request
 

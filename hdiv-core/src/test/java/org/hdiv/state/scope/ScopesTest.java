@@ -18,7 +18,7 @@ package org.hdiv.state.scope;
 import javax.servlet.http.HttpServletRequest;
 
 import org.hdiv.AbstractHDIVTestCase;
-import org.hdiv.context.RequestContext;
+import org.hdiv.context.RequestContextHolder;
 import org.hdiv.dataComposer.DataComposerFactory;
 import org.hdiv.dataComposer.DataComposerMemory;
 import org.hdiv.dataComposer.IDataComposer;
@@ -114,7 +114,7 @@ public class ScopesTest extends AbstractHDIVTestCase {
 	public void testScopedPage() {
 
 		MockHttpServletRequest request = getMockRequest();
-		RequestContext context = getRequestContext();
+		RequestContextHolder context = getRequestContext();
 		// Put a uri that is configured as a scoped page
 		request.setRequestURI("/scopedPage/user.html");
 		IDataComposer dataComposer = dataComposerFactory.newInstance(request);

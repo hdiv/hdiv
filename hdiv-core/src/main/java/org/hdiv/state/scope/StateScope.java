@@ -15,7 +15,7 @@
  */
 package org.hdiv.state.scope;
 
-import org.hdiv.context.RequestContext;
+import org.hdiv.context.RequestContextHolder;
 import org.hdiv.state.IState;
 
 /**
@@ -30,11 +30,11 @@ import org.hdiv.state.IState;
  */
 public interface StateScope {
 
-	String addState(RequestContext context, IState state, String token);
+	String addState(RequestContextHolder context, IState state, String token);
 
-	IState restoreState(RequestContext context, int stateId);
+	IState restoreState(RequestContextHolder context, int stateId);
 
-	String getStateToken(RequestContext context, int stateId);
+	String getStateToken(RequestContextHolder context, int stateId);
 
 	StateScopeType getScopeType();
 

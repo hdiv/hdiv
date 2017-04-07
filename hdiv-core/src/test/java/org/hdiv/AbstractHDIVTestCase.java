@@ -27,6 +27,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hdiv.config.HDIVConfig;
 import org.hdiv.context.RequestContext;
+import org.hdiv.context.RequestContextHolder;
 import org.hdiv.dataComposer.DataComposerFactory;
 import org.hdiv.dataComposer.IDataComposer;
 import org.hdiv.init.RequestInitializer;
@@ -216,7 +217,7 @@ public abstract class AbstractHDIVTestCase extends TestCase {
 		return config;
 	}
 
-	public RequestContext getRequestContext() {
+	public RequestContextHolder getRequestContext() {
 		return requestContext;
 	}
 

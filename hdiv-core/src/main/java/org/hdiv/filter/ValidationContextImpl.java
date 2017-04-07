@@ -20,15 +20,14 @@ import java.io.UnsupportedEncodingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.hdiv.context.RequestContext;
 import org.hdiv.exception.HDIVException;
 import org.hdiv.util.Constants;
 import org.hdiv.util.HDIVErrorCodes;
 import org.hdiv.util.HDIVUtil;
 import org.hdiv.util.Method;
 
-public class ValidationContextImpl implements ValidationContext {
-
-	private final HttpServletRequest request;
+public class ValidationContextImpl extends RequestContext implements ValidationContext {
 
 	private final boolean obfuscation;
 
@@ -39,8 +38,6 @@ public class ValidationContextImpl implements ValidationContext {
 	protected String target;
 
 	protected String redirect;
-
-	private final HttpServletResponse response;
 
 	private final Method method;
 
@@ -59,8 +56,7 @@ public class ValidationContextImpl implements ValidationContext {
 
 	public ValidationContextImpl(final HttpServletRequest request, final HttpServletResponse response, final StateRestorer restorer,
 			final boolean obfuscation) {
-		this.request = request;
-		this.response = response;
+		super(request, response);
 		this.obfuscation = obfuscation;
 		this.restorer = restorer;
 		method = Method.valueOf(request.getMethod());
@@ -83,21 +79,13 @@ public class ValidationContextImpl implements ValidationContext {
 		return paramName;
 	}
 
-	public HttpServletRequest getRequest() {
-		return request;
-	}
-
-	public HttpServletResponse getResponse() {
-		return response;
-	}
-
 	public String getTarget() {
 		if (target == null) {
 			String target = getRequestedTarget();
 			if (obfuscation && HDIVUtil.isObfuscatedTarget(target)) {
 
 				// Restore state from request or memory
-				ValidatorHelperResult result = restorer.restoreState(hdivParameterName, request, target,
+				ValidatorHelperResult result = restorer.restoreState(hdivParameterName, this, target,
 						request.getParameter(hdivParameterName));
 				if (result.isValid()) {
 					this.target = result.getValue().getAction();

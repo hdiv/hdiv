@@ -13,36 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.hdiv.session;
+package org.hdiv.context;
 
-import org.hdiv.context.RequestContextHolder;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
-/**
- * Cache key to index the pages
- * @author Ander Ruiz
- *
- */
-public class SimpleCacheKey {
+import org.hdiv.session.SessionModel;
 
-	private RequestContextHolder context;
+public interface RequestContextHolder {
 
-	protected final int pageId;
+	SessionModel getSession();
 
-	public SimpleCacheKey(final RequestContextHolder context, final int pageId) {
-		this.context = context;
-		this.pageId = pageId;
-	}
+	HttpServletResponse getResponse();
 
-	public SimpleCacheKey(final int pageId) {
-		this.pageId = pageId;
-	}
-
-	public RequestContextHolder getRequestContext() {
-		return context;
-	}
-
-	public int getPageId() {
-		return pageId;
-	}
+	HttpServletRequest getRequest();
 
 }

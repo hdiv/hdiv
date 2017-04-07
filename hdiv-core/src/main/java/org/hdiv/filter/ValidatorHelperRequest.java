@@ -37,6 +37,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hdiv.config.HDIVConfig;
 import org.hdiv.context.RequestContext;
+import org.hdiv.context.RequestContextHolder;
 import org.hdiv.dataComposer.DataComposerFactory;
 import org.hdiv.dataComposer.IDataComposer;
 import org.hdiv.dataValidator.IDataValidator;
@@ -229,7 +230,7 @@ public class ValidatorHelperRequest implements IValidationHelper, StateRestorer 
 		}
 
 		if (hdivConfig.isCookiesIntegrityActivated()) {
-			result = validateRequestCookies(request, target);
+			result = validateRequestCookies(context, target);
 			if (!result.isValid()) {
 				if (log.isDebugEnabled()) {
 					log.debug("Invalid cookies found.");
@@ -378,17 +379,17 @@ public class ValidatorHelperRequest implements IValidationHelper, StateRestorer 
 	 * session by HDIV to be correct. False otherwise.
 	 * @since HDIV 1.1
 	 */
-	protected ValidatorHelperResult validateRequestCookies(final HttpServletRequest request, final String target) {
+	protected final ValidatorHelperResult validateRequestCookies(final ValidationContext context, final String target) {
 
-		Cookie[] requestCookies = request.getCookies();
+		Cookie[] requestCookies = context.getRequest().getCookies();
 
 		if (requestCookies == null || requestCookies.length == 0) {
 			return ValidatorHelperResult.VALID;
 		}
 
 		@SuppressWarnings("unchecked")
-		Map<String, SavedCookie> sessionCookies = session.getAttribute(new RequestContext(request), // TODO cache
-																									// context?
+		Map<String, SavedCookie> sessionCookies = session.getAttribute(context, // TODO cache
+																				// context?
 				Constants.HDIV_COOKIES_KEY, Map.class);
 
 		if (sessionCookies == null) {
@@ -698,8 +699,7 @@ public class ValidatorHelperRequest implements IValidationHelper, StateRestorer 
 	 */
 	public final ValidatorHelperResult restoreState(final String hdivParameter, final ValidationContext context) {
 		// checks if the parameter HDIV parameter exists in the parameters of the request
-		HttpServletRequest request = context.getRequest();
-		return restoreState(hdivParameter, request, context.getTarget(), request.getParameter(hdivParameter));
+		return restoreState(hdivParameter, context, context.getTarget(), context.getRequest().getParameter(hdivParameter));
 	}
 
 	/**
@@ -712,7 +712,13 @@ public class ValidatorHelperRequest implements IValidationHelper, StateRestorer 
 	 */
 	public final ValidatorHelperResult restoreState(final String hdivParameter, final String hdivState, final ValidationContext context) {
 		// checks if the parameter HDIV parameter exists in the parameters of the requestds
-		return restoreState(hdivParameter, context.getRequest(), context.getTarget(), hdivState);
+		return restoreState(hdivParameter, context, context.getTarget(), hdivState);
+	}
+
+	@Deprecated
+	public final ValidatorHelperResult restoreState(final String hdivParameter, final HttpServletRequest request, final String target,
+			final String requestState) {
+		return restoreState(hdivParameter, new RequestContext(request), target, requestState);
 	}
 
 	/**
@@ -723,7 +729,7 @@ public class ValidatorHelperRequest implements IValidationHelper, StateRestorer 
 	 * @param target Part of the url that represents the target action
 	 * @return valid result if restored state is valid. False in otherwise.
 	 */
-	public ValidatorHelperResult restoreState(final String hdivParameter, final HttpServletRequest request, final String target,
+	public ValidatorHelperResult restoreState(final String hdivParameter, final RequestContextHolder context, final String target,
 			String requestState) {
 
 		if (requestState == null) {
@@ -739,11 +745,10 @@ public class ValidatorHelperRequest implements IValidationHelper, StateRestorer 
 
 		try {
 			int pageId = stateUtil.getPageId(requestState);
-			RequestContext context = new RequestContext(request);
 			IState state = stateUtil.restoreState(context, requestState);
 
 			// Save current page id in request
-			HDIVUtil.setCurrentPageId(pageId, request);
+			HDIVUtil.setCurrentPageId(pageId, context.getRequest());
 
 			if (!validateHDIVSuffix(context, requestState, state)) {
 				ValidatorError error = new ValidatorError(HDIVErrorCodes.INVALID_HDIV_PARAMETER_VALUE, target, hdivParameter, requestState);
@@ -774,7 +779,7 @@ public class ValidatorHelperRequest implements IValidationHelper, StateRestorer 
 	 * @param restoredState restored state
 	 * @return True if the received value of the suffix is valid. False otherwise.
 	 */
-	protected boolean validateHDIVSuffix(final RequestContext context, final String value, final IState restoredState) {
+	protected boolean validateHDIVSuffix(final RequestContextHolder context, final String value, final IState restoredState) {
 		int firstSeparator = value.indexOf(Constants.STATE_ID_SEPARATOR);
 		int lastSeparator = value.lastIndexOf(Constants.STATE_ID_SEPARATOR);
 

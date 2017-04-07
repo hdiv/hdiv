@@ -22,7 +22,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.hdiv.context.RequestContext;
+import org.hdiv.context.RequestContextHolder;
 import org.hdiv.state.IPage;
 import org.hdiv.util.Constants;
 import org.hdiv.util.HDIVUtil;
@@ -125,7 +125,7 @@ public class HTTPSessionCache {
 		}
 	}
 
-	void removeEndedPages(final RequestContext context, final String conversationId) {
+	void removeEndedPages(final RequestContextHolder context, final String conversationId) {
 
 		SessionModel session = context.getSession();
 
@@ -159,7 +159,7 @@ public class HTTPSessionCache {
 	 * @param context Context holder for request-specific state.
 	 * @param cache cache object
 	 */
-	protected void logCacheContent(final RequestContext context, final IStateCache cache) {
+	protected void logCacheContent(final RequestContextHolder context, final IStateCache cache) {
 		if (log.isTraceEnabled()) {
 			synchronized (cache) {
 				List<Integer> ids = cache.getPageIds();

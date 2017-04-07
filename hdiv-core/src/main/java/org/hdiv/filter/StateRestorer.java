@@ -15,7 +15,7 @@
  */
 package org.hdiv.filter;
 
-import javax.servlet.http.HttpServletRequest;
+import org.hdiv.context.RequestContextHolder;
 
 public interface StateRestorer {
 
@@ -25,6 +25,5 @@ public interface StateRestorer {
 
 	ValidatorHelperResult restoreState(final String hdivParameter, String hdivState, ValidationContext context);
 
-	ValidatorHelperResult restoreState(final String hdivParameter, final HttpServletRequest request, final String target,
-			String requestState);
+	ValidatorHelperResult restoreState(final String hdivParameter, RequestContextHolder context, final String target, String requestState);
 }

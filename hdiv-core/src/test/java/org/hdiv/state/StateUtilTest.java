@@ -18,7 +18,7 @@ package org.hdiv.state;
 import javax.servlet.http.HttpServletRequest;
 
 import org.hdiv.AbstractHDIVTestCase;
-import org.hdiv.context.RequestContext;
+import org.hdiv.context.RequestContextHolder;
 import org.hdiv.dataComposer.DataComposerFactory;
 import org.hdiv.dataComposer.IDataComposer;
 import org.hdiv.exception.HDIVException;
@@ -46,7 +46,7 @@ public class StateUtilTest extends AbstractHDIVTestCase {
 	public void testRestore() {
 
 		HttpServletRequest request = getMockRequest();
-		RequestContext context = getRequestContext();
+		RequestContextHolder context = getRequestContext();
 		IDataComposer dataComposer = dataComposerFactory.newInstance(request);
 		HDIVUtil.setDataComposer(dataComposer, request);
 
@@ -68,7 +68,7 @@ public class StateUtilTest extends AbstractHDIVTestCase {
 	public void testRestoreIncorrectStateId() {
 
 		HttpServletRequest request = getMockRequest();
-		RequestContext context = getRequestContext();
+		RequestContextHolder context = getRequestContext();
 		IDataComposer dataComposer = dataComposerFactory.newInstance(request);
 		HDIVUtil.setDataComposer(dataComposer, request);
 
@@ -86,7 +86,7 @@ public class StateUtilTest extends AbstractHDIVTestCase {
 	public void testLongLivingApp() {
 
 		HttpServletRequest request = getMockRequest();
-		RequestContext context = getRequestContext();
+		RequestContextHolder context = getRequestContext();
 		IDataComposer dataComposer = dataComposerFactory.newInstance(request);
 		HDIVUtil.setDataComposer(dataComposer, request);
 
@@ -111,7 +111,7 @@ public class StateUtilTest extends AbstractHDIVTestCase {
 	public void testLongLivingUser() {
 
 		HttpServletRequest request = getMockRequest();
-		RequestContext context = getRequestContext();
+		RequestContextHolder context = getRequestContext();
 		IDataComposer dataComposer = dataComposerFactory.newInstance(request);
 		HDIVUtil.setDataComposer(dataComposer, request);
 

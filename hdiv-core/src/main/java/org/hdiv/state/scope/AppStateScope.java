@@ -17,7 +17,7 @@ package org.hdiv.state.scope;
 
 import javax.servlet.ServletContext;
 
-import org.hdiv.context.RequestContext;
+import org.hdiv.context.RequestContextHolder;
 import org.springframework.web.context.ServletContextAware;
 
 /**
@@ -42,12 +42,12 @@ public final class AppStateScope extends AbstractStateScope implements ServletCo
 	}
 
 	@Override
-	public ScopedStateCache getStateCache(final RequestContext context) {
+	public ScopedStateCache getStateCache(final RequestContextHolder context) {
 		return (ScopedStateCache) servletContext.getAttribute(APP_STATE_CONTEXT_ATTR);
 	}
 
 	@Override
-	public void setStateCache(final RequestContext context, final ScopedStateCache cache) {
+	public void setStateCache(final RequestContextHolder context, final ScopedStateCache cache) {
 		servletContext.setAttribute(APP_STATE_CONTEXT_ATTR, cache);
 	}
 

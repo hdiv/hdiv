@@ -21,7 +21,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.hdiv.AbstractHDIVTestCase;
-import org.hdiv.context.RequestContext;
+import org.hdiv.context.RequestContextHolder;
 import org.hdiv.dataComposer.DataComposerFactory;
 import org.hdiv.dataComposer.IDataComposer;
 import org.hdiv.state.IParameter;
@@ -40,46 +40,46 @@ public class ThymeleafHdivRequestDataValueProcessorTest extends AbstractHDIVTest
 	@Override
 	protected void onSetUp() throws Exception {
 
-		this.dataValueProcessor = this.getApplicationContext().getBean(ThymeleafHdivRequestDataValueProcessor.class);
-		this.dataComposerFactory = this.getApplicationContext().getBean(DataComposerFactory.class);
-		this.stateUtil = this.getApplicationContext().getBean(StateUtil.class);
+		dataValueProcessor = getApplicationContext().getBean(ThymeleafHdivRequestDataValueProcessor.class);
+		dataComposerFactory = getApplicationContext().getBean(DataComposerFactory.class);
+		stateUtil = getApplicationContext().getBean(StateUtil.class);
 	}
 
 	public void testProcessUrl() {
 
-		HttpServletRequest request = this.getMockRequest();
+		HttpServletRequest request = getMockRequest();
 		String url = "/testAction.do";
 
-		String result = this.dataValueProcessor.processUrl(request, url);
+		String result = dataValueProcessor.processUrl(request, url);
 		assertTrue(result.contains("_HDIV_STATE_"));
 
 	}
 
 	public void testProcessUrlAvoid() {
 
-		this.getConfig().setAvoidValidationInUrlsWithoutParams(true);
+		getConfig().setAvoidValidationInUrlsWithoutParams(true);
 
-		HttpServletRequest request = this.getMockRequest();
+		HttpServletRequest request = getMockRequest();
 		String url = "/testAction.do";
 
-		String result = this.dataValueProcessor.processUrl(request, url);
+		String result = dataValueProcessor.processUrl(request, url);
 		assertEquals(url, result);
 
 	}
 
 	public void testProcessAction() {
 
-		HttpServletRequest request = this.getMockRequest();
+		HttpServletRequest request = getMockRequest();
 		String action = "/testAction.do";
 
-		String result = this.dataValueProcessor.processAction(request, action);
+		String result = dataValueProcessor.processAction(request, action);
 		// Post urls are not modified
 		assertEquals(action, result);
 
-		String val = this.dataValueProcessor.processFormFieldValue(request, "param", "value", "select");
+		String val = dataValueProcessor.processFormFieldValue(request, "param", "value", "select");
 		assertEquals("0", val);
 
-		Map<String, String> extraParams = this.dataValueProcessor.getExtraHiddenFields(request);
+		Map<String, String> extraParams = dataValueProcessor.getExtraHiddenFields(request);
 
 		assertNotNull(extraParams);
 		assertTrue(extraParams.size() > 0);
@@ -87,17 +87,17 @@ public class ThymeleafHdivRequestDataValueProcessorTest extends AbstractHDIVTest
 
 	public void testProcessActionGetMethod() {
 
-		HttpServletRequest request = this.getMockRequest();
+		HttpServletRequest request = getMockRequest();
 		String action = "/onlyget.do"; // Is startPage only for get
 
-		String result = this.dataValueProcessor.processAction(request, action, "GET");
+		String result = dataValueProcessor.processAction(request, action, "GET");
 		// Post urls are not modified
 		assertEquals(action, result);
 
-		String val = this.dataValueProcessor.processFormFieldValue(request, "param", "value", "select");
+		String val = dataValueProcessor.processFormFieldValue(request, "param", "value", "select");
 		assertEquals("value", val);
 
-		Map<String, String> extraParams = this.dataValueProcessor.getExtraHiddenFields(request);
+		Map<String, String> extraParams = dataValueProcessor.getExtraHiddenFields(request);
 
 		assertNotNull(extraParams);
 		assertTrue(extraParams.size() == 0);
@@ -105,19 +105,19 @@ public class ThymeleafHdivRequestDataValueProcessorTest extends AbstractHDIVTest
 
 	public void testProcessActionAvoid() {
 
-		this.getConfig().setAvoidValidationInUrlsWithoutParams(true);
+		getConfig().setAvoidValidationInUrlsWithoutParams(true);
 
-		HttpServletRequest request = this.getMockRequest();
+		HttpServletRequest request = getMockRequest();
 		String action = "/testAction.do";
 
-		String result = this.dataValueProcessor.processAction(request, action);
+		String result = dataValueProcessor.processAction(request, action);
 		// Post urls are not modified
 		assertEquals(action, result);
 
-		String val = this.dataValueProcessor.processFormFieldValue(request, "param", "value", "select");
+		String val = dataValueProcessor.processFormFieldValue(request, "param", "value", "select");
 		assertEquals("0", val);
 
-		Map<String, String> extraParams = this.dataValueProcessor.getExtraHiddenFields(request);
+		Map<String, String> extraParams = dataValueProcessor.getExtraHiddenFields(request);
 
 		assertNotNull(extraParams);
 		assertTrue(extraParams.size() > 0);
@@ -125,9 +125,9 @@ public class ThymeleafHdivRequestDataValueProcessorTest extends AbstractHDIVTest
 
 	public void testProcessFormThymeleafOrder() {
 
-		HttpServletRequest request = this.getMockRequest();
-		RequestContext context = this.getRequestContext();
-		IDataComposer dataComposer = this.dataComposerFactory.newInstance(request);
+		HttpServletRequest request = getMockRequest();
+		RequestContextHolder context = getRequestContext();
+		IDataComposer dataComposer = dataComposerFactory.newInstance(request);
 		HDIVUtil.setDataComposer(dataComposer, request);
 
 		dataComposer.startPage();
@@ -135,12 +135,12 @@ public class ThymeleafHdivRequestDataValueProcessorTest extends AbstractHDIVTest
 		String action = "/testAction.do";
 
 		// 1. the action url
-		String result = this.dataValueProcessor.processAction(request, action);
+		String result = dataValueProcessor.processAction(request, action);
 		// Post urls are not modified
 		assertEquals(action, result);
 
 		// 2. Hidden field
-		Map<String, String> extraParams = this.dataValueProcessor.getExtraHiddenFields(request);
+		Map<String, String> extraParams = dataValueProcessor.getExtraHiddenFields(request);
 
 		assertNotNull(extraParams);
 		assertTrue(extraParams.size() == 1);
@@ -149,10 +149,10 @@ public class ThymeleafHdivRequestDataValueProcessorTest extends AbstractHDIVTest
 		assertNotNull(stateValue);
 
 		// 3. form parameters
-		String val = this.dataValueProcessor.processFormFieldValue(request, "param", "value", "select");
+		String val = dataValueProcessor.processFormFieldValue(request, "param", "value", "select");
 		assertEquals("0", val);
 
-		val = this.dataValueProcessor.processFormFieldValue(request, "param1", "value1", "text");
+		val = dataValueProcessor.processFormFieldValue(request, "param1", "value1", "text");
 		assertEquals("value1", val);
 
 		dataComposer.endPage();

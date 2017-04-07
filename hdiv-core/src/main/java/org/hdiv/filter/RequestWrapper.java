@@ -31,6 +31,7 @@ import javax.servlet.http.HttpServletRequestWrapper;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hdiv.context.RequestContext;
+import org.hdiv.context.RequestContextHolder;
 import org.hdiv.session.ISession;
 import org.hdiv.util.Constants;
 import org.springframework.util.Assert;
@@ -98,7 +99,7 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 	/**
 	 * Request context data.
 	 */
-	protected RequestContext requestContext = new RequestContext(this);
+	protected RequestContextHolder requestContext = new RequestContext(this);
 
 	/**
 	 * Constructs a request object wrapping the given request.

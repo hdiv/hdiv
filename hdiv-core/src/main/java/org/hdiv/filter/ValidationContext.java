@@ -15,16 +15,10 @@
  */
 package org.hdiv.filter;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import org.hdiv.context.RequestContextHolder;
 import org.hdiv.util.Method;
 
-public interface ValidationContext {
-
-	HttpServletRequest getRequest();
-
-	HttpServletResponse getResponse();
+public interface ValidationContext extends RequestContextHolder {
 
 	String getHdivParameterName();
 

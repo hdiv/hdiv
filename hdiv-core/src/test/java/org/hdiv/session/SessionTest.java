@@ -18,7 +18,7 @@ package org.hdiv.session;
 import java.util.List;
 
 import org.hdiv.AbstractHDIVTestCase;
-import org.hdiv.context.RequestContext;
+import org.hdiv.context.RequestContextHolder;
 import org.hdiv.state.IPage;
 import org.hdiv.state.IParameter;
 import org.hdiv.state.IState;
@@ -40,7 +40,7 @@ public class SessionTest extends AbstractHDIVTestCase {
 
 	public void testGetPageId() {
 
-		RequestContext context = getRequestContext();
+		RequestContextHolder context = getRequestContext();
 
 		int pageId = session.getPageId(context);
 
@@ -49,7 +49,7 @@ public class SessionTest extends AbstractHDIVTestCase {
 
 	public void testAddPage() {
 
-		RequestContext context = getRequestContext();
+		RequestContextHolder context = getRequestContext();
 
 		IPage page = new Page(20);
 
@@ -65,7 +65,7 @@ public class SessionTest extends AbstractHDIVTestCase {
 
 	public void testGetState() {
 
-		RequestContext context = getRequestContext();
+		RequestContextHolder context = getRequestContext();
 
 		IPage page = new Page(20);
 
@@ -86,7 +86,7 @@ public class SessionTest extends AbstractHDIVTestCase {
 
 	public void testGetPage() {
 
-		RequestContext context = getRequestContext();
+		RequestContextHolder context = getRequestContext();
 
 		IPage page = new Page(20);
 
@@ -107,7 +107,7 @@ public class SessionTest extends AbstractHDIVTestCase {
 
 	public void testPageRefresh() {
 
-		RequestContext context = getRequestContext();
+		RequestContextHolder context = getRequestContext();
 
 		// First page
 		IPage page = new Page(20);
@@ -159,7 +159,7 @@ public class SessionTest extends AbstractHDIVTestCase {
 
 	public void testAttributes() {
 
-		RequestContext context = super.getRequestContext();
+		RequestContextHolder context = super.getRequestContext();
 		String name = "attr";
 		String value = "value";
 
@@ -179,7 +179,7 @@ public class SessionTest extends AbstractHDIVTestCase {
 
 	public void testTypedAttributes() {
 
-		RequestContext context = super.getRequestContext();
+		RequestContextHolder context = super.getRequestContext();
 		String name = "attr";
 
 		Test1Bean result = session.getAttribute(context, name, Test1Bean.class);
@@ -202,7 +202,7 @@ public class SessionTest extends AbstractHDIVTestCase {
 
 	public void testRemovePage() {
 
-		RequestContext context = getRequestContext();
+		RequestContextHolder context = getRequestContext();
 
 		IPage page = new Page(20);
 

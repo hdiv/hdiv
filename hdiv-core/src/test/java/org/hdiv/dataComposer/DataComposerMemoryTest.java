@@ -20,7 +20,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.hdiv.AbstractHDIVTestCase;
-import org.hdiv.context.RequestContext;
+import org.hdiv.context.RequestContextHolder;
 import org.hdiv.session.ISession;
 import org.hdiv.state.IPage;
 import org.hdiv.state.IParameter;
@@ -72,29 +72,29 @@ public class DataComposerMemoryTest extends AbstractHDIVTestCase {
 
 		// we add a multiple parameter that will be encoded as 0, 1, 2, ...
 		String result = dataComposer.compose("test.do", "parameter1", "2", false);
-		String value = (!confidentiality) ? "2" : "0";
+		String value = !confidentiality ? "2" : "0";
 		assertTrue(value.equals(result));
 
 		result = dataComposer.compose("test.do", "parameter1", "2", false);
-		value = (!confidentiality) ? "2" : "1";
+		value = !confidentiality ? "2" : "1";
 		assertTrue(value.equals(result));
 
 		result = dataComposer.compose("test.do", "parameter1", "2", false);
 		assertTrue("2".equals(result));
 
 		result = dataComposer.compose("test.do", "parameter2", "2", false);
-		value = (!confidentiality) ? "2" : "0";
+		value = !confidentiality ? "2" : "0";
 		assertTrue(value.equals(result));
 
 		result = dataComposer.compose("test.do", "parameter2", "2", false);
-		value = (!confidentiality) ? "2" : "1";
+		value = !confidentiality ? "2" : "1";
 		assertTrue(value.equals(result));
 	}
 
 	public void testComposeAndRestore() {
 
 		HttpServletRequest request = getMockRequest();
-		RequestContext context = getRequestContext();
+		RequestContextHolder context = getRequestContext();
 		IDataComposer dataComposer = dataComposerFactory.newInstance(request);
 		HDIVUtil.setDataComposer(dataComposer, request);
 
@@ -117,7 +117,7 @@ public class DataComposerMemoryTest extends AbstractHDIVTestCase {
 	public void testComposeAndRestoreUrl() {
 
 		HttpServletRequest request = getMockRequest();
-		RequestContext context = getRequestContext();
+		RequestContextHolder context = getRequestContext();
 		IDataComposer dataComposer = dataComposerFactory.newInstance(request);
 
 		dataComposer.startPage();
@@ -139,7 +139,7 @@ public class DataComposerMemoryTest extends AbstractHDIVTestCase {
 
 	public void testComposeExistingState() {
 		HttpServletRequest request = getMockRequest();
-		RequestContext context = getRequestContext();
+		RequestContextHolder context = getRequestContext();
 
 		IDataComposer dataComposer = dataComposerFactory.newInstance(request);
 		HDIVUtil.setDataComposer(dataComposer, request);
@@ -175,7 +175,7 @@ public class DataComposerMemoryTest extends AbstractHDIVTestCase {
 	public void testInnerState() {
 
 		HttpServletRequest request = getMockRequest();
-		RequestContext context = getRequestContext();
+		RequestContextHolder context = getRequestContext();
 		IDataComposer dataComposer = dataComposerFactory.newInstance(request);
 		HDIVUtil.setDataComposer(dataComposer, request);
 
@@ -206,7 +206,7 @@ public class DataComposerMemoryTest extends AbstractHDIVTestCase {
 	public void testEscapeHtml() {
 
 		HttpServletRequest request = getMockRequest();
-		RequestContext context = getRequestContext();
+		RequestContextHolder context = getRequestContext();
 		IDataComposer dataComposer = dataComposerFactory.newInstance(request);
 		HDIVUtil.setDataComposer(dataComposer, request);
 
@@ -238,7 +238,7 @@ public class DataComposerMemoryTest extends AbstractHDIVTestCase {
 	public void testEditableNullValue() {
 
 		HttpServletRequest request = getMockRequest();
-		RequestContext context = getRequestContext();
+		RequestContextHolder context = getRequestContext();
 		IDataComposer dataComposer = dataComposerFactory.newInstance(request);
 		HDIVUtil.setDataComposer(dataComposer, request);
 
@@ -262,7 +262,7 @@ public class DataComposerMemoryTest extends AbstractHDIVTestCase {
 	public void testAjax() {
 
 		MockHttpServletRequest request = getMockRequest();
-		RequestContext context = getRequestContext();
+		RequestContextHolder context = getRequestContext();
 		IDataComposer dataComposer = dataComposerFactory.newInstance(request);
 		HDIVUtil.setDataComposer(dataComposer, request);
 
@@ -304,7 +304,7 @@ public class DataComposerMemoryTest extends AbstractHDIVTestCase {
 		getConfig().setReuseExistingPageInAjaxRequest(true);
 
 		HttpServletRequest request = getMockRequest();
-		RequestContext context = getRequestContext();
+		RequestContextHolder context = getRequestContext();
 		IDataComposer dataComposer = dataComposerFactory.newInstance(request);
 		HDIVUtil.setDataComposer(dataComposer, request);
 
@@ -373,7 +373,7 @@ public class DataComposerMemoryTest extends AbstractHDIVTestCase {
 		// Test the validation of a state before processing all page
 
 		MockHttpServletRequest request = getMockRequest();
-		RequestContext context = getRequestContext();
+		RequestContextHolder context = getRequestContext();
 		IDataComposer dataComposer = dataComposerFactory.newInstance(request);
 		HDIVUtil.setDataComposer(dataComposer, request);
 
@@ -395,7 +395,7 @@ public class DataComposerMemoryTest extends AbstractHDIVTestCase {
 
 		// No encoded url
 		MockHttpServletRequest request = getMockRequest();
-		RequestContext context = getRequestContext();
+		RequestContextHolder context = getRequestContext();
 		IDataComposer dataComposer = dataComposerFactory.newInstance(request);
 		HDIVUtil.setDataComposer(dataComposer, request);
 

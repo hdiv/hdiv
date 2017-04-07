@@ -26,11 +26,11 @@ import org.hdiv.session.SessionModel;
  *
  * @since 3.0.0
  */
-public class RequestContext {
+public class RequestContext implements RequestContextHolder {
 
-	private HttpServletRequest request;
+	protected HttpServletRequest request;
 
-	private HttpServletResponse response;
+	protected HttpServletResponse response;
 
 	private final SessionModel session;
 

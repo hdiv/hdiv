@@ -19,6 +19,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hdiv.config.HDIVConfig;
 import org.hdiv.context.RequestContext;
+import org.hdiv.context.RequestContextHolder;
 import org.hdiv.exception.HDIVException;
 import org.hdiv.session.ISession;
 import org.hdiv.state.scope.StateScope;
@@ -70,16 +71,12 @@ public class StateUtil {
 		return HDIVStateUtils.getPageId(requestState);
 	}
 
-	/**
-	 * Restore state data from <code>request</code>. State restore from memory can be done using an identifier or or using the serialized
-	 * data received in the request.
-	 *
-	 * @param context Context holder for request-specific state.
-	 * @param requestState String that contains HDIV state received in the request
-	 * @return State Restore state data from <code>request</code>.
-	 * @throws HDIVException If the state doesn't exist a new HDIV exception is thrown.
-	 */
-	public IState restoreState(final RequestContext context, final String requestState) {
+	@Deprecated
+	public final IState restoreState(final RequestContext context, final String requestState) {
+		return restoreState((RequestContextHolder) context, requestState);
+	}
+
+	public IState restoreState(final RequestContextHolder context, final String requestState) {
 
 		IState restoredState = restoreMemoryState(context, requestState);
 
@@ -94,6 +91,11 @@ public class StateUtil {
 		return true;
 	}
 
+	@Deprecated
+	protected final IState restoreMemoryState(final RequestContext context, final String requestState) {
+		return restoreMemoryState((RequestContextHolder) context, requestState);
+	}
+
 	/**
 	 * Restore a state from Memory Strategy.
 	 *
@@ -101,7 +103,7 @@ public class StateUtil {
 	 * @param requestState String that contains HDIV state received in the request
 	 * @return State Restore state data from <code>request</code>.
 	 */
-	protected IState restoreMemoryState(final RequestContext context, final String requestState) {
+	protected IState restoreMemoryState(final RequestContextHolder context, final String requestState) {
 
 		IState restoredState;
 
@@ -154,6 +156,11 @@ public class StateUtil {
 		return restoredState;
 	}
 
+	@Deprecated
+	protected IState getStateFromSession(final RequestContext context, final int pageId, final int stateId) {
+		return getStateFromSession((RequestContextHolder) context, pageId, stateId);
+	}
+
 	/**
 	 * Restores the state using the identifier obtained from the <code>HDIVParameter</code> of the request.
 	 *
@@ -162,7 +169,7 @@ public class StateUtil {
 	 * @param stateId current {@link IState} id
 	 * @return State with all the page data.
 	 */
-	protected IState getStateFromSession(final RequestContext context, final int pageId, final int stateId) {
+	protected IState getStateFromSession(final RequestContextHolder context, final int pageId, final int stateId) {
 
 		final IState sessionState = session.getState(context, pageId, stateId);
 
