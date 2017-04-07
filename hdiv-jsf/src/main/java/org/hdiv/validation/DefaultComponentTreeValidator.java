@@ -86,20 +86,29 @@ public class DefaultComponentTreeValidator implements ComponentTreeValidator {
 
 	protected void validateAjaxRequest(final ValidationContext context) {
 
+		UIComponent componentToValidate = null;
 		UIComponent source = findSourceComponent(context);
 		UIForm submittedForm = findParentSubmittedForm(context, source);
-
 		if (submittedForm != null) {
+			componentToValidate = submittedForm;
+		}
+		else {
+			// The executed component is not inside a form!
+			// Use the source component as the root component to validate
+			componentToValidate = source;
+		}
+
+		if (componentToValidate != null) {
 			if (log.isDebugEnabled()) {
 				log.debug("Validating Ajax request.");
 				log.debug("Components to validate:");
 			}
-			// Validate component tree starting in form
-			validateComponentTree(context, submittedForm);
+			// Validate component tree
+			validateComponentTree(context, componentToValidate);
 		}
 		else {
 			if (log.isErrorEnabled()) {
-				log.error("Can't find submitted form.");
+				log.error("Can't find root component to start the validation.");
 			}
 		}
 	}
@@ -161,7 +170,7 @@ public class DefaultComponentTreeValidator implements ComponentTreeValidator {
 			log.debug(" - Component: " + clientId + " of Type: " + component.getClass().getCanonicalName());
 		}
 
-		if (!component.isRendered()) {
+		if (isExcludedComponent(component)) {
 			// Exclude non rendered components from the parameter validation
 			return;
 		}
@@ -238,6 +247,11 @@ public class DefaultComponentTreeValidator implements ComponentTreeValidator {
 			}
 		}
 		return errors;
+	}
+
+	protected boolean isExcludedComponent(final UIComponent component) {
+
+		return !component.isRendered();
 	}
 
 	protected boolean isExcludedUrl(final FacesContext context) {
