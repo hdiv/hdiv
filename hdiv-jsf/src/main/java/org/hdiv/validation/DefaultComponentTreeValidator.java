@@ -87,7 +87,7 @@ public class DefaultComponentTreeValidator implements ComponentTreeValidator {
 	protected void validateAjaxRequest(final ValidationContext context) {
 
 		UIComponent source = findSourceComponent(context);
-		UIForm submittedForm = findParentSubmittedForm(context.getFacesContext(), source);
+		UIForm submittedForm = findParentSubmittedForm(context, source);
 
 		if (submittedForm != null) {
 			if (log.isDebugEnabled()) {
@@ -107,7 +107,7 @@ public class DefaultComponentTreeValidator implements ComponentTreeValidator {
 	protected void validateNonAjaxRequest(final ValidationContext context) {
 
 		// Find submitted form
-		UIForm submittedForm = findSubmittedForm(context.getFacesContext(), context.getFacesContext().getViewRoot());
+		UIForm submittedForm = findSubmittedForm(context, context.getFacesContext().getViewRoot());
 
 		if (submittedForm != null) {
 			if (log.isDebugEnabled()) {
@@ -276,18 +276,18 @@ public class DefaultComponentTreeValidator implements ComponentTreeValidator {
 	 * @param comp Base component
 	 * @return UIForm component
 	 */
-	protected UIForm findSubmittedForm(final FacesContext facesContext, final UIComponent comp) {
+	protected UIForm findSubmittedForm(final ValidationContext context, final UIComponent comp) {
 
 		if (comp instanceof UIForm) {
 			UIForm form = (UIForm) comp;
 			String clientId = form.getClientId();
-			String paramValue = facesContext.getExternalContext().getRequestParameterMap().get(clientId);
+			String paramValue = context.getRequestParameters().get(clientId);
 			if (paramValue != null && paramValue.equals(clientId)) {
 				return form;
 			}
 		}
 		for (UIComponent child : comp.getChildren()) {
-			UIForm form = findSubmittedForm(facesContext, child);
+			UIForm form = findSubmittedForm(context, child);
 			if (form != null) {
 				return form;
 			}
@@ -301,22 +301,25 @@ public class DefaultComponentTreeValidator implements ComponentTreeValidator {
 	 * @param comp Base component
 	 * @return UIForm component
 	 */
-	protected UIForm findParentSubmittedForm(final FacesContext facesContext, final UIComponent comp) {
+	protected UIForm findParentSubmittedForm(final ValidationContext context, final UIComponent comp) {
 
 		if (comp == null || comp instanceof UIViewRoot) {
 			return null;
 		}
 
-		if (comp instanceof UIForm) {
-			UIForm form = (UIForm) comp;
-			String clientId = form.getClientId();
-			String paramValue = facesContext.getExternalContext().getRequestParameterMap().get(clientId);
-			if (paramValue != null && paramValue.equals(clientId)) {
-				return form;
+		UIComponent parent = comp.getParent();
+		while (parent != null && !(parent instanceof UIViewRoot)) {
+			if (parent instanceof UIForm) {
+				UIForm form = (UIForm) parent;
+				String clientId = form.getClientId();
+				String paramValue = context.getRequestParameters().get(clientId);
+				if (paramValue != null && paramValue.equals(clientId)) {
+					return form;
+				}
 			}
+			parent = parent.getParent();
 		}
-
-		return findParentSubmittedForm(facesContext, comp.getParent());
+		return null;
 	}
 
 	public void setConfig(final HDIVConfig config) {

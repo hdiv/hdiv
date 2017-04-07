@@ -157,8 +157,10 @@ public class ValidatorPhaseListener implements PhaseListener {
 		HttpServletResponse response = (HttpServletResponse) context.getExternalContext().getResponse();
 
 		List<ValidatorError> errors = new ArrayList<ValidatorError>();
-		for (FacesValidatorError error : validatorErrors) {
-			errors.add(error);
+		if (validatorErrors != null) {
+			for (FacesValidatorError error : validatorErrors) {
+				errors.add(error);
+			}
 		}
 		validatorErrorHandler.handleValidatorError(request, response, errors);
 	}
@@ -173,9 +175,11 @@ public class ValidatorPhaseListener implements PhaseListener {
 
 		HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
 
-		for (ValidatorError error : errors) {
-			error.setTarget(HDIVUtil.getRequestURI(request));
-			logger.log(error);
+		if (errors != null) {
+			for (ValidatorError error : errors) {
+				error.setTarget(HDIVUtil.getRequestURI(request));
+				logger.log(error);
+			}
 		}
 	}
 
