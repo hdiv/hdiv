@@ -203,11 +203,30 @@ public class DataComposerMemory extends AbstractDataComposer {
 		return toId(state);
 	}
 
+	private void logCompact(final HDIVException e) {
+		if (hdivConfig.isDebugMode()) {
+			StringBuilder sb = new StringBuilder();
+			sb.append("Error on page").append(e.getMessage());
+			if (e.getStackTrace().length > 0) {
+				sb.append(" Cl:").append(e.getStackTrace()[0].getClassName()).append(":").append(e.getStackTrace()[0].getLineNumber());
+			}
+			log.info(sb.toString());
+		}
+		else {
+			throw e;
+		}
+	}
+
 	/**
 	 * It is called in the pre-processing stage of each user request assigning a new page identifier to the page.
 	 */
-	public void startPage() {
-		initPage();
+	public final void startPage() {
+		try {
+			initPage();
+		}
+		catch (HDIVException e) {
+			logCompact(e);
+		}
 	}
 
 	/**
@@ -231,21 +250,25 @@ public class DataComposerMemory extends AbstractDataComposer {
 	 * This method is called in the pre-processing stage of each user request to add an IPage object, which represents the page to show by
 	 * the server, with all its states to the user session.
 	 */
-	public void endPage() {
-
-		if (isRequestStarted()) {
-			// A request is started but not ended
-			endRequest();
-		}
-
-		if (page.getStatesCount() > 0) {
-			// The page has states, update them in session
-			session.addPage(context, page);
-		}
-		else {
-			if (log.isDebugEnabled()) {
-				log.debug("The page [" + page.getId() + "] has no states, is not stored in session");
+	public final void endPage() {
+		try {
+			if (isRequestStarted()) {
+				// A request is started but not ended
+				endRequest();
 			}
+
+			if (page.getStatesCount() > 0) {
+				// The page has states, update them in session
+				session.addPage(context, page);
+			}
+			else {
+				if (log.isDebugEnabled()) {
+					log.debug("The page [" + page.getId() + "] has no states, is not stored in session");
+				}
+			}
+		}
+		catch (HDIVException e) {
+			logCompact(e);
 		}
 
 	}
