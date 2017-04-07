@@ -81,6 +81,12 @@ public class HtmlInputHiddenValidator extends AbstractComponentValidator {
 				log.debug("Hidden's value sent to the client:" + hiddenRealValue);
 			}
 
+			if (hiddenRealValue == null) {
+				// If the hidden field has not a defined value, a null value is stored.
+				// For request validation purpose, it equivalent to empty String
+				hiddenRealValue = "";
+			}
+
 			if (hiddenValue == null) {
 
 				if (log.isDebugEnabled()) {
