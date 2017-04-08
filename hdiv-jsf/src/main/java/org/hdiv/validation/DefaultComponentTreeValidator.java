@@ -54,8 +54,7 @@ public class DefaultComponentTreeValidator implements ComponentTreeValidator {
 		componentValidators.add(new GenericComponentValidator());
 		componentValidators.add(new HtmlInputHiddenValidator());
 		componentValidators.add(new UICommandValidator());
-		EditableValidator editableValidator = new EditableValidator();
-		editableValidator.setHdivConfig(config);
+		EditableValidator editableValidator = new EditableValidator(config.getEditableDataValidationProvider());
 		componentValidators.add(editableValidator);
 		componentValidators.add(new UISelectValidator());
 	}

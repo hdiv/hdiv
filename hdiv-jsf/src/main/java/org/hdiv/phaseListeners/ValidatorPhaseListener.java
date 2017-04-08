@@ -131,18 +131,28 @@ public class ValidatorPhaseListener implements PhaseListener {
 
 	protected boolean mustStopRequest(final List<FacesValidatorError> errors) {
 
+		if (errors.isEmpty()) {
+			return false;
+		}
+
 		if (config.isDebugMode()) {
 			return false;
 		}
 
+		boolean onlyEditable = true;
 		if (errors != null && !errors.isEmpty()) {
 			for (ValidatorError error : errors) {
 				if (!error.getType().equals(HDIVErrorCodes.INVALID_EDITABLE_VALUE)) {
-					return true;
+					onlyEditable = false;
+					break;
 				}
 			}
 		}
-		return false;
+
+		if (onlyEditable && !config.isShowErrorPageOnEditableValidation()) {
+			return false;
+		}
+		return true;
 	}
 
 	/**

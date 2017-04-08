@@ -15,6 +15,8 @@
  */
 package org.hdiv.validators;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Locale;
 
 import javax.faces.application.FacesMessage;
@@ -25,18 +27,17 @@ import javax.faces.component.html.HtmlInputSecret;
 import javax.faces.component.html.HtmlInputText;
 import javax.faces.component.html.HtmlInputTextarea;
 import javax.faces.context.FacesContext;
-import javax.faces.convert.Converter;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.hdiv.config.HDIVConfig;
 import org.hdiv.util.Constants;
 import org.hdiv.util.HDIVErrorCodes;
 import org.hdiv.util.HDIVUtil;
 import org.hdiv.util.MessageFactory;
 import org.hdiv.util.UtilsJsf;
 import org.hdiv.validation.ValidationContext;
+import org.hdiv.validator.EditableDataValidationProvider;
 import org.hdiv.validator.EditableDataValidationResult;
 
 /**
@@ -49,9 +50,13 @@ public class EditableValidator implements ComponentValidator {
 	private static final Log log = LogFactory.getLog(EditableValidator.class);
 
 	/**
-	 * HDIV config
+	 * EditableDataValidationProvider
 	 */
-	private HDIVConfig hdivConfig;
+	private final EditableDataValidationProvider editableDataValidationProvider;
+
+	public EditableValidator(final EditableDataValidationProvider editableDataValidationProvider) {
+		this.editableDataValidationProvider = editableDataValidationProvider;
+	}
 
 	public boolean supports(final UIComponent component) {
 
@@ -71,9 +76,8 @@ public class EditableValidator implements ComponentValidator {
 	protected void validateInput(final ValidationContext validationContext, final UIInput inputComponent) {
 
 		FacesContext context = validationContext.getFacesContext();
-
 		String clientId = inputComponent.getClientId(context);
-		Object value = context.getExternalContext().getRequestParameterMap().get(clientId);
+
 		String contentType = null;
 		if (inputComponent instanceof HtmlInputHidden) {
 			contentType = "hidden";
@@ -88,32 +92,71 @@ public class EditableValidator implements ComponentValidator {
 			contentType = "password";
 		}
 
-		// Parameter value is always accepted, because the component has an editable value
-		Converter conv = inputComponent.getConverter();
-		String convertedValue = value == null ? "" : value.toString();
-		if (conv != null) {
-			convertedValue = conv.getAsString(context, inputComponent, value);
-		}
-		validationContext.acceptParameter(clientId, convertedValue);
+		List<String> parameters = getSubmittedClientId(validationContext, clientId);
+		for (String param : parameters) {
 
-		EditableDataValidationResult result = validateContent(context, clientId, value, contentType);
+			Object val = context.getExternalContext().getRequestParameterMap().get(param);
+			String value = null;
+			if (val == null) {
+				return;
+			}
+			else {
+				value = val.toString();
+			}
+
+			validateParameter(validationContext, inputComponent, contentType, param, value);
+		}
+	}
+
+	/**
+	 * Get submitted parameters for this component.
+	 * @param context Validation context
+	 * @param clientId component client id
+	 * @return
+	 */
+	protected List<String> getSubmittedClientId(final ValidationContext context, final String clientId) {
+
+		List<String> params = context.getParamsWithRowId().get(clientId);
+		if (params != null && params.size() > 0) {
+			return params;
+		}
+		return Collections.singletonList(clientId);
+	}
+
+	/**
+	 * Validate a parameter.
+	 * @param validationContext Validation context
+	 * @param component Component to validate
+	 * @param contentType Component type
+	 * @param paramName the name of the component to validate
+	 * @param paramValue the value of the parameter
+	 */
+	protected void validateParameter(final ValidationContext validationContext, final UIInput inputComponent, final String contentType,
+			final String paramName, final String paramValue) {
+
+		FacesContext context = validationContext.getFacesContext();
+
+		validationContext.acceptParameter(paramName, paramValue);
+
+		EditableDataValidationResult result = validateContent(context, paramName, paramValue, contentType);
 		if (!result.isValid()) {
 
 			// Add message
 			FacesMessage msg = createFacesMessage(context, inputComponent);
-			context.addMessage(clientId, msg);
+			context.addMessage(paramName, msg);
 
 			// We can't do this in RestoreState phase. Store the component and do it later.
 			// inputComponent.setValid(false);
 
 			if (log.isDebugEnabled()) {
-				log.debug("Parameter '" + clientId + "' rejected in component '" + clientId + "' in ComponentValidator '" + this.getClass()
-						+ "'");
+				log.debug("Parameter '" + paramName + "' rejected in component '" + inputComponent.getClientId()
+						+ "' in ComponentValidator '" + this.getClass() + "'");
 			}
 
-			validationContext.rejectParameter(clientId, value.toString(), HDIVErrorCodes.INVALID_EDITABLE_VALUE, result.getValidationId(),
+			validationContext.rejectParameter(paramName, paramValue, HDIVErrorCodes.INVALID_EDITABLE_VALUE, result.getValidationId(),
 					inputComponent);
 		}
+
 	}
 
 	/**
@@ -133,8 +176,7 @@ public class EditableValidator implements ComponentValidator {
 		String target = UtilsJsf.getTargetUrl(context);
 
 		String[] content = { (String) contentObj };
-		EditableDataValidationResult result = hdivConfig.getEditableDataValidationProvider().validate(target, clientId, content,
-				contentType);
+		EditableDataValidationResult result = editableDataValidationProvider.validate(target, clientId, content, contentType);
 		return result;
 	}
 
@@ -147,7 +189,7 @@ public class EditableValidator implements ComponentValidator {
 	 */
 	protected FacesMessage createFacesMessage(final FacesContext context, final UIInput inputComponent) {
 
-		String clientId = inputComponent.getClientId();
+		String clientId = inputComponent.getClientId(context);
 
 		String label = null;
 
@@ -190,7 +232,4 @@ public class EditableValidator implements ComponentValidator {
 		return facesMessage;
 	}
 
-	public void setHdivConfig(final HDIVConfig hdivConfig) {
-		this.hdivConfig = hdivConfig;
-	}
 }
