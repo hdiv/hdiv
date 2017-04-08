@@ -66,17 +66,18 @@ public class ComponentMessagesLog {
 		Iterator<String> clientIterator = facesContext.getClientIdsWithMessages();
 		while (clientIterator.hasNext()) {
 			String clientId = clientIterator.next();
+			if (clientId != null) {
+				HttpServletRequest request = (HttpServletRequest) facesContext.getExternalContext().getRequest();
+				String requestValue = request.getParameter(clientId);
 
-			HttpServletRequest request = (HttpServletRequest) facesContext.getExternalContext().getRequest();
-			String requestValue = request.getParameter(clientId);
+				// Remove row identifiers from clientId
+				String clientIdWithoutRowId = UtilsJsf.removeRowId(clientId);
 
-			// Remove row identifiers from clientId
-			String clientIdWithoutRowId = UtilsJsf.removeRowId(clientId);
-
-			UIComponent clientComponent = facesContext.getViewRoot().findComponent(clientIdWithoutRowId);
-			Iterator<FacesMessage> clientMessages = facesContext.getMessages(clientId);
-			String requestUri = HDIVUtil.getRequestURI(request);
-			manageClientMessages(requestValue, facesContext, clientComponent, clientMessages, requestUri);
+				UIComponent clientComponent = facesContext.getViewRoot().findComponent(clientIdWithoutRowId);
+				Iterator<FacesMessage> clientMessages = facesContext.getMessages(clientId);
+				String requestUri = HDIVUtil.getRequestURI(request);
+				manageClientMessages(requestValue, facesContext, clientComponent, clientMessages, requestUri);
+			}
 		}
 	}
 

@@ -95,6 +95,10 @@ public class ValidationContext {
 
 	public void acceptParameter(final String parameterName, final Object parameterValue) {
 
+		if (parameterName == null || parameterValue == null) {
+			return;
+		}
+
 		if (log.isDebugEnabled()) {
 			log.debug("Accepted parameter: " + parameterName + ", " + parameterValue);
 		}
@@ -102,12 +106,9 @@ public class ValidationContext {
 		Set<Object> values = validParameters.get(parameterName);
 		if (values == null) {
 			values = new HashSet<Object>();
-			values.add(parameterValue);
 			validParameters.put(parameterName, values);
 		}
-		else {
-			values.add(parameterValue);
-		}
+		values.add(parameterValue.toString());
 	}
 
 	public void rejectParameter(final String paramName, final String paramErrorValue, final String errorKey,
