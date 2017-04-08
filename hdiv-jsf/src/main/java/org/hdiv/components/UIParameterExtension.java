@@ -16,14 +16,15 @@
 package org.hdiv.components;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 import javax.faces.component.UIComponent;
+import javax.faces.component.UINamingContainer;
 import javax.faces.component.UIParameter;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 
+import org.hdiv.state.StateManager;
 import org.hdiv.util.ConstantsJsf;
 import org.hdiv.util.HDIVUtil;
 
@@ -48,16 +49,20 @@ public class UIParameterExtension extends UIParameter {
 	 * @param parentClientId Parent ClientId
 	 * @return parameter value
 	 */
-	@SuppressWarnings("unchecked")
-	public Object getValue(final String parentClientId) {
+	public Object getValue(final FacesContext context, final String parentClientId) {
 
 		Object val = this.getValue();
 
 		// If it has previously been stored in the state, return the stored value else return the default
-		Map<String, Object> values = (Map<String, Object>) getAttributes().get(ConstantsJsf.HDIV_ATTRIBUTE_KEY);
-		if (values != null) {
-			val = values.get(parentClientId);
+		StateManager stateManager = getStateManager(context);
+		if (stateManager != null) {
+			List<Object> values = stateManager.restoreState(parentClientId + UINamingContainer.getSeparatorChar(context) + getName());
+
+			if (values != null && values.size() > 0) {
+				val = values.get(0);
+			}
 		}
+
 		return val;
 	}
 
@@ -67,7 +72,6 @@ public class UIParameterExtension extends UIParameter {
 	 * @see javax.faces.component.UIComponent#encodeBegin(javax.faces.context. FacesContext)
 	 */
 	@Override
-	@SuppressWarnings("unchecked")
 	public void encodeBegin(final FacesContext context) throws IOException {
 
 		// HDIV parameter name
@@ -81,18 +85,22 @@ public class UIParameterExtension extends UIParameter {
 		else {
 			UIComponent parent = getParent();
 			String parentClientId = parent.getClientId(context);
-			Map<String, Object> values = (Map<String, Object>) getAttributes().get(ConstantsJsf.HDIV_ATTRIBUTE_KEY);
-			if (values == null) {
-				values = new HashMap<String, Object>();
-			}
 
 			// It is a parameter added by the application, so store its value in the JSF state to be able to validate it in future requests.
 			Object val = this.getValue();
-			values.put(parentClientId, val);
 
-			getAttributes().put(ConstantsJsf.HDIV_ATTRIBUTE_KEY, values);
+			StateManager stateManager = getStateManager(context);
+			if (stateManager != null) {
+				stateManager.saveState(parentClientId + UINamingContainer.getSeparatorChar(context) + name, val);
+			}
 		}
 		super.encodeBegin(context);
+	}
+
+	protected StateManager getStateManager(final FacesContext context) {
+		StateManager stateManager = (StateManager) context.getExternalContext().getRequestMap()
+				.get(ConstantsJsf.HDIV_STATE_MANAGER_ATTRIBUTE_KEY);
+		return stateManager;
 	}
 
 }

@@ -131,23 +131,13 @@ public class UICommandValidator extends AbstractComponentValidator {
 		FacesContext context = validationContext.getFacesContext();
 		UIParameterExtension param = (UIParameterExtension) parameter;
 
-		UIComponent parent = parameter.getParent();
-		String parentClientId = parent.getClientId(context);
-
 		Map<String, String> requestMap = context.getExternalContext().getRequestParameterMap();
 		String requestValue = requestMap.get(param.getName());
 
-		Object realValueObj = param.getValue(parentClientId);
 		String realValue = null;
-
+		Object realValueObj = param.getValue(context, clicked.getParamName());
 		if (realValueObj != null) {
 			realValue = realValueObj.toString();
-		}
-		else {
-			realValueObj = param.getValue(clicked.getParamName());
-			if (realValueObj != null) {
-				realValue = realValueObj.toString();
-			}
 		}
 
 		if (log.isDebugEnabled()) {
