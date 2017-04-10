@@ -17,8 +17,6 @@ package org.hdiv.filter;
 
 import java.io.UnsupportedEncodingException;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.hdiv.context.RequestContextHolder;
 import org.hdiv.exception.HDIVException;
 import org.hdiv.util.Constants;
@@ -46,7 +44,7 @@ public class ValidationContextImpl implements ValidationContext {
 		this.context = context;
 		this.obfuscation = obfuscation;
 		this.restorer = restorer;
-		method = Method.valueOf(context.getRequest().getMethod());
+		method = Method.valueOf(context.getMethod());
 	}
 
 	public String getTarget() {
@@ -85,12 +83,11 @@ public class ValidationContextImpl implements ValidationContext {
 		return restorer;
 	}
 
-	private final String getDecodedTarget(final StringBuilder sb, final HttpServletRequest request) {
+	private final String getDecodedTarget(final StringBuilder sb, final RequestContextHolder request) {
 		/**
 		 * Remove contest path and session info first
 		 */
-		String target = HDIVUtil.stripSession(request.getRequestURI().substring(request.getContextPath().length()));
-		return decodeUrl(sb, target);
+		return decodeUrl(sb, HDIVUtil.stripSession(request.getUrlWithoutContextPath()));
 	}
 
 	/**
@@ -116,7 +113,7 @@ public class ValidationContextImpl implements ValidationContext {
 	}
 
 	public String getRequestedTarget() {
-		return getDecodedTarget(sb, context.getRequest());
+		return getDecodedTarget(sb, context);
 	}
 
 	public RequestContextHolder getRequestContext() {

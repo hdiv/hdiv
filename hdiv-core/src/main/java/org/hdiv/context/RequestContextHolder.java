@@ -15,6 +15,10 @@
  */
 package org.hdiv.context;
 
+import java.util.Enumeration;
+import java.util.Map;
+
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -27,6 +31,7 @@ public interface RequestContextHolder {
 
 	HttpServletResponse getResponse();
 
+	@Deprecated
 	HttpServletRequest getRequest();
 
 	String getHdivParameterName();
@@ -58,5 +63,41 @@ public interface RequestContextHolder {
 	long getRenderTime();
 
 	void addRenderTime(long time);
+
+	String getMethod();
+
+	String getContextPath();
+
+	String getServletPath();
+
+	String getServerName();
+
+	Object getAttribute(String attributeName);
+
+	void setAttribute(String attributeName, Object value);
+
+	boolean isAsync();
+
+	Map<String, String[]> getParameterMap();
+
+	void setFormStateId(String formStateId);
+
+	String getFormStateId();
+
+	Enumeration<String> getParameterNames();
+
+	String[] getParameterValues(String parameter);
+
+	Cookie[] getCookies();
+
+	String getQueryString();
+
+	void addEditableParameter(final String name);
+
+	String getMessage(final String key, final String o);
+
+	void addParameterToRequest(final String name, final String[] value);
+
+	String getContentType();
 
 }

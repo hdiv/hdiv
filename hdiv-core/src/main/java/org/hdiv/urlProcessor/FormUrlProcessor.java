@@ -32,8 +32,6 @@ import org.hdiv.util.Method;
  */
 public class FormUrlProcessor extends AbstractUrlProcessor {
 
-	public static final String FORM_STATE_ID = "hdivFormStateId";
-
 	/**
 	 * Commons Logging instance.
 	 */
@@ -83,13 +81,13 @@ public class FormUrlProcessor extends AbstractUrlProcessor {
 			return url;
 		}
 		String hdivParameter = dataComposer.getHdivParameterName();
-		UrlData urlData = createUrlData(url, method, hdivParameter, request.getRequest());
+		UrlData urlData = createUrlData(url, method, hdivParameter, request);
 		if (urlData.isHdivStateNecessary(config)) {
 			// the url needs protection
 			String stateId = dataComposer.beginRequest(method, urlData.getUrlWithoutContextPath());
 
 			// Publish the state in request to make it accessible on jsp
-			request.getRequest().setAttribute(FORM_STATE_ID, stateId);
+			request.setFormStateId(stateId);
 
 			// Process url params
 			String processedParams = dataComposer.composeParams(urlData.getUrlParams(), method, Constants.ENCODING_UTF_8);
@@ -101,7 +99,7 @@ public class FormUrlProcessor extends AbstractUrlProcessor {
 		}
 		else {
 			// Reset state info
-			request.getRequest().removeAttribute(FORM_STATE_ID);
+			request.setFormStateId(null);
 		}
 
 		return url;

@@ -15,8 +15,7 @@
  */
 package org.hdiv.web.servlet.support;
 
-import javax.servlet.http.HttpServletRequest;
-
+import org.hdiv.context.RequestContextHolder;
 import org.springframework.web.servlet.support.RequestDataValueProcessor;
 
 /**
@@ -34,7 +33,7 @@ public class GrailsHdivRequestDataValueProcessor extends HdivRequestDataValuePro
 	 * @return processed url
 	 */
 	@Override
-	public String processUrl(final HttpServletRequest request, final String url) {
+	public String processUrl(final RequestContextHolder request, final String url) {
 		String urlToProcess = url;
 		Boolean modified = false;
 		String contextPath = request.getContextPath();

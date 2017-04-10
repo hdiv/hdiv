@@ -15,14 +15,25 @@
  */
 package org.hdiv.context;
 
+import java.util.Enumeration;
+import java.util.Locale;
+import java.util.Map;
+
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletRequestWrapper;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hdiv.dataComposer.IDataComposer;
+import org.hdiv.exception.HDIVException;
+import org.hdiv.filter.AsyncRequestWrapper;
+import org.hdiv.filter.RequestWrapper;
 import org.hdiv.session.SessionModel;
 import org.hdiv.util.Constants;
+import org.hdiv.util.HDIVUtil;
 
 /**
  * Context holder for request-specific state. Contains request-specific data for validation and composition phases.
@@ -55,22 +66,14 @@ public class RequestContext implements RequestContextHolder {
 
 	private final Log log = LogFactory.getLog(RequestContextHolder.class);
 
+	private String formStateId;
+
 	@SuppressWarnings("deprecation")
 	public RequestContext(final HttpServletRequest request, final HttpServletResponse response) {
 		this.request = request;
 		this.response = response;
 		requestURI = request.getRequestURI();
 		request.setAttribute(Constants.HDIV_REQUEST_CONTEXT, this);
-		doCreateSession();
-	}
-
-	public RequestContext(final RequestContextHolder context) {
-		request = context.getRequest();
-		response = context.getResponse();
-		modifyParameterName = context.getHdivModifyParameterName();
-		hdivParameterName = context.getHdivParameterName();
-		requestURI = context.getRequestURI();
-		currentPageId = context.getCurrentPageId();
 		doCreateSession();
 	}
 
@@ -83,9 +86,6 @@ public class RequestContext implements RequestContextHolder {
 		this.response = response;
 	}
 
-	/**
-	 * @return the request
-	 */
 	public HttpServletRequest getRequest() {
 		return request;
 	}
@@ -194,5 +194,142 @@ public class RequestContext implements RequestContextHolder {
 
 	public long getRenderTime() {
 		return renderTime;
+	}
+
+	public String getMethod() {
+		return request.getMethod();
+	}
+
+	public String getContextPath() {
+		return request.getContextPath();
+	}
+
+	public String getServerName() {
+		return request.getServerName();
+	}
+
+	public Object getAttribute(final String attributeName) {
+		return request.getAttribute(attributeName);
+	}
+
+	public void setAttribute(final String attributeName, final Object value) {
+		request.setAttribute(attributeName, value);
+	}
+
+	public boolean isAsync() {
+		RequestWrapper wrapper = HDIVUtil.getNativeRequest(request, RequestWrapper.class);
+		if (wrapper != null && wrapper instanceof AsyncRequestWrapper) {
+			AsyncRequestWrapper asyncWrapper = (AsyncRequestWrapper) wrapper;
+			return asyncWrapper.isAsyncRequest();
+		}
+		return false;
+	}
+
+	public Map<String, String[]> getParameterMap() {
+		return request.getParameterMap();
+	}
+
+	public String getFormStateId() {
+		return formStateId;
+	}
+
+	public void setFormStateId(final String formStateId) {
+		this.formStateId = formStateId;
+	}
+
+	public Enumeration<String> getParameterNames() {
+		return request.getParameterNames();
+	}
+
+	/**
+	 * Mark parameter as editable.
+	 *
+	 * @param request HttpServletRequest to validate
+	 * @param name parameter name
+	 */
+	public void addEditableParameter(final String name) {
+
+		if (request instanceof RequestWrapper) {
+			if (log.isDebugEnabled()) {
+				log.debug("Editable parameter [" + name + "] added.");
+			}
+			RequestWrapper wrapper = (RequestWrapper) request;
+			wrapper.addEditableParameter(name);
+		}
+	}
+
+	/**
+	 * Try to resolve the message. Treat as an error if the message can't be found.
+	 *
+	 * @param request ServletRequest object
+	 * @param key the code to lookup up, such as 'calculator.noRateSet'
+	 * @param o Array of arguments that will be filled in for params within the message (params look like "{0}", "{1,date}", "{2,time}"
+	 * within a message), or null if none.
+	 * @return The resolved message
+	 */
+	public String getMessage(final String key, final String o) {
+		return HDIVUtil.getMessage(request, key, o, Locale.getDefault());
+	}
+
+	protected ServletRequest getNativeRequest(final ServletRequest request, final Class<?> requiredType) {
+		if (requiredType != null) {
+			if (requiredType.isInstance(request)) {
+				return request;
+			}
+			else if (request instanceof ServletRequestWrapper) {
+				return getNativeRequest(((ServletRequestWrapper) request).getRequest(), requiredType);
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Adds one parameter to the request. Since the HttpServletRequest object's parameters are unchanged according to the Servlet
+	 * specification, the instance of request should be passed as a parameter of type RequestWrapper.
+	 *
+	 * @param request HttpServletRequest to validate
+	 * @param name new parameter name
+	 * @param value new parameter value
+	 * @throws HDIVException if the request object is not of type RequestWrapper
+	 */
+	public void addParameterToRequest(final String name, final String[] value) {
+
+		RequestWrapper wrapper;
+
+		if (request instanceof RequestWrapper) {
+			wrapper = (RequestWrapper) request;
+		}
+		else {
+			wrapper = (RequestWrapper) getNativeRequest(request, RequestWrapper.class);
+		}
+
+		if (wrapper != null) {
+			wrapper.addParameter(name, value);
+		}
+		else {
+			String errorMessage = HDIVUtil.getMessage(request, "helper.notwrapper");
+			throw new HDIVException(errorMessage);
+		}
+
+	}
+
+	public String[] getParameterValues(final String name) {
+		return request.getParameterValues(name);
+	}
+
+	public Cookie[] getCookies() {
+		return request.getCookies();
+	}
+
+	public String getQueryString() {
+		return request.getQueryString();
+	}
+
+	public String getContentType() {
+		return request.getContentType();
+	}
+
+	public String getServletPath() {
+		return request.getServletPath();
 	}
 }

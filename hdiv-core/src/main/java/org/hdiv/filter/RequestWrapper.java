@@ -96,6 +96,7 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 	 * 
 	 * @param servletRequest request
 	 */
+	@SuppressWarnings("deprecation")
 	public RequestWrapper(final RequestContextHolder requestContext) {
 		super(requestContext.getRequest());
 		this.requestContext = requestContext;

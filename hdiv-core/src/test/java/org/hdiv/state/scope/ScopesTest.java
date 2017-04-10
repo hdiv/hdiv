@@ -114,7 +114,7 @@ public class ScopesTest extends AbstractHDIVTestCase {
 
 		RequestContext context = (RequestContext) getRequestContext();
 		// Put a uri that is configured as a scoped page
-		context.setRequestURI("/scopedPage/user.html");
+		setRequestURI("/scopedPage/user.html");
 		IDataComposer dataComposer = dataComposerFactory.newInstance(context);
 		context.setDataComposer(dataComposer);
 		assertTrue(dataComposer instanceof DataComposerMemory);

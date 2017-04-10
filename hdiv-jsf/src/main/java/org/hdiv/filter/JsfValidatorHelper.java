@@ -21,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.hdiv.context.RequestContextHolder;
 import org.hdiv.state.IState;
 import org.hdiv.util.HDIVErrorCodes;
 import org.hdiv.util.Method;
@@ -61,18 +62,17 @@ public class JsfValidatorHelper extends ValidatorHelperRequest {
 	 * @see org.hdiv.filter.ValidatorHelperRequest#preValidate(javax.servlet.http.HttpServletRequest, java.lang.String)
 	 */
 	@Override
-	@SuppressWarnings("unchecked")
-	protected ValidatorHelperResult preValidate(final HttpServletRequest request, final String target) {
-
+	protected ValidatorHelperResult preValidate(final ValidationContext vc) {
+		RequestContextHolder ctx = vc.getRequestContext();
 		if (log.isDebugEnabled()) {
-			log.debug("URI: " + request.getRequestURI());
+			log.debug("URI: " + ctx.getRequestURI());
 		}
 
-		Map<String, Object> requestMap = request.getParameterMap();
+		Map<String, String[]> requestMap = ctx.getParameterMap();
 
 		boolean isViewState = UtilsJsf.hasFacesViewParamName(requestMap.keySet());
 
-		request.setAttribute(IS_VIEW_STATE_REQUEST, isViewState);
+		ctx.setAttribute(IS_VIEW_STATE_REQUEST, isViewState);
 
 		if (isViewState) {
 			// Contains parameter with JSF state, it is a JSF request.
@@ -80,7 +80,7 @@ public class JsfValidatorHelper extends ValidatorHelperRequest {
 				log.debug("Request contains view state");
 			}
 
-			if (hdivConfig.isStartPage(target, Method.secureValueOf(request.getMethod()))) {
+			if (hdivConfig.isStartPage(vc.getTarget(), Method.secureValueOf(ctx.getMethod()))) {
 				// It is an init page
 				if (log.isDebugEnabled()) {
 					log.debug("Request is start page");
@@ -103,7 +103,7 @@ public class JsfValidatorHelper extends ValidatorHelperRequest {
 	 * org.hdiv.state.IState)
 	 */
 	@Override
-	public ValidatorHelperResult isTheSameAction(final HttpServletRequest request, final String target, final IState state) {
+	public ValidatorHelperResult isTheSameAction(final RequestContextHolder request, final String target, final IState state) {
 
 		// First check if target and action are the same
 		// When outputlink is used target matches action

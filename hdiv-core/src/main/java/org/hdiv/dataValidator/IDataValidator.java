@@ -15,8 +15,7 @@
  */
 package org.hdiv.dataValidator;
 
-import javax.servlet.http.HttpServletRequest;
-
+import org.hdiv.context.RequestContextHolder;
 import org.hdiv.state.IParameter;
 
 /**
@@ -45,7 +44,7 @@ public interface IDataValidator {
 	 * @return object that represents the result of the validation process for the parameter <code>parameter</code> and the value
 	 * <code>data</code>.
 	 */
-	public IValidationResult validate(HttpServletRequest request, String value, String target, String parameter, IParameter stateParameter,
-			String[] actionParamValues);
+	public IValidationResult validate(RequestContextHolder request, String value, String target, String parameter,
+			IParameter stateParameter, String[] actionParamValues);
 
 }

@@ -61,6 +61,12 @@ public abstract class AbstractUrlProcessor {
 		return data.getUrlWithOutUriTemplate();
 	}
 
+	@Deprecated
+	public final UrlData createUrlData(final String url, final Method method, final String hdivParameter,
+			final HttpServletRequest request) {
+		return createUrlData(url, method, hdivParameter, HDIVUtil.getRequestContext(request));
+	}
+
 	/**
 	 * Create a new instance of {@link UrlData}.
 	 *
@@ -70,11 +76,11 @@ public abstract class AbstractUrlProcessor {
 	 * @param request {@link HttpServletRequest} object
 	 * @return new instance of {@link UrlData}
 	 */
-	public UrlData createUrlData(String url, final Method method, final String hdivParameter, final HttpServletRequest request) {
+	public UrlData createUrlData(String url, final Method method, final String hdivParameter, final RequestContextHolder ctx) {
 
-		final String contextPath = request.getContextPath();
-		final String serverName = request.getServerName();
-		final String baseURL = getBaseURL(request);
+		final String contextPath = ctx.getContextPath();
+		final String serverName = ctx.getServerName();
+		final String baseURL = getBaseURL(ctx);
 		final UrlDataImpl urlData = new UrlDataImpl(url, method);
 		url = removeURITemplateParams(urlData);
 
@@ -116,7 +122,10 @@ public abstract class AbstractUrlProcessor {
 	}
 
 	protected static final String getBaseURL(final HttpServletRequest request) {
-		RequestContextHolder context = HDIVUtil.getRequestContext(request);
+		return getBaseURL(HDIVUtil.getRequestContext(request));
+	}
+
+	protected static final String getBaseURL(final RequestContextHolder context) {
 		// Base url defined by <base> tag in some frameworks
 		String baseUrl = context.getBaseURL();
 		if (baseUrl != null) {

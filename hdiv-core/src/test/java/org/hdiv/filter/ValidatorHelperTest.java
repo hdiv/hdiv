@@ -104,7 +104,7 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 		MockHttpServletRequest request = getMockRequest();
 
 		dataComposer.beginRequest(Method.GET, targetName);
-		request.setRequestURI("/testing.do");
+		setRequestURI("/testing.do");
 
 		String pageState = dataComposer.endRequest();
 		dataComposer.endPage();
@@ -492,7 +492,7 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 		String pageState = dataComposer.endRequest();
 		dataComposer.endPage();
 
-		request.setRequestURI("/path/test%20Action.do");
+		setRequestURI("/path/test%20Action.do");
 		request.addParameter(hdivParameter, pageState);
 
 		assertTrue(helper.validate(validationContext).isValid());
@@ -507,7 +507,7 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 		String pageState = dataComposer.endRequest();
 		dataComposer.endPage();
 
-		request.setRequestURI("/path/test%20Action.do");
+		setRequestURI("/path/test%20Action.do");
 		request.addParameter(hdivParameter, pageState);
 
 		assertTrue(helper.validate(validationContext).isValid());
@@ -587,7 +587,7 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 		String stateId = dataComposer.endRequest();
 		dataComposer.endPage();
 
-		request.setRequestURI(encoded);
+		setRequestURI(encoded);
 
 		assertNotNull(stateId);
 
@@ -609,7 +609,7 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 		String stateId = dataComposer.endRequest();
 		dataComposer.endPage();
 
-		request.setRequestURI(urlRequest);
+		setRequestURI(urlRequest);
 
 		assertNotNull(stateId);
 

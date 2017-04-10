@@ -226,6 +226,11 @@ public abstract class AbstractHDIVTestCase extends TestCase {
 		((RequestContext) context).clearAjax();
 	}
 
+	public final void setRequestURI(final String uri) {
+		getMockRequest().setRequestURI(uri);
+		((RequestContext) context).setRequestURI(uri);
+	}
+
 	public MockHttpServletRequest getMockRequest() {
 		return mockRequest;
 	}

@@ -22,6 +22,8 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.hdiv.context.RequestContextDataValueProcessor;
+import org.hdiv.context.RequestContextHolder;
 import org.hdiv.dataComposer.IDataComposer;
 import org.hdiv.urlProcessor.FormUrlProcessor;
 import org.hdiv.urlProcessor.LinkUrlProcessor;
@@ -34,7 +36,7 @@ import org.springframework.web.servlet.support.RequestDataValueProcessor;
  * 
  * @author Gotzon Illarramendi
  */
-public class HdivRequestDataValueProcessor implements RequestDataValueProcessor {
+public class HdivRequestDataValueProcessor implements RequestDataValueProcessor, RequestContextDataValueProcessor {
 
 	protected LinkUrlProcessor linkUrlProcessor;
 
@@ -98,90 +100,24 @@ public class HdivRequestDataValueProcessor implements RequestDataValueProcessor 
 		return this.processAction(request, action, Method.POST.toString());
 	}
 
-	/**
-	 * Process the action url of the form tag.
-	 * 
-	 * @param request request object
-	 * @param action form action url
-	 * @param method form submit method
-	 * @return processed action url
-	 */
-	public String processAction(final HttpServletRequest request, String action, final String method) {
-
-		if (innerRequestDataValueProcessor != null) {
-			String processedAction = innerRequestDataValueProcessor.processAction(request, action, method);
-			if (processedAction != action) {
-				action = processedAction;
-			}
-		}
-		return formUrlProcessor.processUrl(request, action, Method.secureValueOf(method));
+	@Deprecated
+	public final String processAction(final HttpServletRequest request, final String action, final String method) {
+		return processAction(HDIVUtil.getRequestContext(request), action, method);
 	}
 
-	/**
-	 * Process form field value.
-	 * 
-	 * @param request request object
-	 * @param name the name of the field
-	 * @param value the value of the field
-	 * @param type the type of the field
-	 * @return processed field value
-	 */
-	public String processFormFieldValue(final HttpServletRequest request, final String name, String value, final String type) {
-
-		if (innerRequestDataValueProcessor != null) {
-			String processedValue = innerRequestDataValueProcessor.processFormFieldValue(request, name, value, type);
-			if (processedValue != value) {
-				value = processedValue;
-			}
-		}
-
-		if (name == null) {
-			return value;
-		}
-
-		IDataComposer dataComposer = HDIVUtil.getDataComposer(request);
-
-		if (dataComposer == null) {
-			return value;
-		}
-
-		if (isEditable(type)) {
-			dataComposer.composeFormField(name, value, true, type);
-			return value;
-		}
-		else {
-			return dataComposer.composeFormField(name, value, false, type);
-		}
-
+	@Deprecated
+	public final String processFormFieldValue(final HttpServletRequest request, final String name, final String value, final String type) {
+		return processFormFieldValue(HDIVUtil.getRequestContext(request), name, value, type);
 	}
 
-	/**
-	 * Extra hidden fields with the HDIV state value.
-	 * 
-	 * @param request request object
-	 * @return hidden field name/value
-	 */
-	public Map<String, String> getExtraHiddenFields(final HttpServletRequest request) {
+	@Deprecated
+	public final Map<String, String> getExtraHiddenFields(final HttpServletRequest request) {
+		return getExtraHiddenFields(HDIVUtil.getRequestContext(request));
+	}
 
-		Map<String, String> extraFields = getInnerExtraHiddenFields(request);
-
-		IDataComposer dataComposer = HDIVUtil.getDataComposer(request);
-		if (dataComposer == null || !dataComposer.isRequestStarted()) {
-			return extraFields;
-		}
-
-		String requestId = dataComposer.endRequest();
-
-		if (requestId != null && requestId.length() > 0) {
-			String hdivStateParam = dataComposer.getHdivParameterName();
-			if (hdivStateParam != null) {
-				extraFields.put(hdivStateParam, requestId);
-			}
-
-			// Publish the state in request to make it accessible on jsp
-			request.setAttribute(FormUrlProcessor.FORM_STATE_ID, requestId);
-		}
-		return extraFields;
+	@Deprecated
+	public final String processUrl(final HttpServletRequest request, final String url) {
+		return processUrl(HDIVUtil.getRequestContext(request), url);
 	}
 
 	/**
@@ -190,7 +126,7 @@ public class HdivRequestDataValueProcessor implements RequestDataValueProcessor 
 	 * @param request request object
 	 * @return hidden field name/value
 	 */
-	protected Map<String, String> getInnerExtraHiddenFields(final HttpServletRequest request) {
+	protected final Map<String, String> getInnerExtraHiddenFields(final HttpServletRequest request) {
 
 		Map<String, String> extraFields = new HashMap<String, String>();
 
@@ -201,24 +137,6 @@ public class HdivRequestDataValueProcessor implements RequestDataValueProcessor 
 			}
 		}
 		return extraFields;
-	}
-
-	/**
-	 * Process the url for a link.
-	 * 
-	 * @param request request object
-	 * @param url link url
-	 * @return processed url
-	 */
-	public String processUrl(final HttpServletRequest request, String url) {
-
-		if (innerRequestDataValueProcessor != null) {
-			String processedUrl = innerRequestDataValueProcessor.processUrl(request, url);
-			if (processedUrl != null) {
-				url = processedUrl;
-			}
-		}
-		return linkUrlProcessor.processUrl(request, url);
 	}
 
 	/**
@@ -257,6 +175,78 @@ public class HdivRequestDataValueProcessor implements RequestDataValueProcessor 
 	 */
 	public RequestDataValueProcessor getInnerRequestDataValueProcessor() {
 		return innerRequestDataValueProcessor;
+	}
+
+	public String processAction(final RequestContextHolder request, String action, final String method) {
+		if (innerRequestDataValueProcessor != null) {
+			@SuppressWarnings("deprecation")
+			String processedAction = innerRequestDataValueProcessor.processAction(request.getRequest(), action, method);
+			if (processedAction != action) {
+				action = processedAction;
+			}
+		}
+		return formUrlProcessor.processUrl(request, action, Method.secureValueOf(method));
+	}
+
+	public String processFormFieldValue(final RequestContextHolder request, final String name, String value, final String type) {
+		if (innerRequestDataValueProcessor != null) {
+			@SuppressWarnings("deprecation")
+			String processedValue = innerRequestDataValueProcessor.processFormFieldValue(request.getRequest(), name, value, type);
+			if (processedValue != value) {
+				value = processedValue;
+			}
+		}
+
+		if (name == null) {
+			return value;
+		}
+
+		IDataComposer dataComposer = request.getDataComposer();
+
+		if (dataComposer == null) {
+			return value;
+		}
+
+		if (isEditable(type)) {
+			dataComposer.composeFormField(name, value, true, type);
+			return value;
+		}
+		else {
+			return dataComposer.composeFormField(name, value, false, type);
+		}
+	}
+
+	public Map<String, String> getExtraHiddenFields(final RequestContextHolder context) {
+		@SuppressWarnings("deprecation")
+		Map<String, String> extraFields = getInnerExtraHiddenFields(context.getRequest());
+		IDataComposer dataComposer = context.getDataComposer();
+		if (dataComposer == null || !dataComposer.isRequestStarted()) {
+			return extraFields;
+		}
+
+		String requestId = dataComposer.endRequest();
+
+		if (requestId != null && requestId.length() > 0) {
+			String hdivStateParam = dataComposer.getHdivParameterName();
+			if (hdivStateParam != null) {
+				extraFields.put(hdivStateParam, requestId);
+			}
+
+			// Publish the state in request to make it accessible on jsp
+			context.setFormStateId(requestId);
+		}
+		return extraFields;
+	}
+
+	public String processUrl(final RequestContextHolder request, String url) {
+		if (innerRequestDataValueProcessor != null) {
+			@SuppressWarnings("deprecation")
+			String processedUrl = innerRequestDataValueProcessor.processUrl(request.getRequest(), url);
+			if (processedUrl != null) {
+				url = processedUrl;
+			}
+		}
+		return linkUrlProcessor.processUrl(request, url);
 	}
 
 }

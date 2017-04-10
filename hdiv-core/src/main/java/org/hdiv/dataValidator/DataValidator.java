@@ -18,11 +18,10 @@ package org.hdiv.dataValidator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hdiv.config.HDIVConfig;
+import org.hdiv.context.RequestContextHolder;
 import org.hdiv.state.IParameter;
 import org.hdiv.util.HDIVUtil;
 
@@ -50,11 +49,11 @@ public class DataValidator implements IDataValidator {
 	 * @see org.hdiv.dataValidator.IDataValidator#validate(javax.servlet.http.HttpServletRequest, java.lang.String, java.lang.String,
 	 * java.lang.String, org.hdiv.state.IParameter, java.lang.String[])
 	 */
-	public IValidationResult validate(final HttpServletRequest request, final String value, final String target, final String parameter,
+	public IValidationResult validate(final RequestContextHolder request, final String value, final String target, final String parameter,
 			final IParameter stateParameter, final String[] actionParamValues) {
 
 		boolean confidentiality = config.getConfidentiality();
-		boolean noConfidentiality = config.isParameterWithoutConfidentiality(HDIVUtil.getRequestContext(request), parameter);
+		boolean noConfidentiality = config.isParameterWithoutConfidentiality(request, parameter);
 		if (log.isDebugEnabled() && noConfidentiality) {
 			log.debug("Parameter [" + parameter + "] is ParameterWithoutConfidentiality.");
 		}
