@@ -57,6 +57,7 @@ public class AjaxTest extends AbstractHDIVTestCase {
 		request.addParameter(getConfig().getStateParameterName(), stateId);
 
 		request.addHeader("x-requested-with", "XMLHttpRequest");
+		clearAjax();
 
 		// DataComposer1
 		IDataComposer dataComposer1 = dataComposerFactory.newInstance(request);
@@ -122,6 +123,7 @@ public class AjaxTest extends AbstractHDIVTestCase {
 		request.addParameter(getConfig().getStateParameterName(), stateId);
 
 		request.addHeader("x-requested-with", "XMLHttpRequest");
+		clearAjax();
 
 		// DataComposer1
 		IDataComposer dataComposer1 = dataComposerFactory.newInstance(request);
@@ -187,6 +189,7 @@ public class AjaxTest extends AbstractHDIVTestCase {
 		request.addParameter(getConfig().getStateParameterName(), stateId);
 
 		request.addHeader("x-requested-with", "XMLHttpRequest");
+		clearAjax();
 
 		// Create two dataComposers concurrently
 		IDataComposer dataComposer1 = dataComposerFactory.newInstance(request);

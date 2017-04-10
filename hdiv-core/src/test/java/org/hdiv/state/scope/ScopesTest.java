@@ -18,7 +18,7 @@ package org.hdiv.state.scope;
 import javax.servlet.http.HttpServletRequest;
 
 import org.hdiv.AbstractHDIVTestCase;
-import org.hdiv.context.RequestContextHolder;
+import org.hdiv.context.RequestContext;
 import org.hdiv.dataComposer.DataComposerFactory;
 import org.hdiv.dataComposer.DataComposerMemory;
 import org.hdiv.dataComposer.IDataComposer;
@@ -27,7 +27,6 @@ import org.hdiv.urlProcessor.LinkUrlProcessor;
 import org.hdiv.util.HDIVStateUtils;
 import org.hdiv.util.HDIVUtil;
 import org.hdiv.util.Method;
-import org.springframework.mock.web.MockHttpServletRequest;
 
 public class ScopesTest extends AbstractHDIVTestCase {
 
@@ -113,12 +112,11 @@ public class ScopesTest extends AbstractHDIVTestCase {
 
 	public void testScopedPage() {
 
-		MockHttpServletRequest request = getMockRequest();
-		RequestContextHolder context = getRequestContext();
+		RequestContext context = (RequestContext) getRequestContext();
 		// Put a uri that is configured as a scoped page
-		request.setRequestURI("/scopedPage/user.html");
-		IDataComposer dataComposer = dataComposerFactory.newInstance(request);
-		HDIVUtil.setDataComposer(dataComposer, request);
+		context.setRequestURI("/scopedPage/user.html");
+		IDataComposer dataComposer = dataComposerFactory.newInstance(context);
+		context.setDataComposer(dataComposer);
 		assertTrue(dataComposer instanceof DataComposerMemory);
 
 		dataComposer.startPage();

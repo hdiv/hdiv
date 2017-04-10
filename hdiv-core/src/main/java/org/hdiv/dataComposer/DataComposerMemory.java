@@ -21,7 +21,7 @@ import java.util.Deque;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.hdiv.context.RequestContext;
+import org.hdiv.context.RequestContextHolder;
 import org.hdiv.exception.HDIVException;
 import org.hdiv.state.IPage;
 import org.hdiv.state.IState;
@@ -67,7 +67,7 @@ public class DataComposerMemory extends AbstractDataComposer {
 
 	protected StateScope stateScope;
 
-	public DataComposerMemory(final RequestContext requestContext) {
+	public DataComposerMemory(final RequestContextHolder requestContext) {
 		super(requestContext);
 	}
 

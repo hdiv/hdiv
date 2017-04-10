@@ -19,6 +19,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.hdiv.AbstractHDIVTestCase;
+import org.hdiv.context.RequestContext;
+import org.hdiv.context.RequestContextFactory;
 import org.hdiv.exception.HDIVException;
 import org.hdiv.filter.RequestWrapper;
 import org.hdiv.filter.ResponseWrapper;
@@ -29,46 +31,49 @@ public class RequestInitializerTest extends AbstractHDIVTestCase {
 
 	private RequestInitializer requestInitializer;
 
+	private RequestContextFactory contextFactory;
+
+	@Override
 	protected void onSetUp() throws Exception {
-		this.requestInitializer = this.getApplicationContext().getBean(RequestInitializer.class);
+		requestInitializer = getApplicationContext().getBean(RequestInitializer.class);
 	}
 
 	public void testCreateRequestWrapper() {
 
-		HttpServletRequest request = this.getMockRequest();
-		HttpServletResponse response = this.getMockResponse();
+		HttpServletRequest request = getMockRequest();
+		HttpServletResponse response = getMockResponse();
 
-		RequestWrapper wrapper = this.requestInitializer.createRequestWrapper(request, response);
+		RequestWrapper wrapper = requestInitializer.createRequestWrapper(new RequestContext(request, response));
 
 		assertNotNull(wrapper);
 	}
 
 	public void testCreateResponseWrapper() {
 
-		HttpServletRequest request = this.getMockRequest();
-		HttpServletResponse response = this.getMockResponse();
+		HttpServletRequest request = getMockRequest();
+		HttpServletResponse response = getMockResponse();
 
-		ResponseWrapper wrapper = this.requestInitializer.createResponseWrapper(request, response);
+		ResponseWrapper wrapper = requestInitializer.createResponseWrapper(new RequestContext(request, response));
 
 		assertNotNull(wrapper);
 	}
 
 	public void testInitRequest() {
 
-		HttpServletRequest request = this.getMockRequest();
+		HttpServletRequest request = getMockRequest();
 		HttpServletResponse response = new MockHttpServletResponse();
 
-		this.requestInitializer.initRequest(request, response);
+		requestInitializer.initRequest(new RequestContext(request, response));
 
 		assertNotNull(HDIVUtil.getRequestURI(request));
 	}
 
 	public void testEndRequest() {
 
-		HttpServletRequest request = this.getMockRequest();
+		HttpServletRequest request = getMockRequest();
 		HttpServletResponse response = new MockHttpServletResponse();
 		try {
-			this.requestInitializer.endRequest(request, response);
+			requestInitializer.endRequest(new RequestContext(request, response));
 		}
 		catch (HDIVException e) {
 			assertTrue(true);

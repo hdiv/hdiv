@@ -89,7 +89,7 @@ public class CipherTag extends TagSupport {
 	@Override
 	public int doStartTag() throws JspException {
 
-		IDataComposer dataComposer = HDIVUtil.getDataComposer(pageContext.getRequest());
+		IDataComposer dataComposer = HDIVUtil.getRequestContext(pageContext.getRequest()).getDataComposer();
 
 		String action = (String) getValue("action");
 		String parameter = (String) getValue("parameter");

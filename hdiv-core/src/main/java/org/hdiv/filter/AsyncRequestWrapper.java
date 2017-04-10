@@ -18,33 +18,18 @@ package org.hdiv.filter;
 import javax.servlet.AsyncContext;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.springframework.util.Assert;
+import org.hdiv.context.RequestContextHolder;
 
 public class AsyncRequestWrapper extends RequestWrapper {
-
-	/**
-	 * Commons Logging instance.
-	 */
-	private static final Log log = LogFactory.getLog(AsyncRequestWrapper.class);
 
 	/**
 	 * True if this is an Async request.
 	 */
 	protected boolean isAsyncRequest = false;
 
-	public AsyncRequestWrapper(final HttpServletRequest servletRequest) {
-
+	public AsyncRequestWrapper(final RequestContextHolder servletRequest) {
 		super(servletRequest);
-
-		Assert.notNull(servletRequest);
-
-		if (log.isDebugEnabled()) {
-			log.debug("New RequestWrapper instance.");
-		}
 	}
 
 	@Override

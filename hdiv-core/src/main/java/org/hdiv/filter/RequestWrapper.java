@@ -25,16 +25,11 @@ import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.hdiv.context.RequestContext;
 import org.hdiv.context.RequestContextHolder;
 import org.hdiv.session.ISession;
 import org.hdiv.util.Constants;
-import org.springframework.util.Assert;
 
 /**
  * A wrapper for HTTP servlet request.
@@ -44,11 +39,6 @@ import org.springframework.util.Assert;
  * @see javax.servlet.http.HttpServletRequestWrapper
  */
 public class RequestWrapper extends HttpServletRequestWrapper {
-
-	/**
-	 * Commons Logging instance.
-	 */
-	private static final Log log = LogFactory.getLog(RequestWrapper.class);
 
 	/**
 	 * HTTP header to sent cookies.
@@ -99,22 +89,16 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 	/**
 	 * Request context data.
 	 */
-	protected RequestContextHolder requestContext = new RequestContext(this);
+	protected final RequestContextHolder requestContext;
 
 	/**
 	 * Constructs a request object wrapping the given request.
 	 * 
 	 * @param servletRequest request
 	 */
-	public RequestWrapper(final HttpServletRequest servletRequest) {
-
-		super(servletRequest);
-
-		Assert.notNull(servletRequest);
-
-		if (log.isDebugEnabled()) {
-			log.debug("New RequestWrapper instance.");
-		}
+	public RequestWrapper(final RequestContextHolder requestContext) {
+		super(requestContext.getRequest());
+		this.requestContext = requestContext;
 	}
 
 	/**

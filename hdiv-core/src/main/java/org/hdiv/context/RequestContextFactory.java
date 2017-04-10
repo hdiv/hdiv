@@ -18,45 +18,8 @@ package org.hdiv.context;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.hdiv.dataComposer.IDataComposer;
-import org.hdiv.session.SessionModel;
+import org.hdiv.init.RequestInitializer;
 
-public interface RequestContextHolder {
-
-	SessionModel getSession();
-
-	HttpServletResponse getResponse();
-
-	HttpServletRequest getRequest();
-
-	String getHdivParameterName();
-
-	String getHdivModifyParameterName();
-
-	String getHdivState();
-
-	String getRequestURI();
-
-	int getCurrentPageId();
-
-	void setCurrentPageId(int pageId);
-
-	void setBaseURL(String baseURL);
-
-	String getBaseURL();
-
-	String getParameter(String name);
-
-	boolean isAjax();
-
-	String getUrlWithoutContextPath();
-
-	IDataComposer getDataComposer();
-
-	void setDataComposer(IDataComposer composer);
-
-	long getRenderTime();
-
-	void addRenderTime(long time);
-
+public interface RequestContextFactory {
+	RequestContextHolder create(RequestInitializer initializer, HttpServletRequest request, HttpServletResponse response);
 }

@@ -31,6 +31,8 @@ import org.hdiv.config.multipart.JsfMultipartConfig;
 import org.hdiv.config.multipart.SpringMVCMultipartConfig;
 import org.hdiv.config.multipart.StrutsMultipartConfig;
 import org.hdiv.context.RedirectHelper;
+import org.hdiv.context.RequestContextFactory;
+import org.hdiv.context.RequestContextFactoryImpl;
 import org.hdiv.dataComposer.DataComposerFactory;
 import org.hdiv.dataValidator.DataValidator;
 import org.hdiv.dataValidator.IDataValidator;
@@ -201,6 +203,8 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 
 	protected RuntimeBeanReference validationContextFactoryRef;
 
+	protected RuntimeBeanReference requestContextFactoryRef;
+
 	protected RuntimeBeanReference validatorErrorHandlerRef;
 
 	protected boolean springVersionGrEqThan4() {
@@ -237,6 +241,7 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		formUrlProcessorRef = createFormUrlProcessor(source, parserContext);
 		basicUrlProcessorRef = createBasicUrlProcessor(source, parserContext);
 		validationContextFactoryRef = createValidationContextFactory(source, parserContext);
+		requestContextFactoryRef = createRequestContextFactory(source, parserContext);
 		createRequestInitializer(source, parserContext);
 		createServletContextInitializer(source, parserContext);
 		createSessionInitializer(source, parserContext);
@@ -500,6 +505,14 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
 
 		return registerBean(bean, ValidationContextFactory.class.getName(), parserContext);
+	}
+
+	protected RuntimeBeanReference createRequestContextFactory(final Object source, final ParserContext parserContext) {
+		RootBeanDefinition bean = new RootBeanDefinition(RequestContextFactoryImpl.class);
+		bean.setSource(source);
+		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
+
+		return registerBean(bean, RequestContextFactory.class.getName(), parserContext);
 	}
 
 	protected RuntimeBeanReference createRequestDataValueProcessor(final Object source, final ParserContext parserContext) {

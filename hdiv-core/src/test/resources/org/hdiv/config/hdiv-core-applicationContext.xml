@@ -51,6 +51,8 @@
 	</bean>
 
 	<!-- Initializers -->
+	<bean id="contextFactory" class="org.hdiv.context.RequestContextFactoryImpl">
+	</bean>
 	<bean id="requestInitializer" class="org.hdiv.init.DefaultRequestInitializer">
 		<property name="config" ref="config" />
 		<property name="session" ref="sessionHDIV" />

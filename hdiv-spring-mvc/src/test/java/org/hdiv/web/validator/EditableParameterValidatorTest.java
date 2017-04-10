@@ -21,6 +21,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.hdiv.AbstractHDIVTestCase;
+import org.hdiv.context.RequestContext;
 import org.hdiv.dataComposer.DataComposerFactory;
 import org.hdiv.dataComposer.IDataComposer;
 import org.hdiv.filter.IValidationHelper;
@@ -73,8 +74,10 @@ public class EditableParameterValidatorTest extends AbstractHDIVTestCase {
 		request.addParameter(hdivParameter, pageState);
 		request.addParameter("paramName", "<script>storeCookie()</script>");
 
-		HttpServletRequest requestWrapper = new RequestWrapper(request);
-		ValidatorHelperResult result = helper.validate(new ValidationContextImpl(requestWrapper, getMockResponse(), helper, false));
+		RequestContext context = new RequestContext(request, getMockResponse());
+		context.setHdivParameterName(hdivParameter);
+		HttpServletRequest requestWrapper = new RequestWrapper(context);
+		ValidatorHelperResult result = helper.validate(new ValidationContextImpl(context, helper, false));
 		assertFalse(result.isValid());
 
 		// Editable errors in request?

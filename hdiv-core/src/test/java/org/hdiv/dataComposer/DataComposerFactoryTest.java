@@ -53,6 +53,7 @@ public class DataComposerFactoryTest extends AbstractHDIVTestCase {
 		// Create other instance
 		request.addParameter("_HDIV_STATE_", stateId);
 		request.addHeader("x-requested-with", "XMLHttpRequest");
+		clearAjax();
 		getConfig().setReuseExistingPageInAjaxRequest(true);
 
 		dataComposer = dataComposerFactory.newInstance(request);
@@ -76,6 +77,7 @@ public class DataComposerFactoryTest extends AbstractHDIVTestCase {
 
 		// Create other instance
 		request.addHeader("x-requested-with", "XMLHttpRequest");
+		clearAjax();
 		getConfig().setReuseExistingPageInAjaxRequest(true);
 
 		dataComposer = dataComposerFactory.newInstance(request);
@@ -101,6 +103,7 @@ public class DataComposerFactoryTest extends AbstractHDIVTestCase {
 		request.addParameter("_HDIV_STATE_", stateId);
 		request.addHeader("x-requested-with", "XMLHttpRequest");
 		request.addHeader("X-PJAX", "");
+		clearAjax();
 		getConfig().setReuseExistingPageInAjaxRequest(true);
 
 		dataComposer = dataComposerFactory.newInstance(request);

@@ -33,6 +33,10 @@ import org.springframework.context.ApplicationContextAware;
  */
 public class DefaultSessionInitializer implements SessionInitializer, ApplicationContextAware {
 
+	public static final String HDIV_PARAMETER = "HDIVParameter";
+
+	public static final String MODIFY_STATE_HDIV_PARAMETER = "modifyHDIVStateParameter";
+
 	protected HDIVConfig config;
 
 	protected ApplicationContext applicationContext;
@@ -75,7 +79,6 @@ public class DefaultSessionInitializer implements SessionInitializer, Applicatio
 	 * @param httpSession http session
 	 * @since HDIV 1.1
 	 */
-	@SuppressWarnings("deprecation")
 	protected void initStateParameterNames(final HttpSession httpSession) {
 
 		String hdivParameterName;
@@ -90,8 +93,8 @@ public class DefaultSessionInitializer implements SessionInitializer, Applicatio
 			modifyHdivStateParameterName = config.getModifyStateParameterName();
 		}
 
-		httpSession.setAttribute(Constants.HDIV_PARAMETER, hdivParameterName);
-		httpSession.setAttribute(Constants.MODIFY_STATE_HDIV_PARAMETER, modifyHdivStateParameterName);
+		httpSession.setAttribute(HDIV_PARAMETER, hdivParameterName);
+		httpSession.setAttribute(MODIFY_STATE_HDIV_PARAMETER, modifyHdivStateParameterName);
 	}
 
 	public void setApplicationContext(final ApplicationContext applicationContext) {

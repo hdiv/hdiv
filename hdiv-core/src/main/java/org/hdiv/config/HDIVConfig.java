@@ -23,15 +23,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.hdiv.context.RequestContextHolder;
 import org.hdiv.regex.PatternMatcher;
 import org.hdiv.regex.PatternMatcherFactory;
 import org.hdiv.state.IPage;
 import org.hdiv.state.scope.StateScopeType;
-import org.hdiv.util.HDIVUtil;
 import org.hdiv.util.Method;
 import org.hdiv.validator.EditableDataValidationProvider;
 
@@ -47,8 +45,6 @@ public class HDIVConfig implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private static final Log log = LogFactory.getLog(HDIVConfig.class);
-
-	private static final Strategy DEFAULT_STRATEGY = Strategy.MEMORY;
 
 	private static final String DEFAULT_STATE_PARAMETER_NAME = "_HDIV_STATE_";
 
@@ -274,9 +270,9 @@ public class HDIVConfig implements Serializable {
 	 * @param paramName parameter name to check
 	 * @return boolean
 	 */
-	public boolean isParameterWithoutConfidentiality(final HttpServletRequest request, final String paramName) {
+	public boolean isParameterWithoutConfidentiality(final RequestContextHolder context, final String paramName) {
 
-		String modifyHdivStateParameterName = HDIVUtil.getModifyHdivStateParameterName(request);
+		String modifyHdivStateParameterName = context.getHdivModifyParameterName();
 		if (modifyHdivStateParameterName != null && modifyHdivStateParameterName.equals(paramName)) {
 			return true;
 		}

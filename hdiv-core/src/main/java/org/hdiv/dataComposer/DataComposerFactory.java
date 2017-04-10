@@ -21,7 +21,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.hdiv.config.HDIVConfig;
-import org.hdiv.context.RequestContext;
+import org.hdiv.context.RequestContextHolder;
 import org.hdiv.idGenerator.UidGenerator;
 import org.hdiv.session.ISession;
 import org.hdiv.state.IPage;
@@ -29,7 +29,6 @@ import org.hdiv.state.IState;
 import org.hdiv.state.StateUtil;
 import org.hdiv.state.scope.StateScopeManager;
 import org.hdiv.state.scope.StateScopeType;
-import org.hdiv.util.Constants;
 import org.hdiv.util.HDIVUtil;
 
 /**
@@ -77,6 +76,11 @@ public class DataComposerFactory {
 	 */
 	protected List<String> excludePageReuseHeaders = Arrays.asList("X-PJAX", "X-HDIV-EXCLUDE-PAGE-REUSE");
 
+	@Deprecated
+	public final IDataComposer newInstance(final HttpServletRequest request) {
+		return newInstance(HDIVUtil.getRequestContext(request));
+	}
+
 	/**
 	 * Creates a new instance of DataComposer based on the defined strategy.
 	 *
@@ -84,9 +88,8 @@ public class DataComposerFactory {
 	 *
 	 * @return IDataComposer instance
 	 */
-	public IDataComposer newInstance(final HttpServletRequest request) {
+	public IDataComposer newInstance(final RequestContextHolder context) {
 
-		RequestContext context = new RequestContext(request);
 		DataComposerMemory composer = new DataComposerMemory(context);
 		composer.setHdivConfig(config);
 		composer.setSession(session);
@@ -103,12 +106,11 @@ public class DataComposerFactory {
 	 * @param dataComposer IDataComposer instance
 	 * @param context current request context
 	 */
-	protected void initDataComposer(final IDataComposer dataComposer, final RequestContext context) {
+	protected void initDataComposer(final IDataComposer dataComposer, final RequestContextHolder context) {
 
-		HttpServletRequest request = context.getRequest();
-		String hdivState = request.getParameter(dataComposer.getHdivParameterName());
+		String hdivState = context.getHdivState();
 
-		String preState = getModifyStateParameterValue(request);
+		String preState = getModifyStateParameterValue(context);
 
 		if (preState != null && preState.length() > 0) {
 
@@ -129,7 +131,7 @@ public class DataComposerFactory {
 			}
 
 		}
-		else if (reuseExistingPage(request)) {
+		else if (reuseExistingPage(context)) {
 
 			if (hdivState != null && hdivState.length() > 0) {
 				int pageId = stateUtil.getPageId(hdivState);
@@ -150,7 +152,7 @@ public class DataComposerFactory {
 		}
 
 		// Detect if request url is configured as a long living page
-		String url = request.getRequestURI().substring(request.getContextPath().length());
+		String url = context.getUrlWithoutContextPath();
 		StateScopeType scope = config.isLongLivingPages(url);
 		if (scope != null) {
 			dataComposer.startScope(scope);
@@ -161,12 +163,12 @@ public class DataComposerFactory {
 	 * Get _MODIFY_HDIV_STATE_ parameter value.
 	 *
 	 * @param dataComposer IDataComposer instance
-	 * @param request current HttpServletRequest instance
+	 * @param context current HttpServletRequest instance
 	 * @return parameter value.
 	 */
-	protected String getModifyStateParameterValue(final HttpServletRequest request) {
-		String paramName = HDIVUtil.getModifyHdivStateParameterName(request);
-		return paramName != null ? request.getParameter(paramName) : null;
+	protected String getModifyStateParameterValue(final RequestContextHolder context) {
+		String paramName = context.getHdivModifyParameterName();
+		return paramName != null ? context.getParameter(paramName) : null;
 	}
 
 	/**
@@ -175,38 +177,11 @@ public class DataComposerFactory {
 	 * @param request current HttpServletRequest instance
 	 * @return reuse or not
 	 */
-	protected boolean reuseExistingPage(final HttpServletRequest request) {
-
-		if (isAjaxRequest(request)) {
-
-			if (excludePageReuseInAjax(request)) {
-				return false;
-			}
-			// Decides based on user settings
-			return config.isReuseExistingPageInAjaxRequest();
-		}
-		return false;
+	protected final boolean reuseExistingPage(final RequestContextHolder context) {
+		return config.isReuseExistingPageInAjaxRequest() && context.isAjax() && !excludePageReuseInAjax(context.getRequest());
 	}
 
-	/**
-	 * Checks if request is an ajax request and store the result in a request's attribute
-	 *
-	 * @param request the HttpServletRequest
-	 *
-	 * @return isAjaxRquest
-	 */
-	protected boolean isAjaxRequest(final HttpServletRequest request) {
-
-		String xRequestedWithValue = request.getHeader("x-requested-with");
-
-		boolean isAjaxRequest = xRequestedWithValue != null ? "XMLHttpRequest".equalsIgnoreCase(xRequestedWithValue) : false;
-
-		request.setAttribute(Constants.AJAX_REQUEST, isAjaxRequest);
-
-		return isAjaxRequest;
-	}
-
-	protected boolean excludePageReuseInAjax(final HttpServletRequest request) {
+	protected final boolean excludePageReuseInAjax(final HttpServletRequest request) {
 
 		for (String header : excludePageReuseHeaders) {
 			String headerValue = request.getHeader(header);

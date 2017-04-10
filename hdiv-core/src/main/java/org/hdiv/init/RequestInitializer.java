@@ -15,9 +15,7 @@
  */
 package org.hdiv.init;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import org.hdiv.context.RequestContextHolder;
 import org.hdiv.filter.RequestWrapper;
 import org.hdiv.filter.ResponseWrapper;
 import org.hdiv.filter.ValidatorFilter;
@@ -36,7 +34,7 @@ public interface RequestInitializer {
 	 * @param request request object
 	 * @param response response object
 	 */
-	void initRequest(HttpServletRequest request, HttpServletResponse response);
+	void initRequest(RequestContextHolder context);
 
 	/**
 	 * Destroy request scoped data
@@ -44,7 +42,7 @@ public interface RequestInitializer {
 	 * @param request request object
 	 * @param response response object
 	 */
-	void endRequest(HttpServletRequest request, HttpServletResponse response);
+	void endRequest(RequestContextHolder context);
 
 	/**
 	 * Create request wrapper.
@@ -53,7 +51,7 @@ public interface RequestInitializer {
 	 * @param response HTTP response
 	 * @return the request wrapper
 	 */
-	RequestWrapper createRequestWrapper(HttpServletRequest request, HttpServletResponse response);
+	RequestWrapper createRequestWrapper(RequestContextHolder context);
 
 	/**
 	 * Create response wrapper.
@@ -62,5 +60,5 @@ public interface RequestInitializer {
 	 * @param response HTTP response
 	 * @return the response wrapper
 	 */
-	ResponseWrapper createResponseWrapper(HttpServletRequest request, HttpServletResponse response);
+	ResponseWrapper createResponseWrapper(RequestContextHolder context);
 }

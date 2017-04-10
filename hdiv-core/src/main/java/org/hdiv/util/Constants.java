@@ -72,21 +72,15 @@ public class Constants {
 	public static final String STATE_CACHE_NAME = "org.hdiv.StateCache";
 
 	/**
-	 * Session and request attribute for Hdiv state parameter name.
-	 */
-	@Deprecated
-	public static final String HDIV_PARAMETER = "HDIVParameter";
-
-	/**
 	 * Obfuscation redirect target
 	 */
 	static final String HDIV_OBF_REDIRECT = "HDIVObfRedirect";
 
 	/**
-	 * Session and request attribute for Modify Hdiv state parameter name.
+	 * Request context
 	 */
 	@Deprecated
-	public static final String MODIFY_STATE_HDIV_PARAMETER = "modifyHDIVStateParameter";
+	public static final String HDIV_REQUEST_CONTEXT = "HdivRC";
 
 	public static final String ENCODING_UTF_8 = "UTF-8";
 
@@ -106,13 +100,6 @@ public class Constants {
 	 * Location of the internal resources files
 	 */
 	public static final String MESSAGE_SOURCE_PATH = "org.hdiv.msg.MessageResources";
-
-	/**
-	 * Request attribute name that contains if request is an ajax request
-	 * 
-	 * @since 2.1.13
-	 */
-	public static final String AJAX_REQUEST = "org.hdiv.ajaxrequest";
 
 	/**
 	 * Common separator for state IDs

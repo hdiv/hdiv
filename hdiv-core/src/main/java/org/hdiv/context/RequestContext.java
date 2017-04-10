@@ -17,11 +17,12 @@ package org.hdiv.context;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
-import org.hdiv.exception.HDIVException;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.hdiv.dataComposer.IDataComposer;
 import org.hdiv.session.SessionModel;
-import org.hdiv.util.HDIVUtil;
+import org.hdiv.util.Constants;
 
 /**
  * Context holder for request-specific state. Contains request-specific data for validation and composition phases.
@@ -34,20 +35,52 @@ public class RequestContext implements RequestContextHolder {
 
 	protected HttpServletResponse response;
 
-	private final SessionModel session;
+	protected SessionModel session;
 
-	public RequestContext(final HttpServletRequest request) {
-		this(request, null);
-	}
+	protected String modifyParameterName;
 
+	protected String hdivParameterName;
+
+	private String requestURI;
+
+	private String baseURL;
+
+	private int currentPageId;
+
+	private Boolean isAjaxRequest;
+
+	private IDataComposer dataComposer;
+
+	private long renderTime;
+
+	private final Log log = LogFactory.getLog(RequestContextHolder.class);
+
+	@SuppressWarnings("deprecation")
 	public RequestContext(final HttpServletRequest request, final HttpServletResponse response) {
 		this.request = request;
 		this.response = response;
+		requestURI = request.getRequestURI();
+		request.setAttribute(Constants.HDIV_REQUEST_CONTEXT, this);
+		doCreateSession();
+	}
+
+	public RequestContext(final RequestContextHolder context) {
+		request = context.getRequest();
+		response = context.getResponse();
+		modifyParameterName = context.getHdivModifyParameterName();
+		hdivParameterName = context.getHdivParameterName();
+		requestURI = context.getRequestURI();
+		currentPageId = context.getCurrentPageId();
+		doCreateSession();
+	}
+
+	protected void doCreateSession() {
 		session = new HttpSessionModel(request.getSession());
 	}
 
-	public RequestContext(final HttpSession session) {
-		this.session = new HttpSessionModel(session);
+	public final void update(final HttpServletRequest request, final HttpServletResponse response) {
+		this.request = request;
+		this.response = response;
 	}
 
 	/**
@@ -55,6 +88,10 @@ public class RequestContext implements RequestContextHolder {
 	 */
 	public HttpServletRequest getRequest() {
 		return request;
+	}
+
+	public String getParameter(final String name) {
+		return request.getParameter(name);
 	}
 
 	/**
@@ -71,27 +108,91 @@ public class RequestContext implements RequestContextHolder {
 		return session;
 	}
 
-	/**
-	 * Name of the parameter that HDIV will include in the requests or/and forms which contains the state identifier in the memory strategy.
-	 *
-	 * @param request request
-	 * @return hdiv parameter value
-	 */
-	protected String getHdivParameter() {
-
-		String paramName = HDIVUtil.getHdivStateParameterName(request);
-
-		if (paramName == null) {
-			throw new HDIVException("HDIV parameter name missing in session. Deleted by the app?");
-		}
-		return paramName;
+	public String getHdivParameterName() {
+		return hdivParameterName;
 	}
 
-	public String getHdivParameterName() {
-		return getHdivParameter();
+	public void setHdivParameterName(final String name) {
+		hdivParameterName = name;
+	}
+
+	public String getHdivModifyParameterName() {
+		return modifyParameterName;
+	}
+
+	public void setHdivModifyParameterName(final String name) {
+		modifyParameterName = name;
 	}
 
 	public String getHdivState() {
 		return request.getParameter(getHdivParameterName());
+	}
+
+	public String getRequestURI() {
+		return requestURI;
+	}
+
+	public void setRequestURI(final String requestURI) {
+		this.requestURI = requestURI;
+	}
+
+	public int getCurrentPageId() {
+		return currentPageId;
+	}
+
+	public void setCurrentPageId(final int currentPageId) {
+		this.currentPageId = currentPageId;
+	}
+
+	public String getBaseURL() {
+		return baseURL;
+	}
+
+	public void setBaseURL(final String baseURL) {
+		this.baseURL = baseURL;
+	}
+
+	/**
+	 * Checks if request is an ajax request and store the result in a request's attribute
+	 *
+	 * @param request the HttpServletRequest
+	 *
+	 * @return isAjaxRquest
+	 */
+	public final boolean isAjax() {
+		if (isAjaxRequest == null) {
+			String xRequestedWithValue = request.getHeader("x-requested-with");
+			isAjaxRequest = xRequestedWithValue != null ? "XMLHttpRequest".equalsIgnoreCase(xRequestedWithValue) : false;
+		}
+		return isAjaxRequest;
+	}
+
+	public void clearAjax() {
+		// Only for testing
+		isAjaxRequest = null;
+	}
+
+	public String getUrlWithoutContextPath() {
+		return requestURI.substring(request.getContextPath().length());
+	}
+
+	public IDataComposer getDataComposer() {
+		return dataComposer;
+	}
+
+	public void setDataComposer(final IDataComposer dataComposer) {
+		this.dataComposer = dataComposer;
+	}
+
+	public void addRenderTime(long time) {
+		time = System.nanoTime() - time;
+		if (log.isDebugEnabled()) {
+			log.debug("render-time-processUrl (ms): " + time / 1000000.0);
+		}
+		renderTime += time;
+	}
+
+	public long getRenderTime() {
+		return renderTime;
 	}
 }

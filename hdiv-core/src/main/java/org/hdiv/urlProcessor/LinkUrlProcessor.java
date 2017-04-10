@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.hdiv.context.RequestContextHolder;
 import org.hdiv.dataComposer.IDataComposer;
 import org.hdiv.util.Constants;
 import org.hdiv.util.HDIVUtil;
@@ -36,16 +37,14 @@ public class LinkUrlProcessor extends AbstractUrlProcessor {
 	 */
 	private static final Log log = LogFactory.getLog(LinkUrlProcessor.class);
 
-	/**
-	 * Process the url to add hdiv state if it is necessary.
-	 * 
-	 * @param request {@link HttpServletRequest} object
-	 * @param url url to process
-	 * @return processed url
-	 */
-	public String processUrl(final HttpServletRequest request, final String url) {
-		// Default encoding UTF-8
-		return this.processUrl(request, url, Constants.ENCODING_UTF_8);
+	@Deprecated
+	public final String processUrl(final HttpServletRequest request, final String url) {
+		return processUrl(HDIVUtil.getRequestContext(request), url);
+	}
+
+	@Deprecated
+	public final String processUrl(final HttpServletRequest request, final String url, final String encoding) {
+		return processUrl(HDIVUtil.getRequestContext(request), url, encoding);
 	}
 
 	/**
@@ -53,12 +52,24 @@ public class LinkUrlProcessor extends AbstractUrlProcessor {
 	 * 
 	 * @param request {@link HttpServletRequest} object
 	 * @param url url to process
+	 * @return processed url
+	 */
+	public String processUrl(final RequestContextHolder request, final String url) {
+		// Default encoding UTF-8
+		return this.processUrl(request, url, Constants.ENCODING_UTF_8);
+	}
+
+	/**
+	 * Process the url to add hdiv state if it is necessary.
+	 * 
+	 * @param request {@link RequestContextHolder} object
+	 * @param url url to process
 	 * @param encoding char encoding
 	 * @return processed url
 	 */
-	public String processUrl(final HttpServletRequest request, String url, final String encoding) {
+	public String processUrl(final RequestContextHolder request, String url, final String encoding) {
 
-		IDataComposer dataComposer = HDIVUtil.getDataComposer(request);
+		IDataComposer dataComposer = request.getDataComposer();
 		if (dataComposer == null) {
 			// IDataComposer not initialized on request, request is out of filter
 			if (log.isDebugEnabled()) {
@@ -67,7 +78,7 @@ public class LinkUrlProcessor extends AbstractUrlProcessor {
 			return url;
 		}
 		String hdivParameter = dataComposer.getHdivParameterName();
-		UrlData urlData = createUrlData(url, Method.GET, hdivParameter, request);
+		UrlData urlData = createUrlData(url, Method.GET, hdivParameter, request.getRequest());
 		if (urlData.isHdivStateNecessary(config)) {
 			// the url needs protection
 			dataComposer.beginRequest(Method.GET, urlData.getUrlWithoutContextPath());

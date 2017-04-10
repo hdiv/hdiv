@@ -15,8 +15,7 @@
  */
 package org.hdiv.filter;
 
-import javax.servlet.http.HttpServletRequest;
-
+import org.hdiv.context.RequestContextHolder;
 import org.hdiv.exception.HDIVException;
 
 /**
@@ -50,13 +49,13 @@ public interface IValidationHelper extends StateRestorer {
 	 *
 	 * @param request HTTP servlet request
 	 */
-	void startPage(HttpServletRequest request);
+	void startPage(RequestContextHolder request);
 
 	/**
 	 * It is called in the post-processing stage of each user request.
 	 *
 	 * @param request HTTP servlet request
 	 */
-	void endPage(HttpServletRequest request);
+	void endPage(RequestContextHolder request);
 
 }

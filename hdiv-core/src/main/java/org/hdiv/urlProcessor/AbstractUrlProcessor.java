@@ -24,6 +24,7 @@ import java.util.StringTokenizer;
 import javax.servlet.http.HttpServletRequest;
 
 import org.hdiv.config.HDIVConfig;
+import org.hdiv.context.RequestContextHolder;
 import org.hdiv.util.Constants;
 import org.hdiv.util.HDIVUtil;
 import org.hdiv.util.Method;
@@ -115,8 +116,9 @@ public abstract class AbstractUrlProcessor {
 	}
 
 	protected static final String getBaseURL(final HttpServletRequest request) {
+		RequestContextHolder context = HDIVUtil.getRequestContext(request);
 		// Base url defined by <base> tag in some frameworks
-		String baseUrl = HDIVUtil.getBaseURL(request);
+		String baseUrl = context.getBaseURL();
 		if (baseUrl != null) {
 			// Remove server part from the url
 			final String serverUrl = getServerFromUrl(baseUrl);
@@ -127,7 +129,7 @@ public abstract class AbstractUrlProcessor {
 		}
 		else {
 			// Original RequestUri before Jsp processing
-			baseUrl = HDIVUtil.getRequestURI(request);
+			baseUrl = context.getRequestURI();
 		}
 		return baseUrl;
 	}
@@ -185,7 +187,7 @@ public abstract class AbstractUrlProcessor {
 	 * @return Map
 	 */
 	public Map<String, String[]> getUrlParamsAsMap(final StringBuilder sb, final HttpServletRequest request, final String urlParams) {
-		return getUrlParamsAsMap(HDIVUtil.getHdivStateParameterName(request), sb, urlParams);
+		return getUrlParamsAsMap(HDIVUtil.getRequestContext(request).getHdivParameterName(), sb, urlParams);
 	}
 
 	/**

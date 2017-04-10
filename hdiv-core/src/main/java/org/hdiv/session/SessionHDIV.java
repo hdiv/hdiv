@@ -57,7 +57,7 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 	 */
 	public final int getPageId(final RequestContextHolder context) {
 
-		HttpSession session = context.getRequest().getSession();
+		SessionModel session = context.getSession();
 
 		PageIdGenerator pageIdGenerator = (PageIdGenerator) session.getAttribute(pageIdGeneratorName);
 		if (pageIdGenerator == null) {
@@ -164,9 +164,12 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 
 	public String getAttribute(final RequestContextHolder context, final String name) {
 		Assert.notNull(context);
-		Assert.notNull(name);
+		return getAttribute(context.getSession(), name);
+	}
 
-		return (String) context.getSession().getAttribute(name);
+	public String getAttribute(final SessionModel context, final String name) {
+		Assert.notNull(name);
+		return (String) context.getAttribute(name);
 	}
 
 	@SuppressWarnings("unchecked")

@@ -29,6 +29,8 @@ import org.hdiv.config.annotation.ValidationConfigurer.ValidationConfig.Editable
 import org.hdiv.config.annotation.builders.SecurityConfigBuilder;
 import org.hdiv.config.validations.DefaultValidationParser;
 import org.hdiv.config.validations.DefaultValidationParser.ValidationParam;
+import org.hdiv.context.RequestContextFactory;
+import org.hdiv.context.RequestContextFactoryImpl;
 import org.hdiv.dataComposer.DataComposerFactory;
 import org.hdiv.dataValidator.DataValidator;
 import org.hdiv.dataValidator.IDataValidator;
@@ -161,6 +163,11 @@ public abstract class AbstractHdivWebSecurityConfiguration {
 		config.setLongLivingPages(longLivingPages);
 
 		return config;
+	}
+
+	@Bean
+	public RequestContextFactory requestContextFactory() {
+		return new RequestContextFactoryImpl();
 	}
 
 	@Bean
@@ -363,7 +370,7 @@ public abstract class AbstractHdivWebSecurityConfiguration {
 		repository.setDefaultValidations(defaultRules);
 		return repository;
 	}
-	
+
 	@Bean
 	public ValidationContextFactory validationContextFactory() {
 		return new DefaultValidationContextFactory();

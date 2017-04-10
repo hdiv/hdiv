@@ -31,6 +31,8 @@ import org.apache.commons.logging.LogFactory;
 import org.hdiv.config.HDIVConfig;
 import org.hdiv.config.multipart.IMultipartConfig;
 import org.hdiv.config.multipart.exception.HdivMultipartException;
+import org.hdiv.context.RequestContextFactory;
+import org.hdiv.context.RequestContextHolder;
 import org.hdiv.exception.HDIVException;
 import org.hdiv.init.RequestInitializer;
 import org.hdiv.logs.IUserData;
@@ -86,6 +88,8 @@ public class ValidatorFilter extends OncePerRequestFilter {
 	 */
 	protected RequestInitializer requestInitializer;
 
+	private RequestContextFactory requestContextFactory;
+
 	/**
 	 * Obtains user data from the request
 	 */
@@ -120,7 +124,7 @@ public class ValidatorFilter extends OncePerRequestFilter {
 						// For applications without Multipart requests
 						multipartConfig = null;
 					}
-
+					requestContextFactory = context.getBean(RequestContextFactory.class);
 					userData = context.getBean(IUserData.class);
 					logger = context.getBean(Logger.class);
 					errorHandler = context.getBean(ValidatorErrorHandler.class);
@@ -145,12 +149,12 @@ public class ValidatorFilter extends OncePerRequestFilter {
 			throws ServletException, IOException {
 		// Initialize dependencies
 		initDependencies();
-
+		RequestContextHolder ctx = requestContextFactory.create(requestInitializer, request, response);
 		// Initialize request scoped data
-		requestInitializer.initRequest(request, response);
+		requestInitializer.initRequest(ctx);
 
-		RequestWrapper requestWrapper = requestInitializer.createRequestWrapper(request, response);
-		ResponseWrapper responseWrapper = requestInitializer.createResponseWrapper(request, response);
+		RequestWrapper requestWrapper = (RequestWrapper) ctx.getRequest();
+		ResponseWrapper responseWrapper = (ResponseWrapper) ctx.getResponse();
 
 		HttpServletRequest multipartProcessedRequest = requestWrapper;
 
@@ -181,8 +185,7 @@ public class ValidatorFilter extends OncePerRequestFilter {
 					legal = true;
 				}
 			}
-			ValidationContext context = validationContextFactory.newInstance(multipartProcessedRequest, response, validationHelper,
-					hdivConfig.isUrlObfuscation());
+			ValidationContext context = validationContextFactory.newInstance(ctx, validationHelper, hdivConfig.isUrlObfuscation());
 			List<ValidatorError> errors = null;
 			try {
 				ValidatorHelperResult result = null;
@@ -234,7 +237,7 @@ public class ValidatorFilter extends OncePerRequestFilter {
 
 			if (legal || hdivConfig.isDebugMode() || hasEditableError && !hdivConfig.isShowErrorPageOnEditableValidation()) {
 
-				processRequest(multipartProcessedRequest, responseWrapper, filterChain, context.getRedirect());
+				processRequest(ctx, multipartProcessedRequest, responseWrapper, filterChain, context.getRedirect());
 			}
 			else {
 
@@ -276,7 +279,7 @@ public class ValidatorFilter extends OncePerRequestFilter {
 			}
 
 			// Destroy request scoped data
-			requestInitializer.endRequest(multipartProcessedRequest, responseWrapper);
+			requestInitializer.endRequest(ctx);
 		}
 	}
 
@@ -316,9 +319,10 @@ public class ValidatorFilter extends OncePerRequestFilter {
 	 * @throws IOException if there is an error in request process.
 	 * @throws ServletException if there is an error in request process.
 	 */
-	protected void processRequest(final HttpServletRequest requestWrapper, final ResponseWrapper responseWrapper,
-			final FilterChain filterChain, final String obfuscated) throws IOException, ServletException {
-		validationHelper.startPage(requestWrapper);
+	protected void processRequest(final RequestContextHolder ctx, final HttpServletRequest requestWrapper,
+			final ResponseWrapper responseWrapper, final FilterChain filterChain, final String obfuscated)
+			throws IOException, ServletException {
+		validationHelper.startPage(ctx);
 		try {
 			if (obfuscated != null) {
 				requestWrapper.getRequestDispatcher(obfuscated).forward(requestWrapper, responseWrapper);
@@ -328,7 +332,7 @@ public class ValidatorFilter extends OncePerRequestFilter {
 			}
 		}
 		finally {
-			validationHelper.endPage(requestWrapper);
+			validationHelper.endPage(ctx);
 		}
 	}
 

@@ -74,8 +74,8 @@ public class Parameter implements IParameter {
 
 	public Parameter(final String name, final String[] values, final boolean editable, final String editableDataType,
 			final boolean actionParam) {
-		this(name, values.length != 0 ? values[0] : null, editable, editableDataType, actionParam);
-		if (values.length > 1) {
+		this(name, values != null && values.length != 0 ? values[0] : null, editable, editableDataType, actionParam);
+		if (values != null && values.length > 1) {
 			for (int i = 1; i < values.length; i++) {
 				addValue(values[i]);
 			}

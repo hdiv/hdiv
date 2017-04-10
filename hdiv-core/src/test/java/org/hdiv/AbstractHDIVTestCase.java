@@ -27,6 +27,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hdiv.config.HDIVConfig;
 import org.hdiv.context.RequestContext;
+import org.hdiv.context.RequestContextFactory;
 import org.hdiv.context.RequestContextHolder;
 import org.hdiv.dataComposer.DataComposerFactory;
 import org.hdiv.dataComposer.IDataComposer;
@@ -77,14 +78,14 @@ public abstract class AbstractHDIVTestCase extends TestCase {
 
 	private MockHttpServletResponse mockResponse;
 
-	private RequestContext requestContext;
-
 	// @formatter:off
 	private String[] files = { 
 			"/org/hdiv/config/hdiv-core-applicationContext.xml",
 			"/org/hdiv/config/hdiv-config.xml",
 			"/org/hdiv/config/hdiv-validations.xml",
 			"/org/hdiv/config/applicationContext-extra.xml" };
+
+	private RequestContextHolder context;
 	// @formatter:on
 
 	@Override
@@ -97,7 +98,6 @@ public abstract class AbstractHDIVTestCase extends TestCase {
 		HttpServletResponse response = new MockHttpServletResponse();
 		HttpSession httpSession = request.getSession();
 		ServletContext servletContext = httpSession.getServletContext();
-		requestContext = new RequestContext(request, response);
 		// Store objects for teardown cleanup
 		mockRequest = request;
 		mockResponse = (MockHttpServletResponse) response;
@@ -129,7 +129,8 @@ public abstract class AbstractHDIVTestCase extends TestCase {
 
 		// Init Request scoped data
 		RequestInitializer requestInitializer = applicationContext.getBean(RequestInitializer.class);
-		requestInitializer.initRequest(request, response);
+		RequestContextFactory contextFactory = applicationContext.getBean(RequestContextFactory.class);
+		context = contextFactory.create(requestInitializer, request, response);
 
 		DataComposerFactory dataComposerFactory = applicationContext.getBean(DataComposerFactory.class);
 
@@ -183,7 +184,7 @@ public abstract class AbstractHDIVTestCase extends TestCase {
 		preTearDown();
 
 		RequestInitializer requestInitializer = applicationContext.getBean(RequestInitializer.class);
-		requestInitializer.endRequest(mockRequest, mockResponse);
+		requestInitializer.endRequest(context);
 
 		// Destroy HttpSession
 		HttpSessionEvent httpSessionEvent = new HttpSessionEvent(mockRequest.getSession());
@@ -218,7 +219,11 @@ public abstract class AbstractHDIVTestCase extends TestCase {
 	}
 
 	public RequestContextHolder getRequestContext() {
-		return requestContext;
+		return context;
+	}
+
+	public void clearAjax() {
+		((RequestContext) context).clearAjax();
 	}
 
 	public MockHttpServletRequest getMockRequest() {
@@ -248,7 +253,7 @@ public abstract class AbstractHDIVTestCase extends TestCase {
 	}
 
 	protected String getState(final String url) {
-		return getParameter(url, HDIVUtil.getHdivStateParameterName(getMockRequest()));
+		return getParameter(url, context.getHdivParameterName());
 	}
 
 	protected String getModifyState(final String url) {

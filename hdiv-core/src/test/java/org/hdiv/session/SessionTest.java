@@ -26,7 +26,6 @@ import org.hdiv.state.Page;
 import org.hdiv.state.Parameter;
 import org.hdiv.state.State;
 import org.hdiv.util.Constants;
-import org.hdiv.util.HDIVUtil;
 
 public class SessionTest extends AbstractHDIVTestCase {
 
@@ -137,7 +136,7 @@ public class SessionTest extends AbstractHDIVTestCase {
 		assertEquals(2, ids.size());
 
 		// Simulate Page refresh
-		HDIVUtil.setCurrentPageId(20, getMockRequest());
+		getRequestContext().setCurrentPageId(20);
 
 		// Third page
 		page = new Page(22);

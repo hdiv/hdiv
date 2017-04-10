@@ -17,7 +17,6 @@ package org.hdiv.session;
 
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.logging.Log;
@@ -25,7 +24,6 @@ import org.apache.commons.logging.LogFactory;
 import org.hdiv.context.RequestContextHolder;
 import org.hdiv.state.IPage;
 import org.hdiv.util.Constants;
-import org.hdiv.util.HDIVUtil;
 import org.springframework.beans.factory.BeanFactory;
 
 /**
@@ -48,16 +46,14 @@ public class HTTPSessionCache {
 	private static final String PAGE_ID_KEY_PREFIX = "hdiv-page-";
 
 	public void insertPage(final SimpleCacheKey key, final IPage newPage) {
-		SessionModel session = key.getRequestContext().getSession();
+		RequestContextHolder ctx = key.getRequestContext();
+		SessionModel session = ctx.getSession();
 		int pageId = newPage.getId();
-		HttpServletRequest request = key.getRequestContext().getRequest();
-
-		boolean isAjaxRequest = false;
 
 		IStateCache cache = getStateCache(session);
 
 		// Get current request page identifier. Null if no state
-		Integer currentPage = HDIVUtil.getCurrentPageId(request);
+		Integer currentPage = key.getRequestContext().getCurrentPageId();
 
 		Integer lastPageId = cache.getLastPageId();
 		IPage lastPage = lastPageId == null ? null : findPage(new SimpleCacheKey(key.getRequestContext(), lastPageId));
@@ -66,11 +62,7 @@ public class HTTPSessionCache {
 				&& newPage.getParentStateId().equals(lastPage.getParentStateId());
 
 		// Check if is an Ajax request.
-		Object isAjaxRequestObject = request.getAttribute(Constants.AJAX_REQUEST);
-
-		if (isAjaxRequestObject != null) {
-			isAjaxRequest = (Boolean) isAjaxRequestObject;
-		}
+		boolean isAjaxRequest = ctx.isAjax();
 
 		Integer removedPageId = cache.addPage(pageId, currentPage, isRefreshRequest, isAjaxRequest);
 

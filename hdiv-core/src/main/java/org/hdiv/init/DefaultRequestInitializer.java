@@ -15,17 +15,13 @@
  */
 package org.hdiv.init;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.hdiv.config.HDIVConfig;
 import org.hdiv.context.RequestContext;
+import org.hdiv.context.RequestContextHolder;
 import org.hdiv.filter.AsyncRequestWrapper;
 import org.hdiv.filter.RequestWrapper;
 import org.hdiv.filter.ResponseWrapper;
 import org.hdiv.session.ISession;
-import org.hdiv.util.Constants;
-import org.hdiv.util.HDIVUtil;
 
 /**
  * {@link RequestInitializer} implementation with the default behavior.
@@ -45,28 +41,19 @@ public class DefaultRequestInitializer implements RequestInitializer {
 	 */
 	protected ISession session;
 
-	@SuppressWarnings("deprecation")
-	public void initRequest(final HttpServletRequest request, final HttpServletResponse response) {
-
-		RequestContext context = new RequestContext(request, response);
-
+	public void initRequest(final RequestContextHolder context) {
+		RequestContext ctx = (RequestContext) context;
 		// Store session scoped data into request
 
-		String stateParameterName = session.getAttribute(context, Constants.HDIV_PARAMETER);
-		String modifyStateParameterName = session.getAttribute(context, Constants.MODIFY_STATE_HDIV_PARAMETER);
-
-		HDIVUtil.setHdivStateParameterName(request, stateParameterName);
-		HDIVUtil.setModifyHdivStateParameterName(request, modifyStateParameterName);
-
-		// Store request original request uri
-		HDIVUtil.setRequestURI(request.getRequestURI(), request);
+		ctx.setHdivParameterName(session.getAttribute(context, DefaultSessionInitializer.HDIV_PARAMETER));
+		ctx.setHdivModifyParameterName(session.getAttribute(context, DefaultSessionInitializer.MODIFY_STATE_HDIV_PARAMETER));
 	}
 
-	public void endRequest(final HttpServletRequest request, final HttpServletResponse response) {
+	public void endRequest(final RequestContextHolder context) {
 	}
 
-	public RequestWrapper createRequestWrapper(final HttpServletRequest request, final HttpServletResponse response) {
-		RequestWrapper requestWrapper = new AsyncRequestWrapper(request);
+	public RequestWrapper createRequestWrapper(final RequestContextHolder context) {
+		RequestWrapper requestWrapper = new AsyncRequestWrapper(context);
 		requestWrapper.setConfidentiality(config.getConfidentiality());
 		requestWrapper.setCookiesConfidentiality(config.isCookiesConfidentialityActivated());
 		requestWrapper.setSession(session);
@@ -74,8 +61,8 @@ public class DefaultRequestInitializer implements RequestInitializer {
 		return requestWrapper;
 	}
 
-	public ResponseWrapper createResponseWrapper(final HttpServletRequest request, final HttpServletResponse response) {
-		ResponseWrapper responseWrapper = new ResponseWrapper(request, response);
+	public ResponseWrapper createResponseWrapper(final RequestContextHolder context) {
+		ResponseWrapper responseWrapper = new ResponseWrapper(context);
 		responseWrapper.setConfidentiality(config.getConfidentiality());
 		responseWrapper.setAvoidCookiesConfidentiality(!config.isCookiesConfidentialityActivated());
 		responseWrapper.setSession(session);

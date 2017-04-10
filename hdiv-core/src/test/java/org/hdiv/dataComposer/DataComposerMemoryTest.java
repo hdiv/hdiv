@@ -319,6 +319,7 @@ public class DataComposerMemoryTest extends AbstractHDIVTestCase {
 		// Ajax
 		MockHttpServletRequest ajaxRequest = getMockRequest();
 		ajaxRequest.addHeader("x-requested-with", "XMLHttpRequest");
+		clearAjax();
 		ajaxRequest.addParameter("_HDIV_STATE_", stateId);
 		IDataComposer ajaxDataComposer = dataComposerFactory.newInstance(request);
 		HDIVUtil.setDataComposer(ajaxDataComposer, ajaxRequest);
@@ -353,6 +354,7 @@ public class DataComposerMemoryTest extends AbstractHDIVTestCase {
 		// Ajax
 		MockHttpServletRequest ajaxRequest = getMockRequest();
 		ajaxRequest.addHeader("x-requested-with", "XMLHttpRequest");
+		clearAjax();
 		ajaxRequest.addParameter("_HDIV_STATE_", stateId);
 		IDataComposer ajaxDataComposer = dataComposerFactory.newInstance(request);
 		HDIVUtil.setDataComposer(ajaxDataComposer, ajaxRequest);

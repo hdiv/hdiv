@@ -15,11 +15,10 @@
  */
 package org.hdiv.filter;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import org.hdiv.context.RequestContextHolder;
 
 public interface ValidationContextFactory {
 
-	ValidationContext newInstance(HttpServletRequest request, HttpServletResponse response, StateRestorer restorer, boolean obfuscation);
+	ValidationContext newInstance(RequestContextHolder ctx, StateRestorer restorer, boolean obfuscation);
 
 }

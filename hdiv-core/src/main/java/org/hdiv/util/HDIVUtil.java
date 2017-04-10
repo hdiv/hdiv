@@ -31,6 +31,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hdiv.application.IApplication;
 import org.hdiv.config.HDIVConfig;
+import org.hdiv.context.RequestContext;
+import org.hdiv.context.RequestContextHolder;
 import org.hdiv.dataComposer.IDataComposer;
 import org.hdiv.exception.HDIVException;
 import org.hdiv.filter.RequestWrapper;
@@ -66,17 +68,9 @@ public class HDIVUtil {
 
 	private static final String HDIVCONFIG_SERVLETCONTEXT_KEY = "HDIVCONFIG_SERVLETCONTEXT_KEY";
 
-	private static final String DATACOMPOSER_REQUEST_KEY = "DATACOMPOSER_REQUEST_KEY";
-
-	private static final String REQUESTURI_REQUEST_KEY = "REQUESTURI_REQUEST_KEY";
-
-	private static final String BASEURL_REQUEST_KEY = "BASEURL_REQUEST_KEY";
-
 	private static final String LINKURLPROCESSOR_SERVLETCONTEXT_KEY = "LINKURLPROCESSOR_SERVLETCONTEXT_KEY";
 
 	private static final String FORMURLPROCESSOR_SERVLETCONTEXT_KEY = "FORMURLPROCESSOR_SERVLETCONTEXT_KEY";
-
-	private static final String CURRENT_PAGE_KEY = "CURRENT_PAGE_KEY";
 
 	public static final Pattern intPattern = Pattern.compile("[0-9]+");
 
@@ -97,86 +91,6 @@ public class HDIVUtil {
 
 	private HDIVUtil() {
 
-	}
-
-	/**
-	 * Returns data composer object from <code>HttpServletRequest</code>
-	 *
-	 * @param request HttpServletRequest
-	 * @return {@link IDataComposer} instance
-	 */
-	public static IDataComposer getDataComposer(final ServletRequest request) {
-		return (IDataComposer) request.getAttribute(DATACOMPOSER_REQUEST_KEY);
-	}
-
-	/**
-	 * Set the <code>IDataComposer</code>
-	 *
-	 * @param newDataComposer new {@link IDataComposer}
-	 * @param request {@link HttpServletRequest} instance
-	 */
-	public static void setDataComposer(final IDataComposer newDataComposer, final HttpServletRequest request) {
-		request.setAttribute(DATACOMPOSER_REQUEST_KEY, newDataComposer);
-	}
-
-	/**
-	 * Remove the <code>IDataComposer</code> from the request.
-	 *
-	 * @param request {@link HttpServletRequest} instance
-	 */
-	public static void removeDataComposer(final HttpServletRequest request) {
-		request.removeAttribute(DATACOMPOSER_REQUEST_KEY);
-	}
-
-	/* RequestURI */
-
-	/**
-	 * Returns RequestURI value from <code>HttpServletRequest</code>
-	 *
-	 * @param request HttpServletRequest
-	 * @return String
-	 */
-	public static String getRequestURI(final HttpServletRequest request) {
-
-		String requestURI = (String) request.getAttribute(REQUESTURI_REQUEST_KEY);
-		if (requestURI == null) {
-			throw new HDIVException("RequestURI has not been initialized in request.");
-		}
-		return requestURI;
-	}
-
-	/**
-	 * Set the RequestURI
-	 *
-	 * @param requestURI RequestURI to set
-	 * @param request {@link HttpServletRequest} object
-	 */
-	public static void setRequestURI(final String requestURI, final HttpServletRequest request) {
-
-		request.setAttribute(REQUESTURI_REQUEST_KEY, requestURI);
-	}
-
-	/* BaseURL */
-
-	/**
-	 * Returns BaseURL value from <code>HttpServletRequest</code>
-	 *
-	 * @param request HttpServletRequest
-	 * @return String
-	 */
-	public static String getBaseURL(final ServletRequest request) {
-		return (String) request.getAttribute(BASEURL_REQUEST_KEY);
-	}
-
-	/**
-	 * Set the BaseURL
-	 *
-	 * @param baseURL BaseURL to set
-	 * @param request {@link ServletRequest} object
-	 */
-	public static void setBaseURL(final String baseURL, final ServletRequest request) {
-
-		request.setAttribute(BASEURL_REQUEST_KEY, baseURL);
 	}
 
 	/* IApplication */
@@ -283,28 +197,6 @@ public class HDIVUtil {
 		servletContext.setAttribute(FORMURLPROCESSOR_SERVLETCONTEXT_KEY, urlProcessor);
 	}
 
-	/* CurrentPageId */
-
-	/**
-	 * Returns CurrentPageId value from <code>ServletRequest</code>
-	 *
-	 * @param request {@link ServletRequest} object
-	 * @return pageId
-	 */
-	public static Integer getCurrentPageId(final ServletRequest request) {
-		return (Integer) request.getAttribute(CURRENT_PAGE_KEY);
-	}
-
-	/**
-	 * Set the CurrentPageId
-	 *
-	 * @param pageId Current page id
-	 * @param request {@link ServletRequest} object
-	 */
-	public static void setCurrentPageId(final Integer pageId, final ServletRequest request) {
-		request.setAttribute(CURRENT_PAGE_KEY, pageId);
-	}
-
 	/* MessageSource */
 
 	/**
@@ -381,16 +273,9 @@ public class HDIVUtil {
 		return resolvedMessage;
 	}
 
-	/**
-	 * Get Hdiv state parameter name from request.
-	 * @param request HttpServletRequest object
-	 * @return Parameter name
-	 * @since 3.0.1
-	 */
 	@SuppressWarnings("deprecation")
-	public static String getHdivStateParameterName(final HttpServletRequest request) {
-
-		return (String) request.getAttribute(Constants.HDIV_PARAMETER);
+	public static RequestContextHolder getRequestContext(final ServletRequest request) {
+		return (RequestContextHolder) request.getAttribute(Constants.HDIV_REQUEST_CONTEXT);
 	}
 
 	@Deprecated
@@ -447,18 +332,6 @@ public class HDIVUtil {
 	}
 
 	/**
-	 * Set Hdiv state parameter name in request.
-	 * @param request HttpServletRequest object
-	 * @param parameterName The name of the parameter
-	 * @since 3.0.1
-	 */
-	@SuppressWarnings("deprecation")
-	public static void setHdivStateParameterName(final HttpServletRequest request, final String parameterName) {
-
-		request.setAttribute(Constants.HDIV_PARAMETER, parameterName);
-	}
-
-	/**
 	 * Set Hdiv redirection from request.
 	 * @param request HttpServletRequest object
 	 * @return Parameter name
@@ -466,30 +339,6 @@ public class HDIVUtil {
 	 */
 	public static void setHdivObfRedirectAction(final HttpServletRequest request, final String url) {
 		request.setAttribute(Constants.HDIV_OBF_REDIRECT, url);
-	}
-
-	/**
-	 * Get Hdiv state modification parameter name from request.
-	 * @param request HttpServletRequest object
-	 * @return Parameter name
-	 * @since 3.0.1
-	 */
-	@SuppressWarnings("deprecation")
-	public static String getModifyHdivStateParameterName(final HttpServletRequest request) {
-
-		return (String) request.getAttribute(Constants.MODIFY_STATE_HDIV_PARAMETER);
-	}
-
-	/**
-	 * Set Hdiv state modification parameter name in request.
-	 * @param request HttpServletRequest object
-	 * @param parameterName The name of the parameter
-	 * @since 3.0.1
-	 */
-	@SuppressWarnings("deprecation")
-	public static void setModifyHdivStateParameterName(final HttpServletRequest request, final String parameterName) {
-
-		request.setAttribute(Constants.MODIFY_STATE_HDIV_PARAMETER, parameterName);
 	}
 
 	/**
@@ -786,6 +635,82 @@ public class HDIVUtil {
 			return true;
 		}
 		return false;
+	}
+
+	/* RequestURI */
+
+	@Deprecated
+	public static String getRequestURI(final HttpServletRequest request) {
+		return getRequestContext(request).getRequestURI();
+	}
+
+	@Deprecated
+	public static void setRequestURI(final String requestURI, final HttpServletRequest request) {
+		getContext(request).setRequestURI(requestURI);
+	}
+
+	/* CurrentPageId */
+
+	@Deprecated
+	public static Integer getCurrentPageId(final ServletRequest request) {
+		return getRequestContext(request).getCurrentPageId();
+	}
+
+	@Deprecated
+	public static void setCurrentPageId(final Integer pageId, final ServletRequest request) {
+		getContext(request).setCurrentPageId(pageId);
+	}
+
+	@Deprecated
+	public static String getModifyHdivStateParameterName(final HttpServletRequest request) {
+		return getRequestContext(request).getHdivModifyParameterName();
+	}
+
+	@Deprecated
+	public static void setModifyHdivStateParameterName(final HttpServletRequest request, final String parameterName) {
+		getContext(request).setHdivModifyParameterName(parameterName);
+	}
+
+	@Deprecated
+	private static RequestContext getContext(final ServletRequest request) {
+		return (RequestContext) request.getAttribute(Constants.HDIV_REQUEST_CONTEXT);
+	}
+
+	@Deprecated
+	public static String getHdivStateParameterName(final HttpServletRequest request) {
+		return getRequestContext(request).getHdivParameterName();
+	}
+
+	@Deprecated
+	public static void setHdivStateParameterName(final HttpServletRequest request, final String parameterName) {
+		getContext(request).setHdivParameterName(parameterName);
+	}
+
+	/* BaseURL */
+
+	@Deprecated
+	public static String getBaseURL(final ServletRequest request) {
+		return getRequestContext(request).getBaseURL();
+	}
+
+	@Deprecated
+	public static void setBaseURL(final String baseURL, final ServletRequest request) {
+		getRequestContext(request).setBaseURL(baseURL);
+	}
+
+	@Deprecated
+	public static IDataComposer getDataComposer(final ServletRequest request) {
+		return getRequestContext(request).getDataComposer();
+	}
+
+	@Deprecated
+	public static void setDataComposer(final IDataComposer newDataComposer, final HttpServletRequest request) {
+		getRequestContext(request).setDataComposer(newDataComposer);
+	}
+
+	@Deprecated
+	public static void removeDataComposer(final HttpServletRequest request) {
+		setDataComposer(null, request);
 	}
 
 }

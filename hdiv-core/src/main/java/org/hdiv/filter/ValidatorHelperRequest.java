@@ -36,7 +36,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hdiv.config.HDIVConfig;
-import org.hdiv.context.RequestContext;
 import org.hdiv.context.RequestContextHolder;
 import org.hdiv.dataComposer.DataComposerFactory;
 import org.hdiv.dataComposer.IDataComposer;
@@ -129,7 +128,7 @@ public class ValidatorHelperRequest implements IValidationHelper, StateRestorer 
 		ValidatorHelperResult ptresult = restoreState(context);
 		if (ptresult.isValid()) {
 			List<String> editable = new ArrayList<String>();
-			context.getResponse().setContentType("text/html");
+			context.getRequestContext().getResponse().setContentType("text/html");
 
 			if (ptresult.getValue().getParameters() != null) {
 				for (IParameter parameter : ptresult.getValue().getParameters()) {
@@ -141,7 +140,7 @@ public class ValidatorHelperRequest implements IValidationHelper, StateRestorer 
 			for (int i = 0; i < editable.size(); i++) {
 
 				try {
-					PrintWriter out = context.getResponse().getWriter();
+					PrintWriter out = context.getRequestContext().getResponse().getWriter();
 					if (i != 0) {
 						out.write(',');
 					}
@@ -179,6 +178,7 @@ public class ValidatorHelperRequest implements IValidationHelper, StateRestorer 
 	 * @return valid result If all the parameter values of the request <code>request</code> pass the the HDIV validation. False, otherwise.
 	 * @throws HDIVException If the request doesn't pass the HDIV validation an exception is thrown explaining the cause of the error.
 	 */
+	@SuppressWarnings("unused")
 	public ValidatorHelperResult validate(final ValidationContext context) {
 
 		String target = context.getTarget();
@@ -187,7 +187,7 @@ public class ValidatorHelperRequest implements IValidationHelper, StateRestorer 
 			processPenTesting(context);
 		}
 
-		HttpServletRequest request = context.getRequest();
+		HttpServletRequest request = context.getRequestContext().getRequest();
 
 		// Hook before the validation
 		ValidatorHelperResult result = preValidate(context);
@@ -240,7 +240,7 @@ public class ValidatorHelperRequest implements IValidationHelper, StateRestorer 
 		}
 
 		// Hdiv parameter name
-		String hdivParameter = context.getHdivParameterName();
+		String hdivParameter = context.getRequestContext().getHdivParameterName();
 
 		// Restore state from request or memory
 		result = restoreState(hdivParameter, context);
@@ -381,15 +381,15 @@ public class ValidatorHelperRequest implements IValidationHelper, StateRestorer 
 	 */
 	protected final ValidatorHelperResult validateRequestCookies(final ValidationContext context, final String target) {
 
-		Cookie[] requestCookies = context.getRequest().getCookies();
+		Cookie[] requestCookies = context.getRequestContext().getRequest().getCookies();
 
 		if (requestCookies == null || requestCookies.length == 0) {
 			return ValidatorHelperResult.VALID;
 		}
 
 		@SuppressWarnings("unchecked")
-		Map<String, SavedCookie> sessionCookies = session.getAttribute(context, // TODO cache
-																				// context?
+		Map<String, SavedCookie> sessionCookies = session.getAttribute(context.getRequestContext(), // TODO cache
+				// context?
 				Constants.HDIV_COOKIES_KEY, Map.class);
 
 		if (sessionCookies == null) {
@@ -686,7 +686,7 @@ public class ValidatorHelperRequest implements IValidationHelper, StateRestorer 
 	 * @return valid result if restored state is valid. False in otherwise.
 	 */
 	public ValidatorHelperResult restoreState(final ValidationContext context) {
-		return restoreState(context.getHdivParameterName(), context);
+		return restoreState(context.getRequestContext().getHdivParameterName(), context);
 	}
 
 	/**
@@ -699,7 +699,8 @@ public class ValidatorHelperRequest implements IValidationHelper, StateRestorer 
 	 */
 	public final ValidatorHelperResult restoreState(final String hdivParameter, final ValidationContext context) {
 		// checks if the parameter HDIV parameter exists in the parameters of the request
-		return restoreState(hdivParameter, context, context.getTarget(), context.getRequest().getParameter(hdivParameter));
+		return restoreState(hdivParameter, context.getRequestContext(), context.getTarget(),
+				context.getRequestContext().getRequest().getParameter(hdivParameter));
 	}
 
 	/**
@@ -712,13 +713,13 @@ public class ValidatorHelperRequest implements IValidationHelper, StateRestorer 
 	 */
 	public final ValidatorHelperResult restoreState(final String hdivParameter, final String hdivState, final ValidationContext context) {
 		// checks if the parameter HDIV parameter exists in the parameters of the requestds
-		return restoreState(hdivParameter, context, context.getTarget(), hdivState);
+		return restoreState(hdivParameter, context.getRequestContext(), context.getTarget(), hdivState);
 	}
 
 	@Deprecated
 	public final ValidatorHelperResult restoreState(final String hdivParameter, final HttpServletRequest request, final String target,
 			final String requestState) {
-		return restoreState(hdivParameter, new RequestContext(request), target, requestState);
+		return restoreState(hdivParameter, HDIVUtil.getRequestContext(request), target, requestState);
 	}
 
 	/**
@@ -748,7 +749,7 @@ public class ValidatorHelperRequest implements IValidationHelper, StateRestorer 
 			IState state = stateUtil.restoreState(context, requestState);
 
 			// Save current page id in request
-			HDIVUtil.setCurrentPageId(pageId, context.getRequest());
+			context.setCurrentPageId(pageId);
 
 			if (!validateHDIVSuffix(context, requestState, state)) {
 				ValidatorError error = new ValidatorError(HDIVErrorCodes.INVALID_HDIV_PARAMETER_VALUE, target, hdivParameter, requestState);
@@ -956,7 +957,7 @@ public class ValidatorHelperRequest implements IValidationHelper, StateRestorer 
 
 		for (int i = 0; i < values.length; i++) {
 
-			if (hdivConfig.isParameterWithoutConfidentiality(request, parameter)) {
+			if (hdivConfig.isParameterWithoutConfidentiality(HDIVUtil.getRequestContext(request), parameter)) {
 				return ValidatorHelperResult.VALID;
 			}
 
@@ -1176,7 +1177,7 @@ public class ValidatorHelperRequest implements IValidationHelper, StateRestorer 
 	 * @return ValidatorHelperResult result
 	 */
 	protected ValidatorHelperResult preValidate(final ValidationContext context) {
-		return preValidate(context.getRequest(), context.getTarget());
+		return preValidate(context.getRequestContext().getRequest(), context.getTarget());
 	}
 
 	@Deprecated
@@ -1189,16 +1190,14 @@ public class ValidatorHelperRequest implements IValidationHelper, StateRestorer 
 	 *
 	 * @see org.hdiv.filter.IValidationHelper#startPage(javax.servlet.http. HttpServletRequest)
 	 */
-	public void startPage(final HttpServletRequest request) {
+	public void startPage(final RequestContextHolder request) {
 
 		// Don`t create IDataComposer if it is not necessary
 		boolean exclude = hdivConfig.hasExtensionToExclude(request.getRequestURI());
 		if (!exclude) {
 
 			// Init datacomposer
-			IDataComposer dataComposer = dataComposerFactory.newInstance(request);
-
-			HDIVUtil.setDataComposer(dataComposer, request);
+			request.setDataComposer(dataComposerFactory.newInstance(request));
 		}
 
 	}
@@ -1208,20 +1207,20 @@ public class ValidatorHelperRequest implements IValidationHelper, StateRestorer 
 	 *
 	 * @see org.hdiv.filter.IValidationHelper#endPage(javax.servlet.http. HttpServletRequest)
 	 */
-	public void endPage(final HttpServletRequest request) {
+	public void endPage(final RequestContextHolder request) {
 
 		// End page in datacomposer
-		IDataComposer dataComposer = HDIVUtil.getDataComposer(request);
+		IDataComposer dataComposer = request.getDataComposer();
 
 		if (dataComposer != null) {
 			dataComposer.endPage();
 
-			RequestWrapper wrapper = HDIVUtil.getNativeRequest(request, RequestWrapper.class);
+			RequestWrapper wrapper = HDIVUtil.getNativeRequest(request.getRequest(), RequestWrapper.class);
 			if (wrapper != null && wrapper instanceof AsyncRequestWrapper) {
 				AsyncRequestWrapper asyncWrapper = (AsyncRequestWrapper) wrapper;
 				if (!asyncWrapper.isAsyncRequest()) {
 					// If this is an Async request, don't remove IDataComposer from request.
-					HDIVUtil.removeDataComposer(request);
+					request.setDataComposer(null);
 				}
 			}
 		}

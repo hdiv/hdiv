@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.hdiv.context.RequestContextHolder;
 import org.hdiv.dataComposer.IDataComposer;
 import org.hdiv.util.Constants;
 import org.hdiv.util.HDIVUtil;
@@ -38,6 +39,16 @@ public class FormUrlProcessor extends AbstractUrlProcessor {
 	 */
 	private static final Log log = LogFactory.getLog(FormUrlProcessor.class);
 
+	@Deprecated
+	public final String processUrl(final HttpServletRequest request, final String url) {
+		return processUrl(HDIVUtil.getRequestContext(request), url, Method.POST);
+	}
+
+	@Deprecated
+	public final String processUrl(final HttpServletRequest request, final String url, final Method method) {
+		return processUrl(HDIVUtil.getRequestContext(request), url, method);
+	}
+
 	/**
 	 * Process form action url to add hdiv state if it is necessary.
 	 *
@@ -45,7 +56,7 @@ public class FormUrlProcessor extends AbstractUrlProcessor {
 	 * @param url url to process
 	 * @return processed url
 	 */
-	public String processUrl(final HttpServletRequest request, final String url) {
+	public String processUrl(final RequestContextHolder request, final String url) {
 		return processUrl(request, url, Method.POST);
 	}
 
@@ -57,13 +68,13 @@ public class FormUrlProcessor extends AbstractUrlProcessor {
 	 * @param method form submit method
 	 * @return processed url
 	 */
-	public String processUrl(final HttpServletRequest request, String url, Method method) {
+	public String processUrl(final RequestContextHolder request, String url, Method method) {
 
 		if (method == null) {
 			method = Method.POST;
 		}
 
-		IDataComposer dataComposer = HDIVUtil.getDataComposer(request);
+		IDataComposer dataComposer = request.getDataComposer();
 		if (dataComposer == null) {
 			// IDataComposer not initialized on request, request is out of filter
 			if (log.isDebugEnabled()) {
@@ -72,13 +83,13 @@ public class FormUrlProcessor extends AbstractUrlProcessor {
 			return url;
 		}
 		String hdivParameter = dataComposer.getHdivParameterName();
-		UrlData urlData = createUrlData(url, method, hdivParameter, request);
+		UrlData urlData = createUrlData(url, method, hdivParameter, request.getRequest());
 		if (urlData.isHdivStateNecessary(config)) {
 			// the url needs protection
 			String stateId = dataComposer.beginRequest(method, urlData.getUrlWithoutContextPath());
 
 			// Publish the state in request to make it accessible on jsp
-			request.setAttribute(FORM_STATE_ID, stateId);
+			request.getRequest().setAttribute(FORM_STATE_ID, stateId);
 
 			// Process url params
 			String processedParams = dataComposer.composeParams(urlData.getUrlParams(), method, Constants.ENCODING_UTF_8);
@@ -90,7 +101,7 @@ public class FormUrlProcessor extends AbstractUrlProcessor {
 		}
 		else {
 			// Reset state info
-			request.removeAttribute(FORM_STATE_ID);
+			request.getRequest().removeAttribute(FORM_STATE_ID);
 		}
 
 		return url;

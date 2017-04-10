@@ -18,7 +18,7 @@ package org.hdiv.filter;
 import org.hdiv.context.RequestContextHolder;
 import org.hdiv.util.Method;
 
-public interface ValidationContext extends RequestContextHolder {
+public interface ValidationContext {
 
 	String getRequestedTarget();
 
@@ -29,5 +29,7 @@ public interface ValidationContext extends RequestContextHolder {
 	StringBuilder getBuffer();
 
 	Method getMethod();
+
+	RequestContextHolder getRequestContext();
 
 }

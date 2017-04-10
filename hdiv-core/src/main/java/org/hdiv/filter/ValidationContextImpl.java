@@ -18,16 +18,15 @@ package org.hdiv.filter;
 import java.io.UnsupportedEncodingException;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
-import org.hdiv.context.RequestContext;
+import org.hdiv.context.RequestContextHolder;
 import org.hdiv.exception.HDIVException;
 import org.hdiv.util.Constants;
 import org.hdiv.util.HDIVErrorCodes;
 import org.hdiv.util.HDIVUtil;
 import org.hdiv.util.Method;
 
-public class ValidationContextImpl extends RequestContext implements ValidationContext {
+public class ValidationContextImpl implements ValidationContext {
 
 	private final boolean obfuscation;
 
@@ -41,26 +40,13 @@ public class ValidationContextImpl extends RequestContext implements ValidationC
 
 	private final Method method;
 
-	private final String hdivParameterName;
+	protected final RequestContextHolder context;
 
-	/**
-	 * @deprecated
-	 * @param request
-	 * @param restorer
-	 * @param obfuscation
-	 */
-	@Deprecated
-	public ValidationContextImpl(final HttpServletRequest request, final StateRestorer restorer, final boolean obfuscation) {
-		this(request, null, restorer, obfuscation);
-	}
-
-	public ValidationContextImpl(final HttpServletRequest request, final HttpServletResponse response, final StateRestorer restorer,
-			final boolean obfuscation) {
-		super(request, response);
+	public ValidationContextImpl(final RequestContextHolder context, final StateRestorer restorer, final boolean obfuscation) {
+		this.context = context;
 		this.obfuscation = obfuscation;
 		this.restorer = restorer;
-		method = Method.valueOf(request.getMethod());
-		hdivParameterName = getHdivParameter();
+		method = Method.valueOf(context.getRequest().getMethod());
 	}
 
 	public String getTarget() {
@@ -69,12 +55,12 @@ public class ValidationContextImpl extends RequestContext implements ValidationC
 			if (obfuscation && HDIVUtil.isObfuscatedTarget(target)) {
 
 				// Restore state from request or memory
-				ValidatorHelperResult result = restorer.restoreState(hdivParameterName, this, target,
-						request.getParameter(hdivParameterName));
+				ValidatorHelperResult result = restorer.restoreState(context.getHdivParameterName(), context, target,
+						context.getParameter(context.getHdivParameterName()));
 				if (result.isValid()) {
 					this.target = result.getValue().getAction();
 					redirect = this.target;
-					HDIVUtil.setHdivObfRedirectAction(request, redirect);
+					HDIVUtil.setHdivObfRedirectAction(context.getRequest(), redirect);
 				}
 				if (redirect == null) {
 					throw new HDIVException(HDIVErrorCodes.INVALID_HDIV_PARAMETER_VALUE);
@@ -129,13 +115,12 @@ public class ValidationContextImpl extends RequestContext implements ValidationC
 		return method;
 	}
 
-	@Override
-	public String getHdivParameterName() {
-		return hdivParameterName;
+	public String getRequestedTarget() {
+		return getDecodedTarget(sb, context.getRequest());
 	}
 
-	public String getRequestedTarget() {
-		return getDecodedTarget(sb, request);
+	public RequestContextHolder getRequestContext() {
+		return context;
 	}
 
 }

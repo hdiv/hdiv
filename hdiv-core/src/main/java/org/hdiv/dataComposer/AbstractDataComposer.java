@@ -23,7 +23,7 @@ import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hdiv.config.HDIVConfig;
-import org.hdiv.context.RequestContext;
+import org.hdiv.context.RequestContextHolder;
 import org.hdiv.idGenerator.UidGenerator;
 import org.hdiv.session.ISession;
 import org.hdiv.state.IPage;
@@ -85,13 +85,13 @@ public abstract class AbstractDataComposer implements IDataComposer {
 	/**
 	 * Context holder for request-specific state.
 	 */
-	protected RequestContext context;
+	protected RequestContextHolder context;
 
 	protected final StringBuilder sb = new StringBuilder(128);
 
 	private final String hdivParameterName;
 
-	public AbstractDataComposer(final RequestContext context) {
+	public AbstractDataComposer(final RequestContextHolder context) {
 		this.context = context;
 		hdivParameterName = context.getHdivParameterName();
 	}
@@ -396,7 +396,7 @@ public abstract class AbstractDataComposer implements IDataComposer {
 			return false;
 		}
 
-		if (hdivConfig.isParameterWithoutConfidentiality(context.getRequest(), parameterName)) {
+		if (hdivConfig.isParameterWithoutConfidentiality(context, parameterName)) {
 			return false;
 		}
 

@@ -22,17 +22,14 @@ import java.util.Map;
 import java.util.StringTokenizer;
 
 import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.hdiv.context.RequestContext;
 import org.hdiv.context.RequestContextHolder;
 import org.hdiv.session.ISession;
 import org.hdiv.util.Constants;
-import org.springframework.util.Assert;
 
 /**
  * A wrapper for HTTP servlet response.
@@ -85,15 +82,19 @@ public class ResponseWrapper extends HttpServletResponseWrapper {
 	 * @param request HttpServletRequest instance
 	 * @param originalResponse response
 	 */
-	public ResponseWrapper(final HttpServletRequest request, final HttpServletResponse originalResponse) {
+	public ResponseWrapper(final RequestContextHolder context) {
+		this(context, context.getResponse());
+	}
 
-		super(originalResponse);
-
-		Assert.notNull(request);
-		Assert.notNull(originalResponse);
-
-		requestContext = new RequestContext(request, originalResponse);
-
+	/**
+	 * Constructs a response object wrapping the given response.
+	 *
+	 * @param request HttpServletRequest instance
+	 * @param originalResponse response
+	 */
+	protected ResponseWrapper(final RequestContextHolder context, final HttpServletResponse response) {
+		super(response);
+		requestContext = context;
 		if (log.isDebugEnabled()) {
 			log.debug("New ResponseWrapper instance.");
 		}
