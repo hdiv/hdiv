@@ -131,7 +131,7 @@ public class ValidatorPhaseListener implements PhaseListener {
 
 	protected boolean mustStopRequest(final List<FacesValidatorError> errors) {
 
-		if (errors.isEmpty()) {
+		if (errors == null || errors.isEmpty()) {
 			return false;
 		}
 
@@ -187,7 +187,7 @@ public class ValidatorPhaseListener implements PhaseListener {
 
 		if (errors != null) {
 			for (ValidatorError error : errors) {
-				error.setTarget(HDIVUtil.getRequestURI(request));
+				error.setTarget(HDIVUtil.getRequestContext(request).getRequestURI());
 				logger.log(error);
 			}
 		}
