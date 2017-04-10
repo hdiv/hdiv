@@ -44,7 +44,7 @@ public class OutcomeTargetComponentProcessor extends AbstractComponentProcessor 
 			HttpServletRequest request = (HttpServletRequest) externalContext.getRequest();
 
 			String url = helper.getUrl(context, component);
-			String hdivParameter = HDIVUtil.getHdivStateParameterName(request);
+			String hdivParameter = HDIVUtil.getRequestContext(request).getHdivState();
 			UrlData urlData = linkUrlProcessor.createUrlData(url, Method.GET, hdivParameter, request);
 			if (urlData.isHdivStateNecessary(config)) {
 
@@ -57,7 +57,7 @@ public class OutcomeTargetComponentProcessor extends AbstractComponentProcessor 
 					return;
 				}
 
-				IDataComposer dataComposer = HDIVUtil.getDataComposer(request);
+				IDataComposer dataComposer = HDIVUtil.getRequestContext(request).getDataComposer();
 				dataComposer.beginRequest(Method.GET, urlData.getUrlWithoutContextPath());
 
 				urlData.setComposedUrlParams(dataComposer.composeParams(urlData.getUrlParams(), Method.GET, Constants.ENCODING_UTF_8));

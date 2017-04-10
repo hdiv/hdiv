@@ -75,7 +75,7 @@ public class ComponentMessagesLog {
 
 				UIComponent clientComponent = facesContext.getViewRoot().findComponent(clientIdWithoutRowId);
 				Iterator<FacesMessage> clientMessages = facesContext.getMessages(clientId);
-				String requestUri = HDIVUtil.getRequestURI(request);
+				String requestUri = HDIVUtil.getRequestContext(request).getRequestURI();
 				manageClientMessages(requestValue, facesContext, clientComponent, clientMessages, requestUri);
 			}
 		}

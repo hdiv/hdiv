@@ -29,6 +29,8 @@ import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 
+import org.hdiv.context.RequestContextHolder;
+
 /**
  * General HDIV utility methods
  * 
@@ -211,7 +213,14 @@ public abstract class UtilsJsf {
 	public static String getTargetUrl(final FacesContext context) {
 
 		HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
-		String url = HDIVUtil.getRequestURI(request);
+		RequestContextHolder requestContext = HDIVUtil.getRequestContext(request);
+		String url = "";
+		if (requestContext != null) {
+			url = requestContext.getRequestURI();
+		}
+		else {
+			url = request.getRequestURI();
+		}
 		return url.substring(request.getContextPath().length());
 	}
 
