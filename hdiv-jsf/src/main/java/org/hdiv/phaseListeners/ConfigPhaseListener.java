@@ -15,6 +15,8 @@
  */
 package org.hdiv.phaseListeners;
 
+import java.util.Map;
+
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
@@ -28,6 +30,9 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hdiv.config.HDIVConfig;
 import org.hdiv.exception.HDIVException;
+import org.hdiv.state.DefaultStateManager;
+import org.hdiv.state.StateManager;
+import org.hdiv.util.ConstantsJsf;
 import org.hdiv.util.HDIVUtil;
 
 /**
@@ -78,7 +83,13 @@ public class ConfigPhaseListener implements PhaseListener {
 			checkSupportedFeatures(context);
 
 			initialized = true;
+		}
 
+		if (event.getPhaseId().equals(PhaseId.RESTORE_VIEW)) {
+
+			FacesContext context = event.getFacesContext();
+			// Init state manager
+			initializeStateManager(context);
 		}
 
 		if (event.getPhaseId().equals(PhaseId.RENDER_RESPONSE)) {
@@ -86,6 +97,8 @@ public class ConfigPhaseListener implements PhaseListener {
 			FacesContext context = event.getFacesContext();
 			// Add user's unique id to state
 			addUserUniqueTokenToState(context);
+			// Init state manager
+			initializeStateManager(context);
 		}
 
 	}
@@ -138,6 +151,20 @@ public class ConfigPhaseListener implements PhaseListener {
 			throw new HDIVException("Confidentiality is not implemented in HDIV for JSF, disable it in hdiv-config.xml");
 		}
 
+	}
+
+	/**
+	 * Initialize {@link StateManager} for the current request.
+	 * @param context request context
+	 */
+	protected void initializeStateManager(final FacesContext context) {
+
+		Map<String, Object> requestMap = context.getExternalContext().getRequestMap();
+		if (!requestMap.containsKey(ConstantsJsf.HDIV_STATE_MANAGER_ATTRIBUTE_KEY)) {
+
+			StateManager stateManager = new DefaultStateManager(context);
+			requestMap.put(ConstantsJsf.HDIV_STATE_MANAGER_ATTRIBUTE_KEY, stateManager);
+		}
 	}
 
 }

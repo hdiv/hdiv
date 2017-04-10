@@ -22,9 +22,9 @@ package org.hdiv.util;
  */
 public class ConstantsJsf {
 
-	public static final String HDIV_ATTRIBUTE_KEY = "HDIV_VALUES";
+	public static final String HDIV_STATE_MANAGER_ATTRIBUTE_KEY = "HDIV_STATE_MANAGER_ATTRIBUTE_KEY";
 
-	public static final String HDIV_ATTRIBUTE_CLIENTIDS_KEY = "HDIV_CLIENTIDS";
+	public static final String HDIV_STATE_HOLDER_ATTRIBUTE_KEY = "HDIV_STATE_HOLDER_ATTRIBUTE_KEY";
 
 	/** Name of the state parameter for each of the implementations */
 	public static final String[] FACES_VIEWSTATE_PARAMNAMES = { "com.sun.faces.VIEW", "javax.faces.ViewState", // SUN RI

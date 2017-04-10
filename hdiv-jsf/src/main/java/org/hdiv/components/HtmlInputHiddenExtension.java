@@ -16,19 +16,15 @@
 package org.hdiv.components;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import javax.faces.component.UIData;
 import javax.faces.component.html.HtmlInputHidden;
 import javax.faces.context.FacesContext;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.hdiv.state.StateManager;
 import org.hdiv.util.ConstantsJsf;
-import org.hdiv.util.UtilsJsf;
 
 /**
  * HtmlInputHidden component extension
@@ -46,22 +42,19 @@ public class HtmlInputHiddenExtension extends HtmlInputHidden {
 	 * 
 	 * @return hidden real value
 	 */
-	@SuppressWarnings("unchecked")
-	public Object getRealValue(final String clientId) {
-		Map<String, Object> values = (Map<String, Object>) getAttributes().get(ConstantsJsf.HDIV_ATTRIBUTE_KEY);
-		return values.get(clientId);
-	}
+	public Object getRealValue(final FacesContext context, final String clientId) {
 
-	/**
-	 * Returns component's client id for the row passed as a parameter
-	 * 
-	 * @param rowIndex row index in UIData
-	 * @return component id
-	 */
-	@SuppressWarnings("unchecked")
-	public String getRequestId(final int rowIndex) {
-		List<String> clientIds = (List<String>) getAttributes().get(ConstantsJsf.HDIV_ATTRIBUTE_CLIENTIDS_KEY);
-		return clientIds.get(rowIndex);
+		Object val = getValue();
+
+		StateManager stateManager = getStateManager(context);
+		if (stateManager != null) {
+			List<Object> values = stateManager.restoreState(clientId);
+			if (values != null && values.size() > 0) {
+				val = values.get(0);
+			}
+		}
+
+		return val;
 	}
 
 	/*
@@ -70,43 +63,27 @@ public class HtmlInputHiddenExtension extends HtmlInputHidden {
 	 * @see javax.faces.component.UIComponent#encodeBegin(javax.faces.context. FacesContext)
 	 */
 	@Override
-	@SuppressWarnings("unchecked")
 	public void encodeBegin(final FacesContext context) throws IOException {
 
-		Map<String, Object> values = null;
-		List<String> clientIds = null;
-		UIData tableComp = UtilsJsf.findParentUIData(this);
 		String clientId = this.getClientId(context);
-		if (tableComp != null) {
-			values = (Map<String, Object>) getAttributes().get(ConstantsJsf.HDIV_ATTRIBUTE_KEY);
-			clientIds = (List<String>) getAttributes().get(ConstantsJsf.HDIV_ATTRIBUTE_CLIENTIDS_KEY);
+		Object val = super.getValue();
+
+		StateManager stateManager = getStateManager(context);
+		if (stateManager != null) {
+			stateManager.saveState(clientId, val);
 		}
-		if (values == null) {
-			values = new HashMap<String, Object>();
-		}
-		if (clientIds == null) {
-			clientIds = new ArrayList<String>();
-		}
-		values.put(clientId, super.getValue());
-		clientIds.add(clientId);
-		getAttributes().put(ConstantsJsf.HDIV_ATTRIBUTE_KEY, values);
-		getAttributes().put(ConstantsJsf.HDIV_ATTRIBUTE_CLIENTIDS_KEY, clientIds);
 
 		if (log.isDebugEnabled()) {
-			log.debug("Hidden real value :" + values.get(clientId));
+			log.debug("Hidden real value :" + val);
 		}
 
 		super.encodeBegin(context);
 	}
 
-	/**
-	 * Returns list of component's client id
-	 * 
-	 * @return list of ids
-	 */
-	@SuppressWarnings("unchecked")
-	public List<String> getClientIds() {
-		return (List<String>) getAttributes().get(ConstantsJsf.HDIV_ATTRIBUTE_CLIENTIDS_KEY);
+	protected StateManager getStateManager(final FacesContext context) {
+		StateManager stateManager = (StateManager) context.getExternalContext().getRequestMap()
+				.get(ConstantsJsf.HDIV_STATE_MANAGER_ATTRIBUTE_KEY);
+		return stateManager;
 	}
 
 }

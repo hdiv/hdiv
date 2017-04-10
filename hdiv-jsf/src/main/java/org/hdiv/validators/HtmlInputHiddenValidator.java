@@ -15,11 +15,9 @@
  */
 package org.hdiv.validators;
 
-import java.util.List;
 import java.util.Map;
 
 import javax.faces.component.UIComponent;
-import javax.faces.component.UIData;
 import javax.faces.component.html.HtmlInputHidden;
 import javax.faces.context.FacesContext;
 
@@ -27,7 +25,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hdiv.components.HtmlInputHiddenExtension;
 import org.hdiv.util.HDIVErrorCodes;
-import org.hdiv.util.UtilsJsf;
 import org.hdiv.validation.ValidationContext;
 
 /**
@@ -59,94 +56,44 @@ public class HtmlInputHiddenValidator extends AbstractComponentValidator {
 
 		FacesContext context = validationContext.getFacesContext();
 
-		UIData uiDataComp = UtilsJsf.findParentUIData(inputHidden);
-
-		int rowIndex = 0;
-		if (uiDataComp != null) {
-			rowIndex = uiDataComp.getRowIndex();
-		}
-		Object hiddenValue;
-		Object hiddenRealValue;
-
 		Map<String, String> parameters = context.getExternalContext().getRequestParameterMap();
-		if (rowIndex >= 0) {
-			// If rowIndex >= 0, current position is a table and hidden's component
-			// clientId is correct
 
-			hiddenValue = parameters.get(inputHidden.getClientId(context));
-			hiddenRealValue = inputHidden.getRealValue(inputHidden.getClientId(context));
+		Object hiddenValue = parameters.get(inputHidden.getClientId(context));
+		Object hiddenRealValue = inputHidden.getRealValue(context, inputHidden.getClientId(context));
+
+		if (log.isDebugEnabled()) {
+			log.debug("Hidden's value received:" + hiddenValue);
+			log.debug("Hidden's value sent to the client:" + hiddenRealValue);
+		}
+
+		if (hiddenRealValue == null) {
+			// If the hidden field has not a defined value, a null value is stored.
+			// For request validation purpose, it equivalent to empty String
+			hiddenRealValue = "";
+		}
+
+		if (hiddenValue == null) {
 
 			if (log.isDebugEnabled()) {
-				log.debug("Hidden's value received:" + hiddenValue);
-				log.debug("Hidden's value sent to the client:" + hiddenRealValue);
+				log.debug("Parameter '" + inputHidden.getId() + "' rejected in component '" + inputHidden.getId()
+						+ "' in ComponentValidator '" + this.getClass() + "'");
 			}
+			validationContext.rejectParameter(inputHidden.getId(), null, HDIVErrorCodes.NOT_RECEIVED_ALL_REQUIRED_PARAMETERS);
+		}
 
-			if (hiddenRealValue == null) {
-				// If the hidden field has not a defined value, a null value is stored.
-				// For request validation purpose, it equivalent to empty String
-				hiddenRealValue = "";
+		boolean correct = hasEqualValue(hiddenValue, hiddenRealValue);
+		if (!correct) {
+
+			if (log.isDebugEnabled()) {
+				log.debug("Parameter '" + inputHidden.getId() + "' rejected in component '" + inputHidden.getId()
+						+ "' in ComponentValidator '" + this.getClass() + "'");
 			}
-
-			if (hiddenValue == null) {
-
-				if (log.isDebugEnabled()) {
-					log.debug("Parameter '" + inputHidden.getId() + "' rejected in component '" + inputHidden.getId()
-							+ "' in ComponentValidator '" + this.getClass() + "'");
-				}
-				validationContext.rejectParameter(inputHidden.getId(), null, HDIVErrorCodes.NOT_RECEIVED_ALL_REQUIRED_PARAMETERS);
-			}
-
-			boolean correct = hasEqualValue(hiddenValue, hiddenRealValue);
-			if (!correct) {
-
-				if (log.isDebugEnabled()) {
-					log.debug("Parameter '" + inputHidden.getId() + "' rejected in component '" + inputHidden.getId()
-							+ "' in ComponentValidator '" + this.getClass() + "'");
-				}
-				validationContext.rejectParameter(inputHidden.getId(), hiddenRealValue.toString(), HDIVErrorCodes.INVALID_PARAMETER_VALUE);
-			}
-			else {
-				validationContext.acceptParameter(inputHidden.getId(), hiddenRealValue.toString());
-			}
+			validationContext.rejectParameter(inputHidden.getId(), hiddenRealValue.toString(), HDIVErrorCodes.INVALID_PARAMETER_VALUE);
 		}
 		else {
-			// else, current position isn't a table, but hidden is in a table
-			// and its clientId is incorrect
-			List<String> clientIds = inputHidden.getClientIds();
-			for (int i = 0; i < clientIds.size(); i++) {
-				String clientId = clientIds.get(i);
-				hiddenValue = parameters.get(clientId);
-				hiddenRealValue = inputHidden.getRealValue(clientId);
-				if (log.isDebugEnabled()) {
-					log.debug("Hidden's value received:" + hiddenValue);
-					log.debug("Hidden's value sent to the client:" + hiddenRealValue);
-				}
-
-				if (hiddenValue == null) {
-
-					if (log.isDebugEnabled()) {
-						log.debug("Parameter '" + inputHidden.getId() + "' rejected in component '" + inputHidden.getId()
-								+ "' in ComponentValidator '" + this.getClass() + "'");
-					}
-					validationContext.rejectParameter(inputHidden.getId(), null, HDIVErrorCodes.NOT_RECEIVED_ALL_REQUIRED_PARAMETERS);
-				}
-
-				boolean correct = hiddenValue.equals(hiddenRealValue);
-				if (!correct) {
-
-					if (log.isDebugEnabled()) {
-						log.debug("Parameter '" + inputHidden.getId() + "' rejected in component '" + inputHidden.getId()
-								+ "' in ComponentValidator '" + this.getClass() + "'");
-					}
-					validationContext.rejectParameter(inputHidden.getId(), hiddenRealValue.toString(),
-							HDIVErrorCodes.INVALID_PARAMETER_VALUE);
-				}
-				else {
-					validationContext.acceptParameter(inputHidden.getId(), hiddenRealValue.toString());
-				}
-			}
-
+			validationContext.acceptParameter(inputHidden.getId(), hiddenRealValue.toString());
 		}
+
 	}
 
 	/**
