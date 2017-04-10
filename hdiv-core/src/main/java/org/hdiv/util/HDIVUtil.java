@@ -42,6 +42,7 @@ import org.hdiv.urlProcessor.UrlData;
 import org.hdiv.urlProcessor.UrlDataImpl;
 import org.springframework.context.MessageSource;
 import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 import org.springframework.web.util.HtmlUtils;
 
@@ -276,6 +277,11 @@ public class HDIVUtil {
 	@SuppressWarnings("deprecation")
 	public static RequestContextHolder getRequestContext(final ServletRequest request) {
 		return (RequestContextHolder) request.getAttribute(Constants.HDIV_REQUEST_CONTEXT);
+	}
+
+	public static HttpServletRequest getCurrentHttpRequest() {
+		return ((ServletRequestAttributes) org.springframework.web.context.request.RequestContextHolder.currentRequestAttributes())
+				.getRequest();
 	}
 
 	@Deprecated
