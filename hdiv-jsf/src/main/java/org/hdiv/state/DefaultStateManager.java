@@ -15,10 +15,11 @@
  */
 package org.hdiv.state;
 
-import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import javax.faces.context.FacesContext;
 
@@ -34,27 +35,27 @@ public class DefaultStateManager implements StateManager {
 
 	public void saveState(final String componentid, final Object value) {
 
-		Map<String, List<Object>> stateHolder = getStateHolder();
-		List<Object> values = stateHolder.get(componentid);
+		Map<String, Set<Object>> stateHolder = getStateHolder();
+		Set<Object> values = stateHolder.get(componentid);
 		if (values == null) {
-			values = new ArrayList<Object>();
+			values = new HashSet<Object>();
 			stateHolder.put(componentid, values);
 		}
 		values.add(value);
 	}
 
-	public List<Object> restoreState(final String componentId) {
-		Map<String, List<Object>> stateHolder = getStateHolder();
+	public Collection<Object> restoreState(final String componentId) {
+		Map<String, Set<Object>> stateHolder = getStateHolder();
 		return stateHolder.get(componentId);
 	}
 
-	protected Map<String, List<Object>> getStateHolder() {
+	protected Map<String, Set<Object>> getStateHolder() {
 
 		@SuppressWarnings("unchecked")
-		Map<String, List<Object>> stateHolder = (Map<String, List<Object>>) context.getViewRoot().getAttributes()
+		Map<String, Set<Object>> stateHolder = (Map<String, Set<Object>>) context.getViewRoot().getAttributes()
 				.get(ConstantsJsf.HDIV_STATE_HOLDER_ATTRIBUTE_KEY);
 		if (stateHolder == null) {
-			stateHolder = new HashMap<String, List<Object>>();
+			stateHolder = new HashMap<String, Set<Object>>();
 			context.getViewRoot().getAttributes().put(ConstantsJsf.HDIV_STATE_HOLDER_ATTRIBUTE_KEY, stateHolder);
 		}
 		return stateHolder;

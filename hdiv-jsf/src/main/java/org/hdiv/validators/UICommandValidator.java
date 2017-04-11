@@ -16,6 +16,7 @@
 package org.hdiv.validators;
 
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -134,18 +135,14 @@ public class UICommandValidator extends AbstractComponentValidator {
 		Map<String, String> requestMap = context.getExternalContext().getRequestParameterMap();
 		String requestValue = requestMap.get(param.getName());
 
-		String realValue = null;
-		Object realValueObj = param.getValue(context, clicked.getParamName());
-		if (realValueObj != null) {
-			realValue = realValueObj.toString();
-		}
+		Collection<Object> stateValues = param.getStateValue(context, clicked.getParamName());
 
 		if (log.isDebugEnabled()) {
 			log.debug("UIParameter requestValue:" + requestValue);
-			log.debug("UIParameter realValue:" + realValue);
+			log.debug("UIParameter stateValues:" + stateValues);
 		}
 
-		if (requestValue != null && requestValue.equals(realValue)) {
+		if (requestValue != null && isCorrectValue(requestValue, stateValues)) {
 			validationContext.acceptParameter(param.getName(), requestValue);
 		}
 		else if (requestValue == null) {
@@ -164,6 +161,20 @@ public class UICommandValidator extends AbstractComponentValidator {
 			}
 			validationContext.rejectParameter(param.getName(), requestValue, HDIVErrorCodes.INVALID_PARAMETER_VALUE);
 		}
+	}
+
+	protected boolean isCorrectValue(final String requestValue, final Collection<Object> stateValues) {
+
+		Iterator<Object> it = stateValues.iterator();
+		while (it.hasNext()) {
+			Object value = it.next();
+			if (value != null) {
+				if (value.toString().equals(requestValue)) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	public static class Clicked {

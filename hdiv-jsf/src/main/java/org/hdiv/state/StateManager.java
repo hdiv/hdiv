@@ -15,11 +15,11 @@
  */
 package org.hdiv.state;
 
-import java.util.List;
+import java.util.Collection;
 
 public interface StateManager {
 
 	void saveState(String componentid, Object value);
 
-	List<Object> restoreState(String componentId);
+	Collection<Object> restoreState(String componentId);
 }
