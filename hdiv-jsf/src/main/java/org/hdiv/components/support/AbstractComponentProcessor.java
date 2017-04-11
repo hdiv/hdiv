@@ -37,7 +37,7 @@ public abstract class AbstractComponentProcessor {
 
 		// Remove the component with the HDIV state, we don't want to store it in the state
 		HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
-		String hdivParameter = HDIVUtil.getRequestContext(request).getHdivState();
+		String hdivParameter = HDIVUtil.getRequestContext(request).getHdivParameterName();
 
 		// First we add to a list the components to remove
 		// The list used by MyFaces has a problem with the iterator

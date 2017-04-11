@@ -76,7 +76,7 @@ public class UIParameterExtension extends UIParameter {
 
 		// HDIV parameter name
 		HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
-		String hdivParameter = HDIVUtil.getRequestContext(request).getHdivState();
+		String hdivParameter = HDIVUtil.getRequestContext(request).getHdivParameterName();
 
 		String name = getName();
 		if (name != null && name.equals(hdivParameter)) {

@@ -15,6 +15,7 @@
  */
 package org.hdiv.validators;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.faces.component.UIComponent;
@@ -42,16 +43,19 @@ public class UISelectValidator implements ComponentValidator {
 
 		FacesContext context = validationContext.getFacesContext();
 		String clientId = component.getClientId(context);
-		Object value = context.getExternalContext().getRequestParameterMap().get(clientId);
 
-		if (value != null) {
-			validationContext.acceptParameter(clientId, value);
+		List<String> componentParams = validationContext.getParamsWithRowId().get(clientId);
+		if (componentParams == null || componentParams.isEmpty()) {
+			componentParams = new ArrayList<String>();
+			componentParams.add(clientId);
 		}
-		else {
-			List<String> params = validationContext.getParamsWithRowId().get(clientId);
-			if (params != null && params.size() > 0) {
-				for (String param : params) {
-					validationContext.acceptParameter(param, validationContext.getRequestParameters().get(param));
+
+		// Accept all known parameters
+		for (String param : componentParams) {
+			String[] values = context.getExternalContext().getRequestParameterValuesMap().get(param);
+			if (values != null && values.length > 0) {
+				for (String value : values) {
+					validationContext.acceptParameter(param, value);
 				}
 			}
 		}
