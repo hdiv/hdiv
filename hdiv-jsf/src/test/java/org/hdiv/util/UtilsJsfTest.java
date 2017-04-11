@@ -23,12 +23,30 @@ public class UtilsJsfTest extends TestCase {
 
 		String clientId = "aaaa:1:bbbb";
 		String ci = UtilsJsf.removeRowId(clientId);
+		assertEquals("aaaa:bbbb", ci);
+		assertFalse(ci.matches(":\\d*:"));
+	}
+
+	public void testRemoveRowIdEnd() {
+
+		String clientId = "aaaa:1";
+		String ci = UtilsJsf.removeRowId(clientId);
+		assertEquals("aaaa", ci);
 		assertFalse(ci.matches(":\\d*:"));
 	}
 
 	public void testHasRowId() {
 
 		String clientId = "aaaa:1:bbbb";
+		assertTrue(UtilsJsf.hasRowId(clientId));
+
+		clientId = "aaaa:bbbb";
+		assertFalse(UtilsJsf.hasRowId(clientId));
+	}
+
+	public void testHasRowIdEnd() {
+
+		String clientId = "aaaa:1";
 		assertTrue(UtilsJsf.hasRowId(clientId));
 
 		clientId = "aaaa:bbbb";
