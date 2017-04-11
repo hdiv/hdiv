@@ -80,15 +80,45 @@ public class GenericComponentValidator extends AbstractComponentValidator {
 			AjaxBehavior ajaxBehavior = (AjaxBehavior) behavior;
 			Collection<String> executeIds = ajaxBehavior.getExecute();
 			Collection<String> renderIds = ajaxBehavior.getRender();
+			String clientId = ((UIComponent) component).getClientId();
+			boolean hasNamingContainerParent = UtilsJsf.findParentNamingContainer((UIComponent) component) != null;
 
 			context.acceptParameter("javax.faces.partial.ajax", "true");
-			// TODO If component is child of UIData the 'javax.faces.source' will contain an indexed id: 'form:list:1:button'
-			context.acceptParameter("javax.faces.source", ((UIComponent) component).getClientId());
-			context.acceptParameter("javax.faces.behavior.event", behaviourEvent);
-			context.acceptParameter("javax.faces.partial.execute", resolveClientIds((UIComponent) component, executeIds));
-			context.acceptParameter("javax.faces.partial.render", resolveClientIds((UIComponent) component, renderIds));
 			context.acceptParameter("javax.faces.partial.event", "click");// TODO more valid values??
+			context.acceptParameter("javax.faces.behavior.event", behaviourEvent);
+			acceptParameter(context, "javax.faces.source", clientId, hasNamingContainerParent);
+			acceptParameter(context, "javax.faces.partial.execute", resolveClientIds((UIComponent) component, executeIds),
+					hasNamingContainerParent);
+			acceptParameter(context, "javax.faces.partial.render", resolveClientIds((UIComponent) component, renderIds),
+					hasNamingContainerParent);
 		}
+	}
+
+	protected void acceptParameter(final ValidationContext context, final String param, final String ids,
+			final boolean hasNamingContainerParent) {
+
+		if (!hasNamingContainerParent) {
+			context.acceptParameter(param, ids);
+		}
+		else {
+			// Component is inside NamingContainer component, can contain indexes in component ids. Ex: 'form:list:1:button'
+			String paramValue = context.getRequestParameters().get(param);
+			if (paramValue != null) {
+				String genericValue = UtilsJsf.removeRowId(paramValue);
+				if (genericValue.equals(paramValue)) {
+					// No index in the components
+					context.acceptParameter(param, ids);
+				}
+				else {
+					// Index in the param value, Ex: 'form:list:1:button'
+					if (genericValue.equals(ids)) {
+						context.acceptParameter(param, paramValue);
+					}
+					// else: no param value match, can not accept it
+				}
+			}
+		}
+
 	}
 
 	protected String resolveClientIds(final UIComponent component, final Collection<String> ids) {
