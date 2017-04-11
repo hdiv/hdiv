@@ -72,11 +72,6 @@ public class Constants {
 	public static final String STATE_CACHE_NAME = "org.hdiv.StateCache";
 
 	/**
-	 * Obfuscation redirect target
-	 */
-	static final String HDIV_OBF_REDIRECT = "HDIVObfRedirect";
-
-	/**
 	 * Request context
 	 */
 	@Deprecated

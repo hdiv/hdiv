@@ -15,15 +15,9 @@
  */
 package org.hdiv.filter;
 
-import org.hdiv.context.RequestContextHolder;
-
 public interface StateRestorer {
 
 	ValidatorHelperResult restoreState(ValidationContext context);
 
-	ValidatorHelperResult restoreState(final String hdivParameter, ValidationContext context);
-
-	ValidatorHelperResult restoreState(final String hdivParameter, String hdivState, ValidationContext context);
-
-	ValidatorHelperResult restoreState(final String hdivParameter, RequestContextHolder context, final String target, String requestState);
+	ValidatorHelperResult restoreState(ValidationContext context, String requestState);
 }

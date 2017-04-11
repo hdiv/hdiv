@@ -294,40 +294,6 @@ public class HDIVUtil {
 	}
 
 	/**
-	 * Get Hdiv redirection from request.
-	 * @param request HttpServletRequest object
-	 * @return Parameter name
-	 * @since 3.3.0
-	 */
-	public static String getHdivObfRedirectAction(final HttpServletRequest request) {
-		return (String) request.getAttribute(Constants.HDIV_OBF_REDIRECT);
-	}
-
-	/**
-	 * Get Hdiv redirection from request.
-	 * @param request HttpServletRequest object
-	 * @return Parameter name
-	 * @since 3.3.0
-	 */
-	public static String getHdivObfRedirectUrl(final HttpServletRequest request) {
-		String action = (String) request.getAttribute(Constants.HDIV_OBF_REDIRECT);
-		if (action != null) {
-			return getHdivObfUrl(request, action);
-		}
-		return null;
-	}
-
-	/**
-	 * Get deobfuscated target from request.
-	 * @param request HttpServletRequest object
-	 * @return Parameter name
-	 * @since 3.3.0
-	 */
-	public static String getHdivObfUrl(final HttpServletRequest request, final String target) {
-		return request.getContextPath() + target;
-	}
-
-	/**
 	 * Gets if target is an obfuscated URL
 	 * @param target Target to check
 	 * @return Parameter name
@@ -335,16 +301,6 @@ public class HDIVUtil {
 	 */
 	public static boolean isObfuscatedTarget(final String target) {
 		return target.indexOf(UrlData.OBFUSCATION_ROOT_PATH) != -1;
-	}
-
-	/**
-	 * Set Hdiv redirection from request.
-	 * @param request HttpServletRequest object
-	 * @return Parameter name
-	 * @since 3.3.0
-	 */
-	public static void setHdivObfRedirectAction(final HttpServletRequest request, final String url) {
-		request.setAttribute(Constants.HDIV_OBF_REDIRECT, url);
 	}
 
 	/**

@@ -100,4 +100,8 @@ public interface RequestContextHolder {
 
 	String getContentType();
 
+	void setRedirectAction(String redirect);
+
+	String getRedirectAction();
+
 }

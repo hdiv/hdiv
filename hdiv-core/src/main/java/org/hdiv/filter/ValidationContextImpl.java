@@ -19,6 +19,7 @@ import java.io.UnsupportedEncodingException;
 
 import org.hdiv.context.RequestContextHolder;
 import org.hdiv.exception.HDIVException;
+import org.hdiv.state.IState;
 import org.hdiv.util.Constants;
 import org.hdiv.util.HDIVErrorCodes;
 import org.hdiv.util.HDIVUtil;
@@ -53,12 +54,11 @@ public class ValidationContextImpl implements ValidationContext {
 			if (obfuscation && HDIVUtil.isObfuscatedTarget(target)) {
 
 				// Restore state from request or memory
-				ValidatorHelperResult result = restorer.restoreState(context.getHdivParameterName(), context, target,
-						context.getParameter(context.getHdivParameterName()));
-				if (result.isValid()) {
-					this.target = result.getValue().getAction();
+				IState state = restoreState();
+				if (state != null) {
+					this.target = state.getAction();
 					redirect = this.target;
-					HDIVUtil.setHdivObfRedirectAction(context.getRequest(), redirect);
+					context.setRedirectAction(redirect);
 				}
 				if (redirect == null) {
 					throw new HDIVException(HDIVErrorCodes.INVALID_HDIV_PARAMETER_VALUE);
@@ -69,6 +69,14 @@ public class ValidationContextImpl implements ValidationContext {
 			}
 		}
 		return target;
+	}
+
+	protected IState restoreState() {
+		ValidatorHelperResult result = restorer.restoreState(this);
+		if (result.isValid()) {
+			return result.getValue();
+		}
+		return null;
 	}
 
 	public StringBuilder getBuffer() {

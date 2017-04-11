@@ -68,6 +68,8 @@ public class RequestContext implements RequestContextHolder {
 
 	private String formStateId;
 
+	private String redirect;
+
 	@SuppressWarnings("deprecation")
 	public RequestContext(final HttpServletRequest request, final HttpServletResponse response) {
 		this.request = request;
@@ -331,5 +333,13 @@ public class RequestContext implements RequestContextHolder {
 
 	public String getServletPath() {
 		return request.getServletPath();
+	}
+
+	public void setRedirectAction(final String redirect) {
+		this.redirect = redirect;
+	}
+
+	public String getRedirectAction() {
+		return redirect;
 	}
 }
