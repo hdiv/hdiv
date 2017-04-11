@@ -43,6 +43,8 @@ import org.hdiv.validators.UISelectValidator;
 
 public class DefaultComponentTreeValidator implements ComponentTreeValidator {
 
+	private final static String FACELETS_COMPONENT_FAMILY = "facelets";
+
 	private static final Log log = LogFactory.getLog(DefaultComponentTreeValidator.class);
 
 	protected final List<ComponentValidator> componentValidators = new ArrayList<ComponentValidator>();
@@ -169,12 +171,11 @@ public class DefaultComponentTreeValidator implements ComponentTreeValidator {
 			log.debug(" - Component: " + clientId + " of Type: " + component.getClass().getCanonicalName());
 		}
 
-		if (isExcludedComponent(component)) {
-			// Exclude non rendered components from the parameter validation
-			return;
-		}
+		boolean excluded = isExcludedComponent(component);
+		if (!excluded) {
 
-		validateComponent(context, component);
+			validateComponent(context, component);
+		}
 
 		Iterator<UIComponent> it = component.getFacetsAndChildren();
 		while (it.hasNext()) {
@@ -250,7 +251,11 @@ public class DefaultComponentTreeValidator implements ComponentTreeValidator {
 
 	protected boolean isExcludedComponent(final UIComponent component) {
 
-		return !component.isRendered();
+		if (FACELETS_COMPONENT_FAMILY.equals(component.getFamily())) {
+			return true;
+		}
+
+		return false;
 	}
 
 	protected boolean isExcludedUrl(final FacesContext context) {
