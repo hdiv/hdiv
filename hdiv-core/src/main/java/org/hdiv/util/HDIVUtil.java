@@ -289,6 +289,7 @@ public class HDIVUtil {
 		return request.getParameter(getHdivStateParameterName(request));
 	}
 
+	@Deprecated
 	public static void setHdivState(final HttpServletRequest request, final String value) {
 		((RequestWrapper) request).addParameter(getHdivStateParameterName(request), new String[] { value });
 	}

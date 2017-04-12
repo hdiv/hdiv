@@ -15,6 +15,8 @@
  */
 package org.hdiv.context;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Enumeration;
 import java.util.Locale;
 import java.util.Map;
@@ -341,5 +343,18 @@ public class RequestContext implements RequestContextHolder {
 
 	public String getRedirectAction() {
 		return redirect;
+	}
+
+	@SuppressWarnings("deprecation")
+	public void setHdivState(final String hdivState) {
+		HDIVUtil.setHdivState(request, hdivState);
+	}
+
+	public InputStream getInputStream() throws IOException {
+		return request.getInputStream();
+	}
+
+	public String getHeader(final String header) {
+		return request.getHeader(header);
 	}
 }

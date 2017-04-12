@@ -15,6 +15,8 @@
  */
 package org.hdiv.context;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Enumeration;
 import java.util.Map;
 
@@ -39,6 +41,8 @@ public interface RequestContextHolder {
 	String getHdivModifyParameterName();
 
 	String getHdivState();
+
+	void setHdivState(String hdivState);
 
 	String getRequestURI();
 
@@ -103,5 +107,9 @@ public interface RequestContextHolder {
 	void setRedirectAction(String redirect);
 
 	String getRedirectAction();
+
+	InputStream getInputStream() throws IOException;
+
+	String getHeader(String header);
 
 }

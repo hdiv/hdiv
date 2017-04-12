@@ -178,10 +178,10 @@ public class DataComposerFactory {
 	 * @return reuse or not
 	 */
 	protected final boolean reuseExistingPage(final RequestContextHolder context) {
-		return config.isReuseExistingPageInAjaxRequest() && context.isAjax() && !excludePageReuseInAjax(context.getRequest());
+		return config.isReuseExistingPageInAjaxRequest() && context.isAjax() && !excludePageReuseInAjax(context);
 	}
 
-	protected final boolean excludePageReuseInAjax(final HttpServletRequest request) {
+	protected final boolean excludePageReuseInAjax(final RequestContextHolder request) {
 
 		for (String header : excludePageReuseHeaders) {
 			String headerValue = request.getHeader(header);
