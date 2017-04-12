@@ -153,6 +153,7 @@
 		<module>hdiv-jsf</module>
 		<module>hdiv-thymeleaf</module>
 		<module>hdiv-docs</module>
+		<module>hdiv-services</module>
 	</modules>
 
 	<licenses>
