@@ -233,4 +233,11 @@ public abstract class UtilsJsf {
 		return url.substring(request.getContextPath().length());
 	}
 
+	public static boolean isRequestInitialized(final FacesContext context) {
+
+		HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
+		RequestContextHolder requestContext = HDIVUtil.getRequestContext(request);
+		return requestContext.getDataComposer() != null;
+	}
+
 }

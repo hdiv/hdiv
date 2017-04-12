@@ -34,6 +34,7 @@ import org.hdiv.filter.ValidatorErrorHandler;
 import org.hdiv.logs.Logger;
 import org.hdiv.util.HDIVErrorCodes;
 import org.hdiv.util.HDIVUtil;
+import org.hdiv.util.UtilsJsf;
 import org.hdiv.validation.ComponentTreeValidator;
 import org.hdiv.validation.FacesValidatorError;
 import org.springframework.web.context.WebApplicationContext;
@@ -103,6 +104,10 @@ public class ValidatorPhaseListener implements PhaseListener {
 		if (event.getPhaseId().equals(PhaseId.RESTORE_VIEW)) {
 
 			FacesContext context = event.getFacesContext();
+			boolean reqInitialized = UtilsJsf.isRequestInitialized(context);
+			if (!reqInitialized) {
+				return;
+			}
 
 			if (!context.isPostback()) {
 				// Don't validate a request if it is not a postback
