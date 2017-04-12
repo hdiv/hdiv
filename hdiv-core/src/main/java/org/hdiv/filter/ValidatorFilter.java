@@ -325,7 +325,6 @@ public class ValidatorFilter extends OncePerRequestFilter {
 			final ResponseWrapper responseWrapper, final FilterChain filterChain, final String obfuscated)
 			throws IOException, ServletException {
 		validationHelper.startPage(ctx);
-		System.out.println("Validate:" + (System.currentTimeMillis() - start) + " " + ctx.getRequestURI());
 		try {
 			if (obfuscated != null) {
 				requestWrapper.getRequestDispatcher(obfuscated).forward(requestWrapper, responseWrapper);
@@ -333,13 +332,11 @@ public class ValidatorFilter extends OncePerRequestFilter {
 			else {
 				long time = System.currentTimeMillis();
 				filterChain.doFilter(requestWrapper, responseWrapper);
-				System.out.println("Process:" + (System.currentTimeMillis() - time) + " " + ctx.getRequestURI());
 			}
 		}
 		finally {
 			long time = System.currentTimeMillis();
 			validationHelper.endPage(ctx);
-			System.out.println("End Page:" + (System.currentTimeMillis() - time) + " " + ctx.getRequestURI());
 		}
 	}
 
