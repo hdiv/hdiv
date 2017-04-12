@@ -244,7 +244,7 @@ public class ValidatorFilter extends OncePerRequestFilter {
 			else {
 
 				// Call to ValidatorErrorHandler
-				errorHandler.handleValidatorError(multipartProcessedRequest, responseWrapper, errors);
+				errorHandler.handleValidatorError(ctx, errors);
 			}
 
 		}
@@ -253,7 +253,7 @@ public class ValidatorFilter extends OncePerRequestFilter {
 			if (errors != null) {
 				// Show error page
 				if (!hdivConfig.isDebugMode()) {
-					errorHandler.handleValidatorError(multipartProcessedRequest, responseWrapper, errors);
+					errorHandler.handleValidatorError(ctx, errors);
 				}
 			}
 			else {

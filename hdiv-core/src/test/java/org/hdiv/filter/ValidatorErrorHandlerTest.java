@@ -22,6 +22,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.hdiv.AbstractHDIVTestCase;
+import org.hdiv.context.RequestContextHolder;
 import org.hdiv.util.HDIVErrorCodes;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.mock.web.MockHttpSession;
@@ -30,34 +31,36 @@ public class ValidatorErrorHandlerTest extends AbstractHDIVTestCase {
 
 	private ValidatorErrorHandler validatorErrorHandler;
 
+	@Override
 	protected void onSetUp() throws Exception {
-		this.validatorErrorHandler = this.getApplicationContext().getBean(ValidatorErrorHandler.class);
+		validatorErrorHandler = getApplicationContext().getBean(ValidatorErrorHandler.class);
 	}
 
 	public void testPageIncorrect() {
 
-		HttpServletRequest request = this.getMockRequest();
-		MockHttpServletResponse response = new MockHttpServletResponse();
+		RequestContextHolder ctx = getRequestContext();
 
 		ValidatorError error = new ValidatorError(HDIVErrorCodes.INVALID_PAGE_ID);
 		List<ValidatorError> errors = Collections.singletonList(error);
-		this.validatorErrorHandler.handleValidatorError(request, response, errors);
+		validatorErrorHandler.handleValidatorError(ctx, errors);
 
-		String redirectUrl = response.getRedirectedUrl();
+		String redirectUrl = getMockResponse().getRedirectedUrl();
 
 		assertEquals(getConfig().getSessionExpiredLoginPage(), redirectUrl);
 	}
 
 	public void testHandleValidatorError() {
 
-		HttpServletRequest request = this.getMockRequest();
+		HttpServletRequest request = getMockRequest();
+		RequestContextHolder ctx = getRequestContext();
 		MockHttpSession session = (MockHttpSession) request.getSession();
 		session.setNew(false); // mark as not new sesssion
-		MockHttpServletResponse response = new MockHttpServletResponse();
+		clearSession();
+		MockHttpServletResponse response = getMockResponse();
 
 		ValidatorError error = new ValidatorError(HDIVErrorCodes.NOT_RECEIVED_ALL_REQUIRED_PARAMETERS);
 		List<ValidatorError> errors = Collections.singletonList(error);
-		this.validatorErrorHandler.handleValidatorError(request, response, errors);
+		validatorErrorHandler.handleValidatorError(ctx, errors);
 
 		String redirectUrl = response.getRedirectedUrl();
 
@@ -69,12 +72,12 @@ public class ValidatorErrorHandlerTest extends AbstractHDIVTestCase {
 		// Remove default errorPage
 		getConfig().setErrorPage(null);
 
-		HttpServletRequest request = this.getMockRequest();
-		MockHttpServletResponse response = new MockHttpServletResponse();
+		RequestContextHolder ctx = getRequestContext();
+		MockHttpServletResponse response = getMockResponse();
 
 		ValidatorError error = new ValidatorError(HDIVErrorCodes.NOT_RECEIVED_ALL_REQUIRED_PARAMETERS);
 		List<ValidatorError> errors = Collections.singletonList(error);
-		this.validatorErrorHandler.handleValidatorError(request, response, errors);
+		validatorErrorHandler.handleValidatorError(ctx, errors);
 
 		// Default Error page is generated, so no redirect URL exist
 		assertNull(response.getRedirectedUrl());

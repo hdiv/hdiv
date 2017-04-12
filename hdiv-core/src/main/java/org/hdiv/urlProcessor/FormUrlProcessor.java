@@ -50,7 +50,7 @@ public class FormUrlProcessor extends AbstractUrlProcessor {
 	/**
 	 * Process form action url to add hdiv state if it is necessary.
 	 *
-	 * @param request {@link HttpServletRequest} object
+	 * @param request {@link RequestContextHolder} object
 	 * @param url url to process
 	 * @return processed url
 	 */
@@ -61,7 +61,7 @@ public class FormUrlProcessor extends AbstractUrlProcessor {
 	/**
 	 * Process form action url to add hdiv state if it is necessary.
 	 *
-	 * @param request {@link HttpServletRequest} object
+	 * @param request {@link RequestContextHolder} object
 	 * @param url url to process
 	 * @param method form submit method
 	 * @return processed url

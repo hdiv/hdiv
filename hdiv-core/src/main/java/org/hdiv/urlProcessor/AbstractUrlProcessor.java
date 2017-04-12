@@ -69,11 +69,10 @@ public abstract class AbstractUrlProcessor {
 
 	/**
 	 * Create a new instance of {@link UrlData}.
-	 *
 	 * @param url original url
 	 * @param method Http method
 	 * @param hdivParameter Parameter for HDIV State
-	 * @param request {@link HttpServletRequest} object
+	 * @param ctx {@link RequestContextHolder} object
 	 * @return new instance of {@link UrlData}
 	 */
 	public UrlData createUrlData(String url, final Method method, final String hdivParameter, final RequestContextHolder ctx) {
@@ -121,6 +120,7 @@ public abstract class AbstractUrlProcessor {
 
 	}
 
+	@Deprecated
 	protected static final String getBaseURL(final HttpServletRequest request) {
 		return getBaseURL(HDIVUtil.getRequestContext(request));
 	}
@@ -188,23 +188,17 @@ public abstract class AbstractUrlProcessor {
 		return result;
 	}
 
-	/**
-	 * Generates a Map with request parameter name and values.
-	 * @see Still used in structs1
-	 * @param request {@link HttpServletRequest} object
-	 * @param urlParams urls query string
-	 * @return Map
-	 */
-	public Map<String, String[]> getUrlParamsAsMap(final StringBuilder sb, final HttpServletRequest request, final String urlParams) {
+	@Deprecated
+	public final Map<String, String[]> getUrlParamsAsMap(final StringBuilder sb, final HttpServletRequest request, final String urlParams) {
 		return getUrlParamsAsMap(HDIVUtil.getRequestContext(request).getHdivParameterName(), sb, urlParams);
 	}
 
 	/**
 	 * Generates a Map with request parameter name and values.
-	 *
-	 * @param request {@link HttpServletRequest} object
+	 * @param hdivParameter
+	 * @param sb
 	 * @param urlParams urls query string
-	 * @return Map
+	 * @return
 	 */
 	public Map<String, String[]> getUrlParamsAsMap(final String hdivParameter, final StringBuilder sb, final String urlParams) {
 

@@ -18,8 +18,7 @@ package org.hdiv.filter;
 import java.io.PrintWriter;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-
+import org.hdiv.context.RequestContextHolder;
 import org.springframework.web.util.HtmlUtils;
 
 /**
@@ -35,7 +34,7 @@ public class DefaultErrorPageWritter {
 	 * @param out output to the response
 	 * @param editableErrors existing editable errors to show in error page.
 	 */
-	public void writeErrorPage(final HttpServletRequest request, final PrintWriter out, final List<ValidatorError> editableErrors) {
+	public void writeErrorPage(final RequestContextHolder request, final PrintWriter out, final List<ValidatorError> editableErrors) {
 		// @formatter:off
 		out.write("<!DOCTYPE html>");
 		out.write("<html>");

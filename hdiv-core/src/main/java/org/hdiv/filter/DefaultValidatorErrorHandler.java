@@ -24,6 +24,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.hdiv.config.HDIVConfig;
+import org.hdiv.context.RequestContextHolder;
 import org.hdiv.logs.IUserData;
 import org.hdiv.util.Constants;
 import org.hdiv.util.HDIVErrorCodes;
@@ -54,29 +55,29 @@ public class DefaultValidatorErrorHandler implements ValidatorErrorHandler {
 	 * @param errors Validation errors
 	 * @since 2.1.13
 	 */
-	public void handleValidatorError(final HttpServletRequest request, final HttpServletResponse response,
-			final List<ValidatorError> errors) {
-
+	public void handleValidatorError(final RequestContextHolder ctx, final List<ValidatorError> errors) {
+		HttpServletResponse response = ctx.getResponse();
 		if (isPageNotFoundError(errors)) {
 			// Page not found in session
 
-			HttpSession session = request.getSession(false);
+			@SuppressWarnings("deprecation")
+			HttpSession session = ctx.getRequest().getSession(false);
 
 			if (session == null || session.isNew()) {
 				// New session, maybe expired session
 				// Redirect to login page instead of error page
-				redirectToLoginPage(request, response);
+				redirectToLoginPage(ctx, response);
 			}
 			else {
 				ValidatorError error = errors.get(0);
 				String username = error.getUserName();
 				if (username == null || username == IUserData.ANONYMOUS) {
 					// Not logged, so send to login page
-					redirectToLoginPage(request, response);
+					redirectToLoginPage(ctx, response);
 				}
 				else {
 					// Logged, send to home
-					redirectToHomePage(request, response);
+					redirectToHomePage(ctx, response);
 				}
 			}
 
@@ -84,7 +85,7 @@ public class DefaultValidatorErrorHandler implements ValidatorErrorHandler {
 		else {
 
 			// Redirect to general error page
-			redirectToErrorPage(request, response);
+			redirectToErrorPage(ctx, response);
 		}
 	}
 
@@ -110,12 +111,12 @@ public class DefaultValidatorErrorHandler implements ValidatorErrorHandler {
 	 * @param request {@link HttpServletRequest} instance
 	 * @param response {@link HttpServletResponse} instance
 	 */
-	protected void redirectToErrorPage(final HttpServletRequest request, final HttpServletResponse response) {
+	protected void redirectToErrorPage(final RequestContextHolder ctx, final HttpServletResponse response) {
 		if (config.getErrorPage() != null) {
-			redirect(response, request.getContextPath() + config.getErrorPage());
+			redirect(response, ctx.getContextPath() + config.getErrorPage());
 		}
 		else {
-			redirectToDefaultErrorPage(request, response);
+			redirectToDefaultErrorPage(ctx, response);
 		}
 	}
 
@@ -125,12 +126,12 @@ public class DefaultValidatorErrorHandler implements ValidatorErrorHandler {
 	 * @param request {@link HttpServletRequest} instance
 	 * @param response {@link HttpServletResponse} instance
 	 */
-	protected void redirectToLoginPage(final HttpServletRequest request, final HttpServletResponse response) {
+	protected void redirectToLoginPage(final RequestContextHolder ctx, final HttpServletResponse response) {
 		if (config.getSessionExpiredLoginPage() != null) {
-			redirect(response, request.getContextPath() + config.getSessionExpiredLoginPage());
+			redirect(response, ctx.getContextPath() + config.getSessionExpiredLoginPage());
 		}
 		else {
-			redirectToErrorPage(request, response);
+			redirectToErrorPage(ctx, response);
 		}
 	}
 
@@ -140,12 +141,12 @@ public class DefaultValidatorErrorHandler implements ValidatorErrorHandler {
 	 * @param request {@link HttpServletRequest} instance
 	 * @param response {@link HttpServletResponse} instance
 	 */
-	protected void redirectToHomePage(final HttpServletRequest request, final HttpServletResponse response) {
+	protected void redirectToHomePage(final RequestContextHolder ctx, final HttpServletResponse response) {
 		if (config.getSessionExpiredHomePage() != null) {
-			redirect(response, request.getContextPath() + config.getSessionExpiredHomePage());
+			redirect(response, ctx.getContextPath() + config.getSessionExpiredHomePage());
 		}
 		else {
-			redirectToErrorPage(request, response);
+			redirectToErrorPage(ctx, response);
 		}
 	}
 
@@ -173,18 +174,17 @@ public class DefaultValidatorErrorHandler implements ValidatorErrorHandler {
 	 * @param response {@link HttpServletResponse} instance
 	 */
 	@SuppressWarnings("unchecked")
-	protected void redirectToDefaultErrorPage(final HttpServletRequest request, final HttpServletResponse response) {
+	protected void redirectToDefaultErrorPage(final RequestContextHolder ctx, final HttpServletResponse response) {
 
 		try {
 
 			response.setContentType("text/html");
 			PrintWriter out = response.getWriter();
 
-			List<ValidatorError> editableErrors = (List<ValidatorError>) request.getSession()
-					.getAttribute(Constants.EDITABLE_PARAMETER_ERROR);
-			request.getSession().removeAttribute(Constants.EDITABLE_PARAMETER_ERROR);
+			List<ValidatorError> editableErrors = (List<ValidatorError>) ctx.getSession().getAttribute(Constants.EDITABLE_PARAMETER_ERROR);
+			ctx.getSession().removeAttribute(Constants.EDITABLE_PARAMETER_ERROR);
 
-			errorPageWritter.writeErrorPage(request, out, editableErrors);
+			errorPageWritter.writeErrorPage(ctx, out, editableErrors);
 			out.flush();
 		}
 		catch (IOException e) {

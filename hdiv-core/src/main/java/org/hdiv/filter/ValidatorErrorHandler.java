@@ -20,6 +20,8 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.hdiv.context.RequestContextHolder;
+
 /**
  * Process a request with validation errors.
  * 
@@ -36,5 +38,5 @@ public interface ValidatorErrorHandler {
 	 * @param errors Validation errors
 	 * @since 2.1.13
 	 */
-	void handleValidatorError(HttpServletRequest request, HttpServletResponse response, List<ValidatorError> errors);
+	void handleValidatorError(RequestContextHolder context, List<ValidatorError> errors);
 }

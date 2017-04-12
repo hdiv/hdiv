@@ -19,7 +19,9 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.hdiv.context.RequestContextHolder;
 import org.hdiv.state.IState;
+import org.hdiv.util.HDIVUtil;
 
 /**
  * UrlProcessor implementation for {@link IState} restore and URL validation purpose method.
@@ -28,6 +30,11 @@ import org.hdiv.state.IState;
  */
 public class BasicUrlProcessor extends AbstractUrlProcessor {
 
+	@Deprecated
+	public final BasicUrlData createBasicUrlData(final String url, final HttpServletRequest request) {
+		return createBasicUrlData(url, HDIVUtil.getRequestContext(request));
+	}
+
 	/**
 	 * Create {@link UrlData} instance only with the ContextPath relative url and parameters in a Map.
 	 *
@@ -35,7 +42,7 @@ public class BasicUrlProcessor extends AbstractUrlProcessor {
 	 * @param request {@link HttpServletRequest} object
 	 * @return new instance of {@link BasicUrlData}
 	 */
-	public BasicUrlData createBasicUrlData(String url, final HttpServletRequest request) {
+	public BasicUrlData createBasicUrlData(String url, final RequestContextHolder request) {
 
 		BasicUrlData urlData = new BasicUrlData();
 
@@ -43,7 +50,7 @@ public class BasicUrlProcessor extends AbstractUrlProcessor {
 		int paramInit = url.indexOf('?');
 		if (paramInit > -1) {
 			String urlParams = url.substring(paramInit + 1);
-			Map<String, String[]> ulrParamsMap = getUrlParamsAsMap(new StringBuilder(128), request, urlParams);
+			Map<String, String[]> ulrParamsMap = getUrlParamsAsMap(request.getHdivParameterName(), new StringBuilder(128), urlParams);
 			urlData.setUrlParams(ulrParamsMap);
 			url = url.substring(0, paramInit);
 		}
@@ -53,6 +60,11 @@ public class BasicUrlProcessor extends AbstractUrlProcessor {
 		return urlData;
 	}
 
+	@Deprecated
+	public final BasicUrlData processUrl(final HttpServletRequest request, final String url) {
+		return createBasicUrlData(url, request);
+	}
+
 	/**
 	 * Creates {@link BasicUrlData} instance with contextPath relative URL and parameters processed.
 	 *
@@ -60,7 +72,7 @@ public class BasicUrlProcessor extends AbstractUrlProcessor {
 	 * @param url URL to process
 	 * @return {@link BasicUrlData} instance
 	 */
-	public BasicUrlData processUrl(final HttpServletRequest request, final String url) {
+	public BasicUrlData processUrl(final RequestContextHolder request, final String url) {
 		return createBasicUrlData(url, request);
 	}
 

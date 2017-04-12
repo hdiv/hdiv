@@ -24,7 +24,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.hdiv.AbstractHDIVTestCase;
-import org.hdiv.context.RequestContext;
 import org.hdiv.dataComposer.DataComposerFactory;
 import org.hdiv.dataComposer.IDataComposer;
 import org.hdiv.init.RequestInitializer;
@@ -72,9 +71,8 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 		dataComposer.startPage();
 
 		RequestInitializer requestInitializer = getApplicationContext().getBean(RequestInitializer.class);
-		RequestWrapper requestWrapper = requestInitializer.createRequestWrapper(new RequestContext(request, response));
 		validationContext = new ValidationContextImpl(getRequestContext(), helper, false);
-		responseWrapper = requestInitializer.createResponseWrapper(new RequestContext(request, response));
+		responseWrapper = requestInitializer.createResponseWrapper(getRequestContext());
 
 	}
 

@@ -84,7 +84,7 @@ public class DataComposerFactory {
 	/**
 	 * Creates a new instance of DataComposer based on the defined strategy.
 	 *
-	 * @param request {@link HttpServletRequest} instance
+	 * @param request {@link RequestContextHolder} instance
 	 *
 	 * @return IDataComposer instance
 	 */

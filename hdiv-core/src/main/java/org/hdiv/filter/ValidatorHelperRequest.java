@@ -994,16 +994,7 @@ public class ValidatorHelperRequest implements IValidationHelper, StateRestorer 
 		}
 	}
 
-	/**
-	 * Checks if repeated values have been received for the parameter <code>parameter</code>.
-	 *
-	 * @param request HttpServletRequest to validate
-	 * @param target Part of the url that represents the target action
-	 * @param parameter parameter name
-	 * @param values Parameter <code>parameter</code> values
-	 * @param stateValues real values for <code>parameter</code>
-	 * @return True If repeated values have been received for the parameter <code>parameter</code>.
-	 */
+	@Deprecated
 	protected final ValidatorHelperResult hasConfidentialIncorrectValues(final HttpServletRequest request, final String target,
 			final String parameter, final String[] values, final List<String> stateValues) {
 		throw new UnsupportedOperationException();

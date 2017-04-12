@@ -50,7 +50,7 @@ public class LinkUrlProcessor extends AbstractUrlProcessor {
 	/**
 	 * Process the url to add hdiv state if it is necessary.
 	 * 
-	 * @param request {@link HttpServletRequest} object
+	 * @param request {@link RequestContextHolder} object
 	 * @param url url to process
 	 * @return processed url
 	 */

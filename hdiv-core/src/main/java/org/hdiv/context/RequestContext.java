@@ -81,7 +81,8 @@ public class RequestContext implements RequestContextHolder {
 		doCreateSession();
 	}
 
-	protected void doCreateSession() {
+	@Deprecated
+	public void doCreateSession() {
 		session = new HttpSessionModel(request.getSession());
 	}
 
