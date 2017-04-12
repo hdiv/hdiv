@@ -61,4 +61,27 @@ public class UserData implements IUserData {
 		return IUserData.ANONYMOUS;
 	}
 
+	public String getLocalIp(final HttpServletRequest request) {
+		return getUserLocalIP(request);
+	}
+
+	public String getRemoteIp(final HttpServletRequest request) {
+		return request.getRemoteAddr();
+	}
+
+	/**
+	 * Obtain user local IP.
+	 *
+	 * @param request the HttpServletRequest of the request
+	 * @return Returns the remote user IP address if behind the proxy.
+	 */
+	protected String getUserLocalIP(final HttpServletRequest request) {
+		if (request.getHeader("X-Forwarded-For") == null) {
+			return request.getRemoteAddr();
+		}
+		else {
+			return request.getHeader("X-Forwarded-For");
+		}
+	}
+
 }

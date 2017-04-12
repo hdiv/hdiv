@@ -18,7 +18,7 @@ package org.hdiv.logs;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * Interface to get request's username
+ * Interface to get information about the user who made the request.
  * 
  * @author Roberto Velasco
  */
@@ -39,4 +39,19 @@ public interface IUserData {
 	 */
 	String getUsername(HttpServletRequest request);
 
+	/**
+	 * Get users local IP address, which can be different to the remote address if the user is behind a web proxy.
+	 * @param request request object
+	 * @return local IP
+	 * @since 3.3.0
+	 */
+	String getLocalIp(HttpServletRequest request);
+
+	/**
+	 * Get users remote IP address.
+	 * @param request request object
+	 * @return remote IP
+	 * @since 3.3.0
+	 */
+	String getRemoteIp(HttpServletRequest request);
 }
