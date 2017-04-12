@@ -22,24 +22,22 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.context.PartialResponseWriter;
 import javax.faces.context.PartialViewContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.hdiv.context.RequestContextHolder;
 
 public class JsfValidatorErrorHandler extends DefaultValidatorErrorHandler {
 
 	private static final Log log = LogFactory.getLog(JsfValidatorErrorHandler.class);
 
 	@Override
-	public void handleValidatorError(final HttpServletRequest request, final HttpServletResponse response,
-			final List<ValidatorError> errors) {
+	public void handleValidatorError(final RequestContextHolder ctx, final List<ValidatorError> errors) {
 
 		FacesContext context = FacesContext.getCurrentInstance();
 		if (context == null) {
 
-			super.handleValidatorError(request, response, errors);
+			super.handleValidatorError(ctx, errors);
 			return;
 		}
 
@@ -72,7 +70,7 @@ public class JsfValidatorErrorHandler extends DefaultValidatorErrorHandler {
 		}
 		else {
 
-			super.handleValidatorError(request, response, errors);
+			super.handleValidatorError(ctx, errors);
 			context.responseComplete();
 		}
 	}

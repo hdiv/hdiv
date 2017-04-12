@@ -25,7 +25,6 @@ import javax.faces.event.PhaseEvent;
 import javax.faces.event.PhaseId;
 import javax.faces.event.PhaseListener;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -164,7 +163,6 @@ public class ValidatorPhaseListener implements PhaseListener {
 	protected void forwardToErrorPage(final FacesContext context, final List<FacesValidatorError> validatorErrors) {
 
 		HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
-		HttpServletResponse response = (HttpServletResponse) context.getExternalContext().getResponse();
 
 		List<ValidatorError> errors = new ArrayList<ValidatorError>();
 		if (validatorErrors != null) {
@@ -172,7 +170,7 @@ public class ValidatorPhaseListener implements PhaseListener {
 				errors.add(error);
 			}
 		}
-		validatorErrorHandler.handleValidatorError(request, response, errors);
+		validatorErrorHandler.handleValidatorError(HDIVUtil.getRequestContext(request), errors);
 	}
 
 	/**
