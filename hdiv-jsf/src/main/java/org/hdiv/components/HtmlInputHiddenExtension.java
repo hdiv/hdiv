@@ -16,7 +16,7 @@
 package org.hdiv.components;
 
 import java.io.IOException;
-import java.util.List;
+import java.util.Collection;
 
 import javax.faces.component.html.HtmlInputHidden;
 import javax.faces.context.FacesContext;
@@ -42,15 +42,15 @@ public class HtmlInputHiddenExtension extends HtmlInputHidden {
 	 * 
 	 * @return hidden real value
 	 */
-	public Object getRealValue(final FacesContext context, final String clientId) {
+	public Object getStateValue(final FacesContext context, final String clientId) {
 
 		Object val = getValue();
 
 		StateManager stateManager = getStateManager(context);
 		if (stateManager != null) {
-			List<Object> values = stateManager.restoreState(clientId);
+			Collection<Object> values = stateManager.restoreState(clientId);
 			if (values != null && values.size() > 0) {
-				val = values.get(0);
+				val = values.iterator().next();
 			}
 		}
 

@@ -43,6 +43,8 @@ import org.hdiv.validators.UISelectValidator;
 
 public class DefaultComponentTreeValidator implements ComponentTreeValidator {
 
+	private final static String FACELETS_COMPONENT_FAMILY = "facelets";
+
 	private static final Log log = LogFactory.getLog(DefaultComponentTreeValidator.class);
 
 	protected final List<ComponentValidator> componentValidators = new ArrayList<ComponentValidator>();
@@ -169,12 +171,11 @@ public class DefaultComponentTreeValidator implements ComponentTreeValidator {
 			log.debug(" - Component: " + clientId + " of Type: " + component.getClass().getCanonicalName());
 		}
 
-		if (isExcludedComponent(component)) {
-			// Exclude non rendered components from the parameter validation
-			return;
-		}
+		boolean excluded = isExcludedComponent(component);
+		if (!excluded) {
 
-		validateComponent(context, component);
+			validateComponent(context, component);
+		}
 
 		Iterator<UIComponent> it = component.getFacetsAndChildren();
 		while (it.hasNext()) {
@@ -199,7 +200,7 @@ public class DefaultComponentTreeValidator implements ComponentTreeValidator {
 			Iterator<FacesValidatorError> it = errors.iterator();
 			while (it.hasNext()) {
 				FacesValidatorError error = it.next();
-				boolean excluded = isExcludedParameter(context, error.getParameterName(), error.getParameterValue());
+				boolean excluded = isExcludedParameter(context, error.getParameterName());
 				if (excluded) {
 					it.remove();
 				}
@@ -215,11 +216,8 @@ public class DefaultComponentTreeValidator implements ComponentTreeValidator {
 			boolean paramIsPressent = validParameters.keySet().contains(param);
 
 			if (!paramIsPressent) {
-				if (!isExcludedParameter(context, param, null)) {
-					if (log.isDebugEnabled()) {
-						log.debug("Invalid parameter name: " + param);
-					}
-					FacesValidatorError error = new FacesValidatorError(HDIVErrorCodes.INVALID_PARAMETER_NAME, null, param, null);
+				FacesValidatorError error = processUnknownParameter(context, param, values);
+				if (error != null) {
 					errors.add(error);
 				}
 			}
@@ -231,7 +229,7 @@ public class DefaultComponentTreeValidator implements ComponentTreeValidator {
 							paramValuePressent = true;
 						}
 						if (!paramValuePressent) {
-							if (!isExcludedParameter(context, param, value)) {
+							if (!isExcludedParameter(context, param)) {
 								if (log.isDebugEnabled()) {
 									log.debug("Invalid parameter value for parameter: " + param + ". Valid values are: "
 											+ validParameters.get(param));
@@ -248,9 +246,27 @@ public class DefaultComponentTreeValidator implements ComponentTreeValidator {
 		return errors;
 	}
 
+	protected FacesValidatorError processUnknownParameter(final ValidationContext context, final String paramName,
+			final String[] paramValues) {
+
+		if (isExcludedParameter(context, paramName)) {
+			return null;
+		}
+
+		if (log.isDebugEnabled()) {
+			log.debug("Invalid parameter name: " + paramName);
+		}
+		FacesValidatorError error = new FacesValidatorError(HDIVErrorCodes.INVALID_PARAMETER_NAME, null, paramName, null);
+		return error;
+	}
+
 	protected boolean isExcludedComponent(final UIComponent component) {
 
-		return !component.isRendered();
+		if (FACELETS_COMPONENT_FAMILY.equals(component.getFamily())) {
+			return true;
+		}
+
+		return false;
 	}
 
 	protected boolean isExcludedUrl(final FacesContext context) {
@@ -259,7 +275,7 @@ public class DefaultComponentTreeValidator implements ComponentTreeValidator {
 		return config.isStartPage(target, Method.POST);
 	}
 
-	protected boolean isExcludedParameter(final ValidationContext context, final String paramName, final String paramValue) {
+	protected boolean isExcludedParameter(final ValidationContext context, final String paramName) {
 
 		if (UtilsJsf.isFacesViewParamName(paramName)) {
 			return true;

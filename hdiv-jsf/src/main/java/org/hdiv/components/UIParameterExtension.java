@@ -16,7 +16,8 @@
 package org.hdiv.components;
 
 import java.io.IOException;
-import java.util.List;
+import java.util.Collection;
+import java.util.Collections;
 
 import javax.faces.component.UIComponent;
 import javax.faces.component.UINamingContainer;
@@ -44,26 +45,25 @@ import org.hdiv.util.HDIVUtil;
 public class UIParameterExtension extends UIParameter {
 
 	/**
-	 * Returns the value of the parameter for the requested row in the dataTable
+	 * Returns the values of the parameter for the requested row in the dataTable
 	 * 
 	 * @param parentClientId Parent ClientId
-	 * @return parameter value
+	 * @return parameter values
 	 */
-	public Object getValue(final FacesContext context, final String parentClientId) {
+	public Collection<Object> getStateValue(final FacesContext context, final String parentClientId) {
 
-		Object val = this.getValue();
+		Object val = getValue();
 
 		// If it has previously been stored in the state, return the stored value else return the default
 		StateManager stateManager = getStateManager(context);
 		if (stateManager != null) {
-			List<Object> values = stateManager.restoreState(parentClientId + UINamingContainer.getSeparatorChar(context) + getName());
+			Collection<Object> values = stateManager.restoreState(parentClientId + UINamingContainer.getSeparatorChar(context) + getName());
 
 			if (values != null && values.size() > 0) {
-				val = values.get(0);
+				return values;
 			}
 		}
-
-		return val;
+		return Collections.singletonList(val);
 	}
 
 	/*
@@ -87,11 +87,12 @@ public class UIParameterExtension extends UIParameter {
 			String parentClientId = parent.getClientId(context);
 
 			// It is a parameter added by the application, so store its value in the JSF state to be able to validate it in future requests.
-			Object val = this.getValue();
+			Object val = getValue();
 
 			StateManager stateManager = getStateManager(context);
 			if (stateManager != null) {
-				stateManager.saveState(parentClientId + UINamingContainer.getSeparatorChar(context) + name, val);
+				String id = parentClientId + UINamingContainer.getSeparatorChar(context) + name;
+				stateManager.saveState(id, val);
 			}
 		}
 		super.encodeBegin(context);

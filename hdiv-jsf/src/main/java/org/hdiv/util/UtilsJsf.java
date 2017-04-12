@@ -38,7 +38,9 @@ import org.hdiv.context.RequestContextHolder;
  */
 public abstract class UtilsJsf {
 
-	private static final Pattern HAS_ROW_ID_PATTERN = Pattern.compile(":\\d*:");
+	private static final Pattern ROW_ID_PATTERN_MIDDLE = Pattern.compile(":\\d*:");
+
+	private static final Pattern ROW_ID_PATTERN_END = Pattern.compile(":\\d$");
 
 	private UtilsJsf() {
 	}
@@ -124,7 +126,8 @@ public abstract class UtilsJsf {
 		if (clientId == null) {
 			return null;
 		}
-		return clientId.replaceAll(":\\d*:", ":");
+		String result = ROW_ID_PATTERN_MIDDLE.matcher(clientId).replaceAll(":");
+		return ROW_ID_PATTERN_END.matcher(result).replaceAll("");
 	}
 
 	/**
@@ -138,7 +141,13 @@ public abstract class UtilsJsf {
 			return false;
 		}
 
-		return HAS_ROW_ID_PATTERN.matcher(clientId).find();
+		boolean found = ROW_ID_PATTERN_MIDDLE.matcher(clientId).find();
+		if (found) {
+			return true;
+		}
+		else {
+			return ROW_ID_PATTERN_END.matcher(clientId).find();
+		}
 	}
 
 	/**

@@ -59,17 +59,17 @@ public class HtmlInputHiddenValidator extends AbstractComponentValidator {
 		Map<String, String> parameters = context.getExternalContext().getRequestParameterMap();
 
 		Object hiddenValue = parameters.get(inputHidden.getClientId(context));
-		Object hiddenRealValue = inputHidden.getRealValue(context, inputHidden.getClientId(context));
+		Object hiddenStateValue = inputHidden.getStateValue(context, inputHidden.getClientId(context));
 
 		if (log.isDebugEnabled()) {
-			log.debug("Hidden's value received:" + hiddenValue);
-			log.debug("Hidden's value sent to the client:" + hiddenRealValue);
+			log.debug("Hidden's received value:" + hiddenValue);
+			log.debug("Hidden's stored value:" + hiddenStateValue);
 		}
 
-		if (hiddenRealValue == null) {
+		if (hiddenStateValue == null) {
 			// If the hidden field has not a defined value, a null value is stored.
 			// For request validation purpose, it equivalent to empty String
-			hiddenRealValue = "";
+			hiddenStateValue = "";
 		}
 
 		if (hiddenValue == null) {
@@ -81,17 +81,17 @@ public class HtmlInputHiddenValidator extends AbstractComponentValidator {
 			validationContext.rejectParameter(inputHidden.getId(), null, HDIVErrorCodes.NOT_RECEIVED_ALL_REQUIRED_PARAMETERS);
 		}
 
-		boolean correct = hasEqualValue(hiddenValue, hiddenRealValue);
+		boolean correct = hasEqualValue(hiddenValue, hiddenStateValue);
 		if (!correct) {
 
 			if (log.isDebugEnabled()) {
 				log.debug("Parameter '" + inputHidden.getId() + "' rejected in component '" + inputHidden.getId()
 						+ "' in ComponentValidator '" + this.getClass() + "'");
 			}
-			validationContext.rejectParameter(inputHidden.getId(), hiddenRealValue.toString(), HDIVErrorCodes.INVALID_PARAMETER_VALUE);
+			validationContext.rejectParameter(inputHidden.getId(), hiddenStateValue.toString(), HDIVErrorCodes.INVALID_PARAMETER_VALUE);
 		}
 		else {
-			validationContext.acceptParameter(inputHidden.getId(), hiddenRealValue.toString());
+			validationContext.acceptParameter(inputHidden.getId(), hiddenStateValue.toString());
 		}
 
 	}
