@@ -147,7 +147,6 @@ public class ValidatorFilter extends OncePerRequestFilter {
 	@Override
 	protected void doFilterInternal(final HttpServletRequest request, final HttpServletResponse response, final FilterChain filterChain)
 			throws ServletException, IOException {
-		long time = System.currentTimeMillis();
 		// Initialize dependencies
 		initDependencies();
 		RequestContextHolder ctx = requestContextFactory.create(requestInitializer, request, response);
@@ -239,7 +238,7 @@ public class ValidatorFilter extends OncePerRequestFilter {
 
 			if (legal || hdivConfig.isDebugMode() || hasEditableError && !hdivConfig.isShowErrorPageOnEditableValidation()) {
 
-				processRequest(time, ctx, multipartProcessedRequest, responseWrapper, filterChain, context.getRedirect());
+				processRequest(ctx, multipartProcessedRequest, responseWrapper, filterChain, context.getRedirect());
 			}
 			else {
 
@@ -321,7 +320,7 @@ public class ValidatorFilter extends OncePerRequestFilter {
 	 * @throws IOException if there is an error in request process.
 	 * @throws ServletException if there is an error in request process.
 	 */
-	protected void processRequest(final long start, final RequestContextHolder ctx, final HttpServletRequest requestWrapper,
+	protected final void processRequest(final RequestContextHolder ctx, final HttpServletRequest requestWrapper,
 			final ResponseWrapper responseWrapper, final FilterChain filterChain, final String obfuscated)
 			throws IOException, ServletException {
 		validationHelper.startPage(ctx);
@@ -330,12 +329,10 @@ public class ValidatorFilter extends OncePerRequestFilter {
 				requestWrapper.getRequestDispatcher(obfuscated).forward(requestWrapper, responseWrapper);
 			}
 			else {
-				long time = System.currentTimeMillis();
 				filterChain.doFilter(requestWrapper, responseWrapper);
 			}
 		}
 		finally {
-			long time = System.currentTimeMillis();
 			validationHelper.endPage(ctx);
 		}
 	}
