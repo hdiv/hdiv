@@ -382,4 +382,4 @@ Hdiv is released under version 2.0 of the [Apache License](http://www.apache.org
 
 ## Profiler
 JProfiler is kindly supporting Hdiv open source project with its full-featured Java Profiler.
-Take a look at JProfiler's leading software products: [Java Profiler](http://www.ej-technologies.com/products/jprofiler/overview.html)
+Take a look at JProfiler's leading software products: [Java Profiler](http://www.ej-technologies.com/products/jprofiler/overview.html
