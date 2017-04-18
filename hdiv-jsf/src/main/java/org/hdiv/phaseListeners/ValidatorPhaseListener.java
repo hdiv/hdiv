@@ -31,9 +31,11 @@ import org.apache.commons.logging.LogFactory;
 import org.hdiv.config.HDIVConfig;
 import org.hdiv.filter.ValidatorError;
 import org.hdiv.filter.ValidatorErrorHandler;
+import org.hdiv.logs.IUserData;
 import org.hdiv.logs.Logger;
 import org.hdiv.util.HDIVErrorCodes;
 import org.hdiv.util.HDIVUtil;
+import org.hdiv.util.UtilsJsf;
 import org.hdiv.validation.ComponentTreeValidator;
 import org.hdiv.validation.FacesValidatorError;
 import org.springframework.web.context.WebApplicationContext;
@@ -56,6 +58,8 @@ public class ValidatorPhaseListener implements PhaseListener {
 
 	private Logger logger;
 
+	private IUserData userData;
+
 	private ValidatorErrorHandler validatorErrorHandler;
 
 	public PhaseId getPhaseId() {
@@ -74,6 +78,7 @@ public class ValidatorPhaseListener implements PhaseListener {
 			validatorErrorHandler = wac.getBean(ValidatorErrorHandler.class);
 			componentTreeValidator = wac.getBean(ComponentTreeValidator.class);
 			config = wac.getBean(HDIVConfig.class);
+			userData = wac.getBean(IUserData.class);
 			logger = wac.getBean(Logger.class);
 		}
 
@@ -103,6 +108,10 @@ public class ValidatorPhaseListener implements PhaseListener {
 		if (event.getPhaseId().equals(PhaseId.RESTORE_VIEW)) {
 
 			FacesContext context = event.getFacesContext();
+			boolean reqInitialized = UtilsJsf.isRequestInitialized(context);
+			if (!reqInitialized) {
+				return;
+			}
 
 			if (!context.isPostback()) {
 				// Don't validate a request if it is not a postback
@@ -119,12 +128,49 @@ public class ValidatorPhaseListener implements PhaseListener {
 				}
 			}
 
-			context.getAttributes().put(VALIDATION_ERRORS_ATTR_NAME, errors);
+			if (errors != null && errors.size() > 0) {
+				completeErrorData(context, errors);
 
-			log(context, errors);
-			if (mustStopRequest(errors)) {
-				forwardToErrorPage(context, errors);
+				context.getAttributes().put(VALIDATION_ERRORS_ATTR_NAME, errors);
+
+				log(context, errors);
+				if (mustStopRequest(errors)) {
+					forwardToErrorPage(context, errors);
+				}
 			}
+		}
+	}
+
+	/**
+	 * Complete {@link ValidatorError} containing data including user related info.
+	 *
+	 * @param context request object
+	 * @param errors all validation errors
+	 */
+	protected void completeErrorData(final FacesContext context, final List<FacesValidatorError> errors) {
+
+		HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
+
+		String localIp = userData.getLocalIp(request);
+		String remoteIp = userData.getRemoteIp(request);
+		String userName = userData.getUsername(request);
+
+		String contextPath = request.getContextPath();
+		for (ValidatorError error : errors) {
+
+			error.setLocalIp(localIp);
+			error.setRemoteIp(remoteIp);
+			error.setUserName(userName);
+
+			// Include context path in the target
+			String target = error.getTarget();
+			if (target != null && !target.startsWith(contextPath)) {
+				target = request.getContextPath() + target;
+			}
+			else if (target == null) {
+				target = request.getRequestURI();
+			}
+			error.setTarget(target);
 		}
 	}
 

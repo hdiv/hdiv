@@ -34,6 +34,7 @@ import org.hdiv.state.DefaultStateManager;
 import org.hdiv.state.StateManager;
 import org.hdiv.util.ConstantsJsf;
 import org.hdiv.util.HDIVUtil;
+import org.hdiv.util.UtilsJsf;
 
 /**
  * PhaseListener that takes care of HDIV configuration, mostly objects that are stored in application context.
@@ -72,29 +73,32 @@ public class ConfigPhaseListener implements PhaseListener {
 	 */
 	public void beforePhase(final PhaseEvent event) {
 
-		if (event.getPhaseId().equals(PhaseId.RESTORE_VIEW) && !initialized) {
-
-			if (log.isDebugEnabled()) {
-				log.debug("Initialize ConfigPhaseListener.");
-			}
-
-			FacesContext context = event.getFacesContext();
-			// Check not supported features
-			checkSupportedFeatures(context);
-
-			initialized = true;
+		FacesContext context = event.getFacesContext();
+		boolean reqInitialized = UtilsJsf.isRequestInitialized(context);
+		if (!reqInitialized) {
+			return;
 		}
 
 		if (event.getPhaseId().equals(PhaseId.RESTORE_VIEW)) {
 
-			FacesContext context = event.getFacesContext();
+			if (!initialized) {
+
+				if (log.isDebugEnabled()) {
+					log.debug("Initialize ConfigPhaseListener.");
+				}
+
+				// Check not supported features
+				checkSupportedFeatures(context);
+
+				initialized = true;
+			}
+
 			// Init state manager
 			initializeStateManager(context);
 		}
 
 		if (event.getPhaseId().equals(PhaseId.RENDER_RESPONSE)) {
 
-			FacesContext context = event.getFacesContext();
 			// Add user's unique id to state
 			addUserUniqueTokenToState(context);
 			// Init state manager

@@ -15,6 +15,7 @@
  */
 package org.hdiv.phaseListeners;
 
+import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseEvent;
 import javax.faces.event.PhaseId;
 import javax.faces.event.PhaseListener;
@@ -23,6 +24,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hdiv.logs.ComponentMessagesLog;
 import org.hdiv.logs.Logger;
+import org.hdiv.util.UtilsJsf;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.jsf.FacesContextUtils;
 
@@ -76,6 +78,12 @@ public class ComponentMessagesPhaseListener implements PhaseListener {
 	 * @see javax.faces.event.PhaseListener#afterPhase(javax.faces.event.PhaseEvent)
 	 */
 	public void afterPhase(final PhaseEvent event) {
+
+		FacesContext context = event.getFacesContext();
+		boolean reqInitialized = UtilsJsf.isRequestInitialized(context);
+		if (!reqInitialized) {
+			return;
+		}
 
 		messagesLog.processMessages(event.getFacesContext());
 	}

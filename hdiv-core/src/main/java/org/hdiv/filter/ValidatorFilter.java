@@ -345,8 +345,8 @@ public class ValidatorFilter extends OncePerRequestFilter {
 	 */
 	protected void completeErrorData(final HttpServletRequest request, final List<ValidatorError> errors) {
 
-		String localIp = getUserLocalIP(request);
-		String remoteIp = request.getRemoteAddr();
+		String localIp = userData.getLocalIp(request);
+		String remoteIp = userData.getRemoteIp(request);
 		String userName = userData.getUsername(request);
 
 		String contextPath = request.getContextPath();
@@ -369,21 +369,6 @@ public class ValidatorFilter extends OncePerRequestFilter {
 	}
 
 	/**
-	 * Obtain user local IP.
-	 *
-	 * @param request the HttpServletRequest of the request
-	 * @return Returns the remote user IP address if behind the proxy.
-	 */
-	protected String getUserLocalIP(final HttpServletRequest request) {
-		if (request.getHeader("X-Forwarded-For") == null) {
-			return request.getRemoteAddr();
-		}
-		else {
-			return request.getHeader("X-Forwarded-For");
-		}
-	}
-
-	/**
 	 * Log validation errors
 	 *
 	 * @param request request object
@@ -395,7 +380,6 @@ public class ValidatorFilter extends OncePerRequestFilter {
 			// Log the error
 			logger.log(error);
 		}
-
 	}
 
 	/**

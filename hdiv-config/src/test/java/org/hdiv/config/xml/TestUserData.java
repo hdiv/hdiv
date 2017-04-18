@@ -21,8 +21,16 @@ import org.hdiv.logs.IUserData;
 
 public class TestUserData implements IUserData {
 
-	public String getUsername(HttpServletRequest request) {
+	public String getUsername(final HttpServletRequest request) {
 		return "test";
+	}
+
+	public String getLocalIp(final HttpServletRequest request) {
+		return "127.0.0.1";
+	}
+
+	public String getRemoteIp(final HttpServletRequest request) {
+		return "127.0.0.1";
 	}
 
 }
