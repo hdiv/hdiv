@@ -38,20 +38,6 @@ public interface ActionDescriptor {
 	String getHttpMethod();
 
 	/**
-	 * Gets contentType consumed by the action
-	 * 
-	 * @return consumes
-	 */
-	String getConsumes();
-
-	/**
-	 * Gets contentType produced by the action
-	 * 
-	 * @return produces
-	 */
-	String getProduces();
-
-	/**
 	 * Gets names of path variables, if URL has variables.
 	 *
 	 * @return names or empty collection
@@ -95,25 +81,11 @@ public interface ActionDescriptor {
 	boolean hasRequestBody();
 
 	/**
-	 * Gets well-defined semantic action type, e.g. http://schema.org/Action subtype.
-	 *
-	 * @return semantic action type
-	 */
-	String getSemanticActionType();
-
-	/**
 	 * Gets required parameters.
 	 *
 	 * @return required parameters, may be empty
 	 */
 	Map<String, ActionInputParameter> getRequiredParameters();
-
-	/**
-	 * Hints if the action response is a single object or a collection.
-	 *
-	 * @return cardinality cardinality
-	 */
-	Cardinality getCardinality();
 
 	/**
 	 * Visits the body to find parameters
