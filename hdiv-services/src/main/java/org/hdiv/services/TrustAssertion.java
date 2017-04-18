@@ -31,7 +31,8 @@ public @interface TrustAssertion {
 	 * Model class that defines the property if applies
 	 * @return
 	 */
-	Class<?> idFor();
+	// TODO: review Void as default value
+	Class<?> idFor() default Void.class;
 
 	/**
 	 * If the annotated element is not an Object by default nid (Native Id) value is included
@@ -39,4 +40,21 @@ public @interface TrustAssertion {
 	 */
 	boolean nid() default true;
 
+	Type type() default Type.FROM_JAVA;
+
+	int max() default Integer.MAX_VALUE;
+
+	int min() default Integer.MIN_VALUE;
+
+	int minLength() default Integer.MIN_VALUE;
+
+	int maxLength() default Integer.MAX_VALUE;
+
+	String pattern() default "";
+
+	int step() default 0;
+
+	boolean required() default false;
+
+	boolean readOnly() default false;
 }
