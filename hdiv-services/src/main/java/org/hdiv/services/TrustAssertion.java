@@ -27,6 +27,8 @@ import java.lang.annotation.Target;
 @Target({ METHOD, PARAMETER, FIELD })
 public @interface TrustAssertion {
 
+	public static final String WILDCARD_LIST_MASK = "[*]";
+
 	/**
 	 * Model class that defines the property if applies
 	 * @return
@@ -87,4 +89,8 @@ public @interface TrustAssertion {
 	 * @return the {@link SuggestType}
 	 */
 	SuggestType suggestType() default SuggestType.INTERNAL;
+
+	boolean wildcardCollection() default false;
+
+	boolean recursiveNavigation() default false;
 }
