@@ -187,6 +187,7 @@ public class ValidatorFilter extends OncePerRequestFilter {
 				}
 			}
 			ValidationContext context = validationContextFactory.newInstance(ctx, validationHelper, hdivConfig.isUrlObfuscation());
+			ctx.setValidationContext(context);
 			List<ValidatorError> errors = null;
 			try {
 				ValidatorHelperResult result = null;

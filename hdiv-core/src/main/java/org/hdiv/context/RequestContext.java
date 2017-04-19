@@ -33,6 +33,7 @@ import org.hdiv.dataComposer.IDataComposer;
 import org.hdiv.exception.HDIVException;
 import org.hdiv.filter.AsyncRequestWrapper;
 import org.hdiv.filter.RequestWrapper;
+import org.hdiv.filter.ValidationContext;
 import org.hdiv.session.SessionModel;
 import org.hdiv.util.Constants;
 import org.hdiv.util.HDIVUtil;
@@ -71,6 +72,8 @@ public class RequestContext implements RequestContextHolder {
 	private String formStateId;
 
 	private String redirect;
+
+	private ValidationContext validationContext;
 
 	@SuppressWarnings("deprecation")
 	public RequestContext(final HttpServletRequest request, final HttpServletResponse response) {
@@ -357,5 +360,13 @@ public class RequestContext implements RequestContextHolder {
 
 	public String getHeader(final String header) {
 		return request.getHeader(header);
+	}
+
+	public <T extends ValidationContext> T getValidationContext() {
+		return (T) validationContext;
+	}
+
+	public void setValidationContext(final ValidationContext validationContext) {
+		this.validationContext = validationContext;
 	}
 }

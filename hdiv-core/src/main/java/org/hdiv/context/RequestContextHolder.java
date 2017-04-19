@@ -25,6 +25,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.hdiv.dataComposer.IDataComposer;
+import org.hdiv.filter.ValidationContext;
 import org.hdiv.session.SessionModel;
 
 public interface RequestContextHolder {
@@ -111,5 +112,9 @@ public interface RequestContextHolder {
 	InputStream getInputStream() throws IOException;
 
 	String getHeader(String header);
+
+	void setValidationContext(final ValidationContext validationContext);
+
+	<T extends ValidationContext> T getValidationContext();
 
 }
