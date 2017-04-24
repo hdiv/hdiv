@@ -60,6 +60,8 @@ public @interface TrustAssertion {
 
 	boolean readOnly() default false;
 
+	boolean ignored() default false;
+
 	/**
 	 * Allows to pass String arguments to the Options implementation. By default, a String array can be used to define possible values,
 	 * since the default Options implementation is {@link StringOptions}
