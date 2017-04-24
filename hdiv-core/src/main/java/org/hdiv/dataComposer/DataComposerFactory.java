@@ -177,7 +177,7 @@ public class DataComposerFactory {
 	 * @param request current HttpServletRequest instance
 	 * @return reuse or not
 	 */
-	protected final boolean reuseExistingPage(final RequestContextHolder context) {
+	protected boolean reuseExistingPage(final RequestContextHolder context) {
 		return config.isReuseExistingPageInAjaxRequest() && context.isAjax() && !excludePageReuseInAjax(context);
 	}
 
