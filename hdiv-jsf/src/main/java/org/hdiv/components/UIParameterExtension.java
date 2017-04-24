@@ -47,6 +47,7 @@ public class UIParameterExtension extends UIParameter {
 	/**
 	 * Returns the values of the parameter for the requested row in the dataTable
 	 * 
+	 * @param context {@link FacesContext}
 	 * @param parentClientId Parent ClientId
 	 * @return parameter values
 	 */
