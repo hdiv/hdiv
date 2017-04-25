@@ -266,7 +266,7 @@ public class HDIVConfig implements Serializable {
 	/**
 	 * Check if the parameter needs confidentiality.
 	 * 
-	 * @param request HttpServletRequest object
+	 * @param context request context
 	 * @param paramName parameter name to check
 	 * @return boolean
 	 */

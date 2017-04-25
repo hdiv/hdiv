@@ -84,7 +84,7 @@ public class DataComposerFactory {
 	/**
 	 * Creates a new instance of DataComposer based on the defined strategy.
 	 *
-	 * @param request {@link RequestContextHolder} instance
+	 * @param context Request context
 	 *
 	 * @return IDataComposer instance
 	 */
@@ -162,8 +162,7 @@ public class DataComposerFactory {
 	/**
 	 * Get _MODIFY_HDIV_STATE_ parameter value.
 	 *
-	 * @param dataComposer IDataComposer instance
-	 * @param context current HttpServletRequest instance
+	 * @param context request context
 	 * @return parameter value.
 	 */
 	protected String getModifyStateParameterValue(final RequestContextHolder context) {
@@ -174,7 +173,7 @@ public class DataComposerFactory {
 	/**
 	 * Is it necessary to create a new Page or reuse existing Page adding the created states to it?
 	 *
-	 * @param request current HttpServletRequest instance
+	 * @param context request context
 	 * @return reuse or not
 	 */
 	protected boolean reuseExistingPage(final RequestContextHolder context) {

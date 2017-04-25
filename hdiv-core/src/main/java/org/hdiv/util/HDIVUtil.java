@@ -460,6 +460,7 @@ public class HDIVUtil {
 	 * Based on {@link HtmlUtils#htmlUnescape}.
 	 * </p>
 	 *
+	 * @param sb builder
 	 * @param value value to decode
 	 * @param charEncoding character encoding
 	 * @return value decoded
@@ -493,8 +494,8 @@ public class HDIVUtil {
 	/**
 	 * Returns if <code>parameterValue</code> and <code>value</code> are the same encoded value.
 	 * 
-	 * @param parameterValue
-	 * @param value
+	 * @param parameterValue parameter value
+	 * @param value value to compare
 	 * @return <code>true</code> if they are the same value; <code>false</code> otherwise
 	 * @since HDIV 3.3
 	 */
@@ -504,7 +505,12 @@ public class HDIVUtil {
 	}
 
 	/**
+	 * @param sb builder
+	 * @param s value
+	 * @param enc encoding
+	 * @return decoded value
 	 * @see URLDecoder#decode(String, String)
+	 * @throws UnsupportedEncodingException
 	 */
 	public static String decodeValue(final StringBuilder sb, final String s, final String enc) throws UnsupportedEncodingException {
 		sb.setLength(0);
@@ -697,7 +703,6 @@ public class HDIVUtil {
 	 * StringUtils.replaceOnce("aba", "a", "z")   = "zba"
 	 * </pre>
 	 *
-	 * @see #replace(String text, String searchString, String replacement, int max)
 	 * @param text text to search and replace in, may be null
 	 * @param searchString the String to search for, may be null
 	 * @param replacement the String to replace with, may be null

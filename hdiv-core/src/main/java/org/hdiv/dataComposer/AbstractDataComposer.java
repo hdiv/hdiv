@@ -280,7 +280,6 @@ public abstract class AbstractDataComposer implements IDataComposer {
 	 * Apply confidentiality to parameters String. Replaces real values with confidential ones.
 	 *
 	 * @param parameters parameters in query format
-	 * @param method HTTP method
 	 * @return parameters in query format with confidential values
 	 */
 	protected String applyConfidentialityToParams(String parameters) {
@@ -378,7 +377,6 @@ public abstract class AbstractDataComposer implements IDataComposer {
 	 * Returns true if the parameter requires confidentiality. False otherwise.
 	 *
 	 * @param parameterName the name of the parameter
-	 * @param method request HTTP method
 	 * @return boolean result
 	 * @since HDIV 2.1.6
 	 */

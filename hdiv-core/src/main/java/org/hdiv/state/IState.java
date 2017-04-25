@@ -91,26 +91,32 @@ public interface IState extends Serializable {
 
 	/**
 	 * Returns true if a method is valid for this state
-	 * @param method
-	 * @return
+	 * @param method Http method
+	 * @return true if a method is valid for this state
 	 */
 	boolean contains(Method method);
 
 	/**
 	 * Returns if two states are equivalent
-	 * @param state
-	 * @return
+	 * @param state Hdiv state
+	 * @return true if two states are equivalent
 	 */
 	boolean isEquivalent(IState state);
 
 	/**
 	 * Returns the type of random token
-	 * @return
+	 * @return the type of random token
 	 */
 	RandomTokenType getTokenType();
 
+	/**
+	 * @return Page related to this state
+	 */
 	IPage getPage();
 
+	/**
+	 * @param currentPage current {@link IPage}
+	 */
 	void setPage(IPage currentPage);
 
 }

@@ -79,8 +79,7 @@ public class ResponseWrapper extends HttpServletResponseWrapper {
 	/**
 	 * Constructs a response object wrapping the given response.
 	 *
-	 * @param request HttpServletRequest instance
-	 * @param originalResponse response
+	 * @param context request context
 	 */
 	public ResponseWrapper(final RequestContextHolder context) {
 		this(context, context.getResponse());
@@ -89,8 +88,8 @@ public class ResponseWrapper extends HttpServletResponseWrapper {
 	/**
 	 * Constructs a response object wrapping the given response.
 	 *
-	 * @param request HttpServletRequest instance
-	 * @param originalResponse response
+	 * @param context request context
+	 * @param response response instance
 	 */
 	protected ResponseWrapper(final RequestContextHolder context, final HttpServletResponse response) {
 		super(response);

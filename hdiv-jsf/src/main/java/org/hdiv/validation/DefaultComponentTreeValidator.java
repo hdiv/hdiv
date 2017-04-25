@@ -302,6 +302,7 @@ public class DefaultComponentTreeValidator implements ComponentTreeValidator {
 	/**
 	 * Searches the form inside the component. Input component must be UICommand type and must be inside a form.
 	 * 
+	 * @param context Validation context
 	 * @param comp Base component
 	 * @return UIForm component
 	 */
@@ -327,6 +328,7 @@ public class DefaultComponentTreeValidator implements ComponentTreeValidator {
 	/**
 	 * Searches the form inside the component. Input component must be UICommand type and must be inside a form.
 	 * 
+	 * @param context Validation context
 	 * @param comp Base component
 	 * @return UIForm component
 	 */

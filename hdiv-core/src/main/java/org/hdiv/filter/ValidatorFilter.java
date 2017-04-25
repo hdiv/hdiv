@@ -315,9 +315,11 @@ public class ValidatorFilter extends OncePerRequestFilter {
 	/**
 	 * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
 	 *
+	 * @param ctx request context
 	 * @param requestWrapper request wrapper
 	 * @param responseWrapper response wrapper
 	 * @param filterChain filter chain
+	 * @param obfuscated obfuscated
 	 * @throws IOException if there is an error in request process.
 	 * @throws ServletException if there is an error in request process.
 	 */
@@ -372,7 +374,6 @@ public class ValidatorFilter extends OncePerRequestFilter {
 	/**
 	 * Log validation errors
 	 *
-	 * @param request request object
 	 * @param errors all validation errors
 	 */
 	protected void logValidationErrors(final List<ValidatorError> errors) {

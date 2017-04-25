@@ -163,7 +163,6 @@ public class EditableValidationsBeanDefinitionParser extends AbstractSingleBeanD
 	 * Initialize Map with url, parameter and ValidationRule data.
 	 *
 	 * @param node processing xml node
-	 * @param bean bean configuration
 	 * @param validationsData Map with url, parameter and ValidationRule data
 	 */
 	protected void processValidationRule(final Node node, final Map<ValidationTargetData, List<String>> validationsData) {

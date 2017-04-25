@@ -31,10 +31,11 @@ public class DefaultErrorPageWritter {
 	/**
 	 * Create default HDIV error page and write to the output.
 	 * 
+	 * @param context request context
 	 * @param out output to the response
 	 * @param editableErrors existing editable errors to show in error page.
 	 */
-	public void writeErrorPage(final RequestContextHolder request, final PrintWriter out, final List<ValidatorError> editableErrors) {
+	public void writeErrorPage(final RequestContextHolder context, final PrintWriter out, final List<ValidatorError> editableErrors) {
 		// @formatter:off
 		out.write("<!DOCTYPE html>");
 		out.write("<html>");
@@ -165,7 +166,7 @@ public class DefaultErrorPageWritter {
 
         out.write("            <div style=\"margin-top:58px;\">");
         out.write("                <a href=\"javascript: window.history.back()\" class=\"hdiv-btn hdiv-btn-primary btn-small\"><i class=\"icon-long-arrow-left\"></i> Go back</a>&nbsp;&nbsp;");
-        out.write("                <a href=\"" + request.getContextPath() + "\" class=\"hdiv-btn btn-small\">Home</a>");
+        out.write("                <a href=\"" + context.getContextPath() + "\" class=\"hdiv-btn btn-small\">Home</a>");
         out.write("            </div>");
 
         if (editableErrors != null)

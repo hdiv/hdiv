@@ -31,14 +31,14 @@ public @interface TrustAssertion {
 
 	/**
 	 * Model class that defines the property if applies
-	 * @return
+	 * @return model class
 	 */
 	// TODO: review Void as default value
 	Class<?> idFor() default Void.class;
 
 	/**
 	 * If the annotated element is not an Object by default nid (Native Id) value is included
-	 * @return
+	 * @return include nid value
 	 */
 	boolean nid() default true;
 
