@@ -134,7 +134,7 @@ public abstract class AbstractHDIVTestCase extends TestCase {
 
 		DataComposerFactory dataComposerFactory = applicationContext.getBean(DataComposerFactory.class);
 
-		IDataComposer dataComposer = dataComposerFactory.newInstance(request);
+		IDataComposer dataComposer = dataComposerFactory.newInstance(context);
 		HDIVUtil.setDataComposer(dataComposer, request);
 
 		if (log.isDebugEnabled()) {
