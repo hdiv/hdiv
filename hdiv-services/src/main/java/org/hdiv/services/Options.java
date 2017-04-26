@@ -48,16 +48,16 @@ public interface Options<T> {
 	 * public HttpEntity&lt;Resource&lt;List&lt;String&gt;&gt; showDetails(
 	 *     &#064;PathVariable Long personId,
 	 *     &#064;RequestParam(&quot;detail&quot;)
-	 *     &#064;Select(options = DetailOptions.class, args = &quot;personId&quot;)
+	 *     &#064;TrustAssertion(options = DetailOptions.class, args = &quot;personId&quot;)
 	 *     List&lt;String&gt; details) {
 	 *    ...
 	 * }
 	 * </pre>
 	 * <p>
-	 * The <code>&#064;Select</code> annotation above says that the possible detail values come from a DetailOptions class which determines
-	 * those values based on the personId. Note how the <code>personId</code> is passed to showDetails as argument to the same call,
-	 * alongside the <code>details</code> argument. This allows us to resolve the <code>"personId"</code> arg defined for DetailOptions to
-	 * an actual value.
+	 * The <code>&#064;TrustAssertion</code> annotation above says that the possible detail values come from a DetailOptions class which
+	 * determines those values based on the personId. Note how the <code>personId</code> is passed to showDetails as argument to the same
+	 * call, alongside the <code>details</code> argument. This allows us to resolve the <code>"personId"</code> arg defined for
+	 * DetailOptions to an actual value.
 	 * </p>
 	 * <p>
 	 * Within the call to {@link Options#get} the args array contains the values specified by the args annotation attribute in the given
@@ -66,9 +66,9 @@ public interface Options<T> {
 	 *
 	 * @param value parameters to be used by the implementation. Could be literal values as used by {@link StringOptions} or some argument
 	 * to a custom implementation of Options, such as an SQL string.
-	 * @param args from the same method call, as defined by {@link Select#args()}. The possible values for a parameter might depend on the
-	 * context. In that case, you can use {@link Select#args()} to pass other argument values received in the same method call to an
-	 * implementation of {@link Options}. See above for an example.
+	 * @param args from the same method call, as defined by {@link TrustAssertion#args()}. The possible values for a parameter might depend
+	 * on the context. In that case, you can use {@link TrustAssertion#args()} to pass other argument values received in the same method
+	 * call to an implementation of {@link Options}. See above for an example.
 	 * @return possible values
 	 * @see StringOptions
 	 */

@@ -68,12 +68,12 @@ public enum Type {
 	 */
 	MONTH("month"),
 	/**
-	 * Numeric value, normally determined automatically. You can set restrictions on the numbers with {@link Input#max}, {@link Input#min}
-	 * and {@link Input#step}.
+	 * Numeric value, normally determined automatically. You can set restrictions on the numbers with {@link TrustAssertion#max},
+	 * {@link TrustAssertion#min} and {@link TrustAssertion#step}.
 	 */
 	NUMBER("number"),
 	/**
-	 * Allowed range of values, use with {@link Input#max} and {@link Input#min}. Client may use slider.
+	 * Allowed range of values, use with {@link TrustAssertion#max} and {@link TrustAssertion#min}. Client may use slider.
 	 */
 	RANGE("range"),
 	/**
