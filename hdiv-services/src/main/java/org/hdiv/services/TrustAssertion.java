@@ -33,7 +33,6 @@ public @interface TrustAssertion {
 	 * Model class that defines the property if applies
 	 * @return
 	 */
-	// TODO: review Void as default value
 	Class<?> idFor() default Void.class;
 
 	/**
