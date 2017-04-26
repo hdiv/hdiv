@@ -10,6 +10,7 @@ Release 3.3.0
  * Ensure error message content is escaped.
  * Error page design update.
  * JSF 1.x support removed. Now JSF 2.0 is the minimum supported version.
+ * All request scoped data moved inside RequestContextHolder object.
 
 Release 3.2.0
 ==================================
