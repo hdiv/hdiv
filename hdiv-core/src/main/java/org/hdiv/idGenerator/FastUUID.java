@@ -64,6 +64,7 @@ public class FastUUID {
 	/**
 	 * Method to generate the random GUID. Setting secure true enables each random number generated to be cryptographically strong. Secure
 	 * false defaults to the standard Random function seeded with a single cryptographically strong random number.
+	 * @return random GUID.
 	 */
 	public static String get() {
 		return asHex(random.nextLong(), random.nextLong());

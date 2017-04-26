@@ -31,24 +31,21 @@ public interface RequestInitializer {
 	/**
 	 * Initialize request scoped data
 	 * 
-	 * @param request request object
-	 * @param response response object
+	 * @param context request context
 	 */
 	void initRequest(RequestContextHolder context);
 
 	/**
 	 * Destroy request scoped data
 	 * 
-	 * @param request request object
-	 * @param response response object
+	 * @param context request context
 	 */
 	void endRequest(RequestContextHolder context);
 
 	/**
 	 * Create request wrapper.
 	 * 
-	 * @param request HTTP request
-	 * @param response HTTP response
+	 * @param context request context
 	 * @return the request wrapper
 	 */
 	RequestWrapper createRequestWrapper(RequestContextHolder context);
@@ -56,8 +53,7 @@ public interface RequestInitializer {
 	/**
 	 * Create response wrapper.
 	 * 
-	 * @param request HTTP request
-	 * @param response HTTP response
+	 * @param context request context
 	 * @return the response wrapper
 	 */
 	ResponseWrapper createResponseWrapper(RequestContextHolder context);

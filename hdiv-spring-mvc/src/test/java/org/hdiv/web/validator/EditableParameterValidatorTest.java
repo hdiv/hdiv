@@ -55,8 +55,7 @@ public class EditableParameterValidatorTest extends AbstractHDIVTestCase {
 		helper = getApplicationContext().getBean(IValidationHelper.class);
 
 		DataComposerFactory dataComposerFactory = (DataComposerFactory) getApplicationContext().getBean("dataComposerFactory");
-		HttpServletRequest request = getMockRequest();
-		dataComposer = dataComposerFactory.newInstance(request);
+		dataComposer = dataComposerFactory.newInstance(getRequestContext());
 		dataComposer.startPage();
 	}
 

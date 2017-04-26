@@ -17,6 +17,7 @@ package org.hdiv.components;
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Collections;
 
 import javax.faces.component.html.HtmlInputHidden;
 import javax.faces.context.FacesContext;
@@ -38,23 +39,23 @@ public class HtmlInputHiddenExtension extends HtmlInputHidden {
 	/**
 	 * Obtains hidden real value which has been stored in the JSF state
 	 * 
+	 * @param context {@link FacesContext}
 	 * @param clientId ClientId value
-	 * 
-	 * @return hidden real value
+	 * @return hidden stored values
 	 */
-	public Object getStateValue(final FacesContext context, final String clientId) {
+	public Collection<Object> getStateValue(final FacesContext context, final String clientId) {
 
 		Object val = getValue();
 
 		StateManager stateManager = getStateManager(context);
 		if (stateManager != null) {
 			Collection<Object> values = stateManager.restoreState(clientId);
+
 			if (values != null && values.size() > 0) {
-				val = values.iterator().next();
+				return values;
 			}
 		}
-
-		return val;
+		return Collections.singletonList(val);
 	}
 
 	/*

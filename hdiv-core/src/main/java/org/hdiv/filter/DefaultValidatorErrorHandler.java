@@ -19,7 +19,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
@@ -50,8 +49,7 @@ public class DefaultValidatorErrorHandler implements ValidatorErrorHandler {
 	/**
 	 * Process a request with validation errors.
 	 * 
-	 * @param request {@link HttpServletRequest} instance
-	 * @param response {@link HttpServletResponse} instance
+	 * @param ctx request context
 	 * @param errors Validation errors
 	 * @since 2.1.13
 	 */
@@ -108,7 +106,7 @@ public class DefaultValidatorErrorHandler implements ValidatorErrorHandler {
 	/**
 	 * Redirect to error page if it exists.
 	 * 
-	 * @param request {@link HttpServletRequest} instance
+	 * @param ctx request context
 	 * @param response {@link HttpServletResponse} instance
 	 */
 	protected void redirectToErrorPage(final RequestContextHolder ctx, final HttpServletResponse response) {
@@ -123,7 +121,7 @@ public class DefaultValidatorErrorHandler implements ValidatorErrorHandler {
 	/**
 	 * Redirect to login page if it exists.
 	 * 
-	 * @param request {@link HttpServletRequest} instance
+	 * @param ctx request context
 	 * @param response {@link HttpServletResponse} instance
 	 */
 	protected void redirectToLoginPage(final RequestContextHolder ctx, final HttpServletResponse response) {
@@ -138,7 +136,7 @@ public class DefaultValidatorErrorHandler implements ValidatorErrorHandler {
 	/**
 	 * Redirect to home page if it exists.
 	 * 
-	 * @param request {@link HttpServletRequest} instance
+	 * @param ctx request context
 	 * @param response {@link HttpServletResponse} instance
 	 */
 	protected void redirectToHomePage(final RequestContextHolder ctx, final HttpServletResponse response) {
@@ -170,7 +168,7 @@ public class DefaultValidatorErrorHandler implements ValidatorErrorHandler {
 	/**
 	 * Redirect to the default error page.
 	 * 
-	 * @param request {@link HttpServletRequest} instance
+	 * @param ctx request context
 	 * @param response {@link HttpServletResponse} instance
 	 */
 	@SuppressWarnings("unchecked")

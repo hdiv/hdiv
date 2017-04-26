@@ -85,6 +85,10 @@ public class UICommandValidator extends AbstractComponentValidator {
 	/**
 	 * If the UICommand component is inside a UIData component can have an index in the name. <br>
 	 * For example: form:pets:1:button
+	 * @param context validation context
+	 * @param command {@link UICommand} instance
+	 * @param clientId client id
+	 * @return was this component clicked?
 	 */
 	protected Clicked wasComponentWithRowIdClicked(final ValidationContext context, final UICommand command, final String clientId) {
 

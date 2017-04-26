@@ -237,7 +237,12 @@ public abstract class UtilsJsf {
 
 		HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
 		RequestContextHolder requestContext = HDIVUtil.getRequestContext(request);
-		return requestContext.getDataComposer() != null;
+		if (requestContext == null) {
+			return false;
+		}
+		else {
+			return requestContext.getDataComposer() != null;
+		}
 	}
 
 }

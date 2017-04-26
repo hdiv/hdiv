@@ -94,7 +94,7 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 	/**
 	 * Constructs a request object wrapping the given request.
 	 * 
-	 * @param servletRequest request
+	 * @param requestContext request context
 	 */
 	@SuppressWarnings("deprecation")
 	public RequestWrapper(final RequestContextHolder requestContext) {

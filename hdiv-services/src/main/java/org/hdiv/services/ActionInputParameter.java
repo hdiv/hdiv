@@ -202,4 +202,6 @@ public interface ActionInputParameter {
 
 	boolean isReadOnly();
 
+	boolean isIgnored();
+
 }

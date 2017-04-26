@@ -25,6 +25,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.hdiv.context.RequestContextHolder;
 import org.hdiv.dataComposer.IDataComposer;
 import org.hdiv.urlProcessor.UrlData;
 import org.hdiv.util.Constants;
@@ -43,8 +44,9 @@ public class OutputLinkComponentProcessor extends AbstractComponentProcessor {
 			HttpServletRequest request = (HttpServletRequest) externalContext.getRequest();
 
 			String url = component.getValue().toString();
-			String hdivParameter = HDIVUtil.getRequestContext(request).getHdivParameterName();
-			UrlData urlData = linkUrlProcessor.createUrlData(url, Method.GET, hdivParameter, request);
+			RequestContextHolder requestContext = HDIVUtil.getRequestContext(request);
+			String hdivParameter = requestContext.getHdivParameterName();
+			UrlData urlData = linkUrlProcessor.createUrlData(url, Method.GET, hdivParameter, requestContext);
 			if (urlData.isHdivStateNecessary(config)) {
 
 				boolean hasUIParams = UtilsJsf.hasUIParameterChild(component);

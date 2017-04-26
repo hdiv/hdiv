@@ -112,7 +112,7 @@ public class EditableValidator implements ComponentValidator {
 	 * Get submitted parameters for this component.
 	 * @param context Validation context
 	 * @param clientId component client id
-	 * @return
+	 * @return client id
 	 */
 	protected List<String> getSubmittedClientId(final ValidationContext context, final String clientId) {
 
@@ -126,7 +126,7 @@ public class EditableValidator implements ComponentValidator {
 	/**
 	 * Validate a parameter.
 	 * @param validationContext Validation context
-	 * @param component Component to validate
+	 * @param inputComponent Component to validate
 	 * @param contentType Component type
 	 * @param paramName the name of the component to validate
 	 * @param paramValue the value of the parameter

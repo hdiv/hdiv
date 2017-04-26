@@ -31,13 +31,13 @@ public @interface TrustAssertion {
 
 	/**
 	 * Model class that defines the property if applies
-	 * @return
+	 * @return model class
 	 */
 	Class<?> idFor() default Void.class;
 
 	/**
 	 * If the annotated element is not an Object by default nid (Native Id) value is included
-	 * @return
+	 * @return include nid value
 	 */
 	boolean nid() default true;
 
@@ -58,6 +58,8 @@ public @interface TrustAssertion {
 	boolean required() default false;
 
 	boolean readOnly() default false;
+
+	boolean ignored() default false;
 
 	/**
 	 * Allows to pass String arguments to the Options implementation. By default, a String array can be used to define possible values,

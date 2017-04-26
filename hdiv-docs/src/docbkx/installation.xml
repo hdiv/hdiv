@@ -397,7 +397,7 @@ compile ':hdiv:1.0-RC2'
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd"
     version="2.0">
-    
+
     <component>
         <component-type>javax.faces.HtmlOutcomeTargetLink</component-type>
         <component-class>org.hdiv.components.HtmlOutcomeTargetLinkExtension</component-class>
@@ -418,25 +418,17 @@ compile ':hdiv:1.0-RC2'
         <component-type>javax.faces.HtmlOutputLink</component-type>
         <component-class>org.hdiv.components.HtmlOutputLinkExtension</component-class>
     </component>
-    <component>
-        <component-type>javax.faces.HtmlCommandLink</component-type>
-        <component-class>org.hdiv.components.HtmlCommandLinkExtension</component-class>
-    </component>
-    <component>
-        <component-type>javax.faces.HtmlCommandButton</component-type>
-        <component-class>org.hdiv.components.HtmlCommandButtonExtension</component-class>
-    </component>
-    
+
     <lifecycle>
         <phase-listener>org.hdiv.phaseListeners.ComponentMessagesPhaseListener</phase-listener>
         <phase-listener>org.hdiv.phaseListeners.ConfigPhaseListener</phase-listener>
+        <phase-listener>org.hdiv.phaseListeners.ValidatorPhaseListener</phase-listener>
     </lifecycle>
 
     <factory>
         <external-context-factory>org.hdiv.context.ExternalContextFactoryWrapper</external-context-factory>
-        <exception-handler-factory>org.hdiv.exceptionHandler.HDIVExceptionHandlerFactory</exception-handler-factory>
     </factory>
-    
+
 </faces-config>
 ]]></programlisting>
 			</listitem>

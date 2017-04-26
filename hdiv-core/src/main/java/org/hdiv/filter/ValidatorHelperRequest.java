@@ -172,7 +172,7 @@ public class ValidatorHelperRequest implements IValidationHelper, StateRestorer 
 	 * 5.3. If the parameter is editable, if validations have been defined values are checked.<br>
 	 * 5.4. If it is a non editable parameter, all the received values are checked.
 	 *
-	 * @param request HttpServletRequest to validate
+	 * @param context request context
 	 * @return valid result If all the parameter values of the request <code>request</code> pass the the HDIV validation. False, otherwise.
 	 * @throws HDIVException If the request doesn't pass the HDIV validation an exception is thrown explaining the cause of the error.
 	 */
@@ -313,24 +313,24 @@ public class ValidatorHelperRequest implements IValidationHelper, StateRestorer 
 	/**
 	 * Checks if the action received in the request is the same as the one stored in the HDIV state.
 	 *
-	 * @param request HttpServletRequest to validate
+	 * @param context Request context
 	 * @param target Part of the url that represents the target action
 	 * @param state The restored state for this url
 	 * @return valid result if the actions are the same. False otherwise.
 	 */
-	protected ValidatorHelperResult isTheSameAction(final RequestContextHolder request, final String target, final IState state) {
-		return isTheSameAction(request, target, state.getAction());
+	protected ValidatorHelperResult isTheSameAction(final RequestContextHolder context, final String target, final IState state) {
+		return isTheSameAction(context, target, state.getAction());
 	}
 
 	/**
 	 * Checks if the action received in the request is the same as the one stored in the HDIV state.
 	 *
-	 * @param request HttpServletRequest to validate
+	 * @param context Request context
 	 * @param target Part of the url that represents the target action
-	 * @param state The restored state for this url
+	 * @param stateAction The restored state for this url
 	 * @return valid result if the actions are the same. False otherwise.
 	 */
-	protected ValidatorHelperResult isTheSameAction(final RequestContextHolder request, final String target, String stateAction) {
+	protected ValidatorHelperResult isTheSameAction(final RequestContextHolder context, final String target, String stateAction) {
 
 		// Remove HTML escaped content from the action, for example, HTML entities like &Ntilde;
 		stateAction = HtmlUtils.htmlUnescape(stateAction);
@@ -389,7 +389,7 @@ public class ValidatorHelperRequest implements IValidationHelper, StateRestorer 
 	/**
 	 * Checks if the cookies received in the request are correct. For that, it checks if they are in the user session.
 	 *
-	 * @param request HttpServletRequest to validate
+	 * @param context Validation context
 	 * @param target Part of the url that represents the target action
 	 * @return valid result if all the cookies received in the request are correct. They must have been previously stored in the user
 	 * session by HDIV to be correct. False otherwise.
@@ -446,7 +446,6 @@ public class ValidatorHelperRequest implements IValidationHelper, StateRestorer 
 	 * Checks if the values <code>values</code> are valid for the editable parameter <code>parameter</code>. If the values are not valid, an
 	 * error message with the parameter and the received values will be log.
 	 *
-	 * @param request HttpServletRequest to validate
 	 * @param target Part of the url that represents the target action
 	 * @param parameter parameter name
 	 * @param values parameter's values
@@ -723,8 +722,7 @@ public class ValidatorHelperRequest implements IValidationHelper, StateRestorer 
 	 * Restore state from session or <code>request</code> with <code>request</code> identifier. Strategy defined by the user determines the
 	 * way the state is restored.
 	 *
-	 * @param request HTTP request
-	 * @param target Part of the url that represents the target action
+	 * @param context validation context
 	 * @return valid result if restored state is valid. False in otherwise.
 	 */
 	public final ValidatorHelperResult restoreState(final ValidationContext context) {
@@ -761,8 +759,8 @@ public class ValidatorHelperRequest implements IValidationHelper, StateRestorer 
 	 * Restore state from session or <code>request</code> with <code>request</code> identifier. Strategy defined by the user determines the
 	 * way the state is restored.
 	 *
-	 * @param request HTTP request
-	 * @param target Part of the url that represents the target action
+	 * @param context Validation context
+	 * @param requestState Request state
 	 * @return valid result if restored state is valid. False in otherwise.
 	 */
 	public final ValidatorHelperResult restoreState(final ValidationContext context, String requestState) {
@@ -1189,8 +1187,7 @@ public class ValidatorHelperRequest implements IValidationHelper, StateRestorer 
 	 * <li>null: It should continue with the validation process (default answer).</li>
 	 * </ul>
 	 *
-	 * @param request HttpServletRequest to validate
-	 * @param target target url
+	 * @param context Validation context
 	 * @return ValidatorHelperResult result
 	 */
 	protected ValidatorHelperResult preValidate(final ValidationContext context) {

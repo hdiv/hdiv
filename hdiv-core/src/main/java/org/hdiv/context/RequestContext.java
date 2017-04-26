@@ -163,8 +163,6 @@ public class RequestContext implements RequestContextHolder {
 	/**
 	 * Checks if request is an ajax request and store the result in a request's attribute
 	 *
-	 * @param request the HttpServletRequest
-	 *
 	 * @return isAjaxRquest
 	 */
 	public final boolean isAjax() {
@@ -252,7 +250,6 @@ public class RequestContext implements RequestContextHolder {
 	/**
 	 * Mark parameter as editable.
 	 *
-	 * @param request HttpServletRequest to validate
 	 * @param name parameter name
 	 */
 	public void addEditableParameter(final String name) {
@@ -269,7 +266,6 @@ public class RequestContext implements RequestContextHolder {
 	/**
 	 * Try to resolve the message. Treat as an error if the message can't be found.
 	 *
-	 * @param request ServletRequest object
 	 * @param key the code to lookup up, such as 'calculator.noRateSet'
 	 * @param o Array of arguments that will be filled in for params within the message (params look like "{0}", "{1,date}", "{2,time}"
 	 * within a message), or null if none.
@@ -295,7 +291,6 @@ public class RequestContext implements RequestContextHolder {
 	 * Adds one parameter to the request. Since the HttpServletRequest object's parameters are unchanged according to the Servlet
 	 * specification, the instance of request should be passed as a parameter of type RequestWrapper.
 	 *
-	 * @param request HttpServletRequest to validate
 	 * @param name new parameter name
 	 * @param value new parameter value
 	 * @throws HDIVException if the request object is not of type RequestWrapper

@@ -388,4 +388,16 @@ public class LinkUrlProcessorTest extends AbstractHDIVTestCase {
 		getConfig().setUrlObfuscation(conf);
 	}
 
+	public void testParamsSameName() {
+
+		HttpServletRequest request = getMockRequest();
+		String url = "/link.html?one.name=ACEPTED&one.name=ACEPTED_NO";
+		String result = linkUrlProcessor.processUrl(request, url);
+		assertTrue(result.startsWith("/link.html?one.name=0&one.name=1&_HDIV_STATE_="));
+
+		url = "/link.html?one.name=ACEPTED_NO&one.name=ACEPTED";
+		result = linkUrlProcessor.processUrl(request, url);
+		assertTrue(result.startsWith("/link.html?one.name=0&one.name=1&_HDIV_STATE_="));
+	}
+
 }

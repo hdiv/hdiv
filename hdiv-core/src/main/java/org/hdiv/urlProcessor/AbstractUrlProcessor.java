@@ -195,10 +195,10 @@ public abstract class AbstractUrlProcessor {
 
 	/**
 	 * Generates a Map with request parameter name and values.
-	 * @param hdivParameter
-	 * @param sb
+	 * @param hdivParameter Hdiv parameter
+	 * @param sb builder
 	 * @param urlParams urls query string
-	 * @return
+	 * @return Parameters as a Map
 	 */
 	public Map<String, String[]> getUrlParamsAsMap(final String hdivParameter, final StringBuilder sb, final String urlParams) {
 
@@ -249,6 +249,7 @@ public abstract class AbstractUrlProcessor {
 	/**
 	 * Generate a url with all parameters and include hdiv state parameter.
 	 *
+	 * @param sb builder
 	 * @param hdivParameter HDIV parameter name
 	 * @param urlData url data object
 	 * @param stateParam hdiv state parameter value
