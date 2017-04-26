@@ -33,7 +33,8 @@ public class ValidationErrorException extends RuntimeException {
 	}
 
 	public ValidationErrorException(final String message, final Throwable e) {
-		this(message, e, new ValidatorHelperResult(new ValidatorError(e, message)));
+		this(message, e, new ValidatorHelperResult(new ValidatorError(message)));
+		result.getErrors().get(0).setException(e);
 	}
 
 	public ValidationErrorException(final ValidatorHelperResult result) {
