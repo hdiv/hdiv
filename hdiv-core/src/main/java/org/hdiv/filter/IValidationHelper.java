@@ -15,6 +15,9 @@
  */
 package org.hdiv.filter;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.hdiv.context.RequestContextHolder;
 import org.hdiv.exception.HDIVException;
 
@@ -57,5 +60,13 @@ public interface IValidationHelper extends StateRestorer {
 	 * @param request HTTP servlet request
 	 */
 	void endPage(RequestContextHolder request);
+
+	/**
+	 * Internal Hdiv request
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	boolean isInternal(HttpServletRequest request, HttpServletResponse response);
 
 }

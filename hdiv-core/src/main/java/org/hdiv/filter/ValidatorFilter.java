@@ -149,6 +149,11 @@ public class ValidatorFilter extends OncePerRequestFilter {
 			throws ServletException, IOException {
 		// Initialize dependencies
 		initDependencies();
+
+		if (validationHelper.isInternal(request, response)) {
+			return;
+		}
+
 		RequestContextHolder ctx = requestContextFactory.create(requestInitializer, request, response);
 		// Initialize request scoped data
 		requestInitializer.initRequest(ctx);
