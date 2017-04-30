@@ -25,6 +25,7 @@ import java.util.regex.Pattern;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletRequestWrapper;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.logging.Log;
@@ -91,8 +92,25 @@ public class HDIVUtil {
 	 */
 	private static final String MULTIPART = "multipart/";
 
+	private static boolean SERVLET3 = false;
+
+	static {
+		Cookie cookie = new Cookie("foo", "var");
+		try {
+			cookie.isHttpOnly();
+			SERVLET3 = true;
+		}
+		catch (Throwable e) {
+			// TODO: handle exception
+		}
+	}
+
 	private HDIVUtil() {
 
+	}
+
+	public static boolean isServlet3() {
+		return SERVLET3;
 	}
 
 	/* IApplication */
