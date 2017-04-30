@@ -12,7 +12,7 @@ Hdiv is a leading provider of open source software for real-time, self-protected
 Technical documentation: [https://hdivsecurity.com/technical-documentation/doc.html](http://hdivsecurity.com/technical-documentation/doc.html)
 
 
-`May 25th, 2016` - **[Hdiv v3.2.0 released!](https://github.com/hdiv/hdiv/releases)**
+`April 26th, 2017` - **[Hdiv v3.3.0 released!](https://github.com/hdiv/hdiv/releases)**
 
 ## How does Hdiv help?
 
