@@ -56,6 +56,8 @@ public class Constants {
 	 */
 	public static final String JSESSIONID = "JSESSIONID";
 
+	public static final String HDIV_RANDOM_COOKIE = "HDIV_RANDOM_COOKIE";
+
 	/**
 	 * Session's cookie identifier in lower case.
 	 */

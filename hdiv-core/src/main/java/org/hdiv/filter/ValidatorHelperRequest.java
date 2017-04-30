@@ -421,6 +421,9 @@ public class ValidatorHelperRequest implements IValidationHelper, StateRestorer 
 			if (requestCookies[i].getName().equals(Constants.JSESSIONID)) {
 				continue;
 			}
+			if (requestCookies[i].getName().equals(Constants.HDIV_RANDOM_COOKIE)) {
+				continue;
+			}
 
 			if (sessionCookies.containsKey(requestCookies[i].getName())) {
 
