@@ -23,11 +23,6 @@ public enum SuggestType {
 	INTERNAL,
 
 	/**
-	 * Values are known in the client because they were previously sent somehow
-	 */
-	EXTERNAL,
-
-	/**
 	 * Values show be retrieved from a remote URL
 	 */
 	REMOTE

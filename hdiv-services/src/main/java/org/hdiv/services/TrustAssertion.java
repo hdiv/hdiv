@@ -29,11 +29,15 @@ public @interface TrustAssertion {
 
 	public static final String WILDCARD_LIST_MASK = "[*]";
 
+	public static final String EMPTY = "EMPTY";
+
 	/**
 	 * Model class that defines the property if applies
 	 * @return model class
 	 */
 	Class<?> idFor() default Void.class;
+
+	String plainIdFor() default EMPTY;
 
 	/**
 	 * If the annotated element is not an Object by default nid (Native Id) value is included
@@ -94,4 +98,6 @@ public @interface TrustAssertion {
 	boolean wildcardCollection() default false;
 
 	boolean recursiveNavigation() default false;
+
+	String originMask() default EMPTY;
 }
