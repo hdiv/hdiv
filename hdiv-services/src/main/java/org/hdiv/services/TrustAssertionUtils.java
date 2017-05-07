@@ -37,8 +37,8 @@ public class TrustAssertionUtils {
 			return TrustAssertion.EMPTY;
 		}
 
-		public boolean nid() {
-			return true;
+		public TriState nid() {
+			return TriState.UNDEFINED;
 		}
 
 		public int max() {
@@ -66,14 +66,14 @@ public class TrustAssertionUtils {
 			return null;
 		}
 
-		public boolean readOnly() {
+		public TriState readOnly() {
 			// TODO Auto-generated method stub
-			return false;
+			return TriState.UNDEFINED;
 		}
 
-		public boolean required() {
+		public TriState required() {
 			// TODO Auto-generated method stub
-			return false;
+			return TriState.UNDEFINED;
 		}
 
 		public int step() {
@@ -129,6 +129,29 @@ public class TrustAssertionUtils {
 
 	public static boolean isEntity(final TrustAssertion assertion) {
 		return assertion != null && (assertion.idFor() != Void.class || !assertion.plainIdFor().equals(TrustAssertion.EMPTY));
+	}
+
+	public static boolean isReadOnly(final TrustAssertion assertion) {
+		return checkTriState(assertion.readOnly(), TrustAssertionDefaults.get().readOnly);
+	}
+
+	public static boolean isRequired(final TrustAssertion assertion) {
+		return checkTriState(assertion.required(), TrustAssertionDefaults.get().required);
+	}
+
+	public static boolean isNid(final TrustAssertion assertion) {
+		return checkTriState(assertion.nid(), TrustAssertionDefaults.get().nid);
+	}
+
+	private static boolean checkTriState(final TriState state, final boolean defaultValue) {
+		switch (state) {
+		case TRUE:
+			return true;
+		case FALSE:
+			return false;
+		default:
+			return defaultValue;
+		}
 	}
 
 }

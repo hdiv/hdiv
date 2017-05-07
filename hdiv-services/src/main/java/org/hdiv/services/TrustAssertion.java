@@ -43,7 +43,7 @@ public @interface TrustAssertion {
 	 * If the annotated element is not an Object by default nid (Native Id) value is included
 	 * @return include nid value
 	 */
-	boolean nid() default true;
+	TriState nid() default TriState.UNDEFINED;
 
 	Type type() default Type.FROM_JAVA;
 
@@ -59,9 +59,9 @@ public @interface TrustAssertion {
 
 	int step() default 0;
 
-	boolean required() default false;
+	TriState required() default TriState.UNDEFINED;
 
-	boolean readOnly() default false;
+	TriState readOnly() default TriState.UNDEFINED;
 
 	boolean ignored() default false;
 
