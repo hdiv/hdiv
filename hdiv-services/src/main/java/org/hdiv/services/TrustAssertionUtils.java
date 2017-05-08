@@ -143,6 +143,10 @@ public class TrustAssertionUtils {
 		return checkTriState(assertion.nid(), TrustAssertionDefaults.get().nid);
 	}
 
+	public static boolean isNotEmpty(final String value) {
+		return value != null && !TrustAssertion.EMPTY.equals(value);
+	}
+
 	private static boolean checkTriState(final TriState state, final boolean defaultValue) {
 		switch (state) {
 		case TRUE:
