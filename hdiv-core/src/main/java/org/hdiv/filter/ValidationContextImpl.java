@@ -45,7 +45,7 @@ public class ValidationContextImpl implements ValidationContext {
 		this.context = context;
 		this.obfuscation = obfuscation;
 		this.restorer = restorer;
-		method = Method.valueOf(context.getMethod());
+		method = Method.secureValueOf(context.getMethod());
 	}
 
 	public String getTarget() {

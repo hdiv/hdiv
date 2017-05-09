@@ -298,7 +298,7 @@ public class ValidatorHelperRequest implements IValidationHelper, StateRestorer 
 	 * @return true if it is a start page
 	 */
 	protected boolean isStartPage(final RequestContextHolder request, final String target) {
-		return hdivConfig.isStartPage(target, Method.valueOf(request.getMethod()));
+		return hdivConfig.isStartPage(target, Method.secureValueOf(request.getMethod()));
 	}
 
 	@Deprecated
