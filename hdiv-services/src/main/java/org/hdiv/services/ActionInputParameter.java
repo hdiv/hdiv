@@ -204,4 +204,5 @@ public interface ActionInputParameter {
 
 	boolean isIgnored();
 
+	EntityValidationInfo getEntityValidationInfo();
 }
