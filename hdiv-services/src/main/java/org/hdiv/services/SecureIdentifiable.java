@@ -21,4 +21,8 @@ import org.springframework.hateoas.Identifiable;
 
 public interface SecureIdentifiable<ID extends Serializable> extends Identifiable<ID>, SecureIdContainer {
 
+	public static final String ID_PROPERTY = "id";
+
+	public static final String NID_PROPERTY = "nid";
+
 }
