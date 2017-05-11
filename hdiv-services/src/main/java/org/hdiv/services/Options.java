@@ -72,5 +72,5 @@ public interface Options<T> {
 	 * @return possible values
 	 * @see StringOptions
 	 */
-	public List<Suggest<T>> get(String[] value, Object... args);
+	List<Suggest<T>> get(String[] value, Object... args);
 }

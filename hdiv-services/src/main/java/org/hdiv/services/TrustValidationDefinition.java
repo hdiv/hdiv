@@ -19,5 +19,5 @@ import org.hdiv.context.RequestContextHolder;
 
 public interface TrustValidationDefinition<T extends SecureIdContainer> {
 
-	public void define(final RequestContextHolder request, final T secureIdentifiable, final TrustValidationBuilder builder);
+	void define(final RequestContextHolder request, final T secureIdentifiable, final TrustValidationBuilder builder);
 }
