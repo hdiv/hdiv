@@ -299,7 +299,7 @@ public abstract class AbstractDataComposer implements IDataComposer {
 				pCount.put(name, num);
 
 				// Replace parameter with confidential values
-				newParameters = newParameters.replace(param, name + "=" + num);
+				newParameters = HDIVUtil.replaceOnce(newParameters, param, name + "=" + num);
 			}
 
 			// Update indexes
