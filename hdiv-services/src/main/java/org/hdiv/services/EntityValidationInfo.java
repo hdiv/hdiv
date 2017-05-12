@@ -33,6 +33,10 @@ public class EntityValidationInfo {
 		this(trustAssertion.idFor(), singleValueType);
 		plainIdFor = trustAssertion.plainIdFor();
 		originMask = trustAssertion.originMask();
+		if (originMask != null && (idFor == null || plainIdFor == null)) {
+			throw new IllegalStateException(
+					"It is not possible to set the originMask attribute without idFor or plainIdFor being specified");
+		}
 	}
 
 	public Class<?> getIdFor() {

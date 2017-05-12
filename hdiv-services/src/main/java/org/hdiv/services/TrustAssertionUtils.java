@@ -17,6 +17,8 @@ package org.hdiv.services;
 
 import java.lang.annotation.Annotation;
 
+import org.hdiv.services.SecureIdContainer.VoidSecureIdContainer;
+
 public class TrustAssertionUtils {
 
 	public static final TrustAssertion EMPTY = new TrustAssertion() {
@@ -25,8 +27,8 @@ public class TrustAssertionUtils {
 			return TrustAssertion.class;
 		}
 
-		public Class<?> idFor() {
-			return Void.class;
+		public Class<? extends SecureIdContainer> idFor() {
+			return VoidSecureIdContainer.class;
 		}
 
 		public String plainIdFor() {
@@ -128,7 +130,8 @@ public class TrustAssertionUtils {
 	}
 
 	public static boolean isEntity(final TrustAssertion assertion) {
-		return assertion != null && (assertion.idFor() != Void.class || !assertion.plainIdFor().equals(TrustAssertion.EMPTY));
+		return assertion != null
+				&& (assertion.idFor() != VoidSecureIdContainer.class || !assertion.plainIdFor().equals(TrustAssertion.EMPTY));
 	}
 
 	public static boolean isReadOnly(final TrustAssertion assertion) {
