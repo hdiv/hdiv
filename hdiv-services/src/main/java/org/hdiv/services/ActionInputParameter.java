@@ -67,32 +67,10 @@ public interface ActionInputParameter {
 	void setHtmlInputFieldType(Type type);
 
 	/**
-	 * Parameter is a complex body.
-	 *
-	 * @return true if applicable
+	 * Returns the type of parameter
+	 * @return
 	 */
-	boolean isRequestBody();
-
-	/**
-	 * Parameter is a request header.
-	 *
-	 * @return true if applicable
-	 */
-	boolean isRequestHeader();
-
-	/**
-	 * Parameter is a query parameter.
-	 *
-	 * @return true if applicable
-	 */
-	boolean isRequestParam();
-
-	/**
-	 * Parameter is a path variable.
-	 *
-	 * @return true if applicable
-	 */
-	boolean isPathVariable();
+	HttpParameterType getHttpParameterType();
 
 	/**
 	 * Parameter has input constraints (like range, step etc.)
