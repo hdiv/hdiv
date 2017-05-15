@@ -41,6 +41,7 @@ import org.hdiv.urlProcessor.FormUrlProcessor;
 import org.hdiv.urlProcessor.LinkUrlProcessor;
 import org.hdiv.urlProcessor.UrlData;
 import org.hdiv.urlProcessor.UrlDataImpl;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.MessageSource;
 import org.springframework.util.StringUtils;
 import org.springframework.web.context.WebApplicationContext;
@@ -66,6 +67,8 @@ public class HDIVUtil {
 	private static final Log log = LogFactory.getLog(HDIVUtil.class);
 
 	private static final String APPLICATION_SERVLETCONTEXT_KEY = "APPLICATION_SERVLETCONTEXT_KEY";
+
+	private static final String HDIV_SERVLETCONTEXT_KEY = "HDIV_SERVLETCONTEXT_KEY";
 
 	private static final String MESSAGESOURCE_SERVLETCONTEXT_KEY = "MESSAGESOURCE_SERVLETCONTEXT_KEY";
 
@@ -441,8 +444,9 @@ public class HDIVUtil {
 	 * @return the desired WebApplicationContext for this web app, or {@code null} if none
 	 * @see ServletContext#getAttributeNames()
 	 */
-	public static WebApplicationContext findWebApplicationContext(final ServletContext sc) {
+	public static ApplicationContext findWebApplicationContext(final ServletContext sc) {
 		WebApplicationContext wac = WebApplicationContextUtils.getWebApplicationContext(sc);
+		ApplicationContext backupCandidate = null;
 		if (wac == null) {
 			Enumeration<String> attrNames = sc.getAttributeNames();
 			while (attrNames.hasMoreElements()) {
@@ -455,12 +459,24 @@ public class HDIVUtil {
 					}
 					wac = (WebApplicationContext) attrValue;
 				}
+				else if (attrValue instanceof ApplicationContext) {
+					if (attrName.equals(HDIV_SERVLETCONTEXT_KEY)) {
+						backupCandidate = (ApplicationContext) attrValue;
+					}
+				}
 			}
 		}
 		if (wac == null) {
+			if (backupCandidate != null) {
+				return backupCandidate;
+			}
 			throw new IllegalStateException("No WebApplicationContext found: no ContextLoaderListener registered?");
 		}
 		return wac;
+	}
+
+	public static void registerApplicationContext(final ApplicationContext context, final ServletContext scontext) {
+		scontext.setAttribute(HDIV_SERVLETCONTEXT_KEY, context);
 	}
 
 	/**
