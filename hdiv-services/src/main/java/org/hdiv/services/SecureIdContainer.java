@@ -16,5 +16,8 @@
 package org.hdiv.services;
 
 public interface SecureIdContainer {
+	public static SecureIdContainer Void = new VoidSecureIdContainer();
 
+	public static class VoidSecureIdContainer implements SecureIdContainer {
+	}
 }

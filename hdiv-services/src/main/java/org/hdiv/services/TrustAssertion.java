@@ -23,6 +23,8 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
+import org.hdiv.services.SecureIdContainer.VoidSecureIdContainer;
+
 @Retention(RUNTIME)
 @Target({ METHOD, PARAMETER, FIELD })
 public @interface TrustAssertion {
@@ -35,7 +37,7 @@ public @interface TrustAssertion {
 	 * Model class that defines the property if applies
 	 * @return model class
 	 */
-	Class<?> idFor() default Void.class;
+	Class<? extends SecureIdContainer> idFor() default VoidSecureIdContainer.class;
 
 	String plainIdFor() default EMPTY;
 
