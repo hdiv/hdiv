@@ -90,8 +90,8 @@ public @interface TrustAssertion {
 	String[] args() default {};
 
 	/**
-	 * Marks the type of select, in case of {@link SuggestType#EXTERNAL} the data may be outside the select, for example as a variable in
-	 * HAL response rather than in HAL-FORMS document
+	 * Marks the type of select, in case of {@link SuggestType#REMOTE} the data may be outside the select, for example as a variable in HAL
+	 * response rather than in HAL-FORMS document
 	 * 
 	 * @return the {@link SuggestType}
 	 */

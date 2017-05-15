@@ -55,7 +55,7 @@ public interface ActionInputParameter {
 	/**
 	 * Type of parameter when used in html-like contexts (e.g. Siren, Uber, XHtml)
 	 *
-	 * @return type
+	 * @return input field type
 	 */
 	Type getHtmlInputFieldType();
 
@@ -68,7 +68,7 @@ public interface ActionInputParameter {
 
 	/**
 	 * Returns the type of parameter
-	 * @return
+	 * @return parameter type
 	 */
 	HttpParameterType getHttpParameterType();
 
