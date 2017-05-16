@@ -93,7 +93,6 @@ public interface ActionInputParameter {
 	 * Establish possible values for this parameter
 	 * 
 	 * @param possibleValues possible values for this parameter.
-	 * @param <T> This is the type parameter
 	 */
 	void setPossibleValues(List<? extends Suggest<?>> possibleValues);
 
