@@ -15,6 +15,8 @@
  */
 package org.hdiv.services;
 
+import java.util.List;
+
 public interface TrustParameterDefinitionBuilder {
 	TrustParameterDefinitionBuilder readOnly(boolean readOnly);
 
@@ -29,5 +31,7 @@ public interface TrustParameterDefinitionBuilder {
 	TrustParameterDefinitionBuilder maxLength(int max);
 
 	TrustParameterDefinitionBuilder minLength(int min);
+
+	TrustParameterDefinitionBuilder possibleValues(final List<? extends Suggest<?>> values);
 
 }
