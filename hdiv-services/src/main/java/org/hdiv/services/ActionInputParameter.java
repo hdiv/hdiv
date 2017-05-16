@@ -87,7 +87,7 @@ public interface ActionInputParameter {
 	 * @param <T> This is the type parameter
 	 * @return possible values or empty array
 	 */
-	<T> List<Suggest<T>> getPossibleValues(ActionDescriptor actionDescriptor);
+	<T> List<Suggest<T>> getPossibleValues(ActionDescriptor<? extends ActionInputParameter> actionDescriptor);
 
 	/**
 	 * Establish possible values for this parameter
@@ -95,7 +95,7 @@ public interface ActionInputParameter {
 	 * @param possibleValues possible values for this parameter.
 	 * @param <T> This is the type parameter
 	 */
-	<T> void setPossibleValues(List<Suggest<T>> possibleValues);
+	void setPossibleValues(List<? extends Suggest<?>> possibleValues);
 
 	/**
 	 * Retrieve the suggest type
