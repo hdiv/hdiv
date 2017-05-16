@@ -21,7 +21,7 @@ import java.util.Map;
 /**
  * Represents a descriptor for a http method execution. Created by Dietrich on 17.05.2015.
  */
-public interface ActionDescriptor {
+public interface ActionDescriptor<T extends ActionInputParameter> {
 
 	/**
 	 * Gets action name. Could be used as form name.
@@ -64,14 +64,14 @@ public interface ActionDescriptor {
 	 * @param name parameter name
 	 * @return parameter
 	 */
-	ActionInputParameter getActionInputParameter(String name);
+	T getActionInputParameter(String name);
 
 	/**
 	 * Request body descriptor, if the action expects a complex request body.
 	 *
 	 * @return request body parameter
 	 */
-	ActionInputParameter getRequestBody();
+	T getRequestBody();
 
 	/**
 	 * Does the action expect a complex request body?
@@ -85,12 +85,12 @@ public interface ActionDescriptor {
 	 *
 	 * @return required parameters, may be empty
 	 */
-	Map<String, ActionInputParameter> getRequiredParameters();
+	Map<String, T> getRequiredParameters();
 
 	/**
 	 * Visits the body to find parameters
 	 * 
 	 * @param visitor visitor
 	 */
-	void accept(ActionInputParameterVisitor visitor);
+	void accept(ActionInputParameterVisitor<T> visitor);
 }

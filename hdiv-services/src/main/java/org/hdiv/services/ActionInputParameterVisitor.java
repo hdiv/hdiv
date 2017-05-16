@@ -15,6 +15,6 @@
  */
 package org.hdiv.services;
 
-public interface ActionInputParameterVisitor {
-	void visit(ActionInputParameter inputParameter);
+public interface ActionInputParameterVisitor<T extends ActionInputParameter> {
+	void visit(T inputParameter);
 }
