@@ -46,6 +46,11 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 	protected static final String COOKIE = "cookie";
 
 	/**
+	 * Flag to rewrite requested URI when parameters change
+	 */
+	private static boolean rewriteURI = false;
+
+	/**
 	 * Set with editable parameters.
 	 */
 	protected Set<String> editableParameters = new HashSet<String>();
@@ -90,6 +95,8 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 	 * Request context data.
 	 */
 	protected final RequestContextHolder requestContext;
+
+	private String modifiedQueryString;
 
 	/**
 	 * Constructs a request object wrapping the given request.
@@ -271,9 +278,36 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 
 		parameters.put(name, value);
 
+		if (rewriteURI) {
+			modifiedQueryString = updateQueryString(getQueryString(), modifiedQueryString, name, value[0]);
+		}
+
 		if (isMultipart) {
 			addTextParameter(name, value);
 		}
+	}
+
+	static String updateQueryString(final String queryString, final String modifiedQueryString, final String name, final String value) {
+		if (queryString != null) {
+			int start = queryString.indexOf(name + "=");
+			if (start != -1) {
+				start += name.length() + 1;
+				int end = queryString.indexOf('&', start);
+				if (end == -1) {
+					end = queryString.length();
+				}
+				return queryString.substring(0, start) + value + queryString.substring(end);
+			}
+		}
+		return modifiedQueryString;
+	}
+
+	@Override
+	public String getQueryString() {
+		if (modifiedQueryString != null) {
+			return modifiedQueryString;
+		}
+		return super.getQueryString();
 	}
 
 	/**
@@ -376,6 +410,10 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 	 */
 	public void setSession(final ISession session) {
 		this.session = session;
+	}
+
+	public static void setRewriteURI(final boolean rewriteURI) {
+		RequestWrapper.rewriteURI = rewriteURI;
 	}
 
 }
