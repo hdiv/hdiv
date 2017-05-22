@@ -93,4 +93,10 @@ public interface ActionDescriptor<T extends ActionInputParameter> {
 	 * @param visitor visitor
 	 */
 	void accept(ActionInputParameterVisitor<T> visitor);
+
+	/**
+	 * Returns body input parameters
+	 * @return
+	 */
+	Collection<T> getBodyParameters();
 }
