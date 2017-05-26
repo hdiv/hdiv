@@ -29,16 +29,13 @@ public class SuggestImpl<T> implements Suggest<T> {
 
 	private final String valueField;
 
-	private final String textField;
-
 	public SuggestImpl(final T value) {
-		this(value, null, null);
+		this(value, null);
 	}
 
-	public SuggestImpl(final T value, final String valueField, final String textField) {
+	public SuggestImpl(final T value, final String valueField) {
 		this.value = value;
 		this.valueField = valueField;
-		this.textField = textField;
 	}
 
 	public T getValue() {
@@ -47,22 +44,6 @@ public class SuggestImpl<T> implements Suggest<T> {
 
 	public String getValueField() {
 		return valueField;
-	}
-
-	public String getTextField() {
-		return textField;
-	}
-
-	public String getText() {
-		if (value != null) {
-			try {
-				return String.valueOf(getField(textField).get(value));
-			}
-			catch (Exception e) {
-				throw new IllegalArgumentException("Textfield could not be serialized", e);
-			}
-		}
-		return null;
 	}
 
 	public String getValueAsString() {
@@ -88,28 +69,27 @@ public class SuggestImpl<T> implements Suggest<T> {
 		return field;
 	}
 
-	public static <T> List<Suggest<T>> wrap(final List<T> list, final String valueField, final String textField) {
+	public static <T> List<Suggest<T>> wrap(final List<T> list, final String valueField) {
 		List<Suggest<T>> suggests = new ArrayList<Suggest<T>>(list.size());
 		for (T value : list) {
-			suggests.add(new SuggestImpl<T>(value, valueField, textField));
+			suggests.add(new SuggestImpl<T>(value, valueField));
 		}
 		return suggests;
 	}
 
 	public static <T extends Serializable, S extends Identifiable<T>> List<Suggest<T>> wrapIdentifiable(final Collection<S> list,
-			final String valueField, final String textField) {
+			final String valueField) {
 		List<Suggest<T>> suggests = new ArrayList<Suggest<T>>(list.size());
 		for (S value : list) {
-			suggests.add(new SuggestImpl<T>(value.getId(), valueField, textField));
+			suggests.add(new SuggestImpl<T>(value.getId(), valueField));
 		}
 		return suggests;
 	}
 
-	public static <T, S> List<Suggest<T>> wrap(final Collection<S> list, final String valueField, final String textField,
-			final SuggestSupplier<S, T> supplier) {
+	public static <T, S> List<Suggest<T>> wrap(final Collection<S> list, final String valueField, final SuggestSupplier<S, T> supplier) {
 		List<Suggest<T>> suggests = new ArrayList<Suggest<T>>(list.size());
 		for (S value : list) {
-			suggests.add(new SuggestImpl<T>(supplier.get(value), valueField, textField));
+			suggests.add(new SuggestImpl<T>(supplier.get(value), valueField));
 		}
 		return suggests;
 	}

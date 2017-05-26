@@ -19,8 +19,6 @@ public class SuggestObjectWrapper<T> implements WrappedValue<T> {
 
 	public static final String ID = Path.path(Path.on(SuggestObjectWrapper.class).getSvalue());
 
-	public static final String TEXT = Path.path(Path.on(SuggestObjectWrapper.class).getText());
-
 	private final String text;
 
 	private final String svalue;

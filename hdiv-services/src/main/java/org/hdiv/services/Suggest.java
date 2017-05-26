@@ -51,18 +51,4 @@ public interface Suggest<T> {
 	 */
 	String getValueField();
 
-	/**
-	 * Text field name
-	 * 
-	 * @return the text field
-	 */
-	String getTextField();
-
-	/**
-	 * String representation of the textField inside value object
-	 * 
-	 * @return the text
-	 */
-	String getText();
-
 }

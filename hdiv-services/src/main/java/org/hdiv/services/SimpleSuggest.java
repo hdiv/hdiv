@@ -30,7 +30,7 @@ public class SimpleSuggest<T> extends SuggestImpl<SuggestObjectWrapper<T>> {
 	}
 
 	public SimpleSuggest(final SuggestObjectWrapper<T> wrapper) {
-		super(wrapper, SuggestObjectWrapper.ID, SuggestObjectWrapper.TEXT);
+		super(wrapper, SuggestObjectWrapper.ID);
 	}
 
 	public static <T> List<Suggest<SuggestObjectWrapper<T>>> wrap(final T[] values) {
