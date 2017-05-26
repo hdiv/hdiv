@@ -30,14 +30,6 @@ public interface Suggest<T> {
 	T getValue();
 
 	/**
-	 * Returns the original value, it may be equals to getValue() or not (i.e. Enums), in this case the real value is returned
-	 * 
-	 * @param <U> Unwrapped type.
-	 * @return the unwrapped value
-	 */
-	<U> U getUnwrappedValue();
-
-	/**
 	 * String representation of the valueField inside value object
 	 * 
 	 * @return the value as String

@@ -15,7 +15,7 @@
  */
 package org.hdiv.services;
 
-public class SuggestObjectWrapper<T> implements WrappedValue<T> {
+public class SuggestObjectWrapper<T> {
 
 	public static final String ID = Path.path(Path.on(SuggestObjectWrapper.class).getSvalue());
 
@@ -23,12 +23,9 @@ public class SuggestObjectWrapper<T> implements WrappedValue<T> {
 
 	private final String svalue;
 
-	private final T original;
-
-	public SuggestObjectWrapper(final String text, final String id, final T original) {
+	public SuggestObjectWrapper(final String text, final String id) {
 		this.text = text;
 		this.svalue = id;
-		this.original = original;
 	}
 
 	public String getText() {
@@ -37,10 +34,6 @@ public class SuggestObjectWrapper<T> implements WrappedValue<T> {
 
 	public String getSvalue() {
 		return svalue;
-	}
-
-	public T getValue() {
-		return original;
 	}
 
 	@Override

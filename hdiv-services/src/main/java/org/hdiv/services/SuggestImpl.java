@@ -94,11 +94,4 @@ public class SuggestImpl<T> implements Suggest<T> {
 		return suggests;
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public <U> U getUnwrappedValue() {
-		if (value instanceof WrappedValue) {
-			return (U) ((WrappedValue) value).getValue();
-		}
-		return (U) value;
-	}
 }

@@ -20,13 +20,8 @@ import java.util.List;
 
 public class SimpleSuggest<T> extends SuggestImpl<SuggestObjectWrapper<T>> {
 
-	@SuppressWarnings("unchecked")
-	public SimpleSuggest(final String text, final String value) {
-		this(text, value, (T) value);
-	}
-
-	public SimpleSuggest(final String text, final String svalue, final T value) {
-		this(new SuggestObjectWrapper<T>(text, svalue, value));
+	public SimpleSuggest(final String text, final String svalue) {
+		this(new SuggestObjectWrapper<T>(text, svalue));
 	}
 
 	public SimpleSuggest(final SuggestObjectWrapper<T> wrapper) {
@@ -36,8 +31,7 @@ public class SimpleSuggest<T> extends SuggestImpl<SuggestObjectWrapper<T>> {
 	public static <T> List<Suggest<SuggestObjectWrapper<T>>> wrap(final T[] values) {
 		List<Suggest<SuggestObjectWrapper<T>>> suggests = new ArrayList<Suggest<SuggestObjectWrapper<T>>>(values.length);
 		for (int i = 0; i < values.length; i++) {
-			suggests.add(
-					new SimpleSuggest<T>(new SuggestObjectWrapper<T>(String.valueOf(values[i]), String.valueOf(values[i]), values[i])));
+			suggests.add(new SimpleSuggest<T>(new SuggestObjectWrapper<T>(String.valueOf(values[i]), String.valueOf(values[i]))));
 		}
 		return suggests;
 	}
