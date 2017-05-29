@@ -19,17 +19,10 @@ public class SuggestObjectWrapper<T> {
 
 	public static final String ID = Path.path(Path.on(SuggestObjectWrapper.class).getSvalue());
 
-	private final String text;
-
 	private final String svalue;
 
-	public SuggestObjectWrapper(final String text, final String id) {
-		this.text = text;
+	public SuggestObjectWrapper(final String id) {
 		this.svalue = id;
-	}
-
-	public String getText() {
-		return text;
 	}
 
 	public String getSvalue() {
@@ -41,7 +34,6 @@ public class SuggestObjectWrapper<T> {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + (svalue == null ? 0 : svalue.hashCode());
-		result = prime * result + (text == null ? 0 : text.hashCode());
 		return result;
 	}
 
@@ -63,14 +55,6 @@ public class SuggestObjectWrapper<T> {
 			}
 		}
 		else if (!svalue.equals(other.svalue)) {
-			return false;
-		}
-		if (text == null) {
-			if (other.text != null) {
-				return false;
-			}
-		}
-		else if (!text.equals(other.text)) {
 			return false;
 		}
 		return true;
