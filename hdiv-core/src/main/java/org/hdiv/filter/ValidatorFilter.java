@@ -239,7 +239,7 @@ public class ValidatorFilter extends OncePerRequestFilter {
 				// Log the errors
 				logValidationErrors(errors);
 
-				hasEditableError = processEditableValidationErrors(multipartProcessedRequest, errors);
+				hasEditableError = processEditableValidationErrors(ctx, errors);
 			}
 
 			if (legal || hdivConfig.isDebugMode() || hasEditableError && !hdivConfig.isShowErrorPageOnEditableValidation()) {
@@ -396,7 +396,7 @@ public class ValidatorFilter extends OncePerRequestFilter {
 	 * @param errors all validation errors
 	 * @return true if there is a editable validation error
 	 */
-	protected boolean processEditableValidationErrors(final HttpServletRequest request, final List<ValidatorError> errors) {
+	protected boolean processEditableValidationErrors(final RequestContextHolder request, final List<ValidatorError> errors) {
 
 		List<ValidatorError> editableErrors = new ArrayList<ValidatorError>();
 		for (ValidatorError error : errors) {
