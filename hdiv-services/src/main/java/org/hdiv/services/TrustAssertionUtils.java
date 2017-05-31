@@ -135,11 +135,13 @@ public class TrustAssertionUtils {
 	}
 
 	public static boolean isReadOnly(final TrustAssertion assertion) {
-		return checkTriState(assertion.readOnly(), TrustAssertionDefaults.get().readOnly);
+		return assertion != null ? checkTriState(assertion.readOnly(), TrustAssertionDefaults.get().readOnly)
+				: TrustAssertionDefaults.get().readOnly;
 	}
 
 	public static boolean isRequired(final TrustAssertion assertion) {
-		return checkTriState(assertion.required(), TrustAssertionDefaults.get().required);
+		return assertion != null ? checkTriState(assertion.required(), TrustAssertionDefaults.get().required)
+				: TrustAssertionDefaults.get().required;
 	}
 
 	public static boolean isNid(final TrustAssertion assertion) {
