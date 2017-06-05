@@ -15,12 +15,16 @@
  */
 package org.hdiv.util;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 import org.junit.Assert;
 import org.junit.Test;
 
 public class HdivStateUtilsTest {
+
+	Set<UUID> uuids = new HashSet<UUID>();
 
 	public HdivStateUtilsTest() {
 		// TODO Auto-generated constructor stub
@@ -37,6 +41,22 @@ public class HdivStateUtilsTest {
 		result = HDIVStateUtils.uuidToString(id);
 		Assert.assertEquals("U00000000000000010000000000000001", result);
 		Assert.assertEquals(id, HDIVStateUtils.parsePageId(result));
+	}
+
+	@Test
+	public void testEncodeDecodeUUIDBulk() {
+		for (int i = 0; i < 100000; i++) {
+			UUID newValue = UUID.randomUUID();
+			if (uuids.contains(newValue)) {
+				throw new IllegalArgumentException("Repeated UUID after:" + uuids.size());
+			}
+			if (i % 1000000 == 0) {
+				System.out.println(i);
+			}
+			uuids.add(newValue);
+			Assert.assertEquals(newValue, HDIVStateUtils.parsePageId(HDIVStateUtils.uuidToString(newValue)));
+		}
+
 	}
 
 }

@@ -60,7 +60,7 @@ public final class HDIVStateUtils {
 	public static UUID parsePageId(final String pageId) {
 		try {
 			if (pageId.startsWith("U")) {
-				return new UUID(Long.parseLong(pageId.substring(1, 17), 16), Long.parseLong(pageId.substring(17, 33), 16));
+				return new UUID(parseUnsignedLong(pageId.substring(1, 17), 16), parseUnsignedLong(pageId.substring(17, 33), 16));
 			}
 			else {
 				return new UUID(0, Long.parseLong(pageId));
@@ -69,6 +69,57 @@ public final class HDIVStateUtils {
 		catch (Exception e) {
 			throw new HDIVException(HDIVErrorCodes.INVALID_PAGE_ID, e);
 		}
+	}
+
+	private static long parseUnsignedLong(final String s, final int radix) throws NumberFormatException {
+		if (s == null) {
+			throw new NumberFormatException("null");
+		}
+
+		int len = s.length();
+		if (len > 0) {
+			char firstChar = s.charAt(0);
+			if (firstChar == '-') {
+				throw new NumberFormatException(String.format("Illegal leading minus sign " + "on unsigned string %s.", s));
+			}
+			else {
+				if (len <= 12 || // Long.MAX_VALUE in Character.MAX_RADIX is 13 digits
+						radix == 10 && len <= 18) { // Long.MAX_VALUE in base 10 is 19 digits
+					return Long.parseLong(s, radix);
+				}
+
+				// No need for range checks on len due to testing above.
+				long first = Long.parseLong(s.substring(0, len - 1), radix);
+				int second = Character.digit(s.charAt(len - 1), radix);
+				if (second < 0) {
+					throw new NumberFormatException("Bad digit at end of " + s);
+				}
+				long result = first * radix + second;
+				if (compareUnsigned(result, first) < 0) {
+					/*
+					 * The maximum unsigned value, (2^64)-1, takes at most one more digit to represent than the maximum signed value,
+					 * (2^63)-1. Therefore, parsing (len - 1) digits will be appropriately in-range of the signed parsing. In other words,
+					 * if parsing (len -1) digits overflows signed parsing, parsing len digits will certainly overflow unsigned parsing.
+					 *
+					 * The compareUnsigned check above catches situations where an unsigned overflow occurs incorporating the contribution
+					 * of the final digit.
+					 */
+					throw new NumberFormatException(String.format("String value %s exceeds " + "range of unsigned long.", s));
+				}
+				return result;
+			}
+		}
+		else {
+			throw new NumberFormatException(s);
+		}
+	}
+
+	private static int compareUnsigned(final long x, final long y) {
+		return compare(x + Long.MIN_VALUE, y + Long.MIN_VALUE);
+	}
+
+	private static int compare(final long x, final long y) {
+		return x < y ? -1 : x == y ? 0 : 1;
 	}
 
 	public static int getStateId(final String stateId) {
