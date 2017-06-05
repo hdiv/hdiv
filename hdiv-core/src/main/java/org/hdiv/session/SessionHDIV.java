@@ -15,6 +15,8 @@
  */
 package org.hdiv.session;
 
+import java.util.UUID;
+
 import javax.servlet.http.HttpSession;
 
 import org.hdiv.context.RequestContextHolder;
@@ -24,6 +26,7 @@ import org.hdiv.state.IPage;
 import org.hdiv.state.IState;
 import org.hdiv.util.Constants;
 import org.hdiv.util.HDIVErrorCodes;
+import org.hdiv.util.HDIVUtil;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
 import org.springframework.util.Assert;
@@ -55,7 +58,7 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 	 * @param context Context holder for request-specific state.
 	 * @return Returns the pageId.
 	 */
-	public final int getPageId(final RequestContextHolder context) {
+	public final UUID getPageId(final RequestContextHolder context) {
 
 		SessionModel session = context.getSession();
 
@@ -67,11 +70,11 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 			throw new HDIVException("session.nopageidgenerator");
 		}
 
-		int id = pageIdGenerator.getNextPageId();
+		UUID id = pageIdGenerator.getNextPageId();
 
 		// PageId must be greater than 0
-		if (id <= 0) {
-			throw new HDIVException("Incorrect PageId generated [" + id + "]. PageId must be greater than 0.");
+		if (id==null) {
+			throw new HDIVException("Incorrect PageId generated [" + id + "].");
 		}
 
 		session.setAttribute(pageIdGeneratorName, pageIdGenerator);
@@ -88,7 +91,7 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 	 * @return Returns the page with id <code>pageId</code>.
 	 * @since HDIV 2.0.4
 	 */
-	public IPage getPage(final RequestContextHolder context, final int pageId) {
+	public IPage getPage(final RequestContextHolder context, final UUID pageId) {
 		try {
 			return cache.findPage(new SimpleCacheKey(context, pageId));
 		}
@@ -123,7 +126,7 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 	 * @param context Context holder for request-specific state.
 	 * @return State identifier <code>stateId</code> throws HDIVException If the state doesn't exist a new HDIV exception is thrown.
 	 */
-	public IState getState(final RequestContextHolder context, final int pageId, final int stateId) {
+	public IState getState(final RequestContextHolder context, final UUID pageId, final int stateId) {
 		try {
 			return getPage(context, pageId).getState(stateId);
 		}
@@ -145,7 +148,7 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 		cache.insertPage(new SimpleCacheKey(context, page.getId()), page);
 	}
 
-	public boolean removePage(final RequestContextHolder context, final int pageId) {
+	public boolean removePage(final RequestContextHolder context, final UUID pageId) {
 		Assert.notNull(context);
 
 		return cache.removePage(new SimpleCacheKey(context, pageId));

@@ -19,6 +19,7 @@ import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -104,7 +105,7 @@ public abstract class AbstractDataComposer implements IDataComposer {
 	 * DataComposer initialization with new stack to store all states of the page <code>page</code>.
 	 */
 	public void init() {
-		setPage(new Page(0));
+		setPage(new Page(new UUID(0, 0)));
 		states = new ArrayDeque<IState>();
 	}
 

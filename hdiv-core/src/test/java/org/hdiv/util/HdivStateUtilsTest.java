@@ -13,38 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.hdiv.session;
+package org.hdiv.util;
 
 import java.util.UUID;
 
-import org.hdiv.context.RequestContextHolder;
+import org.junit.Assert;
+import org.junit.Test;
 
-/**
- * Cache key to index the pages
- * @author Ander Ruiz
- *
- */
-public class SimpleCacheKey {
+public class HdivStateUtilsTest {
 
-	private RequestContextHolder context;
-
-	protected final UUID pageId;
-
-	public SimpleCacheKey(final RequestContextHolder context, final UUID pageId) {
-		this.context = context;
-		this.pageId = pageId;
+	public HdivStateUtilsTest() {
+		// TODO Auto-generated constructor stub
 	}
 
-	public SimpleCacheKey(final UUID pageId) {
-		this.pageId = pageId;
-	}
+	@Test
+	public void testEncodeDecodeUUID() {
+		UUID id = new UUID(0, 1);
+		String result = HDIVStateUtils.uuidToString(id);
+		Assert.assertEquals("1", result);
+		Assert.assertEquals(id, HDIVStateUtils.parsePageId(result));
 
-	public RequestContextHolder getRequestContext() {
-		return context;
-	}
-
-	public UUID getPageId() {
-		return pageId;
+		id = new UUID(1, 1);
+		result = HDIVStateUtils.uuidToString(id);
+		Assert.assertEquals("U00000000000000010000000000000001", result);
+		Assert.assertEquals(id, HDIVStateUtils.parsePageId(result));
 	}
 
 }

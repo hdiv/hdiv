@@ -25,6 +25,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -52,6 +53,7 @@ import org.hdiv.urlProcessor.BasicUrlProcessor;
 import org.hdiv.urlProcessor.UrlData;
 import org.hdiv.util.Constants;
 import org.hdiv.util.HDIVErrorCodes;
+import org.hdiv.util.HDIVStateUtils;
 import org.hdiv.util.HDIVUtil;
 import org.hdiv.util.Method;
 import org.hdiv.validator.EditableDataValidationResult;
@@ -783,7 +785,7 @@ public class ValidatorHelperRequest implements IValidationHelper, StateRestorer 
 
 		try {
 			RequestContextHolder ctx = context.getRequestContext();
-			int pageId = stateUtil.getPageId(requestState);
+			UUID pageId = stateUtil.getPageId(requestState);
 			IState state = doRestoreState(context, requestState);
 
 			// Save current page id in request
@@ -845,7 +847,6 @@ public class ValidatorHelperRequest implements IValidationHelper, StateRestorer 
 			// read suffix from page stored in session
 			String pId = value.substring(0, firstSeparator);
 			String sId = value.substring(firstSeparator + 1, lastSeparator);
-			int pageId;
 			int stateId = 0;
 			try {
 				stateId = Integer.parseInt(sId);
@@ -861,21 +862,14 @@ public class ValidatorHelperRequest implements IValidationHelper, StateRestorer 
 				return requestSuffix.equals(token);
 			}
 
-			try {
-				pageId = Integer.parseInt(pId);
-			}
-			catch (final NumberFormatException e) {
-				throw new HDIVException(HDIVErrorCodes.INVALID_PAGE_ID, e);
-			}
-
 			IPage currentPage = restoredState.getPage();
 			if (currentPage == null) {
-				currentPage = session.getPage(context, pageId);
+				currentPage = session.getPage(context, HDIVStateUtils.parsePageId(pId));
 			}
 
 			if (currentPage == null) {
 				if (log.isErrorEnabled()) {
-					log.error("Page with id [" + pageId + "] not found in session.");
+					log.error("Page with id [" + pId + "] not found in session.");
 				}
 				throw new HDIVException(HDIVErrorCodes.INVALID_PAGE_ID);
 			}

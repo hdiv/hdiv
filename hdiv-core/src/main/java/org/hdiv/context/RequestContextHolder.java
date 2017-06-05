@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Enumeration;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -47,9 +48,9 @@ public interface RequestContextHolder {
 
 	String getRequestURI();
 
-	int getCurrentPageId();
+	UUID getCurrentPageId();
 
-	void setCurrentPageId(int pageId);
+	void setCurrentPageId(UUID pageId);
 
 	void setBaseURL(String baseURL);
 

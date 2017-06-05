@@ -17,6 +17,7 @@ package org.hdiv.session;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -50,7 +51,7 @@ public class StateCache implements IStateCache {
 	/**
 	 * Page identifiers buffer
 	 */
-	private final List<Integer> pageIds = new ArrayList<Integer>();
+	private final List<UUID> pageIds = new ArrayList<UUID>();
 
 	/**
 	 * Adds a new page identifier to the cache.
@@ -65,7 +66,7 @@ public class StateCache implements IStateCache {
 	 * @return If the cache has reached its maximum size, less important identifier is returned in order to delete it from session.
 	 * Otherwise, null will be returned.
 	 */
-	public synchronized Integer addPage(final int pageId, final Integer currentPageId, final boolean isRefreshRequest,
+	public synchronized UUID addPage(final UUID pageId, final UUID currentPageId, final boolean isRefreshRequest,
 			final boolean isAjaxRequest) {
 
 		if (pageIds.contains(pageId)) {
@@ -74,7 +75,7 @@ public class StateCache implements IStateCache {
 
 		}
 		else {
-			Integer removedKey = cleanBuffer(currentPageId, isRefreshRequest, isAjaxRequest);
+			UUID removedKey = cleanBuffer(currentPageId, isRefreshRequest, isAjaxRequest);
 			pageIds.add(pageId);
 
 			if (log.isDebugEnabled()) {
@@ -97,14 +98,15 @@ public class StateCache implements IStateCache {
 	 * 
 	 * @return Oldest page identifier in the map <code>pageIds</code>. Null in otherwise.
 	 */
-	private Integer cleanBuffer(final Integer currentPageId, final boolean isRefreshRequest, final boolean isAjaxRequest) {
+	private UUID cleanBuffer(final UUID currentPageId, final boolean isRefreshRequest, final boolean isAjaxRequest) {
 
-		Integer removed = null;
+		UUID removed = null;
 
 		int totalPages = pageIds.size();
 
 		// Remove last page when we know that browser's forward history is empty (See issue #67)
-		if (currentPageId != null && totalPages > 1 && currentPageId == pageIds.get(totalPages - 2) && isRefreshRequest && !isAjaxRequest) {
+		if (currentPageId != null && totalPages > 1 && currentPageId.equals(pageIds.get(totalPages - 2)) && isRefreshRequest
+				&& !isAjaxRequest) {
 			removed = pageIds.remove(totalPages - 1);
 		}
 
@@ -124,7 +126,7 @@ public class StateCache implements IStateCache {
 	 * @return page id
 	 * @since 2.1.14
 	 */
-	public Integer getLastPageId() {
+	public UUID getLastPageId() {
 
 		return !pageIds.isEmpty() ? pageIds.get(pageIds.size() - 1) : null;
 	}
@@ -134,8 +136,8 @@ public class StateCache implements IStateCache {
 
 		StringBuilder result = new StringBuilder();
 		result.append("[");
-		for (Integer pageId : pageIds) {
-			result.append(" " + pageId);
+		for (UUID pageId : pageIds) {
+			result.append(" " + pageId.getLeastSignificantBits());
 		}
 		result.append("]");
 		return result.toString();
@@ -158,8 +160,14 @@ public class StateCache implements IStateCache {
 	/**
 	 * @return the pageIds
 	 */
-	public List<Integer> getPageIds() {
+	public List<UUID> getPageIds() {
 		return pageIds;
+	}
+	
+	public static void main(String [] args) {
+		int first = 129;
+		Integer second = 129;
+		System.out.println(first==second);
 	}
 
 }

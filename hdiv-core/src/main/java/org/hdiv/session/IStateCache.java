@@ -17,6 +17,7 @@ package org.hdiv.session;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * @author Roberto Velasco
@@ -34,12 +35,12 @@ public interface IStateCache extends Serializable {
 	 * @return If the cache has reached its maximum size, less important identifier is returned in order to delete it from session.
 	 * Otherwise, null will be returned.
 	 */
-	Integer addPage(int pageId, Integer currentPageId, boolean isRefreshRequest, boolean isAjaxRequest);
+	UUID addPage(UUID pageId, UUID currentPageId, boolean isRefreshRequest, boolean isAjaxRequest);
 
 	/**
 	 * @return the pageIds
 	 */
-	List<Integer> getPageIds();
+	List<UUID> getPageIds();
 
 	/**
 	 * Return last page id in the cache.
@@ -47,5 +48,5 @@ public interface IStateCache extends Serializable {
 	 * @return page id
 	 * @since 2.1.14
 	 */
-	Integer getLastPageId();
+	UUID getLastPageId();
 }

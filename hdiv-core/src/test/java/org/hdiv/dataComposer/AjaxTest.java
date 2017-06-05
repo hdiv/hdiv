@@ -238,7 +238,7 @@ public class AjaxTest extends AbstractHDIVTestCase {
 	}
 
 	public int getPageId(final String stateId) {
-		return HDIVStateUtils.getPageId(stateId);
+		return (int) HDIVStateUtils.getPageId(stateId).getLeastSignificantBits();
 	}
 
 	public int getStateId(final String stateId) {

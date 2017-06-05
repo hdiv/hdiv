@@ -17,6 +17,7 @@ package org.hdiv.state;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.UUID;
 
 public interface IPage extends Serializable {
 
@@ -46,7 +47,7 @@ public interface IPage extends Serializable {
 	/**
 	 * @return Returns the page id.
 	 */
-	int getId();
+	UUID getId();
 
 	/**
 	 * @return Returns the page states.

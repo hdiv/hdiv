@@ -16,6 +16,7 @@
 package org.hdiv.session;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -41,69 +42,77 @@ public class StateCacheTest extends AbstractHDIVTestCase {
 	public void testAddPage() {
 
 		// cache's maximum size is defined using the Spring factory.
-		IStateCache cache = this.getApplicationContext().getBean(IStateCache.class);
+		IStateCache cache = getApplicationContext().getBean(IStateCache.class);
 
-		IPage page1 = new Page(1);
-		IPage page2 = new Page(2);
-		IPage page3 = new Page(3);
+		UUID ONE = new UUID(0, 1);
+		UUID TWO = new UUID(0, 2);
+		UUID THREE = new UUID(0, 3);
+
+		IPage page1 = new Page(ONE);
+		IPage page2 = new Page(TWO);
+		IPage page3 = new Page(THREE);
 
 		IState state1 = new State(0);
 		IState state2 = new State(0);
 		IState state3 = new State(0);
 
-		int currentPageid = -1;
+		UUID currentPageid = new UUID(0, -1);
 
 		page1.addState(state1);
-		cache.addPage(1, currentPageid, false, false);
+		cache.addPage(ONE, currentPageid, false, false);
 
 		page2.addState(state2);
-		cache.addPage(2, currentPageid, false, false);
+		cache.addPage(TWO, currentPageid, false, false);
 
 		page3.addState(state3);
-		cache.addPage(3, currentPageid, false, false);
+		cache.addPage(THREE, currentPageid, false, false);
 
 		log.info("cache:" + cache.toString());
 
-		List<Integer> ids = cache.getPageIds();
+		List<UUID> ids = cache.getPageIds();
 		assertEquals(3, ids.size());
-		assertEquals((Integer) 1, ids.get(0));
-		assertEquals((Integer) 2, ids.get(1));
-		assertEquals((Integer) 3, ids.get(2));
+		assertEquals(ONE, ids.get(0));
+		assertEquals(TWO, ids.get(1));
+		assertEquals(THREE, ids.get(2));
 	}
 
 	public void testPageReflesh() {
 
 		// cache's maximum size is defined using the Spring factory.
-		IStateCache cache = this.getApplicationContext().getBean(IStateCache.class);
+		IStateCache cache = getApplicationContext().getBean(IStateCache.class);
 
-		IPage page1 = new Page(1);
-		IPage page2 = new Page(2);
-		IPage page3 = new Page(3);
+		UUID ONE = new UUID(0, 1);
+		UUID TWO = new UUID(0, 2);
+		UUID THREE = new UUID(0, 3);
+
+		IPage page1 = new Page(ONE);
+		IPage page2 = new Page(TWO);
+		IPage page3 = new Page(THREE);
 
 		IState state1 = new State(0);
 		IState state2 = new State(0);
 		IState state3 = new State(0);
 
-		int currentPageid = -1;
+		UUID currentPageid = new UUID(0, -1);
 
 		page1.addState(state1);
-		cache.addPage(1, currentPageid, false, false);
+		cache.addPage(ONE, currentPageid, false, false);
 		assertEquals(1, cache.getPageIds().size());
 
 		page2.addState(state2);
-		cache.addPage(2, currentPageid, false, false);
+		cache.addPage(TWO, currentPageid, false, false);
 		assertEquals(2, cache.getPageIds().size());
 
 		// Simulate a page refresh or F5
-		currentPageid = 1;
+		currentPageid = new UUID(0, 1);
 
 		page3.addState(state3);
-		cache.addPage(3, currentPageid, true, false);
+		cache.addPage(THREE, currentPageid, true, false);
 		assertEquals(2, cache.getPageIds().size());// Size is 2 instead of 3
 
-		List<Integer> ids = cache.getPageIds();
-		assertEquals((Integer) 1, ids.get(0));
-		assertEquals((Integer) 3, ids.get(1));
+		List<UUID> ids = cache.getPageIds();
+		assertEquals(ONE, ids.get(0));
+		assertEquals(THREE, ids.get(1));
 	}
 
 }

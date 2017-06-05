@@ -16,6 +16,7 @@
 package org.hdiv.session;
 
 import java.util.List;
+import java.util.UUID;
 
 import javax.servlet.http.HttpSession;
 
@@ -48,14 +49,14 @@ public class HTTPSessionCache {
 	public void insertPage(final SimpleCacheKey key, final IPage newPage) {
 		RequestContextHolder ctx = key.getRequestContext();
 		SessionModel session = ctx.getSession();
-		int pageId = newPage.getId();
+		UUID pageId = newPage.getId();
 
 		IStateCache cache = getStateCache(session);
 
 		// Get current request page identifier. Null if no state
-		Integer currentPage = key.getRequestContext().getCurrentPageId();
+		UUID currentPage = key.getRequestContext().getCurrentPageId();
 
-		Integer lastPageId = cache.getLastPageId();
+		UUID lastPageId = cache.getLastPageId();
 		IPage lastPage = lastPageId == null ? null : findPage(new SimpleCacheKey(key.getRequestContext(), lastPageId));
 
 		boolean isRefreshRequest = lastPage != null && newPage.getParentStateId() != null && lastPage.getParentStateId() != null
@@ -64,7 +65,7 @@ public class HTTPSessionCache {
 		// Check if is an Ajax request.
 		boolean isAjaxRequest = ctx.isAjax();
 
-		Integer removedPageId = cache.addPage(pageId, currentPage, isRefreshRequest, isAjaxRequest);
+		UUID removedPageId = cache.addPage(pageId, currentPage, isRefreshRequest, isAjaxRequest);
 
 		// if it returns a page identifier it is because the cache has reached
 		// the maximum size and therefore we must delete the page which has been
@@ -106,10 +107,10 @@ public class HTTPSessionCache {
 		session.removeAttribute(PAGE_ID_KEY_PREFIX + key.getPageId());
 
 		IStateCache cache = getStateCache(session);
-		return cache.getPageIds().remove(new Integer(key.getPageId()));
+		return cache.getPageIds().remove(key.getPageId());
 	}
 
-	private void deletePage(final SessionModel session, final int pageId) {
+	private void deletePage(final SessionModel session, final UUID pageId) {
 		session.removeAttribute(PAGE_ID_KEY_PREFIX + pageId);
 
 		if (log.isDebugEnabled()) {
@@ -126,11 +127,11 @@ public class HTTPSessionCache {
 			log.debug("Cache pages before finished pages are deleted:" + cache.toString());
 		}
 
-		List<Integer> pageIds = cache.getPageIds();
+		List<UUID> pageIds = cache.getPageIds();
 
 		for (int i = 0; i < pageIds.size(); i++) {
 
-			Integer pageId = pageIds.get(i);
+			UUID pageId = pageIds.get(i);
 			IPage currentPage = findPage(new SimpleCacheKey(context, pageId));
 			if (currentPage != null && conversationId.equalsIgnoreCase(currentPage.getFlowId())) {
 
@@ -154,9 +155,9 @@ public class HTTPSessionCache {
 	protected void logCacheContent(final RequestContextHolder context, final IStateCache cache) {
 		if (log.isTraceEnabled()) {
 			synchronized (cache) {
-				List<Integer> ids = cache.getPageIds();
+				List<UUID> ids = cache.getPageIds();
 				StringBuilder sb = new StringBuilder();
-				for (final Integer id : ids) {
+				for (final UUID id : ids) {
 					IPage page = findPage(new SimpleCacheKey(context, id));
 					String parentPage = null;
 					if (page != null) {

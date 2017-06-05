@@ -15,6 +15,8 @@
  */
 package org.hdiv.session;
 
+import java.util.UUID;
+
 import javax.servlet.http.HttpSession;
 
 import org.hdiv.context.RequestContextHolder;
@@ -55,7 +57,7 @@ public interface ISession {
 	 *
 	 * @return State identifier <code>stateId</code> throws HDIVException If the state doesn't exist a new HDIV exception is thrown.
 	 */
-	IState getState(RequestContextHolder context, int pageId, int stateId);
+	IState getState(RequestContextHolder context, UUID pageId, int stateId);
 
 	/**
 	 * Obtains from the user session the page identifier for the current request.
@@ -63,7 +65,7 @@ public interface ISession {
 	 * @param context Context holder for request-specific state.
 	 * @return Returns the pageId.
 	 */
-	int getPageId(RequestContextHolder context);
+	UUID getPageId(RequestContextHolder context);
 
 	/**
 	 * Returns the page with id <code>pageId</code>.
@@ -73,7 +75,7 @@ public interface ISession {
 	 * @return Returns the page with id <code>pageId</code>.
 	 * @since HDIV 2.0.4
 	 */
-	IPage getPage(RequestContextHolder context, int pageId);
+	IPage getPage(RequestContextHolder context, UUID pageId);
 
 	/**
 	 * Removes the page with id <code>pageId</code>.
@@ -83,7 +85,7 @@ public interface ISession {
 	 * @return True if the page was found and correctly deleted, false otherwise.
 	 * @since HDIV 3.3.0
 	 */
-	boolean removePage(RequestContextHolder context, int pageId);
+	boolean removePage(RequestContextHolder context, UUID pageId);
 
 	/**
 	 * Get an attribute from session.

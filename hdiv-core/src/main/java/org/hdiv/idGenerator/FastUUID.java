@@ -41,7 +41,7 @@ public class FastUUID {
 	// @formatter:on
 	private static final Random random = new CustomRandom(new SecureRandom().nextLong());
 
-	private static String asHex(final long mostSignificant, final long lestSignificant) {
+	public static String asHex(final long mostSignificant, final long lestSignificant) {
 		char[] hexChars = new char[32];
 		long l = mostSignificant;
 		for (int i = 0; i < 8; i++) {

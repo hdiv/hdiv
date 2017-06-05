@@ -16,6 +16,7 @@
 package org.hdiv.idGenerator;
 
 import java.util.Random;
+import java.util.UUID;
 
 /**
  * This implementation uses a sequence number to generate unique page ids.
@@ -36,7 +37,7 @@ public class SequentialPageIdGenerator implements PageIdGenerator {
 	 * Constructor that initializes the sequence number in a non-constant value.
 	 */
 	public SequentialPageIdGenerator() {
-		this.id = generateInitialPageId();
+		id = generateInitialPageId();
 	}
 
 	/*
@@ -44,8 +45,8 @@ public class SequentialPageIdGenerator implements PageIdGenerator {
 	 *
 	 * @see org.hdiv.util.PageIdGenerator#getNextPageId()
 	 */
-	public synchronized int getNextPageId() {
-		return ++this.id;
+	public synchronized UUID getNextPageId() {
+		return new UUID(0, ++id);
 	}
 
 	/**

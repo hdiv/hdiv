@@ -15,26 +15,29 @@
  */
 package org.hdiv.idGenerator;
 
+import java.util.UUID;
+
 import org.hdiv.AbstractHDIVTestCase;
 
 public class PageIdGeneratorTest extends AbstractHDIVTestCase {
 
 	private PageIdGenerator pageIdGenerator;
 
+	@Override
 	protected void onSetUp() throws Exception {
-		this.pageIdGenerator = super.getApplicationContext().getBean(PageIdGenerator.class);
+		pageIdGenerator = super.getApplicationContext().getBean(PageIdGenerator.class);
 	}
 
 	public void testPageIdGenerator() {
-		int id = this.pageIdGenerator.getNextPageId();
+		UUID id = pageIdGenerator.getNextPageId();
 		assertNotNull(id);
-		assertTrue(id > 0);
+		assertTrue(id.getLeastSignificantBits() > 0);
 
-		int id2 = this.pageIdGenerator.getNextPageId();
+		UUID id2 = pageIdGenerator.getNextPageId();
 		assertNotNull(id2);
-		assertTrue(id2 > 0);
+		assertTrue(id2.getLeastSignificantBits() > 0);
 
-		assertFalse(id == id2);
+		assertFalse(id.getLeastSignificantBits() == id2.getLeastSignificantBits());
 
 	}
 

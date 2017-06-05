@@ -16,6 +16,7 @@
 package org.hdiv.session;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.hdiv.AbstractHDIVTestCase;
 import org.hdiv.context.RequestContextHolder;
@@ -31,6 +32,8 @@ public class SessionTest extends AbstractHDIVTestCase {
 
 	private ISession session;
 
+	private static final UUID ID = new UUID(0, 20);
+
 	@Override
 	protected void onSetUp() throws Exception {
 
@@ -41,16 +44,16 @@ public class SessionTest extends AbstractHDIVTestCase {
 
 		RequestContextHolder context = getRequestContext();
 
-		int pageId = session.getPageId(context);
+		UUID pageId = session.getPageId(context);
 
-		assertTrue(pageId > 0);
+		assertTrue(pageId.getLeastSignificantBits() > 0);
 	}
 
 	public void testAddPage() {
 
 		RequestContextHolder context = getRequestContext();
 
-		IPage page = new Page(20);
+		IPage page = new Page(ID);
 
 		IState state = new State(0);
 		state.setAction("/action");
@@ -66,7 +69,7 @@ public class SessionTest extends AbstractHDIVTestCase {
 
 		RequestContextHolder context = getRequestContext();
 
-		IPage page = new Page(20);
+		IPage page = new Page(ID);
 
 		IState state = new State(0);
 		state.setAction("/action");
@@ -77,7 +80,7 @@ public class SessionTest extends AbstractHDIVTestCase {
 		session.addPage(context, page);
 
 		// Restore state
-		IState restored = session.getState(context, 20, 0);
+		IState restored = session.getState(context, ID, 0);
 
 		assertNotNull(restored);
 		assertEquals(state, restored);
@@ -87,7 +90,7 @@ public class SessionTest extends AbstractHDIVTestCase {
 
 		RequestContextHolder context = getRequestContext();
 
-		IPage page = new Page(20);
+		IPage page = new Page(ID);
 
 		IState state = new State(0);
 		state.setAction("/action");
@@ -98,7 +101,7 @@ public class SessionTest extends AbstractHDIVTestCase {
 		session.addPage(context, page);
 
 		// Restore page
-		IPage restored = session.getPage(context, 20);
+		IPage restored = session.getPage(context, ID);
 
 		assertNotNull(restored);
 		assertEquals(page, restored);
@@ -109,7 +112,7 @@ public class SessionTest extends AbstractHDIVTestCase {
 		RequestContextHolder context = getRequestContext();
 
 		// First page
-		IPage page = new Page(20);
+		IPage page = new Page(ID);
 
 		IState state = new State(0);
 		state.setAction("/action");
@@ -118,11 +121,11 @@ public class SessionTest extends AbstractHDIVTestCase {
 		session.addPage(context, page);
 
 		IStateCache cache = (IStateCache) getMockRequest().getSession().getAttribute(Constants.STATE_CACHE_NAME);
-		List<Integer> ids = cache.getPageIds();
+		List<UUID> ids = cache.getPageIds();
 		assertEquals(1, ids.size());
 
 		// Second page
-		page = new Page(21);
+		page = new Page(new UUID(0, 21));
 
 		state = new State(0);
 		state.setAction("/action");
@@ -136,10 +139,10 @@ public class SessionTest extends AbstractHDIVTestCase {
 		assertEquals(2, ids.size());
 
 		// Simulate Page refresh
-		getRequestContext().setCurrentPageId(20);
+		getRequestContext().setCurrentPageId(ID);
 
 		// Third page
-		page = new Page(22);
+		page = new Page(new UUID(0, 22));
 
 		// Same parent state id because a refresh has been performed
 		page.setParentStateId("14-0-E3E5BA9F9AC0DEA35BBE14189510600E");
@@ -203,7 +206,7 @@ public class SessionTest extends AbstractHDIVTestCase {
 
 		RequestContextHolder context = getRequestContext();
 
-		IPage page = new Page(20);
+		IPage page = new Page(ID);
 
 		IState state = new State(0);
 		state.setAction("/action");
@@ -213,10 +216,10 @@ public class SessionTest extends AbstractHDIVTestCase {
 
 		session.addPage(context, page);
 
-		boolean result = session.removePage(context, 0);
+		boolean result = session.removePage(context, new UUID(0, 0));
 		assertEquals(false, result);
 
-		result = session.removePage(context, 20);
+		result = session.removePage(context, ID);
 		assertEquals(true, result);
 	}
 

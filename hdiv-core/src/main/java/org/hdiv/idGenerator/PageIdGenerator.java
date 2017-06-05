@@ -16,6 +16,7 @@
 package org.hdiv.idGenerator;
 
 import java.io.Serializable;
+import java.util.UUID;
 
 /**
  * Component responsible for generating the unique page ids, which are part of state.
@@ -35,6 +36,6 @@ public interface PageIdGenerator extends Serializable {
 	 * 
 	 * @return new id
 	 */
-	int getNextPageId();
+	UUID getNextPageId();
 
 }

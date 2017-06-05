@@ -18,6 +18,7 @@ package org.hdiv.state;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Data structure to store states of a page.
@@ -32,6 +33,8 @@ public class Page implements IPage, Serializable {
 	 */
 	private static final long serialVersionUID = -5701140762067196143L;
 
+	private static final String NO_TOKEN = "0";
+
 	/**
 	 * Contains the states of the page. Only used in memory strategy.
 	 */
@@ -40,7 +43,7 @@ public class Page implements IPage, Serializable {
 	/**
 	 * Page <code>this</code> identifier.
 	 */
-	protected int id;
+	protected UUID id;
 
 	/**
 	 * Unique id of flow
@@ -91,8 +94,14 @@ public class Page implements IPage, Serializable {
 	public Page() {
 	}
 
-	public Page(final int id) {
+	public Page(final UUID id) {
 		this.id = id;
+		/**
+		 * ID is already random
+		 */
+		if (id.getMostSignificantBits() != 0) {
+			formRandomToken = randomToken = NO_TOKEN;
+		}
 	}
 
 	/**
@@ -148,7 +157,7 @@ public class Page implements IPage, Serializable {
 	/**
 	 * @return Returns the page id.
 	 */
-	public int getId() {
+	public UUID getId() {
 		return id;
 	}
 

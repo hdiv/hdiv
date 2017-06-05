@@ -16,6 +16,7 @@
 package org.hdiv.dataComposer;
 
 import java.util.List;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -153,7 +154,7 @@ public class DataComposerMemoryTest extends AbstractHDIVTestCase {
 		assertNotNull(stateId);
 
 		// New request
-		int pageId = stateUtil.getPageId(stateId);
+		UUID pageId = stateUtil.getPageId(stateId);
 		IState state = stateUtil.restoreState(context, stateId);
 		IPage page = session.getPage(context, pageId);
 		dataComposer = dataComposerFactory.newInstance(request);
@@ -329,9 +330,9 @@ public class DataComposerMemoryTest extends AbstractHDIVTestCase {
 		String ajaxStateId = ajaxDataComposer.endRequest();
 
 		// Restore states
-		int pageId = stateUtil.getPageId(stateId);
+		UUID pageId = stateUtil.getPageId(stateId);
 		IState state = stateUtil.restoreState(context, stateId);
-		int ajaxPageId = stateUtil.getPageId(ajaxStateId);
+		UUID ajaxPageId = stateUtil.getPageId(ajaxStateId);
 		IState ajaxState = stateUtil.restoreState(context, ajaxStateId);
 
 		assertEquals(pageId, ajaxPageId);
@@ -364,10 +365,10 @@ public class DataComposerMemoryTest extends AbstractHDIVTestCase {
 		String ajaxStateId = ajaxDataComposer.endRequest();
 
 		// Restore states
-		int pageId = stateUtil.getPageId(stateId);
-		int ajaxPageId = stateUtil.getPageId(ajaxStateId);
+		UUID pageId = stateUtil.getPageId(stateId);
+		UUID ajaxPageId = stateUtil.getPageId(ajaxStateId);
 
-		assertEquals(pageId + 1, ajaxPageId);
+		assertEquals(pageId.getLeastSignificantBits() + 1, ajaxPageId.getLeastSignificantBits());
 	}
 
 	public void testSaveStateInCreation() {

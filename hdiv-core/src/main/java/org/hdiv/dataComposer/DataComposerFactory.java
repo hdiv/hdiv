@@ -17,6 +17,7 @@ package org.hdiv.dataComposer;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -115,9 +116,9 @@ public class DataComposerFactory {
 		if (preState != null && preState.length() > 0) {
 
 			// We are modifying an existing state, preload dataComposer with it
-			int pageId = stateUtil.getPageId(preState);
+			UUID pageId = stateUtil.getPageId(preState);
 			IState state = stateUtil.restoreState(context, preState);
-			if (pageId > 0) {
+			if (pageId != null) {
 				IPage page = state.getPage();
 				if (page == null) {
 					page = session.getPage(context, pageId);
@@ -134,8 +135,8 @@ public class DataComposerFactory {
 		else if (reuseExistingPage(context)) {
 
 			if (hdivState != null && hdivState.length() > 0) {
-				int pageId = stateUtil.getPageId(hdivState);
-				if (pageId > 0) {
+				UUID pageId = stateUtil.getPageId(hdivState);
+				if (pageId != null) {
 					IPage page = session.getPage(context, pageId);
 					dataComposer.startPage(page);
 				}

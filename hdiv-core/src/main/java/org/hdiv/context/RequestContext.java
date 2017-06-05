@@ -20,6 +20,7 @@ import java.io.InputStream;
 import java.util.Enumeration;
 import java.util.Locale;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletRequestWrapper;
@@ -59,7 +60,7 @@ public class RequestContext implements RequestContextHolder {
 
 	private String baseURL;
 
-	private int currentPageId;
+	private UUID currentPageId;
 
 	private Boolean isAjaxRequest;
 
@@ -144,11 +145,11 @@ public class RequestContext implements RequestContextHolder {
 		this.requestURI = requestURI;
 	}
 
-	public int getCurrentPageId() {
+	public UUID getCurrentPageId() {
 		return currentPageId;
 	}
 
-	public void setCurrentPageId(final int currentPageId) {
+	public void setCurrentPageId(final UUID currentPageId) {
 		this.currentPageId = currentPageId;
 	}
 

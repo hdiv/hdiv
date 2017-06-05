@@ -113,7 +113,8 @@ public class DataComposerFactoryTest extends AbstractHDIVTestCase {
 		dataComposer.endPage();
 
 		// Next page id is expected
-		assertEquals(HDIVStateUtils.getPageId(stateId), HDIVStateUtils.getPageId(stateId2) - 1);
+		assertEquals(HDIVStateUtils.getPageId(stateId).getLeastSignificantBits(),
+				HDIVStateUtils.getPageId(stateId2).getLeastSignificantBits() - 1);
 	}
 
 }

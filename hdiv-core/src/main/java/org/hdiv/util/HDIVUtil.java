@@ -20,6 +20,7 @@ import java.net.URLDecoder;
 import java.util.Enumeration;
 import java.util.Locale;
 import java.util.Random;
+import java.util.UUID;
 import java.util.regex.Pattern;
 
 import javax.servlet.ServletContext;
@@ -657,12 +658,12 @@ public class HDIVUtil {
 
 	@Deprecated
 	public static Integer getCurrentPageId(final ServletRequest request) {
-		return getRequestContext(request).getCurrentPageId();
+		return (int) getRequestContext(request).getCurrentPageId().getLeastSignificantBits();
 	}
 
 	@Deprecated
 	public static void setCurrentPageId(final Integer pageId, final ServletRequest request) {
-		getContext(request).setCurrentPageId(pageId);
+		getContext(request).setCurrentPageId(new UUID(0, pageId));
 	}
 
 	@Deprecated

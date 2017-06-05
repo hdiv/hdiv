@@ -15,6 +15,8 @@
  */
 package org.hdiv.state;
 
+import java.util.UUID;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hdiv.config.HDIVConfig;
@@ -62,11 +64,11 @@ public class StateUtil {
 		log.debug("StateUtil instance created.");
 	}
 
-	public int getPageId(final String requestState) {
+	public UUID getPageId(final String requestState) {
 		// Obtain State from a StateScopes
 		StateScope stateScope = stateScopeManager.getStateScope(requestState);
 		if (stateScope != null) {
-			return 0;
+			return null;
 		}
 		return HDIVStateUtils.getPageId(requestState);
 	}
@@ -143,21 +145,12 @@ public class StateUtil {
 			return restoredState;
 		}
 
-		// Obtain State from a Session
-		int pageId;
-		try {
-			pageId = Integer.parseInt(pId);
-		}
-		catch (NumberFormatException e) {
-			throw new HDIVException(HDIVErrorCodes.INVALID_HDIV_PARAMETER_VALUE, e);
-		}
-
-		restoredState = getStateFromSession(context, pageId, stateId);
+		restoredState = getStateFromSession(context, HDIVStateUtils.parsePageId(pId), stateId);
 		return restoredState;
 	}
 
 	@Deprecated
-	protected IState getStateFromSession(final RequestContext context, final int pageId, final int stateId) {
+	protected IState getStateFromSession(final RequestContext context, final UUID pageId, final int stateId) {
 		return getStateFromSession((RequestContextHolder) context, pageId, stateId);
 	}
 
@@ -169,7 +162,7 @@ public class StateUtil {
 	 * @param stateId current {@link IState} id
 	 * @return State with all the page data.
 	 */
-	protected IState getStateFromSession(final RequestContextHolder context, final int pageId, final int stateId) {
+	protected IState getStateFromSession(final RequestContextHolder context, final UUID pageId, final int stateId) {
 
 		final IState sessionState = session.getState(context, pageId, stateId);
 
