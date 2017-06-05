@@ -60,7 +60,7 @@ public final class HDIVStateUtils {
 	public static UUID parsePageId(final String pageId) {
 		try {
 			if (pageId.startsWith("U")) {
-				return new UUID(Long.parseUnsignedLong(pageId.substring(1, 17), 16), Long.parseUnsignedLong(pageId.substring(17, 33), 16));
+				return new UUID(Long.parseLong(pageId.substring(1, 17), 16), Long.parseLong(pageId.substring(17, 33), 16));
 			}
 			else {
 				return new UUID(0, Long.parseLong(pageId));
