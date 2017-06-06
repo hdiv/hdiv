@@ -34,6 +34,7 @@ import org.hdiv.config.multipart.exception.HdivMultipartException;
 import org.hdiv.context.RequestContextFactory;
 import org.hdiv.context.RequestContextHolder;
 import org.hdiv.exception.HDIVException;
+import org.hdiv.exception.SharedHdivException;
 import org.hdiv.init.RequestInitializer;
 import org.hdiv.logs.IUserData;
 import org.hdiv.logs.Logger;
@@ -331,7 +332,18 @@ public class ValidatorFilter extends OncePerRequestFilter {
 	protected final void processRequest(final RequestContextHolder ctx, final HttpServletRequest requestWrapper,
 			final ResponseWrapper responseWrapper, final FilterChain filterChain, final String obfuscated)
 			throws IOException, ServletException {
-		validationHelper.startPage(ctx);
+		SharedHdivException ex = null;
+		try {
+			validationHelper.startPage(ctx);
+		}
+		catch (SharedHdivException e) {
+			if (hdivConfig.isDebugMode()) {
+				ex = e;
+			}
+			else {
+				throw e;
+			}
+		}
 		try {
 			if (obfuscated != null) {
 				requestWrapper.getRequestDispatcher(obfuscated).forward(requestWrapper, responseWrapper);
@@ -339,9 +351,13 @@ public class ValidatorFilter extends OncePerRequestFilter {
 			else {
 				filterChain.doFilter(requestWrapper, responseWrapper);
 			}
+
 		}
 		finally {
 			validationHelper.endPage(ctx);
+		}
+		if (ex != null) {
+			throw new HDIVException("Wrapped exception on debug", ex);
 		}
 	}
 

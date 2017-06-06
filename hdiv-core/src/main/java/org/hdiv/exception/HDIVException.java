@@ -20,7 +20,7 @@ package org.hdiv.exception;
  *
  * @author Roberto Velasco
  */
-public class HDIVException extends RuntimeException {
+public class HDIVException extends SharedHdivException {
 
 	/**
 	 * Universal version identifier. Deserialization uses this number to ensure that a loaded class corresponds exactly to a serialized

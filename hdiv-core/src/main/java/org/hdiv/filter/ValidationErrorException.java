@@ -15,7 +15,9 @@
  */
 package org.hdiv.filter;
 
-public class ValidationErrorException extends RuntimeException {
+import org.hdiv.exception.SharedHdivException;
+
+public class ValidationErrorException extends SharedHdivException {
 
 	/**
 	 * 
