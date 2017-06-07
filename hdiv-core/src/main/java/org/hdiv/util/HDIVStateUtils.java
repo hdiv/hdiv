@@ -31,8 +31,9 @@ public final class HDIVStateUtils {
 
 	public static String encode(final UUID pageId, final int stateId, final String suffix) {
 		// 11-0-C1EF82C48A86DE9BB907F37454998CC3
-		return new StringBuilder(40).append(uuidToString(pageId)).append(Constants.STATE_ID_SEPARATOR).append(stateId)
-				.append(Constants.STATE_ID_SEPARATOR).append(suffix).toString();
+		StringBuilder sb = new StringBuilder(40);
+		uuidToString(sb, pageId);
+		return sb.append(Constants.STATE_ID_SEPARATOR).append(stateId).append(Constants.STATE_ID_SEPARATOR).append(suffix).toString();
 	}
 
 	public static UUID getPageId(final String stateId) {
@@ -54,6 +55,15 @@ public final class HDIVStateUtils {
 		}
 		else {
 			return "U" + FastUUID.asHex(id.getMostSignificantBits(), id.getLeastSignificantBits());
+		}
+	}
+
+	public static void uuidToString(final StringBuilder sb, final UUID id) {
+		if (id.getMostSignificantBits() == 0) {
+			sb.append(id.getLeastSignificantBits());
+		}
+		else {
+			sb.append('U').append(FastUUID.asHexChars(id.getMostSignificantBits(), id.getLeastSignificantBits()));
 		}
 	}
 

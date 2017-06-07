@@ -42,6 +42,10 @@ public class FastUUID {
 	private static final Random random = new CustomRandom(new SecureRandom().nextLong());
 
 	public static String asHex(final long mostSignificant, final long lestSignificant) {
+		return new String(asHexChars(mostSignificant, lestSignificant));
+	}
+
+	public static char[] asHexChars(final long mostSignificant, final long lestSignificant) {
 		char[] hexChars = new char[32];
 		long l = mostSignificant;
 		for (int i = 0; i < 8; i++) {
@@ -58,7 +62,7 @@ public class FastUUID {
 			hexChars[31 - 2 * i] = BYTE2HEX[v + 1];
 			l >>= 8;
 		}
-		return new String(hexChars);
+		return hexChars;
 	}
 
 	/**
