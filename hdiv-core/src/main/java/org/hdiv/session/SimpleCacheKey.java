@@ -15,6 +15,7 @@
  */
 package org.hdiv.session;
 
+import java.lang.ref.WeakReference;
 import java.util.UUID;
 
 import org.hdiv.context.RequestContextHolder;
@@ -26,12 +27,12 @@ import org.hdiv.context.RequestContextHolder;
  */
 public class SimpleCacheKey {
 
-	private RequestContextHolder context;
+	private WeakReference<RequestContextHolder> context;
 
 	protected final UUID pageId;
 
 	public SimpleCacheKey(final RequestContextHolder context, final UUID pageId) {
-		this.context = context;
+		this.context = new WeakReference<RequestContextHolder>(context);
 		this.pageId = pageId;
 	}
 
@@ -40,7 +41,7 @@ public class SimpleCacheKey {
 	}
 
 	public RequestContextHolder getRequestContext() {
-		return context;
+		return context.get();
 	}
 
 	public UUID getPageId() {
