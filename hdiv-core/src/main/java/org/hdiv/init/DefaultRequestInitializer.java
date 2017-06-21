@@ -15,6 +15,8 @@
  */
 package org.hdiv.init;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.hdiv.config.HDIVConfig;
 import org.hdiv.context.RequestContext;
 import org.hdiv.context.RequestContextHolder;
@@ -29,24 +31,33 @@ import org.hdiv.session.ISession;
  * @author Gotzon Illarramendi
  * @since 2.1.5
  */
-public class DefaultRequestInitializer implements RequestInitializer {
-
-	/**
-	 * HDIV configuration object
-	 */
-	protected HDIVConfig config;
+public class DefaultRequestInitializer extends HdivParameterInitializer implements RequestInitializer {
 
 	/**
 	 * Session object manager.
 	 */
 	protected ISession session;
 
+	private static final Log log = LogFactory.getLog(DefaultRequestInitializer.class);
+
 	public void initRequest(final RequestContextHolder context) {
 		RequestContext ctx = (RequestContext) context;
 		// Store session scoped data into request
 
-		ctx.setHdivParameterName(session.getAttribute(context, DefaultSessionInitializer.HDIV_PARAMETER));
-		ctx.setHdivModifyParameterName(session.getAttribute(context, DefaultSessionInitializer.MODIFY_STATE_HDIV_PARAMETER));
+		ctx.setHdivParameterName(getDefault(context, DefaultSessionInitializer.HDIV_PARAMETER, getHdivParameter()));
+		ctx.setHdivModifyParameterName(
+				getDefault(context, DefaultSessionInitializer.MODIFY_STATE_HDIV_PARAMETER, getModifyHdivParameter()));
+	}
+
+	private String getDefault(final RequestContextHolder context, final String parameter, final String defaultValue) {
+		String value = session.getAttribute(context, parameter);
+		if (value == null) {
+			log.error("HttpSession does not contain HDIV state name, this should never happen!!!");
+			log.error("Restoring the value in the request, validation errors may appear");
+			session.setAttribute(context, parameter, defaultValue);
+			value = defaultValue;
+		}
+		return value;
 	}
 
 	public void endRequest(final RequestContextHolder context) {
