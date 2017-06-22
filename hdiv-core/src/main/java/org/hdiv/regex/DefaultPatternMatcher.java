@@ -18,6 +18,9 @@ package org.hdiv.regex;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 /**
  * {@link PatternMatcher} implementation based on java {@link Pattern}.
  *
@@ -26,6 +29,8 @@ import java.util.regex.Pattern;
 public class DefaultPatternMatcher implements PatternMatcher {
 
 	private static final long serialVersionUID = 1L;
+
+	private static final Log log = LogFactory.getLog(DefaultPatternMatcher.class);
 
 	/**
 	 * Original regular expression
@@ -58,9 +63,14 @@ public class DefaultPatternMatcher implements PatternMatcher {
 	}
 
 	protected boolean execPattern(final String input) {
-
 		Matcher matcher = pattern.matcher(input);
-		return matcher.matches();
+		try {
+			return matcher.matches();
+		}
+		catch (Throwable e) {
+			log.error("Error matching pattern " + matcher.toString() + " with value " + input, e);
+		}
+		return false;
 	}
 
 	public String getPattern() {
@@ -76,7 +86,7 @@ public class DefaultPatternMatcher implements PatternMatcher {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((regex == null) ? 0 : regex.hashCode());
+		result = prime * result + (regex == null ? 0 : regex.hashCode());
 		return result;
 	}
 
