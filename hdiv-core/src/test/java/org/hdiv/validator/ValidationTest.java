@@ -19,6 +19,7 @@ import org.hdiv.AbstractHDIVTestCase;
 
 public class ValidationTest extends AbstractHDIVTestCase {
 
+	@Override
 	protected void onSetUp() throws Exception {
 	}
 
@@ -38,6 +39,44 @@ public class ValidationTest extends AbstractHDIVTestCase {
 		result = validation.validate("param", new String[] { "safetext" }, "othertype");
 		assertTrue(result);
 
+	}
+
+	public void testStackOverflow() {
+
+		Validation validation = new Validation();
+		validation.setName("example");
+		validation.setComponentType("text");
+		validation.setAcceptedPattern("(\\d\\*?(;(?=\\d))?)+");
+
+		StringBuilder builder = new StringBuilder();
+		int number = 123456;
+		for (int count = 1; count <= 300; count++) {
+			builder.append(Integer.toString(number)).append(";");
+			number++;
+		}
+		builder.deleteCharAt(builder.length() - 1);
+
+		boolean result = validation.validate("param", new String[] { builder.toString() }, "text");
+		assertTrue(result);
+
+	}
+
+	public void testStackOverflowXSSRule() {
+
+		Validation validation = new Validation();
+		validation.setName("example");
+		validation.setComponentType("text");
+		validation.setRejectedPattern("(\\s|\\S)*((%65)|e)(\\s)*((%76)|v)(\\s)*((%61)|a)(\\s)*((%6C)|l)(\\s)*(\\()(\\s|\\S)*");
+
+		StringBuilder builder = new StringBuilder("eva");
+		int number = 1;
+		for (int count = 1; count <= 345; count++) {
+			builder.append(Integer.toString(number)).append(";");
+			number++;
+		}
+
+		boolean result = validation.validate("param", new String[] { builder.toString() }, "text");
+		assertTrue(result);
 	}
 
 }
