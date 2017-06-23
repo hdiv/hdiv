@@ -20,7 +20,6 @@ import javax.servlet.http.HttpSession;
 import org.hdiv.config.HDIVConfig;
 import org.hdiv.idGenerator.PageIdGenerator;
 import org.hdiv.util.Constants;
-import org.hdiv.util.HDIVUtil;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
@@ -31,9 +30,7 @@ import org.springframework.context.ApplicationContextAware;
  * 
  * @since 2.1.10
  */
-public class DefaultSessionInitializer implements SessionInitializer, ApplicationContextAware {
-
-	protected HDIVConfig config;
+public class DefaultSessionInitializer extends HdivParameterInitializer implements SessionInitializer, ApplicationContextAware {
 
 	protected ApplicationContext applicationContext;
 
@@ -77,21 +74,8 @@ public class DefaultSessionInitializer implements SessionInitializer, Applicatio
 	 */
 	@SuppressWarnings("deprecation")
 	protected void initStateParameterNames(final HttpSession httpSession) {
-
-		String hdivParameterName;
-		String modifyHdivStateParameterName;
-
-		if (config.isRandomName()) {
-			hdivParameterName = HDIVUtil.createRandomToken(Integer.MAX_VALUE);
-			modifyHdivStateParameterName = HDIVUtil.createRandomToken(Integer.MAX_VALUE);
-		}
-		else {
-			hdivParameterName = config.getStateParameterName();
-			modifyHdivStateParameterName = config.getModifyStateParameterName();
-		}
-
-		httpSession.setAttribute(Constants.HDIV_PARAMETER, hdivParameterName);
-		httpSession.setAttribute(Constants.MODIFY_STATE_HDIV_PARAMETER, modifyHdivStateParameterName);
+		httpSession.setAttribute(Constants.HDIV_PARAMETER, getHdivParameter());
+		httpSession.setAttribute(Constants.MODIFY_STATE_HDIV_PARAMETER, getModifyHdivParameter());
 	}
 
 	public void setApplicationContext(final ApplicationContext applicationContext) {

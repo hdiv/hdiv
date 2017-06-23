@@ -18,6 +18,8 @@ package org.hdiv.init;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.hdiv.config.HDIVConfig;
 import org.hdiv.context.RequestContext;
 import org.hdiv.filter.RequestWrapper;
@@ -32,12 +34,9 @@ import org.hdiv.util.HDIVUtil;
  * @author Gotzon Illarramendi
  * @since 2.1.5
  */
-public class DefaultRequestInitializer implements RequestInitializer {
+public class DefaultRequestInitializer extends HdivParameterInitializer implements RequestInitializer {
 
-	/**
-	 * HDIV configuration object
-	 */
-	protected HDIVConfig config;
+	private static final Log log = LogFactory.getLog(DefaultRequestInitializer.class);
 
 	/**
 	 * Session object manager.
@@ -49,16 +48,24 @@ public class DefaultRequestInitializer implements RequestInitializer {
 
 		RequestContext context = new RequestContext(request);
 
-		// Store session scoped data into request
-
-		String stateParameterName = session.getAttribute(context, Constants.HDIV_PARAMETER);
-		String modifyStateParameterName = session.getAttribute(context, Constants.MODIFY_STATE_HDIV_PARAMETER);
-
-		HDIVUtil.setHdivStateParameterName(request, stateParameterName);
-		HDIVUtil.setModifyHdivStateParameterName(request, modifyStateParameterName);
+		HDIVUtil.setHdivStateParameterName(request, getDefault(context, Constants.HDIV_PARAMETER, getHdivParameter()));
+		HDIVUtil.setModifyHdivStateParameterName(request,
+				getDefault(context, Constants.MODIFY_STATE_HDIV_PARAMETER, getModifyHdivParameter()));
 
 		// Store request original request uri
 		HDIVUtil.setRequestURI(request.getRequestURI(), request);
+
+	}
+
+	private String getDefault(final RequestContext context, final String parameter, final String defaultValue) {
+		String value = session.getAttribute(context, parameter);
+		if (value == null) {
+			log.error("HttpSession does not contain HDIV state name, this should never happen!!!");
+			log.error("Restoring the value in the request, validation errors may appear");
+			session.setAttribute(context, parameter, defaultValue);
+			value = defaultValue;
+		}
+		return value;
 	}
 
 	public void endRequest(final HttpServletRequest request, final HttpServletResponse response) {
