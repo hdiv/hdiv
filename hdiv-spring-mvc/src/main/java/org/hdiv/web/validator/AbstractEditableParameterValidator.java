@@ -17,7 +17,6 @@ package org.hdiv.web.validator;
 
 import java.util.List;
 
-import org.apache.commons.lang3.StringEscapeUtils;
 import org.hdiv.filter.ValidatorError;
 import org.hdiv.util.Constants;
 import org.springframework.validation.Errors;
@@ -121,7 +120,62 @@ public abstract class AbstractEditableParameterValidator {
 				break;
 			}
 		}
-		return StringEscapeUtils.escapeHtml4(printedValue.toString());
+		return escapeHtml(printedValue.toString());
+	}
+
+	/**
+	 * Escapes special HTML characters. Replaces the characters &lt;, &gt;, &amp;, ' and " by their corresponding HTML/XML character entity
+	 * codes.
+	 * @param s the input string.
+	 * @return the escaped output string.
+	 */
+	private static String escapeHtml(final String s) {
+		// (The code of this method is a bit redundant in order to optimize speed)
+		if (s == null) {
+			return null;
+		}
+		int sLength = s.length();
+		boolean found = false;
+		int p;
+		loop1: for (p = 0; p < sLength; p++) {
+			switch (s.charAt(p)) {
+			case '<':
+			case '>':
+			case '&':
+			case '\'':
+			case '"':
+				found = true;
+				break loop1;
+			}
+		}
+		if (!found) {
+			return s;
+		}
+		StringBuilder sb = new StringBuilder(sLength + 16);
+		sb.append(s.substring(0, p));
+		for (; p < sLength; p++) {
+			char c = s.charAt(p);
+			switch (c) {
+			case '<':
+				sb.append("&lt;");
+				break;
+			case '>':
+				sb.append("&gt;");
+				break;
+			case '&':
+				sb.append("&amp;");
+				break;
+			case '\'':
+				sb.append("&#39;");
+				break;
+			case '"':
+				sb.append("&#34;");
+				break;
+			default:
+				sb.append(c);
+			}
+		}
+		return sb.toString();
 	}
 
 }
