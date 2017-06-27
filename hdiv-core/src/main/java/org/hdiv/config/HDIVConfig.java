@@ -220,15 +220,19 @@ public class HDIVConfig implements Serializable {
 	 * @return True if <code>target</code> is an init action. False otherwise.
 	 */
 	public boolean isStartPage(final String target, final Method method) {
+		return getStartPage(target, method) != null;
+	}
+
+	public StartPage getStartPage(final String target, final Method method) {
 		for (int i = 0; i < startPages.length; i++) {
 			StartPage startPage = startPages[i];
 			PatternMatcher m = startPage.compiledPattern;
 
 			if (m.matches(target) && (startPage.isAnyMethod() || startPage.method == method)) {
-				return true;
+				return startPage;
 			}
 		}
-		return false;
+		return null;
 	}
 
 	public boolean hasExtensionToExclude(String path) {
