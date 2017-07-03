@@ -18,6 +18,9 @@ package org.hdiv.validator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 /**
  * Editable data (text/textarea) validation definition.
  *
@@ -27,6 +30,8 @@ import java.util.regex.Pattern;
 public class Validation implements IValidation {
 
 	private static final long serialVersionUID = 1L;
+
+	private static final Log log = LogFactory.getLog(Validation.class);
 
 	/**
 	 * Name of the editable validation.
@@ -109,17 +114,25 @@ public class Validation implements IValidation {
 			}
 
 			if (acceptedPattern != null) {
-
-				Matcher m = acceptedPattern.matcher(value);
-				if (!m.matches()) {
-					return false;
+				try {
+					Matcher m = acceptedPattern.matcher(value);
+					if (!m.matches()) {
+						return false;
+					}
+				}
+				catch (Throwable e) {
+					log.error("Error matching pattern " + acceptedPattern.toString() + " with value " + value, e);
 				}
 			}
 			if (rejectedPattern != null) {
-
-				Matcher m = rejectedPattern.matcher(value);
-				if (m.matches()) {
-					return false;
+				try {
+					Matcher m = rejectedPattern.matcher(value);
+					if (m.matches()) {
+						return false;
+					}
+				}
+				catch (Throwable e) {
+					log.error("Error matching pattern " + rejectedPattern.toString() + " with value " + value, e);
 				}
 			}
 		}

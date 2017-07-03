@@ -4,7 +4,7 @@
 	<parent>
 		<artifactId>hdiv</artifactId>
 		<groupId>org.hdiv</groupId>
-		<version>3.3.1</version>
+		<version>3.3.2-SNAPSHOT</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>hdiv-struts-1</artifactId>
@@ -25,7 +25,6 @@
 			<version>2.3</version>
 			<scope>provided</scope>
 		</dependency>
-
 		<dependency>
 			<groupId>org.apache.struts</groupId>
 			<artifactId>struts-core</artifactId>

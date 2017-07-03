@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>org.hdiv</groupId>
 		<artifactId>hdiv</artifactId>
-		<version>3.3.1</version>
+		<version>3.3.2-SNAPSHOT</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>hdiv-core</artifactId>
@@ -65,7 +65,7 @@
 		<dependency>
 			<groupId>commons-fileupload</groupId>
 			<artifactId>commons-fileupload</artifactId>
-			<version>1.3.1</version>
+			<version>${commons.fileupload.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>javax.servlet</groupId>
