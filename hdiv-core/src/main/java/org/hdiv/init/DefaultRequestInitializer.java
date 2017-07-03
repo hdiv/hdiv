@@ -43,18 +43,24 @@ public class DefaultRequestInitializer extends HdivParameterInitializer implemen
 	public void initRequest(final RequestContextHolder context) {
 		RequestContext ctx = (RequestContext) context;
 		// Store session scoped data into request
-
-		ctx.setHdivParameterName(getDefault(context, DefaultSessionInitializer.HDIV_PARAMETER, getHdivParameter()));
-		ctx.setHdivModifyParameterName(
-				getDefault(context, DefaultSessionInitializer.MODIFY_STATE_HDIV_PARAMETER, getModifyHdivParameter()));
+		ctx.setHdivParameterName(getValue(context, DefaultSessionInitializer.HDIV_PARAMETER));
+		ctx.setHdivModifyParameterName(getValue(context, DefaultSessionInitializer.MODIFY_STATE_HDIV_PARAMETER));
 	}
 
-	private String getDefault(final RequestContextHolder context, final String parameter, final String defaultValue) {
-		String value = session.getAttribute(context, parameter);
+	private String getValue(final RequestContextHolder context, final String attr) {
+		String value = session.getAttribute(context, attr);
 		if (value == null) {
 			log.error("HttpSession does not contain HDIV state name, this should never happen!!!");
 			log.error("Restoring the value in the request, validation errors may appear");
-			session.setAttribute(context, parameter, defaultValue);
+
+			String defaultValue = null;
+			if (DefaultSessionInitializer.HDIV_PARAMETER.equals(attr)) {
+				defaultValue = getHdivParameter();
+			}
+			else if (DefaultSessionInitializer.MODIFY_STATE_HDIV_PARAMETER.equals(attr)) {
+				defaultValue = getModifyHdivParameter();
+			}
+			session.setAttribute(context, attr, defaultValue);
 			value = defaultValue;
 		}
 		return value;
