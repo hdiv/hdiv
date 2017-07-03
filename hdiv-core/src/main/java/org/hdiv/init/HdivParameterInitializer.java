@@ -26,7 +26,6 @@ public class HdivParameterInitializer {
 	protected HDIVConfig config;
 
 	public HdivParameterInitializer() {
-		// TODO Auto-generated constructor stub
 	}
 
 	protected String getHdivParameter() {
