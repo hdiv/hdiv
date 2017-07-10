@@ -99,4 +99,11 @@ public interface ActionDescriptor<T extends ActionInputParameter> {
 	 * @return
 	 */
 	Collection<T> getBodyParameters();
+
+	/**
+	 * Return ActionInputParamter for a json request parameter
+	 * @param paramName
+	 * @return
+	 */
+	Map<String, T> getJsonRequestParameters(String paramName);
 }
