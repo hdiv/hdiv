@@ -22,11 +22,11 @@ import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.BodyTagSupport;
 
-import org.apache.taglibs.standard.tag.common.core.ImportSupport;
 import org.apache.taglibs.standard.tag.common.core.ParamParent;
 import org.apache.taglibs.standard.tag.common.core.ParamSupport;
 import org.apache.taglibs.standard.tag.common.core.UrlSupport;
 import org.apache.taglibs.standard.tag.common.core.Util;
+import org.hdiv.taglibs.standard.util.UrlUtil;
 import org.hdiv.urlProcessor.LinkUrlProcessor;
 import org.hdiv.util.HDIVUtil;
 
@@ -77,21 +77,22 @@ public abstract class RedirectSupportHDIV extends BodyTagSupport implements Para
 		scope = PageContext.PAGE_SCOPE;
 	}
 
-	public void setVar(String var) {
+	public void setVar(final String var) {
 		this.var = var;
 	}
 
-	public void setScope(String scope) {
+	public void setScope(final String scope) {
 		this.scope = Util.getScope(scope);
 	}
 
-	public void addParameter(String name, String value) {
+	public void addParameter(final String name, final String value) {
 		params.addParameter(name, value);
 	}
 
 	/**
 	 * resets any parameters that might be sent
 	 */
+	@Override
 	public int doStartTag() throws JspException {
 
 		params = new ParamSupport.ParamManager();
@@ -101,6 +102,7 @@ public abstract class RedirectSupportHDIV extends BodyTagSupport implements Para
 	/**
 	 * Gets the right value, encodes it, and prints or stores it
 	 */
+	@Override
 	public int doEndTag() throws JspException {
 
 		String result; // the eventual result
@@ -111,7 +113,7 @@ public abstract class RedirectSupportHDIV extends BodyTagSupport implements Para
 
 		// if the URL is relative, rewrite it with 'redirect' encoding rules
 		HttpServletResponse response = ((HttpServletResponse) pageContext.getResponse());
-		if (!ImportSupport.isAbsoluteUrl(result)) {
+		if (!UrlUtil.isAbsoluteUrl(result)) {
 			result = response.encodeRedirectURL(result);
 		}
 
@@ -133,6 +135,7 @@ public abstract class RedirectSupportHDIV extends BodyTagSupport implements Para
 	/**
 	 * Releases any resources we may have (or inherit)
 	 */
+	@Override
 	public void release() {
 		init();
 	}

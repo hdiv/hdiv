@@ -90,7 +90,6 @@
 
 	<build>
 		<plugins>
-
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
@@ -182,7 +181,6 @@
 								</configuration>
 							</execution>
 						</executions>
-
 					</plugin>
 					<plugin>
 						<groupId>com.google.code.maven-replacer-plugin</groupId>
@@ -217,8 +215,6 @@
 												public static String
 												stripAndFillSessionData</value>
 										</replacement>
-
-
 										<replacement>
 											<token>logger\.debug</token>
 											<value>org.hdiv.util.HDIVUtil.println</value>
@@ -292,10 +288,8 @@
 								</configuration> </execution -->
 						</executions>
 					</plugin>
-
 				</plugins>
 			</build>
 		</profile>
-
 	</profiles>
 </project>
