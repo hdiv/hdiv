@@ -2,6 +2,10 @@ HDIV CHANGELOG
 ==============
 http://www.hdiv.org
 
+Release 3.3.2
+==================================
+ * Fix missing 'hdivFormStateId' attribute in request scope
+
 Release 3.3.1
 ==================================
  * Allow Hdiv to run in a auto-contained context (without WebApplicationContext)
