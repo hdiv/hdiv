@@ -23,10 +23,10 @@ import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.BodyTagSupport;
 
 import org.apache.taglibs.standard.resources.Resources;
-import org.apache.taglibs.standard.tag.common.core.ImportSupport;
 import org.apache.taglibs.standard.tag.common.core.ParamParent;
 import org.apache.taglibs.standard.tag.common.core.ParamSupport;
 import org.apache.taglibs.standard.tag.common.core.Util;
+import org.hdiv.taglibs.standard.util.UrlUtil;
 import org.hdiv.urlProcessor.LinkUrlProcessor;
 import org.hdiv.util.HDIVUtil;
 
@@ -70,13 +70,14 @@ public abstract class UrlSupportHDIV extends BodyTagSupport implements ParamPare
 		scope = PageContext.PAGE_SCOPE;
 	}
 
-	public void addParameter(String name, String value) {
+	public void addParameter(final String name, final String value) {
 		params.addParameter(name, value);
 	}
 
 	/**
 	 * Resets any parameters that might be sent
 	 */
+	@Override
 	public int doStartTag() throws JspException {
 		params = new ParamSupport.ParamManager();
 		return EVAL_BODY_BUFFERED;
@@ -85,6 +86,7 @@ public abstract class UrlSupportHDIV extends BodyTagSupport implements ParamPare
 	/**
 	 * Gets the right value, encodes it, and prints or stores it
 	 */
+	@Override
 	public int doEndTag() throws JspException {
 
 		String result; // the eventual result
@@ -94,7 +96,7 @@ public abstract class UrlSupportHDIV extends BodyTagSupport implements ParamPare
 		result = params.aggregateParams(baseUrl);
 
 		// if the URL is relative, rewrite it
-		if (!ImportSupport.isAbsoluteUrl(result)) {
+		if (!UrlUtil.isAbsoluteUrl(result)) {
 			HttpServletResponse response = ((HttpServletResponse) pageContext.getResponse());
 			result = response.encodeURL(result);
 		}
@@ -104,8 +106,9 @@ public abstract class UrlSupportHDIV extends BodyTagSupport implements ParamPare
 		result = linkUrlProcessor.processUrl((HttpServletRequest) pageContext.getRequest(), result);
 
 		// store or print the output
-		if (var != null)
+		if (var != null) {
 			pageContext.setAttribute(var, result, scope);
+		}
 		else {
 			try {
 				pageContext.getOut().print(result);
@@ -121,23 +124,27 @@ public abstract class UrlSupportHDIV extends BodyTagSupport implements ParamPare
 	/**
 	 * Releases any resources we may have (or inherit)
 	 */
+	@Override
 	public void release() {
 		init();
 	}
 
-	public static String resolveUrl(String url, String context, PageContext pageContext) throws JspException {
+	public static String resolveUrl(final String url, final String context, final PageContext pageContext) throws JspException {
 
 		// don't touch absolute URLs
-		if (ImportSupport.isAbsoluteUrl(url))
+		if (UrlUtil.isAbsoluteUrl(url)) {
 			return url;
+		}
 
 		// normalize relative URLs against a context root
 		HttpServletRequest request = (HttpServletRequest) pageContext.getRequest();
 		if (context == null) {
-			if (url.startsWith("/"))
+			if (url.startsWith("/")) {
 				return (request.getContextPath() + url);
-			else
+			}
+			else {
 				return url;
+			}
 		}
 		else {
 			if (!context.startsWith("/") || !url.startsWith("/")) {
@@ -155,11 +162,11 @@ public abstract class UrlSupportHDIV extends BodyTagSupport implements ParamPare
 		}
 	}
 
-	public void setVar(String var) {
+	public void setVar(final String var) {
 		this.var = var;
 	}
 
-	public void setScope(String scope) {
+	public void setScope(final String scope) {
 		this.scope = Util.getScope(scope);
 	}
 

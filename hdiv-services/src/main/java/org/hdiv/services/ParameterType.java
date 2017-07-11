@@ -16,5 +16,5 @@
 package org.hdiv.services;
 
 public enum ParameterType {
-	INPUT, SELECT, UNKNOWN
+	INPUT, SELECT, JSON, UNKNOWN
 }
