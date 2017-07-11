@@ -242,6 +242,7 @@ public class RequestContext implements RequestContextHolder {
 
 	public void setFormStateId(final String formStateId) {
 		this.formStateId = formStateId;
+		request.setAttribute(Constants.FORM_STATE_ID, formStateId);
 	}
 
 	public Enumeration<String> getParameterNames() {

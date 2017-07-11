@@ -79,7 +79,15 @@ public class Constants {
 	@Deprecated
 	public static final String HDIV_REQUEST_CONTEXT = "HdivRC";
 
+	/**
+	 * Constant for UTF-8 encoding name
+	 */
 	public static final String ENCODING_UTF_8 = "UTF-8";
+
+	/**
+	 * Request attribute name that contains the state id of the last rendered form.
+	 */
+	public static final String FORM_STATE_ID = "hdivFormStateId";
 
 	/**
 	 * Properties key that contains the error message to be shown when the value of the editable parameter is not valid. Only used for
