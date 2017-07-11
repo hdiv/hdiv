@@ -33,8 +33,6 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.hdiv.config.HDIVConfig;
 import org.hdiv.context.RequestContextHolder;
 import org.hdiv.dataComposer.DataComposerFactory;
@@ -57,6 +55,8 @@ import org.hdiv.util.HDIVStateUtils;
 import org.hdiv.util.HDIVUtil;
 import org.hdiv.util.Method;
 import org.hdiv.validator.EditableDataValidationResult;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.util.HtmlUtils;
 
 /**
@@ -75,7 +75,7 @@ public class ValidatorHelperRequest implements IValidationHelper, StateRestorer 
 	/**
 	 * Commons Logging instance.
 	 */
-	private static final Log log = LogFactory.getLog(ValidatorHelperRequest.class);
+	private static final Logger log = LoggerFactory.getLogger(ValidatorHelperRequest.class);
 
 	/**
 	 * HDIV configuration object.

@@ -18,12 +18,11 @@ package org.hdiv.taglib.html;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.JspException;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.struts.taglib.TagUtils;
 import org.apache.struts.taglib.html.HiddenTag;
 import org.hdiv.dataComposer.IDataComposer;
 import org.hdiv.util.HDIVUtil;
+import org.slf4j.LoggerFactory;
 
 /**
  * Renders an HTML <b>&lt;input&gt;</b> element of type hidden, populated from the specified value or the specified property of the bean
@@ -43,7 +42,7 @@ public class HiddenTagHDIV extends HiddenTag {
 	/**
 	 * Commons logging instance
 	 */
-	private static final Log log = LogFactory.getLog(HiddenTagHDIV.class);
+	private static final org.slf4j.Logger log = LoggerFactory.getLogger(HiddenTagHDIV.class);
 
 	/**
 	 * Generated encoded value by HDIV composer
@@ -81,7 +80,7 @@ public class HiddenTagHDIV extends HiddenTag {
 
 			// Is rendering the value separately requested?
 			if (!write) {
-				return (EVAL_BODY_TAG);
+				return EVAL_BODY_TAG;
 			}
 
 			// Calculate the value to be rendered separately
@@ -101,7 +100,7 @@ public class HiddenTagHDIV extends HiddenTag {
 
 			// Render the result to the output writer
 			TagUtils.getInstance().write(pageContext, results);
-			return (EVAL_BODY_TAG);
+			return EVAL_BODY_TAG;
 
 		}
 		catch (JspException e) {

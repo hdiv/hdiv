@@ -28,8 +28,6 @@ import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 import javax.faces.context.PartialViewContext;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.hdiv.config.HDIVConfig;
 import org.hdiv.util.HDIVErrorCodes;
 import org.hdiv.util.Method;
@@ -40,12 +38,14 @@ import org.hdiv.validators.GenericComponentValidator;
 import org.hdiv.validators.HtmlInputHiddenValidator;
 import org.hdiv.validators.UICommandValidator;
 import org.hdiv.validators.UISelectValidator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class DefaultComponentTreeValidator implements ComponentTreeValidator {
 
 	private final static String FACELETS_COMPONENT_FAMILY = "facelets";
 
-	private static final Log log = LogFactory.getLog(DefaultComponentTreeValidator.class);
+	private static final Logger log = LoggerFactory.getLogger(DefaultComponentTreeValidator.class);
 
 	protected final List<ComponentValidator> componentValidators = new ArrayList<ComponentValidator>();
 

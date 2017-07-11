@@ -18,13 +18,13 @@ package org.hdiv.session;
 import java.util.List;
 import java.util.UUID;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.hdiv.AbstractHDIVTestCase;
 import org.hdiv.state.IPage;
 import org.hdiv.state.IState;
 import org.hdiv.state.Page;
 import org.hdiv.state.State;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Unit tests for the <code>org.hdiv.session.StateCache</code> class.
@@ -33,7 +33,7 @@ import org.hdiv.state.State;
  */
 public class StateCacheTest extends AbstractHDIVTestCase {
 
-	private static final Log log = LogFactory.getLog(StateCacheTest.class);
+	private static final Logger log = LoggerFactory.getLogger(StateCacheTest.class);
 
 	@Override
 	protected void onSetUp() throws Exception {

@@ -29,8 +29,8 @@ import javax.faces.component.UIOutcomeTarget;
 import javax.faces.component.UIParameter;
 import javax.faces.context.FacesContext;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * <p>
@@ -46,7 +46,7 @@ import org.apache.commons.logging.LogFactory;
  */
 public class OutcomeTargetComponentHelper {
 
-	private static final Log log = LogFactory.getLog(OutcomeTargetComponentHelper.class);
+	private static final Logger log = LoggerFactory.getLogger(OutcomeTargetComponentHelper.class);
 
 	protected static final Param[] EMPTY_PARAMS = new Param[0];
 

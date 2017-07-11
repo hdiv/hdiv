@@ -17,13 +17,13 @@ package org.hdiv.urlProcessor;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.hdiv.context.RequestContextHolder;
 import org.hdiv.dataComposer.IDataComposer;
 import org.hdiv.util.Constants;
 import org.hdiv.util.HDIVUtil;
 import org.hdiv.util.Method;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * UrlProcessor for link and redirect urls.
@@ -35,7 +35,7 @@ public class LinkUrlProcessor extends AbstractUrlProcessor {
 	/**
 	 * Commons Logging instance.
 	 */
-	private static final Log log = LogFactory.getLog(LinkUrlProcessor.class);
+	private static final Logger log = LoggerFactory.getLogger(LinkUrlProcessor.class);
 
 	@Deprecated
 	public final String processUrl(final HttpServletRequest request, final String url) {

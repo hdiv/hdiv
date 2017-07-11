@@ -26,8 +26,6 @@ import javax.faces.event.PhaseListener;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.hdiv.config.HDIVConfig;
 import org.hdiv.exception.HDIVException;
 import org.hdiv.state.DefaultStateManager;
@@ -35,6 +33,8 @@ import org.hdiv.state.StateManager;
 import org.hdiv.util.ConstantsJsf;
 import org.hdiv.util.HDIVUtil;
 import org.hdiv.util.UtilsJsf;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * PhaseListener that takes care of HDIV configuration, mostly objects that are stored in application context.
@@ -45,7 +45,7 @@ public class ConfigPhaseListener implements PhaseListener {
 
 	private static final long serialVersionUID = -3803869221110488120L;
 
-	private static final Log log = LogFactory.getLog(ConfigPhaseListener.class);
+	private static final Logger log = LoggerFactory.getLogger(ConfigPhaseListener.class);
 
 	/**
 	 * Name of the attribute that contains the user token

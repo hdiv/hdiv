@@ -22,11 +22,11 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.hdiv.init.ServletContextInitializer;
 import org.hdiv.init.SessionInitializer;
 import org.hdiv.util.HDIVUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
@@ -43,7 +43,7 @@ public class InitListener implements ServletContextListener, HttpSessionListener
 	/**
 	 * Commons Logging instance.
 	 */
-	private static final Log log = LogFactory.getLog(InitListener.class);
+	private static final Logger log = LoggerFactory.getLogger(InitListener.class);
 
 	/**
 	 * Has servlet context been initialized?

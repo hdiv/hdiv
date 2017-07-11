@@ -29,8 +29,6 @@ import javax.servlet.ServletRequestWrapper;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.hdiv.application.IApplication;
 import org.hdiv.config.HDIVConfig;
 import org.hdiv.context.RequestContext;
@@ -42,6 +40,8 @@ import org.hdiv.urlProcessor.FormUrlProcessor;
 import org.hdiv.urlProcessor.LinkUrlProcessor;
 import org.hdiv.urlProcessor.UrlData;
 import org.hdiv.urlProcessor.UrlDataImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.MessageSource;
 import org.springframework.util.StringUtils;
@@ -65,7 +65,7 @@ public class HDIVUtil {
 	/**
 	 * Commons Logging instance.
 	 */
-	private static final Log log = LogFactory.getLog(HDIVUtil.class);
+	private static final Logger log = LoggerFactory.getLogger(HDIVUtil.class);
 
 	private static final String APPLICATION_SERVLETCONTEXT_KEY = "APPLICATION_SERVLETCONTEXT_KEY";
 

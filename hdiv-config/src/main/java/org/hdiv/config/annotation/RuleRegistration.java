@@ -17,9 +17,9 @@ package org.hdiv.config.annotation;
 
 import java.util.regex.Pattern;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.hdiv.validator.Validation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
 
 /**
@@ -29,7 +29,7 @@ import org.springframework.util.Assert;
  */
 public class RuleRegistration {
 
-	private static final Log log = LogFactory.getLog(RuleRegistration.class);
+	private static final Logger log = LoggerFactory.getLogger(RuleRegistration.class);
 
 	/**
 	 * Validation rule.

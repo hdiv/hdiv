@@ -26,8 +26,6 @@ import javax.faces.event.PhaseId;
 import javax.faces.event.PhaseListener;
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.hdiv.config.HDIVConfig;
 import org.hdiv.filter.ValidatorError;
 import org.hdiv.filter.ValidatorErrorHandler;
@@ -38,6 +36,7 @@ import org.hdiv.util.HDIVUtil;
 import org.hdiv.util.UtilsJsf;
 import org.hdiv.validation.ComponentTreeValidator;
 import org.hdiv.validation.FacesValidatorError;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.jsf.FacesContextUtils;
 
@@ -48,7 +47,7 @@ public class ValidatorPhaseListener implements PhaseListener {
 
 	private static final long serialVersionUID = -5951308353665763734L;
 
-	private static final Log log = LogFactory.getLog(ValidatorPhaseListener.class);
+	private static final org.slf4j.Logger log = LoggerFactory.getLogger(ValidatorPhaseListener.class);
 
 	private static final String VALIDATION_ERRORS_ATTR_NAME = "VALIDATION_ERRORS_ATTR_NAME";
 

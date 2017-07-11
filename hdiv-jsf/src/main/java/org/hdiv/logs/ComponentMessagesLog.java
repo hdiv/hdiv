@@ -27,12 +27,12 @@ import javax.faces.component.html.HtmlInputTextarea;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.hdiv.filter.ValidatorError;
 import org.hdiv.util.HDIVErrorCodes;
 import org.hdiv.util.HDIVUtil;
 import org.hdiv.util.UtilsJsf;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Class for logging messages found in the components that show any data modification by the user.
@@ -41,19 +41,19 @@ import org.hdiv.util.UtilsJsf;
  */
 public class ComponentMessagesLog {
 
-	private static final Log log = LogFactory.getLog(ComponentMessagesLog.class);
+	private static final Logger log = LoggerFactory.getLogger(ComponentMessagesLog.class);
 
 	/**
 	 * HDIV logger
 	 */
-	private final Logger logger;
+	private final org.hdiv.logs.Logger logger;
 
 	/**
 	 * Default constructor
 	 * 
 	 * @param logger Logger instance
 	 */
-	public ComponentMessagesLog(final Logger logger) {
+	public ComponentMessagesLog(final org.hdiv.logs.Logger logger) {
 		this.logger = logger;
 	}
 
@@ -97,12 +97,12 @@ public class ComponentMessagesLog {
 		// or HtmlInputSecret
 		if (clientComponent instanceof UIInput) {
 
-			boolean isTextEditable = (clientComponent instanceof HtmlInputText) || (clientComponent instanceof HtmlInputTextarea)
-					|| (clientComponent instanceof HtmlInputSecret);
+			boolean isTextEditable = clientComponent instanceof HtmlInputText || clientComponent instanceof HtmlInputTextarea
+					|| clientComponent instanceof HtmlInputSecret;
 			boolean isUISelectBoolean = clientComponent instanceof UISelectBoolean;
 
 			// If it is UISelectOne or UISelectMany:
-			if ((!isTextEditable) && (!isUISelectBoolean)) {
+			if (!isTextEditable && !isUISelectBoolean) {
 				// Check all messages from component
 				while (clientMessages.hasNext()) {
 					FacesMessage message = clientMessages.next();

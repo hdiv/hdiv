@@ -26,13 +26,13 @@ import java.util.Set;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.hdiv.util.UtilsJsf;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ValidationContext {
 
-	private static final Log log = LogFactory.getLog(ValidationContext.class);
+	private static final Logger log = LoggerFactory.getLogger(ValidationContext.class);
 
 	protected final FacesContext facesContext;
 

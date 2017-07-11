@@ -22,10 +22,10 @@ import java.util.Collections;
 import javax.faces.component.html.HtmlInputHidden;
 import javax.faces.context.FacesContext;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.hdiv.state.StateManager;
 import org.hdiv.util.ConstantsJsf;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * HtmlInputHidden component extension
@@ -34,7 +34,7 @@ import org.hdiv.util.ConstantsJsf;
  */
 public class HtmlInputHiddenExtension extends HtmlInputHidden {
 
-	private static final Log log = LogFactory.getLog(HtmlInputHiddenExtension.class);
+	private static final Logger log = LoggerFactory.getLogger(HtmlInputHiddenExtension.class);
 
 	/**
 	 * Obtains hidden real value which has been stored in the JSF state

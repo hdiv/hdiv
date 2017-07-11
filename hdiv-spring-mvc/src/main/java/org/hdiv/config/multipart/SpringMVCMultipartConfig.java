@@ -20,12 +20,12 @@ import java.util.Enumeration;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.hdiv.config.multipart.exception.HdivMultipartException;
 import org.hdiv.filter.RequestWrapper;
 import org.hdiv.web.multipart.HdivCommonsMultipartResolver;
 import org.hdiv.web.multipart.HdivStandardServletMultipartResolver;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
@@ -45,7 +45,7 @@ import org.springframework.web.util.WebUtils;
  */
 public class SpringMVCMultipartConfig implements IMultipartConfig {
 
-	private static final Log log = LogFactory.getLog(SpringMVCMultipartConfig.class);
+	private static final Logger log = LoggerFactory.getLogger(SpringMVCMultipartConfig.class);
 
 	private static final String MULTIPART_RESOLVER_BEAN_NAME = DispatcherServlet.MULTIPART_RESOLVER_BEAN_NAME;
 

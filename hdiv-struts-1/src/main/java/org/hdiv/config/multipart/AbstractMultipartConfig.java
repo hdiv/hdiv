@@ -22,9 +22,8 @@ import java.util.List;
 import javax.servlet.ServletContext;
 
 import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.hdiv.filter.RequestWrapper;
+import org.slf4j.LoggerFactory;
 
 /**
  * Class containing multipart request configuration and methods initialized from Spring Factory.
@@ -36,7 +35,7 @@ public abstract class AbstractMultipartConfig implements IMultipartConfig {
 	/**
 	 * Commons Logging instance.
 	 */
-	private static final Log log = LogFactory.getLog(AbstractMultipartConfig.class);
+	private static final org.slf4j.Logger log = LoggerFactory.getLogger(AbstractMultipartConfig.class);
 
 	/**
 	 * The default value for the maximum allowable size, in bytes, of an uploaded file. The value is equivalent to 2MB.
@@ -69,7 +68,7 @@ public abstract class AbstractMultipartConfig implements IMultipartConfig {
 	 * @param defaultSize The value to be returned if the string is invalid.
 	 * @return The actual size in bytes.
 	 */
-	public long convertSizeToBytes(String sizeString, long defaultSize) {
+	public long convertSizeToBytes(String sizeString, final long defaultSize) {
 
 		if (sizeString == null) {
 			return defaultSize;
@@ -99,7 +98,7 @@ public abstract class AbstractMultipartConfig implements IMultipartConfig {
 			multiplier = 1;
 		}
 
-		return (size * multiplier);
+		return size * multiplier;
 	}
 
 	/**
@@ -114,12 +113,12 @@ public abstract class AbstractMultipartConfig implements IMultipartConfig {
 	 * @param servletContext servlet context
 	 * @return The path to the directory to be used to store uploaded files.
 	 */
-	public String getRepositoryPath(ServletContext servletContext) {
+	public String getRepositoryPath(final ServletContext servletContext) {
 
 		// First, look for an explicitly defined temp dir.
-		String saveDir = this.tempDir;
+		String saveDir = tempDir;
 
-		if ((saveDir == null) || saveDir.equals("")) {
+		if (saveDir == null || saveDir.equals("")) {
 			File tempdir = (File) servletContext.getAttribute("javax.servlet.context.tempdir");
 			log.info("Unable to find 'saveDir' property setting. Defaulting to javax.servlet.context.tempdir");
 
@@ -154,7 +153,7 @@ public abstract class AbstractMultipartConfig implements IMultipartConfig {
 	 * @param request The request in which the parameter was specified.
 	 * @param item The file item for the parameter to add.
 	 */
-	public void addFileParameter(RequestWrapper request, FileItem item) {
+	public void addFileParameter(final RequestWrapper request, final FileItem item) {
 
 		List values;
 		if (request.getFileElements().get(item.getFieldName()) != null) {
@@ -171,14 +170,14 @@ public abstract class AbstractMultipartConfig implements IMultipartConfig {
 	/**
 	 * @param maxFileSize The maximum size to set.
 	 */
-	public void setMaxFileSize(String maxFileSize) {
+	public void setMaxFileSize(final String maxFileSize) {
 		this.maxFileSize = maxFileSize;
 	}
 
 	/**
 	 * @param tempDir The tempDir to set.
 	 */
-	public void setTempDir(String tempDir) {
+	public void setTempDir(final String tempDir) {
 		this.tempDir = tempDir;
 	}
 
@@ -188,6 +187,6 @@ public abstract class AbstractMultipartConfig implements IMultipartConfig {
 	 * @return The maximum allowable file size, in bytes.
 	 */
 	protected long getSizeMax() {
-		return convertSizeToBytes(this.maxFileSize, AbstractMultipartConfig.DEFAULT_SIZE_MAX);
+		return convertSizeToBytes(maxFileSize, AbstractMultipartConfig.DEFAULT_SIZE_MAX);
 	}
 }

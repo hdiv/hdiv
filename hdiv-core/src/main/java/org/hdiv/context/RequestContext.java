@@ -28,8 +28,6 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.hdiv.dataComposer.IDataComposer;
 import org.hdiv.exception.HDIVException;
 import org.hdiv.filter.AsyncRequestWrapper;
@@ -38,6 +36,8 @@ import org.hdiv.filter.ValidationContext;
 import org.hdiv.session.SessionModel;
 import org.hdiv.util.Constants;
 import org.hdiv.util.HDIVUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Context holder for request-specific state. Contains request-specific data for validation and composition phases.
@@ -68,7 +68,7 @@ public class RequestContext implements RequestContextHolder {
 
 	private long renderTime;
 
-	private final Log log = LogFactory.getLog(RequestContextHolder.class);
+	private final Logger log = LoggerFactory.getLogger(RequestContextHolder.class);
 
 	private String formStateId;
 

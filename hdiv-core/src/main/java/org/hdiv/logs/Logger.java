@@ -15,9 +15,8 @@
  */
 package org.hdiv.logs;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.hdiv.filter.ValidatorError;
+import org.slf4j.LoggerFactory;
 
 /**
  * Log that shows the attacks detected by HDIV. It includes type of attack and the identity (application user) of the user. Since the way to
@@ -35,7 +34,7 @@ public class Logger {
 	/**
 	 * Commons Logging instance.
 	 */
-	private static final Log log = LogFactory.getLog(Logger.class);
+	private static final org.slf4j.Logger log = LoggerFactory.getLogger(Logger.class);
 
 	/**
 	 * Logger is initialized.

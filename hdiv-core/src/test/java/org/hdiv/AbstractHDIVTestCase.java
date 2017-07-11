@@ -23,8 +23,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpSessionEvent;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.hdiv.config.HDIVConfig;
 import org.hdiv.context.RequestContext;
 import org.hdiv.context.RequestContextFactory;
@@ -34,6 +32,8 @@ import org.hdiv.dataComposer.IDataComposer;
 import org.hdiv.init.RequestInitializer;
 import org.hdiv.listener.InitListener;
 import org.hdiv.util.HDIVUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.mock.web.MockHttpServletRequest;
@@ -50,7 +50,7 @@ import junit.framework.TestCase;
  */
 public abstract class AbstractHDIVTestCase extends TestCase {
 
-	private static final Log log = LogFactory.getLog(AbstractHDIVTestCase.class);
+	private static final Logger log = LoggerFactory.getLogger(AbstractHDIVTestCase.class);
 
 	/**
 	 * Pattern to check if the memory strategy is being used
