@@ -15,30 +15,15 @@
  */
 package org.hdiv.services;
 
-public enum HttpParameterType {
-	PATH_VARIABLE, PARAM, JSONPARAM, HEADER, BODY, NESTED;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-	@Override
-	public String toString() {
-		switch (this) {
-		case BODY:
-			return "RequestBody";
+@Target(ElementType.PARAMETER)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface JsonRequestParam {
 
-		case PATH_VARIABLE:
-			return "PathVariable";
-
-		case PARAM:
-			return "RequestParam";
-
-		case JSONPARAM:
-			return "JsonRequestParam";
-
-		case HEADER:
-			return "RequestHeader";
-
-		default:
-			return "Nested";
-		}
-	}
+	Class<?> type() default RequestParamType.class;
 
 }

@@ -16,7 +16,8 @@
 package org.hdiv.services;
 
 public enum ProtectionType {
-	READONLY("INTEGRITY"), NONEDITABLE("INTEGRITY"), ENTITY("INTEGRITY"), WHITELIST("WHITELIST"), BLACKLIST("BLACKLIST");
+	READONLY("INTEGRITY"), NONEDITABLE("INTEGRITY"), ENTITY("INTEGRITY"), WHITELIST("WHITELIST"), BLACKLIST("BLACKLIST"), JSONPARAMETER(
+			"JSON");
 
 	String category;
 
@@ -24,7 +25,7 @@ public enum ProtectionType {
 
 	ProtectionType(final String category) {
 		this.category = category;
-		editable = !category.equals("INTEGRITY");
+		editable = !category.equals("INTEGRITY") && !category.equals("JSON");
 	}
 
 	public String getCategory() {
