@@ -36,7 +36,6 @@ import org.hdiv.filter.ValidatorError;
 import org.hdiv.urlProcessor.LinkUrlProcessor;
 import org.hdiv.util.Constants;
 import org.hdiv.util.HDIVUtil;
-import org.slf4j.LoggerFactory;
 
 /**
  * Struts' RequestProcessor extension to visualize the errors produced in the editable fields detected by HDIV.
@@ -47,8 +46,6 @@ import org.slf4j.LoggerFactory;
  * @since HDIV 1.1
  */
 public class HDIVRequestProcessor extends RequestProcessor {
-
-	private static final org.slf4j.Logger log = LoggerFactory.getLogger(HDIVRequestProcessor.class);
 
 	/**
 	 * The request attributes key under HDIV should store errors produced in the editable fields.

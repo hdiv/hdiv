@@ -51,7 +51,12 @@
 			<artifactId>hdiv-core</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-
+		<dependency>
+			<groupId>commons-logging</groupId>
+			<artifactId>commons-logging</artifactId>
+			<version>1.2</version>
+			<optional>true</optional>
+		</dependency>
 		<!-- Struts-EL -->
 		<dependency>
 			<groupId>javax.servlet</groupId>
