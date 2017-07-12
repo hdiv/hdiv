@@ -17,7 +17,7 @@ package org.hdiv.services;
 
 import org.hdiv.context.RequestContextHolder;
 
-public interface TrustValidationDefinition<T extends SecureIdContainer> {
+public interface TrustValidationDefinition<T> {
 
 	void define(final RequestContextHolder request, final T secureIdentifiable, final TrustValidationBuilder builder);
 }
