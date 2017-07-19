@@ -3,14 +3,23 @@
 ## HDIV CHANGELOG
 http://www.hdiv.org
 
-# Release 3.3.2
+# Release 3.3.3
 
  * Fix missing 'hdivFormStateId' attribute in request scope
+ * Fix for issue 94: https://github.com/hdiv/hdiv/issues/94
+
+# Release 3.3.2
+
+ * Reduce dependencies
+ * Protect Matchers from StackOverflowError.
+ * Reinitialize HttpSession attributes if they are missing.
 
 # Release 3.3.1
 
  * Allow Hdiv to run in a auto-contained context (without WebApplicationContext)
-
+ * Weak reference RequestContext
+ * Allow UUID as Page Ids
+ * Fix for Glassfish queryString
 
 # Release 3.3.0
 
