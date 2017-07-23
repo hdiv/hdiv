@@ -1,7 +1,7 @@
 # Release notes
 
 ## HDIV CHANGELOG
-http://www.hdiv.org
+https://github.com/hdiv
 
 # Release 3.3.3
 
