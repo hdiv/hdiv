@@ -36,7 +36,7 @@ Is an open-source web application security framework that includes read-only dat
 ### Hdiv Enterprise
 Is a commercial all-in-one solution integrating the best of AST (Application Security Testing), RASP (Runtime application self protection), and WAF (Web application firewall) approaches with enterprise-class security, exclusive functionality, scalability, and enterprise-level support services. For more information, contact us at support@hdivsecurity.com
 
-![Hdiv](https://hdivsecurity.com/img/technologies.png)
+![Hdiv](https://hdivsecurity.com/img/supported-technologies.png)
 
 
 ## Installation
