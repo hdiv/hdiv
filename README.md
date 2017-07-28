@@ -363,7 +363,7 @@ From Hdiv version 2.1.7, it is possible to configure Hdiv in Java instead of XML
         }
     }
 
-All the configuration options are on the [technical documentation](https://hdivsecurity.com/technical-documentation/doc.html#configuration).
+All the configuration options are on the [technical documentation](https://hdivsecurity.com/docs/installation/library-setup/).
                 
 ## How to build your own Hdiv jar
 Clone this repository and build jar files (you'll need Git and Maven installed):
