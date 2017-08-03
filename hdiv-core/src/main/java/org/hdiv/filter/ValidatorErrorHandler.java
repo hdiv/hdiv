@@ -28,6 +28,15 @@ import org.hdiv.context.RequestContextHolder;
 public interface ValidatorErrorHandler {
 
 	/**
+	 * Process an uncontrolled exception while validating
+	 * 
+	 * @param context request context
+	 * @param e Exception
+	 * @since 3.3.4
+	 */
+	void handleValidatorException(RequestContextHolder context, Throwable e);
+
+	/**
 	 * Process a request with validation errors.
 	 * 
 	 * @param context request context

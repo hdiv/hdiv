@@ -214,20 +214,16 @@ public class ValidatorFilter extends OncePerRequestFilter {
 				errors = e.getResult().getErrors();
 			}
 			catch (Exception e) {
-				if (hdivConfig.isDebugMode()) {
-					errors = findErrors(e, context.getRequestedTarget());
-					if (errors == null) {
-						/**
-						 * It is not a HdivException... but it was launched in our code...
-						 */
-						if (log.isErrorEnabled()) {
-							log.error("Exception in request validation in target:" + context.getRequestedTarget(), e);
-						}
-						errors = Collections.singletonList(new ValidatorError(e, context.getRequestedTarget()));
+				errors = findErrors(e, context.getRequestedTarget(), false);
+				if (errors == null) {
+					/**
+					 * It is not a HdivException... but it was launched in our code...
+					 */
+					if (log.isErrorEnabled()) {
+						log.error("Exception in request validation in target:" + context.getRequestedTarget(), e);
 					}
-				}
-				else {
-					throw e;
+					legal = true;
+					errorHandler.handleValidatorException(ctx, e);
 				}
 			}
 
@@ -254,7 +250,7 @@ public class ValidatorFilter extends OncePerRequestFilter {
 
 		}
 		catch (Exception e) {
-			List<ValidatorError> errors = findErrors(e, request.getRequestURI());
+			List<ValidatorError> errors = findErrors(e, request.getRequestURI(), true);
 			if (errors != null) {
 				// Show error page
 				if (!hdivConfig.isDebugMode()) {
@@ -290,18 +286,29 @@ public class ValidatorFilter extends OncePerRequestFilter {
 		}
 	}
 
-	private List<ValidatorError> findErrors(final Throwable e, final String target) {
+	private List<ValidatorError> findErrors(final Throwable e, final String target, final boolean allowUncontrolledOrigin) {
 		Throwable current = e;
 		do {
-			if (!(current instanceof HDIVException)) {
+			if (!(current instanceof SharedHdivException)) {
 				current = current.getCause();
 			}
-		} while (current != null && !(current instanceof HDIVException));
-		if (current instanceof HDIVException) {
+		} while (current != null && !(current instanceof SharedHdivException));
+		if (current instanceof SharedHdivException) {
 			if (log.isErrorEnabled()) {
 				log.error("Exception in request validation", current);
 			}
-			// Show error page
+			if (!allowUncontrolledOrigin) {
+				// Check uncontrolledOrigin
+				Throwable invalid;
+				while ((invalid = current.getCause()) != null) {
+					if (invalid instanceof NullPointerException || invalid instanceof IndexOutOfBoundsException
+							|| invalid instanceof OutOfMemoryError || invalid instanceof ClassNotFoundException
+							|| invalid instanceof StackOverflowError) {
+						return null;
+					}
+				}
+
+			}
 			return Collections.singletonList(new ValidatorError(current, target));
 		}
 		return null;
