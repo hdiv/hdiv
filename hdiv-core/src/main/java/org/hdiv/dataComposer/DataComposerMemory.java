@@ -127,7 +127,7 @@ public class DataComposerMemory extends AbstractDataComposer {
 			action = HDIVUtil.decodeValue(sb, action, Constants.ENCODING_UTF_8);
 		}
 		catch (UnsupportedEncodingException e) {
-			throw new HDIVException(Constants.ENCODING_UTF_8 + " enconding not supported.", e);
+			throw new HDIVException(Constants.ENCODING_UTF_8 + " encoding not supported.", e);
 		}
 		catch (IllegalArgumentException e) {
 			// Some decoding errors throw IllegalArgumentException
