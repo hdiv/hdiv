@@ -121,7 +121,7 @@ Thanks to the implementation of [RequestDataValueProcessor](http://docs.spring.i
 
 ### Grails
 
-With the plugin architecture and [Hdiv Plugin](http://grails.org/plugin/hdiv) implementation supported by Grails, Hdiv installation is implemented using the BuildConfig.groovy configuration file adding the Hdiv plugin to it:
+With the plugin architecture and [Hdiv Plugin](http://grails.org/plugin/hdiv) implementation supported by Grails, Hdiv installation is implemented using the ```BuildConfig.groovy``` configuration file adding the Hdiv plugin to it:
 
     compile ':hdiv:1.0-RC2'
 
@@ -367,7 +367,7 @@ Clone this repository and build jar files (you'll need Git and Maven installed):
     cd hdiv
     mvn install
 
-The jars will be created in a folder named "target" and installed in local Maven repository.
+The jars will be created in a folder named ```target``` and installed in local Maven repository.
 
 ## Do you need help?
 
