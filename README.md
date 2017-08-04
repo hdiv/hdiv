@@ -55,12 +55,12 @@ Thanks to the new [extension point](http://docs.spring.io/spring/docs/current/ja
         <dependency>
             <groupId>org.hdiv</groupId>
             <artifactId>hdiv-config</artifactId>
-            <version>3.2.0</version>
+            <version>3.3.0</version>
         </dependency>
         <dependency>
             <groupId>org.hdiv</groupId>
             <artifactId>hdiv-spring-mvc</artifactId>
-            <version>3.2.0</version>
+            <version>3.3.0</version>
         </dependency>
 
 2. Add Hdiv listener and filter within `web.xml` file.
@@ -68,7 +68,7 @@ Thanks to the new [extension point](http://docs.spring.io/spring/docs/current/ja
         <listener>
             <listener-class>org.hdiv.listener.InitListener</listener-class>
         </listener>
-        
+
         <!-- Hdiv Validator Filter -->
         <filter>
             <filter-name>ValidatorFilter</filter-name>
@@ -85,7 +85,7 @@ Thanks to the new [extension point](http://docs.spring.io/spring/docs/current/ja
         <bean id="multipartResolver" class="org.hdiv.web.multipart.HdivCommonsMultipartResolver">
             <property name="maxUploadSize" value="100000" />
         </bean>
-        
+
     If Servlet 3 standard multipart processing is used:
 
         <bean id="multipartResolver" class="org.hdiv.web.multipart.HdivStandardServletMultipartResolver"></bean>
@@ -95,7 +95,7 @@ Thanks to the new [extension point](http://docs.spring.io/spring/docs/current/ja
         <mvc:annotation-driven validator="hdivEditableValidator"/>
 
 If you are using a Spring MVC version prior to 3.1, it is necessary to introduce an additional step, replacing Spring MVC tlds with Hdiv tlds according to the specific version. The next example shows the code for Spring MVC 3.0.4:
-        
+
         <jsp-config>
             <taglib>
                 <taglib-uri>http://www.springframework.org/tags/form</taglib-uri>
@@ -116,7 +116,7 @@ Thanks to the implementation of [RequestDataValueProcessor](http://docs.spring.i
         <dependency>
             <groupId>org.hdiv</groupId>
             <artifactId>hdiv-thymeleaf</artifactId>
-            <version>3.2.0</version>
+            <version>3.3.0</version>
         </dependency>
 
 ### Grails
@@ -132,12 +132,12 @@ With the plugin architecture and [Hdiv Plugin](http://grails.org/plugin/hdiv) im
         <dependency>
             <groupId>org.hdiv</groupId>
             <artifactId>hdiv-config</artifactId>
-            <version>3.2.0</version>
+            <version>3.3.0</version>
         </dependency>
         <dependency>
             <groupId>org.hdiv</groupId>
             <artifactId>hdiv-jstl-taglibs-1.2</artifactId>
-            <version>3.2.0</version>
+            <version>3.3.0</version>
         </dependency>
 
 2. Add Hdiv Listener and Filter within `web.xml` file
@@ -145,7 +145,7 @@ With the plugin architecture and [Hdiv Plugin](http://grails.org/plugin/hdiv) im
         <listener>
             <listener-class>org.hdiv.listener.InitListener</listener-class>
         </listener>
-        
+
         <!-- Hdiv Validator Filter -->
         <filter>
             <filter-name>ValidatorFilter</filter-name>
@@ -156,7 +156,7 @@ With the plugin architecture and [Hdiv Plugin](http://grails.org/plugin/hdiv) im
             <!-- Spring MVC Servlet name-->
             <servlet-name>SampleMvc</servlet-name>
         </filter-mapping>
-        
+
         <!-- Replace JSTL tld with Hdiv tld-->
         <jsp-config>
             <taglib>
@@ -172,12 +172,12 @@ With the plugin architecture and [Hdiv Plugin](http://grails.org/plugin/hdiv) im
         <dependency>
             <groupId>org.hdiv</groupId>
             <artifactId>hdiv-config</artifactId>
-            <version>3.2.0</version>
+            <version>3.3.0</version>
         </dependency>
         <dependency>
             <groupId>org.hdiv</groupId>
             <artifactId>hdiv-struts-1</artifactId>
-            <version>3.2.0</version>
+            <version>3.3.0</version>
         </dependency>
 
 2. Add Hdiv listener and Filter within `web.xml` file.
@@ -186,7 +186,7 @@ With the plugin architecture and [Hdiv Plugin](http://grails.org/plugin/hdiv) im
         <listener>
             <listener-class>org.hdiv.listener.InitListener</listener-class>
         </listener>
-        
+
         <!-- Hdiv Validator Filter -->
         <filter>
             <filter-name>ValidatorFilter</filter-name>
@@ -196,7 +196,7 @@ With the plugin architecture and [Hdiv Plugin](http://grails.org/plugin/hdiv) im
             <filter-name>ValidatorFilter</filter-name>
             <url-pattern>*.do</url-pattern>
         </filter-mapping>
-        
+
         <!-- Replace Struts 1 tld with Hdiv tlds -->
         <jsp-config>
             <taglib>
@@ -210,7 +210,7 @@ With the plugin architecture and [Hdiv Plugin](http://grails.org/plugin/hdiv) im
             <taglib>
                 <taglib-uri>/WEB-INF/struts-logic.tld</taglib-uri>
                 <taglib-location>/WEB-INF/hdiv-logic.tld</taglib-location>
-            </taglib> 
+            </taglib>
         </jsp-config>
 
 ### Struts 2
@@ -234,21 +234,21 @@ The latest Struts 2 version supported by Hdiv is Struts 2.0.11. Higher versions 
         <listener>
             <listener-class>org.hdiv.listener.InitListener</listener-class>
         </listener>
-        
+
         <!-- Hdiv Validator Filter -->
-        
+
         <filter-mapping>
             <filter-name>ValidatorFilter</filter-name>
             <url-pattern>*.action</url-pattern>
         </filter-mapping>
-        
+
         <filter-mapping>
             <filter-name>ValidatorFilter</filter-name>
             <url-pattern>*.jsp</url-pattern>
         </filter-mapping>		
-        
+
         <!-- Replace Struts 2 tld with Hdiv tlds -->
-        
+
         <jsp-config>
             <taglib>
                 <taglib-uri>/struts-tags</taglib-uri>
@@ -262,12 +262,12 @@ The latest Struts 2 version supported by Hdiv is Struts 2.0.11. Higher versions 
         <dependency>
             <groupId>org.hdiv</groupId>
             <artifactId>hdiv-config</artifactId>
-            <version>3.2.0</version>
+            <version>3.3.0</version>
         </dependency>
         <dependency>
             <groupId>org.hdiv</groupId>
             <artifactId>hdiv-jsf</artifactId>
-            <version>3.2.0</version>
+            <version>3.3.0</version>
         </dependency>
 
 2. Add Hdiv listener, Hdiv Filter and define your custom faces-config (with Hdiv configuration, see the next point) within `web.xml` file.
@@ -277,12 +277,12 @@ The latest Struts 2 version supported by Hdiv is Struts 2.0.11. Higher versions 
              <param-name>javax.faces.CONFIG_FILES</param-name>
              <param-value>/WEB-INF/hdiv-faces2-config.xml</param-value>
         </context-param>
-        
+
         <!-- Hdiv Initialization listener -->
         <listener>
             <listener-class>org.hdiv.listener.InitListener</listener-class>
         </listener>
-        
+
         <!-- Hdiv Validator Filter -->
         <filter>
             <filter-name>ValidatorFilter</filter-name>
@@ -300,7 +300,7 @@ The latest Struts 2 version supported by Hdiv is Struts 2.0.11. Higher versions 
             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
             xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd"
             version="2.0">
-            
+
             <component>
                 <component-type>javax.faces.HtmlOutcomeTargetLink</component-type>
                 <component-class>org.hdiv.components.HtmlOutcomeTargetLinkExtension</component-class>
@@ -321,36 +321,28 @@ The latest Struts 2 version supported by Hdiv is Struts 2.0.11. Higher versions 
                 <component-type>javax.faces.HtmlOutputLink</component-type>
                 <component-class>org.hdiv.components.HtmlOutputLinkExtension</component-class>
             </component>
-            <component>
-                <component-type>javax.faces.HtmlCommandLink</component-type>
-                <component-class>org.hdiv.components.HtmlCommandLinkExtension</component-class>
-            </component>
-            <component>
-                <component-type>javax.faces.HtmlCommandButton</component-type>
-                <component-class>org.hdiv.components.HtmlCommandButtonExtension</component-class>
-            </component>
-            
+
             <lifecycle>
                 <phase-listener>org.hdiv.phaseListeners.ComponentMessagesPhaseListener</phase-listener>
                 <phase-listener>org.hdiv.phaseListeners.ConfigPhaseListener</phase-listener>
+                <phase-listener>org.hdiv.phaseListeners.ValidatorPhaseListener</phase-listener>
             </lifecycle>
-        
+
             <factory>
                 <external-context-factory>org.hdiv.context.ExternalContextFactoryWrapper</external-context-factory>
-                <exception-handler-factory>org.hdiv.exceptionHandler.HDIVExceptionHandlerFactory</exception-handler-factory>
             </factory>
-            
+
         </faces-config>
 
 ## Configuration
 Hdiv configuration is based on Spring configuration. Hdiv has a custom schema to reduce the configuration tasks. First of all we need a Spring configuration file to add Hdiv configuration.
 
     <?xml version="1.0" encoding="UTF-8"?>
-    <beans xmlns="http://www.springframework.org/schema/beans" 
-           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-           xmlns:hdiv="http://www.hdiv.org/schema/hdiv" 
-           xsi:schemaLocation="http://www.springframework.org/schema/beans 
-                               http://www.springframework.org/schema/beans/spring-beans.xsd 
+    <beans xmlns="http://www.springframework.org/schema/beans"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns:hdiv="http://www.hdiv.org/schema/hdiv"
+           xsi:schemaLocation="http://www.springframework.org/schema/beans
+                               http://www.springframework.org/schema/beans/spring-beans.xsd
                                http://www.hdiv.org/schema/hdiv http://www.hdiv.org/schema/hdiv/hdiv.xsd">
 
 From Hdiv version 2.1.7, it is possible to configure Hdiv in Java instead of XML.
@@ -358,16 +350,16 @@ From Hdiv version 2.1.7, it is possible to configure Hdiv in Java instead of XML
     @Configuration
     @EnableHdivWebSecurity
     public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
-    
+
         @Override
         public void configure(SecurityConfigBuilder builder) {
-    
+
             // Configuration options
         }
     }
 
 All the configuration options are on the [technical documentation](https://hdivsecurity.com/docs/installation/library-setup/).
-                
+
 ## How to build your own Hdiv jar
 Clone this repository and build jar files (you'll need Git and Maven installed):
 
