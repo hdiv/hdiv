@@ -5,6 +5,7 @@ https://github.com/hdiv
 
 # Release 3.3.4
 
+ * Replace commons-logging by slf4j
  * [BUG] If an uncontrolled exception occurs during validate() the request should progress
 
 # Release 3.3.3
