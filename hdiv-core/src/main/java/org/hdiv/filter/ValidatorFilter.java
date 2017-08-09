@@ -303,7 +303,7 @@ public class ValidatorFilter extends OncePerRequestFilter {
 				while ((invalid = current.getCause()) != null) {
 					if (invalid instanceof NullPointerException || invalid instanceof IndexOutOfBoundsException
 							|| invalid instanceof OutOfMemoryError || invalid instanceof ClassNotFoundException
-							|| invalid instanceof StackOverflowError) {
+							|| invalid instanceof StackOverflowError || invalid instanceof ClassCastException) {
 						return null;
 					}
 				}
