@@ -28,7 +28,7 @@ https://github.com/hdiv
 
 # Release 3.3.0
 
- * Fix issue with parameters without values in WebSphere servers: http://www-01.ibm.com/support/docview.wss?uid=swg1PM35450 
+ * Fix issue with parameters without values in WebSphere servers: http://www-01.ibm.com/support/docview.wss?uid=swg1PM35450
  * Fix Spring security issue that may cause the links not to be processed by Hdiv
  * Performance improvements.
  * Ensure error message content is escaped.
@@ -56,7 +56,7 @@ https://github.com/hdiv
  * Support asynchronous requests.
  * Add 'hdiv-page-' prefix to pages stored in user session.
  * Refactor validation error message creation. It is not created in ValidatorHelperRequest but ValidatorFilter.
- 
+
 # Release 2.1.14
 
  * LinkUrlProcessor: remove input _HDIV_STATE_ parameter if it exists.
@@ -64,12 +64,12 @@ https://github.com/hdiv
 
 # Release 2.1.13
 
- * Multiple iframe support in the same page 
+ * Multiple iframe support in the same page
  * Fix issue with IE 6 when redirects to a URL with a fragment identifier.
  * Extension of Struts 1 Tiles InsertTag class for actions with parameters (queryString) support.
  * Fix issue in HDIV Core library. It was caused when repeated values were received in last positions of array named "values".
  * Multipart request handler modified to return appropriate RequestWrapper object, if available, unwrapping the given request as far as necessary.
- 
+
 # Release 2.1.12
 
  * Fix issue in Struts1: HDIVTilesRequestProcessor class
@@ -88,7 +88,7 @@ https://github.com/hdiv
  * F5 key support. Reloading the same page never expire session states (https://github.com/hdiv/hdiv/issues/67).
  * Fix @Validation and grouping issue (https://github.com/hdiv/hdiv/issues/70).
  * In case of detecting an attack in editable data validation, add validation name to the log.
- * New 'ServletContextInitializer' and 'SessionInitializer' interfaces for ServletContext and HttpSession initialization. 
+ * New 'ServletContextInitializer' and 'SessionInitializer' interfaces for ServletContext and HttpSession initialization.
 
 # Release 2.1.9
 
@@ -99,7 +99,7 @@ https://github.com/hdiv
  * Fix multipart issue in Struts1 (https://github.com/hdiv/hdiv/issues/59).
  * Fix multipart issue in Spring MVC (https://github.com/hdiv/hdiv/issues/62).
  * Support Servlet3 standard multipart processing in Spring MVC.
- 
+
 # Release 2.1.7
 
  * Memory and performance optimizations.
@@ -113,7 +113,7 @@ https://github.com/hdiv
  * Move CipherTag to hdiv-core.
  * New 'longLivingPages' feature to configure pages which link and forms never expire.
  * Create a custom token for form elements.
- 
+
 # Release 2.1.6
 
  * Fix form multipart issue (https://github.com/hdiv/hdiv/issues/44).
@@ -167,7 +167,7 @@ https://github.com/hdiv
  * Add "enableDefaults" attribute to <hdiv:validationRule> element to enable/disable default editable validations per rule.
  * Make possible to update a existing state. Designed for ajax requests that update part of the page.
  * New 'maxPagesPerSession' configuration attribute to control the number of states in session.
- 
+
 # Release 2.1.0
 
  * JavaDoc and License correction.
@@ -177,7 +177,7 @@ https://github.com/hdiv
  * Final Spring Framework 3.1.0 version support.
  * Configurable IUserData instance in the scheme.
  * Better support for anchored urls.
- * Refactor of the url splitting and processing classes. 
+ * Refactor of the url splitting and processing classes.
 
 # Release 2.1.0.RC2
 
@@ -189,13 +189,13 @@ https://github.com/hdiv
 
  * Support for JSF 1.2
  * Support for JSF 2.0
- 
+
 ------- Improvements --------
 
- * WebFlow deletes session pages when conversation ends. 
+ * WebFlow deletes session pages when conversation ends.
    Consecuently, parameter (flowExecutionKey/execution) is no longer added automatically.
  * URLs with anchor (#) are now correctly managed.
- 
+
 ------- NEW CLASSES AND MODIFICATIONS -------
 
  * added hdiv-jsf module
@@ -209,15 +209,15 @@ https://github.com/hdiv
 
  * Support for Spring MVC 3.0.4
  * Support for Spring Webflow 2.1.1
- 
+
 ------- Improvements --------
- 
+
  * Better error handling support.
  * The bean 'multipartConfig' is not required, interesting for applications without multipart requests.
  * The 'paramWithoutValidation' and 'excludedURLExtensions' properties are not required in HdivConfig.
- 
+
 ------- NEW CLASSES AND MODIFICATIONS -------
- 
+
  * added hdiv-spring-mvc-3.0.4 module
  * added hdiv-web-spring-mvc-3.0.4 module
  * added hdiv-webflow-2.1.1 module
@@ -229,15 +229,15 @@ https://github.com/hdiv
 
  * Support for Spring MVC 3.0.2
  * Support for JSTL 1.2
- 
+
 ------- Improvements --------
 
  * It has done a great job in order to improve performance related to CPU, memory and session usage.
  * A new option has been added to avoid creating a state for links wihtout any parameter.
  * A new option called excludedURLExtensions allows excluding links depending on their extension.
- 
+
 ------- NEW CLASSES AND MODIFICATIONS -------
- 
+
  * New interface PageIdGenerator allows changing page id generation strategy.
  * Package org.hdiv.idGenerator has been created for uidGenerator and PageIdGenerator interfaces and their implementations.
  * New DataComposerFactory and DataValidatorFactory factories improve performance on generating IDataComposer and IDataValidator objects.
@@ -251,7 +251,7 @@ https://github.com/hdiv
 
 ------- BUGS FIXED -------
 
- * \#007   protectedExtensions for Struts 1.x: definition of this property is obligatory for Struts 1.x applications 
+ * \#007   protectedExtensions for Struts 1.x: definition of this property is obligatory for Struts 1.x applications
  * \#008   "rewrite" tag: this tag is included in HDIV to add HDIV state in url (Struts 1.x)
  * \#009   logout in Spring MVC: RedirectViewHDIV don't add HDIV state if session doesn't exist
 
@@ -259,22 +259,22 @@ https://github.com/hdiv
 
  * added hdiv-struts-2.0.11 module
  * added hdiv-web-struts-2.0.11 module
- 
+
  * Package org.hdiv.taglib.util
   - modified "getURLWithoutRelativePaths" method  
   - added method "hasActionOrServletExtension" to RequestUtilsHDIV class
- 
+
  * Package org.hdiv.taglib.html
   - added rewrite tag implementation
-  
+
  * Package org.hdiv.web.servlet.view
   - modified method "sendRedirect"
-  
+
 ------- Configuration Files -------
 
  * modified hdiv-html.tld file with "rewrite" tag
  * modified hdiv-html-el.tld file with "rewrite" tag
-   
+
 
 # Release 2.0.3
 
@@ -348,7 +348,7 @@ https://github.com/hdiv
 
  * Package org.hdiv.config
   - added property "FILEUPLOAD_EXCEPTION" to IMultipartConfig class
-  - modified handleMultipartRequest method declaration (IMultipartConfig, 
+  - modified handleMultipartRequest method declaration (IMultipartConfig,
     StrutsMultipartConfig, Struts2Multipartconfig and SpringMVCMultipartConfig)
 
  * Package org.hdiv.filter
@@ -361,9 +361,9 @@ https://github.com/hdiv
   - modified resolveMultipart method (HDIVMultipartResolver)
 
  * Package org.hdiv.web.servlet.view
-  - added "InternalResourceViewResolverHDIV" class to support 
+  - added "InternalResourceViewResolverHDIV" class to support
     Spring MVC "redirect:" prefix
-  - added "RedirectViewHDIV" class to support Spring MVC 
+  - added "RedirectViewHDIV" class to support Spring MVC
     "redirect:" prefix
 
  * Package org.hdiv.action
@@ -384,15 +384,15 @@ https://github.com/hdiv
 ------- New Features -------
 
  * Added support for Spring MVC
- * Added support for Jakarta Taglibs 1.1.0 
- * Added support for Jakarta Taglibs 1.1.2 
+ * Added support for Jakarta Taglibs 1.1.0
+ * Added support for Jakarta Taglibs 1.1.2
  * Added support for Struts 2.0.9
  * Added support for Struts 1.3.8
 
 ------- BUGS FIXED -------
 
  * \#004   Logout does not work in Struts 2.0.6: resolved
- 
+
 ------- NEW CLASSES AND MODIFICATIONS -------
 
  * added hdiv-spring-mvc module
@@ -410,7 +410,7 @@ https://github.com/hdiv
    - added AbstractValidatorHelper class
 
 ------- Configuration Files -------
-  
+
  * applicationContext.xml
   - removed property "logger" from "stateUtil" bean
   - renamed "helper" bean property
@@ -425,7 +425,7 @@ https://github.com/hdiv
 ------- BUGS FIXED -------
 
  * \#003   RequestWrapper: modified getParameterMap() method
- 
+
 ------- NEW CLASSES AND MODIFICATIONS -------
 
  * added hdiv-struts-2.0.6 module
@@ -439,22 +439,22 @@ https://github.com/hdiv
 
  * Package org.hdiv.config
    - modified "checkValue()" method
-   
+
  * Package org.hdiv.validator
   - modified acceptedPattern property
   - modified rejectedPattern property
-  
+
  * Package org.hdiv.util
   - modified HDIVUtil's getActionMappingName method
 
 ------- Configuration Files -------
-  
+
  * applicationContext.xml
   - removed property "logger" from "stateUtil" bean
   - renamed "session" bean to "sessionHDIV"
   - modified "multipartConfig"'s bean class
 
-   
+
 # Release 1.1.2
 
 ------- New Features -------
@@ -488,27 +488,27 @@ https://github.com/hdiv
 ------- NEW CLASSES AND MODIFICATIONS -------
 
  * Added org.hdiv.validation.IValidation class to editable data validations.
- 
+
  * Added org.hdiv.util.Constants class.
- 
+
  * Package org.hdiv.config
    - added "matchedPages" property to HDIVConfig
    - added "matchedParameters" property to HDIVConfig
    - added "checkValue()" method to HDIVConfig, to check if value is an init action or parameter
-   
+
  * Package org.hdiv.filter
    - added "getHeader" method to RequestWrapper
    - added "getHeaders" method to RequestWrapper
    - added "replaceCookieString" method to RequestWrapper
    - added "SavedCookie" class
-   
+
 ------- Configuration Files -------
- 
+
  * hdiv-config.xml:
    - added new beans: avoidCookiesIntegrity, avoidCookiesConfidentiality
    - added "avoidCookiesIntegrity" and "avoidCookiesConfidentiality" beans to "config" bean
    - modified "randomName" bean type
-   
+
 
 # Release 1.1
 
@@ -525,36 +525,36 @@ https://github.com/hdiv
 ------- NEW CLASSES AND MODIFICATIONS -------
 
  * Added org.hdiv.validation package.
- 
+
  * Added org.hdiv.config.HDIVValidations class to editable data validations.
- 
+
  * Added org.hdiv.filter.IResponseWrapper class to cookie's validation.
- 
+
  * Added org.hdiv.filter.ResponseWrapper class to cookie's validation.
- 
- * Added org.hdiv.action.HDIVRequestProcessor to visualize the errors 
+
+ * Added org.hdiv.action.HDIVRequestProcessor to visualize the errors
    produced in the editable fields detected by HDIV.
-   
- * Added org.hdiv.taglib.util.ResponseUtilsHDIV class that contains general purpose 
-   utility methods related to generating a servlet response in the Struts controller 
+
+ * Added org.hdiv.taglib.util.ResponseUtilsHDIV class that contains general purpose
+   utility methods related to generating a servlet response in the Struts controller
    framework.
- 
+
  * Package org.hdiv.config
    - added "setValidations()" method to HDIVConfig
    - added "existValidations()" method to HDIVConfig, to check if there are validations defined for    
      editable fields
-   - added "areEditableParameterValuesValid()" method to HDIVConfig, to check if the values are valid 
+   - added "areEditableParameterValuesValid()" method to HDIVConfig, to check if the values are valid
      for the editable parameter
-  
+
  * Package org.hdiv.dataComposer
    - redefined compose methods to accept editableName parameters
-   
- * Package org.hdiv.filter 
+
+ * Package org.hdiv.filter
    - added "validateEditableParameter()" method to validate editable parameters
-	
+
  * Package org.hdiv.listener
    - modified "sessionCreated()" method to store suffix in session in the memory version in order to add to HDIV      parameter
-  
+
  * Package org.hdiv.session
    - added "generateInitialPageId()" method to SessionHDIV
 
@@ -564,8 +564,7 @@ https://github.com/hdiv
 ------- Configuration Files -------
 
  * Added hdiv-validations.xml file to editable data validations.
- 
+
  * Renamed hdivConfig.xml to hdiv-config-xml and added property "validations" to bean "config"
- 
+
  * applicationContext.xml: bean "page" and all references have been removed
- 
