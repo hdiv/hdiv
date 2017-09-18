@@ -26,8 +26,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.hdiv.config.HDIVConfig;
 import org.hdiv.config.multipart.IMultipartConfig;
 import org.hdiv.config.multipart.exception.HdivMultipartException;
@@ -41,6 +39,7 @@ import org.hdiv.logs.Logger;
 import org.hdiv.util.Constants;
 import org.hdiv.util.HDIVErrorCodes;
 import org.hdiv.util.HDIVUtil;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -57,7 +56,7 @@ public class ValidatorFilter extends OncePerRequestFilter {
 	/**
 	 * Commons Logging instance.
 	 */
-	private static final Log log = LogFactory.getLog(ValidatorFilter.class);
+	private static final org.slf4j.Logger log = LoggerFactory.getLogger(ValidatorFilter.class);
 
 	/**
 	 * HDIV configuration object.
@@ -215,20 +214,16 @@ public class ValidatorFilter extends OncePerRequestFilter {
 				errors = e.getResult().getErrors();
 			}
 			catch (Exception e) {
-				if (hdivConfig.isDebugMode()) {
-					errors = findErrors(e, context.getRequestedTarget());
-					if (errors == null) {
-						/**
-						 * It is not a HdivException... but it was launched in our code...
-						 */
-						if (log.isErrorEnabled()) {
-							log.error("Exception in request validation in target:" + context.getRequestedTarget(), e);
-						}
-						errors = Collections.singletonList(new ValidatorError(e, context.getRequestedTarget()));
+				errors = findErrors(e, context.getRequestedTarget(), false);
+				if (errors == null) {
+					/**
+					 * It is not a HdivException... but it was launched in our code...
+					 */
+					if (log.isErrorEnabled()) {
+						log.error("Exception in request validation in target:" + context.getRequestedTarget(), e);
 					}
-				}
-				else {
-					throw e;
+					legal = true;
+					errorHandler.handleValidatorException(ctx, e);
 				}
 			}
 
@@ -255,7 +250,7 @@ public class ValidatorFilter extends OncePerRequestFilter {
 
 		}
 		catch (Exception e) {
-			List<ValidatorError> errors = findErrors(e, request.getRequestURI());
+			List<ValidatorError> errors = findErrors(e, request.getRequestURI(), true);
 			if (errors != null) {
 				// Show error page
 				if (!hdivConfig.isDebugMode()) {
@@ -291,18 +286,29 @@ public class ValidatorFilter extends OncePerRequestFilter {
 		}
 	}
 
-	private List<ValidatorError> findErrors(final Throwable e, final String target) {
+	private List<ValidatorError> findErrors(final Throwable e, final String target, final boolean allowUncontrolledOrigin) {
 		Throwable current = e;
 		do {
-			if (!(current instanceof HDIVException)) {
+			if (!(current instanceof SharedHdivException)) {
 				current = current.getCause();
 			}
-		} while (current != null && !(current instanceof HDIVException));
-		if (current instanceof HDIVException) {
+		} while (current != null && !(current instanceof SharedHdivException));
+		if (current instanceof SharedHdivException) {
 			if (log.isErrorEnabled()) {
 				log.error("Exception in request validation", current);
 			}
-			// Show error page
+			if (!allowUncontrolledOrigin) {
+				// Check uncontrolledOrigin
+				Throwable invalid;
+				while ((invalid = current.getCause()) != null) {
+					if (invalid instanceof NullPointerException || invalid instanceof IndexOutOfBoundsException
+							|| invalid instanceof OutOfMemoryError || invalid instanceof ClassNotFoundException
+							|| invalid instanceof StackOverflowError || invalid instanceof ClassCastException) {
+						return null;
+					}
+				}
+
+			}
 			return Collections.singletonList(new ValidatorError(current, target));
 		}
 		return null;

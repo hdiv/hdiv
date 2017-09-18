@@ -19,13 +19,13 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.hdiv.context.RequestContextHolder;
 import org.hdiv.state.IState;
 import org.hdiv.util.HDIVErrorCodes;
 import org.hdiv.util.Method;
 import org.hdiv.util.UtilsJsf;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * <p>
@@ -49,7 +49,7 @@ public class JsfValidatorHelper extends ValidatorHelperRequest {
 	/**
 	 * Commons Logging instance.
 	 */
-	private static final Log log = LogFactory.getLog(JsfValidatorHelper.class);
+	private static final Logger log = LoggerFactory.getLogger(JsfValidatorHelper.class);
 
 	/**
 	 * Request attribute that has a true value only if the request has a view state.

@@ -23,8 +23,6 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.hdiv.context.RequestContextHolder;
 import org.hdiv.dataComposer.IDataComposer;
 import org.hdiv.urlProcessor.UrlData;
@@ -32,10 +30,12 @@ import org.hdiv.util.Constants;
 import org.hdiv.util.HDIVUtil;
 import org.hdiv.util.Method;
 import org.hdiv.util.UtilsJsf;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class OutputLinkComponentProcessor extends AbstractComponentProcessor {
 
-	private static final Log log = LogFactory.getLog(OutputLinkComponentProcessor.class);
+	private static final Logger log = LoggerFactory.getLogger(OutputLinkComponentProcessor.class);
 
 	public void processOutputLink(final FacesContext context, final HtmlOutputLink component) {
 

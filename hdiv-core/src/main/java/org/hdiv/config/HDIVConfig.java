@@ -23,8 +23,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.hdiv.context.RequestContextHolder;
 import org.hdiv.regex.PatternMatcher;
 import org.hdiv.regex.PatternMatcherFactory;
@@ -32,6 +30,8 @@ import org.hdiv.state.IPage;
 import org.hdiv.state.scope.StateScopeType;
 import org.hdiv.util.Method;
 import org.hdiv.validator.EditableDataValidationProvider;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Class containing HDIV configuration initialized from Spring Factory.
@@ -44,7 +44,7 @@ public class HDIVConfig implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private static final Log log = LogFactory.getLog(HDIVConfig.class);
+	private static final Logger log = LoggerFactory.getLogger(HDIVConfig.class);
 
 	private static final String DEFAULT_STATE_PARAMETER_NAME = "_HDIV_STATE_";
 

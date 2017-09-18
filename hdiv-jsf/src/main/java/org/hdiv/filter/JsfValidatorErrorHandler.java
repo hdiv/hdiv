@@ -23,13 +23,13 @@ import javax.faces.context.FacesContext;
 import javax.faces.context.PartialResponseWriter;
 import javax.faces.context.PartialViewContext;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.hdiv.context.RequestContextHolder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class JsfValidatorErrorHandler extends DefaultValidatorErrorHandler {
 
-	private static final Log log = LogFactory.getLog(JsfValidatorErrorHandler.class);
+	private static final Logger log = LoggerFactory.getLogger(JsfValidatorErrorHandler.class);
 
 	@Override
 	public void handleValidatorError(final RequestContextHolder ctx, final List<ValidatorError> errors) {

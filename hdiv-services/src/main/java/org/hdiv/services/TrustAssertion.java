@@ -37,7 +37,7 @@ public @interface TrustAssertion {
 	 * Model class that defines the property if applies
 	 * @return model class
 	 */
-	Class<? extends SecureIdContainer> idFor() default VoidSecureIdContainer.class;
+	Class<?> idFor() default VoidSecureIdContainer.class;
 
 	String plainIdFor() default EMPTY;
 

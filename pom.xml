@@ -7,7 +7,7 @@
 	<artifactId>hdiv</artifactId>
 	<packaging>pom</packaging>
 	<name>Hdiv Community</name>
-	<version>3.3.3</version>
+	<version>3.3.4-SNAPSHOT</version>
 	<url>http://www.hdiv.org</url>
 	<description>Web Application Security Framework</description>
 
@@ -153,7 +153,6 @@
 		<module>hdiv-struts-1</module>
 		<module>hdiv-jsf</module>
 		<module>hdiv-thymeleaf</module>
-		<module>hdiv-docs</module>
 		<module>hdiv-services</module>
 	</modules>
 
@@ -186,6 +185,12 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>1.7.5</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
 			<version>1.2.17</version>
@@ -195,6 +200,12 @@
 			<groupId>commons-logging</groupId>
 			<artifactId>commons-logging</artifactId>
 			<version>1.2</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.7.5</version>
 		</dependency>
 	</dependencies>
 

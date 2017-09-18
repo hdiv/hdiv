@@ -4,7 +4,7 @@
 	<parent>
 		<artifactId>hdiv</artifactId>
 		<groupId>org.hdiv</groupId>
-		<version>3.3.3</version>
+		<version>3.3.4-SNAPSHOT</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>hdiv-struts-1</artifactId>
@@ -26,6 +26,12 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
+			<groupId>commons-fileupload</groupId>
+			<artifactId>commons-fileupload</artifactId>
+			<version>${commons.fileupload.version}</version>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
 			<groupId>org.apache.struts</groupId>
 			<artifactId>struts-core</artifactId>
 			<version>${org.struts.version}</version>
@@ -45,7 +51,12 @@
 			<artifactId>hdiv-core</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-
+		<dependency>
+			<groupId>commons-logging</groupId>
+			<artifactId>commons-logging</artifactId>
+			<version>1.2</version>
+			<optional>true</optional>
+		</dependency>
 		<!-- Struts-EL -->
 		<dependency>
 			<groupId>javax.servlet</groupId>

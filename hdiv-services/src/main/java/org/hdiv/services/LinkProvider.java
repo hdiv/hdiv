@@ -15,9 +15,13 @@
  */
 package org.hdiv.services;
 
-import org.hdiv.context.RequestContextHolder;
+import java.security.Principal;
+import java.util.List;
 
-public interface TrustValidationDefinition<T> {
+import javax.servlet.http.HttpServletRequest;
 
-	void define(final RequestContextHolder request, final T secureIdentifiable, final TrustValidationBuilder builder);
+import org.springframework.hateoas.Link;
+
+public interface LinkProvider {
+	List<Link> getLinks(String referer, Principal principal, HttpServletRequest request);
 }

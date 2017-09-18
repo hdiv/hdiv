@@ -23,11 +23,11 @@ import javax.faces.component.UIComponent;
 import javax.faces.component.html.HtmlInputHidden;
 import javax.faces.context.FacesContext;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.hdiv.components.HtmlInputHiddenExtension;
 import org.hdiv.util.HDIVErrorCodes;
 import org.hdiv.validation.ValidationContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Validates component of type HtmlInputHiddenExtension.
@@ -36,7 +36,7 @@ import org.hdiv.validation.ValidationContext;
  */
 public class HtmlInputHiddenValidator extends AbstractComponentValidator {
 
-	private static final Log log = LogFactory.getLog(HtmlInputHiddenValidator.class);
+	private static final Logger log = LoggerFactory.getLogger(HtmlInputHiddenValidator.class);
 
 	public HtmlInputHiddenValidator() {
 		super(HtmlInputHidden.class);

@@ -18,8 +18,8 @@ package org.hdiv.regex;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * {@link PatternMatcher} implementation based on java {@link Pattern}.
@@ -30,7 +30,7 @@ public class DefaultPatternMatcher implements PatternMatcher {
 
 	private static final long serialVersionUID = 1L;
 
-	private static final Log log = LogFactory.getLog(DefaultPatternMatcher.class);
+	private static final Logger log = LoggerFactory.getLogger(DefaultPatternMatcher.class);
 
 	/**
 	 * Original regular expression

@@ -20,11 +20,10 @@ import javax.faces.event.PhaseEvent;
 import javax.faces.event.PhaseId;
 import javax.faces.event.PhaseListener;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.hdiv.logs.ComponentMessagesLog;
 import org.hdiv.logs.Logger;
 import org.hdiv.util.UtilsJsf;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.jsf.FacesContextUtils;
 
@@ -37,7 +36,7 @@ public class ComponentMessagesPhaseListener implements PhaseListener {
 
 	private static final long serialVersionUID = 1L;
 
-	private static final Log log = LogFactory.getLog(ComponentMessagesPhaseListener.class);
+	private static final org.slf4j.Logger log = LoggerFactory.getLogger(ComponentMessagesPhaseListener.class);
 
 	/**
 	 * Utility class for managing validation messages

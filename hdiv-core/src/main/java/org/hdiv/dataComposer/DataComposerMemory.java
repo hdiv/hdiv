@@ -19,8 +19,6 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayDeque;
 import java.util.Deque;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.hdiv.context.RequestContextHolder;
 import org.hdiv.exception.HDIVException;
 import org.hdiv.state.IPage;
@@ -33,6 +31,8 @@ import org.hdiv.util.Constants;
 import org.hdiv.util.HDIVStateUtils;
 import org.hdiv.util.HDIVUtil;
 import org.hdiv.util.Method;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * <p>
@@ -53,7 +53,7 @@ public class DataComposerMemory extends AbstractDataComposer {
 	/**
 	 * Commons Logging instance.
 	 */
-	private static final Log log = LogFactory.getLog(DataComposerMemory.class);
+	private static final Logger log = LoggerFactory.getLogger(DataComposerMemory.class);
 
 	/**
 	 * State scope manager.
@@ -127,7 +127,7 @@ public class DataComposerMemory extends AbstractDataComposer {
 			action = HDIVUtil.decodeValue(sb, action, Constants.ENCODING_UTF_8);
 		}
 		catch (UnsupportedEncodingException e) {
-			throw new HDIVException(Constants.ENCODING_UTF_8 + " enconding not supported.", e);
+			throw new HDIVException(Constants.ENCODING_UTF_8 + " encoding not supported.", e);
 		}
 		catch (IllegalArgumentException e) {
 			// Some decoding errors throw IllegalArgumentException

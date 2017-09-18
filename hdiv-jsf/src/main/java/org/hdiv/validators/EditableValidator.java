@@ -29,8 +29,6 @@ import javax.faces.component.html.HtmlInputTextarea;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.hdiv.util.Constants;
 import org.hdiv.util.HDIVErrorCodes;
 import org.hdiv.util.HDIVUtil;
@@ -39,6 +37,8 @@ import org.hdiv.util.UtilsJsf;
 import org.hdiv.validation.ValidationContext;
 import org.hdiv.validator.EditableDataValidationProvider;
 import org.hdiv.validator.EditableDataValidationResult;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Responsible for validating that the parameters coming from an editable component (InputText, Textarea, Secret) are logical
@@ -47,7 +47,7 @@ import org.hdiv.validator.EditableDataValidationResult;
  */
 public class EditableValidator implements ComponentValidator {
 
-	private static final Log log = LogFactory.getLog(EditableValidator.class);
+	private static final Logger log = LoggerFactory.getLogger(EditableValidator.class);
 
 	/**
 	 * EditableDataValidationProvider

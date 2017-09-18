@@ -78,16 +78,17 @@ public class HDIVRequestProcessor extends RequestProcessor {
 	 * @exception ServletException if a servlet exception occurs
 	 * @exception InvalidCancelException if a cancellation is attempted without the proper action configuration
 	 */
-	protected boolean processValidate(HttpServletRequest request, HttpServletResponse response, ActionForm form, ActionMapping mapping)
-			throws IOException, ServletException, InvalidCancelException {
+	@Override
+	protected boolean processValidate(final HttpServletRequest request, final HttpServletResponse response, final ActionForm form,
+			final ActionMapping mapping) throws IOException, ServletException, InvalidCancelException {
 
 		if (form == null) {
-			return (true);
+			return true;
 		}
 
 		// Has validation been turned off for this mapping?
 		if (!mapping.getValidate()) {
-			return (true);
+			return true;
 		}
 
 		// Was this request cancelled? If it has been, the mapping also
@@ -99,7 +100,7 @@ public class HDIVRequestProcessor extends RequestProcessor {
 				if (log.isDebugEnabled()) {
 					log.debug(" Cancelled transaction, skipping validation");
 				}
-				return (true);
+				return true;
 			}
 			else {
 				request.removeAttribute(Globals.CANCEL_KEY);
@@ -112,15 +113,15 @@ public class HDIVRequestProcessor extends RequestProcessor {
 			log.debug(" Validating input form properties");
 		}
 		ActionMessages errors = form.validate(mapping, request);
-		if ((errors == null) || errors.isEmpty()) {
+		if (errors == null || errors.isEmpty()) {
 
-			errors = this.getEditableParametersErrors(request);
-			if ((errors == null) || errors.isEmpty()) {
+			errors = getEditableParametersErrors(request);
+			if (errors == null || errors.isEmpty()) {
 
 				if (log.isTraceEnabled()) {
 					log.trace("  No errors detected, accepting input");
 				}
-				return (true);
+				return true;
 			}
 		}
 
@@ -139,7 +140,7 @@ public class HDIVRequestProcessor extends RequestProcessor {
 				log.trace("  Validation failed but no input form available");
 			}
 			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, getInternal().getMessage("noInput", mapping.getPath()));
-			return (false);
+			return false;
 		}
 
 		// Save our error messages and return to the input form if possible
@@ -156,7 +157,7 @@ public class HDIVRequestProcessor extends RequestProcessor {
 			internalModuleRelativeForward(input, request, response);
 		}
 
-		return (false);
+		return false;
 
 	}
 
@@ -166,7 +167,7 @@ public class HDIVRequestProcessor extends RequestProcessor {
 	 * @param request The servlet request we are processing
 	 * @return errors detected by HDIV during the validation process of the editable parameters.
 	 */
-	public ActionMessages getEditableParametersErrors(HttpServletRequest request) {
+	public ActionMessages getEditableParametersErrors(final HttpServletRequest request) {
 
 		@SuppressWarnings("unchecked")
 		List<ValidatorError> validationErrors = (List<ValidatorError>) request.getAttribute(EDITABLE_PARAMETER_ERROR);
@@ -185,7 +186,7 @@ public class HDIVRequestProcessor extends RequestProcessor {
 					error = new ActionMessage(HDIV_EDITABLE_PASSWORD_ERROR);
 				}
 				else {
-					String printedValue = this.createMessageError(errorValues);
+					String printedValue = createMessageError(errorValues);
 					error = new ActionMessage(HDIV_EDITABLE_ERROR, printedValue);
 				}
 				errors.add("hdiv.editable." + validationError.getParameterName(), error);
@@ -200,7 +201,7 @@ public class HDIVRequestProcessor extends RequestProcessor {
 	 * @param paramValues values with not allowed characters
 	 * @return message error to show
 	 */
-	public String createMessageError(String paramValues) {
+	public String createMessageError(final String paramValues) {
 
 		String[] values = paramValues.split(",");
 		StringBuilder printedValue = new StringBuilder();
@@ -238,7 +239,8 @@ public class HDIVRequestProcessor extends RequestProcessor {
 	 * @throws ServletException if a servlet exception occurs
 	 * @since HDIV 2.0.1
 	 */
-	protected void processForwardConfig(HttpServletRequest request, HttpServletResponse response, ForwardConfig forward)
+	@Override
+	protected void processForwardConfig(final HttpServletRequest request, final HttpServletResponse response, ForwardConfig forward)
 			throws IOException, ServletException {
 		if (forward == null) {
 			return;

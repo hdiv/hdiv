@@ -27,12 +27,9 @@ import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
-import javax.servlet.ServletRequestWrapper;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.struts.upload.CommonsMultipartRequestHandler;
 import org.apache.struts.upload.FormFile;
 import org.apache.struts.upload.MultipartRequestWrapper;
@@ -40,13 +37,15 @@ import org.hdiv.config.multipart.IMultipartConfig;
 import org.hdiv.config.multipart.exception.HdivMultipartException;
 import org.hdiv.filter.RequestWrapper;
 import org.hdiv.util.HDIVUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class HDIVMultipartRequestHandler extends CommonsMultipartRequestHandler {
 
 	/**
 	 * Commons Logging instance.
 	 */
-	protected static Log log = LogFactory.getLog(HDIVMultipartRequestHandler.class);
+	protected static Logger log = LoggerFactory.getLogger(HDIVMultipartRequestHandler.class);
 
 	/**
 	 * The combined text and file request parameters.
@@ -70,7 +69,8 @@ public class HDIVMultipartRequestHandler extends CommonsMultipartRequestHandler 
 	 * @param request The multipart request to be processed.
 	 * @throws ServletException if an unrecoverable error occurs.
 	 */
-	public void handleRequest(HttpServletRequest request) throws ServletException {
+	@Override
+	public void handleRequest(final HttpServletRequest request) throws ServletException {
 
 		// Create the hash tables to be populated.
 		elementsText = new Hashtable();
@@ -81,15 +81,17 @@ public class HDIVMultipartRequestHandler extends CommonsMultipartRequestHandler 
 
 			MultipartRequestWrapper wrapper = (MultipartRequestWrapper) request;
 			ServletRequest origRequest = wrapper.getRequest();
-			if (origRequest == null)
+			if (origRequest == null) {
 				return;
+			}
 
 			RequestWrapper requestWrapper = HDIVUtil.getNativeRequest(origRequest, RequestWrapper.class);
-			if (requestWrapper == null)
+			if (requestWrapper == null) {
 				return;
+			}
 
 			Boolean maxLengthExceeded = (Boolean) request.getAttribute(ATTRIBUTE_MAX_LENGTH_EXCEEDED);
-			if ((maxLengthExceeded != null) && (maxLengthExceeded.booleanValue())) {
+			if (maxLengthExceeded != null && maxLengthExceeded.booleanValue()) {
 				return;
 			}
 
@@ -133,7 +135,7 @@ public class HDIVMultipartRequestHandler extends CommonsMultipartRequestHandler 
 	 * @param name Parameter name.
 	 * @param value Parameter value.
 	 */
-	protected void addTextParameter(HttpServletRequest request, String name, String[] value) {
+	protected void addTextParameter(final HttpServletRequest request, final String name, final String[] value) {
 
 		if (request instanceof MultipartRequestWrapper) {
 			MultipartRequestWrapper wrapper = (MultipartRequestWrapper) request;
@@ -152,7 +154,7 @@ public class HDIVMultipartRequestHandler extends CommonsMultipartRequestHandler 
 	 * 
 	 * @param items file items for the parameter to add
 	 */
-	protected void addFileParameter(List items) {
+	protected void addFileParameter(final List items) {
 
 		FileItem currentItem;
 		for (int i = 0; i < items.size(); i++) {
@@ -170,8 +172,9 @@ public class HDIVMultipartRequestHandler extends CommonsMultipartRequestHandler 
 	 * 
 	 * @return The text request parameters.
 	 */
+	@Override
 	public Hashtable getTextElements() {
-		return this.elementsText;
+		return elementsText;
 	}
 
 	/**
@@ -179,8 +182,9 @@ public class HDIVMultipartRequestHandler extends CommonsMultipartRequestHandler 
 	 * 
 	 * @return The file request parameters.
 	 */
+	@Override
 	public Hashtable getFileElements() {
-		return this.elementsFile;
+		return elementsFile;
 	}
 
 	/**
@@ -188,13 +192,15 @@ public class HDIVMultipartRequestHandler extends CommonsMultipartRequestHandler 
 	 * 
 	 * @return The text and file request parameters.
 	 */
+	@Override
 	public Hashtable getAllElements() {
-		return this.elementsAll;
+		return elementsAll;
 	}
 
 	/**
 	 * Cleans up when a problem occurs during request processing.
 	 */
+	@Override
 	public void rollback() {
 
 		Iterator iter = elementsFile.values().iterator();
@@ -225,7 +231,7 @@ public class HDIVMultipartRequestHandler extends CommonsMultipartRequestHandler 
 		 * 
 		 * @param fileItem The Commons file item to be wrapped.
 		 */
-		public CommonsFormFile(FileItem fileItem) {
+		public CommonsFormFile(final FileItem fileItem) {
 			this.fileItem = fileItem;
 		}
 
@@ -245,7 +251,7 @@ public class HDIVMultipartRequestHandler extends CommonsMultipartRequestHandler 
 		 * 
 		 * @param contentType A string representing the content type.
 		 */
-		public void setContentType(String contentType) {
+		public void setContentType(final String contentType) {
 			throw new UnsupportedOperationException("The setContentType() method is not supported.");
 		}
 
@@ -265,7 +271,7 @@ public class HDIVMultipartRequestHandler extends CommonsMultipartRequestHandler 
 		 * 
 		 * @param filesize The size of the file, in bytes.
 		 */
-		public void setFileSize(int filesize) {
+		public void setFileSize(final int filesize) {
 			throw new UnsupportedOperationException("The setFileSize() method is not supported.");
 		}
 
@@ -285,7 +291,7 @@ public class HDIVMultipartRequestHandler extends CommonsMultipartRequestHandler 
 		 * 
 		 * @param fileName The client-side name for the file.
 		 */
-		public void setFileName(String fileName) {
+		public void setFileName(final String fileName) {
 			throw new UnsupportedOperationException("The setFileName() method is not supported.");
 		}
 
@@ -329,7 +335,7 @@ public class HDIVMultipartRequestHandler extends CommonsMultipartRequestHandler 
 		 * 
 		 * @return The base file name, from the end of the path.
 		 */
-		protected String getBaseFileName(String filePath) {
+		protected String getBaseFileName(final String filePath) {
 
 			// First, ask the JDK for the base file name.
 			String fileName = new File(filePath).getName();
@@ -356,6 +362,7 @@ public class HDIVMultipartRequestHandler extends CommonsMultipartRequestHandler 
 		 * 
 		 * @return The client-size file name.
 		 */
+		@Override
 		public String toString() {
 			return getFileName();
 		}

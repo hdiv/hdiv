@@ -26,11 +26,11 @@ import javax.faces.component.UIParameter;
 import javax.faces.context.FacesContext;
 import javax.faces.context.PartialViewContext;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.hdiv.components.UIParameterExtension;
 import org.hdiv.util.HDIVErrorCodes;
 import org.hdiv.validation.ValidationContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * ComponentValidator that validates parameters of a component of type UICommand,
@@ -39,7 +39,7 @@ import org.hdiv.validation.ValidationContext;
  */
 public class UICommandValidator extends AbstractComponentValidator {
 
-	private static final Log log = LogFactory.getLog(UICommandValidator.class);
+	private static final Logger log = LoggerFactory.getLogger(UICommandValidator.class);
 
 	public UICommandValidator() {
 		super(UICommand.class);

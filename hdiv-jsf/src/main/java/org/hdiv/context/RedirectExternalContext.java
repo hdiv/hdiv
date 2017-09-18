@@ -20,8 +20,8 @@ import java.io.IOException;
 import javax.faces.context.ExternalContext;
 import javax.servlet.ServletContext;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
@@ -40,7 +40,7 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
  */
 public class RedirectExternalContext extends javax.faces.context.ExternalContextWrapper {
 
-	private static final Log log = LogFactory.getLog(RedirectExternalContext.class);
+	private static final Logger log = LoggerFactory.getLogger(RedirectExternalContext.class);
 
 	/**
 	 * Class for helping with the redirect logic

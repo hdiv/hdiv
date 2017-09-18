@@ -17,8 +17,6 @@ package org.hdiv.state;
 
 import java.util.UUID;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.hdiv.config.HDIVConfig;
 import org.hdiv.context.RequestContext;
 import org.hdiv.context.RequestContextHolder;
@@ -29,6 +27,8 @@ import org.hdiv.state.scope.StateScopeManager;
 import org.hdiv.util.Constants;
 import org.hdiv.util.HDIVErrorCodes;
 import org.hdiv.util.HDIVStateUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Class containing utility methods for state.
@@ -40,7 +40,7 @@ public class StateUtil {
 	/**
 	 * Commons Logging instance.
 	 */
-	private static final Log log = LogFactory.getLog(StateUtil.class);
+	private static final Logger log = LoggerFactory.getLogger(StateUtil.class);
 
 	/**
 	 * Hdiv configuration for this app. Access to user defined strategy.

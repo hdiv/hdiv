@@ -195,4 +195,8 @@ public class DefaultValidatorErrorHandler implements ValidatorErrorHandler {
 		this.config = config;
 	}
 
+	public void handleValidatorException(final RequestContextHolder context, final Throwable e) {
+		// Nothing to do by default
+	}
+
 }

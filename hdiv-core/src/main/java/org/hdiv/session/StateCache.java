@@ -19,8 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * It is composed by a data structure limited by a maximum size <code>maxSize</code>. <code>pageIds</code> structure is composed by elements
@@ -35,7 +35,7 @@ public class StateCache implements IStateCache {
 	/**
 	 * Commons Logging instance.
 	 */
-	private static final Log log = LogFactory.getLog(StateCache.class);
+	private static final Logger log = LoggerFactory.getLogger(StateCache.class);
 
 	/**
 	 * Universal version identifier. Deserialization uses this number to ensure that a loaded class corresponds exactly to a serialized
@@ -163,11 +163,11 @@ public class StateCache implements IStateCache {
 	public List<UUID> getPageIds() {
 		return pageIds;
 	}
-	
-	public static void main(String [] args) {
+
+	public static void main(final String[] args) {
 		int first = 129;
 		Integer second = 129;
-		System.out.println(first==second);
+		System.out.println(first == second);
 	}
 
 }

@@ -24,10 +24,10 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.fileupload.DiskFileUpload;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.hdiv.config.multipart.exception.HdivMultipartException;
 import org.hdiv.filter.RequestWrapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Class containing multipart request configuration and methods initialized from Spring Factory.
@@ -39,7 +39,7 @@ public class StrutsMultipartConfig extends AbstractMultipartConfig {
 	/**
 	 * Commons Logging instance.
 	 */
-	private static final Log log = LogFactory.getLog(StrutsMultipartConfig.class);
+	private static final Logger log = LoggerFactory.getLogger(StrutsMultipartConfig.class);
 
 	/**
 	 * The size threshold which determines whether an uploaded file will be written to disk or cached in memory.
@@ -54,7 +54,8 @@ public class StrutsMultipartConfig extends AbstractMultipartConfig {
 	 * @return multipart processed request
 	 * @throws HdivMultipartException if an unrecoverable error occurs.
 	 */
-	public HttpServletRequest handleMultipartRequest(RequestWrapper request, ServletContext servletContext) throws HdivMultipartException {
+	public HttpServletRequest handleMultipartRequest(final RequestWrapper request, final ServletContext servletContext)
+			throws HdivMultipartException {
 
 		DiskFileUpload upload = new DiskFileUpload();
 
@@ -92,10 +93,10 @@ public class StrutsMultipartConfig extends AbstractMultipartConfig {
 			FileItem item = iter.next();
 
 			if (item.isFormField()) {
-				this.addTextParameter(request, item);
+				addTextParameter(request, item);
 			}
 			else {
-				this.addFileParameter(request, item);
+				addFileParameter(request, item);
 			}
 		}
 		return request;
@@ -107,7 +108,7 @@ public class StrutsMultipartConfig extends AbstractMultipartConfig {
 	 * @return The size threshold, in bytes.
 	 */
 	protected long getSizeThreshold() {
-		return convertSizeToBytes(this.memFileSize, AbstractMultipartConfig.DEFAULT_SIZE_THRESHOLD);
+		return convertSizeToBytes(memFileSize, AbstractMultipartConfig.DEFAULT_SIZE_THRESHOLD);
 	}
 
 	/**
@@ -117,7 +118,7 @@ public class StrutsMultipartConfig extends AbstractMultipartConfig {
 	 * @param request The request in which the parameter was specified.
 	 * @param item The file item for the parameter to add.
 	 */
-	public void addTextParameter(RequestWrapper request, FileItem item) {
+	public void addTextParameter(final RequestWrapper request, final FileItem item) {
 
 		String name = item.getFieldName();
 		String value = null;
@@ -143,7 +144,7 @@ public class StrutsMultipartConfig extends AbstractMultipartConfig {
 			haveValue = true;
 		}
 
-		String[] oldArray = (String[]) request.getParameterValues(name);
+		String[] oldArray = request.getParameterValues(name);
 		String[] newArray;
 
 		if (oldArray != null) {
@@ -158,13 +159,13 @@ public class StrutsMultipartConfig extends AbstractMultipartConfig {
 		request.addParameter(name, newArray);
 	}
 
-	public void cleanupMultipart(HttpServletRequest request) {
+	public void cleanupMultipart(final HttpServletRequest request) {
 	}
 
 	/**
 	 * @param memFileSize The memFileSize to set.
 	 */
-	public void setMemFileSize(String memFileSize) {
+	public void setMemFileSize(final String memFileSize) {
 		this.memFileSize = memFileSize;
 	}
 }

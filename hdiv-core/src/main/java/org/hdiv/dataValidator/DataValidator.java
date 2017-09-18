@@ -18,12 +18,12 @@ package org.hdiv.dataValidator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.hdiv.config.HDIVConfig;
 import org.hdiv.context.RequestContextHolder;
 import org.hdiv.state.IParameter;
 import org.hdiv.util.HDIVUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Validates that one parameter value or values are correct, besides to replacing the relative values by its real values.
@@ -36,7 +36,7 @@ public class DataValidator implements IDataValidator {
 	/**
 	 * Commons Logging instance.
 	 */
-	private static final Log log = LogFactory.getLog(DataValidator.class);
+	private static final Logger log = LoggerFactory.getLogger(DataValidator.class);
 
 	/**
 	 * HDIV general configuration.

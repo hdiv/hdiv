@@ -15,8 +15,6 @@
  */
 package org.hdiv.init;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.hdiv.config.HDIVConfig;
 import org.hdiv.context.RequestContext;
 import org.hdiv.context.RequestContextHolder;
@@ -24,6 +22,8 @@ import org.hdiv.filter.AsyncRequestWrapper;
 import org.hdiv.filter.RequestWrapper;
 import org.hdiv.filter.ResponseWrapper;
 import org.hdiv.session.ISession;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * {@link RequestInitializer} implementation with the default behavior.
@@ -38,7 +38,7 @@ public class DefaultRequestInitializer extends HdivParameterInitializer implemen
 	 */
 	protected ISession session;
 
-	private static final Log log = LogFactory.getLog(DefaultRequestInitializer.class);
+	private static final Logger log = LoggerFactory.getLogger(DefaultRequestInitializer.class);
 
 	public void initRequest(final RequestContextHolder context) {
 		RequestContext ctx = (RequestContext) context;

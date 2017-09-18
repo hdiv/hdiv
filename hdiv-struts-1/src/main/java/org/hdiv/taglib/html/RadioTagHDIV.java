@@ -18,11 +18,11 @@ package org.hdiv.taglib.html;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.JspException;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.struts.taglib.html.RadioTag;
 import org.hdiv.dataComposer.IDataComposer;
 import org.hdiv.util.HDIVUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * <p>
@@ -45,7 +45,7 @@ public class RadioTagHDIV extends RadioTag {
 	 */
 	private static final long serialVersionUID = -3271977297872192976L;
 
-	private static final Log log = LogFactory.getLog(RadioTagHDIV.class);
+	private static final Logger log = LoggerFactory.getLogger(RadioTagHDIV.class);
 
 	/**
 	 * Renders an HTML &lt;input type="radio"&gt; element.

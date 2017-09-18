@@ -20,11 +20,11 @@ import java.util.UUID;
 
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.hdiv.context.RequestContextHolder;
 import org.hdiv.state.IPage;
 import org.hdiv.util.Constants;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.BeanFactory;
 
 /**
@@ -37,7 +37,7 @@ public class HTTPSessionCache {
 	/**
 	 * Commons Logging instance.
 	 */
-	private static final Log log = LogFactory.getLog(SessionHDIV.class);
+	private static final Logger log = LoggerFactory.getLogger(SessionHDIV.class);
 
 	private BeanFactory beanFactory;
 
