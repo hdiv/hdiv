@@ -100,10 +100,12 @@ public class ValidatorFilter extends OncePerRequestFilter {
 	 */
 	protected ValidationContextFactory validationContextFactory;
 
+	private boolean customErrorImage;
+
 	/**
 	 * Initialize required dependencies.
 	 */
-	protected void initDependencies() {
+	private void initDependencies(final HttpServletRequest request) {
 		if (validationContextFactory == null) {
 			synchronized (this) {
 				if (hdivConfig == null) {
@@ -130,6 +132,7 @@ public class ValidatorFilter extends OncePerRequestFilter {
 					errorHandler = context.getBean(ValidatorErrorHandler.class);
 					requestInitializer = context.getBean(RequestInitializer.class);
 					validationContextFactory = context.getBean(ValidationContextFactory.class);
+					customErrorImage = HDIVUtil.checkCustomImage(request);
 				}
 			}
 		}
@@ -148,7 +151,7 @@ public class ValidatorFilter extends OncePerRequestFilter {
 	protected void doFilterInternal(final HttpServletRequest request, final HttpServletResponse response, final FilterChain filterChain)
 			throws ServletException, IOException {
 		// Initialize dependencies
-		initDependencies();
+		initDependencies(request);
 
 		if (validationHelper.isInternal(request, response)) {
 			return;

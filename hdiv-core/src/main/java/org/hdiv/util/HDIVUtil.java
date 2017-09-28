@@ -16,7 +16,10 @@
 package org.hdiv.util;
 
 import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.Enumeration;
 import java.util.Locale;
 import java.util.Random;
@@ -44,6 +47,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.MessageSource;
+import org.springframework.http.HttpStatus;
 import org.springframework.util.StringUtils;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -809,6 +813,35 @@ public class HDIVUtil {
 		}
 		buf.append(text.substring(start));
 		return buf.toString();
+	}
+
+	/**
+	 * Gets custom client app image if it is present
+	 * @param request
+	 * @return
+	 */
+	public static String getCustomImage(final HttpServletRequest request) {
+		System.out.println(request.getServerName() + ":" + request.getContextPath());
+		return "http://hdiv.org/images/" + URLEncoder.encode(new sun.misc.BASE64Encoder().encode(request.getServerName().getBytes())) + "/"
+				+ URLEncoder.encode(new sun.misc.BASE64Encoder().encode(request.getContextPath().getBytes()));
+	}
+
+	public static boolean checkCustomImage(final HttpServletRequest request) {
+		try {
+			/**
+			 * Check whether a custom error image is present for the particular client
+			 */
+			HttpURLConnection connection = (HttpURLConnection) new URL(getCustomImage(request)).openConnection();
+			return connection.getResponseCode() == HttpStatus.ACCEPTED.value();
+		}
+		catch (RuntimeException e) {
+			return false;
+		}
+
+		catch (Exception e) {
+			// What to do? true for now
+			return true;
+		}
 	}
 
 }
