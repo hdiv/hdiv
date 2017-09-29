@@ -19,7 +19,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import org.hdiv.config.HDIVConfig;
-import org.hdiv.config.Strategy;
 import org.hdiv.config.annotation.builders.SecurityConfigBuilder;
 import org.hdiv.state.scope.StateScopeType;
 import org.hdiv.util.Method;
@@ -75,8 +74,6 @@ public class HdivWebSecurityConfigurationSupportTest {
 					.debugMode(true)
 					.confidentiality(false)
 					.errorPage("/customErrorPage.html")
-					.randomName(true)
-					.strategy(Strategy.MEMORY)
 					.validateUrlsWithoutParams(false);
 			}
 			// @formatter:on
@@ -91,8 +88,6 @@ public class HdivWebSecurityConfigurationSupportTest {
 		assertEquals(true, config.isDebugMode());
 		assertEquals(false, config.getConfidentiality());
 		assertEquals("/customErrorPage.html", config.getErrorPage());
-		assertEquals(true, config.isRandomName());
-		assertEquals(Strategy.MEMORY, config.getStrategy());
 		assertEquals(false, config.isValidationInUrlsWithoutParamsActivated());
 	}
 

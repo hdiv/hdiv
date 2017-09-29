@@ -30,13 +30,11 @@ import org.springframework.context.ApplicationContextAware;
  * 
  * @since 2.1.10
  */
-public class DefaultSessionInitializer extends HdivParameterInitializer implements SessionInitializer, ApplicationContextAware {
-
-	public static final String HDIV_PARAMETER = "HDIVParameter";
-
-	public static final String MODIFY_STATE_HDIV_PARAMETER = "modifyHDIVStateParameter";
+public class DefaultSessionInitializer implements SessionInitializer, ApplicationContextAware {
 
 	protected ApplicationContext applicationContext;
+
+	protected HDIVConfig config;
 
 	/*
 	 * (non-Javadoc)
@@ -44,9 +42,7 @@ public class DefaultSessionInitializer extends HdivParameterInitializer implemen
 	 * @see org.hdiv.init.SessionInitializer#initializeSession(javax.servlet.http.HttpSession)
 	 */
 	public void initializeSession(final HttpSession session) {
-
 		initPageIdGenerator(session);
-		initStateParameterNames(session);
 	}
 
 	/*
@@ -68,17 +64,6 @@ public class DefaultSessionInitializer extends HdivParameterInitializer implemen
 		// Obtain new instance of PageIdGenerator
 		PageIdGenerator pageIdGenerator = applicationContext.getBean(PageIdGenerator.class);
 		httpSession.setAttribute(Constants.PAGE_ID_GENERATOR_NAME, pageIdGenerator);
-	}
-
-	/**
-	 * State parameter names initialization.
-	 * 
-	 * @param httpSession http session
-	 * @since HDIV 1.1
-	 */
-	protected void initStateParameterNames(final HttpSession httpSession) {
-		httpSession.setAttribute(HDIV_PARAMETER, getHdivParameter());
-		httpSession.setAttribute(MODIFY_STATE_HDIV_PARAMETER, getModifyHdivParameter());
 	}
 
 	public void setApplicationContext(final ApplicationContext applicationContext) {

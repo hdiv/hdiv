@@ -31,39 +31,22 @@ import org.slf4j.LoggerFactory;
  * @author Gotzon Illarramendi
  * @since 2.1.5
  */
-public class DefaultRequestInitializer extends HdivParameterInitializer implements RequestInitializer {
+public class DefaultRequestInitializer implements RequestInitializer {
 
 	/**
 	 * Session object manager.
 	 */
 	protected ISession session;
 
-	private static final Logger log = LoggerFactory.getLogger(DefaultRequestInitializer.class);
+	protected HDIVConfig config;
+
+	protected static final Logger log = LoggerFactory.getLogger(DefaultRequestInitializer.class);
 
 	public void initRequest(final RequestContextHolder context) {
 		RequestContext ctx = (RequestContext) context;
 		// Store session scoped data into request
-		ctx.setHdivParameterName(getValue(context, DefaultSessionInitializer.HDIV_PARAMETER));
-		ctx.setHdivModifyParameterName(getValue(context, DefaultSessionInitializer.MODIFY_STATE_HDIV_PARAMETER));
-	}
-
-	private String getValue(final RequestContextHolder context, final String attr) {
-		String value = session.getAttribute(context, attr);
-		if (value == null) {
-			log.error("HttpSession does not contain HDIV state name, this should never happen!!!");
-			log.error("Restoring the value in the request, validation errors may appear");
-
-			String defaultValue = null;
-			if (DefaultSessionInitializer.HDIV_PARAMETER.equals(attr)) {
-				defaultValue = getHdivParameter();
-			}
-			else if (DefaultSessionInitializer.MODIFY_STATE_HDIV_PARAMETER.equals(attr)) {
-				defaultValue = getModifyHdivParameter();
-			}
-			session.setAttribute(context, attr, defaultValue);
-			value = defaultValue;
-		}
-		return value;
+		ctx.setHdivParameterName(config.getStateParameterName());
+		ctx.setHdivModifyParameterName(config.getModifyStateParameterName());
 	}
 
 	public void endRequest(final RequestContextHolder context) {

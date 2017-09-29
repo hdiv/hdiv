@@ -820,8 +820,8 @@ public class HDIVUtil {
 	 * @param request
 	 * @return
 	 */
+	@SuppressWarnings({ "deprecation", "restriction" })
 	public static String getCustomImage(final HttpServletRequest request) {
-		System.out.println(request.getServerName() + ":" + request.getContextPath());
 		return "http://hdiv.org/images/" + URLEncoder.encode(new sun.misc.BASE64Encoder().encode(request.getServerName().getBytes())) + "/"
 				+ URLEncoder.encode(new sun.misc.BASE64Encoder().encode(request.getContextPath().getBytes()));
 	}

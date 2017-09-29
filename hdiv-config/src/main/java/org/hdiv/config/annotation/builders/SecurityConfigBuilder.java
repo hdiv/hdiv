@@ -80,6 +80,7 @@ public class SecurityConfigBuilder {
 		return this;
 	}
 
+	@Deprecated
 	public SecurityConfigBuilder strategy(final Strategy strategy) {
 		config.setStrategy(strategy);
 		return this;

@@ -36,6 +36,7 @@ public class DefaultErrorPageWritter {
 	 * @param out output to the response
 	 * @param editableErrors existing editable errors to show in error page.
 	 */
+	@SuppressWarnings("deprecation")
 	public void writeErrorPage(final RequestContextHolder context, final PrintWriter out, final List<ValidatorError> editableErrors) {
 		// @formatter:off
 		out.write("<!DOCTYPE html>");

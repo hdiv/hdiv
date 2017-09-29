@@ -46,9 +46,9 @@ public class HDIVConfig implements Serializable {
 
 	private static final Logger log = LoggerFactory.getLogger(HDIVConfig.class);
 
-	private static final String DEFAULT_STATE_PARAMETER_NAME = "_HDIV_STATE_";
+	public static final String DEFAULT_STATE_PARAMETER_NAME = "_HDIV_STATE_";
 
-	private static final String DEFAULT_MODIFY_STATE_PARAMETER_NAME = "_MODIFY_HDIV_STATE_";
+	public static final String DEFAULT_MODIFY_STATE_PARAMETER_NAME = "_MODIFY_HDIV_STATE_";
 
 	/**
 	 * Regular expression executor factory.
@@ -129,24 +129,6 @@ public class HDIVConfig implements Serializable {
 	 * @since HDIV 2.1.0
 	 */
 	protected List<String> excludedURLExtensions;
-
-	/**
-	 * HDIV adds an extra parameter to all links and forms. By default this parameter is _HDIV_STATE_. If <code>randomName</code> is true a
-	 * random name is generated instead of default name (_HDIV_STATE_)
-	 * 
-	 * @since HDIV 2.1.0
-	 */
-	protected boolean randomName = false;
-
-	/**
-	 * Name of the parameter that contains state identification. Default value is '_HDIV_STATE_'.
-	 */
-	protected String stateParameterName = DEFAULT_STATE_PARAMETER_NAME;
-
-	/**
-	 * Name of the parameter that contains state identification to modify. Used for ajax requests.
-	 */
-	protected String modifyStateParameterName = DEFAULT_MODIFY_STATE_PARAMETER_NAME;
 
 	/**
 	 * If debug mode is enabled, the attacks are logged but the requests are not stopped.
@@ -530,14 +512,17 @@ public class HDIVConfig implements Serializable {
 	 * @return the randomName
 	 */
 	public boolean isRandomName() {
-		return randomName;
+		return false;
 	}
 
 	/**
 	 * @param randomName the randomName to set
 	 */
+	@Deprecated
 	public void setRandomName(final boolean randomName) {
-		this.randomName = randomName;
+		if (randomName) {
+			noLongerSupportedDisclaimer("RandomName");
+		}
 	}
 
 	@Deprecated
@@ -598,28 +583,34 @@ public class HDIVConfig implements Serializable {
 	 * @return the stateParameterName
 	 */
 	public String getStateParameterName() {
-		return stateParameterName;
+		return DEFAULT_STATE_PARAMETER_NAME;
 	}
 
 	/**
 	 * @param stateParameterName the stateParameterName to set
 	 */
+	@Deprecated
 	public void setStateParameterName(final String stateParameterName) {
-		this.stateParameterName = stateParameterName;
+		if (!stateParameterName.equals(DEFAULT_STATE_PARAMETER_NAME)) {
+			noLongerSupportedDisclaimer("StateParameterName");
+		}
 	}
 
 	/**
 	 * @return the modifyStateParameterName
 	 */
 	public String getModifyStateParameterName() {
-		return modifyStateParameterName;
+		return DEFAULT_MODIFY_STATE_PARAMETER_NAME;
 	}
 
 	/**
 	 * @param modifyStateParameterName the modifyStateParameterName to set
 	 */
+	@Deprecated
 	public void setModifyStateParameterName(final String modifyStateParameterName) {
-		this.modifyStateParameterName = modifyStateParameterName;
+		if (!modifyStateParameterName.equals(DEFAULT_MODIFY_STATE_PARAMETER_NAME)) {
+			noLongerSupportedDisclaimer("ModifyStateParameterName");
+		}
 	}
 
 	/**
@@ -678,5 +669,14 @@ public class HDIVConfig implements Serializable {
 		result.append(" showErrorPageOnEditableValidation=").append(showErrorPageOnEditableValidation);
 
 		return result.toString();
+	}
+
+	private void noLongerSupportedDisclaimer(final String feature) {
+		System.err.println("**************************************************************");
+		System.err.println("*                                                            *");
+		System.err.println("*       This feature is no longer supported under Hdiv CE    *");
+		System.err.println("*                                                            *");
+		System.err.println("**************************************************************");
+		System.err.println("Feature:" + feature);
 	}
 }

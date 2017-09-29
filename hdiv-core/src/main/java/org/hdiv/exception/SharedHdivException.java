@@ -17,6 +17,11 @@ package org.hdiv.exception;
 
 public class SharedHdivException extends RuntimeException {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public SharedHdivException() {
 		// TODO Auto-generated constructor stub
 	}

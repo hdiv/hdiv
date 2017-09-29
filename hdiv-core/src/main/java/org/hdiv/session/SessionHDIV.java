@@ -26,7 +26,6 @@ import org.hdiv.state.IPage;
 import org.hdiv.state.IState;
 import org.hdiv.util.Constants;
 import org.hdiv.util.HDIVErrorCodes;
-import org.hdiv.util.HDIVUtil;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
 import org.springframework.util.Assert;
@@ -73,7 +72,7 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 		UUID id = pageIdGenerator.getNextPageId();
 
 		// PageId must be greater than 0
-		if (id==null) {
+		if (id == null) {
 			throw new HDIVException("Incorrect PageId generated [" + id + "].");
 		}
 

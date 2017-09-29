@@ -359,6 +359,7 @@ public class RequestContext implements RequestContextHolder {
 		return request.getHeader(header);
 	}
 
+	@SuppressWarnings("unchecked")
 	public <T extends ValidationContext> T getValidationContext() {
 		return (T) validationContext;
 	}

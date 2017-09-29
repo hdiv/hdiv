@@ -29,29 +29,27 @@ public class SecurityConfigBuilderTest {
 
 	@Before
 	public void setUp() {
-		this.builder = new SecurityConfigBuilder(new PatternMatcherFactory());
+		builder = new SecurityConfigBuilder(new PatternMatcherFactory());
 	}
 
 	// @formatter:off
 	@Test
 	public void build() {
-		assertNotNull(this.builder);
+		assertNotNull(builder);
 
-		this.builder
+		builder
 			.cookiesConfidentiality(false)
-			.stateParameterName("state")
 			.maxPagesPerSession(23)
 			.reuseExistingPageInAjaxRequest(true)
 			.sessionExpired()
 				.loginPage("/login.html");
 
-		HDIVConfig config = this.builder.build();
+		HDIVConfig config = builder.build();
 		assertNotNull(config);
 		assertEquals(false, config.isCookiesConfidentialityActivated());
-		assertEquals("state", config.getStateParameterName());
 		assertEquals(true, config.isReuseExistingPageInAjaxRequest());
 		
-		assertEquals(23, this.builder.getMaxPagesPerSession());
+		assertEquals(23, builder.getMaxPagesPerSession());
 	}
 	// @formatter:on
 }

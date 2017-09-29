@@ -100,8 +100,6 @@ public class ValidatorFilter extends OncePerRequestFilter {
 	 */
 	protected ValidationContextFactory validationContextFactory;
 
-	private boolean customErrorImage;
-
 	/**
 	 * Initialize required dependencies.
 	 */
@@ -132,7 +130,7 @@ public class ValidatorFilter extends OncePerRequestFilter {
 					errorHandler = context.getBean(ValidatorErrorHandler.class);
 					requestInitializer = context.getBean(RequestInitializer.class);
 					validationContextFactory = context.getBean(ValidationContextFactory.class);
-					customErrorImage = HDIVUtil.checkCustomImage(request);
+					HDIVUtil.checkCustomImage(request);
 				}
 			}
 		}
