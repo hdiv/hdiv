@@ -51,7 +51,7 @@ public class SubmitTagHDIV extends SubmitTag {
 		IDataComposer dataComposer = HDIVUtil.getDataComposer(request);
 
 		// this property is editable and we must check it
-		if (property != null) {
+		if (dataComposer != null && property != null) {
 			dataComposer.composeFormField(prepareName(), "", true, null);
 		}
 

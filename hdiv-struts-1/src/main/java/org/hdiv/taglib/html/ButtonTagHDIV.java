@@ -55,7 +55,9 @@ public class ButtonTagHDIV extends ButtonTag {
 		IDataComposer dataComposer = HDIVUtil.getDataComposer(request);
 
 		// this property is editable and we must check it
-		dataComposer.composeFormField(prepareName(), "", true, null);
+		if (dataComposer != null) {
+			dataComposer.composeFormField(prepareName(), "", true, null);
+		}
 
 		return super.doStartTag();
 	}

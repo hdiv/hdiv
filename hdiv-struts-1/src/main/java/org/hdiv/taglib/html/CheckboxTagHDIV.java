@@ -61,7 +61,9 @@ public class CheckboxTagHDIV extends CheckboxTag {
 		IDataComposer dataComposer = HDIVUtil.getDataComposer(request);
 
 		// this property is editable and we must check it
-		dataComposer.composeFormField(prepareName(), value, true, null);
+		if (dataComposer != null) {
+			dataComposer.composeFormField(prepareName(), value, true, null);
+		}
 
 		return super.doStartTag();
 	}

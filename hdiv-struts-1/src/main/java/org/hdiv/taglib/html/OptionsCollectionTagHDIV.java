@@ -82,7 +82,7 @@ public class OptionsCollectionTagHDIV extends OptionsCollectionTag {
 
 		HttpServletRequest request = (HttpServletRequest) pageContext.getRequest();
 		IDataComposer dataComposer = HDIVUtil.getDataComposer(request);
-		String cipheredValue = dataComposer.composeFormField(selectTag.getProperty(), value, false, null);
+		String cipheredValue = dataComposer != null ? dataComposer.composeFormField(selectTag.getProperty(), value, false, null) : value;
 
 		if (filter) {
 			sb.append(TagUtils.getInstance().filter(cipheredValue));

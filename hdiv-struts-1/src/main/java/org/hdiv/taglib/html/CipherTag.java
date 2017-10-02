@@ -89,7 +89,10 @@ public class CipherTag extends TagSupport {
 		String value = (String) getValue("value");
 
 		String cipheredValue;
-		if (action != null) {
+		if (dataComposer == null) {
+			cipheredValue = value;
+		}
+		else if (action != null) {
 			cipheredValue = dataComposer.compose(action, parameter, value, false);
 		}
 		else {
