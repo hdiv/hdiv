@@ -74,7 +74,7 @@ public class MultiboxTagHDIV extends MultiboxTag {
 
 		final HttpServletRequest request = (HttpServletRequest) pageContext.getRequest();
 		final IDataComposer dataComposer = HDIVUtil.getDataComposer(request);
-		final String cipheredValue = dataComposer.composeFormField(property, value, false, null);
+		final String cipheredValue = dataComposer != null ? dataComposer.composeFormField(property, value, false, null) : value;
 
 		prepareAttribute(results, "value", TagUtils.getInstance().filter(cipheredValue));
 

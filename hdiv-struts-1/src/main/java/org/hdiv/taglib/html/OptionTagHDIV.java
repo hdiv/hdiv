@@ -74,7 +74,7 @@ public class OptionTagHDIV extends OptionTag {
 			throw e;
 		}
 
-		String cipheredValue = dataComposer.composeFormField(selectTag.getProperty(), value, false, null);
+		String cipheredValue = dataComposer != null ? dataComposer.composeFormField(selectTag.getProperty(), value, false, null) : value;
 
 		// If there isn't any content in the body of the tag option, and there isn't
 		// any value for the property key, the value of the property value is shown.

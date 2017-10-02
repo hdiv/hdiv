@@ -49,7 +49,9 @@ public class TextTagHDIV extends TextTag {
 		IDataComposer dataComposer = HDIVUtil.getDataComposer(request);
 
 		// this property is editable and we must check it
-		dataComposer.composeFormField(prepareName(), "", true, "text");
+		if (dataComposer != null) {
+			dataComposer.composeFormField(prepareName(), "", true, "text");
+		}
 
 		return super.doStartTag();
 	}

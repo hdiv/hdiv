@@ -50,7 +50,9 @@ public class PasswordTagHDIV extends PasswordTag {
 		IDataComposer dataComposer = HDIVUtil.getDataComposer(request);
 
 		// this property is editable and we must check it
-		dataComposer.composeFormField(prepareName(), "", true, "password");
+		if (dataComposer != null) {
+			dataComposer.composeFormField(prepareName(), "", true, "password");
+		}
 
 		return super.doStartTag();
 	}

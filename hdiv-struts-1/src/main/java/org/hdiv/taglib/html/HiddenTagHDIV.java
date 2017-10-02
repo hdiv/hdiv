@@ -73,7 +73,7 @@ public class HiddenTagHDIV extends HiddenTag {
 
 			HttpServletRequest request = (HttpServletRequest) pageContext.getRequest();
 			IDataComposer dataComposer = HDIVUtil.getDataComposer(request);
-			encodedValue = dataComposer.composeFormField(prepareName(), hiddenValue, false, null);
+			encodedValue = dataComposer != null ? dataComposer.composeFormField(prepareName(), hiddenValue, false, null) : hiddenValue;
 
 			// Render the result to the output writer
 			TagUtils.getInstance().write(pageContext, renderInputElement());
