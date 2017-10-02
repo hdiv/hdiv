@@ -60,7 +60,9 @@ public class SelectTagHDIV extends SelectTag {
 		IDataComposer dataComposer = HDIVUtil.getDataComposer(request);
 
 		// this property is editable and we must check it
-		dataComposer.composeFormField(prepareName(), "", false, null);
+		if (dataComposer != null) {
+			dataComposer.composeFormField(prepareName(), "", false, null);
+		}
 
 		return super.doStartTag();
 	}

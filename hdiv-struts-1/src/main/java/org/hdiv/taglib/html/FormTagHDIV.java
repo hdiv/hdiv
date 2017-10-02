@@ -103,7 +103,7 @@ public class FormTagHDIV extends FormTag {
 
 		final HttpServletRequest request = (HttpServletRequest) pageContext.getRequest();
 		final IDataComposer dataComposer = HDIVUtil.getDataComposer(request);
-		if (!dataComposer.isRequestStarted()) {
+		if (dataComposer == null || !dataComposer.isRequestStarted()) {
 			return;
 		}
 		final String requestId = dataComposer.endRequest();

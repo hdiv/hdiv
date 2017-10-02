@@ -3,6 +3,10 @@
 ## HDIV CHANGELOG
 https://github.com/hdiv
 
+# Release 3.3.5
+
+ * Protect Struts Tags extension from null IDataComposer
+
 # Release 3.3.4
 
  * Replace commons-logging by slf4j

@@ -52,7 +52,9 @@ public class CancelTagHDIV extends CancelTag {
 		IDataComposer dataComposer = HDIVUtil.getDataComposer(request);
 
 		// this property is editable and we must check it
-		dataComposer.composeFormField(property, "", true, null);
+		if (dataComposer != null) {
+			dataComposer.composeFormField(property, "", true, null);
+		}
 
 		return super.doStartTag();
 	}
