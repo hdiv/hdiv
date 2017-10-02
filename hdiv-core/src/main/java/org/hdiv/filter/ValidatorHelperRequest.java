@@ -1227,7 +1227,9 @@ public class ValidatorHelperRequest implements IValidationHelper, StateRestorer 
 		if (dataComposer != null) {
 			dataComposer.endPage();
 
-			if (!request.isAsync()) {
+			boolean disableClean = Boolean.getBoolean("hdiv.async.clean.disabled");
+
+			if (!disableClean && !request.isAsync()) {
 				// If this is an Async request, don't remove IDataComposer from request.
 				request.setDataComposer(null);
 			}
