@@ -15,13 +15,20 @@
  */
 package org.hdiv.filter;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.hdiv.context.RequestContext;
+import org.hdiv.util.Constants;
+import org.hdiv.util.HDIVUtil;
 import org.junit.Assert;
 import org.junit.Test;
+import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.mock.web.MockHttpServletResponse;
 
 public class RequestWrapperTest {
 
 	public RequestWrapperTest() {
-		// TODO Auto-generated constructor stub
 	}
 
 	@Test
@@ -36,4 +43,30 @@ public class RequestWrapperTest {
 				.updateQueryString("?personId=1-88B-DBEDAFDE-10-0-BEB37C78B859D3212B19066A8E2FACB0&value=2", null, "personId", "1"));
 	}
 
+	@Test
+	@SuppressWarnings("deprecation")
+	public void protectAttributes() {
+
+		HttpServletRequest request = new MockHttpServletRequest("GET", "/path/testAction.do");
+		HttpServletResponse response = new MockHttpServletResponse();
+
+		request = new RequestWrapper(new RequestContext(request, response));
+
+		RequestContext ctx1 = (RequestContext) HDIVUtil.getRequestContext(request);
+		Assert.assertNotNull(ctx1);
+
+		request.setAttribute(Constants.HDIV_REQUEST_CONTEXT, null);
+		RequestContext ctx2 = (RequestContext) HDIVUtil.getRequestContext(request);
+		Assert.assertNotNull(ctx2);
+
+		request.setAttribute(Constants.HDIV_REQUEST_CONTEXT, new RequestContext(request, response));
+		RequestContext ctx3 = (RequestContext) HDIVUtil.getRequestContext(request);
+		Assert.assertNotNull(ctx3);
+		Assert.assertEquals(ctx1, ctx3);
+
+		request.removeAttribute(Constants.HDIV_REQUEST_CONTEXT);
+		RequestContext ctx4 = (RequestContext) HDIVUtil.getRequestContext(request);
+		Assert.assertNotNull(ctx4);
+		Assert.assertEquals(ctx1, ctx4);
+	}
 }

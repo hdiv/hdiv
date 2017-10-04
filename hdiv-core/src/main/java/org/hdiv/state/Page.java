@@ -43,7 +43,15 @@ public class Page implements IPage, Serializable {
 	/**
 	 * Page <code>this</code> identifier.
 	 */
-	protected UUID id;
+	@Deprecated
+	@DeprecatedSince(1)
+	protected int id;
+
+	/**
+	 * Page <code>this</code> identifier using UUID instead of integer.
+	 */
+	@Since(1)
+	protected UUID uuid;
 
 	/**
 	 * Unique id of flow
@@ -95,11 +103,11 @@ public class Page implements IPage, Serializable {
 	}
 
 	public Page(final UUID id) {
-		this.id = id;
+		uuid = id;
 		/**
 		 * ID is already random
 		 */
-		if (id.getMostSignificantBits() != 0) {
+		if (uuid.getMostSignificantBits() != 0) {
 			formRandomToken = randomToken = NO_TOKEN;
 		}
 	}
@@ -158,7 +166,7 @@ public class Page implements IPage, Serializable {
 	 * @return Returns the page id.
 	 */
 	public UUID getId() {
-		return id;
+		return uuid;
 	}
 
 	/**
@@ -273,7 +281,7 @@ public class Page implements IPage, Serializable {
 	public String toString() {
 
 		StringBuilder result = new StringBuilder();
-		result.append("Page:").append(id).append(' ');
+		result.append("Page:").append(uuid).append(' ');
 
 		for (IState state : states) {
 			result.append(" ").append(String.valueOf(state));
