@@ -30,6 +30,8 @@ import javax.servlet.http.HttpServletRequestWrapper;
 import org.hdiv.context.RequestContextHolder;
 import org.hdiv.session.ISession;
 import org.hdiv.util.Constants;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * A wrapper for HTTP servlet request.
@@ -39,6 +41,8 @@ import org.hdiv.util.Constants;
  * @see javax.servlet.http.HttpServletRequestWrapper
  */
 public class RequestWrapper extends HttpServletRequestWrapper {
+
+	private static final Logger log = LoggerFactory.getLogger(RequestWrapper.class);
 
 	/**
 	 * HTTP header to sent cookies.
@@ -323,6 +327,30 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 		map.putAll(parameters);
 
 		return map;
+	}
+
+	@Override
+	@SuppressWarnings("deprecation")
+	public void setAttribute(final String name, final Object o) {
+		if (Constants.HDIV_REQUEST_CONTEXT.equals(name)) {
+			if (super.getAttribute(Constants.HDIV_REQUEST_CONTEXT) != null) {
+				log.warn("The application is trying to modify an Hdiv internal attribute. The change will be avoided.");
+				return;
+			}
+		}
+		super.setAttribute(name, o);
+	}
+
+	@Override
+	@SuppressWarnings("deprecation")
+	public void removeAttribute(final String name) {
+		if (Constants.HDIV_REQUEST_CONTEXT.equals(name)) {
+			if (super.getAttribute(Constants.HDIV_REQUEST_CONTEXT) != null) {
+				log.warn("The application is trying to remove an Hdiv internal attribute. The change will be avoided.");
+				return;
+			}
+		}
+		super.removeAttribute(name);
 	}
 
 	/**
