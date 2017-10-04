@@ -3,6 +3,10 @@
 ## HDIV CHANGELOG
 https://github.com/hdiv
 
+# Release 3.3.7
+
+ * Protect internal request attributes deletion or modification. 
+
 # Release 3.3.6
 
  * System property to disable request clean in async requests 
