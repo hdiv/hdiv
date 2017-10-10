@@ -3,6 +3,10 @@
 ## HDIV CHANGELOG
 https://github.com/hdiv
 
+# Release 3.3.8
+
+ * @Since and @DeprecatedSince annotations to enable Page and State versioning. 
+
 # Release 3.3.7
 
  * Protect internal request attributes deletion or modification. 
