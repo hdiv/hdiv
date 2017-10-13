@@ -29,7 +29,7 @@ public class LoggerTest extends AbstractHDIVTestCase {
 
 	@Override
 	protected void onSetUp() throws Exception {
-		this.logger = super.getApplicationContext().getBean(Logger.class);
+		logger = super.getApplicationContext().getBean(Logger.class);
 
 		// Add MockAppender as root Appender
 		LogManager.getRootLogger().addAppender(mockAppender);
@@ -70,7 +70,7 @@ public class LoggerTest extends AbstractHDIVTestCase {
 
 		@Override
 		protected void append(final LoggingEvent event) {
-			this.message = event.getMessage().toString();
+			message = event.getMessage().toString();
 		}
 
 		public String getMessage() {

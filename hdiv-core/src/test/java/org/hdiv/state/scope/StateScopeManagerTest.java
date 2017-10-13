@@ -30,10 +30,10 @@ public class StateScopeManagerTest extends AbstractHDIVTestCase {
 	public void testScope() {
 
 		StateScope scope = stateScopeManager.getStateScope(StateScopeType.APP);
-		assertEquals("app", scope.getScopeType().getName());
+		assertEquals(StateScopeType.APP, scope.getScopeType());
 
 		scope = stateScopeManager.getStateScope(StateScopeType.USER_SESSION);
-		assertEquals("user-session", scope.getScopeType().getName());
+		assertEquals(StateScopeType.USER_SESSION, scope.getScopeType());
 
 		scope = stateScopeManager.getStateScope(StateScopeType.PAGE);
 		assertNull(scope);

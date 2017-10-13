@@ -26,13 +26,14 @@ public class UserDataTest extends AbstractHDIVTestCase {
 
 	private IUserData userData;
 
+	@Override
 	protected void onSetUp() throws Exception {
-		this.userData = super.getApplicationContext().getBean(IUserData.class);
+		userData = super.getApplicationContext().getBean(IUserData.class);
 	}
 
 	public void testDefault() {
 
-		HttpServletRequest request = this.getMockRequest();
+		HttpServletRequest request = getMockRequest();
 
 		String username = userData.getUsername(request);
 
@@ -44,7 +45,7 @@ public class UserDataTest extends AbstractHDIVTestCase {
 
 	public void testPrincipal() {
 
-		HttpServletRequest request = this.getMockRequest();
+		HttpServletRequest request = getMockRequest();
 		HttpServletRequest mockResquest = new HttpServletRequestWrapper(request) {
 			@Override
 			public Principal getUserPrincipal() {

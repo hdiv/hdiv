@@ -44,8 +44,9 @@ public class AjaxTest extends AbstractHDIVTestCase {
 
 		MockHttpServletRequest request = getMockRequest();
 		RequestContextHolder context = getRequestContext();
-		IDataComposer dataComposer = dataComposerFactory.newInstance(request);
-		HDIVUtil.setDataComposer(dataComposer, request);
+		IDataComposer dataComposer = dataComposerFactory.newInstance(context);
+
+		context.setDataComposer(dataComposer);
 
 		dataComposer.startPage();
 		dataComposer.beginRequest(Method.GET, "test.do");
@@ -60,8 +61,8 @@ public class AjaxTest extends AbstractHDIVTestCase {
 		clearAjax();
 
 		// DataComposer1
-		IDataComposer dataComposer1 = dataComposerFactory.newInstance(request);
-		HDIVUtil.setDataComposer(dataComposer1, request);
+		IDataComposer dataComposer1 = dataComposerFactory.newInstance(context);
+		context.setDataComposer(dataComposer1);
 
 		dataComposer1.beginRequest(Method.GET, "test.do");
 		// Add new parameter
@@ -72,8 +73,8 @@ public class AjaxTest extends AbstractHDIVTestCase {
 		assertEquals(getPageId(stateId), getPageId(stateId1) - 1);
 
 		// DataComposer2
-		IDataComposer dataComposer2 = dataComposerFactory.newInstance(request);
-		HDIVUtil.setDataComposer(dataComposer2, request);
+		IDataComposer dataComposer2 = dataComposerFactory.newInstance(context);
+		context.setDataComposer(dataComposer2);
 
 		dataComposer2.beginRequest(Method.GET, "test.do");
 		// Add new parameter
@@ -110,8 +111,8 @@ public class AjaxTest extends AbstractHDIVTestCase {
 
 		MockHttpServletRequest request = getMockRequest();
 		RequestContextHolder context = getRequestContext();
-		IDataComposer dataComposer = dataComposerFactory.newInstance(request);
-		HDIVUtil.setDataComposer(dataComposer, request);
+		IDataComposer dataComposer = dataComposerFactory.newInstance(context);
+		context.setDataComposer(dataComposer);
 
 		dataComposer.startPage();
 		dataComposer.beginRequest(Method.GET, "test.do");
@@ -126,8 +127,8 @@ public class AjaxTest extends AbstractHDIVTestCase {
 		clearAjax();
 
 		// DataComposer1
-		IDataComposer dataComposer1 = dataComposerFactory.newInstance(request);
-		HDIVUtil.setDataComposer(dataComposer1, request);
+		IDataComposer dataComposer1 = dataComposerFactory.newInstance(context);
+		context.setDataComposer(dataComposer1);
 
 		dataComposer1.beginRequest(Method.GET, "test.do");
 		// Add new parameter
@@ -138,8 +139,8 @@ public class AjaxTest extends AbstractHDIVTestCase {
 		assertEquals(getPageId(stateId), getPageId(stateId1));
 
 		// DataComposer2
-		IDataComposer dataComposer2 = dataComposerFactory.newInstance(request);
-		HDIVUtil.setDataComposer(dataComposer2, request);
+		IDataComposer dataComposer2 = dataComposerFactory.newInstance(context);
+		context.setDataComposer(dataComposer2);
 
 		dataComposer2.beginRequest(Method.GET, "test.do");
 		// Add new parameter
@@ -176,8 +177,8 @@ public class AjaxTest extends AbstractHDIVTestCase {
 
 		MockHttpServletRequest request = getMockRequest();
 		RequestContextHolder context = getRequestContext();
-		IDataComposer dataComposer = dataComposerFactory.newInstance(request);
-		HDIVUtil.setDataComposer(dataComposer, request);
+		IDataComposer dataComposer = dataComposerFactory.newInstance(context);
+		context.setDataComposer(dataComposer);
 
 		dataComposer.startPage();
 		dataComposer.beginRequest(Method.POST, "test.do");
@@ -192,9 +193,9 @@ public class AjaxTest extends AbstractHDIVTestCase {
 		clearAjax();
 
 		// Create two dataComposers concurrently
-		IDataComposer dataComposer1 = dataComposerFactory.newInstance(request);
-		IDataComposer dataComposer2 = dataComposerFactory.newInstance(request);
-		HDIVUtil.setDataComposer(dataComposer1, request);
+		IDataComposer dataComposer1 = dataComposerFactory.newInstance(context);
+		IDataComposer dataComposer2 = dataComposerFactory.newInstance(context);
+		context.setDataComposer(dataComposer1);
 
 		// DataComposer1
 		dataComposer1.beginRequest(Method.GET, "test.do");
@@ -206,7 +207,7 @@ public class AjaxTest extends AbstractHDIVTestCase {
 		assertEquals(getPageId(stateId), getPageId(stateId1));
 
 		// DataComposer2
-		HDIVUtil.setDataComposer(dataComposer2, request);
+		context.setDataComposer(dataComposer2);
 
 		dataComposer2.beginRequest(Method.GET, "test.do");
 		// Add new parameter
