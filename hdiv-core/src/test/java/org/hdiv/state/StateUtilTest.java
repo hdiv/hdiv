@@ -23,6 +23,8 @@ import org.hdiv.dataComposer.DataComposerFactory;
 import org.hdiv.dataComposer.IDataComposer;
 import org.hdiv.exception.HDIVException;
 import org.hdiv.state.scope.StateScopeType;
+import org.hdiv.util.Constants;
+import org.hdiv.util.HDIVErrorCodes;
 import org.hdiv.util.HDIVUtil;
 import org.hdiv.util.Method;
 
@@ -132,4 +134,35 @@ public class StateUtilTest extends AbstractHDIVTestCase {
 		assertEquals(restored.getAction(), "test.do");
 		assertEquals(restored.getParameter("parameter1").getValues().get(0), "2");
 	}
+
+	public void testInvalidateSession() {
+
+		HttpServletRequest request = getMockRequest();
+		RequestContextHolder context = getRequestContext();
+		IDataComposer dataComposer = dataComposerFactory.newInstance(request);
+
+		dataComposer.startPage();
+		dataComposer.beginRequest(Method.GET, "test.do");
+		String params = "param1=val1&param2=val2";
+		String processedParams = dataComposer.composeParams(params, Method.GET, Constants.ENCODING_UTF_8);
+		assertEquals("param1=0&param2=0", processedParams);
+		String stateId = dataComposer.endRequest();
+
+		// Invalidate the session in the middle of the request
+		request.getSession().invalidate();
+
+		dataComposer.endPage();
+		assertNotNull(stateId);
+
+		try {
+			stateUtil.restoreState(context, stateId);
+		}
+		catch (HDIVException e) {
+			assertEquals(HDIVErrorCodes.INVALID_PAGE_ID, e.getMessage());
+			return;
+		}
+
+		fail();
+	}
+
 }
