@@ -30,11 +30,12 @@ public class ValidatorHelperRequestTest extends AbstractHDIVTestCase {
 
 	private IValidationHelper helper;
 
-	private String targetName = "/path/testAction.do";
+	private final String targetName = "/path/testAction.do";
 
+	@Override
 	protected void onSetUp() throws Exception {
 
-		this.helper = this.getApplicationContext().getBean(IValidationHelper.class);
+		helper = getApplicationContext().getBean(IValidationHelper.class);
 	}
 
 	/**

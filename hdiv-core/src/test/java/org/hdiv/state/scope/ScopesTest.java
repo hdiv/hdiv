@@ -15,17 +15,15 @@
  */
 package org.hdiv.state.scope;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.hdiv.AbstractHDIVTestCase;
 import org.hdiv.context.RequestContext;
+import org.hdiv.context.RequestContextHolder;
 import org.hdiv.dataComposer.DataComposerFactory;
 import org.hdiv.dataComposer.DataComposerMemory;
 import org.hdiv.dataComposer.IDataComposer;
 import org.hdiv.state.IState;
 import org.hdiv.urlProcessor.LinkUrlProcessor;
 import org.hdiv.util.HDIVStateUtils;
-import org.hdiv.util.HDIVUtil;
 import org.hdiv.util.Method;
 
 public class ScopesTest extends AbstractHDIVTestCase {
@@ -46,11 +44,11 @@ public class ScopesTest extends AbstractHDIVTestCase {
 
 	public void testScopeDifferent() {
 
-		HttpServletRequest request = getMockRequest();
+		RequestContextHolder request = getRequestContext();
 		String url = "/testAction.do";
 		String url2 = "/otherAction.do";
 
-		IDataComposer dataComposer = HDIVUtil.getDataComposer(request);
+		IDataComposer dataComposer = request.getDataComposer();
 		dataComposer.startScope(StateScopeType.APP);
 
 		String result1 = linkUrlProcessor.processUrl(request, url);
@@ -63,10 +61,10 @@ public class ScopesTest extends AbstractHDIVTestCase {
 
 	public void testScopeSame() {
 
-		HttpServletRequest request = getMockRequest();
+		RequestContextHolder request = getRequestContext();
 		String url = "/testAction.do";
 
-		IDataComposer dataComposer = HDIVUtil.getDataComposer(request);
+		IDataComposer dataComposer = request.getDataComposer();
 		dataComposer.startScope(StateScopeType.APP);
 
 		String result1 = linkUrlProcessor.processUrl(request, url);
@@ -79,11 +77,11 @@ public class ScopesTest extends AbstractHDIVTestCase {
 
 	public void testScopeDifferentParams() {
 
-		HttpServletRequest request = getMockRequest();
+		RequestContextHolder request = getRequestContext();
 		String url = "/testAction.do?param=value";
 		String url2 = "/testAction.do?other=value";
 
-		IDataComposer dataComposer = HDIVUtil.getDataComposer(request);
+		IDataComposer dataComposer = request.getDataComposer();
 		dataComposer.startScope(StateScopeType.APP);
 
 		String result1 = linkUrlProcessor.processUrl(request, url);
@@ -96,10 +94,10 @@ public class ScopesTest extends AbstractHDIVTestCase {
 
 	public void testScopeSameParams() {
 
-		HttpServletRequest request = getMockRequest();
+		RequestContextHolder request = getRequestContext();
 		String url = "/testAction.do?param=value";
 
-		IDataComposer dataComposer = HDIVUtil.getDataComposer(request);
+		IDataComposer dataComposer = request.getDataComposer();
 		dataComposer.startScope(StateScopeType.APP);
 
 		String result1 = linkUrlProcessor.processUrl(request, url);

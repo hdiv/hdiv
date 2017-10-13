@@ -34,8 +34,8 @@ public class AppStateScopeTest extends AbstractHDIVTestCase {
 
 	public void testConf() {
 
-		String scopeName = stateScope.getScopeType().getName();
-		assertEquals("app", scopeName);
+		StateScopeType scope = stateScope.getScopeType();
+		assertEquals(StateScopeType.APP, scope);
 
 		String scopePrefix = stateScope.getScopePrefix();
 		assertEquals("A", scopePrefix);
