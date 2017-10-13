@@ -5,7 +5,8 @@ https://github.com/hdiv
 
 # Release 3.3.8
 
- * @Since and @DeprecatedSince annotations to enable Page and State versioning. 
+ * @Since and @DeprecatedSince annotations to enable Page and State versioning.
+ * Protect access to invalidated session attributes. 
 
 # Release 3.3.7
 
