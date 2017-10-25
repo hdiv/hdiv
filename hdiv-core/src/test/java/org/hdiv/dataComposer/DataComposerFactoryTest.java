@@ -15,9 +15,8 @@
  */
 package org.hdiv.dataComposer;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.hdiv.AbstractHDIVTestCase;
+import org.hdiv.context.RequestContextHolder;
 import org.hdiv.util.HDIVStateUtils;
 import org.hdiv.util.Method;
 import org.springframework.mock.web.MockHttpServletRequest;
@@ -28,14 +27,13 @@ public class DataComposerFactoryTest extends AbstractHDIVTestCase {
 
 	@Override
 	protected void onSetUp() throws Exception {
-
 		dataComposerFactory = getApplicationContext().getBean(DataComposerFactory.class);
 	}
 
 	public void testNewInstance() {
 
-		HttpServletRequest request = getMockRequest();
-		IDataComposer dataComposer = dataComposerFactory.newInstance(request);
+		RequestContextHolder context = getRequestContext();
+		IDataComposer dataComposer = dataComposerFactory.newInstance(context);
 
 		assertTrue(dataComposer instanceof DataComposerMemory);
 	}
@@ -43,8 +41,8 @@ public class DataComposerFactoryTest extends AbstractHDIVTestCase {
 	public void testNewInstanceAjax() {
 
 		MockHttpServletRequest request = getMockRequest();
-
-		IDataComposer dataComposer = dataComposerFactory.newInstance(request);
+		RequestContextHolder context = getRequestContext();
+		IDataComposer dataComposer = dataComposerFactory.newInstance(context);
 
 		dataComposer.beginRequest(Method.GET, "/ajax");
 		String stateId = dataComposer.endRequest();
@@ -56,7 +54,7 @@ public class DataComposerFactoryTest extends AbstractHDIVTestCase {
 		clearAjax();
 		getConfig().setReuseExistingPageInAjaxRequest(true);
 
-		dataComposer = dataComposerFactory.newInstance(request);
+		dataComposer = dataComposerFactory.newInstance(context);
 
 		dataComposer.beginRequest(Method.GET, "/ajax");
 		String stateId2 = dataComposer.endRequest();
@@ -69,7 +67,8 @@ public class DataComposerFactoryTest extends AbstractHDIVTestCase {
 
 		MockHttpServletRequest request = getMockRequest();
 
-		IDataComposer dataComposer = dataComposerFactory.newInstance(request);
+		RequestContextHolder context = getRequestContext();
+		IDataComposer dataComposer = dataComposerFactory.newInstance(context);
 
 		dataComposer.beginRequest(Method.GET, "/ajax");
 		String stateId = dataComposer.endRequest();
@@ -80,7 +79,7 @@ public class DataComposerFactoryTest extends AbstractHDIVTestCase {
 		clearAjax();
 		getConfig().setReuseExistingPageInAjaxRequest(true);
 
-		dataComposer = dataComposerFactory.newInstance(request);
+		dataComposer = dataComposerFactory.newInstance(context);
 
 		dataComposer.beginRequest(Method.GET, "/ajax");
 		String stateId2 = dataComposer.endRequest();
@@ -93,7 +92,8 @@ public class DataComposerFactoryTest extends AbstractHDIVTestCase {
 
 		MockHttpServletRequest request = getMockRequest();
 
-		IDataComposer dataComposer = dataComposerFactory.newInstance(request);
+		RequestContextHolder context = getRequestContext();
+		IDataComposer dataComposer = dataComposerFactory.newInstance(context);
 
 		dataComposer.beginRequest(Method.GET, "/ajax");
 		String stateId = dataComposer.endRequest();
@@ -106,7 +106,7 @@ public class DataComposerFactoryTest extends AbstractHDIVTestCase {
 		clearAjax();
 		getConfig().setReuseExistingPageInAjaxRequest(true);
 
-		dataComposer = dataComposerFactory.newInstance(request);
+		dataComposer = dataComposerFactory.newInstance(context);
 
 		dataComposer.beginRequest(Method.GET, "/ajax");
 		String stateId2 = dataComposer.endRequest();

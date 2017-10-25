@@ -41,8 +41,6 @@ public class DataValidatorTest extends AbstractHDIVTestCase {
 	 */
 	public void testValidateDataIsNotInt() {
 
-		HttpServletRequest request = getMockRequest();
-
 		IParameter param1 = new Parameter("param1", "value1", false, null, false);
 
 		IValidationResult result = dataValidator.validate(getRequestContext(), "dataIsNotInt", "simpleAction", "param1", param1, null);
@@ -69,8 +67,6 @@ public class DataValidatorTest extends AbstractHDIVTestCase {
 	 */
 	public void testValidatePositionDoesNotExist() {
 
-		HttpServletRequest request = getMockRequest();
-
 		IParameter param1 = new Parameter("param1", "value1", false, null, false);
 
 		IValidationResult result = dataValidator.validate(getRequestContext(), "1", "simpleAction", "param1", param1, null);
@@ -81,8 +77,6 @@ public class DataValidatorTest extends AbstractHDIVTestCase {
 	 * Validation test with a noneditable parameter. The validation is correct.
 	 */
 	public void testValidateCorrectData() {
-
-		HttpServletRequest request = getMockRequest();
 
 		IParameter param1 = new Parameter("param1", "value1", false, null, false);
 
@@ -95,8 +89,6 @@ public class DataValidatorTest extends AbstractHDIVTestCase {
 	}
 
 	public void testValidateActionParams() {
-
-		HttpServletRequest request = getMockRequest();
 
 		String[] values = new String[] { "value1" };
 

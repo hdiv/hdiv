@@ -13,30 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.hdiv.state.scope;
+package org.hdiv.context;
+
+import javax.servlet.http.HttpSession;
 
 import org.hdiv.AbstractHDIVTestCase;
 
-public class StateScopeManagerTest extends AbstractHDIVTestCase {
-
-	private StateScopeManager stateScopeManager;
+public class RequestContextTest extends AbstractHDIVTestCase {
 
 	@Override
 	protected void onSetUp() throws Exception {
-
-		stateScopeManager = getApplicationContext().getBean(StateScopeManager.class);
 	}
 
-	public void testScope() {
+	public void testSessionInvalidate() {
 
-		StateScope scope = stateScopeManager.getStateScope(StateScopeType.APP);
-		assertEquals(StateScopeType.APP, scope.getScopeType());
+		RequestContextHolder ctx = getRequestContext();
+		HttpSession session = getMockRequest().getSession();
+		session.setAttribute("sample", "value");
 
-		scope = stateScopeManager.getStateScope(StateScopeType.USER_SESSION);
-		assertEquals(StateScopeType.USER_SESSION, scope.getScopeType());
+		// Invalidate
+		session.invalidate();
 
-		scope = stateScopeManager.getStateScope(StateScopeType.PAGE);
-		assertNull(scope);
+		Object value = ctx.getSession().getAttribute("sample");
+		assertNull(value);
 	}
 
 }

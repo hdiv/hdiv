@@ -29,6 +29,7 @@ import org.springframework.mock.web.MockHttpServletResponse;
 
 public class ValidatorFilterTest extends AbstractHDIVTestCase {
 
+	@Override
 	protected void onSetUp() throws Exception {
 
 	}
@@ -36,7 +37,7 @@ public class ValidatorFilterTest extends AbstractHDIVTestCase {
 	public void testFilterCreation() {
 		ValidatorFilter filter = new ValidatorFilter();
 
-		HttpServletRequest request = this.getMockRequest();
+		HttpServletRequest request = getMockRequest();
 		MockHttpServletResponse response = new MockHttpServletResponse();
 		FilterConfig filterConfig = new MockFilterConfig(request.getSession().getServletContext(), "hdivFilter");
 		FilterChain filterChain = new MockFilterChain();

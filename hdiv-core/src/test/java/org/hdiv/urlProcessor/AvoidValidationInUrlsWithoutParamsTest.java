@@ -15,12 +15,10 @@
  */
 package org.hdiv.urlProcessor;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.hdiv.AbstractHDIVTestCase;
+import org.hdiv.context.RequestContextHolder;
 import org.hdiv.dataComposer.DataComposerFactory;
 import org.hdiv.dataComposer.IDataComposer;
-import org.hdiv.util.HDIVUtil;
 import org.springframework.mock.web.MockHttpServletRequest;
 
 public class AvoidValidationInUrlsWithoutParamsTest extends AbstractHDIVTestCase {
@@ -50,7 +48,7 @@ public class AvoidValidationInUrlsWithoutParamsTest extends AbstractHDIVTestCase
 
 		getConfig().setAvoidValidationInUrlsWithoutParams(Boolean.FALSE);
 
-		HttpServletRequest request = getMockRequest();
+		RequestContextHolder request = getRequestContext();
 		String url = "/testAction.do";
 
 		String result = linkUrlProcessor.processUrl(request, url);
@@ -62,7 +60,7 @@ public class AvoidValidationInUrlsWithoutParamsTest extends AbstractHDIVTestCase
 
 		getConfig().setAvoidValidationInUrlsWithoutParams(Boolean.FALSE);
 
-		HttpServletRequest request = getMockRequest();
+		RequestContextHolder request = getRequestContext();
 		String url = "/testAction.do?param=1";
 
 		String result = linkUrlProcessor.processUrl(request, url);
@@ -74,7 +72,7 @@ public class AvoidValidationInUrlsWithoutParamsTest extends AbstractHDIVTestCase
 
 		getConfig().setAvoidValidationInUrlsWithoutParams(Boolean.TRUE);
 
-		HttpServletRequest request = getMockRequest();
+		RequestContextHolder request = getRequestContext();
 		String url = "/testAction.do";
 
 		String result = linkUrlProcessor.processUrl(request, url);
@@ -86,7 +84,7 @@ public class AvoidValidationInUrlsWithoutParamsTest extends AbstractHDIVTestCase
 
 		getConfig().setAvoidValidationInUrlsWithoutParams(Boolean.TRUE);
 
-		HttpServletRequest request = getMockRequest();
+		RequestContextHolder request = getRequestContext();
 		String url = "/testAction.do?param=1";
 
 		String result = linkUrlProcessor.processUrl(request, url);
@@ -102,7 +100,7 @@ public class AvoidValidationInUrlsWithoutParamsTest extends AbstractHDIVTestCase
 
 		getConfig().setAvoidValidationInUrlsWithoutParams(Boolean.FALSE);
 
-		HttpServletRequest request = getMockRequest();
+		RequestContextHolder request = getRequestContext();
 		String action = "/testAction.do";
 
 		String result = formUrlProcessor.processUrl(request, action);
@@ -115,7 +113,7 @@ public class AvoidValidationInUrlsWithoutParamsTest extends AbstractHDIVTestCase
 
 		getConfig().setAvoidValidationInUrlsWithoutParams(Boolean.FALSE);
 
-		HttpServletRequest request = getMockRequest();
+		RequestContextHolder request = getRequestContext();
 		String action = "/testAction.do?param=1";
 
 		String result = formUrlProcessor.processUrl(request, action);
@@ -128,10 +126,10 @@ public class AvoidValidationInUrlsWithoutParamsTest extends AbstractHDIVTestCase
 
 		getConfig().setAvoidValidationInUrlsWithoutParams(Boolean.TRUE);
 
-		HttpServletRequest request = getMockRequest();
+		RequestContextHolder request = getRequestContext();
 
 		IDataComposer dataComposer = dataComposerFactory.newInstance(request);
-		HDIVUtil.setDataComposer(dataComposer, request);
+		request.setDataComposer(dataComposer);
 		dataComposer.startPage();
 
 		String action = "/testAction.do";
@@ -156,10 +154,11 @@ public class AvoidValidationInUrlsWithoutParamsTest extends AbstractHDIVTestCase
 
 		MockHttpServletRequest request = getMockRequest();
 		request.addHeader("x-requested-with", "XMLHttpRequest");
+		clearAjax();
 
 		String url = "/testAction.do?param=1";
 
-		String result = linkUrlProcessor.processUrl(request, url);
+		String result = linkUrlProcessor.processUrl(getRequestContext(), url);
 
 		assertTrue(result.contains("_HDIV_STATE_"));
 
@@ -171,10 +170,11 @@ public class AvoidValidationInUrlsWithoutParamsTest extends AbstractHDIVTestCase
 
 		MockHttpServletRequest request = getMockRequest();
 		request.addHeader("x-requested-with", "XMLHttpRequest");
+		clearAjax();
 
 		String url = "/testAction.do";
 
-		String result = linkUrlProcessor.processUrl(request, url);
+		String result = linkUrlProcessor.processUrl(getRequestContext(), url);
 
 		assertTrue(!result.contains("_HDIV_STATE_"));
 	}

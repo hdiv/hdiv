@@ -15,15 +15,14 @@
  */
 package org.hdiv.state;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.hdiv.AbstractHDIVTestCase;
 import org.hdiv.context.RequestContextHolder;
 import org.hdiv.dataComposer.DataComposerFactory;
 import org.hdiv.dataComposer.IDataComposer;
 import org.hdiv.exception.HDIVException;
 import org.hdiv.state.scope.StateScopeType;
-import org.hdiv.util.HDIVUtil;
+import org.hdiv.util.Constants;
+import org.hdiv.util.HDIVErrorCodes;
 import org.hdiv.util.Method;
 
 /**
@@ -45,10 +44,9 @@ public class StateUtilTest extends AbstractHDIVTestCase {
 
 	public void testRestore() {
 
-		HttpServletRequest request = getMockRequest();
 		RequestContextHolder context = getRequestContext();
-		IDataComposer dataComposer = dataComposerFactory.newInstance(request);
-		HDIVUtil.setDataComposer(dataComposer, request);
+		IDataComposer dataComposer = dataComposerFactory.newInstance(context);
+		context.setDataComposer(dataComposer);
 
 		dataComposer.startPage();
 		dataComposer.beginRequest(Method.GET, "test.do");
@@ -67,10 +65,9 @@ public class StateUtilTest extends AbstractHDIVTestCase {
 
 	public void testRestoreIncorrectStateId() {
 
-		HttpServletRequest request = getMockRequest();
 		RequestContextHolder context = getRequestContext();
-		IDataComposer dataComposer = dataComposerFactory.newInstance(request);
-		HDIVUtil.setDataComposer(dataComposer, request);
+		IDataComposer dataComposer = dataComposerFactory.newInstance(context);
+		context.setDataComposer(dataComposer);
 
 		try {
 			IState restored = stateUtil.restoreState(context, "1111-");
@@ -85,10 +82,9 @@ public class StateUtilTest extends AbstractHDIVTestCase {
 
 	public void testLongLivingApp() {
 
-		HttpServletRequest request = getMockRequest();
 		RequestContextHolder context = getRequestContext();
-		IDataComposer dataComposer = dataComposerFactory.newInstance(request);
-		HDIVUtil.setDataComposer(dataComposer, request);
+		IDataComposer dataComposer = dataComposerFactory.newInstance(context);
+		context.setDataComposer(dataComposer);
 
 		dataComposer.startPage();
 		dataComposer.startScope(StateScopeType.APP);
@@ -110,10 +106,9 @@ public class StateUtilTest extends AbstractHDIVTestCase {
 
 	public void testLongLivingUser() {
 
-		HttpServletRequest request = getMockRequest();
 		RequestContextHolder context = getRequestContext();
-		IDataComposer dataComposer = dataComposerFactory.newInstance(request);
-		HDIVUtil.setDataComposer(dataComposer, request);
+		IDataComposer dataComposer = dataComposerFactory.newInstance(context);
+		context.setDataComposer(dataComposer);
 
 		dataComposer.startPage();
 		dataComposer.startScope(StateScopeType.USER_SESSION);
@@ -132,4 +127,35 @@ public class StateUtilTest extends AbstractHDIVTestCase {
 		assertEquals(restored.getAction(), "test.do");
 		assertEquals(restored.getParameter("parameter1").getValues().get(0), "2");
 	}
+
+	public void testInvalidateSession() {
+
+		RequestContextHolder context = getRequestContext();
+		IDataComposer dataComposer = dataComposerFactory.newInstance(context);
+		context.setDataComposer(dataComposer);
+
+		dataComposer.startPage();
+		dataComposer.beginRequest(Method.GET, "test.do");
+		String params = "param1=val1&param2=val2";
+		String processedParams = dataComposer.composeParams(params, Method.GET, Constants.ENCODING_UTF_8);
+		assertEquals("param1=0&param2=0", processedParams);
+		String stateId = dataComposer.endRequest();
+
+		// Invalidate the session in the middle of the request
+		context.getRequest().getSession().invalidate();
+
+		dataComposer.endPage();
+		assertNotNull(stateId);
+
+		try {
+			stateUtil.restoreState(context, stateId);
+		}
+		catch (HDIVException e) {
+			assertEquals(HDIVErrorCodes.INVALID_PAGE_ID, e.getMessage());
+			return;
+		}
+
+		fail();
+	}
+
 }

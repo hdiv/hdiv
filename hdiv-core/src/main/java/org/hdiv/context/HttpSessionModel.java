@@ -18,8 +18,12 @@ package org.hdiv.context;
 import javax.servlet.http.HttpSession;
 
 import org.hdiv.session.SessionModel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class HttpSessionModel implements SessionModel {
+
+	private static final Logger log = LoggerFactory.getLogger(HttpSessionModel.class);
 
 	private final HttpSession session;
 
@@ -29,20 +33,35 @@ public class HttpSessionModel implements SessionModel {
 
 	public Object getAttribute(final String name) {
 		if (session != null) {
-			return session.getAttribute(name);
+			try {
+				return session.getAttribute(name);
+			}
+			catch (IllegalStateException e) {
+				log.debug("It was not possible to get an attribute from HttpSession. Msg: {}", e.getMessage());
+			}
 		}
 		return null;
 	}
 
 	public void removeAttribute(final String name) {
 		if (session != null) {
-			session.removeAttribute(name);
+			try {
+				session.removeAttribute(name);
+			}
+			catch (IllegalStateException e) {
+				log.debug("It was not possible to remove an attribute from HttpSession. Msg: {}", e.getMessage());
+			}
 		}
 	}
 
 	public void setAttribute(final String name, final Object cache) {
 		if (session != null) {
-			session.setAttribute(name, cache);
+			try {
+				session.setAttribute(name, cache);
+			}
+			catch (IllegalStateException e) {
+				log.debug("It was not possible to set an attribute from HttpSession. Msg: {}", e.getMessage());
+			}
 		}
 	}
 

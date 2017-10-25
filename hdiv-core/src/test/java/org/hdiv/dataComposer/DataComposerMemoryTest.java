@@ -375,7 +375,7 @@ public class DataComposerMemoryTest extends AbstractHDIVTestCase {
 
 		// Test the validation of a state before processing all page
 
-		MockHttpServletRequest request = getMockRequest();
+		HttpServletRequest request = getMockRequest();
 		RequestContextHolder context = getRequestContext();
 		IDataComposer dataComposer = dataComposerFactory.newInstance(request);
 		HDIVUtil.setDataComposer(dataComposer, request);
@@ -397,7 +397,7 @@ public class DataComposerMemoryTest extends AbstractHDIVTestCase {
 	public void testEncodeFormAction() {
 
 		// No encoded url
-		MockHttpServletRequest request = getMockRequest();
+		HttpServletRequest request = getMockRequest();
 		RequestContextHolder context = getRequestContext();
 		IDataComposer dataComposer = dataComposerFactory.newInstance(request);
 		HDIVUtil.setDataComposer(dataComposer, request);

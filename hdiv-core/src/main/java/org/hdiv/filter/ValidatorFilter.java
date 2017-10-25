@@ -155,8 +155,6 @@ public class ValidatorFilter extends OncePerRequestFilter {
 		}
 
 		RequestContextHolder ctx = requestContextFactory.create(requestInitializer, request, response);
-		// Initialize request scoped data
-		requestInitializer.initRequest(ctx);
 
 		@SuppressWarnings("deprecation")
 		RequestWrapper requestWrapper = (RequestWrapper) ctx.getRequest();

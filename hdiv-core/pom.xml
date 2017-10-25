@@ -13,6 +13,10 @@
 	<url>http://www.hdiv.org</url>
 	<description>Web Application Security Framework</description>
 
+	<properties>
+		<org.springframework-test.version>4.0.9.RELEASE</org.springframework-test.version>
+	</properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -90,7 +94,7 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-test</artifactId>
-			<version>${org.springframework.version}</version>
+			<version>${org.springframework-test.version}</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
