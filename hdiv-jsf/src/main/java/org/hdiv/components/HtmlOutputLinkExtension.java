@@ -20,11 +20,9 @@ import java.io.IOException;
 import javax.faces.component.html.HtmlOutputLink;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
-import javax.servlet.ServletContext;
 
 import org.hdiv.components.support.OutputLinkComponentProcessor;
-import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.context.support.WebApplicationContextUtils;
+import org.hdiv.util.UtilsJsf;
 
 /**
  * HtmlOutputLink component extension
@@ -39,10 +37,7 @@ public class HtmlOutputLinkExtension extends HtmlOutputLink {
 
 		if (componentProcessor == null) {
 			ExternalContext externalContext = context.getExternalContext();
-			ServletContext servletContext = (ServletContext) externalContext.getContext();
-			WebApplicationContext wac = WebApplicationContextUtils.getRequiredWebApplicationContext(servletContext);
-
-			componentProcessor = wac.getBean(OutputLinkComponentProcessor.class);
+			componentProcessor = UtilsJsf.getRequiredWebApplicationContext(externalContext).getBean(OutputLinkComponentProcessor.class);
 		}
 	}
 

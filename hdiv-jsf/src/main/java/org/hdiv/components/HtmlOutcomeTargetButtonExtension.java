@@ -20,11 +20,9 @@ import java.io.IOException;
 import javax.faces.component.html.HtmlOutcomeTargetButton;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
-import javax.servlet.ServletContext;
 
 import org.hdiv.components.support.OutcomeTargetComponentProcessor;
-import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.context.support.WebApplicationContextUtils;
+import org.hdiv.util.UtilsJsf;
 
 /**
  * <p>
@@ -47,10 +45,7 @@ public class HtmlOutcomeTargetButtonExtension extends HtmlOutcomeTargetButton {
 
 		if (componentProcessor == null) {
 			ExternalContext externalContext = context.getExternalContext();
-			ServletContext servletContext = (ServletContext) externalContext.getContext();
-			WebApplicationContext wac = WebApplicationContextUtils.getRequiredWebApplicationContext(servletContext);
-
-			componentProcessor = wac.getBean(OutcomeTargetComponentProcessor.class);
+			componentProcessor = UtilsJsf.getRequiredWebApplicationContext(externalContext).getBean(OutcomeTargetComponentProcessor.class);
 		}
 	}
 

@@ -26,10 +26,16 @@ import javax.faces.component.UIData;
 import javax.faces.component.UIForm;
 import javax.faces.component.UIParameter;
 import javax.faces.component.UIViewRoot;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.portlet.PortletContext;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
 import org.hdiv.context.RequestContextHolder;
+import org.springframework.context.ApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
+import org.springframework.web.portlet.context.PortletApplicationContextUtils;
 
 /**
  * General HDIV utility methods
@@ -243,6 +249,19 @@ public abstract class UtilsJsf {
 		else {
 			return requestContext.getDataComposer() != null;
 		}
+	}
+
+	public static ApplicationContext getRequiredWebApplicationContext(final ExternalContext externalContext) {
+
+		if (ServletContext.class.isAssignableFrom(externalContext.getContext().getClass())) {
+			ServletContext servletContext = (ServletContext) externalContext.getContext();
+			return WebApplicationContextUtils.getRequiredWebApplicationContext(servletContext);
+		}
+		else {
+			PortletContext portletContext = (PortletContext) externalContext.getContext();
+			return PortletApplicationContextUtils.getWebApplicationContext(portletContext);
+		}
+
 	}
 
 }

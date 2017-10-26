@@ -18,12 +18,11 @@ package org.hdiv.context;
 import java.io.IOException;
 
 import javax.faces.context.ExternalContext;
-import javax.servlet.ServletContext;
 
+import org.hdiv.util.UtilsJsf;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
-import org.springframework.web.context.support.WebApplicationContextUtils;
 
 /**
  * <p>
@@ -59,8 +58,7 @@ public class RedirectExternalContext extends javax.faces.context.ExternalContext
 	 */
 	public RedirectExternalContext(final ExternalContext wrapped) {
 
-		ServletContext servletContext = (ServletContext) wrapped.getContext();
-		redirectHelper = WebApplicationContextUtils.getRequiredWebApplicationContext(servletContext).getBean(RedirectHelper.class);
+		redirectHelper = UtilsJsf.getRequiredWebApplicationContext(wrapped).getBean(RedirectHelper.class);
 
 		Assert.notNull(redirectHelper);
 
