@@ -3,6 +3,10 @@
 ## HDIV CHANGELOG
 https://github.com/hdiv
 
+# Release 3.3.9
+
+ * Struts1: Don’t process url if requestContext is null.
+
 # Release 3.3.8
 
  * @Since and @DeprecatedSince annotations to enable Page and State versioning.

@@ -32,6 +32,7 @@ import org.apache.struts.action.RequestProcessor;
 import org.apache.struts.config.ForwardConfig;
 import org.apache.struts.taglib.TagUtils;
 import org.apache.struts.util.RequestUtils;
+import org.hdiv.context.RequestContextHolder;
 import org.hdiv.filter.ValidatorError;
 import org.hdiv.urlProcessor.LinkUrlProcessor;
 import org.hdiv.util.Constants;
@@ -279,8 +280,14 @@ public class HDIVRequestProcessor extends RequestProcessor {
 			}
 
 			// Call to Hdiv LinkUrlProcessor
-			LinkUrlProcessor linkUrlProcessor = HDIVUtil.getLinkUrlProcessor(request.getSession().getServletContext());
-			uri = linkUrlProcessor.processUrl(request, uri);
+			RequestContextHolder ctx = HDIVUtil.getRequestContext(request);
+			if (ctx != null) {
+				LinkUrlProcessor linkUrlProcessor = HDIVUtil.getLinkUrlProcessor(request.getSession().getServletContext());
+				uri = linkUrlProcessor.processUrl(ctx, uri);
+			}
+			else {
+				log.warn("RequestContextHolder missing in request.");
+			}
 
 			response.sendRedirect(response.encodeRedirectURL(uri));
 
