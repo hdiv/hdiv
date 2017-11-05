@@ -20,6 +20,7 @@ import javax.servlet.jsp.JspException;
 
 import org.apache.struts.taglib.TagUtils;
 import org.apache.struts.taglib.html.LinkTag;
+import org.hdiv.context.RequestContextHolder;
 import org.hdiv.urlProcessor.LinkUrlProcessor;
 import org.hdiv.util.HDIVUtil;
 
@@ -79,7 +80,11 @@ public class LinkTagHDIV extends LinkTag {
 		if (linkUrlProcessor == null) {
 			linkUrlProcessor = HDIVUtil.getLinkUrlProcessor(request.getSession().getServletContext());
 		}
-		final String urlWithHDIVParameter = linkUrlProcessor.processUrl(request, url, charEncoding);
+		RequestContextHolder ctx = HDIVUtil.getRequestContext(request);
+		String urlWithHDIVParameter = url;
+		if (linkUrlProcessor != null && ctx != null) {
+			urlWithHDIVParameter = linkUrlProcessor.processUrl(ctx, url, charEncoding);
+		}
 
 		renderAttribute(results, "href", urlWithHDIVParameter);
 
