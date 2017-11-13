@@ -536,7 +536,21 @@ public class HDIVUtil {
 	 */
 	public static boolean isTheSameEncodedValue(final String parameterValue, final String value) {
 
-		return parameterValue.replace(" ", "+").equalsIgnoreCase(value);
+		if (parameterValue.replace(" ", "+").equalsIgnoreCase(value)) {
+			return true;
+		}
+
+		// Wrongly encoded value?
+		// Encoded in UTF-8 but decoded in ISO-8859-1
+		String fix;
+		try {
+			fix = URLEncoder.encode(value, Constants.ENCODING_ISO_8859_1);
+			fix = URLDecoder.decode(fix, Constants.ENCODING_UTF_8);
+		}
+		catch (Exception e) {
+			return false;
+		}
+		return fix != null && fix.equals(parameterValue);
 	}
 
 	/**
