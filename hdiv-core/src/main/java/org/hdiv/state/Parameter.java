@@ -214,11 +214,8 @@ public class Parameter implements IParameter {
 		return actionParam;
 	}
 
-	/**
-	 * @param actionParam The actionParam to set.
-	 */
-	public void setActionParam(final boolean actionParam) {
-		this.actionParam = actionParam;
+	public boolean isRequired() {
+		return actionParam || editable && editableDataType != null && !HDIVUtil.isButtonType(editableDataType);
 	}
 
 	/**

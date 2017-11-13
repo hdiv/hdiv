@@ -205,7 +205,7 @@ public class State implements IState {
 		else {
 			List<String> requiredParams = new ArrayList<String>(parameters.size());
 			for (IParameter parameter : parameters) {
-				if (parameter.isActionParam()) {
+				if (parameter.isRequired()) {
 					requiredParams.add(parameter.getName());
 				}
 			}

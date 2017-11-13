@@ -943,7 +943,7 @@ public class ValidatorHelperRequest implements IValidationHelper, StateRestorer 
 				stateParamValues = Arrays.asList(actionParamValues);
 			}
 
-			ValidatorHelperResult result = hasRepeatedOrInvalidValues(request, target, parameter, values, stateParamValues);
+			ValidatorHelperResult result = hasRepeatedOrInvalidValues(request, target, parameter, values, stateParamValues, stateParameter);
 			if (!result.isValid()) {
 				return result;
 			}
@@ -966,6 +966,12 @@ public class ValidatorHelperRequest implements IValidationHelper, StateRestorer 
 		throw new UnsupportedOperationException();
 	}
 
+	@Deprecated
+	protected final ValidatorHelperResult hasRepeatedOrInvalidValues(final RequestContextHolder request, final String target,
+			final String parameter, final String[] values, final List<String> stateValues) {
+		return hasRepeatedOrInvalidValues(request, target, parameter, values, stateValues, null);
+	}
+
 	/**
 	 * Checks if repeated or no valid values have been received for the parameter <code>parameter</code>.
 	 *
@@ -976,14 +982,14 @@ public class ValidatorHelperRequest implements IValidationHelper, StateRestorer 
 	 * @param stateValues values stored in state for <code>parameter</code>
 	 * @return True If repeated or no valid values have been received for the parameter <code>parameter</code>.
 	 */
-	protected ValidatorHelperResult hasRepeatedOrInvalidValues(final RequestContextHolder request, final String target,
-			final String parameter, final String[] values, final List<String> stateValues) {
+	protected final ValidatorHelperResult hasRepeatedOrInvalidValues(final RequestContextHolder request, final String target,
+			final String parameter, final String[] values, final List<String> stateValues, final IParameter stateParameter) {
 
 		List<String> tempStateValues = new ArrayList<String>();
 		tempStateValues.addAll(stateValues);
 
 		if (hdivConfig.getConfidentiality()) {
-			return hasConfidentialIncorrectValues(request, target, parameter, values, tempStateValues);
+			return hasConfidentialIncorrectValues(request, target, parameter, values, tempStateValues, stateParameter);
 		}
 		else {
 			return hasNonConfidentialIncorrectValues(target, parameter, values, tempStateValues);
@@ -996,6 +1002,12 @@ public class ValidatorHelperRequest implements IValidationHelper, StateRestorer 
 		throw new UnsupportedOperationException();
 	}
 
+	@Deprecated
+	protected final ValidatorHelperResult hasConfidentialIncorrectValues(final RequestContextHolder request, final String target,
+			final String parameter, final String[] values, final List<String> stateValues) {
+		return hasConfidentialIncorrectValues(request, target, parameter, values, stateValues, null);
+	}
+
 	/**
 	 * Checks if repeated values have been received for the parameter <code>parameter</code>.
 	 *
@@ -1006,14 +1018,15 @@ public class ValidatorHelperRequest implements IValidationHelper, StateRestorer 
 	 * @param stateValues real values for <code>parameter</code>
 	 * @return True If repeated values have been received for the parameter <code>parameter</code>.
 	 */
-	protected ValidatorHelperResult hasConfidentialIncorrectValues(final RequestContextHolder request, final String target,
-			final String parameter, final String[] values, final List<String> stateValues) {
+	protected final ValidatorHelperResult hasConfidentialIncorrectValues(final RequestContextHolder request, final String target,
+			final String parameter, final String[] values, final List<String> stateValues, final IParameter stateParameter) {
 
 		Set<String> receivedValues = new HashSet<String>();
 
 		for (int i = 0; i < values.length; i++) {
 
-			if (hdivConfig.isParameterWithoutConfidentiality(request, parameter)) {
+			if (hdivConfig.isParameterWithoutConfidentiality(request, parameter)
+					|| stateParameter != null && HDIVUtil.isButtonType(stateParameter.getEditableDataType())) {
 				return ValidatorHelperResult.VALID;
 			}
 

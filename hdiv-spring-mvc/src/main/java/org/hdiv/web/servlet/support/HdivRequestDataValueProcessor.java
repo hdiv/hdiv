@@ -212,7 +212,7 @@ public class HdivRequestDataValueProcessor implements RequestDataValueProcessor,
 			return value;
 		}
 		else {
-			return dataComposer.composeFormField(name, value, false, type);
+			return dataComposer.composeFormField(name, value, false, type, "hidden".equals(type));
 		}
 	}
 
