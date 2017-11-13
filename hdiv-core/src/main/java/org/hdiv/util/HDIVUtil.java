@@ -845,7 +845,8 @@ public class HDIVUtil {
 	}
 
 	public static boolean isButtonType(final String type) {
-		return type != null && ("submit".equalsIgnoreCase(type) || "button".equalsIgnoreCase(type) || "image".equalsIgnoreCase(type));
+		return type != null && ("submit".equalsIgnoreCase(type) || "button".equalsIgnoreCase(type) || "image".equalsIgnoreCase(type)
+				|| "reset".equalsIgnoreCase(type));
 	}
 
 }
