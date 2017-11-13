@@ -87,6 +87,8 @@ public class HdivRequestDataValueProcessor implements RequestDataValueProcessor,
 		noEditableTypes.add("radio");
 		noEditableTypes.add("select");
 		noEditableTypes.add("submit");
+		noEditableTypes.add("reset");
+		noEditableTypes.add("button");
 	}
 
 	/**
