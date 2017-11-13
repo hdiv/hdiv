@@ -85,6 +85,13 @@ public interface IParameter extends Serializable {
 	boolean isActionParam();
 
 	/**
+	 * Indicates if the parameter is required
+	 *
+	 * @return True if the parameter is required
+	 */
+	boolean isRequired();
+
+	/**
 	 * @return Returns the editable data type.
 	 */
 	String getEditableDataType();

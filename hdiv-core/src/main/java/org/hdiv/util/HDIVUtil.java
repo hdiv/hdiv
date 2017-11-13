@@ -678,7 +678,7 @@ public class HDIVUtil {
 
 	@Deprecated
 	private static RequestContext getContext(final ServletRequest request) {
-		return (RequestContext) request.getAttribute(Constants.HDIV_REQUEST_CONTEXT);
+		return (RequestContext) getRequestContext(request);
 	}
 
 	@Deprecated
@@ -809,6 +809,10 @@ public class HDIVUtil {
 		}
 		buf.append(text.substring(start));
 		return buf.toString();
+	}
+
+	public static boolean isButtonType(final String type) {
+		return type != null && ("submit".equalsIgnoreCase(type) || "button".equalsIgnoreCase(type) || "image".equalsIgnoreCase(type));
 	}
 
 }
