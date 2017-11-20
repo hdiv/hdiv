@@ -51,8 +51,20 @@ public class SubmitTagHDIV extends SubmitTag {
 		IDataComposer dataComposer = HDIVUtil.getDataComposer(request);
 
 		// this property is editable and we must check it
+
+		// Acquire the label value we will be generating
+		String label = value;
+
+		if (label == null && text != null) {
+			label = text;
+		}
+
+		if (label == null || label.length() < 1) {
+			label = getDefaultValue();
+		}
+
 		if (dataComposer != null && property != null) {
-			dataComposer.composeFormField(prepareName(), "", true, null);
+			dataComposer.composeFormField(prepareName(), label, false, "submit");
 		}
 
 		return super.doStartTag();

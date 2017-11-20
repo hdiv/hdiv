@@ -171,6 +171,188 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 		assertTrue(helper.validate(context).isValid());
 	}
 
+	/**
+	 * Validation test with a non-editable multivalue parameter. The obtained values for the parameter must be 0 and 1
+	 */
+	public void testValidateRequiredHiddenParameter() {
+
+		MockHttpServletRequest request = getMockRequest();
+
+		dataComposer.beginRequest(Method.GET, targetName);
+		dataComposer.compose("hiddenValue", "value1", false, true);
+
+		String pageState = dataComposer.endRequest();
+		dataComposer.endPage();
+
+		addParameter(pageState);
+
+		assertTrue(!helper.validate(context).isValid());
+
+		request = getMockRequest();
+
+		dataComposer.beginRequest(Method.GET, targetName);
+		String value = dataComposer.compose("hiddenValue", "value1", false, true);
+
+		pageState = dataComposer.endRequest();
+		dataComposer.endPage();
+
+		addParameter(pageState);
+
+		request.addParameter("hiddenValue", value);
+
+		assertTrue(helper.validate(context).isValid());
+	}
+
+	/**
+	 * Validation test with a non-editable multivalue parameter. The obtained values for the parameter must be 0 and 1
+	 */
+	public void testValidateRequiredTextParameter() {
+
+		MockHttpServletRequest request = getMockRequest();
+
+		dataComposer.beginRequest(Method.GET, targetName);
+		dataComposer.compose("text", "value1", true, "text");
+
+		String pageState = dataComposer.endRequest();
+		dataComposer.endPage();
+
+		addParameter(pageState);
+
+		assertTrue(!helper.validate(context).isValid());
+
+		request = getMockRequest();
+
+		dataComposer.beginRequest(Method.GET, targetName);
+		dataComposer.compose("text", "value1", true, "text");
+
+		pageState = dataComposer.endRequest();
+		dataComposer.endPage();
+
+		addParameter(pageState);
+
+		request.addParameter("text", "value2");
+
+		assertTrue(helper.validate(context).isValid());
+	}
+
+	/**
+	 * Validation test with a non-editable multivalue parameter. The obtained values for the parameter must be 0 and 1
+	 */
+	public void testValidateNotRequiredButtonParameter() {
+
+		MockHttpServletRequest request = getMockRequest();
+
+		dataComposer.beginRequest(Method.GET, targetName);
+		dataComposer.compose("button", "value1", true, "button");
+
+		String pageState = dataComposer.endRequest();
+		dataComposer.endPage();
+
+		addParameter(pageState);
+
+		assertTrue(helper.validate(context).isValid());
+
+		request = getMockRequest();
+
+		dataComposer.beginRequest(Method.GET, targetName);
+		dataComposer.compose("button", "value1", true, "button");
+
+		pageState = dataComposer.endRequest();
+		dataComposer.endPage();
+
+		addParameter(pageState);
+
+		request.addParameter("button", "value1");
+
+		assertTrue(helper.validate(context).isValid());
+	}
+
+	public void testValidateNotRequiredButtonAndHiddenParameter() {
+
+		MockHttpServletRequest request = getMockRequest();
+
+		dataComposer.beginRequest(Method.GET, targetName);
+		String buttonValue = dataComposer.compose("button", "buttonValue", false, "button");
+		String hiddenValue = dataComposer.compose("hidden", "value1", false, "hidden", true, Method.POST, "UTF-8");
+
+		System.out.println("HIDDENVALUE:" + hiddenValue + " BUTTON:" + buttonValue);
+
+		String pageState = dataComposer.endRequest();
+		dataComposer.endPage();
+
+		addParameter(pageState);
+
+		assertTrue(!helper.validate(context).isValid());
+	}
+
+	public void testValidateNotRequiredButtonAndHiddenParameterNotConfidential() {
+		MockHttpServletRequest request = getMockRequest();
+
+		dataComposer.beginRequest(Method.GET, targetName);
+		String buttonValue = dataComposer.compose("button", "buttonValue", false, "button");
+		String hiddenValue = dataComposer.compose("hidden", "value1", false, "hidden", true, Method.POST, "UTF-8");
+
+		String pageState = dataComposer.endRequest();
+		dataComposer.endPage();
+
+		addParameter(pageState);
+
+		request.addParameter("hidden", "value1");
+		assertTrue(!helper.validate(context).isValid());
+
+	}
+
+	public void testValidateNotRequiredButtonAndHiddenParameterConfidential() {
+
+		MockHttpServletRequest request = getMockRequest();
+
+		dataComposer.beginRequest(Method.GET, targetName);
+		String buttonValue = dataComposer.compose("button", "buttonValue", false, "button");
+		String hiddenValue = dataComposer.compose("hidden", "value1", false, "hidden", true, Method.POST, "UTF-8");
+
+		String pageState = dataComposer.endRequest();
+		dataComposer.endPage();
+
+		addParameter(pageState);
+
+		request.addParameter("hidden", hiddenValue);
+		ValidatorHelperResult result = helper.validate(context);
+		assertTrue(result.isValid());
+	}
+
+	public void testValidateNotRequiredButtonAndHiddenParameterConfidentialAndButton() {
+		MockHttpServletRequest request = getMockRequest();
+
+		dataComposer.beginRequest(Method.GET, targetName);
+		String buttonValue = dataComposer.compose("button", "buttonValue", false, "button");
+		String hiddenValue = dataComposer.compose("hidden", "value1", false, "hidden");
+
+		String pageState = dataComposer.endRequest();
+		dataComposer.endPage();
+
+		addParameter(pageState);
+
+		request.addParameter("hidden", hiddenValue);
+		request.addParameter("button", "buttonValue");
+		assertTrue(helper.validate(context).isValid());
+	}
+
+	public void testValidateNotRequiredResetButton() {
+		MockHttpServletRequest request = getMockRequest();
+
+		dataComposer.beginRequest(Method.GET, targetName);
+		String buttonValue = dataComposer.compose("reset", "buttonValue", true, "reset");
+		String hiddenValue = dataComposer.compose("hidden", "value1", false, "hidden");
+
+		String pageState = dataComposer.endRequest();
+		dataComposer.endPage();
+
+		addParameter(pageState);
+
+		request.addParameter("hidden", hiddenValue);
+		assertTrue(helper.validate(context).isValid());
+	}
+
 	private void addParameter(final String value) {
 		getMockRequest().addParameter(hdivParameter, value);
 	}
