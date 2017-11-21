@@ -28,6 +28,9 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface Since {
-	/** Version of annotated field, default is 0, and must be incremental to maintain compatibility. */
+	/**
+	 * Version of annotated field, default is 0, and must be incremental to maintain compatibility.
+	 * @return version
+	 */
 	int value() default 0;
 }

@@ -817,8 +817,8 @@ public class HDIVUtil {
 
 	/**
 	 * Gets custom client app image if it is present
-	 * @param request
-	 * @return
+	 * @param request the request
+	 * @return Custom image url
 	 */
 	@SuppressWarnings({ "deprecation", "restriction" })
 	public static String getCustomImage(final HttpServletRequest request) {

@@ -28,6 +28,9 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface DeprecatedSince {
-	/** Deprecation version of annotated field, default is 0. */
+	/**
+	 * Deprecation version of annotated field, default is 0.
+	 * @return version
+	 */
 	int value() default 0;
 }

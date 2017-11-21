@@ -63,9 +63,9 @@ public interface IValidationHelper extends StateRestorer {
 
 	/**
 	 * Internal Hdiv request
-	 * @param request
-	 * @param response
-	 * @return
+	 * @param request HTTP servlet request
+	 * @param response HTTP servlet response
+	 * @return true if internal
 	 */
 	boolean isInternal(HttpServletRequest request, HttpServletResponse response);
 
