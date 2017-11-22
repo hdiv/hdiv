@@ -163,6 +163,10 @@ public class HDIVConfig implements Serializable {
 	 */
 	private boolean urlObfuscation = false;
 
+	private boolean integrityValidation = true;
+
+	private boolean editableValidation = true;
+
 	@Deprecated
 	public void setStrategy(final Strategy strategy) {
 	}
@@ -678,5 +682,21 @@ public class HDIVConfig implements Serializable {
 		System.err.println("*                                                            *");
 		System.err.println("**************************************************************");
 		System.err.println("Feature:" + feature);
+	}
+
+	public boolean isIntegrityValidation() {
+		return integrityValidation;
+	}
+
+	public boolean isEditableValidation() {
+		return editableValidation;
+	}
+
+	public void setIntegrityValidation(final boolean integrityValidation) {
+		this.integrityValidation = integrityValidation;
+	}
+
+	public void setEditableValidation(final boolean editableValidation) {
+		this.editableValidation = editableValidation;
 	}
 }

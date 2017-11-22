@@ -18,6 +18,7 @@ package org.hdiv.filter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.FilterChain;
@@ -223,6 +224,22 @@ public class ValidatorFilter extends OncePerRequestFilter {
 					}
 					legal = true;
 					errorHandler.handleValidatorException(ctx, e);
+				}
+			}
+
+			if (!errors.isEmpty() && (!hdivConfig.isIntegrityValidation() || !hdivConfig.isEditableValidation())) {
+				for (Iterator<ValidatorError> iterator = errors.iterator(); iterator.hasNext();) {
+					ValidatorError validatorError = iterator.next();
+					boolean editable = validatorError.getType().equals(HDIVErrorCodes.INVALID_EDITABLE_VALUE);
+					if (!hdivConfig.isEditableValidation() && editable) {
+						iterator.remove();
+					}
+					if (!hdivConfig.isIntegrityValidation() && !editable) {
+						iterator.remove();
+					}
+				}
+				if (errors.isEmpty()) {
+					legal = true;
 				}
 			}
 
