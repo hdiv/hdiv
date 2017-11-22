@@ -72,7 +72,7 @@ public interface IState extends Serializable {
 	/**
 	 * @return Returns required parameters.
 	 */
-	List<String> getRequiredParams();
+	List<String> getRequiredParams(final boolean editableFieldsRequiredByDefault);
 
 	/**
 	 * @return IState parameters in one String.

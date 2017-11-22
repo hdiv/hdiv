@@ -18,6 +18,7 @@ package org.hdiv.taglib.html;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.JspException;
 
+import org.apache.struts.taglib.TagUtils;
 import org.apache.struts.taglib.html.TextTag;
 import org.hdiv.dataComposer.IDataComposer;
 import org.hdiv.util.HDIVUtil;
@@ -50,9 +51,22 @@ public class TextTagHDIV extends TextTag {
 
 		// this property is editable and we must check it
 		if (dataComposer != null) {
-			dataComposer.composeFormField(prepareName(), "", true, "text");
+			dataComposer.composeFormField(prepareName(), prepareValue(), !getDisabled() && !getReadonly(), "text");
 		}
 
 		return super.doStartTag();
+	}
+
+	protected String prepareValue() throws JspException {
+
+		if (value != null) {
+			return formatValue(value);
+		}
+		else if (redisplay || !"password".equals(type)) {
+			Object value = TagUtils.getInstance().lookup(pageContext, name, property, null);
+
+			return formatValue(value);
+		}
+		return "";
 	}
 }

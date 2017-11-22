@@ -167,6 +167,11 @@ public class HDIVConfig implements Serializable {
 
 	private boolean editableValidation = true;
 
+	/**
+	 * Are editable form fields required?
+	 */
+	protected boolean editableFieldsRequiredByDefault = false;
+
 	@Deprecated
 	public void setStrategy(final Strategy strategy) {
 	}
@@ -649,6 +654,14 @@ public class HDIVConfig implements Serializable {
 
 	public void setUrlObfuscation(final boolean urlObfuscation) {
 		this.urlObfuscation = urlObfuscation;
+	}
+
+	public boolean getEditableFieldsRequiredByDefault() {
+		return editableFieldsRequiredByDefault;
+	}
+
+	public void setEditableFieldsRequiredByDefault(final boolean editableFieldsRequiredByDefault) {
+		this.editableFieldsRequiredByDefault = editableFieldsRequiredByDefault;
 	}
 
 	@Override

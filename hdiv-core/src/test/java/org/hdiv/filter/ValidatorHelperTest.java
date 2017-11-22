@@ -219,7 +219,7 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 
 		addParameter(pageState);
 
-		assertTrue(!helper.validate(context).isValid());
+		assertTrue(helper.validate(context).isValid());
 
 		request = getMockRequest();
 
@@ -234,6 +234,25 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 		request.addParameter("text", "value2");
 
 		assertTrue(helper.validate(context).isValid());
+	}
+
+	public void testValidateEditableFieldsRequiredByDefault() {
+
+		getConfig().setEditableFieldsRequiredByDefault(true);
+
+		dataComposer.beginRequest(Method.GET, targetName);
+		dataComposer.compose("text", "value1", true, "text");
+
+		String pageState = dataComposer.endRequest();
+		dataComposer.endPage();
+
+		addParameter(pageState);
+
+		ValidatorHelperResult result = helper.validate(context);
+		assertFalse(result.isValid());
+		assertEquals(HDIVErrorCodes.NOT_RECEIVED_ALL_REQUIRED_PARAMETERS, result.getErrors().get(0).getType());
+
+		getConfig().setEditableFieldsRequiredByDefault(false);
 	}
 
 	/**

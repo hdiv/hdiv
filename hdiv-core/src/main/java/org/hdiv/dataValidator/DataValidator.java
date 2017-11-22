@@ -54,7 +54,7 @@ public class DataValidator implements IDataValidator {
 
 		boolean confidentiality = config.getConfidentiality();
 		boolean noConfidentiality = config.isParameterWithoutConfidentiality(request, parameter)
-				|| stateParameter != null && HDIVUtil.isButtonType(stateParameter.getEditableDataType());
+				|| stateParameter != null && HDIVUtil.isNonConfidentialType(stateParameter.getEditableDataType());
 		if (log.isDebugEnabled() && noConfidentiality) {
 			log.debug("Parameter [" + parameter + "] is ParameterWithoutConfidentiality.");
 		}
