@@ -980,6 +980,7 @@ public class ValidatorHelperRequest implements IValidationHelper, StateRestorer 
 	 * @param parameter parameter name
 	 * @param values Parameter <code>parameter</code> values
 	 * @param stateValues values stored in state for <code>parameter</code>
+	 * @param stateParameter parameter info in the state
 	 * @return True If repeated or no valid values have been received for the parameter <code>parameter</code>.
 	 */
 	protected final ValidatorHelperResult hasRepeatedOrInvalidValues(final RequestContextHolder request, final String target,
@@ -1016,6 +1017,7 @@ public class ValidatorHelperRequest implements IValidationHelper, StateRestorer 
 	 * @param parameter parameter name
 	 * @param values Parameter <code>parameter</code> values
 	 * @param stateValues real values for <code>parameter</code>
+	 * @param stateParameter parameter info in the state
 	 * @return True If repeated values have been received for the parameter <code>parameter</code>.
 	 */
 	protected final ValidatorHelperResult hasConfidentialIncorrectValues(final RequestContextHolder request, final String target,
