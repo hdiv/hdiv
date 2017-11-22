@@ -198,14 +198,14 @@ public class State implements IState {
 	 * Required parameters to be able to do a correct request with this state. We consider required parameters all of the parameters that
 	 * can be sent via GET or those that are added to the name of an action.
 	 */
-	public List<String> getRequiredParams() {
+	public List<String> getRequiredParams(final boolean editableFieldsRequiredByDefault) {
 		if (parameters == null) {
 			return Collections.emptyList();
 		}
 		else {
 			List<String> requiredParams = new ArrayList<String>(parameters.size());
 			for (IParameter parameter : parameters) {
-				if (parameter.isRequired()) {
+				if (parameter.isRequired(editableFieldsRequiredByDefault)) {
 					requiredParams.add(parameter.getName());
 				}
 			}
@@ -248,7 +248,7 @@ public class State implements IState {
 		sb.append("action: ").append(action);
 		sb.append("parameters: ").append(parameters);
 		sb.append("params: ").append(params);
-		sb.append("requiredParams: ").append(getRequiredParams());
+		sb.append("requiredParams: ").append(getRequiredParams(true));// XXX real value can be different
 		sb.append("method: ").append(method == null ? Method.GET : method);
 		return super.toString();
 	}
@@ -304,8 +304,8 @@ public class State implements IState {
 		}
 
 		// Same required Parameters
-		List<String> requiredParams1 = getRequiredParams();
-		List<String> requiredParams2 = state.getRequiredParams();
+		List<String> requiredParams1 = getRequiredParams(true);
+		List<String> requiredParams2 = state.getRequiredParams(true);
 		if (requiredParams1 != null && requiredParams2 == null) {
 			return false;
 		}

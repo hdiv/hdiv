@@ -831,4 +831,8 @@ public class HDIVUtil {
 				|| "reset".equalsIgnoreCase(type));
 	}
 
+	public static boolean isNonConfidentialType(final String type) {
+		return type != null && (isButtonType(type) || "text".equalsIgnoreCase(type) || "textarea".equalsIgnoreCase(type));
+	}
+
 }
