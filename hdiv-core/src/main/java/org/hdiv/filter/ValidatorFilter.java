@@ -227,7 +227,7 @@ public class ValidatorFilter extends OncePerRequestFilter {
 				}
 			}
 
-			if (!errors.isEmpty() && (!hdivConfig.isIntegrityValidation() || !hdivConfig.isEditableValidation())) {
+			if (errors != null && !errors.isEmpty() && (!hdivConfig.isIntegrityValidation() || !hdivConfig.isEditableValidation())) {
 				for (Iterator<ValidatorError> iterator = errors.iterator(); iterator.hasNext();) {
 					ValidatorError validatorError = iterator.next();
 					boolean editable = validatorError.getType().equals(HDIVErrorCodes.INVALID_EDITABLE_VALUE);
