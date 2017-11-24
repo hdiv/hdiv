@@ -504,7 +504,7 @@ public class ValidatorHelperRequest implements IValidationHelper, StateRestorer 
 	protected ValidatorHelperResult allRequiredParametersReceived(final RequestContextHolder request, final IState state,
 			final String target, final Map<String, String[]> stateParams) {
 
-		List<String> requiredParameters = state.getRequiredParams();
+		List<String> requiredParameters = state.getRequiredParams(hdivConfig.getEditableFieldsRequiredByDefault());
 		List<String> requiredParams = new ArrayList<String>(stateParams.keySet());
 
 		Enumeration<?> requestParameters = request.getParameterNames();
@@ -1028,7 +1028,7 @@ public class ValidatorHelperRequest implements IValidationHelper, StateRestorer 
 		for (int i = 0; i < values.length; i++) {
 
 			if (hdivConfig.isParameterWithoutConfidentiality(request, parameter)
-					|| stateParameter != null && HDIVUtil.isButtonType(stateParameter.getEditableDataType())) {
+					|| stateParameter != null && HDIVUtil.isNonConfidentialType(stateParameter.getEditableDataType())) {
 				return ValidatorHelperResult.VALID;
 			}
 

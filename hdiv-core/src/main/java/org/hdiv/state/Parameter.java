@@ -214,8 +214,13 @@ public class Parameter implements IParameter {
 		return actionParam;
 	}
 
-	public boolean isRequired() {
-		return actionParam || editable && editableDataType != null && !HDIVUtil.isButtonType(editableDataType);
+	public boolean isRequired(final boolean editableFieldsRequiredByDefault) {
+		if (editableFieldsRequiredByDefault) {
+			return actionParam || editable && editableDataType != null && !HDIVUtil.isButtonType(editableDataType);
+		}
+		else {
+			return actionParam;
+		}
 	}
 
 	/**

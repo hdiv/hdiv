@@ -16,6 +16,7 @@
 package org.hdiv.filter;
 
 import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.List;
 
@@ -218,7 +219,7 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 
 		addParameter(pageState);
 
-		assertTrue(!helper.validate(context).isValid());
+		assertTrue(helper.validate(context).isValid());
 
 		request = getMockRequest();
 
@@ -233,6 +234,25 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 		request.addParameter("text", "value2");
 
 		assertTrue(helper.validate(context).isValid());
+	}
+
+	public void testValidateEditableFieldsRequiredByDefault() {
+
+		getConfig().setEditableFieldsRequiredByDefault(true);
+
+		dataComposer.beginRequest(Method.GET, targetName);
+		dataComposer.compose("text", "value1", true, "text");
+
+		String pageState = dataComposer.endRequest();
+		dataComposer.endPage();
+
+		addParameter(pageState);
+
+		ValidatorHelperResult result = helper.validate(context);
+		assertFalse(result.isValid());
+		assertEquals(HDIVErrorCodes.NOT_RECEIVED_ALL_REQUIRED_PARAMETERS, result.getErrors().get(0).getType());
+
+		getConfig().setEditableFieldsRequiredByDefault(false);
 	}
 
 	/**
@@ -769,7 +789,7 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 		assertTrue(result);
 	}
 
-	public void testFormActionWithWhitespace() throws UnsupportedEncodingException {
+	public void testFormActionWithWhitespace() {
 
 		String url = "/sample/TEST TEST/edit";
 		String urlRequest = "/sample/TEST%20TEST/edit";
@@ -791,9 +811,8 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 
 	/**
 	 * Test validation with a link without parameters
-	 * @throws UnsupportedEncodingException
 	 */
-	public void testIfAllParametersAreReceivedLinkWithoutParameters() throws UnsupportedEncodingException {
+	public void testIfAllParametersAreReceivedLinkWithoutParameters() {
 
 		MockHttpServletRequest request = getMockRequest();
 
@@ -809,9 +828,8 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 
 	/**
 	 * Test validation with a link without parameters and adding a parameter
-	 * @throws UnsupportedEncodingException
 	 */
-	public void testIfAllParametersAreReceivedLinkWithoutParametersAndAddParameter() throws UnsupportedEncodingException {
+	public void testIfAllParametersAreReceivedLinkWithoutParametersAndAddParameter() {
 
 		MockHttpServletRequest request = getMockRequest();
 
@@ -830,9 +848,8 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 
 	/**
 	 * Test validation with a link with parameter
-	 * @throws UnsupportedEncodingException
 	 */
-	public void testIfAllParametersAreReceivedLinkWithParameter() throws UnsupportedEncodingException {
+	public void testIfAllParametersAreReceivedLinkWithParameter() {
 
 		MockHttpServletRequest request = getMockRequest();
 
@@ -850,9 +867,8 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 
 	/**
 	 * Test validation if a parameter from a link is removed
-	 * @throws UnsupportedEncodingException
 	 */
-	public void testIfAllParametersAreReceivedRemoveParameterFromLink() throws UnsupportedEncodingException {
+	public void testIfAllParametersAreReceivedRemoveParameterFromLink() {
 
 		MockHttpServletRequest request = getMockRequest();
 
@@ -872,9 +888,8 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 
 	/**
 	 * Test validation if a new parameter is added to a link
-	 * @throws UnsupportedEncodingException
 	 */
-	public void testIfAllParametersAreReceivedAddParameterToLink() throws UnsupportedEncodingException {
+	public void testIfAllParametersAreReceivedAddParameterToLink() {
 
 		MockHttpServletRequest request = getMockRequest();
 
@@ -894,9 +909,8 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 
 	/**
 	 * Test validation if a form has parameters
-	 * @throws UnsupportedEncodingException
 	 */
-	public void testIfAllParametersAreReceivedFormWithParameters() throws UnsupportedEncodingException {
+	public void testIfAllParametersAreReceivedFormWithParameters() {
 
 		MockHttpServletRequest request = getMockRequest();
 		request.setMethod("POST");
@@ -919,9 +933,8 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 
 	/**
 	 * Test validation if a form has parameters and a new parameter is added
-	 * @throws UnsupportedEncodingException
 	 */
-	public void testIfAllParametersAreReceivedFormWithParametersAndAddParameter() throws UnsupportedEncodingException {
+	public void testIfAllParametersAreReceivedFormWithParametersAndAddParameter() {
 
 		MockHttpServletRequest request = getMockRequest();
 		request.setMethod("POST");
@@ -944,9 +957,8 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 
 	/**
 	 * Test validation if a form has parameters and its action has parameters too
-	 * @throws UnsupportedEncodingException
 	 */
-	public void testIfAllParametersAreReceivedFormWithParametersAndActionWithParameters() throws UnsupportedEncodingException {
+	public void testIfAllParametersAreReceivedFormWithParametersAndActionWithParameters() {
 
 		MockHttpServletRequest request = getMockRequest();
 		request.setMethod("POST");
@@ -973,10 +985,8 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 
 	/**
 	 * Test validation if a form has parameters and its action has parameters too. Remove a parameter from action
-	 * 
-	 * @throws UnsupportedEncodingException
 	 */
-	public void testIfAllParametersAreReceivedFormWithParametersAndRemoveParamFromAction() throws UnsupportedEncodingException {
+	public void testIfAllParametersAreReceivedFormWithParametersAndRemoveParamFromAction() {
 
 		MockHttpServletRequest request = getMockRequest();
 		request.setMethod("POST");
@@ -1006,10 +1016,8 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 
 	/**
 	 * Test validation if a form has parameters and its action has parameters too. Add a parameter to action
-	 * 
-	 * @throws UnsupportedEncodingException
 	 */
-	public void testIfAllParametersAreReceivedFormWithParametersAndAddParamToAction() throws UnsupportedEncodingException {
+	public void testIfAllParametersAreReceivedFormWithParametersAndAddParamToAction() {
 
 		MockHttpServletRequest request = getMockRequest();
 		request.setMethod("POST");
@@ -1039,9 +1047,8 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 
 	/**
 	 * Test validation if a form has NOT parameters and its action has parameters.
-	 * @throws UnsupportedEncodingException
 	 */
-	public void testIfAllParametersAreReceivedFormWithoutParamsAndParamsInAction() throws UnsupportedEncodingException {
+	public void testIfAllParametersAreReceivedFormWithoutParamsAndParamsInAction() {
 
 		MockHttpServletRequest request = getMockRequest();
 		request.setMethod("POST");
@@ -1063,9 +1070,8 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 
 	/**
 	 * Test validation if a form has NOT any parameters and its action has parameters. Remove action param.
-	 * @throws UnsupportedEncodingException
 	 */
-	public void testIfAllParametersAreReceivedFormWithoutParamsAndRemovingParamsInAction() throws UnsupportedEncodingException {
+	public void testIfAllParametersAreReceivedFormWithoutParamsAndRemovingParamsInAction() {
 
 		MockHttpServletRequest request = getMockRequest();
 		request.setMethod("POST");
@@ -1088,9 +1094,8 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 
 	/**
 	 * Test validation if a form has NOT any parameters and its action has parameters. Add action param.
-	 * @throws UnsupportedEncodingException
 	 */
-	public void testIfAllParametersAreReceivedFormWithoutParamsAndAddingParamsInAction() throws UnsupportedEncodingException {
+	public void testIfAllParametersAreReceivedFormWithoutParamsAndAddingParamsInAction() {
 
 		MockHttpServletRequest request = getMockRequest();
 		request.setMethod("POST");
@@ -1114,9 +1119,8 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 
 	/**
 	 * Test validation if a form has NOT any parameters. Add form param.
-	 * @throws UnsupportedEncodingException
 	 */
-	public void testIfAllParametersAreReceivedFormWithoutParamsAndAddingFormParam() throws UnsupportedEncodingException {
+	public void testIfAllParametersAreReceivedFormWithoutParamsAndAddingFormParam() {
 
 		MockHttpServletRequest request = getMockRequest();
 		request.setMethod("POST");
@@ -1140,9 +1144,8 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 
 	/**
 	 * Test validation if a form has a parameter with special characters
-	 * @throws UnsupportedEncodingException
 	 */
-	public void testFormWithParameterWithSpecialCharacterDifferentValue() throws UnsupportedEncodingException {
+	public void testFormWithParameterWithSpecialCharacterDifferentValue() {
 
 		getConfig().setConfidentiality(false);
 		MockHttpServletRequest request = getMockRequest();
@@ -1166,9 +1169,8 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 
 	/**
 	 * Test validation if a form has a parameter with special characters
-	 * @throws UnsupportedEncodingException
 	 */
-	public void testFormWithParameterWithSpecialCharacterSameValue() throws UnsupportedEncodingException {
+	public void testFormWithParameterWithSpecialCharacterSameValue() {
 
 		getConfig().setConfidentiality(false);
 		MockHttpServletRequest request = getMockRequest();
@@ -1188,5 +1190,49 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 		ValidatorHelperResult result = helper.validate(context);
 		assertTrue(result.isValid());
 
+	}
+
+	public void testFormWithParameterWithSpecialCharacterWrongEncoding() throws UnsupportedEncodingException {
+
+		getConfig().setConfidentiality(false);
+		MockHttpServletRequest request = getMockRequest();
+		request.setMethod("POST");
+
+		dataComposer.beginRequest(Method.POST, targetName);
+
+		// Form parameters
+		dataComposer.composeFormField("field", "valueññ", false, "submit");
+
+		String pageState = dataComposer.endRequest();
+		dataComposer.endPage();
+
+		request.addParameter(hdivParameter, pageState);
+		String wrongEncoding = "valueÃ±Ã±";// Encoded using UTF-8 and decoded using ISO-8859-1
+		request.addParameter("field", wrongEncoding);
+
+		ValidatorHelperResult result = helper.validate(context);
+		assertTrue(result.isValid());
+	}
+
+	public void testWrongEncodingValue() throws UnsupportedEncodingException {
+
+		String value = "valueññ";
+
+		String encoded = URLEncoder.encode(value, Constants.ENCODING_UTF_8);
+		// encoded: value%C3%B1%C3%B1
+
+		String decoded = URLDecoder.decode(encoded, "ISO-8859-1");
+		// decoded = valueÃ±Ã±
+
+		// Wrong decode encoding used
+		// try to fix it
+
+		String fix = URLEncoder.encode(decoded, "ISO-8859-1");
+		// fix = value%C3%B1%C3%B1
+
+		fix = URLDecoder.decode(fix, Constants.ENCODING_UTF_8);
+		// fix = valueññ
+
+		assertEquals(value, fix);
 	}
 }

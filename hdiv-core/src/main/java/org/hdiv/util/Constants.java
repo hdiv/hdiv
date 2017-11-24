@@ -85,6 +85,11 @@ public class Constants {
 	public static final String ENCODING_UTF_8 = "UTF-8";
 
 	/**
+	 * Constant for ISO-8859-1 encoding name
+	 */
+	public static final String ENCODING_ISO_8859_1 = "ISO-8859-1";
+
+	/**
 	 * Request attribute name that contains the state id of the last rendered form.
 	 */
 	public static final String FORM_STATE_ID = "hdivFormStateId";

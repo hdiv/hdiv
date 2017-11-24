@@ -385,7 +385,7 @@ public abstract class AbstractDataComposer implements IDataComposer {
 
 		IParameter parameter = composeParameter(parameterName, value, editable, editableName, isActionParam, charEncoding);
 
-		if (isConfidentialParam(parameterName) && (editableName == null || !HDIVUtil.isButtonType(editableName))) {
+		if (isConfidentialParam(parameterName) && (editableName == null || !HDIVUtil.isNonConfidentialType(editableName))) {
 			return parameter.getConfidentialValue();
 		}
 		else {

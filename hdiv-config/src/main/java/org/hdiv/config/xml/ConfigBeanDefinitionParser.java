@@ -581,6 +581,7 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		String debugMode = element.getAttribute("debugMode");
 		String showErrorPageOnEditableValidation = element.getAttribute("showErrorPageOnEditableValidation");
 		String reuseExistingPageInAjaxRequest = element.getAttribute("reuseExistingPageInAjaxRequest");
+		String editableFieldsRequiredByDefault = element.getAttribute("editableFieldsRequiredByDefault");
 
 		if (StringUtils.hasText(confidentiality)) {
 			bean.getPropertyValues().addPropertyValue("confidentiality", confidentiality);
@@ -628,6 +629,10 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 
 		if (StringUtils.hasText(reuseExistingPageInAjaxRequest)) {
 			bean.getPropertyValues().addPropertyValue("reuseExistingPageInAjaxRequest", reuseExistingPageInAjaxRequest);
+		}
+
+		if (StringUtils.hasText(editableFieldsRequiredByDefault)) {
+			bean.getPropertyValues().addPropertyValue("editableFieldsRequiredByDefault", editableFieldsRequiredByDefault);
 		}
 
 		bean.getPropertyValues().addPropertyValue("editableDataValidationProvider",

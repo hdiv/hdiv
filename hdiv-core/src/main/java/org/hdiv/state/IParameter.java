@@ -89,7 +89,7 @@ public interface IParameter extends Serializable {
 	 *
 	 * @return True if the parameter is required
 	 */
-	boolean isRequired();
+	boolean isRequired(boolean editableFieldsRequiredByDefault);
 
 	/**
 	 * @return Returns the editable data type.

@@ -50,7 +50,7 @@ public class TextareaTagHDIV extends TextareaTag {
 
 		// this property is editable and we must check it
 		if (dataComposer != null) {
-			dataComposer.composeFormField(prepareName(), "", true, "textarea");
+			dataComposer.composeFormField(prepareName(), renderData(), !getDisabled() && !getReadonly(), "textarea");
 		}
 
 		return super.doStartTag();

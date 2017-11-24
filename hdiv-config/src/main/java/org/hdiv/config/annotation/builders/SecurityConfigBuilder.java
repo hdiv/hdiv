@@ -80,6 +80,11 @@ public class SecurityConfigBuilder {
 		return this;
 	}
 
+	public SecurityConfigBuilder editableFieldsRequiredByDefault(final boolean editableFieldsRequiredByDefault) {
+		config.setEditableFieldsRequiredByDefault(editableFieldsRequiredByDefault);
+		return this;
+	}
+
 	@Deprecated
 	public SecurityConfigBuilder strategy(final Strategy strategy) {
 		config.setStrategy(strategy);
