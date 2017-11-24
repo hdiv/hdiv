@@ -90,6 +90,11 @@ public class HDIVConfig implements Serializable {
 	protected boolean confidentiality = true;
 
 	/**
+	 * Pentesting active
+	 */
+	private boolean pentestingActive = false;
+
+	/**
 	 * Parameters which HDIV validation will not be applied to.
 	 */
 	protected Map<PatternMatcher, List<PatternMatcher>> paramsWithoutValidation;
@@ -698,5 +703,13 @@ public class HDIVConfig implements Serializable {
 
 	public void setEditableValidation(final boolean editableValidation) {
 		this.editableValidation = editableValidation;
+	}
+
+	public boolean isPentestingActive() {
+		return pentestingActive;
+	}
+
+	public void setPentestingActive(final boolean pentestingActive) {
+		this.pentestingActive = pentestingActive;
 	}
 }

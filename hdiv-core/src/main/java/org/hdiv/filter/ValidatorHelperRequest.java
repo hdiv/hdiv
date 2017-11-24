@@ -185,7 +185,7 @@ public class ValidatorHelperRequest implements IValidationHelper, StateRestorer 
 		String target = context.getTarget();
 		RequestContextHolder ctx = context.getRequestContext();
 
-		if (target.endsWith(UrlData.PEN_TESTING_ROOT_PATH) && Boolean.getBoolean("hdiv.pentesting.enabled")) {
+		if (target.endsWith(UrlData.PEN_TESTING_ROOT_PATH) && hdivConfig.isPentestingActive()) {
 			processPenTesting(context);
 		}
 
