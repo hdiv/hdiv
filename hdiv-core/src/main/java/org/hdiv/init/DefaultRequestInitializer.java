@@ -53,7 +53,10 @@ public class DefaultRequestInitializer implements RequestInitializer {
 	}
 
 	public RequestWrapper createRequestWrapper(final RequestContextHolder context) {
-		RequestWrapper requestWrapper = new AsyncRequestWrapper(context);
+		return initializeRequestWrapper(new AsyncRequestWrapper(context));
+	}
+
+	protected RequestWrapper initializeRequestWrapper(final RequestWrapper requestWrapper) {
 		requestWrapper.setConfidentiality(config.getConfidentiality());
 		requestWrapper.setCookiesConfidentiality(config.isCookiesConfidentialityActivated());
 		requestWrapper.setSession(session);
