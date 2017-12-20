@@ -991,7 +991,28 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 
 	}
 
-	public void testFormWithParameterWithSpecialCharacterWrongEncoding() throws UnsupportedEncodingException {
+	public void testFormWithParameterWithSpecialCharacterEscaped() {
+
+		getConfig().setConfidentiality(false);
+		MockHttpServletRequest request = getMockRequest();
+		request.setMethod("POST");
+
+		dataComposer.beginRequest(Method.POST, targetName);
+
+		// Form parameters
+		dataComposer.composeFormField("field", "user&Atilde;&plusmn;Id", false, "hidden");// 'userñId' escaped by Spring hidden tag
+
+		String pageState = dataComposer.endRequest();
+		dataComposer.endPage();
+
+		request.addParameter(hdivParameter, pageState);
+		request.addParameter("field", "userñId");
+
+		ValidatorHelperResult result = helper.validate(context);
+		assertTrue(result.isValid());
+	}
+
+	public void testFormWithParameterWithSpecialCharacterWrongEncoding() {
 
 		getConfig().setConfidentiality(false);
 		MockHttpServletRequest request = getMockRequest();
