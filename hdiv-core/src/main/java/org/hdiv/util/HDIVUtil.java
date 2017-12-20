@@ -17,6 +17,7 @@ package org.hdiv.util;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.Enumeration;
 import java.util.Locale;
 import java.util.Random;
