@@ -544,17 +544,28 @@ public class HDIVUtil {
 			return true;
 		}
 
+		String fix = reDecodeValue(value);
+		boolean equals = fix != null && fix.equals(parameterValue);
+		if (equals) {
+			return true;
+		}
+		else {
+			fix = reDecodeValue(parameterValue);
+			return fix != null && fix.equals(value);
+		}
+	}
+
+	private static String reDecodeValue(String value) {
 		// Wrongly encoded value?
 		// Encoded in UTF-8 but decoded in ISO-8859-1
-		String fix;
 		try {
-			fix = URLEncoder.encode(value, Constants.ENCODING_ISO_8859_1);
-			fix = URLDecoder.decode(fix, Constants.ENCODING_UTF_8);
+			value = URLEncoder.encode(value, Constants.ENCODING_ISO_8859_1);
+			value = URLDecoder.decode(value, Constants.ENCODING_UTF_8);
 		}
 		catch (Exception e) {
-			return false;
+			return null;
 		}
-		return fix != null && fix.equals(parameterValue);
+		return value;
 	}
 
 	/**
