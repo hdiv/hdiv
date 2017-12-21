@@ -17,6 +17,7 @@ package org.hdiv.util;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.Enumeration;
 import java.util.Locale;
 import java.util.Random;
@@ -536,7 +537,32 @@ public class HDIVUtil {
 	 */
 	public static boolean isTheSameEncodedValue(final String parameterValue, final String value) {
 
-		return parameterValue.replace(" ", "+").equalsIgnoreCase(value);
+		if (parameterValue.replace(" ", "+").equalsIgnoreCase(value)) {
+			return true;
+		}
+
+		String fix = reDecodeValue(value);
+		boolean equals = fix != null && fix.equals(parameterValue);
+		if (equals) {
+			return true;
+		}
+		else {
+			fix = reDecodeValue(parameterValue);
+			return fix != null && fix.equals(value);
+		}
+	}
+
+	private static String reDecodeValue(String value) {
+		// Wrongly encoded value?
+		// Encoded in UTF-8 but decoded in ISO-8859-1
+		try {
+			value = URLEncoder.encode(value, Constants.ENCODING_ISO_8859_1);
+			value = URLDecoder.decode(value, Constants.ENCODING_UTF_8);
+		}
+		catch (Exception e) {
+			return null;
+		}
+		return value;
 	}
 
 	/**

@@ -3,6 +3,10 @@
 ## HDIV CHANGELOG
 https://github.com/hdiv
 
+# Release 3.3.10
+
+ * Fix encoding error in Websphere.
+
 # Release 3.3.9
 
  * Struts1: Don’t process url if requestContext is null.
