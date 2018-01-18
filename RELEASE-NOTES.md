@@ -1,53 +1,53 @@
-# Release notes
+# RELEASE NOTES
 
 ## HDIV CHANGELOG
 https://github.com/hdiv
 
-# Release 3.3.9
+###3.3.9
 
  * Struts1: Don’t process url if requestContext is null.
 
-# Release 3.3.8
+###3.3.8
 
  * @Since and @DeprecatedSince annotations to enable Page and State versioning.
  * Protect access to invalidated session attributes. 
 
-# Release 3.3.7
+###3.3.7
 
  * Protect internal request attributes deletion or modification. 
 
-# Release 3.3.6
+###3.3.6
 
  * System property to disable request clean in async requests 
 
-# Release 3.3.5
+###3.3.5
 
  * Protect Struts Tags extension from null IDataComposer
 
-# Release 3.3.4
+###3.3.4
 
  * Replace commons-logging by slf4j
  * [BUG] If an uncontrolled exception occurs during validate() the request should progress
 
-# Release 3.3.3
+###3.3.3
 
  * Fix missing 'hdivFormStateId' attribute in request scope
  * Fix for issue 94: https://github.com/hdiv/hdiv/issues/94
 
-# Release 3.3.2
+###3.3.2
 
  * Reduce dependencies
  * Protect Matchers from StackOverflowError.
  * Reinitialize HttpSession attributes if they are missing.
 
-# Release 3.3.1
+###3.3.1
 
  * Allow Hdiv to run in a auto-contained context (without WebApplicationContext)
  * Weak reference RequestContext
  * Allow UUID as Page Ids
  * Fix for Glassfish queryString
 
-# Release 3.3.0
+###3.3.0
 
  * Fix issue with parameters without values in WebSphere servers: http://www-01.ibm.com/support/docview.wss?uid=swg1PM35450
  * Fix Spring security issue that may cause the links not to be processed by Hdiv
@@ -57,20 +57,20 @@ https://github.com/hdiv
  * JSF 1.x support removed. Now JSF 2.0 is the minimum supported version.
  * All request scoped data moved inside RequestContextHolder object.
 
-# Release 3.2.0
+###3.2.0
 
  * Add new methods to ISession to get/set/remove session attributes.
  * Refactor state id generation and parse.
 
-# Release 3.1.1
+###3.1.1
 
  * Fix spring-security 4.0.x support bug
 
-# Release 3.1.0
+###3.1.0
 
  * Performance improvements.
 
-# Release 3.0.0
+###3.0.0
 
  * Remove Cipher and Hash strategies.
  * Servlet API >= 3.0
@@ -78,12 +78,12 @@ https://github.com/hdiv
  * Add 'hdiv-page-' prefix to pages stored in user session.
  * Refactor validation error message creation. It is not created in ValidatorHelperRequest but ValidatorFilter.
 
-# Release 2.1.14
+###2.1.14
 
  * LinkUrlProcessor: remove input _HDIV_STATE_ parameter if it exists.
  * Bug fixed in page refresh and non sequential page ids.
 
-# Release 2.1.13
+###2.1.13
 
  * Multiple iframe support in the same page
  * Fix issue with IE 6 when redirects to a URL with a fragment identifier.
@@ -91,18 +91,18 @@ https://github.com/hdiv
  * Fix issue in HDIV Core library. It was caused when repeated values were received in last positions of array named "values".
  * Multipart request handler modified to return appropriate RequestWrapper object, if available, unwrapping the given request as far as necessary.
 
-# Release 2.1.12
+###2.1.12
 
  * Fix issue in Struts1: HDIVTilesRequestProcessor class
  * Fix issue in Spring version check.
 
-# Release 2.1.11
+###2.1.11
 
  * Fix issue in longLiving request validation.
  * Fix issue in concurrent Ajax requests with 'reuseExistingPageInAjaxRequest' option enabled.
  * New 'X-HDIV-EXCLUDE-PAGE-REUSE' header to avoid page reusing in Ajax calls.
 
-# Release 2.1.10
+###2.1.10
 
  * Take into account <hdiv:validationRule> tag order looking for a matching url.
  * New 'parameters' attribute in <hdiv:validationRule> tag. Contains a list or unique regular expression that defines the parameters for which editable validation is applied (https://github.com/hdiv/hdiv/issues/66).
@@ -111,17 +111,17 @@ https://github.com/hdiv
  * In case of detecting an attack in editable data validation, add validation name to the log.
  * New 'ServletContextInitializer' and 'SessionInitializer' interfaces for ServletContext and HttpSession initialization.
 
-# Release 2.1.9
+###2.1.9
 
  * Minor error fixes.
 
-# Release 2.1.8
+###2.1.8
 
  * Fix multipart issue in Struts1 (https://github.com/hdiv/hdiv/issues/59).
  * Fix multipart issue in Spring MVC (https://github.com/hdiv/hdiv/issues/62).
  * Support Servlet3 standard multipart processing in Spring MVC.
 
-# Release 2.1.7
+###2.1.7
 
  * Memory and performance optimizations.
  * New 'hdiv-thymeleaf' module for Thymeleaf template engine support.
@@ -135,21 +135,21 @@ https://github.com/hdiv
  * New 'longLivingPages' feature to configure pages which link and forms never expire.
  * Create a custom token for form elements.
 
-# Release 2.1.6
+###2.1.6
 
  * Fix form multipart issue (https://github.com/hdiv/hdiv/issues/44).
  * New 'org.hdiv.regex' package for Java regular expression execution abstraction.
  * New 'hdiv-docs' module with official documentation.
  * Include original parameter value in attack logs
 
-# Release 2.1.5
+###2.1.5
 
  * Java >= 1.5 is required.
  * Fix form field confidentiality error on RESTfull configuration (https://github.com/hdiv/hdiv/issues/31).
  * Hash and Cipher strategy support for Ajax requests (https://github.com/hdiv/hdiv/issues/36).
  * Support Spring 4.0.0 (4.0.0.BUILD-SNAPSHOT) and changes to org.springframework.web.servlet.support.RequestDataValueProcessor
 
-# Release 2.1.4
+###2.1.4
 
  * Use request method to define StartPages (https://github.com/hdiv/hdiv/issues/5).
  * Editable Validation and JSR303 validations in Spring MVC (https://github.com/hdiv/hdiv/issues/10).
@@ -167,20 +167,20 @@ https://github.com/hdiv
  * Spring beans with generated names (https://github.com/hdiv/hdiv/issues/27).
  * Spring 3.0 or greater is required for hdiv-core.
 
-# Release 2.1.3
+###2.1.3
 
  * avoidValidationInUrlsWithoutParams only affects to link urls.
  * Absolute URLs are returned as absolute URLs in LinkUrlProcessor.
  * RequestDataValueProcessor for Grails applications.
 
-# Release 2.1.2
+###2.1.2
 
  * Confidential values are visible in the log.
  * Expose form state id to request. Simpler Ajax support.
  * Fixed (https://github.com/hdiv/hdiv/issues/3) error parsing parameters without value
  * Fixed (https://github.com/hdiv/hdiv/issues/4) bug with nested tags
 
-# Release 2.1.1
+###2.1.1
 
  * New 'debugMode' configuration mode to log the attacks but don`t stop it.
  * Register and use a group of editable validations by default (Sql injection, exec command and XSS attacks).
@@ -189,22 +189,22 @@ https://github.com/hdiv
  * Make possible to update a existing state. Designed for ajax requests that update part of the page.
  * New 'maxPagesPerSession' configuration attribute to control the number of states in session.
 
-# Release 2.1.0
+###2.1.0
 
  * JavaDoc and License correction.
 
-# Release 2.1.0.RC3
+###2.1.0.RC3
 
  * Final Spring Framework 3.1.0 version support.
  * Configurable IUserData instance in the scheme.
  * Better support for anchored urls.
  * Refactor of the url splitting and processing classes.
 
-# Release 2.1.0.RC2
+###2.1.0.RC2
 
  * Hdiv schema for simpler configuration.
 
-# Release 2.1.0.RC1
+###2.1.0.RC1
 
 ------- New Features -------
 
@@ -223,7 +223,7 @@ https://github.com/hdiv
  * added hdiv-jsf-2 module
  * added hdiv-web-jsf-bookstore module
 
-# Release 2.1.0.M2
+###2.1.0.M2
 
 
 ------- New Features -------
@@ -244,7 +244,7 @@ https://github.com/hdiv
  * added hdiv-webflow-2.1.1 module
  * added hdiv-web-webflow-2.1.1 module
 
-# Release 2.1.0.M1
+###2.1.0.M1
 
 ------- New Features -------
 
@@ -263,7 +263,7 @@ https://github.com/hdiv
  * Package org.hdiv.idGenerator has been created for uidGenerator and PageIdGenerator interfaces and their implementations.
  * New DataComposerFactory and DataValidatorFactory factories improve performance on generating IDataComposer and IDataValidator objects.
 
-# Release 2.0.4
+###2.0.4
 
 ------- New Features -------
 
@@ -297,7 +297,7 @@ https://github.com/hdiv
  * modified hdiv-html-el.tld file with "rewrite" tag
 
 
-# Release 2.0.3
+###2.0.3
 
 ------- New Features -------
 
@@ -355,7 +355,7 @@ https://github.com/hdiv
   - modified method "renderOption" (OptionTagHDIV)
 
 
-# Release 2.0.1
+###2.0.1
 
 ------- New Features -------
 
@@ -400,7 +400,7 @@ https://github.com/hdiv
   - modified method "parse" (HDIVJakartaMultiPartRequest)
 
 
-# Release 2.0
+###2.0
 
 ------- New Features -------
 
@@ -437,7 +437,7 @@ https://github.com/hdiv
   - renamed "helper" bean property
 
 
-# Release 1.3
+###1.3
 
 ------- New Features -------
 
@@ -476,7 +476,7 @@ https://github.com/hdiv
   - modified "multipartConfig"'s bean class
 
 
-# Release 1.1.2
+###1.1.2
 
 ------- New Features -------
 
@@ -504,7 +504,7 @@ https://github.com/hdiv
  * Added hdiv-logic-el.tld file to Struts-el
 
 
-# Release 1.1.1
+###1.1.1
 
 ------- NEW CLASSES AND MODIFICATIONS -------
 
@@ -531,7 +531,7 @@ https://github.com/hdiv
    - modified "randomName" bean type
 
 
-# Release 1.1
+###1.1
 
 ------- New Features -------
 
