@@ -136,13 +136,6 @@ public class HDIVConfig implements Serializable {
 	protected List<String> excludedURLExtensions;
 
 	/**
-	 * If debug mode is enabled, the attacks are logged but the requests are not stopped.
-	 * 
-	 * @since HDIV 2.1.1
-	 */
-	protected boolean debugMode = false;
-
-	/**
 	 * Show error page on request with editable validation errors.
 	 * 
 	 * @since 2.1.4
@@ -547,15 +540,17 @@ public class HDIVConfig implements Serializable {
 	/**
 	 * @return the debugMode
 	 */
+	@Deprecated
 	public boolean isDebugMode() {
-		return debugMode;
+		return !isIntegrityValidation();
 	}
 
 	/**
 	 * @param debugMode the debugMode to set
 	 */
 	public void setDebugMode(final boolean debugMode) {
-		this.debugMode = debugMode;
+		setEditableValidation(!debugMode);
+		setIntegrityValidation(!debugMode);
 	}
 
 	/**
@@ -687,7 +682,7 @@ public class HDIVConfig implements Serializable {
 		result.append(" startParameters=").append(startParameters);
 		result.append(" paramsWithoutValidation=").append(paramsWithoutValidation);
 		result.append(" longLivingPages=").append(longLivingPages);
-		result.append(" debugMode=").append(debugMode);
+		result.append(" debugMode=").append(isDebugMode());
 		result.append(" showErrorPageOnEditableValidation=").append(showErrorPageOnEditableValidation);
 
 		return result.toString();

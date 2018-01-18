@@ -204,7 +204,7 @@ public class DataComposerMemory extends AbstractDataComposer {
 	}
 
 	private void logCompact(final HDIVException e) {
-		if (hdivConfig.isDebugMode()) {
+		if (!hdivConfig.isIntegrityValidation()) {
 			StringBuilder sb = new StringBuilder();
 			sb.append("Error on page").append(e.getMessage());
 			if (e.getStackTrace().length > 0) {

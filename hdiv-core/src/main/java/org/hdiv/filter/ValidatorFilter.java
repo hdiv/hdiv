@@ -254,7 +254,7 @@ public class ValidatorFilter extends OncePerRequestFilter {
 				hasEditableError = processEditableValidationErrors(ctx, errors);
 			}
 
-			if (legal || hdivConfig.isDebugMode() || hasEditableError && !hdivConfig.isShowErrorPageOnEditableValidation()) {
+			if (legal || hasEditableError && !hdivConfig.isShowErrorPageOnEditableValidation()) {
 
 				processRequest(ctx, multipartProcessedRequest, responseWrapper, filterChain, context.getRedirect());
 			}
@@ -269,7 +269,7 @@ public class ValidatorFilter extends OncePerRequestFilter {
 			List<ValidatorError> errors = findErrors(e, request.getRequestURI(), true);
 			if (errors != null) {
 				// Show error page
-				if (!hdivConfig.isDebugMode()) {
+				if (hdivConfig.isIntegrityValidation()) {
 					errorHandler.handleValidatorError(ctx, errors);
 				}
 			}
@@ -359,7 +359,7 @@ public class ValidatorFilter extends OncePerRequestFilter {
 			validationHelper.startPage(ctx);
 		}
 		catch (SharedHdivException e) {
-			if (hdivConfig.isDebugMode()) {
+			if (!hdivConfig.isIntegrityValidation()) {
 				ex = e;
 			}
 			else {
@@ -442,7 +442,7 @@ public class ValidatorFilter extends OncePerRequestFilter {
 				editableErrors.add(error);
 			}
 		}
-		if (!editableErrors.isEmpty() && !hdivConfig.isDebugMode()) {
+		if (!editableErrors.isEmpty() && hdivConfig.isEditableValidation()) {
 
 			// Put the errors on request to be accessible from the Web framework
 			request.setAttribute(Constants.EDITABLE_PARAMETER_ERROR, editableErrors);
