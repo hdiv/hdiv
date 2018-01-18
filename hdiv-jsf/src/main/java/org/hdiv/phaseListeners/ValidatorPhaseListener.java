@@ -88,7 +88,7 @@ public class ValidatorPhaseListener implements PhaseListener {
 					.get(VALIDATION_ERRORS_ATTR_NAME);
 			if (errors != null) {
 				for (FacesValidatorError error : errors) {
-					if (error.getType().equals(HDIVErrorCodes.INVALID_EDITABLE_VALUE)) {
+					if (HDIVErrorCodes.isEditableError(error.getType())) {
 						UIComponent comp = error.getEditableValidationComponent();
 						if (comp instanceof UIInput) {
 							((UIInput) comp).setValid(false);
@@ -179,21 +179,22 @@ public class ValidatorPhaseListener implements PhaseListener {
 			return false;
 		}
 
-		if (config.isDebugMode()) {
-			return false;
-		}
-
-		boolean onlyEditable = true;
+		boolean editableError = false;
+		boolean integrityError = false;
 		if (errors != null && !errors.isEmpty()) {
 			for (ValidatorError error : errors) {
-				if (!error.getType().equals(HDIVErrorCodes.INVALID_EDITABLE_VALUE)) {
-					onlyEditable = false;
-					break;
+				if (HDIVErrorCodes.isEditableError(error.getType())) {
+					editableError = true;
+				}
+				else {
+					integrityError = true;
 				}
 			}
 		}
 
-		if (onlyEditable && !config.isShowErrorPageOnEditableValidation()) {
+		boolean integrityOk = !integrityError || !config.isIntegrityValidation();
+		boolean editableOk = !editableError || !config.isShowErrorPageOnEditableValidation() || !config.isEditableValidation();
+		if (integrityOk && editableOk) {
 			return false;
 		}
 		return true;

@@ -124,4 +124,8 @@ public class HDIVErrorCodes {
 	private HDIVErrorCodes() {
 
 	}
+
+	public static boolean isEditableError(final String type) {
+		return HDIVErrorCodes.INVALID_EDITABLE_VALUE.equals(type);
+	}
 }
