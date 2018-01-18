@@ -32,7 +32,9 @@ import java.util.ArrayList;
  * @author Gorka Vicente
  * @since HDIV 2.0.4
  */
+@SuppressWarnings("unchecked")
 public class ELRewriteTagHDIVBeanInfo extends SimpleBeanInfo {
+	@Override
 	public PropertyDescriptor[] getPropertyDescriptors() {
 		ArrayList proplist = new ArrayList();
 
@@ -128,6 +130,6 @@ public class ELRewriteTagHDIVBeanInfo extends SimpleBeanInfo {
 
 		PropertyDescriptor[] result = new PropertyDescriptor[proplist.size()];
 
-		return ((PropertyDescriptor[]) proplist.toArray(result));
+		return (PropertyDescriptor[]) proplist.toArray(result);
 	}
 }

@@ -65,7 +65,7 @@ public class MultiboxTagHDIV extends MultiboxTag {
 	@Override
 	protected String prepareValue(final StringBuffer results) throws JspException {
 
-		final String value = (this.value == null) ? constant : this.value;
+		final String value = this.value == null ? constant : this.value;
 		if (value == null) {
 			final JspException e = new JspException(messages.getMessage("multiboxTag.value"));
 			pageContext.setAttribute(Globals.EXCEPTION_KEY, e, PageContext.REQUEST_SCOPE);
@@ -73,7 +73,7 @@ public class MultiboxTagHDIV extends MultiboxTag {
 		}
 
 		final HttpServletRequest request = (HttpServletRequest) pageContext.getRequest();
-		final IDataComposer dataComposer = HDIVUtil.getDataComposer(request);
+		final IDataComposer dataComposer = HDIVUtil.getRequestContext(request).getDataComposer();
 		final String cipheredValue = dataComposer != null ? dataComposer.composeFormField(property, value, false, null) : value;
 
 		prepareAttribute(results, "value", TagUtils.getInstance().filter(cipheredValue));

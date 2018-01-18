@@ -59,7 +59,7 @@ public class BaseTagHDIV extends BaseTag {
 
 		// Store the base url value on request to be accessible from hdiv core
 		final HttpServletRequest request = (HttpServletRequest) pageContext.getRequest();
-		HDIVUtil.setBaseURL(finalUri, request);
+		HDIVUtil.getRequestContext(request).setBaseURL(finalUri);
 
 		tag.append("\"");
 

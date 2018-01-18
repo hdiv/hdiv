@@ -21,7 +21,6 @@ import java.util.List;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.fileupload.DiskFileUpload;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.hdiv.config.multipart.exception.HdivMultipartException;
@@ -34,6 +33,7 @@ import org.slf4j.LoggerFactory;
  * 
  * @author Gorka Vicente
  */
+@SuppressWarnings("deprecation")
 public class StrutsMultipartConfig extends AbstractMultipartConfig {
 
 	/**
@@ -57,7 +57,7 @@ public class StrutsMultipartConfig extends AbstractMultipartConfig {
 	public HttpServletRequest handleMultipartRequest(final RequestWrapper request, final ServletContext servletContext)
 			throws HdivMultipartException {
 
-		DiskFileUpload upload = new DiskFileUpload();
+		org.apache.commons.fileupload.DiskFileUpload upload = new org.apache.commons.fileupload.DiskFileUpload();
 
 		upload.setHeaderEncoding(request.getCharacterEncoding());
 		// Set the maximum size before a FileUploadException will be thrown.
@@ -72,7 +72,7 @@ public class StrutsMultipartConfig extends AbstractMultipartConfig {
 			items = upload.parseRequest(request);
 
 		}
-		catch (DiskFileUpload.SizeLimitExceededException e) {
+		catch (org.apache.commons.fileupload.DiskFileUpload.SizeLimitExceededException e) {
 			if (log.isErrorEnabled()) {
 				log.error("Size limit exceeded exception");
 			}

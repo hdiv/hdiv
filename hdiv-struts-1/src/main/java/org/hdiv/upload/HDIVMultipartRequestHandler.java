@@ -40,6 +40,7 @@ import org.hdiv.util.HDIVUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@SuppressWarnings("unchecked")
 public class HDIVMultipartRequestHandler extends CommonsMultipartRequestHandler {
 
 	/**

@@ -41,6 +41,7 @@ public class RewriteTagHDIV extends LinkTagHDIV {
 	 *
 	 * @throws JspException if a JSP exception has occurred
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public int doEndTag() throws JspException {
 		// Generate the hyperlink URL
@@ -75,10 +76,10 @@ public class RewriteTagHDIV extends LinkTagHDIV {
 		if (linkUrlProcessor == null) {
 			linkUrlProcessor = HDIVUtil.getLinkUrlProcessor(request.getSession().getServletContext());
 		}
-		url = linkUrlProcessor.processUrl(request, url, charEncoding);
+		url = linkUrlProcessor.processUrl(HDIVUtil.getRequestContext(request), url, charEncoding);
 
 		TagUtils.getInstance().write(pageContext, url);
-		return (EVAL_PAGE);
+		return EVAL_PAGE;
 	}
 
 }

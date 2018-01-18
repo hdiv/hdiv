@@ -62,7 +62,7 @@ public class OptionTagHDIV extends OptionTag {
 	public int doEndTag() throws JspException {
 
 		HttpServletRequest request = (HttpServletRequest) pageContext.getRequest();
-		IDataComposer dataComposer = HDIVUtil.getDataComposer(request);
+		IDataComposer dataComposer = HDIVUtil.getRequestContext(request).getDataComposer();
 
 		// Acquire the select tag we are associated with
 		SelectTag selectTag = (SelectTag) findAncestorWithClass(this, SelectTag.class);
@@ -96,7 +96,7 @@ public class OptionTagHDIV extends OptionTag {
 
 		String optionText = text;
 
-		if ((optionText == null) && (key != null)) {
+		if (optionText == null && key != null) {
 			optionText = TagUtils.getInstance().message(pageContext, bundle, locale, key);
 		}
 

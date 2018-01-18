@@ -70,6 +70,7 @@ public class SecurityConfigBuilder {
 		return this;
 	}
 
+	@SuppressWarnings("deprecation")
 	public SecurityConfigBuilder randomName(final boolean randomName) {
 		config.setRandomName(randomName);
 		return this;
@@ -91,11 +92,13 @@ public class SecurityConfigBuilder {
 		return this;
 	}
 
+	@SuppressWarnings("deprecation")
 	public SecurityConfigBuilder stateParameterName(final String stateParameterName) {
 		config.setStateParameterName(stateParameterName);
 		return this;
 	}
 
+	@SuppressWarnings("deprecation")
 	public SecurityConfigBuilder modifyStateParameterName(final String modifyStateParameterName) {
 		config.setModifyStateParameterName(modifyStateParameterName);
 		return this;

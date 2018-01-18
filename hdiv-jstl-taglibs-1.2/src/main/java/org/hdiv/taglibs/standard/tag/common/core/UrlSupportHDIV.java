@@ -97,13 +97,13 @@ public abstract class UrlSupportHDIV extends BodyTagSupport implements ParamPare
 
 		// if the URL is relative, rewrite it
 		if (!UrlUtil.isAbsoluteUrl(result)) {
-			HttpServletResponse response = ((HttpServletResponse) pageContext.getResponse());
+			HttpServletResponse response = (HttpServletResponse) pageContext.getResponse();
 			result = response.encodeURL(result);
 		}
 
 		// Call to HDIV
 		LinkUrlProcessor linkUrlProcessor = HDIVUtil.getLinkUrlProcessor(pageContext.getServletContext());
-		result = linkUrlProcessor.processUrl((HttpServletRequest) pageContext.getRequest(), result);
+		result = linkUrlProcessor.processUrl(HDIVUtil.getRequestContext(pageContext.getRequest()), result);
 
 		// store or print the output
 		if (var != null) {
@@ -140,7 +140,7 @@ public abstract class UrlSupportHDIV extends BodyTagSupport implements ParamPare
 		HttpServletRequest request = (HttpServletRequest) pageContext.getRequest();
 		if (context == null) {
 			if (url.startsWith("/")) {
-				return (request.getContextPath() + url);
+				return request.getContextPath() + url;
 			}
 			else {
 				return url;
@@ -157,7 +157,7 @@ public abstract class UrlSupportHDIV extends BodyTagSupport implements ParamPare
 				return url;
 			}
 			else {
-				return (context + url);
+				return context + url;
 			}
 		}
 	}

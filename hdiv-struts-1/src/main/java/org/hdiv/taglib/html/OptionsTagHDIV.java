@@ -70,7 +70,7 @@ public class OptionsTagHDIV extends OptionsTag {
 		String cipheredValue = null;
 
 		HttpServletRequest request = (HttpServletRequest) pageContext.getRequest();
-		IDataComposer dataComposer = HDIVUtil.getDataComposer(request);
+		IDataComposer dataComposer = HDIVUtil.getRequestContext(request).getDataComposer();
 		cipheredValue = dataComposer != null ? dataComposer.composeFormField(selectTag.getProperty(), value, false, null) : value;
 
 		if (filter) {

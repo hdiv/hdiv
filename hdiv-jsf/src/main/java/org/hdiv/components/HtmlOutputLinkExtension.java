@@ -67,6 +67,7 @@ public class HtmlOutputLinkExtension extends HtmlOutputLink {
 	 * 
 	 * @see javax.faces.component.UIComponentBase#encodeEnd(javax.faces.context.FacesContext)
 	 */
+	@SuppressWarnings("deprecation")
 	@Override
 	public void encodeEnd(final FacesContext context) throws IOException {
 

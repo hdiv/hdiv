@@ -23,6 +23,7 @@ import javax.servlet.jsp.JspException;
 import org.apache.struts.tiles.ComponentDefinition;
 import org.apache.struts.tiles.Controller;
 import org.apache.struts.tiles.taglib.InsertTag;
+import org.hdiv.context.RequestContextHolder;
 import org.hdiv.filter.RequestWrapper;
 import org.hdiv.urlProcessor.LinkUrlProcessor;
 import org.hdiv.urlProcessor.UrlData;
@@ -92,10 +93,10 @@ public class InsertTagHDIV extends InsertTag {
 		if (requestWrapper != null) {
 
 			LinkUrlProcessor linkUrlProcessorForForward = HDIVUtil.getLinkUrlProcessor(pageContext.getSession().getServletContext());
-			UrlData urlData = linkUrlProcessorForForward.createUrlData(url, Method.GET, HDIVUtil.getHdivStateParameterName(request),
-					request);
-			Map<String, String[]> urlParamsAsMap = linkUrlProcessorForForward.getUrlParamsAsMap(new StringBuilder(128), request,
-					urlData.getUrlParams());
+			RequestContextHolder holder = HDIVUtil.getRequestContext(request);
+			UrlData urlData = linkUrlProcessorForForward.createUrlData(url, Method.GET, holder.getHdivParameterName(), holder);
+			Map<String, String[]> urlParamsAsMap = linkUrlProcessorForForward.getUrlParamsAsMap(holder.getHdivParameterName(),
+					new StringBuilder(128), urlData.getUrlParams());
 			for (Map.Entry<String, String[]> entry : urlParamsAsMap.entrySet()) {
 				requestWrapper.addParameter(entry.getKey(), entry.getValue());
 			}

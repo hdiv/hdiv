@@ -95,6 +95,7 @@ public class RequestContext implements RequestContextHolder {
 		this.response = response;
 	}
 
+	@Deprecated
 	public HttpServletRequest getRequest() {
 		return request;
 	}

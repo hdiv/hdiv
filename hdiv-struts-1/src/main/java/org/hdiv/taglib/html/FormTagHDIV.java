@@ -56,7 +56,7 @@ public class FormTagHDIV extends FormTag {
 		final HttpServletResponse response = (HttpServletResponse) pageContext.getResponse();
 		final HttpServletRequest request = (HttpServletRequest) pageContext.getRequest();
 
-		final String calcAction = (action == null ? getPostbackAction() : action);
+		final String calcAction = action == null ? getPostbackAction() : action;
 
 		final String url = response.encodeURL(TagUtils.getInstance().getActionMappingURL(calcAction, pageContext));
 
@@ -64,7 +64,7 @@ public class FormTagHDIV extends FormTag {
 		if (formUrlProcessor == null) {
 			formUrlProcessor = HDIVUtil.getFormUrlProcessor(request.getSession().getServletContext());
 		}
-		final String encodedURL = formUrlProcessor.processUrl(request, url);
+		final String encodedURL = formUrlProcessor.processUrl(HDIVUtil.getRequestContext(request), url);
 
 		results.append(" action=\"");
 		results.append(encodedURL);
@@ -102,7 +102,7 @@ public class FormTagHDIV extends FormTag {
 	protected void addHDIVParameter() throws JspException {
 
 		final HttpServletRequest request = (HttpServletRequest) pageContext.getRequest();
-		final IDataComposer dataComposer = HDIVUtil.getDataComposer(request);
+		final IDataComposer dataComposer = HDIVUtil.getRequestContext(request).getDataComposer();
 		if (dataComposer == null || !dataComposer.isRequestStarted()) {
 			return;
 		}

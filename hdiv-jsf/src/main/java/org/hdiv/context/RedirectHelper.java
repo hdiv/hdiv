@@ -19,6 +19,7 @@ import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 
 import org.hdiv.urlProcessor.LinkUrlProcessor;
+import org.hdiv.util.HDIVUtil;
 
 /**
  * Helper class for redirect operations This class is independent from the JSF version. It is valid for 1.x and 2.0.
@@ -44,7 +45,7 @@ public class RedirectHelper {
 		FacesContext context = FacesContext.getCurrentInstance();
 		HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
 
-		return linkUrlProcessor.processUrl(request, url);
+		return linkUrlProcessor.processUrl(HDIVUtil.getRequestContext(request), url);
 	}
 
 	/**

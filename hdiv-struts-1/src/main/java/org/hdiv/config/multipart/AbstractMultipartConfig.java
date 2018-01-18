@@ -153,6 +153,7 @@ public abstract class AbstractMultipartConfig implements IMultipartConfig {
 	 * @param request The request in which the parameter was specified.
 	 * @param item The file item for the parameter to add.
 	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void addFileParameter(final RequestWrapper request, final FileItem item) {
 
 		List values;

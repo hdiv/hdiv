@@ -49,7 +49,7 @@ public class CancelTagHDIV extends CancelTag {
 	public int doStartTag() throws JspException {
 
 		HttpServletRequest request = (HttpServletRequest) pageContext.getRequest();
-		IDataComposer dataComposer = HDIVUtil.getDataComposer(request);
+		IDataComposer dataComposer = HDIVUtil.getRequestContext(request).getDataComposer();
 
 		// this property is editable and we must check it
 		String label = value;

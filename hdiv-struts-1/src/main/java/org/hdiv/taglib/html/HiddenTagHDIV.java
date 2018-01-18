@@ -55,6 +55,7 @@ public class HiddenTagHDIV extends HiddenTag {
 	 * @exception JspException if a JSP exception has occurred
 	 * @see org.hdiv.dataComposer.IDataComposer#composeFormField(String, String, boolean, String)
 	 */
+	@SuppressWarnings("deprecation")
 	@Override
 	public int doStartTag() throws JspException {
 
@@ -72,7 +73,7 @@ public class HiddenTagHDIV extends HiddenTag {
 			}
 
 			HttpServletRequest request = (HttpServletRequest) pageContext.getRequest();
-			IDataComposer dataComposer = HDIVUtil.getDataComposer(request);
+			IDataComposer dataComposer = HDIVUtil.getRequestContext(request).getDataComposer();
 			encodedValue = dataComposer != null ? dataComposer.composeFormField(prepareName(), hiddenValue, false, null, true)
 					: hiddenValue;
 

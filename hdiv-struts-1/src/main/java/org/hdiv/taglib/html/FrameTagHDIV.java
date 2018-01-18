@@ -80,7 +80,7 @@ public class FrameTagHDIV extends LinkTagHDIV {
 	protected LinkUrlProcessor linkUrlProcessor;
 
 	public String getFrameborder() {
-		return (frameborder);
+		return frameborder;
 	}
 
 	public void setFrameborder(final String frameborder) {
@@ -88,7 +88,7 @@ public class FrameTagHDIV extends LinkTagHDIV {
 	}
 
 	public String getFrameName() {
-		return (frameName);
+		return frameName;
 	}
 
 	public void setFrameName(final String frameName) {
@@ -96,7 +96,7 @@ public class FrameTagHDIV extends LinkTagHDIV {
 	}
 
 	public String getLongdesc() {
-		return (longdesc);
+		return longdesc;
 	}
 
 	public void setLongdesc(final String longdesc) {
@@ -104,7 +104,7 @@ public class FrameTagHDIV extends LinkTagHDIV {
 	}
 
 	public Integer getMarginheight() {
-		return (marginheight);
+		return marginheight;
 	}
 
 	public void setMarginheight(final Integer marginheight) {
@@ -112,7 +112,7 @@ public class FrameTagHDIV extends LinkTagHDIV {
 	}
 
 	public Integer getMarginwidth() {
-		return (marginwidth);
+		return marginwidth;
 	}
 
 	public void setMarginwidth(final Integer marginwidth) {
@@ -120,7 +120,7 @@ public class FrameTagHDIV extends LinkTagHDIV {
 	}
 
 	public boolean getNoresize() {
-		return (noresize);
+		return noresize;
 	}
 
 	public void setNoresize(final boolean noresize) {
@@ -128,7 +128,7 @@ public class FrameTagHDIV extends LinkTagHDIV {
 	}
 
 	public String getScrolling() {
-		return (scrolling);
+		return scrolling;
 	}
 
 	public void setScrolling(final String scrolling) {
@@ -157,7 +157,7 @@ public class FrameTagHDIV extends LinkTagHDIV {
 		if (linkUrlProcessor == null) {
 			linkUrlProcessor = HDIVUtil.getLinkUrlProcessor(request.getSession().getServletContext());
 		}
-		final String urlWithHDIVParameter = linkUrlProcessor.processUrl(request, url);
+		final String urlWithHDIVParameter = linkUrlProcessor.processUrl(HDIVUtil.getRequestContext(request), url);
 
 		results.append(urlWithHDIVParameter);
 
@@ -181,7 +181,7 @@ public class FrameTagHDIV extends LinkTagHDIV {
 		TagUtils.getInstance().write(pageContext, results.toString());
 
 		// Skip the body of this tag
-		return (SKIP_BODY);
+		return SKIP_BODY;
 	}
 
 	/**
@@ -192,7 +192,7 @@ public class FrameTagHDIV extends LinkTagHDIV {
 	@Override
 	public int doEndTag() throws JspException {
 
-		return (EVAL_PAGE);
+		return EVAL_PAGE;
 	}
 
 	/**

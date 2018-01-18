@@ -32,8 +32,10 @@ import java.util.ArrayList;
  * @author Gorka Vicente
  * @since HDIV 2.0
  */
+@SuppressWarnings("unchecked")
 public class ELCheckboxTagHDIVBeanInfo extends SimpleBeanInfo {
 
+	@Override
 	public PropertyDescriptor[] getPropertyDescriptors() {
 		ArrayList proplist = new ArrayList();
 
@@ -243,6 +245,6 @@ public class ELCheckboxTagHDIVBeanInfo extends SimpleBeanInfo {
 
 		PropertyDescriptor[] result = new PropertyDescriptor[proplist.size()];
 
-		return ((PropertyDescriptor[]) proplist.toArray(result));
+		return (PropertyDescriptor[]) proplist.toArray(result);
 	}
 }

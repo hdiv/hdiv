@@ -63,7 +63,7 @@ public class RadioTagHDIV extends RadioTag {
 
 		String preparedName = prepareName();
 		HttpServletRequest request = (HttpServletRequest) pageContext.getRequest();
-		IDataComposer dataComposer = HDIVUtil.getDataComposer(request);
+		IDataComposer dataComposer = HDIVUtil.getRequestContext(request).getDataComposer();
 		cipheredValue = dataComposer != null ? dataComposer.composeFormField(preparedName, serverValue, false, null) : serverValue;
 
 		StringBuilder results = new StringBuilder("<input type=\"radio\"");

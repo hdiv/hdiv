@@ -34,6 +34,7 @@ import org.apache.struts.config.ForwardConfig;
 import org.apache.struts.taglib.TagUtils;
 import org.apache.struts.tiles.TilesRequestProcessor;
 import org.apache.struts.util.RequestUtils;
+import org.hdiv.context.RequestContextHolder;
 import org.hdiv.filter.RequestWrapper;
 import org.hdiv.filter.ValidatorError;
 import org.hdiv.urlProcessor.LinkUrlProcessor;
@@ -307,7 +308,7 @@ public class HDIVTilesRequestProcessor extends TilesRequestProcessor {
 
 			// Call to HDIV LinkUrlProcessor
 			LinkUrlProcessor linkUrlProcessor = HDIVUtil.getLinkUrlProcessor(request.getSession().getServletContext());
-			uri = linkUrlProcessor.processUrl(request, uri);
+			uri = linkUrlProcessor.processUrl(HDIVUtil.getRequestContext(request), uri);
 
 			if (log.isDebugEnabled()) {
 				log.debug("redirecting to " + uri);
@@ -335,10 +336,10 @@ public class HDIVTilesRequestProcessor extends TilesRequestProcessor {
 		if (requestWrapper != null) {
 
 			LinkUrlProcessor linkUrlProcessorForForward = HDIVUtil.getLinkUrlProcessor(request.getSession().getServletContext());
-			UrlData urlData = linkUrlProcessorForForward.createUrlData(uri, Method.GET, HDIVUtil.getHdivStateParameterName(request),
-					request);
-			Map<String, String[]> urlParamsAsMap = linkUrlProcessorForForward.getUrlParamsAsMap(new StringBuilder(128), request,
-					urlData.getUrlParams());
+			RequestContextHolder holder = HDIVUtil.getRequestContext(request);
+			UrlData urlData = linkUrlProcessorForForward.createUrlData(uri, Method.GET, holder.getHdivParameterName(), holder);
+			Map<String, String[]> urlParamsAsMap = linkUrlProcessorForForward.getUrlParamsAsMap(holder.getHdivParameterName(),
+					new StringBuilder(128), urlData.getUrlParams());
 			for (Map.Entry<String, String[]> entry : urlParamsAsMap.entrySet()) {
 				requestWrapper.addParameter(entry.getKey(), entry.getValue());
 			}

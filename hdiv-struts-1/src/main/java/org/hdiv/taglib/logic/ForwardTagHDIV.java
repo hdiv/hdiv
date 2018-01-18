@@ -62,7 +62,7 @@ public class ForwardTagHDIV extends ForwardTag {
 			if (linkUrlProcessor == null) {
 				linkUrlProcessor = HDIVUtil.getLinkUrlProcessor(request.getSession().getServletContext());
 			}
-			String urlHDIVstate = linkUrlProcessor.processUrl(request, path);
+			String urlHDIVstate = linkUrlProcessor.processUrl(HDIVUtil.getRequestContext(request), path);
 
 			String encodedURL = response.encodeRedirectURL(urlHDIVstate);
 			response.sendRedirect(encodedURL);

@@ -54,6 +54,7 @@ import java.util.TreeMap;
  * @since 2.0
  * @version $Id: Entities.java 161243 2005-04-14 04:30:28Z ggregory $
  */
+@SuppressWarnings("unchecked")
 class Entities {
 
 	private static final String[][] BASIC_ARRAY = { { "quot", "34" }, // " - double-quote

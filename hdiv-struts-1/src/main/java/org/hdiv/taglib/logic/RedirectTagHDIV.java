@@ -63,12 +63,12 @@ public class RedirectTagHDIV extends RedirectTag {
 		if (linkUrlProcessor == null) {
 			linkUrlProcessor = HDIVUtil.getLinkUrlProcessor(request.getSession().getServletContext());
 		}
-		String urlHDIVstate = linkUrlProcessor.processUrl(request, url, charEncoding);
+		String urlHDIVstate = linkUrlProcessor.processUrl(HDIVUtil.getRequestContext(request), url, charEncoding);
 
 		// redirect to the given url
 		doRedirect(urlHDIVstate);
 
-		return (SKIP_PAGE);
+		return SKIP_PAGE;
 	}
 
 }

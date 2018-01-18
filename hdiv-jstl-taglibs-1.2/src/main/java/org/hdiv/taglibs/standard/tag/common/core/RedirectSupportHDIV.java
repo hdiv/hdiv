@@ -15,7 +15,6 @@
  */
 package org.hdiv.taglibs.standard.tag.common.core;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
@@ -112,14 +111,14 @@ public abstract class RedirectSupportHDIV extends BodyTagSupport implements Para
 		result = params.aggregateParams(baseUrl);
 
 		// if the URL is relative, rewrite it with 'redirect' encoding rules
-		HttpServletResponse response = ((HttpServletResponse) pageContext.getResponse());
+		HttpServletResponse response = (HttpServletResponse) pageContext.getResponse();
 		if (!UrlUtil.isAbsoluteUrl(result)) {
 			result = response.encodeRedirectURL(result);
 		}
 
 		// Call to HDIV
 		LinkUrlProcessor linkUrlProcessor = HDIVUtil.getLinkUrlProcessor(pageContext.getServletContext());
-		result = linkUrlProcessor.processUrl((HttpServletRequest) pageContext.getRequest(), result);
+		result = linkUrlProcessor.processUrl(HDIVUtil.getRequestContext(pageContext.getRequest()), result);
 
 		// redirect!
 		try {
