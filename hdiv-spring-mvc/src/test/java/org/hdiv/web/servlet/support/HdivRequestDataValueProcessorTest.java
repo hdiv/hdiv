@@ -20,6 +20,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.hdiv.AbstractHDIVTestCase;
+import org.hdiv.util.Constants;
 
 public class HdivRequestDataValueProcessorTest extends AbstractHDIVTestCase {
 
@@ -104,6 +105,28 @@ public class HdivRequestDataValueProcessorTest extends AbstractHDIVTestCase {
 
 		assertNotNull(extraParams);
 		assertTrue(extraParams.size() > 0);
+	}
+
+	public void testNoRequestContext() {
+
+		HttpServletRequest request = getMockRequest();
+		request.removeAttribute(Constants.HDIV_REQUEST_CONTEXT);
+
+		String url = "/testAction.do";
+		String result = dataValueProcessor.processUrl(request, url);
+		assertEquals(url, result);
+
+		String action = "/testAction.do";
+		result = dataValueProcessor.processAction(request, action);
+		assertEquals(action, result);
+
+		String val = dataValueProcessor.processFormFieldValue(request, "param", "value", "select");
+		assertEquals("value", val);
+
+		Map<String, String> extraParams = dataValueProcessor.getExtraHiddenFields(request);
+
+		assertNotNull(extraParams);
+		assertTrue(extraParams.size() == 0);
 	}
 
 }

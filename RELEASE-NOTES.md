@@ -3,6 +3,10 @@
 ## HDIV CHANGELOG
 https://github.com/hdiv
 
+# Release 3.3.11
+
+ * [BUG] Spring MVC, support no RequestContext in request.
+
 # Release 3.3.10
 
  * Fix encoding error in Websphere.

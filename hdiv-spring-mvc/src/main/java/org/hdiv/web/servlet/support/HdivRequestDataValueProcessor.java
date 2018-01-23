@@ -130,7 +130,7 @@ public class HdivRequestDataValueProcessor implements RequestDataValueProcessor,
 
 		Map<String, String> extraFields = new HashMap<String, String>();
 
-		if (innerRequestDataValueProcessor != null) {
+		if (innerRequestDataValueProcessor != null && request != null) {
 			Map<String, String> innerExtras = innerRequestDataValueProcessor.getExtraHiddenFields(request);
 			if (innerExtras != null) {
 				extraFields.putAll(innerExtras);
@@ -178,6 +178,9 @@ public class HdivRequestDataValueProcessor implements RequestDataValueProcessor,
 	}
 
 	public String processAction(final RequestContextHolder request, String action, final String method) {
+		if (request == null) {
+			return action;
+		}
 		if (innerRequestDataValueProcessor != null) {
 			@SuppressWarnings("deprecation")
 			String processedAction = innerRequestDataValueProcessor.processAction(request.getRequest(), action, method);
@@ -189,6 +192,9 @@ public class HdivRequestDataValueProcessor implements RequestDataValueProcessor,
 	}
 
 	public String processFormFieldValue(final RequestContextHolder request, final String name, String value, final String type) {
+		if (request == null) {
+			return value;
+		}
 		if (innerRequestDataValueProcessor != null) {
 			@SuppressWarnings("deprecation")
 			String processedValue = innerRequestDataValueProcessor.processFormFieldValue(request.getRequest(), name, value, type);
@@ -217,6 +223,9 @@ public class HdivRequestDataValueProcessor implements RequestDataValueProcessor,
 	}
 
 	public Map<String, String> getExtraHiddenFields(final RequestContextHolder context) {
+		if (context == null) {
+			return new HashMap<String, String>();
+		}
 		@SuppressWarnings("deprecation")
 		Map<String, String> extraFields = getInnerExtraHiddenFields(context.getRequest());
 		IDataComposer dataComposer = context.getDataComposer();
@@ -239,6 +248,9 @@ public class HdivRequestDataValueProcessor implements RequestDataValueProcessor,
 	}
 
 	public String processUrl(final RequestContextHolder request, String url) {
+		if (request == null) {
+			return url;
+		}
 		if (innerRequestDataValueProcessor != null) {
 			@SuppressWarnings("deprecation")
 			String processedUrl = innerRequestDataValueProcessor.processUrl(request.getRequest(), url);
