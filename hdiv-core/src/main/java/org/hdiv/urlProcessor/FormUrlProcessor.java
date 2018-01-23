@@ -68,6 +68,9 @@ public class FormUrlProcessor extends AbstractUrlProcessor {
 	 */
 	public String processUrl(final RequestContextHolder request, String url, Method method) {
 
+		if (request == null) {
+			return url;
+		}
 		if (method == null) {
 			method = Method.POST;
 		}

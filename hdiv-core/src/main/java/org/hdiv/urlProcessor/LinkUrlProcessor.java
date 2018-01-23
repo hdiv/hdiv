@@ -69,6 +69,9 @@ public class LinkUrlProcessor extends AbstractUrlProcessor {
 	 */
 	public String processUrl(final RequestContextHolder request, String url, final String encoding) {
 
+		if (request == null) {
+			return url;
+		}
 		IDataComposer dataComposer = request.getDataComposer();
 		if (dataComposer == null) {
 			// IDataComposer not initialized on request, request is out of filter
