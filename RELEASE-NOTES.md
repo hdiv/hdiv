@@ -3,6 +3,14 @@
 ## HDIV CHANGELOG
 https://github.com/hdiv
 
+###3.3.11
+
+ * [BUG] Spring MVC, support no RequestContext in request.
+
+###3.3.10
+
+ * Fix encoding error in Websphere.
+
 ###3.3.9
 
  * Struts1: Don’t process url if requestContext is null.
