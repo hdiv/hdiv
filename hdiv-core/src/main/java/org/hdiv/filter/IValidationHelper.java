@@ -15,6 +15,8 @@
  */
 package org.hdiv.filter;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -68,5 +70,13 @@ public interface IValidationHelper extends StateRestorer {
 	 * @return
 	 */
 	boolean isInternal(HttpServletRequest request, HttpServletResponse response);
+
+	/**
+	 * Find internal errors
+	 * @param t
+	 * @param target
+	 * @return
+	 */
+	List<ValidatorError> findCustomErrors(final Throwable t, String target);
 
 }
