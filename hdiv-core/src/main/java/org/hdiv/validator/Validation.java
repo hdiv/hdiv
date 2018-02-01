@@ -17,6 +17,7 @@ package org.hdiv.validator;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -171,7 +172,13 @@ public class Validation implements IValidation {
 	 * @param acceptedPattern The accepted pattern to set.
 	 */
 	public void setAcceptedPattern(final String acceptedPattern) {
-		this.acceptedPattern = Pattern.compile(acceptedPattern);
+		try {
+			this.acceptedPattern = Pattern.compile(acceptedPattern);
+		}
+		catch (PatternSyntaxException ex) {
+			log.error("Error compiling pattern:" + acceptedPattern + ". It will be ignored.");
+			System.err.println("Error compiling pattern:" + acceptedPattern + ". It will be ignored.");
+		}
 	}
 
 	/**
@@ -185,7 +192,13 @@ public class Validation implements IValidation {
 	 * @param rejectedPattern The rejected pattern to set.
 	 */
 	public void setRejectedPattern(final String rejectedPattern) {
-		this.rejectedPattern = Pattern.compile(rejectedPattern);
+		try {
+			this.rejectedPattern = Pattern.compile(rejectedPattern);
+		}
+		catch (PatternSyntaxException ex) {
+			log.error("Error compiling pattern:" + rejectedPattern + ". It will be ignored.");
+			System.err.println("Error compiling pattern:" + rejectedPattern + ". It will be ignored.");
+		}
 	}
 
 	/**
