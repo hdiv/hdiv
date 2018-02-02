@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -1295,6 +1296,10 @@ public class ValidatorHelperRequest implements IValidationHelper, StateRestorer 
 
 	public boolean isInternal(final HttpServletRequest request, final HttpServletResponse response) {
 		return false;
+	}
+
+	public List<ValidatorError> findCustomErrors(final Throwable t, final String target) {
+		return Collections.emptyList();
 	}
 
 }

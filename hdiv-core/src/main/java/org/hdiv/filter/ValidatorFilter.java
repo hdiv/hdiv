@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletContext;
@@ -163,7 +164,7 @@ public class ValidatorFilter extends OncePerRequestFilter {
 		HttpServletRequest multipartProcessedRequest = requestWrapper;
 
 		boolean isMultipartProcessed = false;
-
+		ValidationContext context = null;
 		try {
 
 			boolean legal = false;
@@ -189,7 +190,7 @@ public class ValidatorFilter extends OncePerRequestFilter {
 					legal = true;
 				}
 			}
-			ValidationContext context = validationContextFactory.newInstance(ctx, validationHelper, hdivConfig.isUrlObfuscation());
+			context = validationContextFactory.newInstance(ctx, validationHelper, hdivConfig.isUrlObfuscation());
 			ctx.setValidationContext(context);
 			List<ValidatorError> errors = null;
 			try {
@@ -256,6 +257,13 @@ public class ValidatorFilter extends OncePerRequestFilter {
 				}
 			}
 			else {
+				errors = validationHelper.findCustomErrors(e, context.getTarget());
+				if (!errors.isEmpty()) {
+					processEditableValidationErrors(ctx, errors);
+					processRequest(ctx, multipartProcessedRequest, responseWrapper, filterChain, context.getRedirect());
+					return;
+				}
+
 				/**
 				 * Try to rethrow the same exception if posible
 				 */
@@ -282,6 +290,16 @@ public class ValidatorFilter extends OncePerRequestFilter {
 			// Destroy request scoped data
 			requestInitializer.endRequest(ctx);
 		}
+	}
+
+	private Callable findAttack(final Throwable e) {
+		if (e instanceof Callable) {
+			return (Callable) e;
+		}
+		else if (e.getCause() != null) {
+			return findAttack(e.getCause());
+		}
+		return null;
 	}
 
 	private List<ValidatorError> findErrors(final Throwable e, final String target, final boolean allowUncontrolledOrigin) {
