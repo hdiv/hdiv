@@ -691,7 +691,8 @@ public class ValidatorHelperRequest implements IValidationHelper, StateRestorer 
 			log.debug("Validation Error Detected: Parameter [" + parameter + "] does not exist in the state for action [" + target + "]");
 		}
 
-		ValidatorError error = new ValidatorError(HDIVErrorCodes.INVALID_PARAMETER_NAME, target, parameter);
+		ValidatorError error = new ValidatorError(HDIVErrorCodes.INVALID_PARAMETER_NAME, target, parameter,
+				request.getParameter(parameter));
 		return new ValidatorHelperResult(error);
 	}
 
