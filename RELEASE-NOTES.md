@@ -3,6 +3,11 @@
 ## HDIV CHANGELOG
 https://github.com/hdiv
 
+###3.3.13
+
+ * [NEW] Include cookie original value in attack detail.
+ * [NEW] Include parameter value in new parameter attack detail.
+ 
 ###3.3.11
 
  * [BUG] Spring MVC, support no RequestContext in request.
