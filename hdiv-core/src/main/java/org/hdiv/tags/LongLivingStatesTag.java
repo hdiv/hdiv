@@ -48,23 +48,24 @@ public class LongLivingStatesTag extends TagSupport {
 	public int doStartTag() throws JspException {
 
 		IDataComposer dataComposer = HDIVUtil.getRequestContext(pageContext.getRequest()).getDataComposer();
-
-		StateScopeType scope = StateScopeType.byName((String) getValue("scope"));
-		if (scope == null) {
-			// Default scope
-			scope = StateScopeType.USER_SESSION;
+		if (dataComposer != null) {
+			StateScopeType scope = StateScopeType.byName((String) getValue("scope"));
+			if (scope == null) {
+				// Default scope
+				scope = StateScopeType.USER_SESSION;
+			}
+			dataComposer.startScope(scope);
 		}
-
-		dataComposer.startScope(scope);
-
 		return EVAL_BODY_INCLUDE;
 	}
 
 	@Override
 	public int doEndTag() throws JspException {
 
-		HDIVUtil.getRequestContext(pageContext.getRequest()).getDataComposer().endScope();
-
+		IDataComposer dataComposer = HDIVUtil.getRequestContext(pageContext.getRequest()).getDataComposer();
+		if (dataComposer != null) {
+			dataComposer.endScope();
+		}
 		return EVAL_PAGE;
 	}
 
