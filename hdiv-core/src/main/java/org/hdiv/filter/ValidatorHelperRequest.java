@@ -186,7 +186,7 @@ public class ValidatorHelperRequest implements IValidationHelper, StateRestorer 
 		String target = context.getTarget();
 		RequestContextHolder ctx = context.getRequestContext();
 
-		if (false && target.endsWith(UrlData.PEN_TESTING_ROOT_PATH)) {
+		if (hdivConfig.isPentestingActive() && target.endsWith(UrlData.PEN_TESTING_ROOT_PATH)) {
 			processPenTesting(context);
 		}
 
@@ -428,9 +428,10 @@ public class ValidatorHelperRequest implements IValidationHelper, StateRestorer 
 				continue;
 			}
 
+			SavedCookie savedCookie = null;
 			if (sessionCookies.containsKey(requestCookies[i].getName())) {
 
-				SavedCookie savedCookie = sessionCookies.get(requestCookies[i].getName());
+				savedCookie = sessionCookies.get(requestCookies[i].getName());
 				if (savedCookie.isEqual(requestCookies[i], cookiesConfidentiality)) {
 
 					found = true;
@@ -441,8 +442,8 @@ public class ValidatorHelperRequest implements IValidationHelper, StateRestorer 
 			}
 
 			if (!found) {
-				ValidatorError error = new ValidatorError(HDIVErrorCodes.INVALID_COOKIE, target, "cookie:" + requestCookies[i].getName(),
-						requestCookies[i].getValue());
+				ValidatorError error = new ValidatorError(HDIVErrorCodes.INVALID_COOKIE, target, requestCookies[i].getName(),
+						requestCookies[i].getValue(), savedCookie != null ? savedCookie.getValue() : null);
 				return new ValidatorHelperResult(error);
 			}
 		}
@@ -691,7 +692,8 @@ public class ValidatorHelperRequest implements IValidationHelper, StateRestorer 
 			log.debug("Validation Error Detected: Parameter [" + parameter + "] does not exist in the state for action [" + target + "]");
 		}
 
-		ValidatorError error = new ValidatorError(HDIVErrorCodes.INVALID_PARAMETER_NAME, target, parameter);
+		ValidatorError error = new ValidatorError(HDIVErrorCodes.INVALID_PARAMETER_NAME, target, parameter,
+				request.getParameter(parameter));
 		return new ValidatorHelperResult(error);
 	}
 

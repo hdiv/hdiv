@@ -105,6 +105,11 @@ public class SecurityConfigBuilder {
 		return this;
 	}
 
+	public SecurityConfigBuilder pentestingActive(final boolean penTestingActive) {
+		config.setPentestingActive(penTestingActive);
+		return this;
+	}
+
 	public SessionExpiredConfigure sessionExpired() {
 		return sessionExpiredConfigure;
 	}
