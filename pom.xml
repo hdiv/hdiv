@@ -223,10 +223,10 @@
 	<profiles>
 		<!-- Profile to activate artifact signing in release -->
 		<profile>
-			<id>performRelease</id>
+			<id>performReleaseToCentral</id>
 			<activation>
 				<property>
-					<name>performRelease</name>
+					<name>performReleaseToCentral</name>
 				</property>
 			</activation>
 			<build>
