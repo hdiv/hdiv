@@ -113,9 +113,9 @@ public class TrustAssertionUtils {
 			return false;
 		}
 
-		public boolean recursiveNavigation() {
+		public TriState recursiveNavigation() {
 			// TODO Auto-generated method stub
-			return false;
+			return TriState.UNDEFINED;
 		}
 
 		public boolean ignored() {
