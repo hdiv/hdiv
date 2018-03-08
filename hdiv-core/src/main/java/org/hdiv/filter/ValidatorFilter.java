@@ -257,11 +257,13 @@ public class ValidatorFilter extends OncePerRequestFilter {
 				}
 			}
 			else {
-				errors = validationHelper.findCustomErrors(e, context.getTarget());
-				if (!errors.isEmpty()) {
-					processEditableValidationErrors(ctx, errors);
-					processRequest(ctx, multipartProcessedRequest, responseWrapper, filterChain, context.getRedirect());
-					return;
+				if (context != null) {
+					errors = validationHelper.findCustomErrors(e, context.getTarget());
+					if (!errors.isEmpty()) {
+						processEditableValidationErrors(ctx, errors);
+						processRequest(ctx, multipartProcessedRequest, responseWrapper, filterChain, context.getRedirect());
+						return;
+					}
 				}
 
 				/**
