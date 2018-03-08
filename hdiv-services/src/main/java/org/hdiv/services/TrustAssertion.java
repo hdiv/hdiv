@@ -99,7 +99,7 @@ public @interface TrustAssertion {
 
 	boolean wildcardCollection() default false;
 
-	boolean recursiveNavigation() default false;
+	TriState recursiveNavigation() default TriState.UNDEFINED;
 
 	String originMask() default EMPTY;
 }
