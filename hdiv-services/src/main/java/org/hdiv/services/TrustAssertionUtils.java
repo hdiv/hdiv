@@ -145,7 +145,7 @@ public class TrustAssertionUtils {
 	}
 
 	public static boolean isNid(final TrustAssertion assertion) {
-		return checkTriState(assertion.nid(), TrustAssertionDefaults.get().nid);
+		return checkTriState(assertion.nid(), false);
 	}
 
 	public static boolean isNotEmpty(final String value) {
