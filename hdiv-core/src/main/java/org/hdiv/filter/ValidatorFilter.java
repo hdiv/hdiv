@@ -123,8 +123,17 @@ public class ValidatorFilter extends OncePerRequestFilter {
 						multipartConfig = context.getBean(IMultipartConfig.class);
 					}
 					else {
-						// For applications without Multipart requests
-						multipartConfig = null;
+						/**
+						 * Final try
+						 */
+						List<IMultipartConfig> configs = HDIVUtil.findBeansInWebApplicationContext(IMultipartConfig.class);
+						if (!configs.isEmpty()) {
+							multipartConfig = configs.get(0);
+						}
+						else {
+							// For applications without Multipart requests
+							multipartConfig = null;
+						}
 					}
 					requestContextFactory = context.getBean(RequestContextFactory.class);
 					userData = context.getBean(IUserData.class);

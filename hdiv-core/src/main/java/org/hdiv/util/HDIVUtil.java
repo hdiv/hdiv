@@ -20,7 +20,9 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 import java.util.UUID;
@@ -45,6 +47,7 @@ import org.hdiv.urlProcessor.UrlData;
 import org.hdiv.urlProcessor.UrlDataImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.BeanFactoryUtils;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
@@ -912,6 +915,31 @@ public class HDIVUtil {
 
 	public static boolean isNonConfidentialType(final String type) {
 		return type != null && (isButtonType(type) || "text".equalsIgnoreCase(type) || "textarea".equalsIgnoreCase(type));
+	}
+
+	public static <T> List<T> findBeansInWebApplicationContext(final Class<T> beanType) {
+		List<T> found = new ArrayList<T>();
+		for (WebApplicationContext wac : findWebApplicationContextWithBeans(beanType)) {
+			found.addAll(BeanFactoryUtils.beansOfTypeIncludingAncestors(wac, beanType, true, false).values());
+		}
+		return found;
+	}
+
+	public static List<WebApplicationContext> findWebApplicationContextWithBeans(final Class<?> beanType) {
+		ServletContext sc = HDIVUtil.getCurrentHttpRequest().getServletContext();
+		List<WebApplicationContext> found = new ArrayList<WebApplicationContext>();
+		Enumeration<String> attrNames = sc.getAttributeNames();
+		while (attrNames.hasMoreElements()) {
+			String attrName = attrNames.nextElement();
+			Object attrValue = sc.getAttribute(attrName);
+			if (attrValue instanceof WebApplicationContext) {
+				if (!BeanFactoryUtils.beansOfTypeIncludingAncestors((WebApplicationContext) attrValue, beanType, true, false).isEmpty()) {
+					found.add((WebApplicationContext) attrValue);
+				}
+
+			}
+		}
+		return found;
 	}
 
 }
