@@ -415,13 +415,15 @@ public class HDIVConfig implements Serializable {
 		for (Entry<String, List<String>> entry : paramsWithoutValidation.entrySet()) {
 
 			PatternMatcher matcher = patternMatcherFactory.getPatternMatcher(entry.getKey());
-			List<PatternMatcher> paramMatchers = new ArrayList<PatternMatcher>();
-
+			List<PatternMatcher> paramMatchers = this.paramsWithoutValidation.get(matcher);
+			if (paramMatchers == null) {
+				paramMatchers = new ArrayList<PatternMatcher>();
+				this.paramsWithoutValidation.put(matcher, paramMatchers);
+			}
 			for (String param : entry.getValue()) {
 				PatternMatcher paramMatcher = patternMatcherFactory.getPatternMatcher(param);
 				paramMatchers.add(paramMatcher);
 			}
-			this.paramsWithoutValidation.put(matcher, paramMatchers);
 		}
 	}
 

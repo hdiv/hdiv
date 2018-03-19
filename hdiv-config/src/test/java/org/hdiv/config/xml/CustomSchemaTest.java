@@ -82,6 +82,20 @@ public class CustomSchemaTest extends TestCase {
 		assertFalse(result);
 	}
 
+	public void testParamsWithoutValidation() {
+
+		HDIVConfig hdivConfig = context.getBean(HDIVConfig.class);
+		assertNotNull(hdivConfig);
+
+		assertTrue(hdivConfig.isParameterWithoutValidation("/page1", "param1"));
+		assertTrue(hdivConfig.isParameterWithoutValidation("/page1", "param2"));
+		assertTrue(hdivConfig.isParameterWithoutValidation("/page1", "param3"));
+		assertTrue(hdivConfig.isParameterWithoutValidation("/page2", "param3"));
+		assertTrue(hdivConfig.isParameterWithoutValidation("/page2", "param4"));
+
+		assertFalse(hdivConfig.isParameterWithoutValidation("/other", "param1"));
+	}
+
 	public void testExpiredSession() {
 
 		HDIVConfig hdivConfig = context.getBean(HDIVConfig.class);

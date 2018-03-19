@@ -17,13 +17,18 @@ package org.hdiv.config.annotation;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
+import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
 
 import org.hdiv.config.HDIVConfig;
+import org.hdiv.config.StartPage;
 import org.hdiv.config.annotation.builders.SecurityConfigBuilder;
 import org.hdiv.config.annotation.configuration.HdivWebSecurityConfigurerAdapter;
+import org.hdiv.regex.DefaultPatternMatcher;
+import org.hdiv.regex.PatternMatcher;
 import org.hdiv.state.scope.StateScopeType;
 import org.hdiv.validator.DefaultValidationRepository;
 import org.hdiv.validator.IValidation;
@@ -54,6 +59,7 @@ public class HdivWebSecurityTest {
 			registry.addUrlExclusions("/attacks/.*");
 
 			registry.addParamExclusions("param1", "param2").forUrls("/attacks/.*");
+			registry.addParamExclusions("param3").forUrls("/attacks/.*");
 			registry.addParamExclusions("param3", "param4");
 		}
 
@@ -108,6 +114,26 @@ public class HdivWebSecurityTest {
 
 		assertEquals("/", config.getSessionExpiredHomePage());
 		assertEquals("/login.html", config.getSessionExpiredLoginPage());
+
+		StartPage[] startPages = (StartPage[]) getFieldValue(config, "startPages");
+		assertNotNull(startPages);
+		assertEquals(7, startPages.length);
+
+		@SuppressWarnings("unchecked")
+		List<PatternMatcher> startParameters = (List<PatternMatcher>) getFieldValue(config, "startParameters");
+		assertNotNull(startParameters);
+		assertEquals(2, startParameters.size());
+
+		@SuppressWarnings("unchecked")
+		Map<PatternMatcher, List<PatternMatcher>> paramsWithoutValidation = (Map<PatternMatcher, List<PatternMatcher>>) getFieldValue(
+				config, "paramsWithoutValidation");
+		assertNotNull(paramsWithoutValidation);
+		assertEquals(1, paramsWithoutValidation.size());
+		List<PatternMatcher> params = paramsWithoutValidation.get(paramsWithoutValidation.keySet().iterator().next());
+		assertEquals(3, params.size());
+		assertTrue(params.contains(new DefaultPatternMatcher("param1")));
+		assertTrue(params.contains(new DefaultPatternMatcher("param2")));
+		assertTrue(params.contains(new DefaultPatternMatcher("param3")));
 	}
 
 	@Test
@@ -155,5 +181,16 @@ public class HdivWebSecurityTest {
 			}
 		}
 		return null;
+	}
+
+	private Object getFieldValue(final Object obj, final String field) {
+		try {
+			Field f = obj.getClass().getDeclaredField(field);
+			f.setAccessible(true);
+			return f.get(obj);
+		}
+		catch (Exception e) {
+			return null;
+		}
 	}
 }

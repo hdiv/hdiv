@@ -79,7 +79,7 @@ public class ExclusionRegistry {
 	 */
 	public ParamExclusionRegistration addParamExclusions(final String... parameterPatterns) {
 		Assert.notEmpty(parameterPatterns, "Parameter patterns are required");
-		ParamExclusionRegistration registration = new ParamExclusionRegistration(Arrays.asList(parameterPatterns));
+		ParamExclusionRegistration registration = new ParamExclusionRegistration(new ArrayList(Arrays.asList(parameterPatterns)));
 		paramRegistrations.add(registration);
 		return registration;
 	}
@@ -119,7 +119,14 @@ public class ExclusionRegistry {
 		for (ParamExclusionRegistration regitration : paramRegistrations) {
 			String urlPattern = regitration.getUrlPattern();
 			if (urlPattern != null) {
-				paramExclusions.put(urlPattern, regitration.getParameterPatterns());
+				List<String> params = paramExclusions.get(urlPattern);
+				if (params == null) {
+					params = regitration.getParameterPatterns();
+				}
+				else {
+					params.addAll(regitration.getParameterPatterns());
+				}
+				paramExclusions.put(urlPattern, params);
 			}
 		}
 		return paramExclusions;

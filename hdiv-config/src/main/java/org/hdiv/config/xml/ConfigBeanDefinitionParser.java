@@ -875,7 +875,14 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		if (named != null) {
 			String url = named.getTextContent();
 			String parameters = attributes.getNamedItem("parameters").getTextContent();
-			map.put(url, convertToList(parameters));
+			List<String> params = map.get(url);
+			if (params == null) {
+				params = convertToList(parameters);
+			}
+			else {
+				params.addAll(convertToList(parameters));
+			}
+			map.put(url, params);
 		}
 	}
 
