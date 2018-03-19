@@ -99,7 +99,7 @@ public @interface TrustAssertion {
 
 	boolean wildcardCollection() default false;
 
-	TriState recursiveNavigation() default TriState.UNDEFINED;
+	SubEntityValidationType validationType() default SubEntityValidationType.DEFAULT;
 
 	String originMask() default EMPTY;
 }
