@@ -15,12 +15,8 @@
  */
 package org.hdiv.services;
 
-import java.io.Serializable;
+public enum SubEntityValidationType {
 
-public interface SecureIdentifiable<ID extends Serializable> extends Identifiable<ID>, SecureIdContainer {
-
-	String ID_PROPERTY = "id";
-
-	String NID_PROPERTY = "nid";
+	OBJECT, FIELDS, DEFAULT/** OBJECT VALIDATION BY DEFAULT **/
 
 }
