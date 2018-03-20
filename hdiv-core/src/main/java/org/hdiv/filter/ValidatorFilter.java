@@ -184,7 +184,7 @@ public class ValidatorFilter extends OncePerRequestFilter {
 			boolean legal = false;
 			boolean isMultipartException = false;
 
-			if (isMultipartContent(request)) {
+			if (isMultipartContent(request) && hdivConfig.isMultipartIntegration()) {
 
 				requestWrapper.setMultipart(true);
 

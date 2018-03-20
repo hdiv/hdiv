@@ -63,6 +63,7 @@ public class CustomSchemaTest extends TestCase {
 		System.out.println(hdivConfig.toString());
 		System.out.println("-----------------------");
 		assertTrue(hdivConfig.isShowErrorPageOnEditableValidation());
+		assertFalse(hdivConfig.isMultipartIntegration());
 
 		EditableDataValidationProvider validationProvider = context.getBean(EditableDataValidationProvider.class);
 		assertNotNull(validationProvider);
