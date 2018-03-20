@@ -16,7 +16,9 @@
 package org.hdiv.config.annotation.builders;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import org.hdiv.config.HDIVConfig;
 import org.hdiv.regex.PatternMatcherFactory;
@@ -41,14 +43,15 @@ public class SecurityConfigBuilderTest {
 			.cookiesConfidentiality(false)
 			.maxPagesPerSession(23)
 			.reuseExistingPageInAjaxRequest(true)
+			.multipartIntegration(false)
 			.sessionExpired()
 				.loginPage("/login.html");
 
 		HDIVConfig config = builder.build();
 		assertNotNull(config);
-		assertEquals(false, config.isCookiesConfidentialityActivated());
-		assertEquals(true, config.isReuseExistingPageInAjaxRequest());
-		
+		assertFalse(config.isCookiesConfidentialityActivated());
+		assertTrue(config.isReuseExistingPageInAjaxRequest());
+		assertFalse(config.isMultipartIntegration());
 		assertEquals(23, builder.getMaxPagesPerSession());
 	}
 	// @formatter:on

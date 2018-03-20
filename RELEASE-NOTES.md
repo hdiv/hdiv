@@ -3,6 +3,11 @@
 ## HDIV CHANGELOG
 https://github.com/hdiv
 
+###3.3.15
+
+ * [NEW] Configuration option to disable multipart integration
+ * [NEW] Prevent exclusion overriding
+
 ###3.3.13
 
  * [NEW] Include cookie original value in attack detail.

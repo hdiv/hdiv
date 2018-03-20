@@ -33,6 +33,7 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.struts.upload.CommonsMultipartRequestHandler;
 import org.apache.struts.upload.FormFile;
 import org.apache.struts.upload.MultipartRequestWrapper;
+import org.hdiv.config.HDIVConfig;
 import org.hdiv.config.multipart.IMultipartConfig;
 import org.hdiv.config.multipart.exception.HdivMultipartException;
 import org.hdiv.filter.RequestWrapper;
@@ -64,6 +65,18 @@ public class HDIVMultipartRequestHandler extends CommonsMultipartRequestHandler 
 	private Hashtable elementsText;
 
 	/**
+	 * Hdiv configuration
+	 */
+	private HDIVConfig config;
+
+	private HDIVConfig getConfig(final HttpServletRequest request) {
+		if (config == null) {
+			config = HDIVUtil.getHDIVConfig(request.getSession().getServletContext());
+		}
+		return config;
+	}
+
+	/**
 	 * Parses the input stream and partitions the parsed items into a set of form fields and a set of file items. In the process, the parsed
 	 * items are translated from Commons FileUpload <code>FileItem</code> instances to Struts <code>FormFile</code> instances.
 	 * 
@@ -83,6 +96,12 @@ public class HDIVMultipartRequestHandler extends CommonsMultipartRequestHandler 
 			MultipartRequestWrapper wrapper = (MultipartRequestWrapper) request;
 			ServletRequest origRequest = wrapper.getRequest();
 			if (origRequest == null) {
+				return;
+			}
+
+			HDIVConfig config = getConfig(request);
+			if (config != null && !config.isMultipartIntegration()) {
+				super.handleRequest(wrapper);
 				return;
 			}
 
@@ -175,7 +194,12 @@ public class HDIVMultipartRequestHandler extends CommonsMultipartRequestHandler 
 	 */
 	@Override
 	public Hashtable getTextElements() {
-		return elementsText;
+		if (config != null && config.isMultipartIntegration()) {
+			return elementsText;
+		}
+		else {
+			return super.getTextElements();
+		}
 	}
 
 	/**
@@ -185,7 +209,12 @@ public class HDIVMultipartRequestHandler extends CommonsMultipartRequestHandler 
 	 */
 	@Override
 	public Hashtable getFileElements() {
-		return elementsFile;
+		if (config != null && config.isMultipartIntegration()) {
+			return elementsFile;
+		}
+		else {
+			return super.getFileElements();
+		}
 	}
 
 	/**
@@ -195,7 +224,12 @@ public class HDIVMultipartRequestHandler extends CommonsMultipartRequestHandler 
 	 */
 	@Override
 	public Hashtable getAllElements() {
-		return elementsAll;
+		if (config != null && config.isMultipartIntegration()) {
+			return elementsAll;
+		}
+		else {
+			return super.getAllElements();
+		}
 	}
 
 	/**
@@ -204,12 +238,16 @@ public class HDIVMultipartRequestHandler extends CommonsMultipartRequestHandler 
 	@Override
 	public void rollback() {
 
-		Iterator iter = elementsFile.values().iterator();
+		if (config != null && config.isMultipartIntegration()) {
+			Iterator iter = elementsFile.values().iterator();
+			while (iter.hasNext()) {
+				FormFile formFile = (FormFile) iter.next();
 
-		while (iter.hasNext()) {
-			FormFile formFile = (FormFile) iter.next();
-
-			formFile.destroy();
+				formFile.destroy();
+			}
+		}
+		else {
+			super.rollback();
 		}
 	}
 

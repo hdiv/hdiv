@@ -170,6 +170,12 @@ public class HDIVConfig implements Serializable {
 	 */
 	protected boolean editableFieldsRequiredByDefault = false;
 
+	/**
+	 * Enable or disable multipart request processing and protection in Hdiv.
+	 * @since 3.3.15
+	 */
+	private boolean multipartIntegration = true;
+
 	@Deprecated
 	public void setStrategy(final Strategy strategy) {
 	}
@@ -666,6 +672,14 @@ public class HDIVConfig implements Serializable {
 		this.editableFieldsRequiredByDefault = editableFieldsRequiredByDefault;
 	}
 
+	public boolean isMultipartIntegration() {
+		return multipartIntegration;
+	}
+
+	public void setMultipartIntegration(final boolean multipartIntegration) {
+		this.multipartIntegration = multipartIntegration;
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder result = new StringBuilder().append("");
@@ -686,6 +700,7 @@ public class HDIVConfig implements Serializable {
 		result.append(" longLivingPages=").append(longLivingPages);
 		result.append(" debugMode=").append(isDebugMode());
 		result.append(" showErrorPageOnEditableValidation=").append(showErrorPageOnEditableValidation);
+		result.append(" multipartIntegration=").append(multipartIntegration);
 
 		return result.toString();
 	}
