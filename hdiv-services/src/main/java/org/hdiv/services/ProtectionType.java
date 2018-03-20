@@ -17,7 +17,7 @@ package org.hdiv.services;
 
 public enum ProtectionType {
 	READONLY("INTEGRITY"), REAL_TIME_WHITELIST("INTEGRITY"), ENTITY("INTEGRITY"), WHITELIST("WHITELIST"), BLACKLIST(
-			"BLACKLIST"), JSONPARAMETER("JSON");
+			"BLACKLIST"), JSONPARAMETER("JSON"), EXCLUDED("EXCLUDED");
 
 	String category;
 
@@ -42,6 +42,7 @@ public enum ProtectionType {
 			return "NON_EDITABLE";
 
 		case BLACKLIST:
+		case EXCLUDED:
 			return "EDITABLE";
 
 		case JSONPARAMETER:
