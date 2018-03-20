@@ -63,6 +63,7 @@ public class CustomSchemaTest extends TestCase {
 		System.out.println(hdivConfig.toString());
 		System.out.println("-----------------------");
 		assertTrue(hdivConfig.isShowErrorPageOnEditableValidation());
+		assertFalse(hdivConfig.isMultipartIntegration());
 
 		EditableDataValidationProvider validationProvider = context.getBean(EditableDataValidationProvider.class);
 		assertNotNull(validationProvider);
@@ -80,6 +81,20 @@ public class CustomSchemaTest extends TestCase {
 
 		result = hdivConfig.isStartPage("/onlyGet.html", Method.POST);
 		assertFalse(result);
+	}
+
+	public void testParamsWithoutValidation() {
+
+		HDIVConfig hdivConfig = context.getBean(HDIVConfig.class);
+		assertNotNull(hdivConfig);
+
+		assertTrue(hdivConfig.isParameterWithoutValidation("/page1", "param1"));
+		assertTrue(hdivConfig.isParameterWithoutValidation("/page1", "param2"));
+		assertTrue(hdivConfig.isParameterWithoutValidation("/page1", "param3"));
+		assertTrue(hdivConfig.isParameterWithoutValidation("/page2", "param3"));
+		assertTrue(hdivConfig.isParameterWithoutValidation("/page2", "param4"));
+
+		assertFalse(hdivConfig.isParameterWithoutValidation("/other", "param1"));
 	}
 
 	public void testExpiredSession() {

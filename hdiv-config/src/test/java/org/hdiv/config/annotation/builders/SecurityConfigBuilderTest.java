@@ -16,7 +16,9 @@
 package org.hdiv.config.annotation.builders;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import org.hdiv.config.HDIVConfig;
 import org.hdiv.regex.PatternMatcherFactory;
@@ -29,29 +31,30 @@ public class SecurityConfigBuilderTest {
 
 	@Before
 	public void setUp() {
-		this.builder = new SecurityConfigBuilder(new PatternMatcherFactory());
+		builder = new SecurityConfigBuilder(new PatternMatcherFactory());
 	}
 
 	// @formatter:off
 	@Test
 	public void build() {
-		assertNotNull(this.builder);
+		assertNotNull(builder);
 
-		this.builder
+		builder
 			.cookiesConfidentiality(false)
 			.stateParameterName("state")
 			.maxPagesPerSession(23)
 			.reuseExistingPageInAjaxRequest(true)
+			.multipartIntegration(false)
 			.sessionExpired()
 				.loginPage("/login.html");
 
-		HDIVConfig config = this.builder.build();
+		HDIVConfig config = builder.build();
 		assertNotNull(config);
-		assertEquals(false, config.isCookiesConfidentialityActivated());
+		assertFalse(config.isCookiesConfidentialityActivated());
 		assertEquals("state", config.getStateParameterName());
-		assertEquals(true, config.isReuseExistingPageInAjaxRequest());
-		
-		assertEquals(23, this.builder.getMaxPagesPerSession());
+		assertTrue(config.isReuseExistingPageInAjaxRequest());
+		assertFalse(config.isMultipartIntegration());
+		assertEquals(23, builder.getMaxPagesPerSession());
 	}
 	// @formatter:on
 }

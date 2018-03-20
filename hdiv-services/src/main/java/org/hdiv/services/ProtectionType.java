@@ -16,8 +16,8 @@
 package org.hdiv.services;
 
 public enum ProtectionType {
-	READONLY("INTEGRITY"), NONEDITABLE("INTEGRITY"), ENTITY("INTEGRITY"), WHITELIST("WHITELIST"), BLACKLIST("BLACKLIST"), JSONPARAMETER(
-			"JSON");
+	READONLY("INTEGRITY"), REAL_TIME_WHITELIST("INTEGRITY"), ENTITY("INTEGRITY"), WHITELIST("WHITELIST"), BLACKLIST(
+			"BLACKLIST"), JSONPARAMETER("JSON"), EXCLUDED("EXCLUDED");
 
 	String category;
 
@@ -34,5 +34,22 @@ public enum ProtectionType {
 
 	public boolean isEditable() {
 		return editable;
+	}
+
+	public String toValidationType() {
+		switch (this) {
+		case REAL_TIME_WHITELIST:
+			return "NON_EDITABLE";
+
+		case BLACKLIST:
+		case EXCLUDED:
+			return "EDITABLE";
+
+		case JSONPARAMETER:
+			return "NONE";
+
+		default:
+			return name();
+		}
 	}
 }

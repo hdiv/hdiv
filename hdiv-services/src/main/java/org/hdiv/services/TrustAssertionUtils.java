@@ -113,9 +113,9 @@ public class TrustAssertionUtils {
 			return false;
 		}
 
-		public TriState recursiveNavigation() {
+		public SubEntityValidationType validationType() {
 			// TODO Auto-generated method stub
-			return TriState.UNDEFINED;
+			return SubEntityValidationType.DEFAULT;
 		}
 
 		public boolean ignored() {
@@ -145,7 +145,7 @@ public class TrustAssertionUtils {
 	}
 
 	public static boolean isNid(final TrustAssertion assertion) {
-		return checkTriState(assertion.nid(), TrustAssertionDefaults.get().nid);
+		return checkTriState(assertion.nid(), false);
 	}
 
 	public static boolean isNotEmpty(final String value) {

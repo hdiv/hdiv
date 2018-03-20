@@ -122,8 +122,22 @@ public class ValidatorFilter extends OncePerRequestFilter {
 						multipartConfig = context.getBean(IMultipartConfig.class);
 					}
 					else {
-						// For applications without Multipart requests
-						multipartConfig = null;
+						/**
+						 * Final try
+						 */
+						try {
+							List<IMultipartConfig> configs = HDIVUtil.findBeansInWebApplicationContext(IMultipartConfig.class);
+							if (!configs.isEmpty()) {
+								multipartConfig = configs.get(0);
+							}
+							else {
+								// For applications without Multipart requests
+								multipartConfig = null;
+							}
+						}
+						catch (Exception e) {
+							// TODO: handle exception
+						}
 					}
 					requestContextFactory = context.getBean(RequestContextFactory.class);
 					userData = context.getBean(IUserData.class);
@@ -170,7 +184,7 @@ public class ValidatorFilter extends OncePerRequestFilter {
 			boolean legal = false;
 			boolean isMultipartException = false;
 
-			if (isMultipartContent(request)) {
+			if (isMultipartContent(request) && hdivConfig.isMultipartIntegration()) {
 
 				requestWrapper.setMultipart(true);
 
@@ -257,11 +271,13 @@ public class ValidatorFilter extends OncePerRequestFilter {
 				}
 			}
 			else {
-				errors = validationHelper.findCustomErrors(e, context.getTarget());
-				if (!errors.isEmpty()) {
-					processEditableValidationErrors(ctx, errors);
-					processRequest(ctx, multipartProcessedRequest, responseWrapper, filterChain, context.getRedirect());
-					return;
+				if (context != null) {
+					errors = validationHelper.findCustomErrors(e, context.getTarget());
+					if (!errors.isEmpty()) {
+						processEditableValidationErrors(ctx, errors);
+						processRequest(ctx, multipartProcessedRequest, responseWrapper, filterChain, context.getRedirect());
+						return;
+					}
 				}
 
 				/**

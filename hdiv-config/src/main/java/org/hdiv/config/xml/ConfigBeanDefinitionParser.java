@@ -581,6 +581,7 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		String debugMode = element.getAttribute("debugMode");
 		String showErrorPageOnEditableValidation = element.getAttribute("showErrorPageOnEditableValidation");
 		String reuseExistingPageInAjaxRequest = element.getAttribute("reuseExistingPageInAjaxRequest");
+		String multipartIntegration = element.getAttribute("multipartIntegration");
 
 		if (StringUtils.hasText(confidentiality)) {
 			bean.getPropertyValues().addPropertyValue("confidentiality", confidentiality);
@@ -628,6 +629,10 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 
 		if (StringUtils.hasText(reuseExistingPageInAjaxRequest)) {
 			bean.getPropertyValues().addPropertyValue("reuseExistingPageInAjaxRequest", reuseExistingPageInAjaxRequest);
+		}
+
+		if (StringUtils.hasText(multipartIntegration)) {
+			bean.getPropertyValues().addPropertyValue("multipartIntegration", multipartIntegration);
 		}
 
 		bean.getPropertyValues().addPropertyValue("editableDataValidationProvider",
@@ -875,7 +880,14 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		if (named != null) {
 			String url = named.getTextContent();
 			String parameters = attributes.getNamedItem("parameters").getTextContent();
-			map.put(url, convertToList(parameters));
+			List<String> params = map.get(url);
+			if (params == null) {
+				params = convertToList(parameters);
+			}
+			else {
+				params.addAll(convertToList(parameters));
+			}
+			map.put(url, params);
 		}
 	}
 

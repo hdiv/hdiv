@@ -306,6 +306,14 @@
 					]]></xsd:documentation>
 				</xsd:annotation>
 			</xsd:attribute>
+			<xsd:attribute name="multipartIntegration"
+				type="xsd:boolean" default="true">
+				<xsd:annotation>
+					<xsd:documentation><![CDATA[
+	Enable multipart request processing and protection in Hdiv.
+					]]></xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
 		</xsd:complexType>
 	</xsd:element>
 

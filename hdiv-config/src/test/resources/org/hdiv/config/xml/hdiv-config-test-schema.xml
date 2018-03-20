@@ -35,7 +35,8 @@ http://www.hdiv.org/schema/hdiv http://www.hdiv.org/schema/hdiv/hdiv.xsd">
 		avoidCookiesConfidentiality="true" avoidValidationInUrlsWithoutParams="true"
 		debugMode="true" userData="testUserData"
 		showErrorPageOnEditableValidation="true"
-		reuseExistingPageInAjaxRequest="true">
+		reuseExistingPageInAjaxRequest="true"
+		multipartIntegration="false">
 		<hdiv:sessionExpired loginPage="/login.html"
 			homePage="/" />
 		<hdiv:startPages>page1,page2</hdiv:startPages>
@@ -44,6 +45,7 @@ http://www.hdiv.org/schema/hdiv http://www.hdiv.org/schema/hdiv/hdiv.xsd">
 		<hdiv:startParameters>parameter1,parameter2</hdiv:startParameters>
 		<hdiv:paramsWithoutValidation>
 			<hdiv:mapping url="/page1" parameters="param1,param2" />
+			<hdiv:mapping url="/page1" parameters="param3" />
 			<hdiv:mapping url="/page2" parameters="param3,param4" />
 		</hdiv:paramsWithoutValidation>
 		<hdiv:longLivingPages>/default.html</hdiv:longLivingPages>
