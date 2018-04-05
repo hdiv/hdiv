@@ -15,8 +15,10 @@
  */
 package org.hdiv.filter;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.hdiv.context.RequestContext;
 import org.hdiv.util.Constants;
@@ -49,8 +51,10 @@ public class RequestWrapperTest {
 
 		HttpServletRequest request = new MockHttpServletRequest("GET", "/path/testAction.do");
 		HttpServletResponse response = new MockHttpServletResponse();
+		HttpSession httpSession = request.getSession();
+		ServletContext servletContext = httpSession.getServletContext();
 
-		request = new RequestWrapper(new RequestContext(request, response));
+		request = new RequestWrapper(new RequestContext(request, response, servletContext));
 
 		RequestContext ctx1 = (RequestContext) HDIVUtil.getRequestContext(request);
 		Assert.assertNotNull(ctx1);
@@ -59,7 +63,7 @@ public class RequestWrapperTest {
 		RequestContext ctx2 = (RequestContext) HDIVUtil.getRequestContext(request);
 		Assert.assertNotNull(ctx2);
 
-		request.setAttribute(Constants.HDIV_REQUEST_CONTEXT, new RequestContext(request, response));
+		request.setAttribute(Constants.HDIV_REQUEST_CONTEXT, new RequestContext(request, response, servletContext));
 		RequestContext ctx3 = (RequestContext) HDIVUtil.getRequestContext(request);
 		Assert.assertNotNull(ctx3);
 		Assert.assertEquals(ctx1, ctx3);

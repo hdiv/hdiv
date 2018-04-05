@@ -130,7 +130,7 @@ public abstract class AbstractHDIVTestCase extends TestCase {
 		// Init Request scoped data
 		RequestInitializer requestInitializer = applicationContext.getBean(RequestInitializer.class);
 		RequestContextFactory contextFactory = applicationContext.getBean(RequestContextFactory.class);
-		context = contextFactory.create(requestInitializer, request, response);
+		context = contextFactory.create(requestInitializer, request, response, servletContext);
 
 		DataComposerFactory dataComposerFactory = applicationContext.getBean(DataComposerFactory.class);
 

@@ -15,8 +15,10 @@
  */
 package org.hdiv.init;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.hdiv.AbstractHDIVTestCase;
 import org.hdiv.context.RequestContext;
@@ -42,8 +44,10 @@ public class RequestInitializerTest extends AbstractHDIVTestCase {
 
 		HttpServletRequest request = getMockRequest();
 		HttpServletResponse response = getMockResponse();
+		HttpSession httpSession = request.getSession();
+		ServletContext servletContext = httpSession.getServletContext();
 
-		RequestWrapper wrapper = requestInitializer.createRequestWrapper(new RequestContext(request, response));
+		RequestWrapper wrapper = requestInitializer.createRequestWrapper(new RequestContext(request, response, servletContext));
 
 		assertNotNull(wrapper);
 	}
@@ -52,8 +56,10 @@ public class RequestInitializerTest extends AbstractHDIVTestCase {
 
 		HttpServletRequest request = getMockRequest();
 		HttpServletResponse response = getMockResponse();
+		HttpSession httpSession = request.getSession();
+		ServletContext servletContext = httpSession.getServletContext();
 
-		ResponseWrapper wrapper = requestInitializer.createResponseWrapper(new RequestContext(request, response));
+		ResponseWrapper wrapper = requestInitializer.createResponseWrapper(new RequestContext(request, response, servletContext));
 
 		assertNotNull(wrapper);
 	}
@@ -62,8 +68,10 @@ public class RequestInitializerTest extends AbstractHDIVTestCase {
 
 		HttpServletRequest request = getMockRequest();
 		HttpServletResponse response = new MockHttpServletResponse();
+		HttpSession httpSession = request.getSession();
+		ServletContext servletContext = httpSession.getServletContext();
 
-		requestInitializer.initRequest(new RequestContext(request, response));
+		requestInitializer.initRequest(new RequestContext(request, response, servletContext));
 
 		assertNotNull(HDIVUtil.getRequestURI(request));
 	}
@@ -72,8 +80,10 @@ public class RequestInitializerTest extends AbstractHDIVTestCase {
 
 		HttpServletRequest request = getMockRequest();
 		HttpServletResponse response = new MockHttpServletResponse();
+		HttpSession httpSession = request.getSession();
+		ServletContext servletContext = httpSession.getServletContext();
 		try {
-			requestInitializer.endRequest(new RequestContext(request, response));
+			requestInitializer.endRequest(new RequestContext(request, response, servletContext));
 		}
 		catch (HDIVException e) {
 			assertTrue(true);
