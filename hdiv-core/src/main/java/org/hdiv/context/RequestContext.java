@@ -22,6 +22,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletRequestWrapper;
 import javax.servlet.http.Cookie;
@@ -76,12 +77,16 @@ public class RequestContext implements RequestContextHolder {
 
 	private ValidationContext validationContext;
 
+	private final ServletContext servletContext;
+
 	@SuppressWarnings("deprecation")
-	public RequestContext(final HttpServletRequest request, final HttpServletResponse response) {
+	public RequestContext(final HttpServletRequest request, final HttpServletResponse response, final ServletContext servletContext) {
 		this.request = request;
 		this.response = response;
 		requestURI = request.getRequestURI();
 		request.setAttribute(Constants.HDIV_REQUEST_CONTEXT, this);
+		this.servletContext = servletContext;
+
 		doCreateSession();
 	}
 
@@ -367,5 +372,9 @@ public class RequestContext implements RequestContextHolder {
 
 	public void setValidationContext(final ValidationContext validationContext) {
 		this.validationContext = validationContext;
+	}
+
+	public ServletContext getServletContext() {
+		return servletContext;
 	}
 }

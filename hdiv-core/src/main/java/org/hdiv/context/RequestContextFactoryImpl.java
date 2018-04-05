@@ -15,6 +15,7 @@
  */
 package org.hdiv.context;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -25,8 +26,8 @@ import org.hdiv.init.RequestInitializer;
 public class RequestContextFactoryImpl implements RequestContextFactory {
 
 	public final RequestContextHolder create(final RequestInitializer initializer, final HttpServletRequest request,
-			final HttpServletResponse response) {
-		return save(initializer, doCreate(request, response));
+			final HttpServletResponse response, final ServletContext servletContext) {
+		return save(initializer, doCreate(request, response, servletContext));
 	}
 
 	private RequestContextHolder save(final RequestInitializer requestInitializer, final RequestContext holder) {
@@ -39,8 +40,9 @@ public class RequestContextFactoryImpl implements RequestContextFactory {
 		return holder;
 	}
 
-	protected RequestContext doCreate(final HttpServletRequest request, final HttpServletResponse response) {
-		return new RequestContext(request, response);
+	protected RequestContext doCreate(final HttpServletRequest request, final HttpServletResponse response,
+			final ServletContext servletContext) {
+		return new RequestContext(request, response, servletContext);
 	}
 
 }

@@ -171,7 +171,7 @@ public class ValidatorFilter extends OncePerRequestFilter {
 			return;
 		}
 
-		RequestContextHolder ctx = requestContextFactory.create(requestInitializer, request, response);
+		RequestContextHolder ctx = requestContextFactory.create(requestInitializer, request, response, getServletContext());
 
 		@SuppressWarnings("deprecation")
 		RequestWrapper requestWrapper = (RequestWrapper) ctx.getRequest();

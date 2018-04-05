@@ -15,11 +15,13 @@
  */
 package org.hdiv.context;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.hdiv.init.RequestInitializer;
 
 public interface RequestContextFactory {
-	RequestContextHolder create(RequestInitializer initializer, HttpServletRequest request, HttpServletResponse response);
+	RequestContextHolder create(RequestInitializer initializer, HttpServletRequest request, HttpServletResponse response,
+			ServletContext servletContext);
 }

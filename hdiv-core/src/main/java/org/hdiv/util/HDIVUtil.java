@@ -926,7 +926,7 @@ public class HDIVUtil {
 	}
 
 	public static List<WebApplicationContext> findWebApplicationContextWithBeans(final Class<?> beanType) {
-		ServletContext sc = HDIVUtil.getCurrentHttpRequest().getServletContext();
+		ServletContext sc = HDIVUtil.getRequestContext(HDIVUtil.getCurrentHttpRequest()).getServletContext();
 		List<WebApplicationContext> found = new ArrayList<WebApplicationContext>();
 		Enumeration<String> attrNames = sc.getAttributeNames();
 		while (attrNames.hasMoreElements()) {

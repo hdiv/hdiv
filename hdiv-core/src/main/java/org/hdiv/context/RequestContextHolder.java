@@ -21,6 +21,7 @@ import java.util.Enumeration;
 import java.util.Map;
 import java.util.UUID;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -117,5 +118,7 @@ public interface RequestContextHolder {
 	void setValidationContext(final ValidationContext validationContext);
 
 	<T extends ValidationContext> T getValidationContext();
+
+	ServletContext getServletContext();
 
 }
