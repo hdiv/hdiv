@@ -18,7 +18,9 @@ package org.hdiv.web.validator;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.hdiv.AbstractHDIVTestCase;
 import org.hdiv.context.RequestContext;
@@ -62,6 +64,8 @@ public class EditableParameterValidatorTest extends AbstractHDIVTestCase {
 	public void testEditableValidator() {
 
 		MockHttpServletRequest request = getMockRequest();
+		HttpSession httpSession = request.getSession();
+		ServletContext servletContext = httpSession.getServletContext();
 		request.setMethod("POST");
 
 		dataComposer.beginRequest(Method.POST, targetName);
@@ -73,7 +77,7 @@ public class EditableParameterValidatorTest extends AbstractHDIVTestCase {
 		request.addParameter(hdivParameter, pageState);
 		request.addParameter("paramName", "<script>storeCookie()</script>");
 
-		RequestContext context = new RequestContext(request, getMockResponse());
+		RequestContext context = new RequestContext(request, getMockResponse(), servletContext);
 		context.setHdivParameterName(hdivParameter);
 		HttpServletRequest requestWrapper = new RequestWrapper(context);
 		ValidatorHelperResult result = helper.validate(new ValidationContextImpl(context, helper, false));
