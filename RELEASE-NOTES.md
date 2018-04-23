@@ -3,6 +3,10 @@
 ## HDIV CHANGELOG
 https://github.com/hdiv
 
+###3.4.0
+
+ * [NEW] New 'editableFieldsRequiredByDefault' configuration option.
+
 ###3.3.15
 
  * [NEW] Configuration option to disable multipart integration
