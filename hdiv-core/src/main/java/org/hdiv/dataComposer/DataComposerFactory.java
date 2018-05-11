@@ -115,6 +115,10 @@ public class DataComposerFactory {
 
 		if (preState != null && preState.length() > 0) {
 
+			// Set Modify Hdiv State value as 'FormStateId'.
+			// This is useful for Ajax requests (with Modify) that generates partial forms that generates links with Modify param.
+			setFormStateId(context, preState);
+
 			// We are modifying an existing state, preload dataComposer with it
 			UUID pageId = stateUtil.getPageId(preState);
 			IState state = stateUtil.restoreState(context, preState);
@@ -169,6 +173,16 @@ public class DataComposerFactory {
 	protected String getModifyStateParameterValue(final RequestContextHolder context) {
 		String paramName = context.getHdivModifyParameterName();
 		return paramName != null ? context.getParameter(paramName) : null;
+	}
+
+	/**
+	 * Set 'FormStateId' value in request context
+	 * 
+	 * @param context request context
+	 * @param modifyStateValue mMdify State Value parameter value
+	 */
+	protected void setFormStateId(final RequestContextHolder context, final String modifyStateValue) {
+		context.setFormStateId(modifyStateValue);
 	}
 
 	/**
