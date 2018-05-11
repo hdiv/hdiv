@@ -6,7 +6,7 @@
 	<artifactId>hdiv</artifactId>
 	<packaging>pom</packaging>
 	<name>Hdiv Community</name>
-	<version>3.3.16-SNAPSHOT</version>
+	<version>3.3.17-SNAPSHOT</version>
 	<url>http://www.hdiv.org</url>
 	<description>Web Application Security Framework</description>
 
