@@ -50,13 +50,13 @@ public class EditableValidationsTest {
 	static class ContextConfiguration extends HdivWebSecurityConfigurerAdapter {
 
 		@Override
-		public void addRules(RuleRegistry registry) {
+		public void addRules(final RuleRegistry registry) {
 
 			registry.addRule("safeText").acceptedPattern("^[a-zA-Z0-9@.\\-_]*$");
 		}
 
 		@Override
-		public void configureEditableValidation(ValidationConfigurer validationConfigurer) {
+		public void configureEditableValidation(final ValidationConfigurer validationConfigurer) {
 
 			validationConfigurer.addValidation("/insecure/.*").disableDefaults();
 			validationConfigurer.addValidation("/secureParam/.*").forParameters("param1");
@@ -80,7 +80,7 @@ public class EditableValidationsTest {
 		assertTrue(result.isValid());
 
 		result = provider.validate("/secureParam/action", "param1", new String[] { "<script>" }, "text");
-		assertFalse(result.isValid());
+		assertTrue(result.isValid());
 
 		result = provider.validate("/secure/action", "parameter", new String[] { "<script>" }, "text");
 		assertFalse(result.isValid());
