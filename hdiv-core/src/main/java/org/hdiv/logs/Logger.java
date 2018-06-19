@@ -49,14 +49,16 @@ public class Logger {
 	 */
 	public void log(final ValidatorError error) {
 
-		this.log(error.getType(), error.getTarget(), error.getParameterName(), error.getParameterValue(), error.getOriginalParameterValue(),
-				error.getLocalIp(), error.getRemoteIp(), error.getUserName(), error.getValidationRuleName());
+		this.log(error.getType(), error.getRule(), error.getTarget(), error.getParameterName(), error.getParameterValue(),
+				error.getOriginalParameterValue(), error.getLocalIp(), error.getRemoteIp(), error.getUserName(),
+				error.getValidationRuleName());
 	}
 
 	/**
 	 * Logs formatted attack produced by the user.
 	 * 
-	 * @param type Error type
+	 * @param type error type
+	 * @param rule protection rule
 	 * @param target target name
 	 * @param parameterName parameter name
 	 * @param parameterValue parameter value
@@ -66,7 +68,7 @@ public class Logger {
 	 * @param userName user name in application
 	 * @param validationRuleName In an attack of type 'EDITABLE_VALIDATION_ERROR', contains the name of the rule that rejected the value
 	 */
-	protected void log(final String type, final String target, final String parameterName, final String parameterValue,
+	protected void log(final String type, final String rule, final String target, final String parameterName, final String parameterValue,
 			final String originalParameterValue, final String localIp, final String remoteIp, final String userName,
 			final String validationRuleName) {
 
