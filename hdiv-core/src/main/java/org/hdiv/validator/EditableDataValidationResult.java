@@ -43,13 +43,23 @@ public class EditableDataValidationResult {
 	 */
 	private final String validationId;
 
+	/**
+	 * Protection rule related to the validationId
+	 */
+	private final String rule;
+
 	public EditableDataValidationResult() {
 		this(true, null);
 	}
 
 	public EditableDataValidationResult(final boolean valid, final String validationId) {
+		this(valid, validationId, null);
+	}
+
+	public EditableDataValidationResult(final boolean valid, final String validationId, final String rule) {
 		this.valid = valid;
 		this.validationId = validationId;
+		this.rule = rule;
 	}
 
 	public boolean isValid() {
@@ -58,6 +68,10 @@ public class EditableDataValidationResult {
 
 	public String getValidationId() {
 		return validationId;
+	}
+
+	public String getRule() {
+		return rule;
 	}
 
 }

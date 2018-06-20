@@ -482,10 +482,15 @@ public class ValidatorHelperRequest implements IValidationHelper, StateRestorer 
 				value = unauthorizedValues.toString();
 			}
 
-			ValidatorError error = new ValidatorError(HDIVErrorCodes.INVALID_EDITABLE_VALUE, target, parameter, value, null,
-					result.getValidationId());
-			unauthorizedParameters.add(error);
+			unauthorizedParameters.add(createEditableValidatorError(result, target, parameter, value));
 		}
+	}
+
+	protected ValidatorError createEditableValidatorError(final EditableDataValidationResult result, final String target,
+			final String parameter, final String value) {
+
+		return new ValidatorError(HDIVErrorCodes.INVALID_EDITABLE_VALUE, result.getRule(), target, parameter, value, null, null, null, null,
+				result.getValidationId());
 	}
 
 	@Deprecated
