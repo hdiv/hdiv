@@ -121,4 +121,9 @@ public interface RequestContextHolder {
 
 	ServletContext getServletContext();
 
+	Object getTagAttribute(String attrName);
+
+	void setTagAttribute(String attrName, Object attrValue);
+
+	void clearTagAttributes();
 }
