@@ -18,6 +18,7 @@ package org.hdiv.context;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
@@ -78,6 +79,8 @@ public class RequestContext implements RequestContextHolder {
 	private ValidationContext validationContext;
 
 	private final ServletContext servletContext;
+
+	private Map<String, Object> tagAttributes;
 
 	@SuppressWarnings("deprecation")
 	public RequestContext(final HttpServletRequest request, final HttpServletResponse response, final ServletContext servletContext) {
@@ -376,5 +379,26 @@ public class RequestContext implements RequestContextHolder {
 
 	public ServletContext getServletContext() {
 		return servletContext;
+	}
+
+	public Object getTagAttribute(final String attrName) {
+		return getTagAttributes().get(attrName);
+	}
+
+	public void setTagAttribute(final String attrName, final Object attrValue) {
+		getTagAttributes().put(attrName, attrValue);
+	}
+
+	private Map<String, Object> getTagAttributes() {
+		if (tagAttributes == null) {
+			tagAttributes = new HashMap<String, Object>();
+		}
+		return tagAttributes;
+	}
+
+	public void clearTagAttributes() {
+		if (tagAttributes != null) {
+			tagAttributes.clear();
+		}
 	}
 }
