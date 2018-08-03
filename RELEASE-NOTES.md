@@ -3,9 +3,29 @@
 ## HDIV CHANGELOG
 https://github.com/hdiv
 
+###3.4.4
+
+ * [NEW] Tag attribute holder in RequestContext
+
+###3.4.3
+
+ * [BUG] Fix loop
+
+###3.4.1
+
+ * [NEW] Initialize ‘formStateId’ attribute with ModifyHdivState state value
+
 ###3.4.0
 
  * [NEW] New 'editableFieldsRequiredByDefault' configuration option.
+
+###3.3.17
+
+ * [BUG] Fix loop
+
+###3.3.16
+
+ * [NEW] Initialize ‘formStateId’ attribute with ModifyHdivState state value
 
 ###3.3.15
 

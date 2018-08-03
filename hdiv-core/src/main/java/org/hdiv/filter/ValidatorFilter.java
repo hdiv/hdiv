@@ -246,7 +246,7 @@ public class ValidatorFilter extends OncePerRequestFilter {
 				for (Iterator<ValidatorError> iterator = errors.iterator(); iterator.hasNext();) {
 					ValidatorError validatorError = iterator.next();
 					boolean editable = HDIVErrorCodes.isEditableError(validatorError.getType());
-					if (!hdivConfig.isEditableValidation() && editable) {
+					if (!hdivConfig.isEditableValidation() && editable && validatorError.getRule() == null) {
 						iterator.remove();
 					}
 					if (!hdivConfig.isIntegrityValidation() && !editable) {
@@ -471,12 +471,16 @@ public class ValidatorFilter extends OncePerRequestFilter {
 	protected boolean processEditableValidationErrors(final RequestContextHolder request, final List<ValidatorError> errors) {
 
 		List<ValidatorError> editableErrors = new ArrayList<ValidatorError>();
+		boolean hasRule = false;
 		for (ValidatorError error : errors) {
 			if (HDIVErrorCodes.isEditableError(error.getType())) {
 				editableErrors.add(error);
 			}
+			if (error.getRule() != null) {
+				hasRule = true;
+			}
 		}
-		if (!editableErrors.isEmpty() && hdivConfig.isEditableValidation()) {
+		if (!editableErrors.isEmpty() && (hdivConfig.isEditableValidation() || hasRule)) {
 
 			// Put the errors on request to be accessible from the Web framework
 			request.setAttribute(Constants.EDITABLE_PARAMETER_ERROR, editableErrors);

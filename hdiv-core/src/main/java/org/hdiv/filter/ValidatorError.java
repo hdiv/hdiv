@@ -27,6 +27,11 @@ public class ValidatorError {
 	private final String type;
 
 	/**
+	 * Protection rule related to validation error
+	 */
+	private final String rule;
+
+	/**
 	 * Target url
 	 */
 	private String target;
@@ -104,7 +109,14 @@ public class ValidatorError {
 	public ValidatorError(final String type, final String target, final String parameterName, final String parameterValue,
 			final String originalParameterValue, final String localIp, final String remoteIp, final String userName,
 			final String validationRuleName) {
+		this(type, null, target, parameterName, parameterValue, originalParameterValue, localIp, remoteIp, userName, validationRuleName);
+	}
+
+	public ValidatorError(final String type, final String rule, final String target, final String parameterName,
+			final String parameterValue, final String originalParameterValue, final String localIp, final String remoteIp,
+			final String userName, final String validationRuleName) {
 		this.type = type;
+		this.rule = rule;
 		this.target = target;
 		this.parameterName = parameterName;
 		this.parameterValue = parameterValue;
@@ -123,6 +135,13 @@ public class ValidatorError {
 	 */
 	public String getType() {
 		return type;
+	}
+
+	/**
+	 * @return the rule
+	 */
+	public String getRule() {
+		return rule;
 	}
 
 	/**
@@ -216,9 +235,9 @@ public class ValidatorError {
 	 */
 	@Override
 	public String toString() {
-		return "ValidatorError [type=" + type + ", target=" + target + ", parameterName=" + parameterName + ", parameterValue="
-				+ parameterValue + ", originalParameterValue=" + originalParameterValue + ", localIp=" + localIp + ", remoteIp=" + remoteIp
-				+ ", userName=" + userName + ", validationRuleName=" + validationRuleName + "]";
+		return "ValidatorError [type=" + type + ", rule=" + rule + ", target=" + target + ", parameterName=" + parameterName
+				+ ", parameterValue=" + parameterValue + ", originalParameterValue=" + originalParameterValue + ", localIp=" + localIp
+				+ ", remoteIp=" + remoteIp + ", userName=" + userName + ", validationRuleName=" + validationRuleName + "]";
 	}
 
 	public static void setDebug(final boolean debugMode) {
