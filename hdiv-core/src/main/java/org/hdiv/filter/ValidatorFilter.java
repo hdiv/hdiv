@@ -349,8 +349,8 @@ public class ValidatorFilter extends OncePerRequestFilter {
 			}
 			if (!allowUncontrolledOrigin) {
 				// Check uncontrolledOrigin
-				Throwable invalid;
-				while ((invalid = current.getCause()) != null) {
+				Throwable invalid = current;
+				while ((invalid = invalid.getCause()) != null) {
 					if (invalid instanceof NullPointerException || invalid instanceof IndexOutOfBoundsException
 							|| invalid instanceof OutOfMemoryError || invalid instanceof ClassNotFoundException
 							|| invalid instanceof StackOverflowError || invalid instanceof ClassCastException) {
