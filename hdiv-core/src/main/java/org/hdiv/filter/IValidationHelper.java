@@ -79,4 +79,6 @@ public interface IValidationHelper extends StateRestorer {
 	 */
 	List<ValidatorError> findCustomErrors(final Throwable t, String target);
 
+	boolean shouldErrorBeRemoved(ValidatorError validatorError);
+
 }
