@@ -1324,4 +1324,15 @@ public class ValidatorHelperRequest implements IValidationHelper, StateRestorer 
 		return Collections.emptyList();
 	}
 
+	public boolean shouldErrorBeRemoved(final ValidatorError validatorError) {
+		boolean editable = HDIVErrorCodes.isEditableError(validatorError.getType());
+		if (!hdivConfig.isEditableValidation() && editable && validatorError.getRule() == null) {
+			return true;
+		}
+		if (!hdivConfig.isIntegrityValidation() && !editable) {
+			return true;
+		}
+		return false;
+	}
+
 }
