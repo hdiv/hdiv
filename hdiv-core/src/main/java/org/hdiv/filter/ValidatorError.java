@@ -109,7 +109,8 @@ public class ValidatorError {
 	public ValidatorError(final String type, final String target, final String parameterName, final String parameterValue,
 			final String originalParameterValue, final String localIp, final String remoteIp, final String userName,
 			final String validationRuleName) {
-		this(type, null, target, parameterName, parameterValue, originalParameterValue, localIp, remoteIp, userName, validationRuleName);
+		this(type, !HDIVErrorCodes.isEditableError(type) ? "AUTOMATED_REAL_TIME_WHITELISTING" : "CUSTOM_INPUT_VALIDATION", target,
+				parameterName, parameterValue, originalParameterValue, localIp, remoteIp, userName, validationRuleName);
 	}
 
 	public ValidatorError(final String type, final String rule, final String target, final String parameterName,

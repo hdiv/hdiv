@@ -1324,9 +1324,46 @@ public class ValidatorHelperRequest implements IValidationHelper, StateRestorer 
 		return Collections.emptyList();
 	}
 
+	public boolean areErrorsLegal(final List<ValidatorError> errors) {
+		if (errors != null && !errors.isEmpty() && (!hdivConfig.isIntegrityValidation() || !hdivConfig.isEditableValidation())) {
+			for (Iterator<ValidatorError> iterator = errors.iterator(); iterator.hasNext();) {
+				ValidatorError validatorError = iterator.next();
+				if (shouldErrorBeRemoved(validatorError)) {
+					iterator.remove();
+				}
+			}
+			if (errors.isEmpty()) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public boolean processEditableValidationErrors(final RequestContextHolder request, final List<ValidatorError> errors) {
+
+		List<ValidatorError> editableErrors = new ArrayList<ValidatorError>();
+		for (ValidatorError error : errors) {
+			if (HDIVErrorCodes.isEditableError(error.getType())) {
+				editableErrors.add(error);
+			}
+		}
+		if (!editableErrors.isEmpty() && hdivConfig.isEditableValidation()) {
+
+			// Put the errors on request to be accessible from the Web framework
+			request.setAttribute(Constants.EDITABLE_PARAMETER_ERROR, editableErrors);
+
+			if (hdivConfig.isShowErrorPageOnEditableValidation()) {
+				// Redirect to error page
+				// Put errors in session to be accessible from error page
+				request.getSession().setAttribute(Constants.EDITABLE_PARAMETER_ERROR, editableErrors);
+			}
+		}
+		return !editableErrors.isEmpty();
+	}
+
 	public boolean shouldErrorBeRemoved(final ValidatorError validatorError) {
 		boolean editable = HDIVErrorCodes.isEditableError(validatorError.getType());
-		if (!hdivConfig.isEditableValidation() && editable && validatorError.getRule() == null) {
+		if (!hdivConfig.isEditableValidation() && editable) {
 			return true;
 		}
 		if (!hdivConfig.isIntegrityValidation() && !editable) {
