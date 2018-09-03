@@ -15,7 +15,7 @@ Online documentation: [https://hdivsecurity.com/docs/](https://hdivsecurity.com/
 Community Technical documentation: [https://hdivsecurity.com/docs/installation/library-setup/](https://hdivsecurity.com/docs/installation/library-setup/)
 
 
-`April 26th, 2017` - **[Hdiv v3.3.0 released!](https://github.com/hdiv/hdiv/releases)**
+`April 20th, 2018` - **[Hdiv v3.4.0 released!](https://github.com/hdiv/hdiv/releases)**
 
 ## How does Hdiv help?
 
