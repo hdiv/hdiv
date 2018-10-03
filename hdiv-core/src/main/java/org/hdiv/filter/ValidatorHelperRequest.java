@@ -408,10 +408,8 @@ public class ValidatorHelperRequest implements IValidationHelper, StateRestorer 
 		}
 
 		@SuppressWarnings("unchecked")
-		Map<String, SavedCookie> sessionCookies = session.getAttribute(context.getRequestContext(), // TODO cache
-				// context?
-				Constants.HDIV_COOKIES_KEY, Map.class);
-
+		Map<String, SavedCookie> sessionCookies = session.getAttribute(context.getRequestContext(), Constants.HDIV_COOKIES_KEY, Map.class);
+		// No server-side created cookies for the user
 		if (sessionCookies == null) {
 			return ValidatorHelperResult.VALID;
 		}
@@ -420,7 +418,6 @@ public class ValidatorHelperRequest implements IValidationHelper, StateRestorer 
 
 		for (int i = 0; i < requestCookies.length; i++) {
 
-			boolean found = false;
 			if (requestCookies[i].getName().equals(Constants.JSESSIONID)) {
 				continue;
 			}
@@ -428,23 +425,19 @@ public class ValidatorHelperRequest implements IValidationHelper, StateRestorer 
 				continue;
 			}
 
-			SavedCookie savedCookie = null;
 			if (sessionCookies.containsKey(requestCookies[i].getName())) {
-
-				savedCookie = sessionCookies.get(requestCookies[i].getName());
+				// Validate only cookies previously generated at server-side
+				SavedCookie savedCookie = sessionCookies.get(requestCookies[i].getName());
 				if (savedCookie.isEqual(requestCookies[i], cookiesConfidentiality)) {
-
-					found = true;
 					if (cookiesConfidentiality && savedCookie.getValue() != null) {
 						requestCookies[i].setValue(savedCookie.getValue());
 					}
 				}
-			}
-
-			if (!found) {
-				ValidatorError error = new ValidatorError(HDIVErrorCodes.INVALID_COOKIE, target, requestCookies[i].getName(),
-						requestCookies[i].getValue(), savedCookie != null ? savedCookie.getValue() : null);
-				return new ValidatorHelperResult(error);
+				else {
+					ValidatorError error = new ValidatorError(HDIVErrorCodes.INVALID_COOKIE, target, requestCookies[i].getName(),
+							requestCookies[i].getValue(), savedCookie != null ? savedCookie.getValue() : null);
+					return new ValidatorHelperResult(error);
+				}
 			}
 		}
 		return ValidatorHelperResult.VALID;
