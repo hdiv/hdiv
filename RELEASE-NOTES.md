@@ -3,6 +3,10 @@
 ## HDIV CHANGELOG
 https://github.com/hdiv
 
+###3.4.5
+
+ * [NEW] Improvements in client-side generated cookies validation
+
 ###3.4.4
 
  * [NEW] Tag attribute holder in RequestContext

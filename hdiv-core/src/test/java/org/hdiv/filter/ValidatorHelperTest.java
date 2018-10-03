@@ -679,6 +679,58 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 		assertTrue(result);
 	}
 
+	/**
+	 * Test for cookies integrity.
+	 */
+	public void testValidateClientCookies() {
+
+		MockHttpServletRequest request = getMockRequest();
+
+		dataComposer.beginRequest(Method.GET, targetName);
+		dataComposer.compose("param1", "value1", false);
+		String pageState = dataComposer.endRequest();
+		assertNotNull(pageState);
+		addParameter(pageState);
+
+		dataComposer.endPage();
+
+		// Modify cookie value on client
+		request.setCookies(new Cookie[] { new Cookie("name", "changedValue") });
+
+		boolean result = helper.validate(context).isValid();
+		assertTrue(result);
+	}
+
+	/**
+	 * Test for cookies integrity.
+	 */
+	public void testValidateClientAndServerCookies() {
+
+		MockHttpServletRequest request = getMockRequest();
+
+		responseWrapper.addCookie(new Cookie("name", "value"));
+
+		dataComposer.beginRequest(Method.GET, targetName);
+		dataComposer.compose("param1", "value1", false);
+		String pageState = dataComposer.endRequest();
+		assertNotNull(pageState);
+		addParameter(pageState);
+
+		dataComposer.endPage();
+
+		// Add new cookie
+		request.setCookies(new Cookie[] { new Cookie("name2", "value2") });
+
+		boolean result = helper.validate(context).isValid();
+		assertTrue(result);
+
+		// modify cookie value
+		request.setCookies(new Cookie[] { new Cookie("name", "changedValue") });
+
+		result = helper.validate(context).isValid();
+		assertFalse(result);
+	}
+
 	public void testValidateWhitespace() {
 
 		MockHttpServletRequest request = getMockRequest();
