@@ -1308,4 +1308,59 @@ public class ValidatorHelperTest extends AbstractHDIVTestCase {
 
 		assertEquals(value, fix);
 	}
+
+	public void testSameActionParamAndField() {
+
+		MockHttpServletRequest request = getMockRequest();
+
+		dataComposer.startPage();
+		dataComposer.beginRequest(Method.POST, targetName);
+		dataComposer.composeParams("a=A", Method.POST, Constants.ENCODING_UTF_8);
+		dataComposer.composeFormField("a", "A", false, "hidden", true);
+		String pageState = dataComposer.endRequest();
+		dataComposer.endPage();
+
+		request.addParameter(hdivParameter, pageState);
+		request.addParameter("a", "0");
+
+		ValidatorHelperResult result = helper.validate(context);
+		assertTrue(result.isValid());
+	}
+
+	public void testSameActionParamAndFieldNoConfidentiality() {
+
+		getConfig().setConfidentiality(false);
+		MockHttpServletRequest request = getMockRequest();
+
+		dataComposer.startPage();
+		dataComposer.beginRequest(Method.POST, targetName);
+		dataComposer.composeParams("a=1", Method.POST, Constants.ENCODING_UTF_8);
+		dataComposer.composeFormField("a", "1", false, "hidden", true);
+		String pageState = dataComposer.endRequest();
+		dataComposer.endPage();
+
+		request.addParameter(hdivParameter, pageState);
+		request.addParameter("a", "1");
+
+		ValidatorHelperResult result = helper.validate(context);
+		assertTrue(result.isValid());
+	}
+
+	public void testValidateMissingParameters() {
+
+		getConfig().setConfidentiality(false);
+		MockHttpServletRequest request = getMockRequest();
+
+		dataComposer.startPage();
+		dataComposer.beginRequest(Method.GET, targetName);
+		dataComposer.composeParams("a=1&clientGeneratedParam=2", Method.POST, Constants.ENCODING_UTF_8);
+		String pageState = dataComposer.endRequest();
+		dataComposer.endPage();
+
+		request.addParameter(hdivParameter, pageState);
+		request.addParameter("a", "1");
+
+		ValidatorHelperResult result = helper.validate(context);
+		assertTrue(result.isValid());
+	}
 }
