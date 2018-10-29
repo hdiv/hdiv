@@ -505,11 +505,11 @@ public class ValidatorHelperRequest implements IValidationHelper, StateRestorer 
 			final String target, final Map<String, String[]> stateParams) {
 
 		List<String> requiredParameters = state.getRequiredParams(hdivConfig.getEditableFieldsRequiredByDefault());
-		List<String> requiredParams = new ArrayList<String>(stateParams.keySet());
+		Set<String> requiredParams = stateParams.keySet();
 
 		Enumeration<?> requestParameters = request.getParameterNames();
 
-		List<String> required = new ArrayList<String>();
+		Set<String> required = new HashSet<String>();
 		required.addAll(requiredParameters);
 		required.addAll(requiredParams);
 
@@ -540,7 +540,7 @@ public class ValidatorHelperRequest implements IValidationHelper, StateRestorer 
 			}
 		}
 
-		return validateMissingParameters(request, state, target, stateParams, required);
+		return validateMissingParameters(request, state, target, stateParams, new ArrayList<String>(required));
 	}
 
 	@Deprecated
@@ -561,6 +561,13 @@ public class ValidatorHelperRequest implements IValidationHelper, StateRestorer 
 	 */
 	protected ValidatorHelperResult validateMissingParameters(final RequestContextHolder request, final IState state, final String target,
 			final Map<String, String[]> stateParams, final List<String> missingParameters) {
+
+		for (Iterator<String> i = missingParameters.iterator(); i.hasNext();) {
+			String param = i.next();
+			if (hdivConfig.isStartParameter(param) || hdivConfig.isParameterWithoutValidation(target, param)) {
+				i.remove();
+			}
+		}
 
 		if (missingParameters.isEmpty()) {
 			return ValidatorHelperResult.VALID;
