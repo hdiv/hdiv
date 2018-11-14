@@ -408,10 +408,8 @@ public class ValidatorHelperRequest implements IValidationHelper, StateRestorer 
 		}
 
 		@SuppressWarnings("unchecked")
-		Map<String, SavedCookie> sessionCookies = session.getAttribute(context.getRequestContext(), // TODO cache
-				// context?
-				Constants.HDIV_COOKIES_KEY, Map.class);
-
+		Map<String, SavedCookie> sessionCookies = session.getAttribute(context.getRequestContext(), Constants.HDIV_COOKIES_KEY, Map.class);
+		// No server-side created cookies for the user
 		if (sessionCookies == null) {
 			return ValidatorHelperResult.VALID;
 		}
@@ -420,7 +418,6 @@ public class ValidatorHelperRequest implements IValidationHelper, StateRestorer 
 
 		for (int i = 0; i < requestCookies.length; i++) {
 
-			boolean found = false;
 			if (requestCookies[i].getName().equals(Constants.JSESSIONID)) {
 				continue;
 			}
@@ -428,23 +425,19 @@ public class ValidatorHelperRequest implements IValidationHelper, StateRestorer 
 				continue;
 			}
 
-			SavedCookie savedCookie = null;
 			if (sessionCookies.containsKey(requestCookies[i].getName())) {
-
-				savedCookie = sessionCookies.get(requestCookies[i].getName());
+				// Validate only cookies previously generated at server-side
+				SavedCookie savedCookie = sessionCookies.get(requestCookies[i].getName());
 				if (savedCookie.isEqual(requestCookies[i], cookiesConfidentiality)) {
-
-					found = true;
 					if (cookiesConfidentiality && savedCookie.getValue() != null) {
 						requestCookies[i].setValue(savedCookie.getValue());
 					}
 				}
-			}
-
-			if (!found) {
-				ValidatorError error = new ValidatorError(HDIVErrorCodes.INVALID_COOKIE, target, requestCookies[i].getName(),
-						requestCookies[i].getValue(), savedCookie != null ? savedCookie.getValue() : null);
-				return new ValidatorHelperResult(error);
+				else {
+					ValidatorError error = new ValidatorError(HDIVErrorCodes.INVALID_COOKIE, target, requestCookies[i].getName(),
+							requestCookies[i].getValue(), savedCookie != null ? savedCookie.getValue() : null);
+					return new ValidatorHelperResult(error);
+				}
 			}
 		}
 		return ValidatorHelperResult.VALID;
@@ -512,11 +505,11 @@ public class ValidatorHelperRequest implements IValidationHelper, StateRestorer 
 			final String target, final Map<String, String[]> stateParams) {
 
 		List<String> requiredParameters = state.getRequiredParams(hdivConfig.getEditableFieldsRequiredByDefault());
-		List<String> requiredParams = new ArrayList<String>(stateParams.keySet());
+		Set<String> requiredParams = stateParams.keySet();
 
 		Enumeration<?> requestParameters = request.getParameterNames();
 
-		List<String> required = new ArrayList<String>();
+		Set<String> required = new HashSet<String>();
 		required.addAll(requiredParameters);
 		required.addAll(requiredParams);
 
@@ -547,7 +540,7 @@ public class ValidatorHelperRequest implements IValidationHelper, StateRestorer 
 			}
 		}
 
-		return validateMissingParameters(request, state, target, stateParams, required);
+		return validateMissingParameters(request, state, target, stateParams, new ArrayList<String>(required));
 	}
 
 	@Deprecated
@@ -568,6 +561,13 @@ public class ValidatorHelperRequest implements IValidationHelper, StateRestorer 
 	 */
 	protected ValidatorHelperResult validateMissingParameters(final RequestContextHolder request, final IState state, final String target,
 			final Map<String, String[]> stateParams, final List<String> missingParameters) {
+
+		for (Iterator<String> i = missingParameters.iterator(); i.hasNext();) {
+			String param = i.next();
+			if (hdivConfig.isStartParameter(param) || hdivConfig.isParameterWithoutValidation(target, param)) {
+				i.remove();
+			}
+		}
 
 		if (missingParameters.isEmpty()) {
 			return ValidatorHelperResult.VALID;
@@ -1322,6 +1322,54 @@ public class ValidatorHelperRequest implements IValidationHelper, StateRestorer 
 
 	public List<ValidatorError> findCustomErrors(final Throwable t, final String target) {
 		return Collections.emptyList();
+	}
+
+	public boolean areErrorsLegal(final List<ValidatorError> errors) {
+		if (errors != null && !errors.isEmpty() && (!hdivConfig.isIntegrityValidation() || !hdivConfig.isEditableValidation())) {
+			for (Iterator<ValidatorError> iterator = errors.iterator(); iterator.hasNext();) {
+				ValidatorError validatorError = iterator.next();
+				if (shouldErrorBeRemoved(validatorError)) {
+					iterator.remove();
+				}
+			}
+			if (errors.isEmpty()) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public boolean processEditableValidationErrors(final RequestContextHolder request, final List<ValidatorError> errors) {
+
+		List<ValidatorError> editableErrors = new ArrayList<ValidatorError>();
+		for (ValidatorError error : errors) {
+			if (HDIVErrorCodes.isEditableError(error.getType())) {
+				editableErrors.add(error);
+			}
+		}
+		if (!editableErrors.isEmpty() && hdivConfig.isEditableValidation()) {
+
+			// Put the errors on request to be accessible from the Web framework
+			request.setAttribute(Constants.EDITABLE_PARAMETER_ERROR, editableErrors);
+
+			if (hdivConfig.isShowErrorPageOnEditableValidation()) {
+				// Redirect to error page
+				// Put errors in session to be accessible from error page
+				request.getSession().setAttribute(Constants.EDITABLE_PARAMETER_ERROR, editableErrors);
+			}
+		}
+		return !editableErrors.isEmpty();
+	}
+
+	public boolean shouldErrorBeRemoved(final ValidatorError validatorError) {
+		boolean editable = HDIVErrorCodes.isEditableError(validatorError.getType());
+		if (!hdivConfig.isEditableValidation() && editable) {
+			return true;
+		}
+		if (!hdivConfig.isIntegrityValidation() && !editable) {
+			return true;
+		}
+		return false;
 	}
 
 }

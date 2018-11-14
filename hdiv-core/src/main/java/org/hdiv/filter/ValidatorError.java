@@ -109,14 +109,15 @@ public class ValidatorError {
 	public ValidatorError(final String type, final String target, final String parameterName, final String parameterValue,
 			final String originalParameterValue, final String localIp, final String remoteIp, final String userName,
 			final String validationRuleName) {
-		this(type, null, target, parameterName, parameterValue, originalParameterValue, localIp, remoteIp, userName, validationRuleName);
+		this(type, getDefaultRule(type), target, parameterName, parameterValue, originalParameterValue, localIp, remoteIp, userName,
+				validationRuleName);
 	}
 
 	public ValidatorError(final String type, final String rule, final String target, final String parameterName,
 			final String parameterValue, final String originalParameterValue, final String localIp, final String remoteIp,
 			final String userName, final String validationRuleName) {
 		this.type = type;
-		this.rule = rule;
+		this.rule = rule != null ? rule : getDefaultRule(type);
 		this.target = target;
 		this.parameterName = parameterName;
 		this.parameterValue = parameterValue;
@@ -128,6 +129,10 @@ public class ValidatorError {
 		if (debugMode) {
 			stackTrace = Thread.currentThread().getStackTrace();
 		}
+	}
+
+	private static String getDefaultRule(final String type) {
+		return !HDIVErrorCodes.isEditableError(type) ? "AUTOMATED_REAL_TIME_WHITELISTING" : "CUSTOM_INPUT_VALIDATION";
 	}
 
 	/**

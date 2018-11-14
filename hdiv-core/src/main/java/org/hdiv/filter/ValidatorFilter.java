@@ -16,9 +16,7 @@
 package org.hdiv.filter;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.Callable;
 
@@ -39,7 +37,6 @@ import org.hdiv.init.RequestInitializer;
 import org.hdiv.logs.IUserData;
 import org.hdiv.logs.Logger;
 import org.hdiv.util.Constants;
-import org.hdiv.util.HDIVErrorCodes;
 import org.hdiv.util.HDIVUtil;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
@@ -242,20 +239,8 @@ public class ValidatorFilter extends OncePerRequestFilter {
 				}
 			}
 
-			if (errors != null && !errors.isEmpty() && (!hdivConfig.isIntegrityValidation() || !hdivConfig.isEditableValidation())) {
-				for (Iterator<ValidatorError> iterator = errors.iterator(); iterator.hasNext();) {
-					ValidatorError validatorError = iterator.next();
-					boolean editable = HDIVErrorCodes.isEditableError(validatorError.getType());
-					if (!hdivConfig.isEditableValidation() && editable && validatorError.getRule() == null) {
-						iterator.remove();
-					}
-					if (!hdivConfig.isIntegrityValidation() && !editable) {
-						iterator.remove();
-					}
-				}
-				if (errors.isEmpty()) {
-					legal = true;
-				}
+			if (validationHelper.areErrorsLegal(errors)) {
+				legal = true;
 			}
 
 			boolean hasEditableError = false;
@@ -266,7 +251,7 @@ public class ValidatorFilter extends OncePerRequestFilter {
 				// Log the errors
 				logValidationErrors(errors);
 
-				hasEditableError = processEditableValidationErrors(ctx, errors);
+				hasEditableError = validationHelper.processEditableValidationErrors(ctx, errors);
 			}
 
 			if (legal || hasEditableError && !hdivConfig.isShowErrorPageOnEditableValidation()) {
@@ -292,7 +277,7 @@ public class ValidatorFilter extends OncePerRequestFilter {
 				if (context != null) {
 					errors = validationHelper.findCustomErrors(e, context.getTarget());
 					if (!errors.isEmpty()) {
-						processEditableValidationErrors(ctx, errors);
+						validationHelper.processEditableValidationErrors(ctx, errors);
 						processRequest(ctx, multipartProcessedRequest, responseWrapper, filterChain, context.getRedirect());
 						return;
 					}
@@ -459,39 +444,6 @@ public class ValidatorFilter extends OncePerRequestFilter {
 			// Log the error
 			logger.log(error);
 		}
-	}
-
-	/**
-	 * Process editable validation errors. Add them to the request scope to read later from the web framework.
-	 *
-	 * @param request request object
-	 * @param errors all validation errors
-	 * @return true if there is a editable validation error
-	 */
-	protected boolean processEditableValidationErrors(final RequestContextHolder request, final List<ValidatorError> errors) {
-
-		List<ValidatorError> editableErrors = new ArrayList<ValidatorError>();
-		boolean hasRule = false;
-		for (ValidatorError error : errors) {
-			if (HDIVErrorCodes.isEditableError(error.getType())) {
-				editableErrors.add(error);
-			}
-			if (error.getRule() != null) {
-				hasRule = true;
-			}
-		}
-		if (!editableErrors.isEmpty() && (hdivConfig.isEditableValidation() || hasRule)) {
-
-			// Put the errors on request to be accessible from the Web framework
-			request.setAttribute(Constants.EDITABLE_PARAMETER_ERROR, editableErrors);
-
-			if (hdivConfig.isShowErrorPageOnEditableValidation()) {
-				// Redirect to error page
-				// Put errors in session to be accessible from error page
-				request.getSession().setAttribute(Constants.EDITABLE_PARAMETER_ERROR, editableErrors);
-			}
-		}
-		return !editableErrors.isEmpty();
 	}
 
 }
