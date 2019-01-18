@@ -87,7 +87,7 @@ public class ValidationContext {
 		return requestParameters;
 	}
 
-	public void acceptParameterValues(final String parameterName, final Collection<Object> parameterValues) {
+	public void acceptParameterValues(final String parameterName, final Collection<? extends Object> parameterValues) {
 		for (Object value : parameterValues) {
 			acceptParameter(parameterName, value);
 		}
