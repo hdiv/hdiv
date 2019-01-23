@@ -93,6 +93,12 @@ public class ValidationContext {
 		}
 	}
 
+	public void acceptParameterValues(final String parameterName, final String[] parameterValues) {
+		for (String value : parameterValues) {
+			acceptParameter(parameterName, value);
+		}
+	}
+
 	public void acceptParameter(final String parameterName, final Object parameterValue) {
 
 		if (parameterName == null || parameterValue == null) {
