@@ -3,6 +3,10 @@
 ## HDIV CHANGELOG
 https://github.com/hdiv
 
+###3.4.6
+
+ * [NEW] Minor changes in hdiv-jsf
+
 ###3.4.5
 
  * [NEW] Improvements in client-side generated cookies validation

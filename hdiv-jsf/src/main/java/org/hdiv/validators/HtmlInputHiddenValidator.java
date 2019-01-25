@@ -59,9 +59,9 @@ public class HtmlInputHiddenValidator extends AbstractComponentValidator {
 		FacesContext context = validationContext.getFacesContext();
 
 		Map<String, String> parameters = context.getExternalContext().getRequestParameterMap();
-
-		String requestValue = parameters.get(inputHidden.getClientId(context));
-		Collection<Object> stateValues = inputHidden.getStateValue(context, inputHidden.getClientId(context));
+		String clientId = inputHidden.getClientId(context);
+		String requestValue = parameters.get(clientId);
+		Collection<Object> stateValues = inputHidden.getStateValue(context, clientId);
 
 		if (log.isDebugEnabled()) {
 			log.debug("Hidden's request value:" + requestValue);
@@ -69,23 +69,23 @@ public class HtmlInputHiddenValidator extends AbstractComponentValidator {
 		}
 
 		if (requestValue != null && isCorrectValue(requestValue, stateValues)) {
-			validationContext.acceptParameter(inputHidden.getClientId(context), requestValue);
+			validationContext.acceptParameter(clientId, requestValue);
 		}
 		else if (requestValue == null) {
 
 			if (log.isDebugEnabled()) {
-				log.debug("Parameter '" + inputHidden.getId() + "' rejected in component '" + inputHidden.getId()
-						+ "' in ComponentValidator '" + this.getClass() + "'");
+				log.debug("Parameter '" + clientId + "' rejected in component '" + inputHidden.getId() + "' in ComponentValidator '"
+						+ this.getClass() + "'");
 			}
-			validationContext.rejectParameter(inputHidden.getId(), null, HDIVErrorCodes.NOT_RECEIVED_ALL_REQUIRED_PARAMETERS);
+			validationContext.rejectParameter(clientId, null, HDIVErrorCodes.NOT_RECEIVED_ALL_REQUIRED_PARAMETERS);
 		}
 		else {
 
 			if (log.isDebugEnabled()) {
-				log.debug("Parameter '" + inputHidden.getId() + "' rejected in component '" + inputHidden.getId()
-						+ "' in ComponentValidator '" + this.getClass() + "'");
+				log.debug("Parameter '" + clientId + "' rejected in component '" + inputHidden.getId() + "' in ComponentValidator '"
+						+ this.getClass() + "'");
 			}
-			validationContext.rejectParameter(inputHidden.getId(), requestValue.toString(), HDIVErrorCodes.INVALID_PARAMETER_VALUE);
+			validationContext.rejectParameter(clientId, requestValue.toString(), HDIVErrorCodes.INVALID_PARAMETER_VALUE);
 		}
 
 	}

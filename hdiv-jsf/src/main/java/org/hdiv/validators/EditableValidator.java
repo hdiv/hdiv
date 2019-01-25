@@ -130,9 +130,10 @@ public class EditableValidator implements ComponentValidator {
 	 * @param contentType Component type
 	 * @param paramName the name of the component to validate
 	 * @param paramValue the value of the parameter
+	 * @return is the content valid?
 	 */
-	protected void validateParameter(final ValidationContext validationContext, final UIInput inputComponent, final String contentType,
-			final String paramName, final String paramValue) {
+	protected EditableDataValidationResult validateParameter(final ValidationContext validationContext, final UIInput inputComponent,
+			final String contentType, final String paramName, final String paramValue) {
 
 		FacesContext context = validationContext.getFacesContext();
 
@@ -156,7 +157,7 @@ public class EditableValidator implements ComponentValidator {
 			validationContext.rejectParameter(paramName, paramValue, HDIVErrorCodes.INVALID_EDITABLE_VALUE, result.getValidationId(),
 					inputComponent);
 		}
-
+		return result;
 	}
 
 	/**
