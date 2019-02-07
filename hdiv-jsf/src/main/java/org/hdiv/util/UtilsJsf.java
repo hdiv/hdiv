@@ -191,6 +191,9 @@ public abstract class UtilsJsf {
 	 */
 	public static UIComponent findParentOfType(final UIComponent comp, final Class<?> type) {
 
+		if (comp == null) {
+			return null;
+		}
 		UIComponent parent = comp.getParent();
 		while (!type.isAssignableFrom(parent.getClass())) {
 			if (parent instanceof UIViewRoot) {
@@ -209,6 +212,9 @@ public abstract class UtilsJsf {
 	 */
 	public static boolean hasUIParameterChild(final UIComponent component) {
 
+		if (component == null) {
+			return false;
+		}
 		boolean hasParams = false;
 		for (UIComponent comp : component.getChildren()) {
 			if (comp instanceof UIParameter) {
