@@ -122,6 +122,7 @@ public class DefaultComponentTreeValidator implements ComponentTreeValidator {
 		if (submittedForm != null) {
 			if (log.isDebugEnabled()) {
 				log.debug("Validating Non Ajax request.");
+				log.debug("Submitted form: {}", submittedForm.getId());
 				log.debug("Components to validate:");
 			}
 			// Validate component tree starting in form
@@ -150,6 +151,9 @@ public class DefaultComponentTreeValidator implements ComponentTreeValidator {
 		if (sourceComp == null) {
 			sourceComp = context.getViewRoot().findComponent(UtilsJsf.removeRowId(source));
 		}
+		if (log.isDebugEnabled()) {
+			log.debug("Source component: {}", sourceComp == null ? "null" : sourceComp.getId());
+		}
 		return sourceComp;
 	}
 
@@ -160,6 +164,9 @@ public class DefaultComponentTreeValidator implements ComponentTreeValidator {
 		UIComponent comp = context.getViewRoot().findComponent(compId);
 		if (comp == null) {
 			comp = context.getViewRoot().findComponent(UtilsJsf.removeRowId(compId));
+		}
+		if (log.isDebugEnabled()) {
+			log.debug("Find component with id {}: {}", compId, comp == null ? "null" : comp.getId());
 		}
 		return comp;
 	}
