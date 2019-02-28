@@ -28,6 +28,7 @@ import javax.faces.context.PartialViewContext;
 
 import org.hdiv.components.UIParameterExtension;
 import org.hdiv.util.HDIVErrorCodes;
+import org.hdiv.util.UtilsJsf;
 import org.hdiv.validation.ValidationContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -70,6 +71,15 @@ public class UICommandValidator extends AbstractComponentValidator {
 		Clicked clicked = wasComponentWithRowIdClicked(context, command, clientId);
 		if (clicked.isClicked()) {
 			return clicked;
+		}
+
+		// ClientId including row id, remove it before process
+		if (UtilsJsf.hasRowId(clientId)) {
+			String clientIdWithoutRowId = UtilsJsf.removeRowId(clientId);
+			clicked = wasComponentWithRowIdClicked(context, command, clientIdWithoutRowId);
+			if (clicked.isClicked()) {
+				return clicked;
+			}
 		}
 
 		PartialViewContext partialContext = context.getFacesContext().getPartialViewContext();

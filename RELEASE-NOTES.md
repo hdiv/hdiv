@@ -3,6 +3,14 @@
 ## HDIV CHANGELOG
 https://github.com/hdiv
 
+###3.4.8
+
+ * [FIX] UICommand clicked detection minor fix
+
+###3.4.7
+
+ * [NEW] Minor changes in hdiv-jsf
+
 ###3.4.6
 
  * [NEW] Minor changes in hdiv-jsf
