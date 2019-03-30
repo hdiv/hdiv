@@ -249,13 +249,13 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		// Register Spring MVC beans if we are using Spring MVC web framework
 		if (springMvcPresent && springMvcModulePresent) {
 			if (grailsPresent) {
-				createGrailsRequestDataValueProcessor(source, parserContext);
+				createRequestDataValueProcessor(source, parserContext, GrailsHdivRequestDataValueProcessor.class);
 			}
 			else if (thymeleafPresent) {
-				createThymeleafRequestDataValueProcessor(source, parserContext);
+				createRequestDataValueProcessor(source, parserContext, ThymeleafHdivRequestDataValueProcessor.class);
 			}
 			else {
-				createRequestDataValueProcessor(source, parserContext);
+				createRequestDataValueProcessor(source, parserContext, HdivRequestDataValueProcessor.class);
 			}
 			this.createSimpleBean(source, parserContext, SpringMVCMultipartConfig.class, IMultipartConfig.class.getName());
 		}
@@ -514,43 +514,23 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 
 		return registerBean(bean, RequestContextFactory.class.getName(), parserContext);
 	}
+	
+	protected RuntimeBeanReference createRequestDataValueProcessor(final Object source, final ParserContext parserContext, final Class<?> processorClass) {
+        RootBeanDefinition bean = new RootBeanDefinition(processorClass);
+        bean.setSource(source);
+        bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
+        bean.getPropertyValues().addPropertyValue(LINK_URL_PROCESSOR, linkUrlProcessorRef);
+        bean.getPropertyValues().addPropertyValue(FORM_URL_PROCESSOR, formUrlProcessorRef);
 
-	protected RuntimeBeanReference createRequestDataValueProcessor(final Object source, final ParserContext parserContext) {
-		RootBeanDefinition bean = new RootBeanDefinition(HdivRequestDataValueProcessor.class);
-		bean.setSource(source);
-		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
-		bean.getPropertyValues().addPropertyValue(LINK_URL_PROCESSOR, linkUrlProcessorRef);
-		bean.getPropertyValues().addPropertyValue(FORM_URL_PROCESSOR, formUrlProcessorRef);
+        if (springSecurityPresent && springVersionGrEqThan4()) {
+            // Spring Security is present and Spring >= 4.0.0
+            // Enable Spring security integration
 
-		if (springSecurityPresent && springVersionGrEqThan4()) {
-			// Spring Security is present and Spring >= 4.0.0
-			// Enable Spring security integration
-
-			bean.getPropertyValues().addPropertyValue("innerRequestDataValueProcessor", new CsrfRequestDataValueProcessor());
-		}
-		parserContext.getRegistry().registerBeanDefinition(REQUEST_DATA_VALUE_PROCESSOR_BEAN_NAME, bean);
-		return new RuntimeBeanReference(REQUEST_DATA_VALUE_PROCESSOR_BEAN_NAME);
-	}
-
-	protected RuntimeBeanReference createGrailsRequestDataValueProcessor(final Object source, final ParserContext parserContext) {
-		RootBeanDefinition bean = new RootBeanDefinition(GrailsHdivRequestDataValueProcessor.class);
-		bean.setSource(source);
-		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
-		bean.getPropertyValues().addPropertyValue(LINK_URL_PROCESSOR, linkUrlProcessorRef);
-		bean.getPropertyValues().addPropertyValue(FORM_URL_PROCESSOR, formUrlProcessorRef);
-		parserContext.getRegistry().registerBeanDefinition(REQUEST_DATA_VALUE_PROCESSOR_BEAN_NAME, bean);
-		return new RuntimeBeanReference(REQUEST_DATA_VALUE_PROCESSOR_BEAN_NAME);
-	}
-
-	protected RuntimeBeanReference createThymeleafRequestDataValueProcessor(final Object source, final ParserContext parserContext) {
-		RootBeanDefinition bean = new RootBeanDefinition(ThymeleafHdivRequestDataValueProcessor.class);
-		bean.setSource(source);
-		bean.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
-		bean.getPropertyValues().addPropertyValue(LINK_URL_PROCESSOR, linkUrlProcessorRef);
-		bean.getPropertyValues().addPropertyValue(FORM_URL_PROCESSOR, formUrlProcessorRef);
-		parserContext.getRegistry().registerBeanDefinition(REQUEST_DATA_VALUE_PROCESSOR_BEAN_NAME, bean);
-		return new RuntimeBeanReference(REQUEST_DATA_VALUE_PROCESSOR_BEAN_NAME);
-	}
+            bean.getPropertyValues().addPropertyValue("innerRequestDataValueProcessor", new CsrfRequestDataValueProcessor());
+        }
+        parserContext.getRegistry().registerBeanDefinition(REQUEST_DATA_VALUE_PROCESSOR_BEAN_NAME, bean);
+        return new RuntimeBeanReference(REQUEST_DATA_VALUE_PROCESSOR_BEAN_NAME);
+    }
 
 	protected RuntimeBeanReference createConfigBean(final Element element, final Object source, final ParserContext parserContext) {
 
