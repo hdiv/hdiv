@@ -3,6 +3,10 @@
 ## HDIV CHANGELOG
 https://github.com/hdiv
 
+###3.4.9
+
+ * [FIX] Make ValidatorError serializable
+
 ###3.4.8
 
  * [FIX] UICommand clicked detection minor fix
