@@ -15,9 +15,13 @@
  */
 package org.hdiv.filter;
 
+import java.io.Serializable;
+
 import org.hdiv.util.HDIVErrorCodes;
 
-public class ValidatorError {
+public class ValidatorError implements Serializable {
+
+	private static final long serialVersionUID = -2460201385122916861L;
 
 	private static boolean debugMode;
 
