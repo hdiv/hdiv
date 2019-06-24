@@ -274,11 +274,11 @@
 			<distributionManagement>
 				<snapshotRepository>
 					<id>nexus</id>
-					<url>http://localhost:8081/nexus/content/repositories/snapshots</url>
+					<url>http://dev.hdivsecurity.com:8081/nexus/content/repositories/snapshots</url>
 				</snapshotRepository>
 				<repository>
 					<id>nexus</id>
-					<url>http://localhost:8081/nexus/content/repositories/releases</url>
+					<url>http://dev.hdivsecurity.com:8081/nexus/content/repositories/releases</url>
 				</repository>
 			</distributionManagement>
 		</profile>

@@ -79,7 +79,7 @@ public class ExclusionRegistry {
 	 */
 	public ParamExclusionRegistration addParamExclusions(final String... parameterPatterns) {
 		Assert.notEmpty(parameterPatterns, "Parameter patterns are required");
-		ParamExclusionRegistration registration = new ParamExclusionRegistration(new ArrayList(Arrays.asList(parameterPatterns)));
+		ParamExclusionRegistration registration = new ParamExclusionRegistration(new ArrayList<String>(Arrays.asList(parameterPatterns)));
 		paramRegistrations.add(registration);
 		return registration;
 	}
