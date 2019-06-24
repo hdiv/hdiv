@@ -174,6 +174,9 @@ public abstract class AbstractUrlProcessor {
 		if (end < 0) {
 			end = params.indexOf('#', start);
 		}
+		else {
+			end++;
+		}
 		if (end < 0) {
 			end = params.length();
 		}

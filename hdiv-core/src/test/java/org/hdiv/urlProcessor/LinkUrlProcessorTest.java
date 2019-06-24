@@ -338,8 +338,15 @@ public class LinkUrlProcessorTest extends AbstractHDIVTestCase {
 
 		HttpServletRequest request = getMockRequest();
 
-		String url = "/link.do?_HDIV_STATE_=11-11-1234567890";
+		String url = "/link.do?_HDIV_STATE_=11-11-1234567890&aaaa=bbbb";
 		String result = linkUrlProcessor.processUrl(request, url);
+		assertEquals(1, StringUtils.countOccurrencesOf(result, "_HDIV_STATE_"));
+		assertFalse(result.contains("11-11-1234567890"));
+		assertTrue(result.startsWith("/link.do?aaaa=0&_HDIV_STATE_="));
+		assertTrue(!result.equals(url));
+
+		url = "/link.do?_HDIV_STATE_=11-11-1234567890";
+		result = linkUrlProcessor.processUrl(request, url);
 		assertEquals(1, StringUtils.countOccurrencesOf(result, "_HDIV_STATE_"));
 		assertFalse(result.contains("11-11-1234567890"));
 		assertTrue(result.startsWith("/link.do?_HDIV_STATE_="));
@@ -350,6 +357,13 @@ public class LinkUrlProcessorTest extends AbstractHDIVTestCase {
 		assertEquals(1, StringUtils.countOccurrencesOf(result, "_HDIV_STATE_"));
 		assertFalse(result.contains("11-11-1234567890"));
 		assertTrue(result.startsWith("/link.do?aaaa=0&_HDIV_STATE_="));
+		assertTrue(!result.equals(url));
+
+		url = "/link.do?aaaa=bbbb&_HDIV_STATE_=11-11-1234567890&cccc=dddd";
+		result = linkUrlProcessor.processUrl(request, url);
+		assertEquals(1, StringUtils.countOccurrencesOf(result, "_HDIV_STATE_"));
+		assertFalse(result.contains("11-11-1234567890"));
+		assertTrue(result.startsWith("/link.do?aaaa=0&cccc=0&_HDIV_STATE_="));
 		assertTrue(!result.equals(url));
 
 		url = "/link.do?aaaa=bbbb&_HDIV_STATE_=11-11-1234567890#hash";
@@ -366,6 +380,21 @@ public class LinkUrlProcessorTest extends AbstractHDIVTestCase {
 		assertTrue(result.contains("11-11-1234567890"));
 		assertTrue(result.startsWith("/link.do?aaaa=0&_MODIFY_HDIV_STATE_="));
 		assertTrue(!result.equals(url));
+
+		url = "/demo/names.html?name=g&amp;desc=i&amp;d-16544-o=2&amp;_HDIV_STATE_=11-11-1234567890&amp;d-16544-s=1";
+		result = linkUrlProcessor.processUrl(request, url);
+		assertEquals(1, StringUtils.countOccurrencesOf(result, "&_HDIV_STATE_"));
+		assertFalse(result.contains("11-11-1234567890"));
+		assertTrue(result.startsWith("/demo/names.html?name=0&desc=0&d-16544-o=0&d-16544-s=0&_HDIV_STATE_="));
+		assertTrue(!result.equals(url));
+
+		url = "/demo/names.html?name=g&amp;desc=i&amp;d-16544-o=2&amp;_HDIV_STATE_=11-11-1234567890";
+		result = linkUrlProcessor.processUrl(request, url);
+		assertEquals(1, StringUtils.countOccurrencesOf(result, "&_HDIV_STATE_"));
+		assertFalse(result.contains("11-11-1234567890"));
+		assertTrue(result.startsWith("/demo/names.html?name=0&desc=0&d-16544-o=0&_HDIV_STATE_="));
+		assertTrue(!result.equals(url));
+
 	}
 
 	public void testProcessObfuscation() {
