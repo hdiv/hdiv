@@ -16,6 +16,7 @@
 package org.hdiv.logs;
 
 import java.security.Principal;
+import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -31,6 +32,8 @@ import org.springframework.util.ClassUtils;
  * @author Gotzon Illarramendi
  */
 public class UserData implements IUserData {
+
+	Pattern X_FORWARDED_FOR_MATCH = Pattern.compile("^[a-fA-f0-9:.]+(,\\s[a-fA-f0-9:.]+)*$");
 
 	private final boolean springSecurityPresent = ClassUtils.isPresent("org.springframework.security.core.context.SecurityContextHolder",
 			UserData.class.getClassLoader());
@@ -76,11 +79,12 @@ public class UserData implements IUserData {
 	 * @return Returns the remote user IP address if behind the proxy.
 	 */
 	protected String getUserLocalIP(final HttpServletRequest request) {
-		if (request.getHeader("X-Forwarded-For") == null) {
+		String header = request.getHeader("X-Forwarded-For");
+		if (header == null || !X_FORWARDED_FOR_MATCH.matcher(header).matches()) {
 			return request.getRemoteAddr();
 		}
 		else {
-			return request.getHeader("X-Forwarded-For");
+			return header;
 		}
 	}
 
