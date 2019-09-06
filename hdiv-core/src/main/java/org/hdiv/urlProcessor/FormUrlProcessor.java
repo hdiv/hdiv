@@ -47,6 +47,16 @@ public class FormUrlProcessor extends AbstractUrlProcessor {
 		return processUrl(HDIVUtil.getRequestContext(request), url, method);
 	}
 
+	@Deprecated
+	public String processUrl(final HttpServletRequest request, final String url, final String method) {
+		return this.processUrl(request, url, Method.secureValueOf(method));
+	}
+
+	@Deprecated
+	public String processUrl(final RequestContextHolder ctx, final String url, final String method) {
+		return this.processUrl(ctx, url, Method.secureValueOf(method));
+	}
+
 	/**
 	 * Process form action url to add hdiv state if it is necessary.
 	 *
