@@ -123,6 +123,11 @@ public class TrustAssertionUtils {
 			return false;
 		}
 
+		public Class<? extends AuthorizationRule> authorizationRule() {
+			// TODO Auto-generated method stub
+			return AllGrantsAuthorizationRule.class;
+		}
+
 	};
 
 	public static boolean areValues(final TrustAssertion assertion) {
