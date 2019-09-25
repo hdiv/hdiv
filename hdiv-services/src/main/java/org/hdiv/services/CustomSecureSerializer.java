@@ -24,6 +24,7 @@ import org.springframework.beans.BeanWrapper;
 
 import com.fasterxml.jackson.annotation.JsonFormat.Value;
 import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.JsonGenerator.Feature;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.AnnotationIntrospector;
 import com.fasterxml.jackson.databind.BeanProperty;
@@ -62,7 +63,11 @@ public abstract class CustomSecureSerializer extends JsonSerializer<Object> {
 		jsonGen = jgen;
 		jsonProvider = provider;
 
-		jgen.writeStartObject();
+		boolean flushEnabled = jsonGen.isEnabled(Feature.FLUSH_PASSED_TO_STREAM);
+
+		jsonGen.disable(Feature.FLUSH_PASSED_TO_STREAM);
+
+		jsonGen.writeStartObject();
 
 		if (delegatedSerializer != null) {
 			Object value = null;
@@ -76,8 +81,8 @@ public abstract class CustomSecureSerializer extends JsonSerializer<Object> {
 					try {
 						efective = (JsonSerializer<Object>) ((ContextualSerializer) delegatedSerializer).createContextual(provider,
 								getBeanProperty(secureIdName, value, trustAssertion, object.getClass().getField("id").getType()));
-						jgen.writeFieldName(secureIdName);
-						efective.serialize(value, jgen, provider);
+						jsonGen.writeFieldName(secureIdName);
+						efective.serialize(value, jsonGen, provider);
 					}
 					catch (Exception e) {
 						System.out.println("Error geting id of object " + object);
@@ -99,8 +104,8 @@ public abstract class CustomSecureSerializer extends JsonSerializer<Object> {
 								if (delegatedSerializer instanceof ContextualSerializer) {
 									efective = ((JsonSerializer<Object>) ((ContextualSerializer) delegatedSerializer).createContextual(
 											provider, getBeanProperty(secureIdName, value, trustAssertion, field.getType())));
-									jgen.writeFieldName(secureIdName);
-									efective.serialize(value, jgen, provider);
+									jsonGen.writeFieldName(secureIdName);
+									efective.serialize(value, jsonGen, provider);
 								}
 								break;
 							}
@@ -117,7 +122,11 @@ public abstract class CustomSecureSerializer extends JsonSerializer<Object> {
 
 		writeBody(object);
 
-		jgen.writeEndObject();
+		if (flushEnabled) {
+			jsonGen.enable(Feature.FLUSH_PASSED_TO_STREAM);
+		}
+
+		jsonGen.writeEndObject();
 
 	}
 
