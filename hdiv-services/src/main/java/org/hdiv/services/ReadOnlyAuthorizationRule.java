@@ -16,23 +16,23 @@
 
 package org.hdiv.services;
 
-import org.springframework.http.server.ServerHttpRequest;
+import javax.servlet.ServletRequest;
 
 public class ReadOnlyAuthorizationRule implements AuthorizationRule {
 
-	public boolean allowGet(final Object o, final ServerHttpRequest request) {
+	public boolean allowGet(final Object o, final ServletRequest request) {
 		return true;
 	};
 
-	public boolean allowPost(final Object o, final ServerHttpRequest request) {
+	public boolean allowPost(final Object o, final ServletRequest request) {
 		return false;
 	};
 
-	public boolean allowPut(final Object o, final ServerHttpRequest request) {
+	public boolean allowPut(final Object o, final ServletRequest request) {
 		return false;
 	};
 
-	public boolean allowDelete(final Object o, final ServerHttpRequest request) {
+	public boolean allowDelete(final Object o, final ServletRequest request) {
 		return false;
 	};
 

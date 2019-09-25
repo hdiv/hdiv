@@ -16,15 +16,15 @@
 
 package org.hdiv.services;
 
-import org.springframework.http.server.ServerHttpRequest;
+import javax.servlet.ServletRequest;
 
 public interface AuthorizationRule {
 
-	public boolean allowGet(Object o, ServerHttpRequest request);
+	public boolean allowGet(Object o, ServletRequest request);
 
-	public boolean allowPost(Object o, ServerHttpRequest request);
+	public boolean allowPost(Object o, ServletRequest request);
 
-	public boolean allowPut(Object o, ServerHttpRequest request);
+	public boolean allowPut(Object o, ServletRequest request);
 
-	public boolean allowDelete(Object o, ServerHttpRequest request);
+	public boolean allowDelete(Object o, ServletRequest request);
 }
