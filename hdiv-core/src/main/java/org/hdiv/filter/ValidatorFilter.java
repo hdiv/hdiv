@@ -446,4 +446,10 @@ public class ValidatorFilter extends OncePerRequestFilter {
 		}
 	}
 
+	@Override
+	protected boolean shouldNotFilterErrorDispatch() {
+		// Execute filter in ERROR DispatchType requests
+		return false;
+	}
+
 }
