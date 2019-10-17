@@ -3,6 +3,14 @@
 ## HDIV CHANGELOG
 https://github.com/hdiv
 
+###3.4.12
+
+ * [FIX] Execute filter in ERROR DispatchType requests
+
+###3.4.11
+
+ * [FIX] Recover deprecated methods
+
 ###3.4.10
 
  * [FIX] Urls with _HDIV_STATE_ parameter
