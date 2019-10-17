@@ -6,7 +6,7 @@
 	<artifactId>hdiv</artifactId>
 	<packaging>pom</packaging>
 	<name>Hdiv Community</name>
-	<version>3.4.12-SNAPSHOT</version>
+	<version>3.4.12</version>
 	<url>http://www.hdiv.org</url>
 	<description>Web Application Security Framework</description>
 
@@ -192,7 +192,7 @@
 		<connection>scm:git:https://bitbucket.org/hdivsecurity/hdiv-ce-releases.git</connection>
 		<url>https://bitbucket.org/hdivsecurity/hdiv-ce-releases</url>
 		<developerConnection>scm:git:https://bitbucket.org/hdivsecurity/hdiv-ce-releases.git</developerConnection>
-		<tag>HEAD</tag>
+		<tag>3.4.12</tag>
 	</scm>
 
 	<organization>
