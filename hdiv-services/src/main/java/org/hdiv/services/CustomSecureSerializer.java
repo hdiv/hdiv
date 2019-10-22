@@ -71,21 +71,19 @@ public abstract class CustomSecureSerializer extends JsonSerializer<Object> {
 
 		if (delegatedSerializer != null) {
 			Object value = null;
-			TrustAssertion trustAssertion = null;
 			if (object instanceof SecureIdentifiable<?>) {
 				if (delegatedSerializer instanceof ContextualSerializer) {
 					secureIdName = "id";
 					value = ((SecureIdentifiable) object).getId();
-					// efectiveSerializer.serialize(value, jgen, provider);
 
 					try {
 						efective = (JsonSerializer<Object>) ((ContextualSerializer) delegatedSerializer).createContextual(provider,
-								getBeanProperty(secureIdName, value, trustAssertion, object.getClass().getField("id").getType()));
+								getBeanProperty(secureIdName, value, null, getIdentityField(object).getType()));
 						jsonGen.writeFieldName(secureIdName);
 						efective.serialize(value, jsonGen, provider);
 					}
 					catch (Exception e) {
-						System.out.println("Error geting id of object " + object);
+						// Error getting id of the object. Do not make any task to preserve the original functionality
 					}
 
 				}
@@ -93,7 +91,7 @@ public abstract class CustomSecureSerializer extends JsonSerializer<Object> {
 			}
 			else if (object instanceof SecureIdContainer) {
 				for (Field field : object.getClass().getDeclaredFields()) {
-					trustAssertion = field.getAnnotation(TrustAssertion.class);
+					TrustAssertion trustAssertion = field.getAnnotation(TrustAssertion.class);
 					if (trustAssertion != null) {
 						if (delegatedSerializer instanceof ContextualSerializer) {
 							try {
@@ -110,7 +108,7 @@ public abstract class CustomSecureSerializer extends JsonSerializer<Object> {
 								break;
 							}
 							catch (Exception e) {
-								System.out.println("Error geting id of object " + object);
+								// Error getting id of the object. Do not make any task to preserve the original functionality
 							}
 						}
 
@@ -130,7 +128,28 @@ public abstract class CustomSecureSerializer extends JsonSerializer<Object> {
 
 	}
 
+	private Field getIdentityField(final Object obj) {
+		Class<?> clazz = obj.getClass();
+		while (clazz != Object.class) {
+
+			try {
+				return clazz.getDeclaredField("id");
+			}
+			catch (NoSuchFieldException e) {
+				// Search into parent classes
+				clazz = clazz.getSuperclass();
+			}
+
+		}
+
+		return null;
+	}
+
 	protected abstract void writeBody(final Object obj);
+
+	protected void writeField(final BeanWrapper beanWrapper, final String propertyName, final boolean nullValueAsBlank) throws IOException {
+		writeField(beanWrapper, propertyName, propertyName, nullValueAsBlank);
+	}
 
 	protected void writeField(final BeanWrapper beanWrapper, final String tagName, final String propertyName,
 			final boolean nullValueAsBlank) throws IOException {
@@ -140,10 +159,8 @@ public abstract class CustomSecureSerializer extends JsonSerializer<Object> {
 		jsonGen.writeFieldName(tagName);
 		if (propertyName.equals(secureIdName) && efective != null) {
 			efective.serialize(propertyValue, jsonGen, jsonProvider);
-			// jsonGen.writeObject(secureIdValue);
 		}
 		else {
-			// Se escribe en el JSON el value
 			if (propertyValue == null && nullValueAsBlank) {
 				jsonGen.writeString("");
 			}
@@ -152,20 +169,8 @@ public abstract class CustomSecureSerializer extends JsonSerializer<Object> {
 			}
 		}
 	}
-	// @Override
-	// @SuppressWarnings("unchecked")
-	// public JsonSerializer<?> createContextual(final SerializerProvider prov, final BeanProperty property) throws JsonMappingException {
-	// if (delegatedSerializer != null && delegatedSerializer.getClass().isAssignableFrom(ContextualSerializer.class)) {
-	// efectiveSerializer = (JsonSerializer<Object>) ((ContextualSerializer) delegatedSerializer).createContextual(prov, property);
-	// // return this;//((ContextualSerializer) delegatedSerializer).createContextual(prov, property);
-	// }
-	// // else {
-	// //
-	// // }
-	// return this;
-	// }
 
-	private BeanProperty getBeanProperty(final String name, final Object value, final TrustAssertion trustAssertion, final Class type) {
+	private BeanProperty getBeanProperty(final String name, final Object value, final TrustAssertion trustAssertion, final Class<?> type) {
 
 		return new BeanProperty() {
 
@@ -188,20 +193,18 @@ public abstract class CustomSecureSerializer extends JsonSerializer<Object> {
 			}
 
 			public PropertyName getWrapperName() {
-				// TODO Auto-generated method stub
 				return null;
 			}
 
 			public PropertyMetadata getMetadata() {
-				// TODO Auto-generated method stub
 				return null;
 			}
 
 			public boolean isRequired() {
-				// TODO Auto-generated method stub
 				return false;
 			}
 
+			@SuppressWarnings("unchecked")
 			public <A extends Annotation> A getAnnotation(final Class<A> acls) {
 				if (acls.isAssignableFrom(TrustAssertion.class)) {
 					return (A) trustAssertion;
@@ -226,7 +229,6 @@ public abstract class CustomSecureSerializer extends JsonSerializer<Object> {
 
 			public void depositSchemaProperty(final JsonObjectFormatVisitor objectVisitor) throws JsonMappingException {
 			}
-
 		};
 
 	}
