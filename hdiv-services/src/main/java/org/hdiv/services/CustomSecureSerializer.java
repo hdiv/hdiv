@@ -39,6 +39,14 @@ import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonObjectFormatVisitor
 import com.fasterxml.jackson.databind.ser.ContextualSerializer;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 
+/**
+ * @author Hdiv
+ * @since 4.0
+ *
+ * Serializer to be used as custom base serializer into services application. Custom serializers do not ensure the securization of the
+ * entities. Use CustomSecureSerializer as application custom serializer to protect ids.
+ * 
+ */
 public abstract class CustomSecureSerializer extends JsonSerializer<Object> {
 
 	private JsonSerializer<Object> delegatedSerializer;
@@ -128,6 +136,11 @@ public abstract class CustomSecureSerializer extends JsonSerializer<Object> {
 
 	}
 
+	/**
+	 * 
+	 * Gets the id field of the bean even if it is defined into any parent class
+	 * 
+	 **/
 	private Field getIdentityField(final Object obj) {
 		Class<?> clazz = obj.getClass();
 		while (clazz != Object.class) {
@@ -147,10 +160,25 @@ public abstract class CustomSecureSerializer extends JsonSerializer<Object> {
 
 	protected abstract void writeBody(final Object obj);
 
+	/**
+	 * Serializes the property with the name propertyName of the beanWrapper object.
+	 * @param beanWrapper Representation of the object to be serialized.
+	 * @param propertyName The name of the property. It will be used as the tag name.
+	 * @param nullValueAsBlank In case of property value is null, if nullValueAsBlank is true blank value will be written, null if false.
+	 * @throws IOException
+	 */
 	protected void writeField(final BeanWrapper beanWrapper, final String propertyName, final boolean nullValueAsBlank) throws IOException {
 		writeField(beanWrapper, propertyName, propertyName, nullValueAsBlank);
 	}
 
+	/**
+	 * Serializes the property with the name propertyName of the beanWrapper object.
+	 * @param beanWrapper Representation of the object to be serialized.
+	 * @param tagName The tag name of the property.
+	 * @param propertyName The name of the property.
+	 * @param nullValueAsBlank In case of property value is null, if nullValueAsBlank is true blank value will be written, null if false.
+	 * @throws IOException
+	 */
 	protected void writeField(final BeanWrapper beanWrapper, final String tagName, final String propertyName,
 			final boolean nullValueAsBlank) throws IOException {
 
