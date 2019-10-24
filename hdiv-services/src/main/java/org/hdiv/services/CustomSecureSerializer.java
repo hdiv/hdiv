@@ -85,8 +85,10 @@ public abstract class CustomSecureSerializer extends JsonSerializer<Object> {
 					value = ((SecureIdentifiable) object).getId();
 
 					try {
+
+						Field identifiableField = getIdentityField(object);
 						efective = (JsonSerializer<Object>) ((ContextualSerializer) delegatedSerializer).createContextual(provider,
-								getBeanProperty(secureIdName, value, null, getIdentityField(object).getType()));
+								getBeanProperty(secureIdName, value, null, identifiableField != null ? identifiableField.getType() : null));
 						jsonGen.writeFieldName(secureIdName);
 						efective.serialize(value, jsonGen, provider);
 					}
