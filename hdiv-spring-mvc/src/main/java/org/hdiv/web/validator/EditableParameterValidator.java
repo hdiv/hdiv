@@ -33,29 +33,29 @@ public class EditableParameterValidator extends AbstractEditableParameterValidat
 	 */
 	private Validator innerValidator;
 
-	public boolean supports(Class<?> clazz) {
+	public boolean supports(final Class<?> clazz) {
 		return true;
 	}
 
-	public void validate(Object obj, Errors errors) {
+	public void validate(final Object obj, final Errors errors) {
 		super.validateEditableParameters(errors);
 
 		// If editable validation is OK, delegate to inner validator
-		if (!errors.hasErrors() && this.innerValidator != null) {
-			this.innerValidator.validate(obj, errors);
+		if (!errors.hasErrors() && innerValidator != null) {
+			innerValidator.validate(obj, errors);
 		}
 	}
 
-	public void validate(Object obj, Errors errors, Object... hints) {
+	public void validate(final Object obj, final Errors errors, final Object... hints) {
 		super.validateEditableParameters(errors);
 
 		// If editable validation is OK, delegate to inner validator
-		if (!errors.hasErrors() && this.innerValidator != null) {
-			if (this.innerValidator instanceof SmartValidator) {
-				((SmartValidator) this.innerValidator).validate(obj, errors, hints);
+		if (!errors.hasErrors() && innerValidator != null) {
+			if (innerValidator instanceof SmartValidator) {
+				((SmartValidator) innerValidator).validate(obj, errors, hints);
 			}
 			else {
-				this.innerValidator.validate(obj, errors);
+				innerValidator.validate(obj, errors);
 			}
 		}
 	}
@@ -63,7 +63,7 @@ public class EditableParameterValidator extends AbstractEditableParameterValidat
 	/**
 	 * @param innerValidator the innerValidator to set
 	 */
-	public void setInnerValidator(Validator innerValidator) {
+	public void setInnerValidator(final Validator innerValidator) {
 		this.innerValidator = innerValidator;
 	}
 

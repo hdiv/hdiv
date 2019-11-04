@@ -45,11 +45,10 @@ public abstract class AbstractEditableParameterValidator {
 			return;
 		}
 
-		List<ValidatorError> validationErrors = (List<ValidatorError>) attr.getAttribute(Constants.EDITABLE_PARAMETER_ERROR, 0);
+		List<ValidatorError> validationErrors = (List<ValidatorError>) attr.getAttribute(Constants.EDITABLE_PARAMETER_ERROR,
+				RequestAttributes.SCOPE_REQUEST);
 		if (validationErrors != null) {
-
 			for (ValidatorError error : validationErrors) {
-
 				rejectParamValues(error.getParameterName(), error.getParameterValue(), errors);
 			}
 		}
@@ -64,7 +63,8 @@ public abstract class AbstractEditableParameterValidator {
 			return;
 		}
 
-		List<ValidatorError> validationErrors = (List<ValidatorError>) attr.getAttribute(Constants.EDITABLE_PARAMETER_ERROR, 0);
+		List<ValidatorError> validationErrors = (List<ValidatorError>) attr.getAttribute(Constants.EDITABLE_PARAMETER_ERROR,
+				RequestAttributes.SCOPE_REQUEST);
 		if (validationErrors != null && !validationErrors.isEmpty()) {
 
 			ValidatorError paramError = null;
@@ -74,7 +74,6 @@ public abstract class AbstractEditableParameterValidator {
 				}
 			}
 			if (paramError != null) {
-
 				rejectParamValues(paramError.getParameterName(), paramError.getParameterValue(), errors);
 			}
 		}
@@ -83,9 +82,7 @@ public abstract class AbstractEditableParameterValidator {
 	protected void rejectParamValues(final String param, final String paramValues, final Errors errors) {
 
 		if (paramValues.contains(Constants.HDIV_EDITABLE_PASSWORD_ERROR_KEY)) {
-
 			errors.rejectValue(param, Constants.HDIV_EDITABLE_PASSWORD_ERROR_KEY);
-
 		}
 		else {
 			String printedValue = createMessageError(paramValues);

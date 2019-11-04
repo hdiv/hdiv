@@ -29,26 +29,26 @@ public class GrailsEditableParameterValidatorConstraint extends AbstractEditable
 
 	private Class<?> owningClass;
 
-	public void setParameter(Object parameter) {
+	public void setParameter(final Object parameter) {
 
 		if (parameter == null) {
-			this.enabled = true;
+			enabled = true;
 		}
 		else if (!(parameter instanceof Boolean)) {
 			throw new IllegalArgumentException("Parameter for constraint [" + NAME + "] of property [" + propertyName + "] of class ["
 					+ owningClass + "] must be a boolean value");
 		}
 		else {
-			this.enabled = ((Boolean) parameter).booleanValue();
+			enabled = ((Boolean) parameter).booleanValue();
 		}
 	}
 
 	public Object getParameter() {
-		return this.enabled;
+		return enabled;
 	}
 
 	@SuppressWarnings("rawtypes")
-	public boolean supports(Class type) {
+	public boolean supports(final Class type) {
 		return type != null && String.class.isAssignableFrom(type);
 	}
 
@@ -56,7 +56,7 @@ public class GrailsEditableParameterValidatorConstraint extends AbstractEditable
 		return NAME;
 	}
 
-	public void setPropertyName(String propertyName) {
+	public void setPropertyName(final String propertyName) {
 		this.propertyName = propertyName;
 	}
 
@@ -68,20 +68,20 @@ public class GrailsEditableParameterValidatorConstraint extends AbstractEditable
 		return true;
 	}
 
-	public void setMessageSource(MessageSource messageSource) {
+	public void setMessageSource(final MessageSource messageSource) {
 		// Not necessary
 	}
 
 	@SuppressWarnings("rawtypes")
-	public void setOwningClass(Class owningClass) {
+	public void setOwningClass(final Class owningClass) {
 		this.owningClass = owningClass;
 	}
 
-	public void validate(Object target, Object propertyValue, Errors errors) {
+	public void validate(final Object target, final Object propertyValue, final Errors errors) {
 		if (!enabled) {
 			return;
 		}
-		super.validateEditableParameter(this.propertyName, errors);
+		super.validateEditableParameter(propertyName, errors);
 	}
 
 }
