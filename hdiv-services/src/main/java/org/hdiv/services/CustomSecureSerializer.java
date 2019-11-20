@@ -41,7 +41,7 @@ import com.fasterxml.jackson.databind.type.TypeFactory;
 
 /**
  * @author Hdiv
- * @since 4.0
+ * @since 3.5
  *
  * Serializer to be used as custom base serializer into services application. Custom serializers do not ensure the securization of the
  * entities. Use CustomSecureSerializer as application custom serializer to protect ids.
