@@ -19,6 +19,8 @@ package org.hdiv.services;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.beans.BeanWrapper;
 
@@ -51,9 +53,7 @@ public abstract class CustomSecureSerializer extends JsonSerializer<Object> {
 
 	private JsonSerializer<Object> delegatedSerializer;
 
-	private String secureIdName = null;
-
-	private JsonSerializer<Object> efective = null;
+	private final Map<String, JsonSerializer<Object>> secureIdSerializer = new HashMap<String, JsonSerializer<Object>>();
 
 	private JsonGenerator jsonGen = null;
 
@@ -78,6 +78,7 @@ public abstract class CustomSecureSerializer extends JsonSerializer<Object> {
 		jsonGen.writeStartObject();
 
 		if (delegatedSerializer != null) {
+			String secureIdName = null;
 			Object value = null;
 			if (object instanceof SecureIdentifiable<?>) {
 				if (delegatedSerializer instanceof ContextualSerializer) {
@@ -85,19 +86,18 @@ public abstract class CustomSecureSerializer extends JsonSerializer<Object> {
 					value = ((SecureIdentifiable) object).getId();
 
 					try {
-
 						Field identifiableField = getIdentityField(object);
-						efective = (JsonSerializer<Object>) ((ContextualSerializer) delegatedSerializer).createContextual(provider,
-								getBeanProperty(secureIdName, value, null, identifiableField != null ? identifiableField.getType() : null));
+						JsonSerializer<Object> efective = (JsonSerializer<Object>) ((ContextualSerializer) delegatedSerializer)
+								.createContextual(provider, getBeanProperty(secureIdName, value, null,
+										identifiableField != null ? identifiableField.getType() : null));
 						jsonGen.writeFieldName(secureIdName);
+						secureIdSerializer.put(secureIdName, efective);
 						efective.serialize(value, jsonGen, provider);
 					}
 					catch (Exception e) {
 						// Error getting id of the object. Do not make any task to preserve the original functionality
 					}
-
 				}
-
 			}
 			else if (object instanceof SecureIdContainer) {
 				for (Field field : object.getClass().getDeclaredFields()) {
@@ -110,21 +110,20 @@ public abstract class CustomSecureSerializer extends JsonSerializer<Object> {
 								value = field.get(object);
 
 								if (delegatedSerializer instanceof ContextualSerializer) {
-									efective = ((JsonSerializer<Object>) ((ContextualSerializer) delegatedSerializer).createContextual(
-											provider, getBeanProperty(secureIdName, value, trustAssertion, field.getType())));
+									JsonSerializer<Object> efective = ((JsonSerializer<Object>) ((ContextualSerializer) delegatedSerializer)
+											.createContextual(provider,
+													getBeanProperty(secureIdName, value, trustAssertion, field.getType())));
 									jsonGen.writeFieldName(secureIdName);
+									secureIdSerializer.put(secureIdName, efective);
 									efective.serialize(value, jsonGen, provider);
 								}
-								break;
 							}
 							catch (Exception e) {
 								// Error getting id of the object. Do not make any task to preserve the original functionality
 							}
 						}
-
 					}
 				}
-
 			}
 		}
 
@@ -154,7 +153,6 @@ public abstract class CustomSecureSerializer extends JsonSerializer<Object> {
 				// Search into parent classes
 				clazz = clazz.getSuperclass();
 			}
-
 		}
 
 		return null;
@@ -187,8 +185,10 @@ public abstract class CustomSecureSerializer extends JsonSerializer<Object> {
 		Object propertyValue = beanWrapper.getPropertyValue(propertyName);
 
 		jsonGen.writeFieldName(tagName);
-		if (propertyName.equals(secureIdName) && efective != null) {
-			efective.serialize(propertyValue, jsonGen, jsonProvider);
+
+		JsonSerializer<Object> jsonEfectiveSerializer = secureIdSerializer.get(propertyName);
+		if (jsonEfectiveSerializer != null) {
+			jsonEfectiveSerializer.serialize(propertyValue, jsonGen, jsonProvider);
 		}
 		else {
 			if (propertyValue == null && nullValueAsBlank) {
