@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>org.hdiv</groupId>
 		<artifactId>hdiv</artifactId>
-		<version>3.5.0-SNAPSHOT</version>
+		<version>3.5.0.RC2</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>hdiv-services</artifactId>
