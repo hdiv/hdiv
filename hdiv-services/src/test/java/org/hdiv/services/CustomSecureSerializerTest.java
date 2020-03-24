@@ -25,13 +25,13 @@ import java.beans.PropertyDescriptor;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.Arrays;
+import java.util.Map;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
-import org.springframework.util.StringUtils;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.BeanProperty;
@@ -239,45 +239,48 @@ public class CustomSecureSerializerTest {
 
 	public class CustomContextualSerializer extends JsonSerializer<Object> implements ContextualSerializer {
 
-		private final boolean identifiable;
+		private Boolean identifiable = null;
 
 		private final JsonGenerator originalJgen;
 
 		public CustomContextualSerializer(final JsonGenerator originalJgen) {
-			this(false, originalJgen);
-		}
-
-		public CustomContextualSerializer(final boolean identifiable, final JsonGenerator originalJgen) {
-			this.identifiable = identifiable;
 			this.originalJgen = originalJgen;
 		}
 
 		@Override
 		public void serialize(final Object br, final JsonGenerator jgen, final SerializerProvider provider) throws IOException {
+			if (identifiable == null) {
+				identifiable = isIdentifiable();
+			}
 			originalJgen.writeObject(br);
 			originalJgen.writeFieldName("isSecure");
 			originalJgen.writeObject(identifiable);
 		}
 
 		public JsonSerializer<?> createContextual(final SerializerProvider prov, final BeanProperty property) throws JsonMappingException {
-
-			try {
-				Field f = CustomSecureSerializer.class.getDeclaredField("secureIdName");
-				f.setAccessible(true);
-				String secureIdName = (String) f.get(serializer);
-				if (StringUtils.hasText(secureIdName)) {
-					return new CustomContextualSerializer(true, originalJgen);
-				}
-				else {
-					return new CustomContextualSerializer(false, originalJgen);
-				}
-			}
-			catch (Exception e) {
-				return this;
-			}
-
+			return new CustomContextualSerializer(originalJgen);
 		}
 
+	}
+
+	@SuppressWarnings("unchecked")
+	private boolean isIdentifiable() {
+		try {
+
+			Field f = CustomSecureSerializer.class.getDeclaredField("secureIdSerializer");
+			f.setAccessible(true);
+
+			Map<String, JsonSerializer<Object>> secureIdSerializer = (Map<String, JsonSerializer<Object>>) f.get(serializer);
+			if (!secureIdSerializer.isEmpty()) {
+				return true;
+			}
+			else {
+				return false;
+			}
+		}
+		catch (Exception e) {
+			return false;
+		}
 	}
 
 }
