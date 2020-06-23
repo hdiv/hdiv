@@ -15,14 +15,12 @@
  */
 package org.hdiv.validator;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import org.hdiv.regex.PatternMatcher;
-import org.hdiv.util.LimitedCache;
 
 /**
  * Validation rules container based in validations defined in hdiv-config.xml file.
@@ -43,10 +41,6 @@ public class DefaultValidationRepository implements ValidationRepository {
 	 */
 	protected List<IValidation> defaultValidations;
 
-	// private Entry<String, List<Entry<ValidationTarget, List<IValidation>>>> lastURLValidation;
-
-	private final LimitedCache<List<Entry<ValidationTarget, List<IValidation>>>> cachedValidations = new LimitedCache<List<Entry<ValidationTarget, List<IValidation>>>>();
-
 	/**
 	 * Returns the validation rules for a concrete url and parameter name.
 	 *
@@ -56,66 +50,30 @@ public class DefaultValidationRepository implements ValidationRepository {
 	 */
 	public List<IValidation> findValidations(final String url, final String parameter) {
 
-		List<Entry<ValidationTarget, List<IValidation>>> cachedURLValidation = cachedValidations.getCached(url);
-
-		if (cachedURLValidation != null) {
-			List<IValidation> validations = findValidationsFromLast(parameter, cachedURLValidation);
-			if (validations != null) {
-				return validations;
-			}
-		}
-		else {
-			cachedURLValidation = new ArrayList<Entry<ValidationTarget, List<IValidation>>>();
-		}
-
-		return findNewValidations(url, parameter, cachedURLValidation);
-	}
-
-	private boolean validationsMatch(final List<PatternMatcher> paramMatchers, final String parameter) {
-
-		if (paramMatchers != null && !paramMatchers.isEmpty()) {
-			for (PatternMatcher paramMatcher : paramMatchers) {
-				if (paramMatcher.matches(parameter)) {
-					return true;
-				}
-			}
-		}
-		else {
-			return true;
-		}
-
-		return false;
-	}
-
-	private List<IValidation> findValidationsFromLast(final String parameter,
-			final List<Entry<ValidationTarget, List<IValidation>>> cachedURLValidation) {
-		for (Entry<ValidationTarget, List<IValidation>> entry : cachedURLValidation) {
-			List<PatternMatcher> paramsMatcher = entry.getKey().getParams();
-			if (validationsMatch(paramsMatcher, parameter)) {
-				return entry.getValue();
-			}
-		}
-		return null;
-	}
-
-	private List<IValidation> findNewValidations(final String url, final String parameter,
-			final List<Entry<ValidationTarget, List<IValidation>>> cachedURLValidation) {
 		for (Entry<ValidationTarget, List<IValidation>> entry : validations.entrySet()) {
-
-			if (cachedURLValidation.contains(entry)) {
-				continue;
-			}
-
 			ValidationTarget target = entry.getKey();
 			PatternMatcher urlMatcher = target.getUrl();
 
 			// Null URL is equivalent to all URLs.
 			if (urlMatcher == null || urlMatcher.matches(url)) {
 
-				cachedURLValidation.add(entry);
-				cachedValidations.register(url, cachedURLValidation);
+				List<PatternMatcher> paramMatchers = target.getParams();
+				boolean paramMatch = false;
 
-				if (validationsMatch(target.getParams(), parameter)) {
+				if (paramMatchers != null && !paramMatchers.isEmpty()) {
+					for (PatternMatcher paramMatcher : paramMatchers) {
+						if (paramMatcher.matches(parameter)) {
+							paramMatch = true;
+							break;
+						}
+					}
+				}
+				else {
+					paramMatch = true;
+				}
+
+				if (paramMatch) {
+
 					return entry.getValue();
 				}
 			}
