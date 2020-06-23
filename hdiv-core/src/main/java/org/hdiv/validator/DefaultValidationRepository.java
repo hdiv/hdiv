@@ -43,8 +43,6 @@ public class DefaultValidationRepository implements ValidationRepository {
 	 */
 	protected List<IValidation> defaultValidations;
 
-	// private Entry<String, List<Entry<ValidationTarget, List<IValidation>>>> lastURLValidation;
-
 	private final LimitedCache<List<Entry<ValidationTarget, List<IValidation>>>> cachedValidations = new LimitedCache<List<Entry<ValidationTarget, List<IValidation>>>>();
 
 	/**
