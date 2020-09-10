@@ -106,58 +106,58 @@ public class CustomSecureSerializerTest {
 	@Test
 	public void emptySecureIdentifiableSerializationTest() throws Exception {
 		serializer.serialize(new SecuredTestBean(), jsonGenerator, null);
-		verify(jsonGenerator, times(2)).writeFieldName("isSecure");
-		verify(jsonGenerator, times(2)).writeFieldName("id");
+		verify(jsonGenerator, times(1)).writeFieldName("isSecure");
+		verify(jsonGenerator, times(1)).writeFieldName("id");
 		verify(jsonGenerator).writeFieldName("otherAttr");
 		verify(jsonGenerator).writeFieldName("otherAttr2");
-		verify(jsonGenerator, times(6)).writeFieldName(anyString());
-		verify(jsonGenerator, times(4)).writeObject(null);
-		verify(jsonGenerator, times(2)).writeObject(true);
+		verify(jsonGenerator, times(4)).writeFieldName(anyString());
+		verify(jsonGenerator, times(3)).writeObject(null);
+		verify(jsonGenerator, times(1)).writeObject(true);
 	}
 
 	@Test
 	public void secureIdentifiableSerializationTest() throws Exception {
 		serializer.serialize(new SecuredTestBean(1L, "testValue1", "testValue2"), jsonGenerator, null);
-		verify(jsonGenerator, times(2)).writeFieldName("isSecure");
-		verify(jsonGenerator, times(2)).writeFieldName("id");
+		verify(jsonGenerator, times(1)).writeFieldName("isSecure");
+		verify(jsonGenerator, times(1)).writeFieldName("id");
 		verify(jsonGenerator).writeFieldName("otherAttr");
 		verify(jsonGenerator).writeFieldName("otherAttr2");
-		verify(jsonGenerator, times(2)).writeObject(true);
-		verify(jsonGenerator, times(2)).writeObject(1L);
+		verify(jsonGenerator, times(1)).writeObject(true);
+		verify(jsonGenerator, times(1)).writeObject(1L);
 		verify(jsonGenerator).writeObject("testValue1");
 		verify(jsonGenerator).writeObject("testValue2");
-		verify(jsonGenerator, times(6)).writeFieldName(anyString());
-		verify(jsonGenerator, times(6)).writeObject(Mockito.any());
+		verify(jsonGenerator, times(4)).writeFieldName(anyString());
+		verify(jsonGenerator, times(4)).writeObject(Mockito.any());
 	}
 
 	@Test
 	public void emptyTrustedIdentifiableSerializationTest() throws Exception {
 		serializer.serialize(new TrustedTestBean(), jsonGenerator, null);
-		verify(jsonGenerator, times(2)).writeFieldName("isSecure");
-		verify(jsonGenerator, times(2)).writeFieldName("code");
+		verify(jsonGenerator, times(1)).writeFieldName("isSecure");
+		verify(jsonGenerator, times(1)).writeFieldName("code");
 		verify(jsonGenerator).writeFieldName("id");
 		verify(jsonGenerator).writeFieldName("otherAttr");
 		verify(jsonGenerator).writeFieldName("otherAttr2");
-		verify(jsonGenerator, times(7)).writeFieldName(anyString());
-		verify(jsonGenerator, times(5)).writeObject(null);
-		verify(jsonGenerator, times(2)).writeObject(true);
+		verify(jsonGenerator, times(5)).writeFieldName(anyString());
+		verify(jsonGenerator, times(4)).writeObject(null);
+		verify(jsonGenerator, times(1)).writeObject(true);
 	}
 
 	@Test
 	public void TrustedSerializationTest() throws Exception {
 		serializer.serialize(new TrustedTestBean(2L, 1L, "testValue1", "testValue2"), jsonGenerator, null);
-		verify(jsonGenerator, times(2)).writeFieldName("isSecure");
-		verify(jsonGenerator, times(2)).writeFieldName("code");
+		verify(jsonGenerator, times(1)).writeFieldName("isSecure");
+		verify(jsonGenerator, times(1)).writeFieldName("code");
 		verify(jsonGenerator).writeFieldName("id");
 		verify(jsonGenerator).writeFieldName("otherAttr");
 		verify(jsonGenerator).writeFieldName("otherAttr2");
-		verify(jsonGenerator, times(2)).writeObject(true);
-		verify(jsonGenerator, times(2)).writeObject(2L);
+		verify(jsonGenerator, times(1)).writeObject(true);
+		verify(jsonGenerator, times(1)).writeObject(2L);
 		verify(jsonGenerator).writeObject(1L);
 		verify(jsonGenerator).writeObject("testValue1");
 		verify(jsonGenerator).writeObject("testValue2");
-		verify(jsonGenerator, times(7)).writeFieldName(anyString());
-		verify(jsonGenerator, times(7)).writeObject(Mockito.any());
+		verify(jsonGenerator, times(5)).writeFieldName(anyString());
+		verify(jsonGenerator, times(5)).writeObject(Mockito.any());
 	}
 
 	public class TestBean {
