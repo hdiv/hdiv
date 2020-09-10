@@ -90,9 +90,12 @@ public abstract class CustomSecureSerializer extends JsonSerializer<Object> {
 						JsonSerializer<Object> efective = (JsonSerializer<Object>) ((ContextualSerializer) delegatedSerializer)
 								.createContextual(provider, getBeanProperty(secureIdName, value, null,
 										identifiableField != null ? identifiableField.getType() : null));
-						jsonGen.writeFieldName(secureIdName);
+						// jsonGen.writeFieldName(secureIdName);
 						secureIdSerializer.put(secureIdName, efective);
-						efective.serialize(value, jsonGen, provider);
+						if (jsonGen.getCurrentValue() == null) {
+							jsonGen.setCurrentValue(object);
+						}
+						// efective.serialize(value, jsonGen, provider);
 					}
 					catch (Exception e) {
 						// Error getting id of the object. Do not make any task to preserve the original functionality
@@ -113,9 +116,12 @@ public abstract class CustomSecureSerializer extends JsonSerializer<Object> {
 									JsonSerializer<Object> efective = ((JsonSerializer<Object>) ((ContextualSerializer) delegatedSerializer)
 											.createContextual(provider,
 													getBeanProperty(secureIdName, value, trustAssertion, field.getType())));
-									jsonGen.writeFieldName(secureIdName);
+									// jsonGen.writeFieldName(secureIdName);
 									secureIdSerializer.put(secureIdName, efective);
-									efective.serialize(value, jsonGen, provider);
+									if (jsonGen.getCurrentValue() == null) {
+										jsonGen.setCurrentValue(object);
+									}
+									// efective.serialize(value, jsonGen, provider);
 								}
 							}
 							catch (Exception e) {
