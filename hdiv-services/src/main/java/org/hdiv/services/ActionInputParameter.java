@@ -175,4 +175,6 @@ public interface ActionInputParameter {
 
 	boolean isIgnored();
 
+	void setValue(final Object value);
+
 }
