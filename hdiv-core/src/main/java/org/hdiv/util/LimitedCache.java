@@ -13,32 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.hdiv.services;
+package org.hdiv.util;
 
-public enum HttpParameterType {
-	PATH_VARIABLE, PARAM, JSONPARAM, HEADER, BODY, NESTED;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
-	@Override
-	public String toString() {
-		switch (this) {
-		case BODY:
-			return "RequestBody";
+public class LimitedCache<T> {
 
-		case PATH_VARIABLE:
-			return "PathVariable";
+	private static final int CACHE_LIMIT = 5;
 
-		case PARAM:
-			return "RequestParam";
+	private final LinkedHashMap<String, T> cache = new LinkedHashMap<String, T>(CACHE_LIMIT + 1) {
 
-		case JSONPARAM:
-			return "JsonRequestParam";
+		private static final long serialVersionUID = 870739249442571505L;
 
-		case HEADER:
-			return "RequestHeader";
-
-		default:
-			return "Nested";
+		@Override
+		protected boolean removeEldestEntry(final Map.Entry<String, T> eldest) {
+			return size() > CACHE_LIMIT;
 		}
+	};
+
+	public void register(final String key, final T value) {
+		cache.put(key, value);
 	}
 
+	public T getCached(final String key) {
+		return cache.get(key);
+	}
 }

@@ -67,12 +67,6 @@ public interface ActionInputParameter {
 	void setHtmlInputFieldType(Type type);
 
 	/**
-	 * Returns the type of parameter
-	 * @return parameter type
-	 */
-	HttpParameterType getHttpParameterType();
-
-	/**
 	 * Parameter has input constraints (like range, step etc.)
 	 *
 	 * @return true for input constraints
