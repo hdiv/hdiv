@@ -14,7 +14,7 @@
 	<description>Web Application Security Framework</description>
 
 	<properties>
-		<org.grails.version>2.2.0</org.grails.version>
+		<org.grails.version>3.3.10</org.grails.version>
 		<org.springframework.version>4.0.0.RELEASE</org.springframework.version>
 	</properties>
 
