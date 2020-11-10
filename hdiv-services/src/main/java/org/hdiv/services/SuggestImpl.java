@@ -15,13 +15,10 @@
  */
 package org.hdiv.services;
 
-import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-
-import org.springframework.hateoas.Identifiable;
 
 public class SuggestImpl<T> implements Suggest<T> {
 
@@ -77,14 +74,14 @@ public class SuggestImpl<T> implements Suggest<T> {
 		return suggests;
 	}
 
-	public static <T extends Serializable, S extends Identifiable<T>> List<Suggest<T>> wrapIdentifiable(final Collection<S> list,
-			final String valueField) {
-		List<Suggest<T>> suggests = new ArrayList<Suggest<T>>(list.size());
-		for (S value : list) {
-			suggests.add(new SuggestImpl<T>(value.getId(), valueField));
-		}
-		return suggests;
-	}
+	// public static <T extends Serializable, S extends Identifiable<T>> List<Suggest<T>> wrapIdentifiable(final Collection<S> list,
+	// final String valueField) {
+	// List<Suggest<T>> suggests = new ArrayList<Suggest<T>>(list.size());
+	// for (S value : list) {
+	// suggests.add(new SuggestImpl<T>(value.getId(), valueField));
+	// }
+	// return suggests;
+	// }
 
 	public static <T, S> List<Suggest<T>> wrap(final Collection<S> list, final String valueField, final SuggestSupplier<S, T> supplier) {
 		List<Suggest<T>> suggests = new ArrayList<Suggest<T>>(list.size());
