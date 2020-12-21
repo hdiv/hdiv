@@ -15,27 +15,30 @@
  */
 package org.hdiv.services;
 
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 
-import org.aopalliance.intercept.MethodInterceptor;
-import org.springframework.aop.framework.ProxyFactory;
-import org.springframework.aop.target.EmptyTargetSource;
-import org.springframework.cglib.proxy.Callback;
-import org.springframework.cglib.proxy.Enhancer;
-import org.springframework.cglib.proxy.Factory;
-import org.springframework.cglib.proxy.MethodProxy;
 import org.springframework.core.ResolvableType;
-import org.springframework.objenesis.ObjenesisStd;
-import org.springframework.util.Assert;
-import org.springframework.util.ReflectionUtils;
 
 public class Path {
 
-	public static ThreadLocal<RecordingMethodInterceptor> interceptorThreadLocal = new ThreadLocal<Path.RecordingMethodInterceptor>();
+	private static boolean USING_SPRING;
+	static {
+		try {
+			Class.forName("org.springframework.aop.framework.ProxyFactory");
+			Class.forName("org.springframework.aop.target.EmptyTargetSource");
+			Class.forName("org.springframework.cglib.proxy.Callback");
+			Class.forName("org.springframework.cglib.proxy.Enhancer");
+			Class.forName("org.springframework.cglib.proxy.Factory");
+			Class.forName("org.springframework.objenesis.ObjenesisStd");
+			USING_SPRING = true;
+		}
+		catch (Exception e) {
+			USING_SPRING = false;
+		}
+	}
+
+	public static ThreadLocal<HdivMethodInterceptor> interceptorThreadLocal = new ThreadLocal<HdivMethodInterceptor>();
 
 	private static InvocationMethodProvider invocationMethodProvider = null;
 
@@ -45,7 +48,8 @@ public class Path {
 
 	public static InvocationMethodProvider getInvocationMethodProvider() {
 		if (invocationMethodProvider == null) {
-			throw new RuntimeException("No InvocationMethodProvider has been registered. Register one to run.");
+			// TODO: XAS.do not throw an exception. Use a default invocation method provider
+			// throw new RuntimeException("No InvocationMethodProvider has been registered. Register one to run.");
 		}
 		return invocationMethodProvider;
 	}
@@ -57,29 +61,31 @@ public class Path {
 	public static <T> T on(final Class<T> type, final boolean init) {
 		if (init) {
 			interceptorThreadLocal.remove();
-			interceptorThreadLocal.set(new RecordingMethodInterceptor(type));
+			InvocationMethodProvider invocationMethodProvider = getInvocationMethodProvider();
+			// XAS. Not sure about that. Use default dummy proxy and interceptor if no invocationMethodProvider is set
+			if (invocationMethodProvider == null) {
+				interceptorThreadLocal.set(new HdivEmptyMethodInterceptor());
+			}
+			else {
+				interceptorThreadLocal.set(getInterceptor(getInvocationMethodProvider(), getHdivProxyFactory(), type));
+			}
 		}
-		return getProxyWithInterceptor(type, interceptorThreadLocal.get(), type.getClassLoader());
+		return getHdivProxyFactory().getProxyWithInterceptor(type, interceptorThreadLocal.get(), type.getClassLoader());
 	}
 
-	public static <T> T on(final Class<T> type, final RecordingMethodInterceptor rmi) {
-		return getProxyWithInterceptor(type, rmi, type.getClassLoader());
+	public static <T> T on(final Class<T> type, final HdivMethodInterceptor rmi) {
+		return getHdivProxyFactory().getProxyWithInterceptor(type, rmi, type.getClassLoader());
 	}
 
 	@SuppressWarnings("unchecked")
 	public static <T> T collection(final Collection<? extends T> collection) {
-		// Assert.isInstanceOf(LastInvocationAware.class, collection);
-
-		// ResolvableType resolvable = ResolvableType.forMethodReturnType(((LastInvocationAware)
-		// collection).getLastInvocation().getMethod());
 		ResolvableType resolvable = ResolvableType.forMethodReturnType(getInvocationMethodProvider().getLastInvocationMethod(collection));
 
 		return on((Class<T>) resolvable.getGeneric(0).getRawClass(), false);
 	}
 
 	@SuppressWarnings("unchecked")
-	public static <T> T collection(final Collection<? extends T> collection, final RecordingMethodInterceptor rmi) {
-		// Assert.isInstanceOf(LastInvocationAware.class, collection);
+	public static <T> T collection(final Collection<? extends T> collection, final HdivMethodInterceptor rmi) {
 
 		ResolvableType resolvable = ResolvableType.forMethodReturnType(getInvocationMethodProvider().getLastInvocationMethod(collection));
 
@@ -87,20 +93,14 @@ public class Path {
 	}
 
 	public static String path(final Object obj) {
-		RecordingMethodInterceptor interceptor = interceptorThreadLocal.get();
-		Assert.notNull(interceptor, "Path.on(Class) should be called first");
+		HdivMethodInterceptor interceptor = interceptorThreadLocal.get();
+		if (interceptor == null) {
+
+			throw new IllegalArgumentException("Path.on(Class) should be called first");
+		}
 		interceptorThreadLocal.remove();
 		return interceptor.getInvocation().toString();
 	}
-
-	// public interface HdivMethodInvocation {
-	//
-	// Object[] getArguments();
-	//
-	// Method getMethod();
-	//
-	// Class<?> getTargetType();
-	// }
 
 	public static interface InvocationAdvice {
 		Object getInvocation();
@@ -108,154 +108,32 @@ public class Path {
 		Iterator<Object> getObjectParameters();
 	}
 
-	public static class RecordingMethodInterceptor implements MethodInterceptor, InvocationAdvice, // LastInvocationAware,
-			org.springframework.cglib.proxy.MethodInterceptor {
-
-		// private static final Method GET_INVOCATIONS;
-		//
-		// private static final Method GET_OBJECT_PARAMETERS;
-
-		private final Class<?> targetType;
-
-		private final Object[] objectParameters;
-
-		private Object invocation;
-
-		// static {
-		// GET_INVOCATIONS = ReflectionUtils.findMethod(LastInvocationAware.class, "getLastInvocation");
-		// GET_OBJECT_PARAMETERS = ReflectionUtils.findMethod(LastInvocationAware.class, "getObjectParameters");
-		// }
-
-		public RecordingMethodInterceptor(final Class<?> targetType, final Object... objectParameters) {
-			this.targetType = targetType;
-			this.objectParameters = objectParameters;
+	public static <T> HdivProxyFactory getHdivProxyFactory() {
+		if (USING_SPRING) {
+			return SpringHdivProxyFactory.getInstance();
 		}
-
-		public Iterator<Object> getObjectParameters() {
-			return Arrays.asList(objectParameters).iterator();
-		}
-
-		public Object getInvocation() {
-			return invocation;
-		}
-
-		public Object invoke(final org.aopalliance.intercept.MethodInvocation invocation) throws Throwable {
-			return intercept(invocation.getThis(), invocation.getMethod(), invocation.getArguments(), null);
-		}
-
-		public Object intercept(final Object obj, final Method method, final Object[] args, final MethodProxy arg3) throws Throwable {
-			// if (GET_INVOCATIONS.equals(method)) {
-			if (getInvocationMethodProvider().getLastInvocationDefMethod().equals(method)) {
-				return getInvocation();
-			}
-			// else if (GET_OBJECT_PARAMETERS.equals(method)) {
-			else if (getInvocationMethodProvider().getObjectParametersDefMethod().equals(method)) {
-				return getObjectParameters();
-			}
-			else if (Object.class.equals(method.getDeclaringClass())) {
-				return ReflectionUtils.invokeMethod(method, obj, args);
-			}
-			invocation = getInvocationMethodProvider().getMethodInvocationIntance(targetType, method, args, getInvocation());
-
-			Class<?> returnType = method.getReturnType();
-			if (Modifier.isFinal(returnType.getModifiers())) {
-				return null;
-			}
-			else {
-				return returnType.cast(getProxyWithInterceptor(returnType, this, obj.getClass().getClassLoader()));
-			}
+		else {
+			return JavaHdivProxyFactory.getInstance();
 		}
 
 	}
 
-	private static ObjenesisStd OBJENESIS = new ObjenesisStd();
-
-	private static <T> T getProxyWithInterceptor(final Class<?> type, final RecordingMethodInterceptor interceptor,
-			final ClassLoader classLoader) {
-		return getProxyWithInterceptor(type, interceptor, classLoader, false);
-	}
-
-	@SuppressWarnings("unchecked")
-	private static <T> T getProxyWithInterceptor(final Class<?> type, final RecordingMethodInterceptor interceptor,
-			final ClassLoader classLoader, final boolean isfinal) {
-
-		if (type.isInterface()) {
-
-			ProxyFactory factory = new ProxyFactory(EmptyTargetSource.INSTANCE);
-			factory.addInterface(type);
-			// factory.addInterface(LastInvocationAware.class);
-			factory.addInterface(getInvocationMethodProvider().getInvokationAwareClass());
-			factory.addAdvice(interceptor);
-
-			return (T) factory.getProxy();
+	public static HdivMethodInterceptor getInterceptor(final InvocationMethodProvider invocationMethodProvider,
+			final HdivProxyFactory hdivProxyFactory, final Class<?> targetType) {
+		if (USING_SPRING) {
+			return new RecordingMethodInterceptor(invocationMethodProvider, hdivProxyFactory, targetType);
 		}
-
-		Enhancer enhancer = new Enhancer();
-		enhancer.setSuperclass(type);
-		// enhancer.setInterfaces(new Class<?>[] { LastInvocationAware.class });
-		enhancer.setInterfaces(new Class<?>[] { getInvocationMethodProvider().getInvokationAwareClass() });
-		enhancer.setCallbackType(org.springframework.cglib.proxy.MethodInterceptor.class);
-		enhancer.setClassLoader(classLoader);
-
-		Factory factory = (Factory) OBJENESIS.newInstance(enhancer.createClass());
-		factory.setCallbacks(new Callback[] { interceptor });
-		return (T) factory;
+		else {
+			return new HdivDefaultMethodInterceptor(invocationMethodProvider, hdivProxyFactory, targetType);
+		}
 	}
-
-	// static class SimpleMethodInvocation implements HdivMethodInvocation {
-	//
-	// private final Class<?> targetType;
-	//
-	// private final Method method;
-	//
-	// private final Object[] arguments;
-	//
-	// private final HdivMethodInvocation invocation;
-	//
-	// /**
-	// * Creates a new {@link SimpleMethodInvocation} for the given {@link Method} and arguments.
-	// *
-	// * @param method
-	// * @param arguments
-	// */
-	// private SimpleMethodInvocation(final Class<?> targetType, final Method method, final Object[] arguments,
-	// final HdivMethodInvocation invocation) {
-	//
-	// this.targetType = targetType;
-	// this.arguments = arguments;
-	// this.method = method;
-	// this.invocation = invocation;
-	// }
-	//
-	// public Class<?> getTargetType() {
-	// return targetType;
-	// }
-	//
-	// public Object[] getArguments() {
-	// return arguments;
-	// }
-	//
-	// public Method getMethod() {
-	// return method;
-	// }
-	//
-	// @Override
-	// public String toString() {
-	// return (invocation != null ? invocation.toString() + "." : "") + getPropertyFromMethod(method);
-	// }
-	//
-	// private String getPropertyFromMethod(final Method method) {
-	// String name = method.getName();
-	// return Introspector.decapitalize(name.substring(name.startsWith("is") ? 2 : 3));
-	// }
-	// }
 
 	public static class PathBuilder {
 
-		private RecordingMethodInterceptor rmi;
+		private HdivMethodInterceptor rmi;
 
 		public <T> T on(final Class<T> clazz) {
-			rmi = new RecordingMethodInterceptor(clazz);
+			rmi = getInterceptor(getInvocationMethodProvider(), getHdivProxyFactory(), clazz);
 			T on = Path.on(clazz, rmi);
 			return on;
 		}

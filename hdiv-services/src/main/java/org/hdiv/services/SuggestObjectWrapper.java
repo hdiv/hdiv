@@ -15,49 +15,8 @@
  */
 package org.hdiv.services;
 
-public class SuggestObjectWrapper<T> {
+public interface SuggestObjectWrapper<T> {
 
-	public static final String ID = Path.path(Path.on(SuggestObjectWrapper.class).getSvalue());
-
-	private final String svalue;
-
-	public SuggestObjectWrapper(final String id) {
-		this.svalue = id;
-	}
-
-	public String getSvalue() {
-		return svalue;
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + (svalue == null ? 0 : svalue.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(final Object obj) {
-		if (this == obj) {
-			return true;
-		}
-		if (obj == null) {
-			return false;
-		}
-		if (getClass() != obj.getClass()) {
-			return false;
-		}
-		SuggestObjectWrapper<?> other = (SuggestObjectWrapper<?>) obj;
-		if (svalue == null) {
-			if (other.svalue != null) {
-				return false;
-			}
-		}
-		else if (!svalue.equals(other.svalue)) {
-			return false;
-		}
-		return true;
-	}
+	public String getSvalue();
 
 }

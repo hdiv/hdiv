@@ -27,7 +27,7 @@ package org.hdiv.services;
 
 import java.util.List;
 
-public class StringOptions implements Options<SuggestObjectWrapper<String>> {
+public class StringOptions implements Options<SuggestObjectWrapperImpl<String>> {
 
 	/**
 	 * Allows to specify possible values for an argument. This allows an {@link ActionDescriptor} to determine possible values for an action
@@ -42,7 +42,7 @@ public class StringOptions implements Options<SuggestObjectWrapper<String>> {
 	 * }
 	 * </pre>
 	 */
-	public List<Suggest<SuggestObjectWrapper<String>>> get(final String[] value, final Object... args) {
+	public List<Suggest<SuggestObjectWrapperImpl<String>>> get(final String[] value, final Object... args) {
 		return SimpleSuggest.wrap(value);
 	}
 }
