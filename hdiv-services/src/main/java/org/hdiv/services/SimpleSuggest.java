@@ -18,20 +18,20 @@ package org.hdiv.services;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SimpleSuggest<T> extends SuggestImpl<SuggestObjectWrapper<T>> {
+public class SimpleSuggest<T> extends SuggestImpl<SuggestObjectWrapper> {
 
 	public SimpleSuggest(final String svalue) {
-		this(new SuggestObjectWrapper<T>(svalue));
+		this(new SuggestObjectWrapper(svalue));
 	}
 
-	public SimpleSuggest(final SuggestObjectWrapper<T> wrapper) {
+	public SimpleSuggest(final SuggestObjectWrapper wrapper) {
 		super(wrapper, SuggestObjectWrapper.ID);
 	}
 
-	public static <T> List<Suggest<SuggestObjectWrapper<T>>> wrap(final T[] values) {
-		List<Suggest<SuggestObjectWrapper<T>>> suggests = new ArrayList<Suggest<SuggestObjectWrapper<T>>>(values.length);
+	public static <T> List<Suggest<SuggestObjectWrapper>> wrap(final T[] values) {
+		List<Suggest<SuggestObjectWrapper>> suggests = new ArrayList<Suggest<SuggestObjectWrapper>>(values.length);
 		for (int i = 0; i < values.length; i++) {
-			suggests.add(new SimpleSuggest<T>(new SuggestObjectWrapper<T>(String.valueOf(values[i]))));
+			suggests.add(new SimpleSuggest<T>(new SuggestObjectWrapper(String.valueOf(values[i]))));
 		}
 		return suggests;
 	}
