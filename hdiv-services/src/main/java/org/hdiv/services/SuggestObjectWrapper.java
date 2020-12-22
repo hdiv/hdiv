@@ -17,7 +17,7 @@ package org.hdiv.services;
 
 public class SuggestObjectWrapper {
 
-	public static final String ID = Path.path(Path.on(SuggestObjectWrapper.class).getSvalue());
+	public static final String ID = "svalue";
 
 	private final String svalue;
 
