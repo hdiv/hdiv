@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>org.hdiv</groupId>
 		<artifactId>hdiv</artifactId>
-		<version>3.5.0-RC6-SNAPSHOT</version>
+		<version>3.5.1-RC1-SNAPSHOT</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>hdiv-services</artifactId>
@@ -32,12 +32,6 @@
   			<version>4.3.5.RELEASE</version>
   			<scope>provided</scope>
 		</dependency>
-<!-- 		<dependency> -->
-<!-- 			<groupId>org.springframework.hateoas</groupId> -->
-<!-- 			<artifactId>spring-hateoas</artifactId> -->
-<!-- 			<version>0.23.0.RELEASE</version> -->
-<!-- 			<scope>provided</scope> -->
-<!-- 		</dependency> -->
 		<dependency>
 			<groupId>org.hdiv</groupId>
 			<artifactId>hdiv-core</artifactId>
@@ -68,6 +62,13 @@
 			<version>4.12</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.hateoas</groupId>
+			<artifactId>spring-hateoas</artifactId>
+			<version>0.23.0.RELEASE</version>
+			<scope>test</scope>
+		</dependency>
+		
 	</dependencies>
 
 	<build>

@@ -15,14 +15,14 @@
  */
 package org.hdiv.services;
 
-public class SuggestObjectWrapper<T> {
+public class SuggestObjectWrapper {
 
-	public static final String ID = Path.path(Path.on(SuggestObjectWrapper.class).getSvalue());
+	public static final String ID = "svalue";
 
 	private final String svalue;
 
 	public SuggestObjectWrapper(final String id) {
-		this.svalue = id;
+		svalue = id;
 	}
 
 	public String getSvalue() {
@@ -48,7 +48,7 @@ public class SuggestObjectWrapper<T> {
 		if (getClass() != obj.getClass()) {
 			return false;
 		}
-		SuggestObjectWrapper<?> other = (SuggestObjectWrapper<?>) obj;
+		SuggestObjectWrapper other = (SuggestObjectWrapper) obj;
 		if (svalue == null) {
 			if (other.svalue != null) {
 				return false;
