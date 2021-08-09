@@ -68,10 +68,7 @@ public class Path {
 
 	@SuppressWarnings("unchecked")
 	public static <T> T collection(final Collection<? extends T> collection) {
-		// Assert.isInstanceOf(LastInvocationAware.class, collection);
-
-		// ResolvableType resolvable = ResolvableType.forMethodReturnType(((LastInvocationAware)
-		// collection).getLastInvocation().getMethod());
+	
 		ResolvableType resolvable = ResolvableType.forMethodReturnType(getInvocationMethodProvider().getLastInvocationMethod(collection));
 
 		return on((Class<T>) resolvable.getGeneric(0).getRawClass(), false);
@@ -79,8 +76,7 @@ public class Path {
 
 	@SuppressWarnings("unchecked")
 	public static <T> T collection(final Collection<? extends T> collection, final RecordingMethodInterceptor rmi) {
-		// Assert.isInstanceOf(LastInvocationAware.class, collection);
-
+	
 		ResolvableType resolvable = ResolvableType.forMethodReturnType(getInvocationMethodProvider().getLastInvocationMethod(collection));
 
 		return on((Class<T>) resolvable.getGeneric(0).getRawClass(), rmi);
@@ -93,15 +89,6 @@ public class Path {
 		return interceptor.getInvocation().toString();
 	}
 
-	// public interface HdivMethodInvocation {
-	//
-	// Object[] getArguments();
-	//
-	// Method getMethod();
-	//
-	// Class<?> getTargetType();
-	// }
-
 	public static interface InvocationAdvice {
 		Object getInvocation();
 
@@ -111,20 +98,11 @@ public class Path {
 	public static class RecordingMethodInterceptor implements MethodInterceptor, InvocationAdvice, // LastInvocationAware,
 			org.springframework.cglib.proxy.MethodInterceptor {
 
-		// private static final Method GET_INVOCATIONS;
-		//
-		// private static final Method GET_OBJECT_PARAMETERS;
-
 		private final Class<?> targetType;
 
 		private final Object[] objectParameters;
 
 		private Object invocation;
-
-		// static {
-		// GET_INVOCATIONS = ReflectionUtils.findMethod(LastInvocationAware.class, "getLastInvocation");
-		// GET_OBJECT_PARAMETERS = ReflectionUtils.findMethod(LastInvocationAware.class, "getObjectParameters");
-		// }
 
 		public RecordingMethodInterceptor(final Class<?> targetType, final Object... objectParameters) {
 			this.targetType = targetType;
@@ -144,11 +122,9 @@ public class Path {
 		}
 
 		public Object intercept(final Object obj, final Method method, final Object[] args, final MethodProxy arg3) throws Throwable {
-			// if (GET_INVOCATIONS.equals(method)) {
 			if (getInvocationMethodProvider().getLastInvocationDefMethod().equals(method)) {
 				return getInvocation();
 			}
-			// else if (GET_OBJECT_PARAMETERS.equals(method)) {
 			else if (getInvocationMethodProvider().getObjectParametersDefMethod().equals(method)) {
 				return getObjectParameters();
 			}
@@ -183,7 +159,6 @@ public class Path {
 
 			ProxyFactory factory = new ProxyFactory(EmptyTargetSource.INSTANCE);
 			factory.addInterface(type);
-			// factory.addInterface(LastInvocationAware.class);
 			factory.addInterface(getInvocationMethodProvider().getInvokationAwareClass());
 			factory.addAdvice(interceptor);
 
@@ -192,7 +167,6 @@ public class Path {
 
 		Enhancer enhancer = new Enhancer();
 		enhancer.setSuperclass(type);
-		// enhancer.setInterfaces(new Class<?>[] { LastInvocationAware.class });
 		enhancer.setInterfaces(new Class<?>[] { getInvocationMethodProvider().getInvokationAwareClass() });
 		enhancer.setCallbackType(org.springframework.cglib.proxy.MethodInterceptor.class);
 		enhancer.setClassLoader(classLoader);
@@ -201,54 +175,6 @@ public class Path {
 		factory.setCallbacks(new Callback[] { interceptor });
 		return (T) factory;
 	}
-
-	// static class SimpleMethodInvocation implements HdivMethodInvocation {
-	//
-	// private final Class<?> targetType;
-	//
-	// private final Method method;
-	//
-	// private final Object[] arguments;
-	//
-	// private final HdivMethodInvocation invocation;
-	//
-	// /**
-	// * Creates a new {@link SimpleMethodInvocation} for the given {@link Method} and arguments.
-	// *
-	// * @param method
-	// * @param arguments
-	// */
-	// private SimpleMethodInvocation(final Class<?> targetType, final Method method, final Object[] arguments,
-	// final HdivMethodInvocation invocation) {
-	//
-	// this.targetType = targetType;
-	// this.arguments = arguments;
-	// this.method = method;
-	// this.invocation = invocation;
-	// }
-	//
-	// public Class<?> getTargetType() {
-	// return targetType;
-	// }
-	//
-	// public Object[] getArguments() {
-	// return arguments;
-	// }
-	//
-	// public Method getMethod() {
-	// return method;
-	// }
-	//
-	// @Override
-	// public String toString() {
-	// return (invocation != null ? invocation.toString() + "." : "") + getPropertyFromMethod(method);
-	// }
-	//
-	// private String getPropertyFromMethod(final Method method) {
-	// String name = method.getName();
-	// return Introspector.decapitalize(name.substring(name.startsWith("is") ? 2 : 3));
-	// }
-	// }
 
 	public static class PathBuilder {
 
