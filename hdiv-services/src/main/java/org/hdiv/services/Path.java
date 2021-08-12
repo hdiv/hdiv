@@ -15,7 +15,6 @@
  */
 package org.hdiv.services;
 
-import java.beans.Introspector;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
@@ -30,8 +29,6 @@ import org.springframework.cglib.proxy.Enhancer;
 import org.springframework.cglib.proxy.Factory;
 import org.springframework.cglib.proxy.MethodProxy;
 import org.springframework.core.ResolvableType;
-import org.springframework.hateoas.core.DummyInvocationUtils.LastInvocationAware;
-import org.springframework.hateoas.core.DummyInvocationUtils.MethodInvocation;
 import org.springframework.objenesis.ObjenesisStd;
 import org.springframework.util.Assert;
 import org.springframework.util.ReflectionUtils;
@@ -39,6 +36,19 @@ import org.springframework.util.ReflectionUtils;
 public class Path {
 
 	public static ThreadLocal<RecordingMethodInterceptor> interceptorThreadLocal = new ThreadLocal<Path.RecordingMethodInterceptor>();
+
+	private static InvocationMethodProvider invocationMethodProvider = null;
+
+	public static void registerInvocationMethodProvider(final InvocationMethodProvider invocationMethodProvider) {
+		Path.invocationMethodProvider = invocationMethodProvider;
+	}
+
+	public static InvocationMethodProvider getInvocationMethodProvider() {
+		if (invocationMethodProvider == null) {
+			throw new RuntimeException("No InvocationMethodProvider has been registered. Register one to run.");
+		}
+		return invocationMethodProvider;
+	}
 
 	public static <T> T on(final Class<T> type) {
 		return on(type, true);
@@ -58,18 +68,16 @@ public class Path {
 
 	@SuppressWarnings("unchecked")
 	public static <T> T collection(final Collection<? extends T> collection) {
-		Assert.isInstanceOf(LastInvocationAware.class, collection);
-
-		ResolvableType resolvable = ResolvableType.forMethodReturnType(((LastInvocationAware) collection).getLastInvocation().getMethod());
+	
+		ResolvableType resolvable = ResolvableType.forMethodReturnType(getInvocationMethodProvider().getLastInvocationMethod(collection));
 
 		return on((Class<T>) resolvable.getGeneric(0).getRawClass(), false);
 	}
 
 	@SuppressWarnings("unchecked")
 	public static <T> T collection(final Collection<? extends T> collection, final RecordingMethodInterceptor rmi) {
-		Assert.isInstanceOf(LastInvocationAware.class, collection);
-
-		ResolvableType resolvable = ResolvableType.forMethodReturnType(((LastInvocationAware) collection).getLastInvocation().getMethod());
+	
+		ResolvableType resolvable = ResolvableType.forMethodReturnType(getInvocationMethodProvider().getLastInvocationMethod(collection));
 
 		return on((Class<T>) resolvable.getGeneric(0).getRawClass(), rmi);
 	}
@@ -78,26 +86,23 @@ public class Path {
 		RecordingMethodInterceptor interceptor = interceptorThreadLocal.get();
 		Assert.notNull(interceptor, "Path.on(Class) should be called first");
 		interceptorThreadLocal.remove();
-		return interceptor.getLastInvocation().toString();
+		return interceptor.getInvocation().toString();
 	}
 
-	public static class RecordingMethodInterceptor
-			implements MethodInterceptor, LastInvocationAware, org.springframework.cglib.proxy.MethodInterceptor {
+	public static interface InvocationAdvice {
+		Object getInvocation();
 
-		private static final Method GET_INVOCATIONS;
+		Iterator<Object> getObjectParameters();
+	}
 
-		private static final Method GET_OBJECT_PARAMETERS;
+	public static class RecordingMethodInterceptor implements MethodInterceptor, InvocationAdvice, // LastInvocationAware,
+			org.springframework.cglib.proxy.MethodInterceptor {
 
 		private final Class<?> targetType;
 
 		private final Object[] objectParameters;
 
-		private MethodInvocation invocation;
-
-		static {
-			GET_INVOCATIONS = ReflectionUtils.findMethod(LastInvocationAware.class, "getLastInvocation");
-			GET_OBJECT_PARAMETERS = ReflectionUtils.findMethod(LastInvocationAware.class, "getObjectParameters");
-		}
+		private Object invocation;
 
 		public RecordingMethodInterceptor(final Class<?> targetType, final Object... objectParameters) {
 			this.targetType = targetType;
@@ -108,7 +113,7 @@ public class Path {
 			return Arrays.asList(objectParameters).iterator();
 		}
 
-		public MethodInvocation getLastInvocation() {
+		public Object getInvocation() {
 			return invocation;
 		}
 
@@ -117,16 +122,16 @@ public class Path {
 		}
 
 		public Object intercept(final Object obj, final Method method, final Object[] args, final MethodProxy arg3) throws Throwable {
-			if (GET_INVOCATIONS.equals(method)) {
-				return getLastInvocation();
+			if (getInvocationMethodProvider().getLastInvocationDefMethod().equals(method)) {
+				return getInvocation();
 			}
-			else if (GET_OBJECT_PARAMETERS.equals(method)) {
+			else if (getInvocationMethodProvider().getObjectParametersDefMethod().equals(method)) {
 				return getObjectParameters();
 			}
 			else if (Object.class.equals(method.getDeclaringClass())) {
 				return ReflectionUtils.invokeMethod(method, obj, args);
 			}
-			invocation = new SimpleMethodInvocation(targetType, method, args, getLastInvocation());
+			invocation = getInvocationMethodProvider().getMethodInvocationIntance(targetType, method, args, getInvocation());
 
 			Class<?> returnType = method.getReturnType();
 			if (Modifier.isFinal(returnType.getModifiers())) {
@@ -154,7 +159,7 @@ public class Path {
 
 			ProxyFactory factory = new ProxyFactory(EmptyTargetSource.INSTANCE);
 			factory.addInterface(type);
-			factory.addInterface(LastInvocationAware.class);
+			factory.addInterface(getInvocationMethodProvider().getInvokationAwareClass());
 			factory.addAdvice(interceptor);
 
 			return (T) factory.getProxy();
@@ -162,61 +167,13 @@ public class Path {
 
 		Enhancer enhancer = new Enhancer();
 		enhancer.setSuperclass(type);
-		enhancer.setInterfaces(new Class<?>[] { LastInvocationAware.class });
+		enhancer.setInterfaces(new Class<?>[] { getInvocationMethodProvider().getInvokationAwareClass() });
 		enhancer.setCallbackType(org.springframework.cglib.proxy.MethodInterceptor.class);
 		enhancer.setClassLoader(classLoader);
 
 		Factory factory = (Factory) OBJENESIS.newInstance(enhancer.createClass());
 		factory.setCallbacks(new Callback[] { interceptor });
 		return (T) factory;
-	}
-
-	static class SimpleMethodInvocation implements MethodInvocation {
-
-		private final Class<?> targetType;
-
-		private final Method method;
-
-		private final Object[] arguments;
-
-		private final MethodInvocation invocation;
-
-		/**
-		 * Creates a new {@link SimpleMethodInvocation} for the given {@link Method} and arguments.
-		 * 
-		 * @param method
-		 * @param arguments
-		 */
-		private SimpleMethodInvocation(final Class<?> targetType, final Method method, final Object[] arguments,
-				final MethodInvocation invocation) {
-
-			this.targetType = targetType;
-			this.arguments = arguments;
-			this.method = method;
-			this.invocation = invocation;
-		}
-
-		public Class<?> getTargetType() {
-			return targetType;
-		}
-
-		public Object[] getArguments() {
-			return arguments;
-		}
-
-		public Method getMethod() {
-			return method;
-		}
-
-		@Override
-		public String toString() {
-			return (invocation != null ? invocation.toString() + "." : "") + getPropertyFromMethod(method);
-		}
-
-		private String getPropertyFromMethod(final Method method) {
-			String name = method.getName();
-			return Introspector.decapitalize(name.substring(name.startsWith("is") ? 2 : 3));
-		}
 	}
 
 	public static class PathBuilder {
@@ -234,7 +191,7 @@ public class Path {
 		}
 
 		public String build() {
-			return rmi.getLastInvocation().toString();
+			return rmi.getInvocation().toString();
 		}
 
 		public <E> E collection(final Collection<? extends E> collection) {

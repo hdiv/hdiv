@@ -15,10 +15,22 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>org.springframework.hateoas</groupId>
-			<artifactId>spring-hateoas</artifactId>
-			<version>0.23.0.RELEASE</version>
-			<scope>provided</scope>
+			<groupId>org.springframework</groupId>
+	  		<artifactId>spring-aop</artifactId>
+	  		<version>4.3.5.RELEASE</version>
+	  		<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+  			<artifactId>spring-web</artifactId>
+  			<version>4.3.5.RELEASE</version>
+  			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+  			<artifactId>spring-webmvc</artifactId>
+  			<version>4.3.5.RELEASE</version>
+  			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.hdiv</groupId>
@@ -50,6 +62,13 @@
 			<version>4.12</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.hateoas</groupId>
+			<artifactId>spring-hateoas</artifactId>
+			<version>0.23.0.RELEASE</version>
+			<scope>test</scope>
+		</dependency>
+		
 	</dependencies>
 
 	<build>

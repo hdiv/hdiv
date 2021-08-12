@@ -3,6 +3,14 @@
 ## HDIV CHANGELOG
 https://github.com/hdiv
 
+###3.5.1
+
+ * [NEW] Remove spring-hateaos dependency
+
+###3.5.0
+
+ * [NEW] Improvements in the hdiv-services module for a better technology support
+
 ###3.4.12
 
  * [FIX] Execute filter in ERROR DispatchType requests
