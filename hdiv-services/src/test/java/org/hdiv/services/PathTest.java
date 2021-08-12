@@ -17,9 +17,15 @@
 package org.hdiv.services;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 public class PathTest {
+
+	@Before
+	public void setup() {
+		Path.registerInvocationMethodProvider(new InvocationMethodProviderForTesting());
+	}
 
 	@Test
 	public void springSuggestPathTest() throws Exception {

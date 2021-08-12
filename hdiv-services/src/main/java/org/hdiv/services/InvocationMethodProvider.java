@@ -15,11 +15,19 @@
  */
 package org.hdiv.services;
 
-import java.security.Principal;
-import java.util.List;
+import java.lang.reflect.Method;
 
-import javax.servlet.http.HttpServletRequest;
+public interface InvocationMethodProvider {
 
-public interface LinkProvider<T> {
-	List<T> getLinks(String referer, Principal principal, HttpServletRequest request);
+	public Method getLastInvocationMethod(Object object);
+
+	public Method getLastInvocationDefMethod();
+
+	public Method getObjectParametersDefMethod();
+
+	public Class<?> getInvokationAwareClass();
+
+	public Object getMethodInvocationIntance(final Class<?> targetType, final Method method, final Object[] arguments,
+			final Object invocation);
+
 }
