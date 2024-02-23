@@ -14,7 +14,7 @@
 	<description>Java Web Application Security Framework</description>
 
 	<properties>
-		<org.springframework.version>4.0.9.RELEASE</org.springframework.version>
+		<org.springframework.version>5.3.32</org.springframework.version>
 	</properties>
 
 	<dependencies>
