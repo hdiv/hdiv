@@ -23,13 +23,13 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
   			<artifactId>spring-web</artifactId>
-  			<version>4.3.5.RELEASE</version>
+  			<version>5.3.33</version>
   			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
   			<artifactId>spring-webmvc</artifactId>
-  			<version>4.3.5.RELEASE</version>
+  			<version>5.3.33</version>
   			<scope>provided</scope>
 		</dependency>
 		<dependency>
