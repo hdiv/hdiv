@@ -15,7 +15,7 @@
 
 	<properties>
 		<org.grails.version>2.2.0</org.grails.version>
-		<org.springframework.version>4.0.0.RELEASE</org.springframework.version>
+		<org.springframework.version>6.1.14</org.springframework.version>
 	</properties>
 
 	<dependencies>
