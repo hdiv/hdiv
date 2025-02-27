@@ -14,7 +14,7 @@
 	<description>Java Web Application Security Framework</description>
 
 	<properties>
-		<org.springframework.version>4.0.9.RELEASE</org.springframework.version>
+		<org.springframework.version>6.1.4</org.springframework.version>
 	</properties>
 
 	<dependencies>
@@ -45,25 +45,17 @@
 		</dependency>
 		<dependency>
 			<groupId>org.hdiv</groupId>
-			<artifactId>hdiv-struts-1</artifactId>
-			<version>${project.version}</version>
-			<scope>compile</scope>
-			<optional>true</optional>
-			<exclusions>
-				<exclusion>
-					<groupId>commons-logging</groupId>
-					<artifactId>commons-logging</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>org.hdiv</groupId>
 			<artifactId>hdiv-jsf</artifactId>
 			<version>${project.version}</version>
 			<scope>compile</scope>
 			<optional>true</optional>
 		</dependency>
 		<dependency>
+		    <groupId>jakarta.faces</groupId>
+		    <artifactId>jakarta.faces-api</artifactId>
+		    <version>4.1.0</version>
+		</dependency>
+		<!--<dependency>
 			<groupId>javax.faces</groupId>
 			<artifactId>jsf-api</artifactId>
 			<version>2.0</version>
@@ -79,7 +71,7 @@
 					<artifactId>jstl</artifactId>
 				</exclusion>
 			</exclusions>
-		</dependency>
+		</dependency>-->
 		<dependency>
 			<groupId>org.hdiv</groupId>
 			<artifactId>hdiv-thymeleaf</artifactId>
@@ -107,14 +99,21 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>javax.servlet-api</artifactId>
+			<groupId>jakarta.servlet</groupId>
+		    <artifactId>jakarta.servlet-api</artifactId>
+		    <version>6.1.0-M1</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>javax.validation</groupId>
-			<artifactId>validation-api</artifactId>
-			<version>1.0.0.GA</version>
+		    <groupId>jakarta.annotation</groupId>
+		    <artifactId>jakarta.annotation-api</artifactId>
+		    <version>3.0.0</version>
+		    <scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>jakarta.validation</groupId>
+		    <artifactId>jakarta.validation-api</artifactId>
+		    <version>3.1.0</version>
 			<scope>provided</scope>
 		</dependency>
 		<!-- Spring Security -->
@@ -132,10 +131,22 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-validator</artifactId>
-			<version>4.3.0.Final</version>
+			<groupId>org.hibernate.validator</groupId>
+    		<artifactId>hibernate-validator</artifactId>
+    		<version>8.0.1.Final</version>
 			<scope>test</scope>
+		</dependency>
+		<dependency>
+		    <groupId>jakarta.el</groupId>
+		    <artifactId>jakarta.el-api</artifactId>
+		    <version>6.0.1</version>
+		    <scope>test</scope>
+		</dependency>
+		<dependency>
+		    <groupId>org.glassfish</groupId>
+		    <artifactId>jakarta.el</artifactId>
+		    <version>5.0.0-M1</version>
+		    <scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>cglib</groupId>

@@ -17,10 +17,10 @@ package org.hdiv.components;
 
 import java.io.IOException;
 
-import javax.faces.component.html.HtmlOutputLink;
-import javax.faces.context.ExternalContext;
-import javax.faces.context.FacesContext;
-import javax.servlet.ServletContext;
+import jakarta.faces.component.html.HtmlOutputLink;
+import jakarta.faces.context.ExternalContext;
+import jakarta.faces.context.FacesContext;
+import jakarta.servlet.ServletContext;
 
 import org.hdiv.components.support.OutputLinkComponentProcessor;
 import org.springframework.web.context.WebApplicationContext;
@@ -76,7 +76,7 @@ public class HtmlOutputLinkExtension extends HtmlOutputLink {
 		componentProcessor.removeHdivStateUIParameter(context, this);
 
 		// Deprecated method in 1.2, but necessary to work in 1.1
-		if (getValueBinding("value") != null) {
+		if (getValueExpression("value") != null) {
 			setValue(null);
 		}
 	}

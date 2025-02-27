@@ -15,7 +15,7 @@
  */
 package org.hdiv.taglibs.standard.tag.el.core;
 
-import javax.servlet.jsp.JspException;
+import jakarta.servlet.jsp.JspException;
 
 import org.apache.taglibs.standard.tag.el.core.ExpressionUtil;
 import org.hdiv.taglibs.standard.tag.common.core.UrlSupportHDIV;

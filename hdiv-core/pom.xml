@@ -14,7 +14,7 @@
 	<description>Web Application Security Framework</description>
 
 	<properties>
-		<org.springframework-test.version>4.0.9.RELEASE</org.springframework-test.version>
+		<org.springframework-test.version>6.1.11</org.springframework-test.version>
 	</properties>
 
 	<dependencies>
@@ -43,19 +43,11 @@
 					<groupId>aopalliance</groupId>
 				</exclusion>
 				<exclusion>
-					<artifactId>spring-expression</artifactId>
-					<groupId>org.springframework</groupId>
-				</exclusion>
-				<exclusion>
 					<artifactId>spring-security-crypto</artifactId>
 					<groupId>org.springframework.security</groupId>
 				</exclusion>
 				<exclusion>
 					<artifactId>spring-aop</artifactId>
-					<groupId>org.springframework</groupId>
-				</exclusion>
-				<exclusion>
-					<artifactId>spring-context</artifactId>
 					<groupId>org.springframework</groupId>
 				</exclusion>
 				<exclusion>
@@ -77,17 +69,18 @@
 			<artifactId>commons-fileupload</artifactId>
 			<version>${commons.fileupload.version}</version>
 			<optional>true</optional>
-		</dependency>
+		</dependency>		
 		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>javax.servlet-api</artifactId>
+			<groupId>jakarta.servlet</groupId>
+		    <artifactId>jakarta.servlet-api</artifactId>
+		    <version>6.1.0-M1</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>javax.servlet.jsp</groupId>
-			<artifactId>jsp-api</artifactId>
-			<version>2.2</version>
-			<scope>provided</scope>
+			<groupId>jakarta.servlet.jsp</groupId>
+	    	<artifactId>jakarta.servlet.jsp-api</artifactId>
+	    	<version>4.0.0-M1</version>
+		    <scope>provided</scope>
 		</dependency>
 		<!-- test -->
 		<dependency>

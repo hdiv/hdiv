@@ -15,8 +15,8 @@
  */
 package org.hdiv.taglib.html;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.jsp.JspException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.jsp.JspException;
 
 import org.apache.struts.taglib.html.FileTag;
 import org.hdiv.dataComposer.IDataComposer;

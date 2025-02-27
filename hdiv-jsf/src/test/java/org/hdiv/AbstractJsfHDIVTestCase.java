@@ -15,7 +15,7 @@
  */
 package org.hdiv;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 import org.hdiv.config.HDIVConfig;
 
@@ -28,9 +28,9 @@ public abstract class AbstractJsfHDIVTestCase extends AbstractHDIVTestCase {
 
 		HttpServletRequest request = getMockRequest();
 
-		shaleMockObjects = new ShaleMockObjects();
-		shaleMockObjects.setUp(request);
-
+		/*
+		 * shaleMockObjects = new ShaleMockObjects(); shaleMockObjects.setUp(request);
+		 */
 		innerSetUp();
 	}
 
@@ -49,7 +49,7 @@ public abstract class AbstractJsfHDIVTestCase extends AbstractHDIVTestCase {
 	protected void tearDown() throws Exception {
 		super.tearDown();
 
-		shaleMockObjects.tearDown();
+		//shaleMockObjects.tearDown();
 	}
 
 }

@@ -15,7 +15,7 @@
  */
 package org.hdiv.init;
 
-import javax.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpSession;
 
 /**
  * Initializes and destroys {@link HttpSession} scoped attributes.

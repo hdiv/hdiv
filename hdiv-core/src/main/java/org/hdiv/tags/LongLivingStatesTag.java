@@ -15,8 +15,8 @@
  */
 package org.hdiv.tags;
 
-import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.tagext.TagSupport;
+import jakarta.servlet.jsp.JspException;
+import jakarta.servlet.jsp.tagext.TagSupport;
 
 import org.hdiv.dataComposer.IDataComposer;
 import org.hdiv.state.scope.StateScopeType;

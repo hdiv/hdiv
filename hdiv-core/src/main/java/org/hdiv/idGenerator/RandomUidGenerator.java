@@ -18,7 +18,7 @@ package org.hdiv.idGenerator;
 import java.io.Serializable;
 import java.util.Random;
 
-import javax.servlet.ServletContext;
+import jakarta.servlet.ServletContext;
 
 import org.springframework.web.context.ServletContextAware;
 

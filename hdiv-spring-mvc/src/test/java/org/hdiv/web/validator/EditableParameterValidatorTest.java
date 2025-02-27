@@ -18,9 +18,9 @@ package org.hdiv.web.validator;
 import java.util.HashMap;
 import java.util.List;
 
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
+import jakarta.servlet.ServletContext;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 
 import org.hdiv.AbstractHDIVTestCase;
 import org.hdiv.context.RequestContext;

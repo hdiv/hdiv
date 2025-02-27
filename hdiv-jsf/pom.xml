@@ -15,32 +15,32 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>servlet-api</artifactId>
-			<version>2.4</version>
+			<groupId>jakarta.servlet</groupId>
+		    <artifactId>jakarta.servlet-api</artifactId>
+		    <version>6.1.0-M1</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>javax.faces</groupId>
-			<artifactId>jsf-api</artifactId>
-			<version>2.0</version>
+			<groupId>jakarta.faces</groupId>
+    		<artifactId>jakarta.faces-api</artifactId>
+    		<version>4.1.0</version>
 			<scope>compile</scope>
 			<optional>true</optional>
 			<exclusions>
 				<exclusion>
-					<groupId>javax.servlet.jsp</groupId>
-					<artifactId>jsp-api</artifactId>
+					<groupId>jakarta.servlet.jsp</groupId>
+    				<artifactId>jakarta.servlet.jsp-api</artifactId>
 				</exclusion>
 				<exclusion>
-					<groupId>javax.servlet.jsp.jstl</groupId>
-					<artifactId>jstl</artifactId>
+					<groupId>jakarta.servlet.jsp.jstl</groupId>
+		    		<artifactId>jakarta.servlet.jsp.jstl-api</artifactId>
 				</exclusion>
 			</exclusions>
 		</dependency>
 		<dependency>
-			<groupId>javax.el</groupId>
-			<artifactId>el-api</artifactId>
-			<version>1.0</version>
+			<groupId>jakarta.el</groupId>
+    		<artifactId>jakarta.el-api</artifactId>
+    		<version>6.0.0</version>
 			<scope>compile</scope>
 			<optional>true</optional>
 		</dependency>
@@ -60,6 +60,11 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<version>${org.springframework.version}</version>
+		</dependency>
 		<!-- Test -->
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -78,12 +83,6 @@
 			<groupId>com.sun.faces</groupId>
 			<artifactId>jsf-impl</artifactId>
 			<version>2.0.2</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.shale</groupId>
-			<artifactId>shale-test</artifactId>
-			<version>1.0.5</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>

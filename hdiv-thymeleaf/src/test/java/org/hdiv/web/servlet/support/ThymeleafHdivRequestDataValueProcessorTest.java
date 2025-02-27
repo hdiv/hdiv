@@ -18,7 +18,7 @@ package org.hdiv.web.servlet.support;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 import org.hdiv.AbstractHDIVTestCase;
 import org.hdiv.context.RequestContextHolder;

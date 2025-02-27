@@ -15,7 +15,7 @@
  */
 package org.hdiv.strutsel.taglib.html;
 
-import javax.servlet.jsp.JspException;
+import jakarta.servlet.jsp.JspException;
 
 import org.apache.struts.taglib.html.BaseTag;
 import org.apache.strutsel.taglib.utils.EvalHelper;

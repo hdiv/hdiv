@@ -15,7 +15,7 @@
  */
 package org.hdiv.state.scope;
 
-import javax.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpSession;
 
 import org.hdiv.context.RequestContextHolder;
 import org.hdiv.session.ISession;

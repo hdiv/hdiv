@@ -15,12 +15,12 @@
  */
 package org.hdiv.components.support;
 
-import javax.faces.FacesException;
-import javax.faces.component.UIOutcomeTarget;
-import javax.faces.component.UIParameter;
-import javax.faces.context.ExternalContext;
-import javax.faces.context.FacesContext;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.faces.FacesException;
+import jakarta.faces.component.UIOutcomeTarget;
+import jakarta.faces.component.UIParameter;
+import jakarta.faces.context.ExternalContext;
+import jakarta.faces.context.FacesContext;
+import jakarta.servlet.http.HttpServletRequest;
 
 import org.hdiv.context.RequestContextHolder;
 import org.hdiv.dataComposer.IDataComposer;

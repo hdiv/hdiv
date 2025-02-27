@@ -15,7 +15,7 @@
  */
 package org.hdiv.strutsel.taglib.logic;
 
-import javax.servlet.jsp.JspException;
+import jakarta.servlet.jsp.JspException;
 
 import org.apache.strutsel.taglib.utils.EvalHelper;
 import org.hdiv.taglib.logic.RedirectTagHDIV;

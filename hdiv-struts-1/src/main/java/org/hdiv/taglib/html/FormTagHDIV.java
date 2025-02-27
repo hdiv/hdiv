@@ -15,9 +15,9 @@
  */
 package org.hdiv.taglib.html;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.jsp.JspException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.jsp.JspException;
 
 import org.apache.struts.Globals;
 import org.apache.struts.taglib.TagUtils;

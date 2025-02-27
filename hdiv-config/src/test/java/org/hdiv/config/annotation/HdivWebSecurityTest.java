@@ -150,7 +150,7 @@ public class HdivWebSecurityTest {
 		assertEquals(2, target.getParams().size());
 
 		urlValidations = getValidations(validations, "/safetext/.*");
-		assertEquals(6, urlValidations.size());// Defaults
+		assertEquals(0, urlValidations.size());
 		target = getTarget(validations, "/safetext/.*");
 		assertEquals(0, target.getParams().size());
 	}

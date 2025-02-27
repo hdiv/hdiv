@@ -15,7 +15,7 @@
  */
 package org.hdiv.logs;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  * Interface to get information about the user who made the request.

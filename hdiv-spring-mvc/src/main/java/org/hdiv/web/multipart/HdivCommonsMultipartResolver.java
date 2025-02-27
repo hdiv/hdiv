@@ -15,14 +15,14 @@
  */
 package org.hdiv.web.multipart;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 import org.hdiv.config.multipart.IMultipartConfig;
 import org.hdiv.config.multipart.exception.HdivMultipartException;
 import org.springframework.web.multipart.MultipartException;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.MultipartResolver;
-import org.springframework.web.multipart.commons.CommonsMultipartResolver;
+import org.springframework.web.multipart.support.StandardServletMultipartResolver;
 import org.springframework.web.util.WebUtils;
 
 /**
@@ -30,7 +30,7 @@ import org.springframework.web.util.WebUtils;
  * 
  * @author Gotzon Illarramendi
  */
-public class HdivCommonsMultipartResolver extends CommonsMultipartResolver {
+public class HdivCommonsMultipartResolver extends StandardServletMultipartResolver {
 
 	@Override
 	public boolean isMultipart(final HttpServletRequest request) {

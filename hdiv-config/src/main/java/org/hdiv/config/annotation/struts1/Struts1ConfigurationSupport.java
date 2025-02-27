@@ -18,7 +18,7 @@ package org.hdiv.config.annotation.struts1;
 import org.hdiv.config.annotation.condition.ConditionalOnFramework;
 import org.hdiv.config.annotation.condition.SupportedFramework;
 import org.hdiv.config.multipart.IMultipartConfig;
-import org.hdiv.config.multipart.StrutsMultipartConfig;
+//import org.hdiv.config.multipart.StrutsMultipartConfig;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -32,7 +32,8 @@ import org.springframework.context.annotation.Configuration;
 public class Struts1ConfigurationSupport {
 
 	@Bean
-	public IMultipartConfig securityMultipartConfig() {
-		return new StrutsMultipartConfig();
+	public IMultipartConfig securityMultipartConfig() {		
+		//return new StrutsMultipartConfig();
+		return null;
 	}
 }

@@ -17,7 +17,7 @@ package org.hdiv.validation;
 
 import java.util.List;
 
-import javax.faces.context.FacesContext;
+import jakarta.faces.context.FacesContext;
 
 public interface ComponentTreeValidator {
 

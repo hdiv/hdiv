@@ -15,7 +15,7 @@
  */
 package org.hdiv.urlProcessor;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 import org.hdiv.AbstractHDIVTestCase;
 import org.hdiv.util.HDIVUtil;

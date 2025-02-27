@@ -15,8 +15,8 @@
  */
 package org.hdiv.context;
 
-import javax.faces.context.ExternalContext;
-import javax.faces.context.ExternalContextFactory;
+import jakarta.faces.context.ExternalContext;
+import jakarta.faces.context.ExternalContextFactory;
 
 /**
  * <p>

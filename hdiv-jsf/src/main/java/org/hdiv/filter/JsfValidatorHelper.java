@@ -17,7 +17,7 @@ package org.hdiv.filter;
 
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 import org.hdiv.context.RequestContextHolder;
 import org.hdiv.state.IState;

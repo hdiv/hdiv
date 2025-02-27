@@ -18,7 +18,7 @@ package org.hdiv.session;
 import java.util.List;
 import java.util.UUID;
 
-import javax.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpSession;
 
 import org.hdiv.context.RequestContextHolder;
 import org.hdiv.state.IPage;

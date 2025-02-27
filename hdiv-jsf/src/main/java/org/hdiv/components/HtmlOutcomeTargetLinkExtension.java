@@ -17,10 +17,10 @@ package org.hdiv.components;
 
 import java.io.IOException;
 
-import javax.faces.component.html.HtmlOutcomeTargetLink;
-import javax.faces.context.ExternalContext;
-import javax.faces.context.FacesContext;
-import javax.servlet.ServletContext;
+import jakarta.faces.component.html.HtmlOutcomeTargetLink;
+import jakarta.faces.context.ExternalContext;
+import jakarta.faces.context.FacesContext;
+import jakarta.servlet.ServletContext;
 
 import org.hdiv.components.support.OutcomeTargetComponentProcessor;
 import org.springframework.web.context.WebApplicationContext;

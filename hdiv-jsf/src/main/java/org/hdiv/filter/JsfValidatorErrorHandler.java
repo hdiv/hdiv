@@ -18,10 +18,10 @@ package org.hdiv.filter;
 import java.io.IOException;
 import java.util.List;
 
-import javax.faces.context.ExternalContext;
-import javax.faces.context.FacesContext;
-import javax.faces.context.PartialResponseWriter;
-import javax.faces.context.PartialViewContext;
+import jakarta.faces.context.ExternalContext;
+import jakarta.faces.context.FacesContext;
+import jakarta.faces.context.PartialResponseWriter;
+import jakarta.faces.context.PartialViewContext;
 
 import org.hdiv.context.RequestContextHolder;
 import org.slf4j.Logger;

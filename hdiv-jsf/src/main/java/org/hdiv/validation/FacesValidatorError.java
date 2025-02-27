@@ -15,7 +15,7 @@
  */
 package org.hdiv.validation;
 
-import javax.faces.component.UIComponent;
+import jakarta.faces.component.UIComponent;
 
 import org.hdiv.filter.ValidatorError;
 

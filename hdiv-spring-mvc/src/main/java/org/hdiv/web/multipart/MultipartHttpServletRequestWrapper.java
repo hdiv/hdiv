@@ -19,8 +19,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletRequestWrapper;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequestWrapper;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -46,8 +46,8 @@ public class MultipartHttpServletRequestWrapper extends HttpServletRequestWrappe
 
 	public MultipartHttpServletRequestWrapper(HttpServletRequest request, MultipartHttpServletRequest innerMultipartHttpServletRequest) {
 		super(request);
-		Assert.notNull(request);
-		Assert.notNull(innerMultipartHttpServletRequest);
+		Assert.notNull(request, "fail");
+		Assert.notNull(innerMultipartHttpServletRequest, "fail");
 		this.innerMultipartHttpServletRequest = innerMultipartHttpServletRequest;
 	}
 

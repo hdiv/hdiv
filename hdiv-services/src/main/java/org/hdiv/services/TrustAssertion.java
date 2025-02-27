@@ -102,4 +102,5 @@ public @interface TrustAssertion {
 	SubEntityValidationType validationType() default SubEntityValidationType.DEFAULT;
 
 	String originMask() default EMPTY;
+
 }

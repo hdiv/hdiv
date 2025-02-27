@@ -15,7 +15,7 @@
  */
 package org.hdiv.state.scope;
 
-import javax.servlet.ServletContext;
+import jakarta.servlet.ServletContext;
 
 import org.hdiv.context.RequestContextHolder;
 import org.springframework.web.context.ServletContextAware;

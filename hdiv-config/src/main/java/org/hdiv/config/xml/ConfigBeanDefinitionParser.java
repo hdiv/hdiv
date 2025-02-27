@@ -29,7 +29,7 @@ import org.hdiv.config.Strategy;
 import org.hdiv.config.multipart.IMultipartConfig;
 import org.hdiv.config.multipart.JsfMultipartConfig;
 import org.hdiv.config.multipart.SpringMVCMultipartConfig;
-import org.hdiv.config.multipart.StrutsMultipartConfig;
+//import org.hdiv.config.multipart.StrutsMultipartConfig;
 import org.hdiv.context.RedirectHelper;
 import org.hdiv.context.RequestContextFactory;
 import org.hdiv.context.RequestContextFactoryImpl;
@@ -259,12 +259,12 @@ public class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 			}
 			this.createSimpleBean(source, parserContext, SpringMVCMultipartConfig.class, IMultipartConfig.class.getName());
 		}
-
-		if (struts1ModulePresent) {
-
-			this.createSimpleBean(source, parserContext, StrutsMultipartConfig.class, IMultipartConfig.class.getName());
-		}
-
+		/*
+		 * if (struts1ModulePresent) {
+		 * 
+		 * this.createSimpleBean(source, parserContext, StrutsMultipartConfig.class,
+		 * IMultipartConfig.class.getName()); }
+		 */
 		// Register JSF specific beans if we are using this web framework
 		if (jsfPresent && jsfModulePresent) {
 			createJsfValidatorHelper(source, parserContext);

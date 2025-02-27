@@ -61,7 +61,7 @@ public class OnFrameworkCondition implements ConfigurationCondition {
 		MultiValueMap<String, Object> attributes = metadata.getAllAnnotationAttributes(ConditionalOnFramework.class.getName(), true);
 
 		List<Object> values = attributes.get("value");
-		Assert.notEmpty(values);
+		Assert.notEmpty(values, "fail");
 		SupportedFramework frwk = (SupportedFramework) values.get(0);
 
 		if (frwk == SupportedFramework.SPRING_MVC) {

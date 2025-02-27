@@ -21,7 +21,7 @@ import java.util.Map;
 import java.util.Stack;
 import java.util.StringTokenizer;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 import org.hdiv.config.HDIVConfig;
 import org.hdiv.context.RequestContextHolder;

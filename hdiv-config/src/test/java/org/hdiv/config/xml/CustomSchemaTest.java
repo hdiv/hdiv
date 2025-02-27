@@ -168,16 +168,13 @@ public class CustomSchemaTest extends TestCase {
 		vals = getValidations(validations, "c");
 		target = getTarget(validations, "c");
 		assertNull(target.getParams());
-		assertEquals(8, vals.size());
-		// 2 custom rule + 6 default rules
+		assertEquals(2, vals.size());
+		// 2 custom rule
 
 		val = (Validation) vals.get(0);
 		assertEquals("id2", val.getName());
 		val = (Validation) vals.get(1);
 		assertEquals("id3", val.getName());
-		val = (Validation) vals.get(2);
-		assertEquals("SQLInjection", val.getName());// first default rule
-		assertTrue(val.isDefaultValidation());
 
 		// Fourth url
 		vals = getValidations(validations, null);

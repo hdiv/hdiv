@@ -15,7 +15,7 @@
 
 	<properties>
 		<org.grails.version>2.2.0</org.grails.version>
-		<org.springframework.version>4.0.0.RELEASE</org.springframework.version>
+		<org.springframework.version>6.1.4</org.springframework.version>
 	</properties>
 
 	<dependencies>
@@ -25,14 +25,15 @@
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>javax.servlet-api</artifactId>
+			<groupId>jakarta.servlet</groupId>
+		    <artifactId>jakarta.servlet-api</artifactId>
+		    <version>6.1.0-M1</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>javax.servlet.jsp</groupId>
-			<artifactId>jsp-api</artifactId>
-			<version>2.1</version>
+			<groupId>jakarta.servlet.jsp</groupId>
+    		<artifactId>jakarta.servlet.jsp-api</artifactId>
+    		<version>4.0.0</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
@@ -48,9 +49,9 @@
 			</exclusions>
 		</dependency>
 		<dependency>
-			<groupId>javax.validation</groupId>
-			<artifactId>validation-api</artifactId>
-			<version>1.0.0.GA</version>
+			<groupId>jakarta.validation</groupId>
+		    <artifactId>jakarta.validation-api</artifactId>
+		    <version>3.1.0</version>
 			<scope>compile</scope>
 			<optional>true</optional>
 		</dependency>

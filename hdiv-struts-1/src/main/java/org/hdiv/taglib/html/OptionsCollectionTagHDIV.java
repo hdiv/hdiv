@@ -15,7 +15,7 @@
  */
 package org.hdiv.taglib.html;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 import org.apache.struts.taglib.TagUtils;
 import org.apache.struts.taglib.html.Constants;

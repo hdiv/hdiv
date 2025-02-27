@@ -18,7 +18,7 @@ package org.hdiv.config.annotation;
 import org.hdiv.config.annotation.grails.GrailsConfigurationSupport;
 import org.hdiv.config.annotation.jsf.JsfConfigurationSupport;
 import org.hdiv.config.annotation.springmvc.SpringMvcConfigurationSupport;
-import org.hdiv.config.annotation.struts1.Struts1ConfigurationSupport;
+//import org.hdiv.config.annotation.struts1.Struts1ConfigurationSupport;
 import org.hdiv.config.annotation.thymeleaf.ThymeleafConfigurationSupport;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -29,7 +29,7 @@ import org.springframework.context.annotation.Import;
  * @since 2.1.7
  */
 @Import({ SpringMvcConfigurationSupport.class, ThymeleafConfigurationSupport.class, GrailsConfigurationSupport.class,
-		JsfConfigurationSupport.class, Struts1ConfigurationSupport.class })
+		JsfConfigurationSupport.class})
 public class HdivWebSecurityConfigurationSupport extends AbstractHdivWebSecurityConfiguration {
 
 }

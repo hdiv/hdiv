@@ -19,9 +19,9 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
 
-import javax.faces.component.UIComponent;
-import javax.faces.component.html.HtmlInputHidden;
-import javax.faces.context.FacesContext;
+import jakarta.faces.component.UIComponent;
+import jakarta.faces.component.html.HtmlInputHidden;
+import jakarta.faces.context.FacesContext;
 
 import org.hdiv.components.HtmlInputHiddenExtension;
 import org.hdiv.util.HDIVErrorCodes;

@@ -15,7 +15,7 @@
  */
 package org.hdiv.taglibs.standard.tag.rt.core;
 
-import javax.servlet.jsp.JspTagException;
+import jakarta.servlet.jsp.JspTagException;
 
 import org.hdiv.taglibs.standard.tag.common.core.RedirectSupportHDIV;
 

@@ -15,7 +15,7 @@
  */
 package org.hdiv.init;
 
-import javax.servlet.ServletContext;
+import jakarta.servlet.ServletContext;
 
 import org.hdiv.application.IApplication;
 import org.hdiv.config.HDIVConfig;
@@ -47,6 +47,8 @@ public class DefaultServletContextInitializer implements ServletContextInitializ
 
 	protected FormUrlProcessor formUrlProcessor;
 
+	private static final String ASSERT_FAILURE = "fail";
+	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -54,11 +56,11 @@ public class DefaultServletContextInitializer implements ServletContextInitializ
 	 */
 	public void initializeServletContext(final ServletContext servletContext) {
 
-		Assert.notNull(config);
-		Assert.notNull(application);
-		Assert.notNull(linkUrlProcessor);
-		Assert.notNull(formUrlProcessor);
-		Assert.notNull(servletContext);
+		Assert.notNull(config, ASSERT_FAILURE);
+		Assert.notNull(application, ASSERT_FAILURE);
+		Assert.notNull(linkUrlProcessor, ASSERT_FAILURE);
+		Assert.notNull(formUrlProcessor, ASSERT_FAILURE);
+		Assert.notNull(servletContext, ASSERT_FAILURE);
 
 		// Init servlet context scoped objects
 		HDIVUtil.setHDIVConfig(config, servletContext);

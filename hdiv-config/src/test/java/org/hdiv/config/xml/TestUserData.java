@@ -15,7 +15,7 @@
  */
 package org.hdiv.config.xml;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 import org.hdiv.logs.IUserData;
 

@@ -15,11 +15,11 @@
  */
 package org.hdiv.taglibs.standard.tag.common.core;
 
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.JspTagException;
-import javax.servlet.jsp.PageContext;
-import javax.servlet.jsp.tagext.BodyTagSupport;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.jsp.JspException;
+import jakarta.servlet.jsp.JspTagException;
+import jakarta.servlet.jsp.PageContext;
+import jakarta.servlet.jsp.tagext.BodyTagSupport;
 
 import org.apache.taglibs.standard.tag.common.core.ParamParent;
 import org.apache.taglibs.standard.tag.common.core.ParamSupport;

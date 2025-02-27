@@ -19,8 +19,8 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
 
-import javax.faces.component.html.HtmlInputHidden;
-import javax.faces.context.FacesContext;
+import jakarta.faces.component.html.HtmlInputHidden;
+import jakarta.faces.context.FacesContext;
 
 import org.hdiv.state.StateManager;
 import org.hdiv.util.ConstantsJsf;

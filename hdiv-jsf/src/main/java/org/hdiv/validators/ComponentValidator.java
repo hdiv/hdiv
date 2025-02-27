@@ -15,7 +15,7 @@
  */
 package org.hdiv.validators;
 
-import javax.faces.component.UIComponent;
+import jakarta.faces.component.UIComponent;
 
 import org.hdiv.validation.ValidationContext;
 

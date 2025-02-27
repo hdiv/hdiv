@@ -15,7 +15,7 @@
  */
 package org.hdiv.context;
 
-import javax.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpSession;
 
 import org.hdiv.session.SessionModel;
 import org.slf4j.Logger;

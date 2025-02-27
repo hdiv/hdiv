@@ -17,7 +17,7 @@ package org.hdiv.session;
 
 import java.util.UUID;
 
-import javax.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpSession;
 
 import org.hdiv.context.RequestContextHolder;
 import org.hdiv.exception.HDIVException;
@@ -50,7 +50,8 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 	private String pageIdGeneratorName = Constants.PAGE_ID_GENERATOR_NAME;
 
 	protected final HTTPSessionCache cache = new HTTPSessionCache();
-
+	
+	private static final String ASSERT_FAILURE = "fail";
 	/**
 	 * Obtains from the user session the page identifier for the current request.
 	 * 
@@ -148,7 +149,7 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 	}
 
 	public boolean removePage(final RequestContextHolder context, final UUID pageId) {
-		Assert.notNull(context);
+		Assert.notNull(context, ASSERT_FAILURE);
 
 		return cache.removePage(new SimpleCacheKey(context, pageId));
 	}
@@ -165,20 +166,20 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 	}
 
 	public String getAttribute(final RequestContextHolder context, final String name) {
-		Assert.notNull(context);
+		Assert.notNull(context, ASSERT_FAILURE);
 		return getAttribute(context.getSession(), name);
 	}
 
 	public String getAttribute(final SessionModel context, final String name) {
-		Assert.notNull(name);
+		Assert.notNull(name, ASSERT_FAILURE);
 		return (String) context.getAttribute(name);
 	}
 
 	@SuppressWarnings("unchecked")
 	public <T> T getAttribute(final RequestContextHolder context, final String name, final Class<T> requiredType) {
-		Assert.notNull(context);
-		Assert.notNull(name);
-		Assert.notNull(requiredType);
+		Assert.notNull(context, ASSERT_FAILURE);
+		Assert.notNull(name, ASSERT_FAILURE);
+		Assert.notNull(requiredType, ASSERT_FAILURE);
 
 		Object result = context.getSession().getAttribute(name);
 		if (result == null) {
@@ -194,15 +195,15 @@ public class SessionHDIV implements ISession, BeanFactoryAware {
 	}
 
 	public void setAttribute(final RequestContextHolder context, final String name, final Object value) {
-		Assert.notNull(context);
-		Assert.notNull(name);
+		Assert.notNull(context, ASSERT_FAILURE);
+		Assert.notNull(name, ASSERT_FAILURE);
 
 		context.getSession().setAttribute(name, value);
 	}
 
 	public void removeAttribute(final RequestContextHolder context, final String name) {
-		Assert.notNull(context);
-		Assert.notNull(name);
+		Assert.notNull(context, ASSERT_FAILURE);
+		Assert.notNull(name, ASSERT_FAILURE);
 
 		context.getSession().removeAttribute(name);
 	}

@@ -20,7 +20,7 @@ import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.List;
 
-import javax.servlet.http.Cookie;
+import jakarta.servlet.http.Cookie;
 
 import org.hdiv.AbstractHDIVTestCase;
 import org.hdiv.context.RequestContext;

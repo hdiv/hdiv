@@ -17,7 +17,7 @@ package org.hdiv.config.annotation;
 
 import java.util.List;
 
-import javax.annotation.PostConstruct;
+import jakarta.annotation.PostConstruct;
 
 import org.hdiv.config.annotation.builders.SecurityConfigBuilder;
 import org.hdiv.config.annotation.configuration.HdivWebSecurityConfigurer;

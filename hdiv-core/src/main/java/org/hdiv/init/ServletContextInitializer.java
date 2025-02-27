@@ -15,7 +15,7 @@
  */
 package org.hdiv.init;
 
-import javax.servlet.ServletContext;
+import jakarta.servlet.ServletContext;
 
 /**
  * Initializes and destroys {@link ServletContext} scoped attributes.

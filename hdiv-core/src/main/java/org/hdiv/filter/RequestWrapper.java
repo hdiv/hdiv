@@ -25,7 +25,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 
-import javax.servlet.http.HttpServletRequestWrapper;
+import jakarta.servlet.http.HttpServletRequestWrapper;
 
 import org.hdiv.context.RequestContextHolder;
 import org.hdiv.session.ISession;

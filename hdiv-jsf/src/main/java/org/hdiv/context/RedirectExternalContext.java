@@ -17,8 +17,8 @@ package org.hdiv.context;
 
 import java.io.IOException;
 
-import javax.faces.context.ExternalContext;
-import javax.servlet.ServletContext;
+import jakarta.faces.context.ExternalContext;
+import jakarta.servlet.ServletContext;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,7 +38,7 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
  * 
  * @author Gotzon Illarramendi
  */
-public class RedirectExternalContext extends javax.faces.context.ExternalContextWrapper {
+public class RedirectExternalContext extends jakarta.faces.context.ExternalContextWrapper {
 
 	private static final Logger log = LoggerFactory.getLogger(RedirectExternalContext.class);
 
@@ -62,7 +62,7 @@ public class RedirectExternalContext extends javax.faces.context.ExternalContext
 		ServletContext servletContext = (ServletContext) wrapped.getContext();
 		redirectHelper = WebApplicationContextUtils.getRequiredWebApplicationContext(servletContext).getBean(RedirectHelper.class);
 
-		Assert.notNull(redirectHelper);
+		Assert.notNull(redirectHelper, "fail");
 
 		this.wrapped = wrapped;
 	}

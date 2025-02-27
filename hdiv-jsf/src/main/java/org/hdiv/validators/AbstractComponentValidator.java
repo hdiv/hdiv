@@ -15,7 +15,7 @@
  */
 package org.hdiv.validators;
 
-import javax.faces.component.UIComponent;
+import jakarta.faces.component.UIComponent;
 
 public abstract class AbstractComponentValidator implements ComponentValidator {
 
